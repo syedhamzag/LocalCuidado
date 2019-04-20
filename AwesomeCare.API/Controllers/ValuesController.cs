@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AwesomeCare.DataAccess.Database;
+using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AwesomeCare.API.Controllers
@@ -14,6 +16,10 @@ namespace AwesomeCare.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            using (var db = new AwesomeCareDbContext())
+            {
+                var company = db.Set<CompanyModel>();
+            }
             return new string[] { "value1", "value2" };
         }
 

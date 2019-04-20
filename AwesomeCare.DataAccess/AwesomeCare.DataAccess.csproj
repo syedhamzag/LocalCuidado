@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190420031348_Initials.cs" />
+    <Compile Remove="Migrations\20190420033217_Initials.cs" />
+    <Compile Remove="Migrations\20190420033724_Initials.cs" />
+    <Compile Remove="Migrations\20190420035754_CompanyContactTable.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.8" />
@@ -12,6 +19,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AwesomeCare.Model\AwesomeCare.Model.csproj" />
   </ItemGroup>
 
 </Project>
