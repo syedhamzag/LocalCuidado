@@ -16,10 +16,7 @@ namespace AwesomeCare.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            using (var db = new AwesomeCareDbContext())
-            {
-                var company = db.Set<CompanyModel>();
-            }
+          
             return new string[] { "value1", "value2" };
         }
 

@@ -5,12 +5,11 @@ using System.Reflection;
 
 namespace AwesomeCare.DataAccess.Database
 {
-    public class AwesomeCareDbContext : DbContext
+    public class AwesomeCareDbContext : DbContext, IDbContext
     {
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public AwesomeCareDbContext(DbContextOptions<AwesomeCareDbContext> options):base(options)
         {
-            optionsBuilder.UseSqlServer("Data Source=HQ-TECH-L048;Initial Catalog=AwesomeCareCMSDb;User ID=sa;Password=olamide@123");
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

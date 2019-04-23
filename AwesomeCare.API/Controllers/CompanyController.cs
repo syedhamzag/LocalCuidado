@@ -1,126 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataAccess.Repositories;
+using AwesomeCare.DataTransferObject.DTOs.Company;
+using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AwesomeCare.DataAccess.Database;
-using AwesomeCare.Model.Models;
 
 namespace AwesomeCare.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Company")]
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        private readonly AwesomeCareDbContext _context;
 
-        public CompanyController(AwesomeCareDbContext context)
+        private IGenericRepository<CompanyModel> _companyRepository;
+
+        public CompanyController(IGenericRepository<CompanyModel> companyRepository)
         {
-            _context = context;
+            _companyRepository = companyRepository;
         }
-
-        // GET: api/Company
+        [HttpGet("{id}", Name = "GetCompany")]
+        public async Task<IActionResult> GetCompany(int id)
+        {            
+            var company = await _companyRepository.GetEntity(id);
+            var createCompanyDto = Mapper.Map<CreateCompanyDto>(company);
+            return Ok(createCompanyDto);
+        }
         [HttpGet]
-        public IEnumerable<CompanyModel> GetCompany()
+        public IActionResult GetCompanies()
         {
-            return _context.Company;
+            var companies =  _companyRepository.Table.ProjectTo<CreateCompanyDto>().ToList();
+            return Ok(companies);
         }
-
-        // GET: api/Company/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCompanyModel([FromRoute] int id)
+        [HttpPost()]
+        public async Task<IActionResult> CreateCompany([FromBody]CreateCompanyDto model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var companyModel = await _context.Company.FindAsync(id);
-
-            if (companyModel == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(companyModel);
-        }
-
-        // PUT: api/Company/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompanyModel([FromRoute] int id, [FromBody] CompanyModel companyModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != companyModel.CompanyId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(companyModel).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompanyModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Company
-        [HttpPost]
-        public async Task<IActionResult> PostCompanyModel([FromBody] CompanyModel companyModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.Company.Add(companyModel);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCompanyModel", new { id = companyModel.CompanyId }, companyModel);
-        }
-
-        // DELETE: api/Company/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompanyModel([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var companyModel = await _context.Company.FindAsync(id);
-            if (companyModel == null)
-            {
-                return NotFound();
-            }
-
-            _context.Company.Remove(companyModel);
-            await _context.SaveChangesAsync();
-
-            return Ok(companyModel);
-        }
-
-        private bool CompanyModelExists(int id)
-        {
-            return _context.Company.Any(e => e.CompanyId == id);
+            var companyMap = Mapper.Map<CompanyModel>(model);
+            var company = await _companyRepository.InsertEntity(companyMap);
+            var createCompanyDto = Mapper.Map<CreateCompanyDto>(company);
+            return CreatedAtAction("GetCompany", new { id = company.CompanyId }, createCompanyDto);
         }
     }
 }

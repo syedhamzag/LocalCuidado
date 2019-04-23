@@ -42,7 +42,8 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasOne(p => p.Company)
                 .WithMany(p => p.CompanyContacts)
                 .HasForeignKey(p => p.CompanyId)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
             #endregion
         }
     }
