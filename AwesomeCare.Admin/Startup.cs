@@ -1,15 +1,16 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AwesomeCare.Admin.Services.Company;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Refit;
 
 namespace AwesomeCare.Admin
 {
@@ -32,9 +33,8 @@ namespace AwesomeCare.Admin
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            AddRefitServices(services);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +46,7 @@ namespace AwesomeCare.Admin
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 
@@ -54,13 +54,18 @@ namespace AwesomeCare.Admin
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc(ConfigureRoutes);
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
-        private void ConfigureRoutes(IRouteBuilder routeBuilder)
+        void AddRefitServices(IServiceCollection services)
         {
-            routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            
+            services.AddRefitClient<ICompanyService>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AwesomeCareBaseApi"]));
         }
     }
 }

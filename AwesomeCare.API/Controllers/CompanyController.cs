@@ -29,13 +29,21 @@ namespace AwesomeCare.API.Controllers
             var createCompanyDto = Mapper.Map<GetCompanyDto>(company);
             return Ok(createCompanyDto);
         }
+        //[HttpGet]
+        //[EnableQuery]
+        //public IQueryable<GetCompanyDto> GetCompanies()
+        //{
+        //    var companies = _companyRepository.Table.ProjectTo<GetCompanyDto>();//.ToList();
+        //    return companies;
+        //   // return Ok(companies);
+        //}
+
         [HttpGet]
-        [EnableQuery]
-        public IQueryable<GetCompanyDto> GetCompanies()
+        public IActionResult GetCompanies()
         {
-            var companies = _companyRepository.Table.ProjectTo<GetCompanyDto>();//.ToList();
-            return companies;
-           // return Ok(companies);
+            var companies = _companyRepository.Table.ProjectTo<GetCompanyDto>().ToList();
+           
+            return Ok(companies);
         }
         [HttpPost()]
         public async Task<IActionResult> CreateCompany([FromBody]CreateCompanyDto model)

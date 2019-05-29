@@ -2,6 +2,7 @@
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.Model.Models;
+using System.Linq;
 
 namespace AwesomeCare.API.AutoMapperConfig
 {
@@ -11,7 +12,9 @@ namespace AwesomeCare.API.AutoMapperConfig
         {
             #region Company
             CreateMap<CompanyModel, GetCompanyDto>()
-               .ForMember(dto => dto.Company, mem => mem.MapFrom(src => src.CompanyName));
+               .ForMember(dto => dto.Company, mem => mem.MapFrom(src => src.CompanyName))
+               .ForMember(dto=>dto.Contacts,mem=>mem.MapFrom(src=>src.CompanyContacts.AsQueryable()));
+               //.ForMember(dto=>dto.Contacts,mem=>mem.Ignore());
 
             CreateMap<CreateCompanyDto, CompanyModel>()
                 .ForMember(dto => dto.CompanyId, mem => mem.Ignore())
