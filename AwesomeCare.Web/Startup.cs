@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using AwesomeCare.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Refit;
 namespace AwesomeCare.Web
 {
     public class Startup
@@ -42,6 +42,8 @@ namespace AwesomeCare.Web
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+         //   services.AddRefitClient()
+         //.ConfigureHttpClient(c => c.BaseAddress = new Uri("https://api.example.com"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

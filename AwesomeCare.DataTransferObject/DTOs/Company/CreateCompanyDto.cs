@@ -8,7 +8,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Company
   public  class CreateCompanyDto
     {
         [Required]
-        public string CompanyName { get; set; }
+        public string Company { get; set; }
         [Required]
         [DataType(DataType.ImageUrl)]
         public string LogoUrl { get; set; }

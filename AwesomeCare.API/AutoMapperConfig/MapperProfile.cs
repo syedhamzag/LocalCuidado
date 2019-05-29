@@ -10,10 +10,12 @@ namespace AwesomeCare.API.AutoMapperConfig
         public MapperProfile()
         {
             #region Company
-            CreateMap<CompanyModel, CreateCompanyDto>();
+            CreateMap<CompanyModel, GetCompanyDto>()
+               .ForMember(dto => dto.Company, mem => mem.MapFrom(src => src.CompanyName));
 
             CreateMap<CreateCompanyDto, CompanyModel>()
                 .ForMember(dto => dto.CompanyId, mem => mem.Ignore())
+                .ForMember(dto => dto.CompanyName, mem => mem.MapFrom(src => src.Company))
                 .ForMember(dto => dto.CompanyContacts, mem => mem.Ignore());
             #endregion
 
