@@ -2,12 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <UserSecretsId>aspnet-AwesomeCare.Web-E7A02AB3-C78E-4F84-BEBD-029AA3CD6472</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="AutoMapper.Collection.EntityFrameworkCore" Version="0.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Refit" Version="4.6.107" />
@@ -15,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AwesomeCare.DataAccess\AwesomeCare.DataAccess.csproj" />
     <ProjectReference Include="..\AwesomeCare.DataTransferObject\AwesomeCare.DataTransferObject.csproj" />
+    <ProjectReference Include="..\AwesomeCare.Model\AwesomeCare.Model.csproj" />
   </ItemGroup>
 
 </Project>

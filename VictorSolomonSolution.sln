@@ -1,21 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28917.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.API", "AwesomeCare.API\AwesomeCare.API.csproj", "{3027F874-B407-4297-9B71-8C1B91F60DD7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.Web", "AwesomeCare.Web\AwesomeCare.Web.csproj", "{5A053C6F-FAEF-47F4-9CC2-B5F2F7CFD591}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.Model", "AwesomeCare.Model\AwesomeCare.Model.csproj", "{16D5F8A3-7252-4B57-AAFA-722D126418DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.DataTransferObject", "AwesomeCare.DataTransferObject\AwesomeCare.DataTransferObject.csproj", "{C3158C49-DC92-418B-9BB8-AF14EA3906D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeCare.Services", "AwesomeCare.Services\AwesomeCare.Services.csproj", "{FDD588E4-9DDD-4A0C-A003-3155C6A0A2B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.Services", "AwesomeCare.Services\AwesomeCare.Services.csproj", "{FDD588E4-9DDD-4A0C-A003-3155C6A0A2B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeCare.DataAccess", "AwesomeCare.DataAccess\AwesomeCare.DataAccess.csproj", "{88F2DBBA-1B80-4076-B7B2-F980D77091BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.DataAccess", "AwesomeCare.DataAccess\AwesomeCare.DataAccess.csproj", "{88F2DBBA-1B80-4076-B7B2-F980D77091BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeCare.Admin", "AwesomeCare.Admin\AwesomeCare.Admin.csproj", "{5B9C8BB2-37AD-4B89-9D19-283A2A305D54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.Admin", "AwesomeCare.Admin\AwesomeCare.Admin.csproj", "{5B9C8BB2-37AD-4B89-9D19-283A2A305D54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeCare.Web", "AwesomeCare.Web\AwesomeCare.Web.csproj", "{658F6408-05B5-49A3-AF14-8C5D852C1822}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{3027F874-B407-4297-9B71-8C1B91F60DD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3027F874-B407-4297-9B71-8C1B91F60DD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3027F874-B407-4297-9B71-8C1B91F60DD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5A053C6F-FAEF-47F4-9CC2-B5F2F7CFD591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5A053C6F-FAEF-47F4-9CC2-B5F2F7CFD591}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5A053C6F-FAEF-47F4-9CC2-B5F2F7CFD591}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5A053C6F-FAEF-47F4-9CC2-B5F2F7CFD591}.Release|Any CPU.Build.0 = Release|Any CPU
 		{16D5F8A3-7252-4B57-AAFA-722D126418DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{16D5F8A3-7252-4B57-AAFA-722D126418DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16D5F8A3-7252-4B57-AAFA-722D126418DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{5B9C8BB2-37AD-4B89-9D19-283A2A305D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B9C8BB2-37AD-4B89-9D19-283A2A305D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B9C8BB2-37AD-4B89-9D19-283A2A305D54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{658F6408-05B5-49A3-AF14-8C5D852C1822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{658F6408-05B5-49A3-AF14-8C5D852C1822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{658F6408-05B5-49A3-AF14-8C5D852C1822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{658F6408-05B5-49A3-AF14-8C5D852C1822}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
