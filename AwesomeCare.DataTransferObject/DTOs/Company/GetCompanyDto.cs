@@ -13,7 +13,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Company
         {
            // Contacts = new HashSet<GetCompanyContactDto>();
         }
-       
+        public int CompanyId { get; set; }
         public string Company { get; set; }        
         public string LogoUrl { get; set; }       
         public string Address { get; set; }       
@@ -21,6 +21,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Company
         public string Website { get; set; }
         public string Language { get; set; }
 
-        public   IQueryable<GetCompanyContactDto> Contacts { get; set; }
+      //  public   IQueryable<GetCompanyContactDto> Contacts { get; set; }
     }
 }

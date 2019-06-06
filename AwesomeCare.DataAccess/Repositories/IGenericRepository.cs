@@ -10,6 +10,7 @@ namespace AwesomeCare.DataAccess.Repositories
         Task<TEntity> GetEntity(object id);
         Task<List<TEntity>> GetEntities();
         Task<TEntity> InsertEntity(TEntity entity);
+        Task<TEntity> UpdateEntity(TEntity entity);
         Task InsertEntities(List<TEntity> entities);
         Task DeleteEntity(TEntity entity);
     }

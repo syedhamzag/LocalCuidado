@@ -24,7 +24,7 @@ namespace AwesomeCare.API.Controllers
         [HttpGet("{id}", Name = "GetCompany")]
         [EnableQuery]
         public async Task<IActionResult> GetCompany(int id)
-        {            
+        {
             var company = await _companyRepository.GetEntity(id);
             var createCompanyDto = Mapper.Map<GetCompanyDto>(company);
             return Ok(createCompanyDto);
@@ -42,7 +42,7 @@ namespace AwesomeCare.API.Controllers
         public IActionResult GetCompanies()
         {
             var companies = _companyRepository.Table.ProjectTo<GetCompanyDto>().ToList();
-           
+
             return Ok(companies);
         }
         [HttpPost()]
@@ -59,6 +59,22 @@ namespace AwesomeCare.API.Controllers
             return CreatedAtAction("GetCompany", new { id = company.CompanyId }, createCompanyDto);
         }
 
-        
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCompany([FromBody]UpdateCompanyDto model, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+           
+            if (model.CompanyId != id)
+            {
+                return NotFound();
+            }
+            var companyMap = Mapper.Map<CompanyModel>(model);
+            var updatedCompany = await _companyRepository.UpdateEntity(companyMap);
+            var createCompanyDto = Mapper.Map<GetCompanyDto>(updatedCompany);
+            return Ok(createCompanyDto);
+        }
     }
 }

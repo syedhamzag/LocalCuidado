@@ -56,6 +56,16 @@ namespace AwesomeCare.DataAccess.Repositories
             return entity;
         }
 
+        public async Task<TEntity> UpdateEntity(TEntity entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException("entity");
+
+            Entities.Update(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
+        }
+
         private DbSet<TEntity> Entities
         {
             get

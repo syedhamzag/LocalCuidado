@@ -11,8 +11,12 @@ namespace AwesomeCare.Admin.Services.Company
     public interface ICompanyService
     {
         [Get("/Company/{companyId}")]
-        Task<HttpResponseMessage> GetCompany(int companyId);
+        Task<GetCompanyDto> GetCompany(int companyId);
         [Get("/Company")]
         Task<IEnumerable<GetCompanyDto>> GetCompanies();
+        [Post("/Company")]
+        Task<HttpResponseMessage> AddCompany(CreateCompanyDto companyDto);
+        [Put("/Company/{companyId}")]
+        Task<GetCompanyDto> UpdateCompany(UpdateCompanyDto companyDto, int companyId);
     }
 }

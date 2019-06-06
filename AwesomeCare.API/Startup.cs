@@ -60,7 +60,7 @@ namespace AwesomeCare.API
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("./swagger/v1/swagger.json", "AwesomeCare API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwesomeCare API V1");
                 c.RoutePrefix = string.Empty;
             });
 
@@ -68,9 +68,14 @@ namespace AwesomeCare.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            else if (env.IsStaging())
+            {
+                app.UseDeveloperExceptionPage();
+            }
             else
             {
-                app.UseHsts();
+                app.UseDeveloperExceptionPage();
+              //  app.UseHsts();
             }
 
             app.UseHttpsRedirection();
