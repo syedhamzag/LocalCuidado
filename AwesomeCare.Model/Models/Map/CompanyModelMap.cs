@@ -48,7 +48,13 @@ namespace AwesomeCare.Model.Models.Map
               .HasMaxLength(255)
               .IsRequired();
 
-           
+
+            #endregion
+
+            #region Region
+            builder.HasOne<CompanyContactModel>(p => p.CompanyContact)
+                .WithOne(p => p.Company)
+                .HasForeignKey<CompanyContactModel>(f => f.CompanyId).OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

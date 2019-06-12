@@ -13,17 +13,17 @@ namespace AwesomeCare.API.AutoMapperConfig
             #region Company
             CreateMap<CompanyModel, GetCompanyDto>()
                .ForMember(dto => dto.Company, mem => mem.MapFrom(src => src.CompanyName));
-               //.ForMember(dto=>dto.Contacts,mem=>mem.MapFrom(src=>src.CompanyContacts.AsQueryable()));
+            //.ForMember(dto=>dto.Contacts,mem=>mem.MapFrom(src=>src.CompanyContacts.AsQueryable()));
             //   .ForMember(dto=>dto.Contacts,mem=>mem.Ignore());
 
             CreateMap<CreateCompanyDto, CompanyModel>()
                 .ForMember(dto => dto.CompanyId, mem => mem.Ignore())
                 .ForMember(dto => dto.CompanyName, mem => mem.MapFrom(src => src.Company))
-                .ForMember(dto => dto.CompanyContacts, mem => mem.Ignore());
+            .ForMember(dto => dto.CompanyContact, mem => mem.Ignore());
 
             CreateMap<UpdateCompanyDto, CompanyModel>()
                .ForMember(dto => dto.CompanyName, mem => mem.MapFrom(src => src.Company))
-               .ForMember(dto => dto.CompanyContacts, mem => mem.Ignore());
+            .ForMember(dto => dto.CompanyContact, mem => mem.Ignore());
 
             CreateMap<CompanyModel, UpdateCompanyDto>()
                 .ForMember(dto => dto.Company, mem => mem.MapFrom(src => src.CompanyName));
@@ -33,10 +33,9 @@ namespace AwesomeCare.API.AutoMapperConfig
 
             #region CompanyContact
             CreateMap<PostCompanyContactDto, CompanyContactModel>()
-               .ForMember(dto => dto.CompanyId, mem => mem.Ignore())
                .ForMember(dto => dto.CompanyContactId, mem => mem.Ignore())
-               .ForMember(dto => dto.Company, mem => mem.Ignore());
-
+              .ForMember(dto => dto.Company, mem => mem.Ignore());
+            
             CreateMap<CompanyContactModel, GetCompanyContactDto>();
             #endregion
         }

@@ -8,7 +8,7 @@ namespace AwesomeCare.Model.Models
     {
         public CompanyModel()
         {
-            CompanyContacts = new HashSet<CompanyContactModel>();
+            
         }
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
@@ -18,6 +18,6 @@ namespace AwesomeCare.Model.Models
         public string Website { get; set; }
         public string Language { get; set; }
 
-        public virtual ICollection<CompanyContactModel> CompanyContacts { get; set; }
+        public CompanyContactModel CompanyContact { get; set; }
     }
 }

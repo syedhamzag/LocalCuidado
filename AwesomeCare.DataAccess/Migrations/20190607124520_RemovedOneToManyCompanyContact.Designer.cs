@@ -3,14 +3,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190607124520_RemovedOneToManyCompanyContact")]
+    partial class RemovedOneToManyCompanyContact
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,9 +26,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("CompanyContactId")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnName("CompanyId");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -44,9 +43,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasMaxLength(255);
 
                     b.HasKey("CompanyContactId");
-
-                    b.HasIndex("CompanyId")
-                        .IsUnique();
 
                     b.ToTable("tbl_CompanyContact");
                 });
@@ -89,14 +85,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasKey("CompanyId");
 
                     b.ToTable("tbl_Company");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.CompanyContactModel", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.CompanyModel", "Company")
-                        .WithOne("CompanyContact")
-                        .HasForeignKey("AwesomeCare.Model.Models.CompanyContactModel", "CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
