@@ -22,7 +22,6 @@ namespace AwesomeCare.API.Controllers
             _companyRepository = companyRepository;
         }
         [HttpGet("{id}", Name = "GetCompany")]
-        [EnableQuery]
         public async Task<IActionResult> GetCompany(int id)
         {
             var company = await _companyRepository.GetEntity(id);

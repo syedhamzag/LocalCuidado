@@ -36,17 +36,24 @@ namespace AwesomeCare.API
             {
                 options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
             });
+            services.AddLogging();
 
+            #region AutoMapper
             //AutoMapper
             AutoMapperConfiguration.Configure();
-            services.AddScoped(typeof(IDbContext),typeof(AwesomeCareDbContext));
-            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-
+            #endregion
+            #region Database
+            services.AddScoped(typeof(IDbContext), typeof(AwesomeCareDbContext));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            #endregion
+            #region Swagger
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "AwesomeCare API", Version = "v1" });
             });
+            #endregion
+
             services.AddOData();
         }
 

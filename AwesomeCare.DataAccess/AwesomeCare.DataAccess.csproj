@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20190420033217_Initials.cs" />
     <Compile Remove="Migrations\20190420033724_Initials.cs" />
     <Compile Remove="Migrations\20190420035754_CompanyContactTable.cs" />
+    <Compile Remove="Migrations\20190607115506_CompanyContactRelationship.cs" />
+    <Compile Remove="Migrations\20190607115506_CompanyContactRelationship.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

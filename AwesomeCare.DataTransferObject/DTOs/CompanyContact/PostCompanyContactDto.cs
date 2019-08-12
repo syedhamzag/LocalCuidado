@@ -14,5 +14,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.CompanyContact
         public string Email { get; set; }
         [Required]
         public string Telephone { get; set; }
+        [Required]
+        public int CompanyId { get; set; }
     }
 }

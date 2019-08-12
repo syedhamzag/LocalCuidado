@@ -48,6 +48,7 @@ namespace AwesomeCare.Admin
             }
             else
             {
+                
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
@@ -67,6 +68,8 @@ namespace AwesomeCare.Admin
         void AddRefitServices(IServiceCollection services)
         {
             services.AddRefitClient<ICompanyService>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AwesomeCareBaseApi"]));
+            services.AddRefitClient<ICompanyContactService>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AwesomeCareBaseApi"]));
         }
     }

@@ -39,11 +39,11 @@ namespace AwesomeCare.Model.Models.Map
             #endregion
 
             #region Relationship
-            builder.HasOne(p => p.Company)
-                .WithMany(p => p.CompanyContacts)
-                .HasForeignKey(p => p.CompanyId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.HasOne(p => p.Company)
+            //    .WithMany(p => p.CompanyContacts)
+            //    .HasForeignKey(p => p.CompanyId)
+            //    .IsRequired()
+            //    .OnDelete(DeleteBehavior.Restrict);
             #endregion
         }
     }

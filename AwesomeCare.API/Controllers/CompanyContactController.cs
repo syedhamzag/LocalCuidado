@@ -5,6 +5,7 @@ using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,21 +17,24 @@ namespace AwesomeCare.API.Controllers
     {
 
         private IGenericRepository<CompanyContactModel> _companyContactRepository;
+        private ILogger<CompanyContactController> _logger;
 
-        public CompanyContactController(IGenericRepository<CompanyContactModel> companyContactRepository)
+        public CompanyContactController(IGenericRepository<CompanyContactModel> companyContactRepository, ILogger<CompanyContactController> logger)
         {
             _companyContactRepository = companyContactRepository;
+            _logger = logger;
         }
 
-        [HttpGet("{id}", Name = "GetCompanyContact")]
-        public async Task<IActionResult> GetCompanyContact(int? id)
+        [HttpGet(Name = "GetCompanyContactByCompanyId")]
+        public async Task<IActionResult> GetCompanyContactByCompanyId(int? companyId)
         {
-            if (!id.HasValue)
+            if (!companyId.HasValue)
             {
                 return NotFound();
             }
 
-            var companyContact = await _companyContactRepository.GetEntity(id);
+            var companyContact = await _companyContactRepository.Table
+               .FirstOrDefaultAsync(cc => cc.CompanyId == companyId);
 
             if (companyContact == null)
             {
@@ -42,31 +46,62 @@ namespace AwesomeCare.API.Controllers
             return Ok(companyContactDto);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetCompanyContacts(int companyId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCompanyContact(int? companyId, int? id)
         {
+            if (!id.HasValue)
+            {
+                return NotFound();
+            }
 
-            var companyContacts = await _companyContactRepository.Table
-               .Where(cc => cc.CompanyId == companyId)
-               .ProjectTo<GetCompanyContactDto>().ToListAsync();
+            var companyContact = await _companyContactRepository.Table
+               .FirstOrDefaultAsync(cc => cc.CompanyId == companyId && cc.CompanyContactId == id);
 
-            return Ok(companyContacts);
+            if (companyContact == null)
+            {
+                return NotFound();
+            }
+
+            var companyContactDto = Mapper.Map<GetCompanyContactDto>(companyContact);
+
+            return Ok(companyContactDto);
         }
+        //[HttpGet]
+        //public async Task<IActionResult> GetCompanyContacts(int companyId)
+        //{
+
+        //    var companyContacts = await _companyContactRepository.Table
+        //       .Where(cc => cc.CompanyId == companyId)
+        //       .ProjectTo<GetCompanyContactDto>().ToListAsync();
+
+        //    return Ok(companyContacts);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> PostCompanyContact(int companyId, [FromBody]PostCompanyContactDto contactDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                if (companyId != contactDto.CompanyId)
+                {
+                    return BadRequest("Invalid CompanyId");
+                }
+                var companyContactMap = Mapper.Map<CompanyContactModel>(contactDto);
+                var companyContact = await _companyContactRepository.InsertEntity(companyContactMap);
+
+                var companyContactDto = Mapper.Map<GetCompanyContactDto>(companyContact);
+
+                return CreatedAtRoute("GetCompanyContact", new { id = companyContact.CompanyContactId }, companyContactDto);
             }
-            var companyContactMap = Mapper.Map<CompanyContactModel>(contactDto);
-            companyContactMap.CompanyId = companyId;
-            var companyContact = await _companyContactRepository.InsertEntity(companyContactMap);
-
-            var companyContactDto = Mapper.Map<GetCompanyContactDto>(companyContact);
-
-            return CreatedAtRoute("GetCompanyContact", new { id = companyContact.CompanyContactId }, companyContactDto);
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, "PostCompanyContact");
+                return BadRequest();
+            }
         }
     }
 }
