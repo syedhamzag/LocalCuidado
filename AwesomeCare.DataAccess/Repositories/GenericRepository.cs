@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.DataAccess.Repositories
@@ -36,7 +37,10 @@ namespace AwesomeCare.DataAccess.Repositories
         {
             return await Entities.FindAsync(id) as TEntity;
         }
-
+        public async Task<TEntity> GetEntityWithRelatedEntity<TRelatedProperty>(Expression<Func<TEntity, TRelatedProperty>> includeExpression,Expression<Func<TEntity, bool>>  firstOrDefault)
+        {            
+            return await Entities.Include(includeExpression).FirstOrDefaultAsync(firstOrDefault) as TEntity;
+        }
         public async Task InsertEntities(List<TEntity> entities)
         {
             if (entities == null || entities.Count == 0)
