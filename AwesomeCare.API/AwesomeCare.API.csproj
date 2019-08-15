@@ -5,6 +5,11 @@
     <Configurations>Debug;Release;Staging</Configurations>
   </PropertyGroup>
 
+   <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+  
   <ItemGroup>
     <Compile Remove="Controllers\CompanyTestController.cs" />
   </ItemGroup>

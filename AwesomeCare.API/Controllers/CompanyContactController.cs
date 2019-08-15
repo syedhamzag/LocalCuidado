@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.API.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Route("api/Company/{companyId}/[controller]")]
     [ApiController]
     public class CompanyContactController : ControllerBase
@@ -25,6 +28,11 @@ namespace AwesomeCare.API.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
         [HttpGet(Name = "GetCompanyContactByCompanyId")]
         public async Task<IActionResult> GetCompanyContactByCompanyId(int? companyId)
         {
@@ -46,6 +54,12 @@ namespace AwesomeCare.API.Controllers
             return Ok(companyContactDto);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCompanyContact(int? companyId, int? id)
         {

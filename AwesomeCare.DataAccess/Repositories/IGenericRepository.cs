@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.DataAccess.Repositories
@@ -13,5 +15,7 @@ namespace AwesomeCare.DataAccess.Repositories
         Task<TEntity> UpdateEntity(TEntity entity);
         Task InsertEntities(List<TEntity> entities);
         Task DeleteEntity(TEntity entity);
+        Task<TEntity> GetEntityWithRelatedEntity<TRelatedProperty>(Expression<Func<TEntity, TRelatedProperty>> includeExpression, Expression<Func<TEntity, bool>> firstOrDefault);
+        
     }
 }

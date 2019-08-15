@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20190420035754_CompanyContactTable.cs" />
     <Compile Remove="Migrations\20190607115506_CompanyContactRelationship.cs" />
     <Compile Remove="Migrations\20190607115506_CompanyContactRelationship.Designer.cs" />
+    <Compile Remove="Migrations\20190814080418_BaseRecordTable.cs" />
+    <Compile Remove="Migrations\20190814080418_BaseRecordTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
