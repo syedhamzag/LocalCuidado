@@ -36,6 +36,7 @@ namespace AwesomeCare.Admin
             //AutoMapper
             AutoMapperConfig.Configure();
             AddRefitServices(services);
+           
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

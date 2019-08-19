@@ -113,6 +113,17 @@ namespace AwesomeCare.API.Controllers
             return Ok(baseRecords);
         }
 
+        [HttpGet("GetBaseRecordsWithItems", Name = "GetBaseRecordsWithItems")]
+        [ProducesResponseType(type: typeof(List<GetBaseRecordWithItems>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetBaseRecordsWithItemsAsync()
+        {
+            var baseRecords = await _baseRecordRepository.Table.ProjectTo<GetBaseRecordWithItems>().Include(c=>c.BaseRecordItems).ToListAsync();
+            return Ok(baseRecords);
+        }
+
+
         [HttpGet("GetBaseRecordItemById/{baseRecordItemId}", Name = "GetBaseRecordItemById")]
         [ProducesResponseType(type: typeof(GetBaseRecordItem), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

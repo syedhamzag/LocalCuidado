@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.Model.Models;
@@ -72,11 +73,18 @@ namespace AwesomeCare.API.AutoMapperConfig
                 .ForMember(dt => dt.ValueName, mem => mem.MapFrom(src => src.ValueName));
 
             CreateMap<BaseRecordModel, GetBaseRecord>();
-                
+
             #endregion
 
             #region BaseRecordItem
 
+            #endregion
+
+            #region Client
+            CreateMap<PostClient, Client>()
+                .ForMember(dto=>dto.ClientId,mem=>mem.Ignore());
+
+            CreateMap<Client, GetClient>();
             #endregion
         }
     }
