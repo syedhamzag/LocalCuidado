@@ -15,7 +15,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class BaseRecordController : ControllerBase
     {
@@ -136,12 +136,16 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var baseRecordItem = await _baseRecordItemRepository.GetEntity(baseRecordItemId);
+           
+            var baseRecordItem = await _baseRecordItemRepository.Table.Include(b => b.BaseRecord).FirstOrDefaultAsync(c => c.BaseRecordItemId == baseRecordItemId);//_baseRecordItemRepository.GetEntity(baseRecordItemId);
             if (baseRecordItem == null)
                 return NotFound();
 
             GetBaseRecordItem getBaseRecordItems = Mapper.Map<GetBaseRecordItem>(baseRecordItem);
             return Ok(getBaseRecordItems);
         }
+
+
+
     }
 }

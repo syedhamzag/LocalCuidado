@@ -7,7 +7,7 @@ using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.Model.Models;
 using System.Linq;
 
-namespace AwesomeCare.API.AutoMapperConfig
+namespace MapperConfig
 {
     public class MapperProfile : Profile
     {
@@ -38,7 +38,7 @@ namespace AwesomeCare.API.AutoMapperConfig
             CreateMap<PostCompanyContactDto, CompanyContactModel>()
                .ForMember(dto => dto.CompanyContactId, mem => mem.Ignore())
               .ForMember(dto => dto.Company, mem => mem.Ignore());
-            
+
             CreateMap<CompanyContactModel, GetCompanyContactDto>();
             #endregion
 
@@ -46,7 +46,7 @@ namespace AwesomeCare.API.AutoMapperConfig
             CreateMap<PostBaseRecord, BaseRecordModel>()
                 .ForMember(dto => dto.KeyName, mem => mem.MapFrom(src => src.KeyName))
                 .ForMember(dto => dto.Description, mem => mem.MapFrom(src => src.Description))
-                .ForMember(dto => dto.BaseRecordItems, mem => mem.MapFrom(src=>src.PostBaseRecordItems))
+                .ForMember(dto => dto.BaseRecordItems, mem => mem.MapFrom(src => src.PostBaseRecordItems))
                 .ForMember(dto => dto.BaseRecordId, mem => mem.Ignore());
 
             CreateMap<BaseRecordModel, PostBaseRecord>()
@@ -77,20 +77,20 @@ namespace AwesomeCare.API.AutoMapperConfig
             CreateMap<BaseRecordModel, GetBaseRecord>();
 
             CreateMap<PutBaseRecordItem, BaseRecordItemModel>()
-                .ForMember(dto=>dto.BaseRecordId,mem=>mem.MapFrom(src=>src.BaseRecordId))
-                .ForMember(dto=>dto.BaseRecordItemId,mem=>mem.MapFrom(src=>src.BaseRecordItemId))
-                .ForMember(dto=>dto.Deleted,mem=>mem.MapFrom(src=>src.Deleted))
-                .ForMember(dto=>dto.ValueName,mem=>mem.MapFrom(src=>src.ValueName))
-                .ForMember(dto=>dto.BaseRecord,mem=>mem.Ignore());
+                .ForMember(dto => dto.BaseRecordId, mem => mem.MapFrom(src => src.BaseRecordId))
+                .ForMember(dto => dto.BaseRecordItemId, mem => mem.MapFrom(src => src.BaseRecordItemId))
+                .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => src.Deleted))
+                .ForMember(dto => dto.ValueName, mem => mem.MapFrom(src => src.ValueName))
+                .ForMember(dto => dto.BaseRecord, mem => mem.Ignore());
             #endregion
 
             #region BaseRecordItem
-
+            CreateMap<GetBaseRecordItem, PutBaseRecordItem>();
             #endregion
 
             #region Client
             CreateMap<PostClient, Client>()
-                .ForMember(dto=>dto.ClientId,mem=>mem.Ignore());
+                .ForMember(dto => dto.ClientId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>();
             #endregion

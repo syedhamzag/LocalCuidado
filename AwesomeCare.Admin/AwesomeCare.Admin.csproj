@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AwesomeCare.DataTransferObject\AwesomeCare.DataTransferObject.csproj" />
+    <ProjectReference Include="..\MapperConfig\MapperConfig.csproj" />
   </ItemGroup>
 
 </Project>

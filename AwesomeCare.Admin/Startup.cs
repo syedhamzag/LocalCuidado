@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.Admin.AutoMapperConfiguration;
+using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Company;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +35,8 @@ namespace AwesomeCare.Admin
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             //AutoMapper
-            AutoMapperConfig.Configure();
+            //AutoMapperConfig.Configure();
+            MapperConfig.AutoMapperConfiguration.Configure();
             AddRefitServices(services);
            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -68,10 +70,14 @@ namespace AwesomeCare.Admin
 
         void AddRefitServices(IServiceCollection services)
         {
+            string uri = Configuration["AwesomeCareBaseApi"];
             services.AddRefitClient<ICompanyService>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AwesomeCareBaseApi"]));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
             services.AddRefitClient<ICompanyContactService>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration["AwesomeCareBaseApi"]));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
+            services.AddRefitClient<IBaseRecordService>()
+               .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
+            
         }
     }
 }

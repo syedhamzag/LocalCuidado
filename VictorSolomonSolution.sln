@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.Web", "AwesomeC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwesomeCare.Admin", "AwesomeCare.Admin\AwesomeCare.Admin.csproj", "{2271009E-1CA3-4623-8B23-ACA5FEB21F6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapperConfig", "MapperConfig\MapperConfig.csproj", "{8D5A0699-3425-4BB8-989D-F7E8B69F5EF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,12 @@ Global
 		{2271009E-1CA3-4623-8B23-ACA5FEB21F6F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2271009E-1CA3-4623-8B23-ACA5FEB21F6F}.Staging|Any CPU.ActiveCfg = Release|Any CPU
 		{2271009E-1CA3-4623-8B23-ACA5FEB21F6F}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{8D5A0699-3425-4BB8-989D-F7E8B69F5EF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D5A0699-3425-4BB8-989D-F7E8B69F5EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D5A0699-3425-4BB8-989D-F7E8B69F5EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D5A0699-3425-4BB8-989D-F7E8B69F5EF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D5A0699-3425-4BB8-989D-F7E8B69F5EF0}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D5A0699-3425-4BB8-989D-F7E8B69F5EF0}.Staging|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

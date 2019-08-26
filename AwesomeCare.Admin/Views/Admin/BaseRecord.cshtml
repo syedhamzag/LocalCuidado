@@ -1,5 +1,5 @@
 ﻿@using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
-@model  List<GetBaseRecordWithItems>
+@model List<GetBaseRecordWithItems>
 
 @{
     ViewData["Title"] = "Base Record";
@@ -7,104 +7,50 @@
 
 <h2>Base Record</h2>
 
-<div class="row clearfix">
 
+<div class="row clearfix">
     <div class="col-lg-12">
         <div class="card">
-
+            <div class="header">
+                <h2>Base Record Items</h2>
+            </div>
             <div class="body">
                 <div class="accordion" id="accordion">
-                    <div>
-                        <div class="card-header" id="headingOne">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Collapsible Group Item #1
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                            <div class="card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="card-header" id="headingTwo">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Collapsible Group Item #2
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                            <div class="card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="card-header" id="headingThree">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    Collapsible Group Item #3
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                            <div class="card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="body">
-                <div class="row">
-                    <div class="col-lg-6 col-md-12">
-                        <h6>Accordion Link</h6>
-                        <p>
-                            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                Link with href
-                            </a>
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                Button with data-target
-                            </button>
-                        </p>
-                        <div class="collapse" id="collapseExample">
-                            <div class="card card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="col-lg-6 col-md-12">
+                    @foreach (var baseRecord in Model)
+                    {
                         <div>
-                            <h6>Multiple targets Accordion</h6>
-                            <p>
-                                <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Toggle first element</a>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Toggle second element</button>
-                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Toggle both elements</button>
-                            </p>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="collapse multi-collapse" id="multiCollapseExample1">
-                                        <div class="card card-body">
-                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="collapse multi-collapse" id="multiCollapseExample2">
-                                        <div class="card card-body">
-                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                                        </div>
-                                    </div>
+
+                            <div class="card-header" id="@baseRecord.KeyName">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#@baseRecord.BaseRecordId" aria-expanded="false" aria-controls="@baseRecord.BaseRecordId">
+                                        @baseRecord.Description
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="@baseRecord.BaseRecordId" class="collapse" aria-labelledby="@baseRecord.KeyName" data-parent="#accordion">
+                                <div class="card-body">
+                                    <table class="table table-condensed table-borderless table-hover">
+                                        @foreach (var item in baseRecord.BaseRecordItems)
+                                        {
+                                            //BaseRecord Content
+                                            <tr>
+                                                <td> @item.ValueName</td>
+                                                <td>   <a asp-controller="Admin" asp-action="EditBaseRecordItem" asp-route-baseRecordItemId="@item.BaseRecordItemId"> <i class="icon-pencil js-sweetalert" /></a></td>
+                                            </tr>
+
+                                        }
+
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
+
+
                 </div>
             </div>
+
         </div>
     </div>
 

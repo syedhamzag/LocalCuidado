@@ -14,7 +14,7 @@ namespace AwesomeCare.API.Controllers
     /// <summary>
     /// 
     /// </summary>
-    [Route("api/Company/{companyId}/[controller]")]
+    [Route("api/v1/Company/{companyId}/[controller]")]
     [ApiController]
     public class CompanyContactController : ControllerBase
     {

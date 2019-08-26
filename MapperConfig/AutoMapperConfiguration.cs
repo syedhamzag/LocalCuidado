@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-
-namespace AwesomeCare.API.AutoMapperConfig
+﻿using System;
+using AutoMapper;
+namespace MapperConfig
 {
     public class AutoMapperConfiguration
     {

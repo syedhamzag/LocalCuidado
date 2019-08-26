@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.API.Controllers
 {
-    [Route("api/Company")]
+    [Route("api/v1/Company")]
     [ApiController]
     public class CompanyController : ControllerBase
     {

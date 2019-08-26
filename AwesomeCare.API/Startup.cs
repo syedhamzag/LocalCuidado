@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using AwesomeCare.API.AutoMapperConfig;
+
 using AwesomeCare.API.Middlewares;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
@@ -43,7 +43,8 @@ namespace AwesomeCare.API
 
             #region AutoMapper
             //AutoMapper
-            AutoMapperConfiguration.Configure();
+            //  AutoMapperConfiguration.Configure();
+            MapperConfig.AutoMapperConfiguration.Configure();
             #endregion
             #region Database
             services.AddScoped(typeof(IDbContext), typeof(AwesomeCareDbContext));
