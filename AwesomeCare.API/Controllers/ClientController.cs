@@ -34,8 +34,17 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+            //Check if client is not already registered
+
+            var isClientRegistered = _clientRepository.Table.Any(c => c.Email.Trim().Equals(postClient.Email.Trim(), StringComparison.InvariantCultureIgnoreCase));
+            if (isClientRegistered)
+            {
+                ModelState.AddModelError("", $"Client with email address {postClient.Email} is already registered");
+                return BadRequest(ModelState);
+            }
+
             var client = Mapper.Map<Client>(postClient);
-            var newClient = _clientRepository.InsertEntity(client);
+            var newClient =await _clientRepository.InsertEntity(client);
             var getClient = Mapper.Map<GetClient>(newClient);
             return CreatedAtAction("GetClient", new { id = getClient.ClientId }, getClient);
 
@@ -52,7 +61,7 @@ namespace AwesomeCare.API.Controllers
             if (!id.HasValue)
                 return BadRequest("id Parameter is required");
 
-            var client = _clientRepository.GetEntity(id);
+            var client =await _clientRepository.GetEntity(id);
             var getClient = Mapper.Map<GetClient>(client);
             return Ok(getClient);
         }

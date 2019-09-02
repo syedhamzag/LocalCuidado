@@ -2,41 +2,54 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using AwesomeCare.Admin.Models;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.ViewModels.Client;
+using AwesomeCare.DataTransferObject.DTOs.Client;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class ClientController : BaseController
     {
-        public IActionResult Register()
+        private readonly IClientService _clientService;
+        public ClientController(IClientService clientService)
         {
-            var kk = new SampleModel();
-            return View(kk);
+            _clientService = clientService;
         }
-        [HttpPost]
-        public IActionResult Register(SampleModel model)
+        public async Task<IActionResult> HomeCare()
         {
-           
-            return View(model);
+            var result = await _clientService.GetClients();
+            return View(result);
         }
+        
 
-        public IActionResult HomeCare()
+        public IActionResult HomeCareRegistration()
         {
             var client = new CreateClient();
-           
+
             return View(client);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult HomeCare(CreateClient model)
+        public async Task<IActionResult> HomeCareRegistration(CreateClient model)
         {
-            if(model == null || !ModelState.IsValid)
+            model.StatusId = 14;
+            if (model == null || !ModelState.IsValid)
             {
                 return View(model);
             }
-            return View();
+
+            var result = await _clientService.PostClient(model);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "New Client successfully registered" : "An Error Occurred" });
+            if (!result.IsSuccessStatusCode)
+                return View(model);
+
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Test()

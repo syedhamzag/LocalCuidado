@@ -49,6 +49,13 @@ namespace MapperConfig
                 .ForMember(dto => dto.BaseRecordItems, mem => mem.MapFrom(src => src.BaseRecordItems))
                 .ForMember(dto => dto.BaseRecordId, mem => mem.Ignore());
 
+            CreateMap<BaseRecordItemDto, BaseRecordItemModel>()
+                .ForMember(dto => dto.ValueName, mem => mem.MapFrom(src => src.ValueName))
+                .ForMember(dto => dto.BaseRecordItemId, mem => mem.Ignore())
+                .ForMember(dto => dto.BaseRecordId, mem => mem.Ignore())
+                .ForMember(dto => dto.Deleted, mem => mem.Ignore())
+                .ForMember(dto => dto.BaseRecord, mem => mem.Ignore());
+
             CreateMap<BaseRecordModel, PostBaseRecord>()
                 .ForMember(dt => dt.KeyName, mem => mem.MapFrom(src => src.KeyName))
                 .ForMember(dt => dt.Description, mem => mem.MapFrom(src => src.Description))
@@ -93,6 +100,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>();
+               // .ForMember(dto=>dto.)
             #endregion
         }
     }

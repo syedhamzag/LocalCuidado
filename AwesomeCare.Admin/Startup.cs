@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
 using AwesomeCare.Admin.Middlewares;
+using AwesomeCare.Admin.Services.Client;
 
 namespace AwesomeCare.Admin
 {
@@ -38,6 +39,7 @@ namespace AwesomeCare.Admin
             //AutoMapper
             //AutoMapperConfig.Configure();
             MapperConfig.AutoMapperConfiguration.Configure();
+            services.AddLogging();
             AddRefitServices(services);
             services.AddMemoryCache();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -79,6 +81,9 @@ namespace AwesomeCare.Admin
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
             services.AddRefitClient<IBaseRecordService>()
                .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
+            services.AddRefitClient<IClientService>()
+              .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
+
             
         }
     }
