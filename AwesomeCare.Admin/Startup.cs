@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
+using AwesomeCare.Admin.Middlewares;
 
 namespace AwesomeCare.Admin
 {
@@ -38,13 +39,14 @@ namespace AwesomeCare.Admin
             //AutoMapperConfig.Configure();
             MapperConfig.AutoMapperConfiguration.Configure();
             AddRefitServices(services);
-           
+            services.AddMemoryCache();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseBaseRecordMiddleware();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

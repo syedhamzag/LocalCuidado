@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.BaseRecord
+namespace AwesomeCare.DataTransferObject.DTOs.BaseRecordItem
 {
     public class PostBaseRecordItem
     {
@@ -11,6 +11,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.BaseRecord
         [MaxLength(225)]
         public string ValueName { get; set; }
         [Required]
-        public bool Deleted { get; set; }
+        public int BaseRecordId { get; set; }
+        //[Required]
+        //    public bool Deleted { get; set; }
     }
 }

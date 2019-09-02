@@ -1,0 +1,38 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.BaseRecordItem;
+@model PostBaseRecordItem
+@{
+    ViewData["Title"] = "Add BaseRecord Item";
+}
+
+<form asp-action="AddBaseRecordItem" method="post">
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+            <div class="card planned_task">
+                <div class="header">
+                    <h2>Add BaseRecord Item</h2>
+
+                </div>
+                <div class="body">
+
+                    <div class="col-sm-12 input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">@ViewBag.BaseRecord</span>
+                        </div>
+
+                        <input type="text" asp-for="ValueName" value="@Model.ValueName" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        <input type="hidden" asp-for="BaseRecordId" value="@Model.BaseRecordId">
+
+                        <span asp-validation-for="ValueName" class="text-danger"></span>
+
+                    </div>
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary ">Submit</button>
+                        <a class="btn btn-outline-secondary" asp-controller="Admin" asp-action="BaseRecord">Cancel</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>

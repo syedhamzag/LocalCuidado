@@ -27,5 +27,8 @@ namespace AwesomeCare.Admin.Services.Admin
 
         [Put("/BaseRecordItem")]
         Task<GetBaseRecordItem> UpdateBaseRecordItem([Body]PutBaseRecordItem baseRecordItem);
+
+        [Post("/BaseRecordItem")]
+        Task<GetBaseRecordItem> PostBaseRecordItem([Body]PostBaseRecordItem baseRecordItem);
     }
 }

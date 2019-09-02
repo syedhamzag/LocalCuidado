@@ -48,5 +48,35 @@ namespace AwesomeCare.API.Controllers
             GetBaseRecordItem getBaseRecordItems = Mapper.Map<GetBaseRecordItem>(update);
             return Ok(getBaseRecordItems);
         }
+
+        /// <summary>
+        /// Add BaseRecord Item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(type: typeof(GetBaseRecordItem), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddBaseRecordItem([FromBody]PostBaseRecordItem item)
+        {
+            if (item == null || !ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var baseRecordItem = Mapper.Map<BaseRecordItemModel>(item);
+            //check if Item does not exist
+
+            var itemExist = _baseRecordItemRepository.Table.Any(i =>i.BaseRecordId==item.BaseRecordId && i.ValueName.Trim().Equals(item.ValueName.Trim(), StringComparison.InvariantCultureIgnoreCase));
+            if(itemExist)
+            {
+                ModelState.AddModelError($"ValueName", $"Item name {item.ValueName} already exist for the selected BaseRecord");
+                return BadRequest(ModelState);
+            }
+            var newItem = await _baseRecordItemRepository.InsertEntity(baseRecordItem);
+
+            GetBaseRecordItem getBaseRecordItems = Mapper.Map<GetBaseRecordItem>(newItem);
+            return Ok(getBaseRecordItems);
+        }
     }
 }

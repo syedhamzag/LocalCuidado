@@ -46,13 +46,13 @@ namespace MapperConfig
             CreateMap<PostBaseRecord, BaseRecordModel>()
                 .ForMember(dto => dto.KeyName, mem => mem.MapFrom(src => src.KeyName))
                 .ForMember(dto => dto.Description, mem => mem.MapFrom(src => src.Description))
-                .ForMember(dto => dto.BaseRecordItems, mem => mem.MapFrom(src => src.PostBaseRecordItems))
+                .ForMember(dto => dto.BaseRecordItems, mem => mem.MapFrom(src => src.BaseRecordItems))
                 .ForMember(dto => dto.BaseRecordId, mem => mem.Ignore());
 
             CreateMap<BaseRecordModel, PostBaseRecord>()
                 .ForMember(dt => dt.KeyName, mem => mem.MapFrom(src => src.KeyName))
                 .ForMember(dt => dt.Description, mem => mem.MapFrom(src => src.Description))
-                .ForMember(dt => dt.PostBaseRecordItems, mem => mem.MapFrom(src => src.BaseRecordItems));
+                .ForMember(dt => dt.BaseRecordItems, mem => mem.MapFrom(src => src.BaseRecordItems));
 
             CreateMap<BaseRecordModel, GetBaseRecordWithItems>()
                 .ForMember(dto => dto.BaseRecordId, mem => mem.MapFrom(src => src.BaseRecordId))
@@ -61,10 +61,10 @@ namespace MapperConfig
                 .ForMember(dto => dto.BaseRecordItems, mem => mem.MapFrom(src => src.BaseRecordItems));
 
             CreateMap<PostBaseRecordItem, BaseRecordItemModel>()
-                .ForMember(dest => dest.BaseRecordId, mem => mem.Ignore())
+                .ForMember(dest => dest.BaseRecordId, mem => mem.MapFrom(src => src.BaseRecordId))
                 .ForMember(dest => dest.BaseRecord, mem => mem.Ignore())
                 .ForMember(dest => dest.BaseRecordItemId, mem => mem.Ignore())
-                .ForMember(dest => dest.Deleted, mem => mem.MapFrom(src => src.Deleted))
+                .ForMember(dest => dest.Deleted, mem => mem.MapFrom(src => false))
                 .ForMember(dest => dest.ValueName, mem => mem.MapFrom(src => src.ValueName));
 
             CreateMap<BaseRecordItemModel, GetBaseRecordItem>()

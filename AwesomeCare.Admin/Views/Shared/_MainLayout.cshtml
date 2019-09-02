@@ -1,5 +1,5 @@
 ﻿@using AwesomeCare.Admin.Components;
-
+@using Microsoft.AspNetCore.Http;
 <!doctype html>
 <html lang="en">
 
@@ -8,13 +8,22 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta name="description" content="Lucid Bootstrap 4.1.1 Admin Template">
+    <meta name="description" content="Cuidado Admin">
     <meta name="author" content="Cuidado Admin, design by: olamidejames.com">
 
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- VENDOR CSS -->
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css" />
+    <link rel="stylesheet" href="../assets/vendor/multi-select/css/multi-select.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="../assets/vendor/nouislider/nouislider.min.css" />
+    <link rel="stylesheet" href="../assets/vendor/parsleyjs/css/parsley.css">
+
+    @RenderSection("HeaderScripts", required: false)
 
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="../assets/css/main.css">
@@ -341,43 +350,35 @@
                         <div class="col-lg-6 col-md-8 col-sm-12">
                             <h2> @ViewData["Title"]</h2>
                             <breadcrumb></breadcrumb>
-                            @*<ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
-                                    <li class="breadcrumb-item">Pages</li>
-                                    <li class="breadcrumb-item active">Page Blank</li>
-                                </ul>*@
+
                         </div>
-                        @*<div class="col-lg-6 col-md-4 col-sm-12 text-right">
-                                <div class="bh_chart hidden-xs">
-                                    <div class="float-left m-r-15">
-                                        <small>Visitors</small>
-                                        <h6 class="mb-0 mt-1"><i class="icon-user"></i> 1,784</h6>
-                                    </div>
-                                    <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
-                                </div>
-                                <div class="bh_chart hidden-sm">
-                                    <div class="float-left m-r-15">
-                                        <small>Visits</small>
-                                        <h6 class="mb-0 mt-1"><i class="icon-globe"></i> 325</h6>
-                                    </div>
-                                    <span class="bh_visits float-right">10,8,9,3,5,8,5</span>
-                                </div>
-                                <div class="bh_chart hidden-sm">
-                                    <div class="float-left m-r-15">
-                                        <small>Chats</small>
-                                        <h6 class="mb-0 mt-1"><i class="icon-bubbles"></i> 13</h6>
-                                    </div>
-                                    <span class="bh_chats float-right">1,8,5,6,2,4,3,2</span>
-                                </div>
-                            </div>*@
+
                     </div>
                 </div>
 
+                @if (this.OperationStatus() != null)
+                {
                 
-                    @RenderBody()
+                    var operationStatus = this.OperationStatus();
+                    if (operationStatus.IsSuccessful)
+                    {
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <i class="fa fa-check-circle"></i> @operationStatus.Message
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <i class="fa fa-times-circle"></i>  @operationStatus.Message
+                        </div>
+                    }
+                }
+                @RenderBody()
 
 
-               
+
             </div>
         </div>
 
@@ -385,13 +386,24 @@
 
     <!-- Javascript -->
     <script src="../assets/bundles/libscripts.bundle.js"></script>
-    <script src="../assets/bundles/vendorscripts.bundle.js"></script>     
+    <script src="../assets/bundles/vendorscripts.bundle.js"></script>
 
+    <script src="../assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js -->
+    <script src="../assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js -->
+    <script src="../assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+    <script src="../assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
     <script src="../assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+    <script src="../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js -->
+    <script src="../assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js -->
     <script src="../assets/vendor/parsleyjs/js/parsley.min.js"></script>
 
-    <script src="../assets/bundles/mainscripts.bundle.js"></script>
 
+    @RenderSection("VendorScripts", required: false)
+
+
+    <script src="../assets/bundles/mainscripts.bundle.js"></script>
+    <script src="../assets/js/pages/forms/advanced-form-elements.js"></script>
 
 
     @RenderSection("Scripts", required: false)
