@@ -98,7 +98,8 @@ namespace MapperConfig
 
             #region Client
             CreateMap<PostClient, Client>()
-                .ForMember(dto => dto.ClientId, mem => mem.Ignore());
+                .ForMember(dto => dto.ClientId, mem => mem.Ignore())
+                .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>();
             // .ForMember(dto=>dto.)
@@ -107,9 +108,11 @@ namespace MapperConfig
             #region ClientInvolvingPartyItem
             CreateMap<PostClientInvolvingPartyItem, ClientInvolvingPartyItem>()
                 .ForMember(dto=>dto.Deleted,mem=>mem.MapFrom(src=> false))
-                .ForMember(dto=>dto.ClientInvolvingPartyItemId,mem=>mem.Ignore());
+                .ForMember(dto=>dto.ClientInvolvingPartyItemId,mem=>mem.Ignore())
+                .ForMember(dto=>dto.ClientInvolvingParty,mem=>mem.Ignore());
             CreateMap<ClientInvolvingPartyItem, GetClientInvolvingPartyItem >();
-            CreateMap<PutClientInvolvingPartyItem, ClientInvolvingPartyItem>();
+            CreateMap<PutClientInvolvingPartyItem, ClientInvolvingPartyItem>()
+                .ForMember(dto=>dto.ClientInvolvingParty,mem=>mem.Ignore());
             #endregion
         }
     }
