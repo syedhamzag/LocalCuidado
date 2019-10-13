@@ -24,8 +24,12 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Client</th>
-                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Telephone</th>
+                            <th>Rate</th>
+                            <th>Keyworker</th>
+                            <th>PostCode</th>
+                            <th>BirthDay</th>
                             <th>Start Date</th>
                             <th>END Date</th>
                             <th>Status</th>
@@ -36,7 +40,11 @@
                         <tr>
                             <td>@client.index </td>
                             <td><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></td>
-                            <td><span class="text-info">@client.data.Email</span></td>
+                            <td><span class="text-info">@client.data.Telephone</span></td>
+                            <td>@client.data.Rate</td>
+                            <td>@client.data.Keyworker</td>
+                            <td>@client.data.PostCode</td>
+                            <td>@client.data.DateOfBirth</td>
                             <td>@client.data.StartDate.ToString("dd MMM yyyy")</td>
                             <td>@client.data.EndDate?.ToString("dd MMM yyyy")</td>
                             <td><span class="badge badge-success">@client.data.StatusId</span></td>

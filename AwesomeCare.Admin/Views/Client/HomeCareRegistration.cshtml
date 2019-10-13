@@ -7,6 +7,7 @@
 
 @section HeaderScripts{
     <link rel="stylesheet" href="../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../assets/vendor/dropify/css/dropify.min.css">
 }
 
 <div class="row clearfix">
@@ -23,107 +24,124 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
-                        <form id="basic-form" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
-
+                        <form id="basic-form" enctype="multipart/form-data" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
                             <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Firstname" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="Firstname">
-                                        <span asp-validation-for="Firstname" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Middlename" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="Middlename">
-                                        <span asp-validation-for="Middlename" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Surname" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="Surname">
-                                        <span asp-validation-for="Surname" class="text-danger"></span>
-                                    </div>
-                                </div>
+                                <div class="col-xs-8 col-sm-8 col-md-8">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Firstname" class="control-label"></label>
+                                                <input type="text" class="form-control" asp-for="Firstname">
+                                                <span asp-validation-for="Firstname" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Middlename" class="control-label"></label>
+                                                <input type="text" class="form-control" asp-for="Middlename">
+                                                <span asp-validation-for="Middlename" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Surname" class="control-label"></label>
+                                                <input type="text" class="form-control" asp-for="Surname">
+                                                <span asp-validation-for="Surname" class="text-danger"></span>
+                                            </div>
+                                        </div>
 
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Gender" class="control-label"></label>
+                                                <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
+                                                <span asp-validation-for="GenderId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DateOfBirth" class="control-label"></label>
+                                                <input data-provide="datepicker" asp-for="DateOfBirth" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="IdNumber" class="control-label"></label>
+                                                <input type="text" class="form-control" asp-for="IdNumber">
+                                                <span asp-validation-for="IdNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Email" class="control-label"></label>
+                                                <input type="email" class="form-control" asp-for="Email">
+                                                <span asp-validation-for="Email" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="StartDate" class="control-label"></label>
+                                                <input type="text" data-provide="datepicker" asp-for="StartDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="EndDate" class="control-label"></label>
+                                                <input type="text" data-provide="datepicker" asp-for="EndDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                <span asp-validation-for="EndDate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="NumberOfCalls" class="control-label"></label>
+                                                <input type="number" class="form-control" asp-for="NumberOfCalls">
+                                                <span asp-validation-for="NumberOfCalls" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="AreaCodeId" class="control-label"></label>
+                                                <baserecord asp-key="AreaCode" asp-for="AreaCodeId" asp-items="null" />
+                                                <span asp-validation-for="AreaCodeId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="TeritoryId" class="control-label"></label>
+                                                <baserecord asp-key="Teritory" asp-for="TeritoryId" asp-items="null" />
+                                                <span asp-validation-for="TeritoryId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4">
+                                    <div class="card">
+                                        <div class="header">
+                                            <h2>Client Image<small></small></h2>
+                                        </div>
+                                        <div class="body">
+                                            <input type="file" asp-for="ClientImage" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                            <span asp-validation-for="ClientImage" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                          
 
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Gender" class="control-label"></label>
-                                        <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
-                                        <span asp-validation-for="GenderId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="DateOfBirth" class="control-label"></label>
-                                        <input data-provide="datepicker" asp-for="DateOfBirth" data-date-autoclose="true" class="form-control" data-date-format="dd/mm/yyyy">
-                                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="IdNumber" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="IdNumber">
-                                        <span asp-validation-for="IdNumber" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Email" class="control-label"></label>
-                                        <input type="email" class="form-control" asp-for="Email">
-                                        <span asp-validation-for="Email" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="StartDate" class="control-label"></label>
-                                        <input type="text" data-provide="datepicker" asp-for="StartDate" data-date-autoclose="true" class="form-control" data-date-format="dd/mm/yyyy">
-                                        <span asp-validation-for="StartDate" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="EndDate" class="control-label"></label>
-                                        <input type="text" data-provide="datepicker" asp-for="EndDate" data-date-autoclose="true" class="form-control" data-date-format="dd/mm/yyyy">
-                                        <span asp-validation-for="EndDate" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="NumberOfCalls" class="control-label"></label>
-                                        <input type="number" class="form-control" asp-for="NumberOfCalls">
-                                        <span asp-validation-for="NumberOfCalls" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="AreaCodeId" class="control-label"></label>
-                                        <baserecord asp-key="AreaCode" asp-for="AreaCodeId" asp-items="null" />
-                                        <span asp-validation-for="AreaCodeId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="TeritoryId" class="control-label"></label>
-                                        <baserecord asp-key="Teritory" asp-for="TeritoryId" asp-items="null" />
-                                        <span asp-validation-for="TeritoryId" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
+                            
 
                             <div class="row">
                                 <div class="col-xs-12 col-sm-4 col-md-4">
@@ -154,7 +172,7 @@
                                 <div class="col-xs-12 col-sm-4 col-md-4">
                                     <div class="form-group">
                                         <label asp-for="Rate" class="control-label"></label>
-                                        <input type="number" class="form-control" asp-for="Rate">
+                                        <input type="number" step=".01" class="form-control" asp-for="Rate">
                                         <span asp-validation-for="Rate" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -252,13 +270,13 @@
                             <br>
                             <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
                         </form>
-                        
+
                     </div>
                     <div class="tab-pane" id="involvingparties">
-                       
+
                     </div>
                     <div class="tab-pane" id="caredetails">
-                        
+
                     </div>
                 </div>
             </div>
@@ -267,8 +285,11 @@
 </div>
 @section VendorScripts{
     <script src="../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../assets/bundles/mainscripts.bundle.js"></script>
 }
 
 @section Scripts{
     <script src="../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../assets/js/pages/forms/dropify.js"></script>
 }

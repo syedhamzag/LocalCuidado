@@ -42,7 +42,12 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var baseRecordItem = Mapper.Map<BaseRecordItemModel>(item);
+
+            var entity = await _baseRecordItemRepository.GetEntity(item.BaseRecordItemId);
+            if (entity == null)
+                return NotFound();
+            
+            var baseRecordItem = Mapper.Map(item, entity);
             var update = await _baseRecordItemRepository.UpdateEntity(baseRecordItem);
 
             GetBaseRecordItem getBaseRecordItems = Mapper.Map<GetBaseRecordItem>(update);

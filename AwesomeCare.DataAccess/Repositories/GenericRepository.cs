@@ -64,8 +64,8 @@ namespace AwesomeCare.DataAccess.Repositories
         {
             if (entity == null)
                 throw new ArgumentNullException("entity");
-
-            Entities.Update(entity);
+            
+            Entities.Update(entity);           
             await _dbContext.SaveChangesAsync();
             return entity;
         }

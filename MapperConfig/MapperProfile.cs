@@ -2,6 +2,7 @@
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecordItem;
 using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.Model.Models;
@@ -100,7 +101,15 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>();
-               // .ForMember(dto=>dto.)
+            // .ForMember(dto=>dto.)
+            #endregion
+
+            #region ClientInvolvingPartyItem
+            CreateMap<PostClientInvolvingPartyItem, ClientInvolvingPartyItem>()
+                .ForMember(dto=>dto.Deleted,mem=>mem.MapFrom(src=> false))
+                .ForMember(dto=>dto.ClientInvolvingPartyItemId,mem=>mem.Ignore());
+            CreateMap<ClientInvolvingPartyItem, GetClientInvolvingPartyItem >();
+            CreateMap<PutClientInvolvingPartyItem, ClientInvolvingPartyItem>();
             #endregion
         }
     }

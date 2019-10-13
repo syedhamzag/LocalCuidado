@@ -19,9 +19,10 @@ namespace AwesomeCare.Admin.Controllers
         {
             _baseRecordService = baseRecordService;
         }
+        #region BaseRecord
         public async Task<IActionResult> BaseRecord()
         {
-            var baseRecordsWithItems =await _baseRecordService.GetBaseRecordsWithItems();
+            var baseRecordsWithItems = await _baseRecordService.GetBaseRecordsWithItems();
             return View(baseRecordsWithItems);
         }
 
@@ -39,7 +40,7 @@ namespace AwesomeCare.Admin.Controllers
                 var updateItem = Mapper.Map<PutBaseRecordItem>(item);
                 var baseRecordItem = await _baseRecordService.UpdateBaseRecordItem(updateItem);
             }
-            catch(Refit.ApiException ee)
+            catch (Refit.ApiException ee)
             {
 
             }
@@ -50,9 +51,9 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("BaseRecord");
         }
 
-        public IActionResult AddBaseRecordItem(int? baseRecordId,string baseRecord)
+        public IActionResult AddBaseRecordItem(int? baseRecordId, string baseRecord)
         {
-            if(!baseRecordId.HasValue || string.IsNullOrEmpty(baseRecord))
+            if (!baseRecordId.HasValue || string.IsNullOrEmpty(baseRecord))
             {
                 return NotFound();
             }
@@ -70,19 +71,27 @@ namespace AwesomeCare.Admin.Controllers
                 if (!ModelState.IsValid)
                     return View(model);
                 var baseRecordItem = await _baseRecordService.PostBaseRecordItem(model);
-                if(baseRecordItem !=null)
+                if (baseRecordItem != null)
                     this.SetOperationStatus(new Models.OperationStatus { Message = "Operation Successful", IsSuccessful = true });
             }
-            catch(Refit.ApiException ee)
+            catch (Refit.ApiException ee)
             {
                 var message = ee.GetException();
-              this.SetOperationStatus( new Models.OperationStatus { Message = message, IsSuccessful = false });
+                this.SetOperationStatus(new Models.OperationStatus { Message = message, IsSuccessful = false });
             }
-            catch (Exception )
+            catch (Exception)
             {
                 this.SetOperationStatus(new Models.OperationStatus { Message = "An Error Occurred", IsSuccessful = false });
             }
             return RedirectToAction("BaseRecord");
         }
+        #endregion
+
+        #region Client Involving Party Base
+        public async Task<IActionResult> ClientInvolvingPartyBase()
+        {
+            return View();
+        }
+        #endregion
     }
 }
