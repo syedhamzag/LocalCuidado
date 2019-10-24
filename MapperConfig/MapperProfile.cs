@@ -2,6 +2,7 @@
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecordItem;
 using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
@@ -113,6 +114,20 @@ namespace MapperConfig
             CreateMap<ClientInvolvingPartyItem, GetClientInvolvingPartyItem >();
             CreateMap<PutClientInvolvingPartyItem, ClientInvolvingPartyItem>()
                 .ForMember(dto=>dto.ClientInvolvingParty,mem=>mem.Ignore());
+            #endregion
+
+            #region ClientInvolvingParty
+            CreateMap<PostClientInvolvingParty, ClientInvolvingParty>()
+                .ForMember(dto => dto.ClientInvolvingPartyId, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientInvolvingPartyItem, mem => mem.Ignore());
+                
+            CreateMap<ClientInvolvingParty, GetClientInvolvingParty>()
+                .ForMember(dto => dto.ClientInvolvingPartyItemName, mem => mem.MapFrom(src => src.ClientInvolvingPartyItem.ItemName));
+
+            CreateMap<PutClientInvolvingParty, ClientInvolvingParty>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientInvolvingPartyItem, mem => mem.Ignore());
             #endregion
         }
     }
