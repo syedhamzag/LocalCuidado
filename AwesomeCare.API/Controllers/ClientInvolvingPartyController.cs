@@ -21,21 +21,39 @@ namespace AwesomeCare.API.Controllers
             _clientInvolvingPartyRepository = clientInvolvingPartyRepository;
         }
 
+        //[HttpPost]
+        //[ProducesResponseType(type: typeof(GetClientInvolvingParty), statusCode: StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<IActionResult> Post([FromBody]PostClientInvolvingParty model)
+        //{
+        //    if (model == null || !ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    var clientInvolvingParty = Mapper.Map<ClientInvolvingParty>(model);
+        //    var newClientInvolvingPartyBase = await _clientInvolvingPartyRepository.InsertEntity(clientInvolvingParty);
+        //    var getClientInvPartyBase = Mapper.Map<GetClientInvolvingParty>(newClientInvolvingPartyBase);
+        //    return CreatedAtAction("Get", new { id = getClientInvPartyBase.ClientInvolvingPartyId }, getClientInvPartyBase);
+
+        //}
+
         [HttpPost]
-        [ProducesResponseType(type: typeof(GetClientInvolvingParty), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType( StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post([FromBody]PostClientInvolvingParty model)
+        public async Task<IActionResult> Post([FromBody]List<PostClientInvolvingParty> models)
         {
-            if (model == null || !ModelState.IsValid)
+            if (models == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var clientInvolvingParty = Mapper.Map<ClientInvolvingParty>(model);
-            var newClientInvolvingPartyBase = await _clientInvolvingPartyRepository.InsertEntity(clientInvolvingParty);
-            var getClientInvPartyBase = Mapper.Map<GetClientInvolvingParty>(newClientInvolvingPartyBase);
-            return CreatedAtAction("Get", new { id = getClientInvPartyBase.ClientInvolvingPartyId }, getClientInvPartyBase);
+            var clientInvolvingParty = Mapper.Map<List<ClientInvolvingParty>>(models);
+            await _clientInvolvingPartyRepository.InsertEntities(clientInvolvingParty);
+
+            return Ok();
 
         }
 

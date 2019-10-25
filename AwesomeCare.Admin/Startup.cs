@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Refit;
 using AwesomeCare.Admin.Middlewares;
 using AwesomeCare.Admin.Services.Client;
+using AwesomeCare.Admin.Services.ClientInvolvingParty;
 
 namespace AwesomeCare.Admin
 {
@@ -42,6 +43,7 @@ namespace AwesomeCare.Admin
             services.AddLogging();
             AddRefitServices(services);
             services.AddMemoryCache();
+            services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -63,7 +65,7 @@ namespace AwesomeCare.Admin
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -88,6 +90,10 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientService>(r));
+            services.AddHttpClient("clientserviceparty", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientInvolvingParty>(r));
             
         }
     }

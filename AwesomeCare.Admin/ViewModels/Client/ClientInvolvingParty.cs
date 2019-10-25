@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 namespace AwesomeCare.Admin.ViewModels.Client
 {
     [System.Diagnostics.DebuggerDisplay("{ItemName}")]
-    public class ClientInvolvingPartyItem
+    public class ClientInvolvingParty
     {
+        public int ClientId { get; set; }
         public int ClientInvolvingPartyItemId { get; set; }        
         public string ItemName { get; set; }
         public string Description { get; set; }

@@ -22,8 +22,9 @@ namespace AwesomeCare.Admin.ViewModels.Client
                 new SelectListItem("Male","Male"),
                 new SelectListItem("Female","Female")
             };
-            InvolvingPartyItems = new List<ClientInvolvingPartyItem>();
+            InvolvingParties = new List<ClientInvolvingParty>();
         }
+        public int ClientId { get; set; }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght =1)]
         [AllowedExtensions(new string[] { ".png", ".jpg" , ".jpeg" })]
@@ -34,7 +35,12 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public bool CanContinue { get; set; }
         #endregion
 
-        public List<ClientInvolvingPartyItem> InvolvingPartyItems { get; set; }
+        #region Tabs
+        public string ActiveTab { get; set; } = "personalInfo";
+       // public string[] Tabs { get; set; } = new string[] { "" };
+        #endregion
+
+        public List<ClientInvolvingParty> InvolvingParties { get; set; }
         #region Methods
         public async Task SaveFileToDisk(IHostingEnvironment env)
         {

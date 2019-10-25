@@ -28,9 +28,12 @@ namespace AwesomeCare.API.Controllers
         /// <param name="postClient"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostClient([FromBody]PostClient postClient)
         {
-            if(postClient == null || !ModelState.IsValid)
+            if (postClient == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -44,7 +47,7 @@ namespace AwesomeCare.API.Controllers
             }
 
             var client = Mapper.Map<Client>(postClient);
-            var newClient =await _clientRepository.InsertEntity(client);
+            var newClient = await _clientRepository.InsertEntity(client);
             var getClient = Mapper.Map<GetClient>(newClient);
             return CreatedAtAction("GetClient", new { id = getClient.ClientId }, getClient);
 
@@ -56,22 +59,28 @@ namespace AwesomeCare.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetClient(int? id)
         {
             if (!id.HasValue)
                 return BadRequest("id Parameter is required");
 
-            var client =await _clientRepository.GetEntity(id);
+            var client = await _clientRepository.GetEntity(id);
             var getClient = Mapper.Map<GetClient>(client);
             return Ok(getClient);
         }
 
-      [HttpGet]
+        [HttpGet]
+        [ProducesResponseType(type: typeof(List<GetClient>), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetClients()
         {
-           
-            var getClient =await _clientRepository.Table.ProjectTo<GetClient>().ToListAsync();
-           
+
+            var getClient = await _clientRepository.Table.ProjectTo<GetClient>().ToListAsync();
+
             return Ok(getClient);
         }
     }

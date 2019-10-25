@@ -24,266 +24,36 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
-                        <form id="basic-form" enctype="multipart/form-data" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
-                            <div class="row">
-                                <div class="col-xs-8 col-sm-8 col-md-8">
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="Firstname" class="control-label"></label>
-                                                <input type="text" class="form-control" asp-for="Firstname">
-                                                <span asp-validation-for="Firstname" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="Middlename" class="control-label"></label>
-                                                <input type="text" class="form-control" asp-for="Middlename">
-                                                <span asp-validation-for="Middlename" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="Surname" class="control-label"></label>
-                                                <input type="text" class="form-control" asp-for="Surname">
-                                                <span asp-validation-for="Surname" class="text-danger"></span>
-                                            </div>
-                                        </div>
 
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="Gender" class="control-label"></label>
-                                                <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
-                                                <span asp-validation-for="GenderId" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="DateOfBirth" class="control-label"></label>
-                                                <input data-provide="datepicker" asp-for="DateOfBirth" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
-                                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="IdNumber" class="control-label"></label>
-                                                <input type="text" class="form-control" asp-for="IdNumber">
-                                                <span asp-validation-for="IdNumber" class="text-danger"></span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="Email" class="control-label"></label>
-                                                <input type="email" class="form-control" asp-for="Email">
-                                                <span asp-validation-for="Email" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="StartDate" class="control-label"></label>
-                                                <input type="text" data-provide="datepicker" asp-for="StartDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
-                                                <span asp-validation-for="StartDate" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="EndDate" class="control-label"></label>
-                                                <input type="text" data-provide="datepicker" asp-for="EndDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
-                                                <span asp-validation-for="EndDate" class="text-danger"></span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="NumberOfCalls" class="control-label"></label>
-                                                <input type="number" class="form-control" asp-for="NumberOfCalls">
-                                                <span asp-validation-for="NumberOfCalls" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="AreaCodeId" class="control-label"></label>
-                                                <baserecord asp-key="AreaCode" asp-for="AreaCodeId" asp-items="null" />
-                                                <span asp-validation-for="AreaCodeId" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-4 col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="TeritoryId" class="control-label"></label>
-                                                <baserecord asp-key="Teritory" asp-for="TeritoryId" asp-items="null" />
-                                                <span asp-validation-for="TeritoryId" class="text-danger"></span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="col-xs-4 col-sm-4 col-md-4">
-                                    <div class="card">
-                                        <div class="header">
-                                            <h2>Client Image<small></small></h2>
-                                        </div>
-                                        <div class="body">
-                                            <input type="file" asp-for="ClientImage" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                            <span asp-validation-for="ClientImage" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="ServiceId" class="control-label"></label>
-                                        <baserecord asp-key="Service" asp-for="ServiceId" asp-items="null" />
-                                        <span asp-validation-for="ServiceId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="ProvisionVenue" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="ProvisionVenue">
-                                        <span asp-validation-for="ProvisionVenue" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="PostCode" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="PostCode">
-                                        <span asp-validation-for="PostCode" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Rate" class="control-label"></label>
-                                        <input type="number" step=".01" class="form-control" asp-for="Rate">
-                                        <span asp-validation-for="Rate" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="TeamLeader" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="TeamLeader">
-                                        <span asp-validation-for="TeamLeader" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Telephone" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="Telephone">
-                                        <span asp-validation-for="Telephone" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="LanguageId" class="control-label"></label>
-                                        <baserecord asp-key="Language" asp-for="LanguageId" asp-items="null" />
-                                        <span asp-validation-for="LanguageId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="KeySafe" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="KeySafe">
-                                        <span asp-validation-for="KeySafe" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="ChoiceOfStaffId" class="control-label"></label>
-                                        <baserecord asp-key="Client_ChoiceOfStaff" asp-for="ChoiceOfStaffId" asp-items="null" />
-                                        <span asp-validation-for="ChoiceOfStaffId" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="CapacityId" class="control-label"></label>
-                                        <baserecord asp-key="Client_Capacity" asp-for="CapacityId" asp-items="null" />
-                                        <span asp-validation-for="CapacityId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="ProviderReference" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="ProviderReference">
-                                        <span asp-validation-for="ProviderReference" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="NumberOfStaff" class="control-label"></label>
-                                        <input type="number" class="form-control" asp-for="NumberOfStaff">
-                                        <span asp-validation-for="NumberOfStaff" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Keyworker" class="control-label"></label>
-                                        <input type="text" class="form-control" asp-for="Keyworker">
-                                        <span asp-validation-for="Keyworker" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="About" class="control-label"></label>
-                                        <textarea class="form-control" asp-for="About"></textarea>
-                                        <span asp-validation-for="About" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-4 col-md-4">
-                                    <div class="form-group">
-                                        <label asp-for="Hobbies" class="control-label"></label>
-                                        <textarea class="form-control" asp-for="Hobbies"></textarea>
-                                        <span asp-validation-for="Hobbies" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <br>
-                            <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                        </form>
+                        @if (Model.ActiveTab == "personalInfo")
+                        {
+                            <form id="basic-form" enctype="multipart/form-data" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
+                                <partial name="_ClientPersonalInfo" model="Model" />
+                                <br>
+                                <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
+                            </form>
+                        }
 
                     </div>
                     <div class="tab-pane" id="involvingparties">
-                        <form id="basic-formII" asp-action="_InvolvingParty" asp-controller="Client" method="post">                            
-                            <partial name="_InvolvingParty" model="Model.InvolvingPartyItems" />
-
-                            <br>
-                            <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                        </form>
-
+                        @if (Model.ActiveTab == "involvingparties")
+                        {
+                            <form id="basic-formII" asp-action="_InvolvingParty" asp-controller="Client" method="post">
+                                <partial name="_InvolvingParty" model="Model" />
+                                <br>
+                                <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
+                            </form>
+                        }
                     </div>
                     <div class="tab-pane" id="caredetails">
 
+
+                        @if (Model.ActiveTab == "caredetails")
+                        {
+                            <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
+                        }
                     </div>
+
                 </div>
             </div>
         </div>
@@ -298,4 +68,10 @@
 @section Scripts{
     <script src="../assets/js/pages/forms/form-wizard.js"></script>
     <script src="../assets/js/pages/forms/dropify.js"></script>
+    <script>
+        $(document).ready(function () {
+             $('a[href="#@Model.ActiveTab"]').tab('show');
+
+        })
+    </script>
 }
