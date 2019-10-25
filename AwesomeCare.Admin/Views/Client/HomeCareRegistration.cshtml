@@ -139,9 +139,9 @@
                                     </div>
                                 </div>
                             </div>
-                          
 
-                            
+
+
 
                             <div class="row">
                                 <div class="col-xs-12 col-sm-4 col-md-4">
@@ -273,6 +273,12 @@
 
                     </div>
                     <div class="tab-pane" id="involvingparties">
+                        <form id="basic-formII" asp-action="_InvolvingParty" asp-controller="Client" method="post">                            
+                            <partial name="_InvolvingParty" model="Model.InvolvingPartyItems" />
+
+                            <br>
+                            <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
+                        </form>
 
                     </div>
                     <div class="tab-pane" id="caredetails">

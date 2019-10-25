@@ -1,4 +1,5 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using Refit;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -17,5 +18,11 @@ namespace AwesomeCare.Admin.Services.Client
 
         [Post("/Client")]
         Task<HttpResponseMessage> PostClient([Body]PostClient client);
+
+        [Get("/ClientInvolvingPartyBase")]
+        Task<List<GetClientInvolvingPartyItem>> GetClientInvolvingPartyBase();
+
+        [Get("/ClientInvolvingPartyBase/{id}")]
+        Task<GetClientInvolvingPartyItem> GetClientInvolvingPartyBase(int id);
     }
 }

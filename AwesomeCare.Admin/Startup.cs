@@ -81,9 +81,13 @@ namespace AwesomeCare.Admin
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
             services.AddRefitClient<IBaseRecordService>()
                .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
-            services.AddRefitClient<IClientService>()
-              .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
+            //services.AddRefitClient<IClientService>()
+            //  .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
 
+            services.AddHttpClient("clientservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientService>(r));
             
         }
     }

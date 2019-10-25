@@ -1,0 +1,55 @@
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+
+@model List<ClientInvolvingPartyItem>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h5>Involving Parties</h5>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>NAME</th>
+            <th>ADDRESS</th>
+            <th>EMAIL</th>
+            <th>TELEPHONE</th>
+            <th>RELATIONSHIP</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int r = 0; r < Model.Count; r++)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox"  asp-for="@Model[r].IsSelected" />
+                </td>
+                <td>
+                    @Model[r].ItemName
+                    <input type="hidden" asp-for="@Model[r].ClientInvolvingPartyItemId" />
+                    <input type="hidden" asp-for="@Model[r].ItemName" />
+                </td>
+                <td><input asp-for="@Model[r].Name" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model[r].Address" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model[r].Email" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model[r].Telephone" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model[r].Relationship" type="text" class="form-control" /></td>
+            </tr>
+        }
+        @*@foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    <input type="checkbox" name="@item.ClientInvolvingPartyItemId" />
+                </td>
+                <td>@item.ItemName
+                </td>
+                <td><input name="@item.Name" type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+            </tr>
+            }*@
+    </tbody>
+</table>

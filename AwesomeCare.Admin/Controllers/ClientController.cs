@@ -8,6 +8,7 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.ViewModels.Client;
 using AwesomeCare.DataTransferObject.DTOs.Client;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -30,10 +31,20 @@ namespace AwesomeCare.Admin.Controllers
         }
 
 
-        public IActionResult HomeCareRegistration()
+        public async Task<IActionResult> HomeCareRegistration()
         {
             var client = new CreateClient();
-
+            var involvingPartyItems = await _clientService.GetClientInvolvingPartyBase();
+            foreach (var item in involvingPartyItems)
+            {
+                client.InvolvingPartyItems.Add(new ClientInvolvingPartyItem
+                {
+                    ClientInvolvingPartyItemId = item.ClientInvolvingPartyItemId,
+                    ItemName = item.ItemName,
+                    Description = item.Description,
+                    Deleted = item.Deleted
+                });
+            }
             return View(client);
         }
         [HttpPost]
@@ -62,6 +73,13 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCare");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult _InvolvingParty(List<ClientInvolvingPartyItem> model)
+        {
+            var items = model.Where(s => s.IsSelected).ToList();
+            return PartialView();
+        }
 
     }
 }
