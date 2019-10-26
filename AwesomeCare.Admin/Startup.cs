@@ -16,6 +16,7 @@ using Refit;
 using AwesomeCare.Admin.Middlewares;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
+using AwesomeCare.Admin.Services.ClientInvolvingPartyBase;
 
 namespace AwesomeCare.Admin
 {
@@ -94,7 +95,11 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientInvolvingParty>(r));
-            
+
+            services.AddHttpClient("clientservicepartybase", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientInvolvingPartyBase>(r));
         }
     }
 }

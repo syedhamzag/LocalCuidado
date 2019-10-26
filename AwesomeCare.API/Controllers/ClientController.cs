@@ -18,9 +18,13 @@ namespace AwesomeCare.API.Controllers
     public class ClientController : ControllerBase
     {
         private IGenericRepository<Client> _clientRepository;
-        public ClientController(IGenericRepository<Client> clientRepository)
+        private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
+        private IGenericRepository<BaseRecordModel> _baseRecordRepository;
+        public ClientController(IGenericRepository<Client> clientRepository, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
         {
             _clientRepository = clientRepository;
+            _baseRecordItemRepository = baseRecordItemRepository;
+            _baseRecordRepository = baseRecordRepository;
         }
         /// <summary>
         /// Create Client
@@ -79,7 +83,45 @@ namespace AwesomeCare.API.Controllers
         public async Task<IActionResult> GetClients()
         {
 
-            var getClient = await _clientRepository.Table.ProjectTo<GetClient>().ToListAsync();
+            // var getClient = await _clientRepository.Table.ProjectTo<GetClient>().ToListAsync();
+            var getClient = await (from client in _clientRepository.Table
+                                   join baseRecItem in _baseRecordItemRepository.Table on client.StatusId equals baseRecItem.BaseRecordItemId
+                                   join baseRec in _baseRecordRepository.Table on baseRecItem.BaseRecordId equals baseRec.BaseRecordId
+                                   where baseRec.KeyName == "Client_Status"
+                                   select new GetClient
+                                   {
+                                       ClientId = client.ClientId,
+                                       Firstname = client.Firstname,
+                                       Middlename = client.Middlename,
+                                       Surname = client.Surname,
+                                       Email = client.Email,
+                                       About = client.About,
+                                       Hobbies = client.Hobbies,
+                                       StartDate = client.StartDate,
+                                       EndDate = client.EndDate,
+                                       Keyworker = client.Keyworker,
+                                       IdNumber = client.IdNumber,
+                                       GenderId = client.GenderId,
+                                       NumberOfCalls = client.NumberOfCalls,
+                                       AreaCodeId = client.AreaCodeId,
+                                       TeritoryId = client.TeritoryId,
+                                       ServiceId = client.ServiceId,
+                                       ProvisionVenue = client.ProvisionVenue,
+                                       PostCode = client.PostCode,
+                                       Rate = client.Rate,
+                                       TeamLeader = client.TeamLeader,
+                                       DateOfBirth = client.DateOfBirth,
+                                       Telephone = client.Telephone,
+                                       LanguageId = client.LanguageId,
+                                       KeySafe = client.KeySafe,
+                                       ChoiceOfStaffId = client.ChoiceOfStaffId,
+                                       StatusId = client.StatusId,
+                                       Status = baseRecItem.ValueName,
+                                       CapacityId = client.CapacityId,
+                                       ProviderReference = client.ProviderReference,
+                                       NumberOfStaff = client.NumberOfStaff
+                                   }
+                      ).ToListAsync();
 
             return Ok(getClient);
         }

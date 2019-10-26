@@ -100,6 +100,8 @@ namespace AwesomeCare.Admin.Controllers
                 createClient.ActiveTab = "involvingparties";
                 return View("HomeCareRegistration", createClient);
             }
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Involving Parties successfully added to Client" : "An Error Occurred" });
+
             createClient.ActiveTab = "caredetails";
             return View("HomeCareRegistration", createClient);
         }

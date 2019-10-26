@@ -102,7 +102,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore())
                 .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore());
 
-            CreateMap<Client, GetClient>();
+            CreateMap<Client, GetClient>()
+                .ForMember(dto=>dto.Status,mem=>mem.Ignore());
             // .ForMember(dto=>dto.)
             #endregion
 

@@ -32,6 +32,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string KeySafe { get; set; }
         public int ChoiceOfStaffId { get; set; }
         public int StatusId { get; set; }
+        public string Status { get; set; }
         public int CapacityId { get; set; }
         public string ProviderReference { get; set; }
         public int NumberOfStaff { get; set; }

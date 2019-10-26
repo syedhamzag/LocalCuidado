@@ -23,6 +23,9 @@
     <link rel="stylesheet" href="../assets/vendor/nouislider/nouislider.min.css" />
     <link rel="stylesheet" href="../assets/vendor/parsleyjs/css/parsley.css">
 
+    @RenderSection("VenderStyleSheets", required: false)
+
+
     @RenderSection("HeaderScripts", required: false)
 
     <!-- MAIN CSS -->
@@ -358,7 +361,7 @@
 
                 @if (this.OperationStatus() != null)
                 {
-                
+
                     var operationStatus = this.OperationStatus();
                     if (operationStatus.IsSuccessful)
                     {
@@ -405,6 +408,7 @@
     <script src="../assets/bundles/mainscripts.bundle.js"></script>
     <script src="../assets/js/pages/forms/advanced-form-elements.js"></script>
 
+       
 
     @RenderSection("Scripts", required: false)
 </body>
