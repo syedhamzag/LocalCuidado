@@ -98,6 +98,7 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Rate)
                .HasColumnName("Rate")
+               .HasColumnType("decimal(18,2)")
                .IsRequired();
 
             builder.Property(p => p.TeamLeader)

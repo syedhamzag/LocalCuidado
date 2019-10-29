@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using AwesomeCare.Admin.Extensions;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
+using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -22,12 +23,13 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientService _clientService;
         private readonly IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IHostingEnvironment _env;
-
-        public ClientController(IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env)
+        private ILogger<ClientController> _logger;
+        public ClientController(IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
         {
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
             _env = env;
+            _logger = logger;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -59,27 +61,38 @@ namespace AwesomeCare.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> HomeCareRegistration(CreateClient model)
         {
-            model.StatusId = 14;
-
-
-            if (model == null || !ModelState.IsValid)
+            try
             {
-                return View(model);
-            }
-            await model.SaveFileToDisk(_env);
-            var result = await _clientService.PostClient(model);
-           // var content = await result.Content.ReadAsStringAsync();
+                if (_env.IsDevelopment())
+                    model.StatusId = 14;
+                else
+                    model.StatusId = 8;
 
-            SetOperationStatus(new OperationStatus { IsSuccessful = result != null? true:false, Message = result != null ? "New Client successfully registered" : "An Error Occurred" });
-            if (result == null)
-            {
-                model.DeleteFileFromDisk(_env);
-                return View(model);
+
+                if (model == null || !ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                await model.SaveFileToDisk(_env);
+                var result = await _clientService.PostClient(model);
+                // var content = await result.Content.ReadAsStringAsync();
+
+                SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Client successfully registered" : "An Error Occurred" });
+                if (result == null)
+                {
+                    model.DeleteFileFromDisk(_env);
+                    return View(model);
+                }
+                model.ActiveTab = "involvingparties";
+                model.ClientId = result.ClientId;
+                model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
+                return View("HomeCareRegistration", model);
             }
-            model.ActiveTab = "involvingparties";
-            model.ClientId =  result.ClientId;
-            model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
-            return View("HomeCareRegistration", model);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "HomeCareRegistration", null);
+                return View("HomeCareRegistration", model);
+            }
 
             // return RedirectToAction("HomeCare");
         }
