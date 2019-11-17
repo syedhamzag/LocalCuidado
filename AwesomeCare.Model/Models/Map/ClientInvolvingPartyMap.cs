@@ -15,15 +15,6 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Properties
 
-            //     public int  { get; set; }
-            //public int  { get; set; }
-            //public int  { get; set; }
-            //public string  { get; set; }
-            //public string  { get; set; }
-            //public string  { get; set; }
-            //public string  { get; set; }
-            //public string  { get; set; }
-
 
             builder.Property(p => p.ClientInvolvingPartyId)
                 .HasColumnName("ClientInvolvingPartyId")
