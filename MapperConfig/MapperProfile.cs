@@ -100,7 +100,8 @@ namespace MapperConfig
             #region Client
             CreateMap<PostClient, Client>()
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore())
-                .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore());
+                .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore())
+                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto=>dto.Status,mem=>mem.Ignore());

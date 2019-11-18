@@ -146,6 +146,10 @@ namespace AwesomeCare.Model.Models.Map
               .HasColumnName("NumberOfStaff")
               .IsRequired();
 
+            builder.HasMany(p => p.RegulatoryContact)
+                .WithOne(p => p.Client)
+                .HasForeignKey(p => p.ClientId)
+                .OnDelete(DeleteBehavior.Cascade);
           
             #endregion
         }

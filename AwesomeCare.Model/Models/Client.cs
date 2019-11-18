@@ -41,5 +41,6 @@ namespace AwesomeCare.Model.Models
         public int NumberOfStaff { get; set; }
 
         public virtual ICollection<ClientInvolvingParty> InvolvingParties { get; set; }
+        public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }
     }
 }

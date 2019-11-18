@@ -23,6 +23,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
                 new SelectListItem("Female","Female")
             };
             InvolvingParties = new List<ClientInvolvingParty>();
+            RegulatoryContacts = new List<ClientRegulatoryContact>();
         }
         public int ClientId { get; set; }
         [DataType(DataType.Upload)]
@@ -36,11 +37,12 @@ namespace AwesomeCare.Admin.ViewModels.Client
         #endregion
 
         #region Tabs
-        public string ActiveTab { get; set; } = "personalInfo";
+        public string ActiveTab { get; set; } =  "personalInfo";
        // public string[] Tabs { get; set; } = new string[] { "" };
         #endregion
 
         public List<ClientInvolvingParty> InvolvingParties { get; set; }
+        public List<ClientRegulatoryContact> RegulatoryContacts { get; set; }
         #region Methods
         public async Task SaveFileToDisk(IHostingEnvironment env)
         {

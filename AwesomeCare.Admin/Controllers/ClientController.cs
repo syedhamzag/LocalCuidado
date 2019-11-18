@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Providers.Entities;
 using AutoMapper;
 using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Services.Client;
@@ -15,6 +14,8 @@ using AwesomeCare.Admin.Extensions;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.Memory;
+using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -24,12 +25,15 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IHostingEnvironment _env;
         private ILogger<ClientController> _logger;
-        public ClientController(IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
+        private readonly IMemoryCache _cache;
+        private const string cacheKey = "baserecord_key";
+        public ClientController(IMemoryCache cache,IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
         {
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
             _env = env;
             _logger = logger;
+            _cache = cache;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -55,6 +59,21 @@ namespace AwesomeCare.Admin.Controllers
             }
             HttpContext.Session.Set<List<ClientInvolvingParty>>("involvingPartyItems", clientInvolvingPartyItems);
             client.InvolvingParties = clientInvolvingPartyItems;
+            #region Regulatory Contact
+            if (_cache.TryGetValue(cacheKey, out List<GetBaseRecordWithItems> baseRecords))
+            {
+
+                client.RegulatoryContacts = (from rec in baseRecords
+                                                   where rec.KeyName == "Client_RegulatoryContact"
+                                                   from recItem in rec.BaseRecordItems
+                                                   select new ClientRegulatoryContact
+                                                   {
+                                                       BaseRecordItemId = recItem.BaseRecordItemId,
+                                                       RegulatoryContact = recItem.ValueName
+                                                   }).ToList();
+            }
+            #endregion
+
             return View(client);
         }
         [HttpPost]
@@ -116,8 +135,31 @@ namespace AwesomeCare.Admin.Controllers
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Involving Parties successfully added to Client" : "An Error Occurred" });
 
             createClient.ActiveTab = "caredetails";
+            #region Regulatory Contact
+            if (_cache.TryGetValue(cacheKey, out List<GetBaseRecordWithItems> baseRecords))
+            {
+
+                createClient.RegulatoryContacts = (from rec in baseRecords
+                                                   where rec.KeyName == "Client_RegulatoryContact"
+                                                   from recItem in rec.BaseRecordItems
+                                                   select new ClientRegulatoryContact
+                                                   {
+                                                       BaseRecordItemId = recItem.BaseRecordItemId,
+                                                       RegulatoryContact = recItem.ValueName
+                                                   }).ToList();
+            }
+            #endregion
             return View("HomeCareRegistration", createClient);
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _RegulatoryContact(CreateClient createClient)
+        {
+            
+            return View("HomeCareRegistration", createClient);
+        }
+        
     }
 }

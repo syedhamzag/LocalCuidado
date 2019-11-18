@@ -21,6 +21,7 @@
                     <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalInfo">Personal Info</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#involvingparties">Involving Parties</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#caredetails">Care Details</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
@@ -53,7 +54,16 @@
                             @*<button type="submit" class="btn btn-primary pull-right">Save & Continue</button>*@
                         }
                     </div>
-
+                    <div class="tab-pane" id="regulatorycontact">
+                        @*@if (Model.ActiveTab == "regulatorycontact")
+                        {*@
+                            <form id="regulatorycontactform" asp-action="_regulatorycontact" asp-controller="client" method="post">
+                                <partial name="_regulatorycontact" model="Model" />
+                                <br>
+                                <button type="submit" class="btn btn-primary pull-right">save & continue</button>
+                            </form>
+                        @*}*@
+                    </div>
                 </div>
             </div>
         </div>
