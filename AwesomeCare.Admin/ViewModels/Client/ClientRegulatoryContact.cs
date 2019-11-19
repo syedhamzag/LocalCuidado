@@ -10,7 +10,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
 {
     public class ClientRegulatoryContact
     {
-
+        public int ClientId { get; set; }
         public int BaseRecordItemId { get; set; }
         public string RegulatoryContact { get; set; }
         public bool IsSelected { get; set; }
@@ -19,7 +19,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
 
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".pdf" })]
-        public IFormFile Evidence { get; set; }
+       // [AllowedExtensions(new string[] { ".pdf" })]
+        public IFormFile EvidenceFile { get; set; }
+        public string Evidence { get; set; }
     }
 }

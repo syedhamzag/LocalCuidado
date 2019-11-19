@@ -16,6 +16,8 @@ using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
+using AwesomeCare.Admin.Services.ClientRegulatoryContact;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -23,17 +25,19 @@ namespace AwesomeCare.Admin.Controllers
     {
         private readonly IClientService _clientService;
         private readonly IClientInvolvingParty _clientInvolvingPartyService;
+        private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
         private readonly IHostingEnvironment _env;
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
         private const string cacheKey = "baserecord_key";
-        public ClientController(IMemoryCache cache,IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
+        public ClientController(IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
         {
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
             _env = env;
             _logger = logger;
             _cache = cache;
+            _clientRegulatoryContactService = clientRegulatoryContactService;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -158,6 +162,27 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> _RegulatoryContact(CreateClient createClient)
         {
             
+            var items = createClient.RegulatoryContacts.Where(s => s.IsSelected).ToList();
+            items.ForEach(c =>
+            {
+                c.ClientId = 1004;// createClient.ClientId;
+            });
+
+            items.ForEach(async c =>
+            {
+                string filePath = await this.HttpContext.Request.UploadFileAsync(_env, c.EvidenceFile, "clientregulatorycontact", "");
+                c.Evidence = filePath;
+            });
+           
+            var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
+            var result = await _clientRegulatoryContactService.Post(regulatoryContacts);
+            if (!result.IsSuccessStatusCode)
+            {
+                createClient.ActiveTab = "regulatorycontact";
+                return View("HomeCareRegistration", createClient);
+            }
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Regulotary Contact successfully added to Client" : "An Error Occurred" });
+
             return View("HomeCareRegistration", createClient);
         }
         

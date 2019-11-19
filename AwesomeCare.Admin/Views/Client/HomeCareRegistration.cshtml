@@ -55,14 +55,14 @@
                         }
                     </div>
                     <div class="tab-pane" id="regulatorycontact">
-                        @*@if (Model.ActiveTab == "regulatorycontact")
-                        {*@
-                            <form id="regulatorycontactform" asp-action="_regulatorycontact" asp-controller="client" method="post">
+                        @if (Model.ActiveTab == "regulatorycontact")
+                        {
+                            <form id="regulatorycontactform" enctype="multipart/form-data" asp-action="_RegulatoryContact" asp-controller="client" method="post">
                                 <partial name="_regulatorycontact" model="Model" />
                                 <br>
                                 <button type="submit" class="btn btn-primary pull-right">save & continue</button>
                             </form>
-                        @*}*@
+                        }
                     </div>
                 </div>
             </div>

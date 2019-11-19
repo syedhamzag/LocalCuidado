@@ -31,12 +31,12 @@
 
                 </td>
                 <td>
-                    <input data-provide="datepicker" asp-for="@Model.RegulatoryContacts[r].DatePerformed" data-date-autoclose="true" class="form-control">
+                    <input data-provide="datepicker" type="text" asp-for="@Model.RegulatoryContacts[r].DatePerformed" data-date-autoclose="true" class="form-control">
                 </td>
                 <td>
-                    <input data-provide="datepicker" asp-for="@Model.RegulatoryContacts[r].DueDate" data-date-autoclose="true" class="form-control">
+                    <input data-provide="datepicker" type="text" asp-for="@Model.RegulatoryContacts[r].DueDate" data-date-autoclose="true" class="form-control">
                 </td>
-                <td><input asp-for="@Model.RegulatoryContacts[r].Evidence" type="file" class="form-control" /></td>
+                <td><input asp-for="@Model.RegulatoryContacts[r].EvidenceFile" type="file" class="dropify" /></td>
                 
             </tr>
         }

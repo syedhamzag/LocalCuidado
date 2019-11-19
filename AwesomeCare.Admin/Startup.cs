@@ -17,6 +17,9 @@ using AwesomeCare.Admin.Middlewares;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
 using AwesomeCare.Admin.Services.ClientInvolvingPartyBase;
+using AwesomeCare.Admin.Services.ClientRegulatoryContact;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace AwesomeCare.Admin
 {
@@ -64,7 +67,13 @@ namespace AwesomeCare.Admin
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(
+                new StaticFileOptions
+                {
+                    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath,"Uploads")),
+                    RequestPath = new PathString("/Files")
+                }
+                );
             app.UseCookiePolicy();
             app.UseSession();
             app.UseMvc(routes =>
@@ -100,6 +109,13 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientInvolvingPartyBase>(r));
+
+            services.AddHttpClient("clientregulatorycontactservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientRegulatoryContactService>(r));
+
+            
         }
     }
 }

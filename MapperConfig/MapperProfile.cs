@@ -6,6 +6,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
+using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.Model.Models;
 using System.Linq;
 
@@ -104,18 +105,18 @@ namespace MapperConfig
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
-                .ForMember(dto=>dto.Status,mem=>mem.Ignore());
+                .ForMember(dto => dto.Status, mem => mem.Ignore());
             // .ForMember(dto=>dto.)
             #endregion
 
             #region ClientInvolvingPartyItem
             CreateMap<PostClientInvolvingPartyItem, ClientInvolvingPartyItem>()
-                .ForMember(dto=>dto.Deleted,mem=>mem.MapFrom(src=> false))
-                .ForMember(dto=>dto.ClientInvolvingPartyItemId,mem=>mem.Ignore())
-                .ForMember(dto=>dto.ClientInvolvingParty,mem=>mem.Ignore());
-            CreateMap<ClientInvolvingPartyItem, GetClientInvolvingPartyItem >();
+                .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => false))
+                .ForMember(dto => dto.ClientInvolvingPartyItemId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientInvolvingParty, mem => mem.Ignore());
+            CreateMap<ClientInvolvingPartyItem, GetClientInvolvingPartyItem>();
             CreateMap<PutClientInvolvingPartyItem, ClientInvolvingPartyItem>()
-                .ForMember(dto=>dto.ClientInvolvingParty,mem=>mem.Ignore());
+                .ForMember(dto => dto.ClientInvolvingParty, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingParty
@@ -123,13 +124,23 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientInvolvingPartyId, mem => mem.Ignore())
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientInvolvingPartyItem, mem => mem.Ignore());
-                
+
             CreateMap<ClientInvolvingParty, GetClientInvolvingParty>()
                 .ForMember(dto => dto.ClientInvolvingPartyItemName, mem => mem.MapFrom(src => src.ClientInvolvingPartyItem.ItemName));
 
             CreateMap<PutClientInvolvingParty, ClientInvolvingParty>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientInvolvingPartyItem, mem => mem.Ignore());
+            #endregion
+
+            #region ClientRegulatoryContact
+
+            CreateMap<PostClientRegulatoryContact, ClientRegulatoryContact>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRegulatoryContactId, mem => mem.Ignore())
+                .ForMember(dto => dto.BaseRecordItem, mem => mem.Ignore());
+
+            CreateMap<ClientRegulatoryContact, GetClientRegulatoryContact>();
             #endregion
         }
     }
