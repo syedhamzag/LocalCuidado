@@ -12,7 +12,7 @@ using AutoMapper;
 
 namespace AwesomeCare.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientRotaController : ControllerBase
     {
@@ -85,7 +85,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetClientRota), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody]PuClientRota model)
+        public async Task<IActionResult> Put([FromBody]PutClientRota model)
         {
             if (!ModelState.IsValid)
             {

@@ -1,0 +1,142 @@
+﻿@using  AwesomeCare.Admin.ViewModels.ClientRota;
+@model ClientRotaViewModel;
+@{
+    ViewData["Title"] = "Client Rota";
+}
+
+
+@section VenderStyleSheets{
+
+}
+
+<div class="row clearfix">
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h2>@Model.SubTitle</h2>
+            </div>
+            <div class="body clearfix">
+                <form asp-controller="Rota" asp-action="SaveEdit" method="post">
+
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="RotaName" class="control-label"></label>
+                                <input type="text" class="form-control" asp-for="RotaName">
+
+                                <span asp-validation-for="RotaName" class="text-danger"></span>
+                                <input type="hidden" class="form-control" asp-for="RotaId">
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Area" class="control-label"></label>
+                                <input type="text" class="form-control" asp-for="Area">
+                                <span asp-validation-for="Area" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="NumberOfStaff" class="control-label"></label>
+                                <input type="text" class="form-control" asp-for="NumberOfStaff">
+                                <span asp-validation-for="NumberOfStaff" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Gender" class="control-label"></label>
+
+                                @Html.DropDownListFor(m => m.Gender, Model.Genders, "select", new { @class = "form-control" })
+                                @*<input type="text" class="form-control" asp-for="Gender">*@
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <br>
+                    <button id="btnSubmit" type="submit" class="btn btn-primary float-right">Submit</button>
+                    @if (Model.RotaId > 0)
+                    {
+                        <a href="/Rota" class="btn btn-default float-left">Cancel</a>
+                    }
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="header">
+                <h2>Rota</h2>
+
+            </div>
+            <div class="body">
+                <div class="table-responsive">
+                    <table id="involvingPartyTable" class="table table-hover js-basic-example dataTable table-custom">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Area</th>
+                                <th>Number of Staffs</th>
+                                <th>Gender</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Area</th>
+                                <th>Number of Staffs</th>
+                                <th>Gender</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            @foreach (var item in Model.Rotas)
+                            {
+
+                                <tr class="gradeA">
+                                    <td>@item.RotaName</td>
+                                    <td>@item.Area</td>
+                                    <td>@item.NumberOfStaff</td>
+                                    <td>@item.Gender</td>
+                                    <td class="actions">
+                                        <a asp-action="Index" asp-route-id="@item.RotaId" asp-controller="Rota" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit">
+                                            <i class="icon-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        @*<button class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit"
+                                                data-toggle="tooltip" data-row-id="@item.RotaId" data-original-title="Edit">
+                                            <i class="icon-pencil" aria-hidden="true"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-icon btn-pure btn-danger on-default button-remove"
+                                                data-toggle="tooltip" data-row-id="@item.RotaId" data-original-title="Remove">
+                                            <i class="icon-trash" aria-hidden="true"></i>
+                                        </button>*@
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section VendorScripts{
+
+    <script src="../assets/bundles/datatablescripts.bundle.js"></script>
+    <script src="../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+    <script src="../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+    <script src="../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+    <script src="../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+    <script src="../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+
+    <script src="../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js -->
+
+
+    <script src="../assets/bundles/mainscripts.bundle.js"></script>
+    <script src="../assets/js/pages/tables/jquery-datatable.js"></script>
+}
+

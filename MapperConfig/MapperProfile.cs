@@ -149,7 +149,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.RotaId, mem => mem.Ignore());
 
             CreateMap<Rota, GetClientRota>();
-            CreateMap<PuClientRota, Rota>();
+            CreateMap<PutClientRota, Rota>();
             #endregion
         }
     }

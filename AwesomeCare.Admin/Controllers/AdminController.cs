@@ -13,6 +13,7 @@ using AwesomeCare.Admin.Services.ClientInvolvingPartyBase;
 using AwesomeCare.Admin.ViewModels.Admin;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.Admin.Models;
+using AwesomeCare.Admin.Services.ClientRota;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -20,11 +21,12 @@ namespace AwesomeCare.Admin.Controllers
     {
         private readonly IBaseRecordService _baseRecordService;
         private readonly IClientInvolvingPartyBase _clientInvolvingPartyBaseService;
-
+       
         public AdminController(IBaseRecordService baseRecordService, IClientInvolvingPartyBase clientInvolvingPartyBaseService)
         {
             _baseRecordService = baseRecordService;
             _clientInvolvingPartyBaseService = clientInvolvingPartyBaseService;
+            
         }
         #region BaseRecord
         public async Task<IActionResult> BaseRecord()
@@ -142,5 +144,7 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         #endregion
+    
+
     }
 }
