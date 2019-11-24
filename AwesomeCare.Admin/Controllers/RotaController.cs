@@ -71,7 +71,7 @@ namespace AwesomeCare.Admin.Controllers
                 var putRota = new PutClientRota
                 {
                     Area = model.Area,
-                    Deleted = false,
+                    Deleted = model.Deleted,
                     Gender = model.Gender,
                     NumberOfStaff = model.NumberOfStaff,
                     RotaName = model.RotaName,
@@ -84,31 +84,6 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Edit(int id)
-        {
-            var rota = await _clientRotaService.Get(id);
-            var putRota = new PutClientRota
-            {
-                Area = rota.Area,
-                Deleted = rota.Deleted,
-                Gender = rota.Gender,
-                NumberOfStaff = rota.NumberOfStaff,
-                RotaId = rota.RotaId,
-                RotaName = rota.RotaName
-            };
-            return View(putRota);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(PutClientRota model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var rota = await _clientRotaService.Put(model);
-
-            return RedirectToAction("Index");
-        }
+        
     }
 }

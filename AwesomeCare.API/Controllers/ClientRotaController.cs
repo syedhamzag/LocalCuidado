@@ -71,7 +71,7 @@ namespace AwesomeCare.API.Controllers
         }
 
         [HttpGet()]
-        [ProducesResponseType(type: typeof(GetClientRota), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(List<GetClientRota>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Get()

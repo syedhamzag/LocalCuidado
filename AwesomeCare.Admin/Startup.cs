@@ -21,6 +21,7 @@ using AwesomeCare.Admin.Services.ClientRegulatoryContact;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using AwesomeCare.Admin.Services.ClientRota;
+using AwesomeCare.Admin.Services.ClientRotaType;
 
 namespace AwesomeCare.Admin
 {
@@ -122,6 +123,10 @@ namespace AwesomeCare.Admin
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientRotaService>(r));
 
+            services.AddHttpClient("clientrotatypeservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientRotaTypeService>(r));
             
         }
     }

@@ -34,7 +34,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientRota
         [Required]
         public string Area { get; set; }
         public List<GetClientRota> Rotas { get; set; }
-
+        public bool Deleted { get; set; } = false;
         public List<SelectListItem> Genders { get; set; }
     }
 }

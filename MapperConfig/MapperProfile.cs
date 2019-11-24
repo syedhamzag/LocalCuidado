@@ -5,6 +5,7 @@ using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.DataTransferObject.DTOs.ClientRota;
+using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
@@ -150,6 +151,14 @@ namespace MapperConfig
 
             CreateMap<Rota, GetClientRota>();
             CreateMap<PutClientRota, Rota>();
+            #endregion
+
+            #region ClientRotaType
+            CreateMap<ClientRotaType, GetClientRotaType>();
+            CreateMap<PutClientRotaType, ClientRotaType>();
+            CreateMap<PostClientRotaType, ClientRotaType>()
+                .ForMember(dto=>dto.RotaType,mem=>mem.MapFrom(src=>src.RotaType.ToUpper()))
+                .ForMember(dto=>dto.ClientRotaTypeId,mem=>mem.Ignore());
             #endregion
         }
     }
