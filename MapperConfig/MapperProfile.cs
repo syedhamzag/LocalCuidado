@@ -105,6 +105,7 @@ namespace MapperConfig
             CreateMap<PostClient, Client>()
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore())
                 .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -146,7 +147,7 @@ namespace MapperConfig
             CreateMap<ClientRegulatoryContact, GetClientRegulatoryContact>();
             #endregion
 
-            #region ClientRota
+            #region Rota
             CreateMap<PostClientRota, Rota>()
                 .ForMember(dto => dto.RotaId, mem => mem.Ignore());
 
@@ -156,9 +157,12 @@ namespace MapperConfig
 
             #region ClientRotaType
             CreateMap<ClientRotaType, GetClientRotaType>();
-            CreateMap<PutClientRotaType, ClientRotaType>();
+            CreateMap<PutClientRotaType, ClientRotaType>()
+                .ForMember(dto=>dto.ClientRota,mem=>mem.Ignore());
+
             CreateMap<PostClientRotaType, ClientRotaType>()
                 .ForMember(dto=>dto.RotaType,mem=>mem.MapFrom(src=>src.RotaType.ToUpper()))
+                .ForMember(dto=>dto.ClientRota,mem=>mem.Ignore())
                 .ForMember(dto=>dto.ClientRotaTypeId,mem=>mem.Ignore());
             #endregion
 

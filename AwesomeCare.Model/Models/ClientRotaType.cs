@@ -9,5 +9,6 @@ namespace AwesomeCare.Model.Models
         public int ClientRotaTypeId { get; set; }
         public string RotaType { get; set; }
 
+        public virtual ICollection<ClientRota> ClientRota { get; set; }
     }
 }
