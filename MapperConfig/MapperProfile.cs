@@ -7,6 +7,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.DataTransferObject.DTOs.ClientRota;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaDays;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
+using AwesomeCare.DataTransferObject.DTOs.ClientRotaTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
@@ -214,7 +215,17 @@ namespace MapperConfig
               .ForMember(dto => dto.ClientRotaTask, mem => mem.Ignore());
             #endregion
 
+            #region ClientRotaTask
+            CreateMap<ClientRotaTask, GetClientRotaTask>();
+            CreateMap<PostClientRotaTask, ClientRotaTask>()
+                .ForMember(dto => dto.ClientRotaTaskId, mem => mem.Ignore())
+                .ForMember(dto => dto.RotaTask, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
 
+            CreateMap<PutClientRotaTask, ClientRotaTask>()
+                .ForMember(dto => dto.RotaTask, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
+            #endregion
         }
     }
 }
