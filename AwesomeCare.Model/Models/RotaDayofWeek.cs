@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AwesomeCare.Model.Models
 {
-  public  class RotaDayofWeek
+  public  class RotaDayofWeek:Base.BaseModel
     {
         public int RotaDayofWeekId { get; set; }
         public string DayofWeek { get; set; }
