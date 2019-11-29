@@ -1,4 +1,4 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.ClientRota;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientRota
     {
         public ClientRotaViewModel()
         {
-            Rotas = new List<GetClientRota>();
+            Rotas = new List<GetClientRotaName>();
             Genders = new List<SelectListItem>
             {
                 new SelectListItem{Text ="Male",Value="Male"},
@@ -33,7 +33,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientRota
         public string Gender { get; set; }
         [Required]
         public string Area { get; set; }
-        public List<GetClientRota> Rotas { get; set; }
+        public List<GetClientRotaName> Rotas { get; set; }
         public bool Deleted { get; set; } = false;
         public List<SelectListItem> Genders { get; set; }
     }

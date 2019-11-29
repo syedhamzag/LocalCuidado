@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AwesomeCare.Admin.Services.ClientRota;
+using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.ViewModels.Rotering;
@@ -17,9 +17,9 @@ namespace AwesomeCare.Admin.Controllers
     public class RoteringController : BaseController
     {
         IClientRotaTypeService _clientRotaTypeService;
-        IClientRotaService _clientRotaService;
+        IClientRotaNameService _clientRotaService;
         IRotaTaskService _rotaTaskService;
-        public RoteringController(IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaService clientRotaService)
+        public RoteringController(IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaService)
         {
             _clientRotaTypeService = clientRotaTypeService;
             _clientRotaService = clientRotaService;

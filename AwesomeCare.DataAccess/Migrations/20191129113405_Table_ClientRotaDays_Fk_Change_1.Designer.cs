@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191129113405_Table_ClientRotaDays_Fk_Change_1")]
+    partial class Table_ClientRotaDays_Fk_Change_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -328,9 +330,9 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaDays", b =>
                 {
-                    b.Property<int>("ClientRotaDaysId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientRotaDaysId")
+                        .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("ClientRotaId")
@@ -349,7 +351,7 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("StopTime")
                         .HasMaxLength(25);
 
-                    b.HasKey("ClientRotaDaysId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ClientRotaId");
 

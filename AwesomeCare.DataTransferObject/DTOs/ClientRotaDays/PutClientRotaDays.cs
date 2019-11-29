@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AwesomeCare.Model.Models
+namespace AwesomeCare.DataTransferObject.DTOs.ClientRotaDays
 {
-   public class ClientRotaDays
+  public  class PutClientRotaDays
     {
-       
+        [Required]
         public int ClientRotaDaysId { get; set; }
+        [Required(ErrorMessage ="please provide  ClientRota")]
         public int ClientRotaId { get; set; }
+        [Required(ErrorMessage ="Please provide Day of Week")]
         public int RotaDayofWeekId { get; set; }
+        [Required]
         public string StartTime { get; set; }
+        [Required]
         public string StopTime { get; set; }
-
-        public virtual ClientRota ClientRota { get; set; }
-        public virtual RotaDayofWeek RotaDayofWeek { get; set; }
-        public virtual ICollection<ClientRotaTask> ClientRotaTask { get; set; }
     }
 }

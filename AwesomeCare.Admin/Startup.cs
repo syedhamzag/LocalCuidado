@@ -20,7 +20,7 @@ using AwesomeCare.Admin.Services.ClientInvolvingPartyBase;
 using AwesomeCare.Admin.Services.ClientRegulatoryContact;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
-using AwesomeCare.Admin.Services.ClientRota;
+using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaTask;
 
@@ -122,7 +122,7 @@ namespace AwesomeCare.Admin
             services.AddHttpClient("clientrotaservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IClientRotaService>(r));
+            }).AddTypedClient(r => RestService.For<IClientRotaNameService>(r));
 
             services.AddHttpClient("clientrotatypeservice", c =>
             {

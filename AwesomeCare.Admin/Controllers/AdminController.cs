@@ -13,7 +13,7 @@ using AwesomeCare.Admin.Services.ClientInvolvingPartyBase;
 using AwesomeCare.Admin.ViewModels.Admin;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.Admin.Models;
-using AwesomeCare.Admin.Services.ClientRota;
+using AwesomeCare.Admin.Services.ClientRotaName;
 
 namespace AwesomeCare.Admin.Controllers
 {

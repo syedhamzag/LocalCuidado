@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.Admin.Models;
-using AwesomeCare.Admin.Services.ClientRota;
+using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.ViewModels.ClientRota;
-using AwesomeCare.DataTransferObject.DTOs.ClientRota;
+using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class RotaController : BaseController
     {
-        private readonly IClientRotaService _clientRotaService;
-        public RotaController(IClientRotaService clientRotaService)
+        private readonly IClientRotaNameService _clientRotaService;
+        public RotaController(IClientRotaNameService clientRotaService)
         {
             _clientRotaService = clientRotaService;
         }
@@ -54,7 +54,7 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.RotaId == 0)
             {
-                var postRota = new PostClientRota
+                var postRota = new PostClientRotaName
                 {
                     Area = model.Area,
                     Deleted = false,
@@ -68,7 +68,7 @@ namespace AwesomeCare.Admin.Controllers
             }
             else
             {
-                var putRota = new PutClientRota
+                var putRota = new PutClientRotaName
                 {
                     Area = model.Area,
                     Deleted = model.Deleted,

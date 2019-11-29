@@ -4,12 +4,10 @@ using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.ClientRota
 {
-  public  class GetClientRota:BaseDTO
+    public class GetClientRota 
     {
-        public int RotaId { get; set; }
-        public int NumberOfStaff { get; set; }
-        public string RotaName { get; set; }
-        public string Gender { get; set; }
-        public string Area { get; set; }
+        public int ClientRotaId { get; set; }
+        public int ClientId { get; set; }
+        public int ClientRotaTypeId { get; set; }
     }
 }

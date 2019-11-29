@@ -40,7 +40,7 @@ namespace AwesomeCare.Model.Models.Map
             #region Relationships
             builder.HasOne(p => p.ClientRota)
                 .WithMany(p => p.ClientRotaDays)
-                .HasForeignKey(p => p.ClientRotaDaysId)
+                .HasForeignKey(p => p.ClientRotaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(p => p.RotaDayofWeek)
