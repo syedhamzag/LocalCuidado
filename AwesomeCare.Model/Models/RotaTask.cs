@@ -12,5 +12,6 @@ namespace AwesomeCare.Model.Models
         public string NotGivenAcronym { get; set; }
         public string Remark { get; set; }
 
+        public virtual ICollection<ClientRotaTask> ClientRotaTask { get; set; }
     }
 }

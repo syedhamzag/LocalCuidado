@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191129093244_Table_ClientRotaTask")]
+    partial class Table_ClientRotaTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

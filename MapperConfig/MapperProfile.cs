@@ -169,8 +169,10 @@ namespace MapperConfig
             #region RotaTask
             CreateMap<RotaTask, GetRotaTask>();
             CreateMap<PostRotaTask, RotaTask>()
+                .ForMember(dto => dto.ClientRotaTask, mem => mem.Ignore())
                 .ForMember(dto => dto.RotaTaskId, mem => mem.Ignore());
-            CreateMap<PutRotaTask, RotaTask>();
+            CreateMap<PutRotaTask, RotaTask>()
+                .ForMember(dto=>dto.ClientRotaTask,mem=>mem.Ignore());
             #endregion
         }
     }
