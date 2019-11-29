@@ -23,112 +23,120 @@
             </div>
             <div class="body">
 
-                @*<table class="table table-hover table-bordered">
+                <form id="roteringForm" asp-action="Index" asp-controller="Rotering" method="post">
+
+
+                    @*<table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>
+                                        <ul class="nav nav-tabs-new2">
+                                            @foreach (var weekDay in Model.WeekDays)
+                                            {
+                                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#@weekDay.ToLower()">@weekDay</a></li>
+                                            }
+                                        </ul>
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var rotaType in Model.RotaTypes)
+                                {
+                                    <tr>
+                                        <td>@rotaType.RotaType</td>
+                                        <td>
+                                            <div class="tab-content">
+                                                @foreach (var weekDay in Model.WeekDays)
+                                                {
+                                                    <div class="tab-pane" id="@weekDay.ToLower()">
+                                                        <h6>@weekDay</h6>
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>*@
+
+
+                    <table class="table table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th></th>
-                                <th>
-                                    <ul class="nav nav-tabs-new2">
-                                        @foreach (var weekDay in Model.WeekDays)
-                                        {
-                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#@weekDay.ToLower()">@weekDay</a></li>
-                                        }
-                                    </ul>
-
-                                </th>
+                                @foreach (var weekDay in Model.WeekDays)
+                                {
+                                    <th>@weekDay</th>
+                                }
                             </tr>
                         </thead>
+
                         <tbody>
                             @foreach (var rotaType in Model.RotaTypes)
                             {
                                 <tr>
-                                    <td>@rotaType.RotaType</td>
                                     <td>
-                                        <div class="tab-content">
-                                            @foreach (var weekDay in Model.WeekDays)
-                                            {
-                                                <div class="tab-pane" id="@weekDay.ToLower()">
-                                                    <h6>@weekDay</h6>
-                                                </div>
-                                            }
-
+                                        <div class="fancy-checkbox">
+                                            <label><input type="checkbox" name="@rotaType.RotaType"><span>@rotaType.RotaType</span></label>
                                         </div>
+                                        
                                     </td>
+                                    @foreach (var weekDay in Model.WeekDays)
+                                    {
+                                        <td>
+                                            <div class="form-group">
+                                                <label>Rota</label>
+                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay}-rota", Model.Rotas, "select rota", new { @class = "form-control" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Tasks</label>
+                                                <br />
+                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay}-rotaTask", Model.RotaTasks, "", new { @multiple = "multiple", @class = "multiselect multiselect-custom taskMultiselect" })
+                                                @*<select class="multiselect multiselect-custom taskMultiselect" multiple="multiple">
+                                                        <option value="cheese">Cheese</option>
+                                                        <option value="tomatoes">Tomatoes</option>
+                                                        <option value="mozarella">Mozzarella</option>
+                                                        <option value="mushrooms">Mushrooms</option>
+                                                        <option value="pepperoni">Pepperoni</option>
+                                                        <option value="onions">Onions</option>
+                                                    </select>*@
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Start Time</label>
+                                                <input type="text" name="@rotaType.RotaType-@weekDay-StartTime" id="@rotaType.RotaType-@weekDay-StartTime" data-provide="timepicker" data-minute-step="1" class="form-control" />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Stop Time</label>
+                                                <input type="text" name="@rotaType.RotaType-@weekDay-StopTime" id="@rotaType.RotaType-@weekDay-StopTime" data-provide="timepicker" data-minute-step="1" class="form-control" />
+
+                                            </div>
+                                        </td>
+                                    }
                                 </tr>
                             }
                         </tbody>
-                    </table>*@
+                    </table>
 
-
-                <table class="table table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            @foreach (var weekDay in Model.WeekDays)
-                            {
-                                <th>@weekDay</th>
-                            }
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach (var rotaType in Model.RotaTypes)
-                        {
-                            <tr>
-                                <td>@rotaType.RotaType</td>
-                                @foreach (var weekDay in Model.WeekDays)
-                                {
-                                    <td>
-
-                                        <div class="form-group">
-                                            <label>Rota</label>
-                                            @Html.DropDownList($"{weekDay}_rota", Model.Rotas, "select rota", new { @class = "form-control" })
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="">Tasks</label>
-                                            <br />
-                                            @Html.DropDownList($"{weekDay}_rotaTask", Model.RotaTasks, "select task", new {@multiple="multiple", @class = "multiselect multiselect-custom taskMultiselect" })
-                                            @*<select class="multiselect multiselect-custom taskMultiselect" multiple="multiple">
-                                                <option value="cheese">Cheese</option>
-                                                <option value="tomatoes">Tomatoes</option>
-                                                <option value="mozarella">Mozzarella</option>
-                                                <option value="mushrooms">Mushrooms</option>
-                                                <option value="pepperoni">Pepperoni</option>
-                                                <option value="onions">Onions</option>
-                                            </select>*@
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Start Time</label>
-                                            <input type="text" class="form-control" value="" />
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Stop Time</label>
-                                            <input type="text" class="form-control" value="" />
-
-                                        </div>
-                                    </td>
-                                }
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-
+                    <button type="submit" class="btn btn-primary pull-right">save & continue</button>
+                </form>
 
             </div>
         </div>
     </div>
 </div>
 
-@section scripts{ 
-<script>
-    $(function() {
-        // validation needs name of the element
-        $('.taskMultiselect').multiselect();
+@section scripts{
+    <script>
+        $(function () {
+            // validation needs name of the element
+            $('.taskMultiselect').multiselect();
 
-        
-    });
-</script>
+
+        });
+    </script>
 }
