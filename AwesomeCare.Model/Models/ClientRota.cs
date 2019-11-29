@@ -15,5 +15,6 @@ namespace AwesomeCare.Model.Models
 
         public virtual Client Client { get; set; }
         public virtual ClientRotaType ClientRotaType { get; set; }
+        public virtual ICollection<ClientRotaDays> ClientRotaDays { get; set; }
     }
 }

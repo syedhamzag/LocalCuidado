@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191129084029_Table_RotaDayofWeek")]
+    partial class Table_RotaDayofWeek
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,34 +328,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_ClientRota");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaDays", b =>
-                {
-                    b.Property<int>("ClientRotaDaysId")
-                        .HasColumnName("ClientRotaDaysId");
-
-                    b.Property<int>("ClientRotaId")
-                        .HasColumnName("ClientRotaId");
-
-                    b.Property<int>("RotaDayofWeekId")
-                        .HasColumnName("RotaDayofWeekId");
-
-                    b.Property<string>("StartTime")
-                        .IsRequired()
-                        .HasColumnName("StartTime")
-                        .HasMaxLength(25);
-
-                    b.Property<string>("StopTime")
-                        .IsRequired()
-                        .HasColumnName("StopTime")
-                        .HasMaxLength(25);
-
-                    b.HasKey("ClientRotaDaysId");
-
-                    b.HasIndex("RotaDayofWeekId");
-
-                    b.ToTable("tbl_ClientRotaDays");
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaType", b =>
                 {
                     b.Property<int>("ClientRotaTypeId")
@@ -482,23 +456,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_ClientRotaName");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.RotaDayofWeek", b =>
-                {
-                    b.Property<int>("RotaDayofWeekId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("RotaDayofWeekId")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("DayofWeek")
-                        .IsRequired()
-                        .HasColumnName("DayofWeek")
-                        .HasMaxLength(15);
-
-                    b.HasKey("RotaDayofWeekId");
-
-                    b.ToTable("tbl_RotaDayofWeek");
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.RotaTask", b =>
                 {
                     b.Property<int>("RotaTaskId")
@@ -545,6 +502,23 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_RotaTask");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.RotaDayofWeek", b =>
+                {
+                    b.Property<int>("RotaDayofWeekId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("RotaDayofWeekId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DayofWeek")
+                        .IsRequired()
+                        .HasColumnName("DayofWeek")
+                        .HasMaxLength(15);
+
+                    b.HasKey("RotaDayofWeekId");
+
+                    b.ToTable("tbl_RotaDayofWeek");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.BaseRecordItemModel", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.BaseRecordModel", "BaseRecord")
@@ -589,19 +563,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.ClientRotaType", "ClientRotaType")
                         .WithMany("ClientRota")
                         .HasForeignKey("ClientRotaTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaDays", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.ClientRota", "ClientRota")
-                        .WithMany("ClientRotaDays")
-                        .HasForeignKey("ClientRotaDaysId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("AwesomeCare.Model.Models.RotaDayofWeek", "RotaDayofWeek")
-                        .WithMany("ClientRotaDays")
-                        .HasForeignKey("RotaDayofWeekId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
