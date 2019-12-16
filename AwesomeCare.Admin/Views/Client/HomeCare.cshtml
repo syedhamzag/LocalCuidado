@@ -1,7 +1,7 @@
 ﻿@using  AwesomeCare.DataTransferObject.DTOs.Client;
 @model List<GetClient>
 @{
-        ViewData["Title"] = "HomeCare";
+    ViewData["Title"] = "HomeCare";
 }
 
 <div class="row clearfix">
@@ -33,22 +33,35 @@
                             <th>Start Date</th>
                             <th>END Date</th>
                             <th>Status</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var client in Model.Select((d,i)=>new { index=i + 1,data=d})){
-                        <tr>
-                            <td>@client.index </td>
-                            <td><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></td>
-                            <td><span class="text-info">@client.data.Telephone</span></td>
-                            <td>@client.data.Rate</td>
-                            <td>@client.data.Keyworker</td>
-                            <td>@client.data.PostCode</td>
-                            <td>@client.data.DateOfBirth</td>
-                            <td>@client.data.StartDate.ToString("dd MMM yyyy")</td>
-                            <td>@client.data.EndDate?.ToString("dd MMM yyyy")</td>
-                            <td><span class="badge badge-success">@client.data.Status</span></td>
-                        </tr>
+                        @foreach (var client in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                            <tr>
+                                <td>@client.index </td>
+                                <td><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></td>
+                                <td><span class="text-info">@client.data.Telephone</span></td>
+                                <td>@client.data.Rate</td>
+                                <td>@client.data.Keyworker</td>
+                                <td>@client.data.PostCode</td>
+                                <td>@client.data.DateOfBirth</td>
+                                <td>@client.data.StartDate.ToString("dd MMM yyyy")</td>
+                                <td>@client.data.EndDate?.ToString("dd MMM yyyy")</td>
+                                <td><span class="badge badge-success">@client.data.Status</span></td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Rotering","Index","Rotering",new  {client=client.data.ClientId },new {@class="dropdown-item" })
+                                            
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                         }
 
 

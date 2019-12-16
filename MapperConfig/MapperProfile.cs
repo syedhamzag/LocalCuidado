@@ -200,6 +200,13 @@ namespace MapperConfig
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
+
+            CreateMap<CreateClientRota, ClientRota>()
+                .ForMember(dto => dto.ClientRotaId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaDays, mem => mem.MapFrom(src => src.ClientRotaDays));
+
             #endregion
 
             #region ClientRotaDays
@@ -213,6 +220,12 @@ namespace MapperConfig
               .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
               .ForMember(dto => dto.RotaDayofWeek, mem => mem.Ignore())
               .ForMember(dto => dto.ClientRotaTask, mem => mem.Ignore());
+
+            CreateMap<CreateClientRotaDays,ClientRotaDays>()
+                 .ForMember(dto => dto.ClientRotaDaysId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
+                .ForMember(dto => dto.RotaDayofWeek, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaTask, mem => mem.MapFrom(src=>src.RotaTasks));
             #endregion
 
             #region ClientRotaTask
@@ -225,6 +238,11 @@ namespace MapperConfig
             CreateMap<PutClientRotaTask, ClientRotaTask>()
                 .ForMember(dto => dto.RotaTask, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
+
+            CreateMap<CreateClientRotaTask, ClientRotaTask>()
+               .ForMember(dto => dto.ClientRotaTaskId, mem => mem.Ignore())
+               .ForMember(dto => dto.RotaTask, mem => mem.Ignore())
+               .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
             #endregion
         }
     }

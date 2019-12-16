@@ -26,25 +26,31 @@
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
 
-                        @if (Model.ActiveTab == "personalInfo")
-                        {
-                            <form id="basic-form" enctype="multipart/form-data" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
-                                <partial name="_ClientPersonalInfo" model="Model" />
-                                <br>
+                       
+                        <form id="basic-form" enctype="multipart/form-data" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
+                            <partial name="_ClientPersonalInfo" model="Model" />
+                            <br>
+                            @if (Model.ActiveTab == "personalInfo")
+                            {
                                 <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                            </form>
-                        }
+                            }
+
+                        </form>
+                        
 
                     </div>
                     <div class="tab-pane" id="involvingparties">
-                        @if (Model.ActiveTab == "involvingparties")
-                        {
-                            <form id="basic-formII" asp-action="_InvolvingParty" asp-controller="Client" method="post">
-                                <partial name="_InvolvingParty" model="Model" />
-                                <br>
+                       
+                        <form id="basic-formII" asp-action="_InvolvingParty" asp-controller="Client" method="post">
+                            <partial name="_InvolvingParty" model="Model" />
+                            <br>
+                            @if (Model.ActiveTab == "involvingparties")
+                            {
                                 <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                            </form>
-                        }
+                            }
+
+                        </form>
+                       
                     </div>
                     <div class="tab-pane" id="caredetails">
 
@@ -55,14 +61,17 @@
                         }
                     </div>
                     <div class="tab-pane" id="regulatorycontact">
-                        @if (Model.ActiveTab == "regulatorycontact")
-                        {
-                            <form id="regulatorycontactform" enctype="multipart/form-data" asp-action="_RegulatoryContact" asp-controller="client" method="post">
-                                <partial name="_regulatorycontact" model="Model" />
-                                <br>
+                       
+                        <form id="regulatorycontactform" enctype="multipart/form-data" asp-action="_RegulatoryContact" asp-controller="client" method="post">
+                            <partial name="_regulatorycontact" model="Model" />
+                            <br>
+                            @if (Model.ActiveTab == "regulatorycontact")
+                            {
                                 <button type="submit" class="btn btn-primary pull-right">save & continue</button>
-                            </form>
-                        }
+                            }
+
+                        </form>
+                       
                     </div>
                 </div>
             </div>

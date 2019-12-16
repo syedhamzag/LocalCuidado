@@ -7,7 +7,7 @@
 
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
-        <div class="card planned_task">
+        <div class="card planned_task  table-responsive">
             <div class="header">
                 <h2>Create Client Rota</h2>
                 <ul class="header-dropdown">
@@ -25,7 +25,7 @@
 
                 <form id="roteringForm" asp-action="Index" asp-controller="Rotering" method="post">
 
-
+                    @Html.HiddenFor(m=>m.ClientId)
                     @*<table class="table table-hover table-bordered">
                             <thead>
                                 <tr>
@@ -69,7 +69,7 @@
                                 <th></th>
                                 @foreach (var weekDay in Model.WeekDays)
                                 {
-                                    <th>@weekDay</th>
+                                    <th>@weekDay.DayofWeek</th>
                                 }
                             </tr>
                         </thead>
@@ -87,14 +87,15 @@
                                     @foreach (var weekDay in Model.WeekDays)
                                     {
                                         <td>
+                                            @Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-Day",weekDay.RotaDayofWeekId)
                                             <div class="form-group">
                                                 <label>Rota</label>
-                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay}-rota", Model.Rotas, "select rota", new { @class = "form-control" })
+                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rota", Model.Rotas, "select rota", new { @class = "form-control" })
                                             </div>
                                             <div class="form-group">
                                                 <label for="">Tasks</label>
                                                 <br />
-                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay}-rotaTask", Model.RotaTasks, "", new { @multiple = "multiple", @class = "multiselect multiselect-custom taskMultiselect" })
+                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rotaTask", Model.RotaTasks,  new { @multiple = "multiple", @class = "multiselect multiselect-custom taskMultiselect" })
                                                 @*<select class="multiselect multiselect-custom taskMultiselect" multiple="multiple">
                                                         <option value="cheese">Cheese</option>
                                                         <option value="tomatoes">Tomatoes</option>
@@ -103,16 +104,16 @@
                                                         <option value="pepperoni">Pepperoni</option>
                                                         <option value="onions">Onions</option>
                                                     </select>*@
-
+                                                
                                             </div>
                                             <div class="form-group">
                                                 <label>Start Time</label>
-                                                <input type="text" name="@rotaType.RotaType-@weekDay-StartTime" id="@rotaType.RotaType-@weekDay-StartTime" data-provide="timepicker" data-minute-step="1" class="form-control" />
+                                                <input type="text" name="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
 
                                             </div>
                                             <div class="form-group">
                                                 <label>Stop Time</label>
-                                                <input type="text" name="@rotaType.RotaType-@weekDay-StopTime" id="@rotaType.RotaType-@weekDay-StopTime" data-provide="timepicker" data-minute-step="1" class="form-control" />
+                                                <input type="text" name="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
 
                                             </div>
                                         </td>
@@ -134,7 +135,11 @@
     <script>
         $(function () {
             // validation needs name of the element
-            $('.taskMultiselect').multiselect();
+            $('.taskMultiselect').multiselect({
+                enableFiltering: false,
+                nonSelectedText: "Select Task",
+                numberDisplayed:0
+        });
 
 
         });

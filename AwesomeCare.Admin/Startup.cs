@@ -23,6 +23,8 @@ using System.IO;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaTask;
+using AwesomeCare.Admin.Services.RotaDayofWeek;
+using AwesomeCare.Admin.Services.ClientRota;
 
 namespace AwesomeCare.Admin
 {
@@ -119,11 +121,17 @@ namespace AwesomeCare.Admin
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientRegulatoryContactService>(r));
 
-            services.AddHttpClient("clientrotaservice", c =>
+            services.AddHttpClient("clientrotanameservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientRotaNameService>(r));
 
+            services.AddHttpClient("clientrotaservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientRotaService>(r));
+
+            
             services.AddHttpClient("clientrotatypeservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
@@ -134,6 +142,11 @@ namespace AwesomeCare.Admin
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IRotaTaskService>(r));
 
+
+            services.AddHttpClient("rotadayofweekservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IRotaDayofWeekService>(r));
             
         }
     }

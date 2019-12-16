@@ -57,29 +57,30 @@ namespace AwesomeCare.API.Controllers
             return Ok(getEntities);
         }
 
-        /// <summary>
-        /// Create ClientRota
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(type: typeof(GetClientRota), statusCode: StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post([FromBody]PostClientRota model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        ///// <summary>
+        ///// Create ClientRota
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //[HttpPost()]
+        //[Route("[action]")]
+        //[ProducesResponseType(type: typeof(GetClientRota), statusCode: StatusCodes.Status201Created)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<IActionResult> Post([FromBody]PostClientRota model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            
-            var postEntity = Mapper.Map<ClientRota>(model);
-            var newEntity = await _clientRotaRepository.InsertEntity(postEntity);
-            var getEntity = Mapper.Map<GetClientRota>(newEntity);
 
-            return CreatedAtRoute("GetClientRotaById", new { id = getEntity.ClientRotaId }, getEntity);
-        }
+        //    var postEntity = Mapper.Map<ClientRota>(model);
+        //    var newEntity = await _clientRotaRepository.InsertEntity(postEntity);
+        //    var getEntity = Mapper.Map<GetClientRota>(newEntity);
+
+        //    return CreatedAtRoute("GetClientRotaById", new { id = getEntity.ClientRotaId }, getEntity);
+        //}
 
         /// <summary>
         /// Update ClientRota
@@ -104,6 +105,16 @@ namespace AwesomeCare.API.Controllers
             return Ok(getEntity);
 
 
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> CreateRota([FromBody]List<CreateClientRota> model)
+        {
+
+            var postEntity = Mapper.Map<List<ClientRota>>(model);
+            await _clientRotaRepository.InsertEntities(postEntity);
+            return Ok();
         }
     }
 }
