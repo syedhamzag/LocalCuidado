@@ -110,10 +110,17 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore())
                 .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
+                .ForMember(dto => dto.UniqueId, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
+                .ForMember(dto => dto.QRCode, mem => mem.Ignore())
+                .ForMember(dto => dto.Gender, mem => mem.Ignore())
                 .ForMember(dto => dto.Status, mem => mem.Ignore());
+
+            CreateMap<Client, GetClientForEdit>()
+                .ForMember(dto => dto.InvolvingParties, mem => mem.MapFrom(src => src.InvolvingParties))
+                .ForMember(dto => dto.RegulatoryContact, mem => mem.MapFrom(src => src.RegulatoryContact));
             // .ForMember(dto=>dto.)
             #endregion
 
@@ -125,6 +132,8 @@ namespace MapperConfig
             CreateMap<ClientInvolvingPartyItem, GetClientInvolvingPartyItem>();
             CreateMap<PutClientInvolvingPartyItem, ClientInvolvingPartyItem>()
                 .ForMember(dto => dto.ClientInvolvingParty, mem => mem.Ignore());
+
+            
             #endregion
 
             #region ClientInvolvingParty
@@ -139,6 +148,8 @@ namespace MapperConfig
             CreateMap<PutClientInvolvingParty, ClientInvolvingParty>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientInvolvingPartyItem, mem => mem.Ignore());
+
+            CreateMap<ClientInvolvingParty, GetClientInvolvingPartyForEdit>();
             #endregion
 
             #region ClientRegulatoryContact
@@ -149,6 +160,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.BaseRecordItem, mem => mem.Ignore());
 
             CreateMap<ClientRegulatoryContact, GetClientRegulatoryContact>();
+            CreateMap<ClientRegulatoryContact, GetClientRegulatoryContactForEdit>();
             #endregion
 
             #region ClientRotaName

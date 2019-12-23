@@ -1,11 +1,18 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
+using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
-   public class GetClient
+   public class GetClientForEdit
     {
+        [DataType(DataType.Upload)]
+        [MaxFileSize(Lenght = 1)]
+        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
+        public IFormFile ClientImage { get; set; }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
         public string Middlename { get; set; }
@@ -17,6 +24,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public DateTime? EndDate { get; set; }
         public string Keyworker { get; set; }
         public string IdNumber { get; set; }
+        [Display(Name ="Gender")]
         public int GenderId { get; set; }
         public int NumberOfCalls { get; set; }
         public int AreaCodeId { get; set; }
@@ -32,12 +40,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string KeySafe { get; set; }
         public int ChoiceOfStaffId { get; set; }
         public int StatusId { get; set; }
-        public string Status { get; set; }
         public int CapacityId { get; set; }
         public string ProviderReference { get; set; }
         public int NumberOfStaff { get; set; }
         public string UniqueId { get; set; }
-        public string Gender { get; set; }
-        public byte[] QRCode { get; set; }
+        public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
+        public virtual ICollection<GetClientRegulatoryContactForEdit> RegulatoryContact { get; set; }
     }
 }

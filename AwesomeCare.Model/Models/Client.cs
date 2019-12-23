@@ -39,7 +39,7 @@ namespace AwesomeCare.Model.Models
         public int CapacityId { get; set; }
         public string ProviderReference { get; set; }
         public int NumberOfStaff { get; set; }
-
+        public string UniqueId  { get; set; }
         public virtual ICollection<ClientInvolvingParty> InvolvingParties { get; set; }
         public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<ClientRota> ClientRota { get; set; }

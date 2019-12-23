@@ -51,6 +51,8 @@ namespace AwesomeCare.API.Controllers
             }
 
             var client = Mapper.Map<Client>(postClient);
+            var uniqueId = _clientRepository.Table.Count() + 1;
+            client.UniqueId = $"AHS/{DateTime.Now.ToString("yy")}/{ uniqueId.ToString("D6")}";
             var newClient = await _clientRepository.InsertEntity(client);
             var getClient = Mapper.Map<GetClient>(newClient);
             return CreatedAtAction("GetClient", new { id = getClient.ClientId }, getClient);
@@ -71,8 +73,47 @@ namespace AwesomeCare.API.Controllers
             if (!id.HasValue)
                 return BadRequest("id Parameter is required");
 
-            var client = await _clientRepository.GetEntity(id);
-            var getClient = Mapper.Map<GetClient>(client);
+            //var client = await _clientRepository.GetEntity(id);
+            // var getClient = Mapper.Map<GetClient>(client);
+            var getClient = await (from client in _clientRepository.Table
+                                   join baseRecItem in _baseRecordItemRepository.Table on client.StatusId equals baseRecItem.BaseRecordItemId
+                                   join baseRec in _baseRecordRepository.Table on baseRecItem.BaseRecordId equals baseRec.BaseRecordId
+                                   where baseRec.KeyName == "Client_Status" && client.ClientId == id.Value
+                                   select new GetClient
+                                   {
+                                       ClientId = client.ClientId,
+                                       Firstname = client.Firstname,
+                                       Middlename = client.Middlename,
+                                       Surname = client.Surname,
+                                       Email = client.Email,
+                                       About = client.About,
+                                       Hobbies = client.Hobbies,
+                                       StartDate = client.StartDate,
+                                       EndDate = client.EndDate,
+                                       Keyworker = client.Keyworker,
+                                       IdNumber = client.IdNumber,
+                                       GenderId = client.GenderId,
+                                       NumberOfCalls = client.NumberOfCalls,
+                                       AreaCodeId = client.AreaCodeId,
+                                       TeritoryId = client.TeritoryId,
+                                       ServiceId = client.ServiceId,
+                                       ProvisionVenue = client.ProvisionVenue,
+                                       PostCode = client.PostCode,
+                                       Rate = client.Rate,
+                                       TeamLeader = client.TeamLeader,
+                                       DateOfBirth = client.DateOfBirth,
+                                       Telephone = client.Telephone,
+                                       LanguageId = client.LanguageId,
+                                       KeySafe = client.KeySafe,
+                                       ChoiceOfStaffId = client.ChoiceOfStaffId,
+                                       StatusId = client.StatusId,
+                                       Status = baseRecItem.ValueName,
+                                       CapacityId = client.CapacityId,
+                                       ProviderReference = client.ProviderReference,
+                                       NumberOfStaff = client.NumberOfStaff,
+                                       UniqueId = client.UniqueId
+                                   }
+                      ).FirstOrDefaultAsync();
             return Ok(getClient);
         }
 
@@ -83,7 +124,6 @@ namespace AwesomeCare.API.Controllers
         public async Task<IActionResult> GetClients()
         {
 
-            // var getClient = await _clientRepository.Table.ProjectTo<GetClient>().ToListAsync();
             var getClient = await (from client in _clientRepository.Table
                                    join baseRecItem in _baseRecordItemRepository.Table on client.StatusId equals baseRecItem.BaseRecordItemId
                                    join baseRec in _baseRecordRepository.Table on baseRecItem.BaseRecordId equals baseRec.BaseRecordId
@@ -119,9 +159,23 @@ namespace AwesomeCare.API.Controllers
                                        Status = baseRecItem.ValueName,
                                        CapacityId = client.CapacityId,
                                        ProviderReference = client.ProviderReference,
-                                       NumberOfStaff = client.NumberOfStaff
+                                       NumberOfStaff = client.NumberOfStaff,
+                                       UniqueId = client.UniqueId
                                    }
                       ).ToListAsync();
+
+            return Ok(getClient);
+        }
+
+        [HttpGet("{clientId}")]
+        [ProducesResponseType(type: typeof(List<GetClient>), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> EditClient(int? clientId)
+        {
+            if (!clientId.HasValue)
+                return BadRequest("id Parameter is required");
+            var getClient = await _clientRepository.Table.Where(c => c.ClientId == clientId).ProjectTo<GetClientForEdit>().FirstOrDefaultAsync();//.Include(c => c.RegulatoryContact).Include(i => i.InvolvingParties).FirstOrDefaultAsync();
 
             return Ok(getClient);
         }

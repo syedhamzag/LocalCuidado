@@ -25,6 +25,7 @@ using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.ClientRota;
+using QRCoder;
 
 namespace AwesomeCare.Admin
 {
@@ -46,6 +47,7 @@ namespace AwesomeCare.Admin
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.AddScoped(typeof(QRCodeGenerator));
             //AutoMapper
             //AutoMapperConfig.Configure();
             MapperConfig.AutoMapperConfiguration.Configure();

@@ -57,6 +57,8 @@
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             @Html.ActionLink("Rotering","Index","Rotering",new  {client=client.data.ClientId },new {@class="dropdown-item" })
+                                            @Html.ActionLink("Details","HomeCareDetails","Client",new  {clientId=client.data.ClientId },new {@class="dropdown-item" })
+                                            @Html.ActionLink("Edit","EditRegistration","Client",new  {clientId=client.data.ClientId },new {@class="dropdown-item" })
                                             
                                         </div>
                                     </div>

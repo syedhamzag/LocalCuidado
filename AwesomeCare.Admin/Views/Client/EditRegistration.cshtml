@@ -1,13 +1,7 @@
-﻿@using AwesomeCare.Admin.ViewModels.Client;
-@model CreateClient
-
+﻿@using AwesomeCare.DataTransferObject.DTOs.Client;
+@model GetClientForEdit
 @{
-    ViewData["Title"] = "HomeCare Client";
-}
-
-@section HeaderScripts{
-    <link rel="stylesheet" href="../assets/vendor/jquery-steps/jquery.steps.css">
-    <link rel="stylesheet" href="../assets/vendor/dropify/css/dropify.min.css">
+    ViewData["Title"] = "EditRegistration";
 }
 
 <div class="row clearfix">
@@ -26,52 +20,38 @@
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
 
-                       
+
                         <form id="basic-form" enctype="multipart/form-data" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
-                            <partial name="_ClientPersonalInfo" model="Model" />
+                            <partial name="_EditClientPersonalInfo" model="Model" />
                             <br>
-                            @if (Model.ActiveTab == "personalInfo")
-                            {
-                                <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                            }
+                            <button type="submit" class="btn btn-primary pull-right">Save</button>
 
                         </form>
-                        
+
 
                     </div>
                     <div class="tab-pane" id="involvingparties">
-                       
+
                         <form id="basic-formII" asp-action="_InvolvingParty" asp-controller="Client" method="post">
-                            <partial name="_InvolvingParty" model="Model" />
+                            <partial name="_EditInvolvingParty" model="Model.InvolvingParties" />
                             <br>
-                            @if (Model.ActiveTab == "involvingparties")
-                            {
-                                <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                            }
+
+                            <button type="submit" class="btn btn-primary pull-right">Save</button>
 
                         </form>
-                       
+
                     </div>
-                    @*<div class="tab-pane" id="caredetails">
 
-
-                        @if (Model.ActiveTab == "caredetails")
-                        {
-                            <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                        }
-                    </div>*@
                     <div class="tab-pane" id="regulatorycontact">
-                       
+
                         <form id="regulatorycontactform" enctype="multipart/form-data" asp-action="_RegulatoryContact" asp-controller="client" method="post">
-                            <partial name="_regulatorycontact" model="Model" />
+                            <partial name="_EditRegulatoryContact" model="Model.RegulatoryContact" />
                             <br>
-                            @if (Model.ActiveTab == "regulatorycontact")
-                            {
-                                <button type="submit" class="btn btn-primary pull-right">save & continue</button>
-                            }
+
+                            <button type="submit" class="btn btn-primary pull-right">Save</button>
 
                         </form>
-                       
+
                     </div>
                 </div>
             </div>
@@ -89,8 +69,8 @@
     <script src="../assets/js/pages/forms/dropify.js"></script>
     <script>
         $(document).ready(function () {
-             $('a[href="#@Model.ActiveTab"]').tab('show');
-
+            
         })
     </script>
 }
+

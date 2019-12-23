@@ -15,6 +15,8 @@ namespace AwesomeCare.Admin.Services.Client
 
         [Get("/Client/{id}")]
         Task<GetClient> GetClient(int id);
+        [Get("/Client/{clientId}")]
+        Task<GetClientForEdit> GetClientForEdit(int clientId);
 
         [Post("/Client")]
         Task<GetClient> PostClient([Body]PostClient client);

@@ -18,6 +18,8 @@ using Microsoft.Extensions.Caching.Memory;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.Admin.Services.ClientRegulatoryContact;
+using QRCoder;
+using System.Drawing;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -30,7 +32,8 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
         private const string cacheKey = "baserecord_key";
-        public ClientController(IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
+        private readonly QRCodeGenerator _qRCodeGenerator;
+        public ClientController(QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
         {
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
@@ -38,6 +41,7 @@ namespace AwesomeCare.Admin.Controllers
             _logger = logger;
             _cache = cache;
             _clientRegulatoryContactService = clientRegulatoryContactService;
+            _qRCodeGenerator = qRCodeGenerator;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -46,6 +50,7 @@ namespace AwesomeCare.Admin.Controllers
         }
 
 
+        #region Registration
         public async Task<IActionResult> HomeCareRegistration()
         {
             List<ClientInvolvingParty> clientInvolvingPartyItems = new List<ClientInvolvingParty>();
@@ -68,13 +73,13 @@ namespace AwesomeCare.Admin.Controllers
             {
 
                 client.RegulatoryContacts = (from rec in baseRecords
-                                                   where rec.KeyName == "Client_RegulatoryContact"
-                                                   from recItem in rec.BaseRecordItems
-                                                   select new ClientRegulatoryContact
-                                                   {
-                                                       BaseRecordItemId = recItem.BaseRecordItemId,
-                                                       RegulatoryContact = recItem.ValueName
-                                                   }).ToList();
+                                             where rec.KeyName == "Client_RegulatoryContact"
+                                             from recItem in rec.BaseRecordItems
+                                             select new ClientRegulatoryContact
+                                             {
+                                                 BaseRecordItemId = recItem.BaseRecordItemId,
+                                                 RegulatoryContact = recItem.ValueName
+                                             }).ToList();
             }
             #endregion
 
@@ -138,7 +143,7 @@ namespace AwesomeCare.Admin.Controllers
             }
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Involving Parties successfully added to Client" : "An Error Occurred" });
 
-            createClient.ActiveTab = "caredetails";
+            createClient.ActiveTab = "regulatorycontact";
             #region Regulatory Contact
             if (_cache.TryGetValue(cacheKey, out List<GetBaseRecordWithItems> baseRecords))
             {
@@ -161,7 +166,7 @@ namespace AwesomeCare.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _RegulatoryContact(CreateClient createClient)
         {
-            
+
             var items = createClient.RegulatoryContacts.Where(s => s.IsSelected).ToList();
             items.ForEach(c =>
             {
@@ -173,7 +178,7 @@ namespace AwesomeCare.Admin.Controllers
                 string filePath = await this.HttpContext.Request.UploadFileAsync(_env, c.EvidenceFile, "clientregulatorycontact", "");
                 c.Evidence = filePath;
             });
-           
+
             var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
             var result = await _clientRegulatoryContactService.Post(regulatoryContacts);
             if (!result.IsSuccessStatusCode)
@@ -185,6 +190,36 @@ namespace AwesomeCare.Admin.Controllers
 
             return View("HomeCareRegistration", createClient);
         }
-        
+
+
+        #endregion
+
+        #region Edit
+        public async Task<IActionResult> EditRegistration(int? clientId)
+        {
+            
+            var result = await _clientService.GetClientForEdit(clientId.Value);
+            return View(result);
+           
+        }
+        #endregion
+
+
+        #region Details
+        public async Task<IActionResult> HomeCareDetails(int? clientId)
+        {
+            if (!clientId.HasValue)
+            {
+                return NotFound();
+            }
+
+            var result = await _clientService.GetClient(clientId.Value);
+            QRCodeData qrCodeData = _qRCodeGenerator.CreateQrCode(result.UniqueId,QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(5);
+            result.QRCode = qrCodeImage.ToByteArray();
+            return View(result);
+        }
+        #endregion
     }
 }

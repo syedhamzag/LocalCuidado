@@ -19,6 +19,7 @@
   
   <ItemGroup>
     <Compile Remove="Controllers\CompanyTestController.cs" />
+    <Compile Remove="Controllers\ValuesController.cs" />
   </ItemGroup>
 
   <ItemGroup>
