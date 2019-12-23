@@ -3,12 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
-    public class PostClient
+  public class PutClient
     {
-        #region Dropdowns
-
-        #endregion
-
         [Required]
         [MaxLength(50)]
         public string Firstname { get; set; }
@@ -30,7 +26,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string Hobbies { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
-       
+
         public DateTime? EndDate { get; set; }
         [Required]
         [MaxLength(50)]
@@ -39,7 +35,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [MaxLength(50)]
         public string IdNumber { get; set; }
         [Required]
-        [Display(Name ="Gender")]
+        [Display(Name = "Gender")]
         public int GenderId { get; set; }
         [Required]
         [Display(Name = "Number of Calls")]

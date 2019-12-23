@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.Model.Models;
@@ -20,11 +22,13 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Client> _clientRepository;
         private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
         private IGenericRepository<BaseRecordModel> _baseRecordRepository;
-        public ClientController(IGenericRepository<Client> clientRepository, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
+        private IDbContext _dbContext;
+        public ClientController(IDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
         {
             _clientRepository = clientRepository;
             _baseRecordItemRepository = baseRecordItemRepository;
             _baseRecordRepository = baseRecordRepository;
+            _dbContext = dbContext;
         }
         /// <summary>
         /// Create Client
@@ -178,6 +182,29 @@ namespace AwesomeCare.API.Controllers
             var getClient = await _clientRepository.Table.Where(c => c.ClientId == clientId).ProjectTo<GetClientForEdit>().FirstOrDefaultAsync();//.Include(c => c.RegulatoryContact).Include(i => i.InvolvingParties).FirstOrDefaultAsync();
 
             return Ok(getClient);
+        }
+
+        [HttpPut("{clientId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PutClient([FromBody]PutClient model, int? clientId)
+        {
+            if (model == null || !ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var client = Mapper.Map<Client>(model);
+            client.ClientId = clientId.Value;
+            _dbContext.Attach(client);
+            var properties = model.GetType().GetProperties();
+            foreach (PropertyInfo prop in properties)
+            {
+                _dbContext.Entry(client).Property(prop.Name).IsModified = true;
+            }
+            var id = await _dbContext.SaveChangesAsync();
+            return Ok(id);
         }
     }
 }

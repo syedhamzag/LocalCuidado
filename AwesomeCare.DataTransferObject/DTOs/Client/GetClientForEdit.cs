@@ -1,5 +1,7 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
+using AwesomeCare.DataTransferObject.Validations;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,22 +28,34 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string IdNumber { get; set; }
         [Display(Name ="Gender")]
         public int GenderId { get; set; }
+        [Display(Name = "Number of Calls")]
         public int NumberOfCalls { get; set; }
+        [Display(Name = "Area Code")]
         public int AreaCodeId { get; set; }
+        [Display(Name = "Teritory")]
         public int TeritoryId { get; set; }
+        [Display(Name ="Service")]
         public int ServiceId { get; set; }
+        [Display(Name = "Provision Venue")]
         public string ProvisionVenue { get; set; }
         public string PostCode { get; set; }
         public decimal Rate { get; set; }
         public string TeamLeader { get; set; }
+        [Display(Name = "Date of Birth")]
         public string DateOfBirth { get; set; }
         public string Telephone { get; set; }
+        [Display(Name = "Language")]
         public int LanguageId { get; set; }
         public string KeySafe { get; set; }
+        [Display(Name = "Choice of Staff")]
         public int ChoiceOfStaffId { get; set; }
+        [Display(Name = "Status")]
         public int StatusId { get; set; }
+        [Display(Name = "Capacity")]
         public int CapacityId { get; set; }
+        [Display(Name = "Provider Reference")]
         public string ProviderReference { get; set; }
+        [Display(Name = "Number of Staff")]
         public int NumberOfStaff { get; set; }
         public string UniqueId { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }

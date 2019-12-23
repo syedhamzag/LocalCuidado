@@ -20,6 +20,8 @@ namespace AwesomeCare.Admin.Services.Client
 
         [Post("/Client")]
         Task<GetClient> PostClient([Body]PostClient client);
+        [Put("/Client/{clientId}")]
+        Task<int> PutClient([Body]PutClient client,int clientId);
 
         [Get("/ClientInvolvingPartyBase")]
         Task<List<GetClientInvolvingPartyItem>> GetClientInvolvingPartyBase();

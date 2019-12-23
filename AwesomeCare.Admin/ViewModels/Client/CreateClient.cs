@@ -1,4 +1,4 @@
-﻿using AwesomeCare.Admin.Validations;
+﻿using AwesomeCare.DataTransferObject.Validations;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

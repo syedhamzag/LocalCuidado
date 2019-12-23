@@ -197,10 +197,31 @@ namespace AwesomeCare.Admin.Controllers
         #region Edit
         public async Task<IActionResult> EditRegistration(int? clientId)
         {
-            
             var result = await _clientService.GetClientForEdit(clientId.Value);
             return View(result);
-           
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _EditPersonalInfo(GetClientForEdit model)
+        {
+
+            if (model == null || !ModelState.IsValid)
+            {
+                return View("EditRegistration", model);
+            }
+            //  await putClient.SaveFileToDisk(_env);
+            var putClient = Mapper.Map<PutClient>(model);
+            var result = await _clientService.PutClient(putClient, model.ClientId);
+            // var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result >= 1 ? true : false, Message = result >= 1 ? "Client Personal Information successfully updated" : "An Error Occurred" });
+            if (result < 1)
+            {
+                // model.DeleteFileFromDisk(_env);
+                return View("EditRegistration", model);
+            }
+            return RedirectToAction("EditRegistration", new { clientId = model.ClientId });
         }
         #endregion
 
@@ -214,7 +235,7 @@ namespace AwesomeCare.Admin.Controllers
             }
 
             var result = await _clientService.GetClient(clientId.Value);
-            QRCodeData qrCodeData = _qRCodeGenerator.CreateQrCode(result.UniqueId,QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = _qRCodeGenerator.CreateQrCode(result.UniqueId, QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(5);
             result.QRCode = qrCodeImage.ToByteArray();

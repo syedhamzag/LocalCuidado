@@ -10,6 +10,8 @@
         <div class="row">
             <div class="col-xs-12 col-sm-4 col-md-4">
                 <div class="form-group">
+                    <input type="hidden" asp-for="ClientId" />
+                    <input type="hidden" asp-for="UniqueId" />
                     <label asp-for="Firstname" class="control-label"></label>
                     <input type="text" class="form-control" asp-for="Firstname">
                     <span asp-validation-for="Firstname" class="text-danger"></span>
@@ -33,21 +35,28 @@
         </div>
 
         <div class="row">
-            <div class="col-xs-12 col-sm-4 col-md-4">
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                <div class="form-group">
+                    <label asp-for="StatusId" class="control-label"></label>
+                    <baserecord asp-key="Client_Status" asp-for="StatusId" asp-items="null" />
+                    <span asp-validation-for="StatusId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-3">
                 <div class="form-group">
                     <label asp-for="GenderId" class="control-label"></label>
                     <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
                     <span asp-validation-for="GenderId" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
+            <div class="col-xs-12 col-sm-4 col-md-3">
                 <div class="form-group">
                     <label asp-for="DateOfBirth" class="control-label"></label>
                     <input data-provide="datepicker" asp-for="DateOfBirth" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
                     <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
+            <div class="col-xs-12 col-sm-4 col-md-3">
                 <div class="form-group">
                     <label asp-for="IdNumber" class="control-label"></label>
                     <input type="text" class="form-control" asp-for="IdNumber">
@@ -110,11 +119,11 @@
     <div class="col-xs-4 col-sm-4 col-md-4">
         <div class="card">
             <div class="header">
-                <h2>Client Image<small></small></h2>
+                <h2>Change Client Image<small>optional</small></h2>
             </div>
             <div class="body">
-                @*<input type="file" asp-for="ClientImage" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                <span asp-validation-for="ClientImage" class="text-danger"></span>*@
+                <input type="file" asp-for="ClientImage" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                <span asp-validation-for="ClientImage" class="text-danger"></span>
             </div>
         </div>
     </div>

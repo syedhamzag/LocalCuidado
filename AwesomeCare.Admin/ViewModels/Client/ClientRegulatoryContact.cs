@@ -1,4 +1,5 @@
-﻿using AwesomeCare.Admin.Validations;
+﻿
+using AwesomeCare.DataTransferObject.Validations;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

@@ -119,9 +119,19 @@ namespace MapperConfig
                 .ForMember(dto => dto.Status, mem => mem.Ignore());
 
             CreateMap<Client, GetClientForEdit>()
+                .ForMember(dto=>dto.ClientImage,mem=>mem.Ignore())
                 .ForMember(dto => dto.InvolvingParties, mem => mem.MapFrom(src => src.InvolvingParties))
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.MapFrom(src => src.RegulatoryContact));
             // .ForMember(dto=>dto.)
+
+            CreateMap<GetClientForEdit, PutClient>();
+
+            CreateMap<PutClient,Client>()
+                 .ForMember(dto => dto.ClientId, mem => mem.Ignore())
+                .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
+                .ForMember(dto => dto.UniqueId, mem => mem.Ignore())
+                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem

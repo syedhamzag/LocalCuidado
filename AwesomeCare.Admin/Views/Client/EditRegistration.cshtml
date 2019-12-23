@@ -1,9 +1,12 @@
 ﻿@using AwesomeCare.DataTransferObject.DTOs.Client;
 @model GetClientForEdit
 @{
-    ViewData["Title"] = "EditRegistration";
+    ViewData["Title"] = "Edit Client Details";
 }
-
+@section HeaderScripts{
+    <link rel="stylesheet" href="../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../assets/vendor/dropify/css/dropify.min.css">
+}
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card">
@@ -21,7 +24,7 @@
                     <div class="tab-pane show active" id="personalInfo">
 
 
-                        <form id="basic-form" enctype="multipart/form-data" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
+                        <form id="basic-form" enctype="multipart/form-data" asp-action="_EditPersonalInfo" asp-controller="Client" method="post">
                             <partial name="_EditClientPersonalInfo" model="Model" />
                             <br>
                             <button type="submit" class="btn btn-primary pull-right">Save</button>
@@ -69,7 +72,7 @@
     <script src="../assets/js/pages/forms/dropify.js"></script>
     <script>
         $(document).ready(function () {
-            
+
         })
     </script>
 }

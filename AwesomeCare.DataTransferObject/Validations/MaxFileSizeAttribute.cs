@@ -2,21 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.DataTransferObject.Validations
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class AllowedExtensionsAttribute : ValidationAttribute
+    public class MaxFileSizeAttribute : ValidationAttribute
     {
-        private readonly string[] _Extensions;
-        public AllowedExtensionsAttribute(string[] Extensions)
-        {
-            _Extensions = Extensions;
-        }
-
+        /// <summary>
+        /// file length in MB
+        /// </summary>
+        public long Lenght { get; set; }
         public override bool IsValid(object value)
         {
             var file = value as IFormFile;
@@ -25,19 +22,16 @@ namespace AwesomeCare.DataTransferObject.Validations
             //    ErrorMessage = "Invalid file";
             //    return false;
             //}
-            if (file != null)
+            if(file != null)
             {
-                var extension = Path.GetExtension(file.FileName);
-                if (!_Extensions.Contains(extension.ToLower()))
+                if (!(file.Length <= (Lenght * 1024 * 1024)))
                 {
-                    ErrorMessage = $"This file extension, {extension} is not allowed!";
+                    ErrorMessage = $"Invalid file length, max length is {Lenght}";
                     return false;
                 }
             }
-
             return true;
         }
-
 
     }
 }
