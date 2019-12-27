@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Dropbox.Api;
+using Dropbox.Api.Files;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -10,8 +12,8 @@ namespace Microsoft.AspNetCore.Http
 {
     public static class HttpRequestExtension
     {
-       
-        public static async Task<string> UploadFileAsync(this HttpRequest request, IHostingEnvironment env, IFormFile formFile,string name,string path)
+        [Obsolete]
+        public static async Task<string> UploadFileAsync(this HttpRequest request, IHostingEnvironment env, IFormFile formFile, string name, string path)
         {
             // string filePath = GetFilePath(env,formFile.FileName,name);
             string fileName = string.Concat(name, "_", Path.GetFileNameWithoutExtension(formFile.FileName), Path.GetExtension(formFile.FileName));
@@ -24,11 +26,26 @@ namespace Microsoft.AspNetCore.Http
             return fileName;
         }
 
-       //static string GetFilePath(IHostingEnvironment env, string filename,string name)
-       // {
-       //     string fileName = string.Concat(name,"_",Path.GetFileNameWithoutExtension(filename), Path.GetExtension(filename));
-       //     string filePath = Path.Combine(env.ContentRootPath, "Uploads", fileName);
-       //     return filePath;
-       // }
+        public static async Task<string> UploadFileToDropboxAsync(this HttpRequest request, DropboxClient dropboxClient, IFormFile formFile, string folderName, string fileName)
+        {
+            string path = $"/{folderName}/{fileName}";
+            await dropboxClient.Files.UploadAsync(path, body: formFile.OpenReadStream());
+            var link = await dropboxClient.Sharing.CreateSharedLinkWithSettingsAsync(path);
+            return link.Url;
+        }
+
+        public static async Task UpdateDropboxFileAsync(this HttpRequest request, DropboxClient dropboxClient, IFormFile formFile, string folderName, string fileName)
+        {
+            string path = $"/{folderName}/{fileName}";
+            await dropboxClient.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: formFile.OpenReadStream());
+        }
+
+
+        //static string GetFilePath(IHostingEnvironment env, string filename,string name)
+        // {
+        //     string fileName = string.Concat(name,"_",Path.GetFileNameWithoutExtension(filename), Path.GetExtension(filename));
+        //     string filePath = Path.Combine(env.ContentRootPath, "Uploads", fileName);
+        //     return filePath;
+        // }
     }
 }

@@ -39,5 +39,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string UniqueId { get; set; }
         public string Gender { get; set; }
         public byte[] QRCode { get; set; }
+        public string PassportFilePath { get; set; }
     }
 }

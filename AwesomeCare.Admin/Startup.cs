@@ -26,6 +26,7 @@ using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.ClientRota;
 using QRCoder;
+using Dropbox.Api;
 
 namespace AwesomeCare.Admin
 {
@@ -48,6 +49,7 @@ namespace AwesomeCare.Admin
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddScoped(typeof(QRCodeGenerator));
+            services.AddScoped(typeof(DropboxClient),c=> new DropboxClient(Configuration["dropboxApiKey"]));
             //AutoMapper
             //AutoMapperConfig.Configure();
             MapperConfig.AutoMapperConfiguration.Configure();

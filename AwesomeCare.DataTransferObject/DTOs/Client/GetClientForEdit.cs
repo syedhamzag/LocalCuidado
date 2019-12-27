@@ -58,6 +58,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [Display(Name = "Number of Staff")]
         public int NumberOfStaff { get; set; }
         public string UniqueId { get; set; }
+        public string PassportFilePath { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
         public virtual ICollection<GetClientRegulatoryContactForEdit> RegulatoryContact { get; set; }
     }

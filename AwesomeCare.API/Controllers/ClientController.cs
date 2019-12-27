@@ -115,7 +115,8 @@ namespace AwesomeCare.API.Controllers
                                        CapacityId = client.CapacityId,
                                        ProviderReference = client.ProviderReference,
                                        NumberOfStaff = client.NumberOfStaff,
-                                       UniqueId = client.UniqueId
+                                       UniqueId = client.UniqueId,
+                                       PassportFilePath = client.PassportFilePath
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);
@@ -164,7 +165,8 @@ namespace AwesomeCare.API.Controllers
                                        CapacityId = client.CapacityId,
                                        ProviderReference = client.ProviderReference,
                                        NumberOfStaff = client.NumberOfStaff,
-                                       UniqueId = client.UniqueId
+                                       UniqueId = client.UniqueId,
+                                       PassportFilePath = client.PassportFilePath
                                    }
                       ).ToListAsync();
 

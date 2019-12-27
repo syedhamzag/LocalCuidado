@@ -95,5 +95,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [Required]
         [Display(Name = "Number of Staff")]
         public int NumberOfStaff { get; set; }
+        public string PassportFilePath { get; set; }
     }
 }

@@ -146,11 +146,19 @@ namespace AwesomeCare.Model.Models.Map
               .HasColumnName("NumberOfStaff")
               .IsRequired();
 
+            builder.Property(p => p.UniqueId)
+              .HasColumnName("UniqueId")
+              .IsRequired();
+
+            builder.Property(p => p.PassportFilePath)
+             .HasColumnName("PassportFilePath")
+             .IsRequired(false);
+
             builder.HasMany(p => p.RegulatoryContact)
                 .WithOne(p => p.Client)
                 .HasForeignKey(p => p.ClientId)
                 .OnDelete(DeleteBehavior.Cascade);
-          
+
             #endregion
         }
     }

@@ -40,6 +40,7 @@ namespace AwesomeCare.Model.Models
         public string ProviderReference { get; set; }
         public int NumberOfStaff { get; set; }
         public string UniqueId  { get; set; }
+        public string PassportFilePath { get; set; }
         public virtual ICollection<ClientInvolvingParty> InvolvingParties { get; set; }
         public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<ClientRota> ClientRota { get; set; }

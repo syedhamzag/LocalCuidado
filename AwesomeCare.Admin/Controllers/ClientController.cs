@@ -20,6 +20,7 @@ using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.Admin.Services.ClientRegulatoryContact;
 using QRCoder;
 using System.Drawing;
+using Dropbox.Api;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -33,8 +34,11 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IMemoryCache _cache;
         private const string cacheKey = "baserecord_key";
         private readonly QRCodeGenerator _qRCodeGenerator;
-        public ClientController(QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
+        private readonly DropboxClient _dropboxClient;
+
+        public ClientController(DropboxClient dropboxClient,QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
         {
+            _dropboxClient = dropboxClient;
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
             _env = env;
@@ -102,13 +106,18 @@ namespace AwesomeCare.Admin.Controllers
                     return View(model);
                 }
                 await model.SaveFileToDisk(_env);
+
+                string folder = $"ClientPassport/{model.Telephone}";
+               
+                string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, model.ClientImage, folder, model.ClientImage.FileName);
+                model.PassportFilePath = path;
                 var result = await _clientService.PostClient(model);
                 // var content = await result.Content.ReadAsStringAsync();
 
                 SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Client successfully registered" : "An Error Occurred" });
                 if (result == null)
                 {
-                    model.DeleteFileFromDisk(_env);
+                    await _dropboxClient.Files.DeleteV2Async(folder);
                     return View(model);
                 }
                 model.ActiveTab = "involvingparties";
@@ -175,8 +184,11 @@ namespace AwesomeCare.Admin.Controllers
 
             items.ForEach(async c =>
             {
-                string filePath = await this.HttpContext.Request.UploadFileAsync(_env, c.EvidenceFile, "clientregulatorycontact", "");
-                c.Evidence = filePath;
+               // string fileName = string.Concat(createClient.ClientId, "_", Path.GetFileNameWithoutExtension(formFile.FileName), Path.GetExtension(formFile.FileName));
+                string folder = $"ClientRegulatoryContact/{createClient.ClientId}";
+                string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, c.EvidenceFile.FileName);
+               // string filePath = await this.HttpContext.Request.UploadFileAsync(_env, c.EvidenceFile, "clientregulatorycontact", "");
+                c.Evidence = path;
             });
 
             var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
