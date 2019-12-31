@@ -6,10 +6,14 @@
 *@
 <h5>Regulatory Contact</h5>
 <input type="hidden" asp-for="@Model.ClientId" />
+<input type="hidden" asp-for="@Model.Firstname" />
+<input type="hidden" asp-for="@Model.Middlename" />
+<input type="hidden" asp-for="@Model.Surname" />
+<input type="hidden" asp-for="@Model.Telephone" />
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            
+
             <th></th>
             <th>Regulatory Contact</th>
             <th>Date Performed</th>
@@ -37,9 +41,9 @@
                     <input data-provide="datepicker" type="text" asp-for="@Model.RegulatoryContacts[r].DueDate" data-date-autoclose="true" class="form-control">
                 </td>
                 <td><input asp-for="@Model.RegulatoryContacts[r].EvidenceFile" type="file" class="dropify" /></td>
-                
+
             </tr>
         }
-      
+
     </tbody>
 </table>

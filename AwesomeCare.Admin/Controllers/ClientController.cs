@@ -21,6 +21,7 @@ using AwesomeCare.Admin.Services.ClientRegulatoryContact;
 using QRCoder;
 using System.Drawing;
 using Dropbox.Api;
+using System.IO;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -36,7 +37,7 @@ namespace AwesomeCare.Admin.Controllers
         private readonly QRCodeGenerator _qRCodeGenerator;
         private readonly DropboxClient _dropboxClient;
 
-        public ClientController(DropboxClient dropboxClient,QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
+        public ClientController(DropboxClient dropboxClient, QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
         {
             _dropboxClient = dropboxClient;
             _clientService = clientService;
@@ -105,11 +106,11 @@ namespace AwesomeCare.Admin.Controllers
                 {
                     return View(model);
                 }
-                await model.SaveFileToDisk(_env);
+                // await model.SaveFileToDisk(_env);
 
                 string folder = $"ClientPassport/{model.Telephone}";
-               
-                string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, model.ClientImage, folder, model.ClientImage.FileName);
+                string filename = string.Concat(model.Firstname, "_", model.Surname, Path.GetExtension(model.ClientImage.FileName));
+                string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, model.ClientImage, folder, filename);
                 model.PassportFilePath = path;
                 var result = await _clientService.PostClient(model);
                 // var content = await result.Content.ReadAsStringAsync();
@@ -179,17 +180,29 @@ namespace AwesomeCare.Admin.Controllers
             var items = createClient.RegulatoryContacts.Where(s => s.IsSelected).ToList();
             items.ForEach(c =>
             {
-                c.ClientId = 1004;// createClient.ClientId;
+                c.ClientId = createClient.ClientId;
             });
 
-            items.ForEach(async c =>
+            foreach (var c in items)
             {
-               // string fileName = string.Concat(createClient.ClientId, "_", Path.GetFileNameWithoutExtension(formFile.FileName), Path.GetExtension(formFile.FileName));
-                string folder = $"ClientRegulatoryContact/{createClient.ClientId}";
-                string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, c.EvidenceFile.FileName);
-               // string filePath = await this.HttpContext.Request.UploadFileAsync(_env, c.EvidenceFile, "clientregulatorycontact", "");
+                string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
+                string filename = string.Concat(c.RegulatoryContact.Replace(" ",""),"_", createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
+                string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
                 c.Evidence = path;
-            });
+            }
+
+            //items.ForEach(async c =>
+            //{
+            //    string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
+            //    string filename = string.Concat(c.RegulatoryContact,createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
+            //    string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
+                
+            //    // string fileName = string.Concat(createClient.ClientId, "_", Path.GetFileNameWithoutExtension(formFile.FileName), Path.GetExtension(formFile.FileName));
+            //    // string folder = $"ClientRegulatoryContact/{createClient.ClientId}";
+            //    // string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, c.EvidenceFile.FileName);
+            //    // string filePath = await this.HttpContext.Request.UploadFileAsync(_env, c.EvidenceFile, "clientregulatorycontact", "");
+            //    c.Evidence = path;
+            //});
 
             var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
             var result = await _clientRegulatoryContactService.Post(regulatoryContacts);
@@ -200,7 +213,8 @@ namespace AwesomeCare.Admin.Controllers
             }
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Regulotary Contact successfully added to Client" : "An Error Occurred" });
 
-            return View("HomeCareRegistration", createClient);
+            // return View("HomeCareRegistration", createClient);
+            return RedirectToAction("HomeCareDetails", new { clientId = createClient.ClientId });
         }
 
 
@@ -222,7 +236,17 @@ namespace AwesomeCare.Admin.Controllers
             {
                 return View("EditRegistration", model);
             }
-            //  await putClient.SaveFileToDisk(_env);
+
+
+            if (model.ClientImage != null)
+            {
+                string folder = $"ClientPassport/{model.Telephone}";
+                string filename = string.Concat(model.Firstname, "_", model.Surname, Path.GetExtension(model.ClientImage.FileName));
+                await this.HttpContext.Request.UpdateDropboxFileAsync(_dropboxClient, model.ClientImage, folder, filename);
+            }
+
+
+
             var putClient = Mapper.Map<PutClient>(model);
             var result = await _clientService.PutClient(putClient, model.ClientId);
             // var content = await result.Content.ReadAsStringAsync();

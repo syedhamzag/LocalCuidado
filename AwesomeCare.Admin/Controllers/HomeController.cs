@@ -38,8 +38,9 @@ namespace AwesomeCare.Admin.Controllers
 
             //update
             //await dropbox.Files.UploadAsync(path, WriteMode.Overwrite.Instance, body: model.ClientImage.OpenReadStream());
-
-            var link = await _dropboxClient.Sharing.CreateSharedLinkWithSettingsAsync(path);
+            var sharedsettings = new Dropbox.Api.Sharing.SharedLinkSettings(Dropbox.Api.Sharing.RequestedVisibility.Public.Instance, audience: Dropbox.Api.Sharing.LinkAudience.Public.Instance);
+            
+            var link = await _dropboxClient.Sharing.CreateSharedLinkWithSettingsAsync(path, sharedsettings);
             string url = link.Url;
             return RedirectToAction("Index");
         }

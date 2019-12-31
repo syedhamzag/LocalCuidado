@@ -30,8 +30,10 @@ namespace Microsoft.AspNetCore.Http
         {
             string path = $"/{folderName}/{fileName}";
             await dropboxClient.Files.UploadAsync(path, body: formFile.OpenReadStream());
-            var link = await dropboxClient.Sharing.CreateSharedLinkWithSettingsAsync(path);
-            return link.Url;
+            var sharedsettings = new Dropbox.Api.Sharing.SharedLinkSettings(Dropbox.Api.Sharing.RequestedVisibility.Public.Instance, audience: Dropbox.Api.Sharing.LinkAudience.Public.Instance);
+            var sharedLink = await dropboxClient.Sharing.CreateSharedLinkWithSettingsAsync(path, sharedsettings);
+            string link = sharedLink.Url.Replace("?dl=0", "?raw=1");
+            return link;
         }
 
         public static async Task UpdateDropboxFileAsync(this HttpRequest request, DropboxClient dropboxClient, IFormFile formFile, string folderName, string fileName)
