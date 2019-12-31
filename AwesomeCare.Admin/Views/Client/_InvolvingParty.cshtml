@@ -1,0 +1,61 @@
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+
+@model CreateClient
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h5>Involving Parties</h5>
+<input type="hidden" asp-for="@Model.ClientId" />
+<input type="hidden" asp-for="@Model.Firstname" />
+<input type="hidden" asp-for="@Model.Middlename" />
+<input type="hidden" asp-for="@Model.Surname" />
+<input type="hidden" asp-for="@Model.Telephone" />
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>NAME</th>
+            <th>ADDRESS</th>
+            <th>EMAIL</th>
+            <th>TELEPHONE</th>
+            <th>RELATIONSHIP</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int r = 0; r < Model.InvolvingParties.Count; r++)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" asp-for="@Model.InvolvingParties[r].IsSelected" />
+                </td>
+                <td>
+                    @Model.InvolvingParties[r].ItemName
+                    <input type="hidden" asp-for="@Model.InvolvingParties[r].ClientInvolvingPartyItemId" />
+                    <input type="hidden" asp-for="@Model.InvolvingParties[r].ItemName" />
+
+                </td>
+                <td><input asp-for="@Model.InvolvingParties[r].Name" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model.InvolvingParties[r].Address" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model.InvolvingParties[r].Email" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model.InvolvingParties[r].Telephone" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model.InvolvingParties[r].Relationship" type="text" class="form-control" /></td>
+            </tr>
+        }
+        @*@foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    <input type="checkbox" name="@item.ClientInvolvingPartyItemId" />
+                </td>
+                <td>@item.ItemName
+                </td>
+                <td><input name="@item.Name" type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+                <td><input type="text" class="form-control" /></td>
+            </tr>
+            }*@
+    </tbody>
+</table>

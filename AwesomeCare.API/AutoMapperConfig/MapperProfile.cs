@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using AwesomeCare.DataTransferObject.DTOs.BaseRecordItem;
+using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.Model.Models;
@@ -69,14 +71,28 @@ namespace AwesomeCare.API.AutoMapperConfig
                 .ForMember(dt => dt.BaseRecordItemId, mem => mem.MapFrom(src => src.BaseRecordItemId))
                 .ForMember(dt => dt.BaseRecordId, mem => mem.MapFrom(src => src.BaseRecordId))
                 .ForMember(dt => dt.Deleted, mem => mem.MapFrom(src => src.Deleted))
-                .ForMember(dt => dt.ValueName, mem => mem.MapFrom(src => src.ValueName));
+                .ForMember(dt => dt.ValueName, mem => mem.MapFrom(src => src.ValueName))
+                .ForMember(dt => dt.KeyName, mem => mem.MapFrom(src => src.BaseRecord.KeyName));
 
             CreateMap<BaseRecordModel, GetBaseRecord>();
-                
+
+            CreateMap<PutBaseRecordItem, BaseRecordItemModel>()
+                .ForMember(dto=>dto.BaseRecordId,mem=>mem.MapFrom(src=>src.BaseRecordId))
+                .ForMember(dto=>dto.BaseRecordItemId,mem=>mem.MapFrom(src=>src.BaseRecordItemId))
+                .ForMember(dto=>dto.Deleted,mem=>mem.MapFrom(src=>src.Deleted))
+                .ForMember(dto=>dto.ValueName,mem=>mem.MapFrom(src=>src.ValueName))
+                .ForMember(dto=>dto.BaseRecord,mem=>mem.Ignore());
             #endregion
 
             #region BaseRecordItem
 
+            #endregion
+
+            #region Client
+            CreateMap<PostClient, Client>()
+                .ForMember(dto=>dto.ClientId,mem=>mem.Ignore());
+
+            CreateMap<Client, GetClient>();
             #endregion
         }
     }

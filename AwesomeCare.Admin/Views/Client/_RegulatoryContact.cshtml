@@ -1,0 +1,49 @@
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+
+@model CreateClient
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h5>Regulatory Contact</h5>
+<input type="hidden" asp-for="@Model.ClientId" />
+<input type="hidden" asp-for="@Model.Firstname" />
+<input type="hidden" asp-for="@Model.Middlename" />
+<input type="hidden" asp-for="@Model.Surname" />
+<input type="hidden" asp-for="@Model.Telephone" />
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+
+            <th></th>
+            <th>Regulatory Contact</th>
+            <th>Date Performed</th>
+            <th>Date Due</th>
+            <th>Evidence</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int r = 0; r < Model.RegulatoryContacts.Count; r++)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" asp-for="@Model.RegulatoryContacts[r].IsSelected" />
+                </td>
+                <td>
+                    @Model.RegulatoryContacts[r].RegulatoryContact
+                    <input type="hidden" asp-for="@Model.RegulatoryContacts[r].BaseRecordItemId" />
+                    <input type="hidden" asp-for="@Model.RegulatoryContacts[r].RegulatoryContact" />
+
+                </td>
+                <td>
+                    <input data-provide="datepicker" type="text" asp-for="@Model.RegulatoryContacts[r].DatePerformed" data-date-autoclose="true" class="form-control">
+                </td>
+                <td>
+                    <input data-provide="datepicker" type="text" asp-for="@Model.RegulatoryContacts[r].DueDate" data-date-autoclose="true" class="form-control">
+                </td>
+                <td><input asp-for="@Model.RegulatoryContacts[r].EvidenceFile" type="file" class="dropify" /></td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>

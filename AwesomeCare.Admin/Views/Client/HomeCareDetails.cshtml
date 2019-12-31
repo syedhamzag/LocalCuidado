@@ -1,0 +1,252 @@
+﻿@using  AwesomeCare.DataTransferObject.DTOs.Client;
+@model GetClient
+@{
+    ViewData["Title"] = "HomeCare Details";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>HomeCare Client Details</h2>
+                <ul class="header-dropdown">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a asp-action="EditRegistration" asp-route-clientId="@Model.ClientId" asp-controller="Client">Edit Client</a></li>
+                          
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="body">
+                <h4>HomeCare Details</h4>
+
+                <div class="row">
+                    <div class="col-xs-7 col-sm-7 col-md-7">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Firstname" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Firstname" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Middlename" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Middlename" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Surname" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Surname" readonly>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Gender" class="control-label"></label>
+                                    <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="DateOfBirth" class="control-label"></label>
+                                    <input asp-for="DateOfBirth" class="form-control" readonly>
+
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="IdNumber" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="IdNumber" readonly>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Email" class="control-label"></label>
+                                    <input type="email" class="form-control" asp-for="Email" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="StartDate" class="control-label"></label>
+                                    <input type="text" asp-for="StartDate" class="form-control" readonly>
+
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="EndDate" class="control-label"></label>
+                                    <input type="text" asp-for="EndDate" class="form-control" readonly>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="NumberOfCalls" class="control-label"></label>
+                                    <input type="number" class="form-control" asp-for="NumberOfCalls" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="AreaCodeId" class="control-label"></label>
+                                    <baserecord asp-key="AreaCode" asp-for="AreaCodeId" asp-items="null" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="TeritoryId" class="control-label"></label>
+                                    <baserecord asp-key="Teritory" asp-for="TeritoryId" asp-items="null" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="card">
+                            <div class="header">
+                                <h2>QR Code<small></small></h2>
+                            </div>
+                            <div class="body">
+                                <img alt="clientimage" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <div class="card">
+                            <div class="header">
+                                <h2>Image<small></small></h2>
+                            </div>
+                            <div class="body">
+                                <img alt="clientimage" src="@Model.PassportFilePath" height="150" width="150">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ServiceId" class="control-label"></label>
+                            <baserecord asp-key="Service" asp-for="ServiceId" asp-items="null" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ProvisionVenue" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="ProvisionVenue" readonly>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="PostCode" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="PostCode" readonly>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Rate" class="control-label"></label>
+                            <input type="text"  class="form-control" asp-for="Rate" readonly>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="TeamLeader" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="TeamLeader" readonly>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Telephone" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="Telephone" readonly>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="LanguageId" class="control-label"></label>
+                            <baserecord asp-key="Language" asp-for="LanguageId" asp-items="null" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="KeySafe" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="KeySafe" readonly>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ChoiceOfStaffId" class="control-label"></label>
+                            <baserecord asp-key="Client_ChoiceOfStaff" asp-for="ChoiceOfStaffId" asp-items="null" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="CapacityId" class="control-label"></label>
+                            <baserecord asp-key="Client_Capacity" asp-for="CapacityId" asp-items="null" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="ProviderReference" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="ProviderReference" readonly>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="NumberOfStaff" class="control-label"></label>
+                            <input type="number" class="form-control" asp-for="NumberOfStaff" readonly>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Keyworker" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="Keyworker" readonly>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="About" class="control-label"></label>
+                            <textarea class="form-control" asp-for="About" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Hobbies" class="control-label"></label>
+                            <textarea class="form-control" asp-for="Hobbies" readonly></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

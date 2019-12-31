@@ -13,6 +13,10 @@
     <Compile Remove="Migrations\20190607115506_CompanyContactRelationship.Designer.cs" />
     <Compile Remove="Migrations\20190814080418_BaseRecordTable.cs" />
     <Compile Remove="Migrations\20190814080418_BaseRecordTable.Designer.cs" />
+    <Compile Remove="Migrations\20191013142935_tbl_ClientInvolvingPartyItem.cs" />
+    <Compile Remove="Migrations\20191013142935_tbl_ClientInvolvingPartyItem.Designer.cs" />
+    <Compile Remove="Migrations\20191124191441_tbl_RotaTask.cs" />
+    <Compile Remove="Migrations\20191124191441_tbl_RotaTask.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

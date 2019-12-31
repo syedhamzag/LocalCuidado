@@ -9,7 +9,7 @@ using Refit;
 
 namespace AwesomeCare.Admin.Controllers
 {
-    public class CompanyContactController : Controller
+    public class CompanyContactController : BaseController
     {
         private ICompanyContactService _companyContactService;
 

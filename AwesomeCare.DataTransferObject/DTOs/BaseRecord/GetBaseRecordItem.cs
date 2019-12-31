@@ -8,6 +8,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.BaseRecord
     {
         public int BaseRecordItemId { get; set; }
         public int BaseRecordId { get; set; }
+        public string KeyName { get; set; }
         public string ValueName { get; set; }
         public bool Deleted { get; set; }
     }

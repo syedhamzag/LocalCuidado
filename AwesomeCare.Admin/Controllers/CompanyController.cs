@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AwesomeCare.Admin.Controllers
 {
-    public class CompanyController : Controller
+    public class CompanyController : BaseController
     {
         private ICompanyService _companyService;
 

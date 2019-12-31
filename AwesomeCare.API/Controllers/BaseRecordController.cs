@@ -15,7 +15,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class BaseRecordController : ControllerBase
     {
@@ -113,6 +113,17 @@ namespace AwesomeCare.API.Controllers
             return Ok(baseRecords);
         }
 
+        [HttpGet("GetBaseRecordsWithItems", Name = "GetBaseRecordsWithItems")]
+        [ProducesResponseType(type: typeof(List<GetBaseRecordWithItems>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetBaseRecordsWithItemsAsync()
+        {
+            var baseRecords = await _baseRecordRepository.Table.ProjectTo<GetBaseRecordWithItems>().Include(c=>c.BaseRecordItems).ToListAsync();
+            return Ok(baseRecords);
+        }
+
+
         [HttpGet("GetBaseRecordItemById/{baseRecordItemId}", Name = "GetBaseRecordItemById")]
         [ProducesResponseType(type: typeof(GetBaseRecordItem), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -125,12 +136,16 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var baseRecordItem = await _baseRecordItemRepository.GetEntity(baseRecordItemId);
+           
+            var baseRecordItem = await _baseRecordItemRepository.Table.Include(b => b.BaseRecord).FirstOrDefaultAsync(c => c.BaseRecordItemId == baseRecordItemId);//_baseRecordItemRepository.GetEntity(baseRecordItemId);
             if (baseRecordItem == null)
                 return NotFound();
 
             GetBaseRecordItem getBaseRecordItems = Mapper.Map<GetBaseRecordItem>(baseRecordItem);
             return Ok(getBaseRecordItems);
         }
+
+
+
     }
 }

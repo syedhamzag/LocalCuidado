@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AwesomeCare.Model.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -15,7 +16,9 @@ namespace AwesomeCare.DataAccess.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-
+            modelBuilder.Entity<Client>()
+                .HasIndex(p => p.IdNumber)
+                .IsUnique();
             var typesToRegister = Assembly.Load("AwesomeCare.Model").GetTypes().
               Where(type => !string.IsNullOrEmpty(type.Namespace)).
               Where(type => type.GetInterface(typeof(IEntityTypeConfiguration<>).FullName) != null);

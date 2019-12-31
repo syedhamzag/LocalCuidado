@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using AwesomeCare.API.AutoMapperConfig;
+
 using AwesomeCare.API.Middlewares;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
@@ -43,7 +43,8 @@ namespace AwesomeCare.API
 
             #region AutoMapper
             //AutoMapper
-            AutoMapperConfiguration.Configure();
+            //  AutoMapperConfiguration.Configure();
+            MapperConfig.AutoMapperConfiguration.Configure();
             #endregion
             #region Database
             services.AddScoped(typeof(IDbContext), typeof(AwesomeCareDbContext));
@@ -54,7 +55,7 @@ namespace AwesomeCare.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "AwesomeCare API", Version = "v1" });
-
+               // c.ResolveConflictingActions(r => r.First());
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -68,6 +69,7 @@ namespace AwesomeCare.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -81,8 +83,9 @@ namespace AwesomeCare.API
                 app.UseDeveloperExceptionPage();
                 //  app.UseHsts();
             }
-          
-           
+
+          //  app.UseMiddleware<RemoveResponseHeaderMiddleware>();
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -90,14 +93,20 @@ namespace AwesomeCare.API
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwesomeCare API V1");
+                if (env.IsStaging())
+                {
+                    c.SwaggerEndpoint("/awesomecareapi/swagger/v1/swagger.json", "AwesomeCare API V1");
+                }
+                else
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwesomeCare API V1");
+                }
                 c.RoutePrefix = string.Empty;
             });
 
           
 
             app.UseHttpsRedirection();
-          //  app.UseMiddleware<RemoveResponseHeaderMiddleware>();
             app.UseMvc();
             //app.UseMvc(routeBuilder=> {
             //    routeBuilder.EnableDependencyInjection();
