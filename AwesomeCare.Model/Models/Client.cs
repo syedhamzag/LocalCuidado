@@ -9,6 +9,7 @@ namespace AwesomeCare.Model.Models
         public Client()
         {
             InvolvingParties = new HashSet<ClientInvolvingParty>();
+            ClientCareDetails = new HashSet<ClientCareDetails>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -44,5 +45,6 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientInvolvingParty> InvolvingParties { get; set; }
         public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<ClientRota> ClientRota { get; set; }
+        public virtual ICollection<ClientCareDetails> ClientCareDetails { get; set; }
     }
 }

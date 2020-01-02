@@ -218,18 +218,6 @@ namespace AwesomeCare.Admin.Controllers
                 c.Evidence = path;
             }
 
-            //items.ForEach(async c =>
-            //{
-            //    string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
-            //    string filename = string.Concat(c.RegulatoryContact,createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
-            //    string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
-                
-            //    // string fileName = string.Concat(createClient.ClientId, "_", Path.GetFileNameWithoutExtension(formFile.FileName), Path.GetExtension(formFile.FileName));
-            //    // string folder = $"ClientRegulatoryContact/{createClient.ClientId}";
-            //    // string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, c.EvidenceFile.FileName);
-            //    // string filePath = await this.HttpContext.Request.UploadFileAsync(_env, c.EvidenceFile, "clientregulatorycontact", "");
-            //    c.Evidence = path;
-            //});
 
             var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
             var result = await _clientRegulatoryContactService.Post(regulatoryContacts);
@@ -238,18 +226,22 @@ namespace AwesomeCare.Admin.Controllers
                 createClient.ActiveTab = "regulatorycontact";
                 return View("HomeCareRegistration", createClient);
             }
-            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Regulotary Contact successfully added to Client" : "An Error Occurred" });
 
-            // return View("HomeCareRegistration", createClient);
-            return RedirectToAction("HomeCareDetails", new { clientId = createClient.ClientId });
+            createClient.ActiveTab = "caredetails";
+            createClient.CareDetails = HttpContext.Session.Get<List<ClientCareDetailsHeading>>("caredetailsItems");
+            return View("HomeCareRegistration", createClient);
+
+            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _CareDetails(CreateClient createClient)
         {
-           
-            return View();
+
+           // SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Regulotary Contact successfully added to Client" : "An Error Occurred" });
+
+            return RedirectToAction("HomeCareDetails", new { clientId = createClient.ClientId });
         }
         #endregion
 
