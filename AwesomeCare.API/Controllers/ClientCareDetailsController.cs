@@ -48,7 +48,7 @@ namespace AwesomeCare.API.Controllers
         }
 
         /// <summary>
-        /// Create ClientRota
+        /// Create ClientCareDetails
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -63,12 +63,33 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(ModelState);
             }
 
-
             var postEntity = Mapper.Map<ClientCareDetails>(model);
             var newEntity = await _clientCareDetailsRepository.InsertEntity(postEntity);
             var getEntity = Mapper.Map<GetClientCareDetails>(newEntity);
 
             return CreatedAtRoute("GetClientCareDetailsById", new { id = getEntity.ClientCareDetailsId }, getEntity);
+        }
+
+        /// <summary>
+        /// Create ClientCareDetails List
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost()]
+        [Route("PostClientCareDetails")]
+        [ProducesResponseType( StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PostClientCareDetails([FromBody]List<PostClientCareDetails> model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var postEntity = Mapper.Map<List<ClientCareDetails>>(model);
+            await _clientCareDetailsRepository.InsertEntities(postEntity);
+            return Ok();
         }
     }
 }

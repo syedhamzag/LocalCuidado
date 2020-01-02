@@ -7,7 +7,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
 {
     public class ClientCareDetailsTask
     {
-      //  public int CareDetailsTaskId { get; set; }
+        public int CareDetailsTaskId { get; set; }
         public int CareDetailsHeadingId { get; set; }
         public string Task { get; set; }
         public string Description { get; set; }
