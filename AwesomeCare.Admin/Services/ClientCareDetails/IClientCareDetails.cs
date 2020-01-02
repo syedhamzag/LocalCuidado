@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsHeading;
+using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsTask;
 using Refit;
 
 namespace AwesomeCare.Admin.Services.ClientCareDetails
@@ -38,6 +39,16 @@ namespace AwesomeCare.Admin.Services.ClientCareDetails
         Task<GetClientCareDetails> GetClientDetailsById(int id);
         [Get("/ClientCareDetails")]
         Task<GetClientCareDetails> GetClientDetails();
+        #endregion
+
+        #region ClientCareDetailsTask 
+        [Post("/ClientCareDetailsTask")]
+        Task<HttpResponseMessage> PostClientDetailsTask([Body]PostClientCareDetailsTask model);
+       
+        [Get("/ClientCareDetailsTask/{id}")]
+        Task<GetClientCareDetails> GetClientDetailsTaskById(int id);
+        [Get("/ClientCareDetailsTask")]
+        Task<GetClientCareDetails> GetClientDetailsTask();
         #endregion
     }
 }

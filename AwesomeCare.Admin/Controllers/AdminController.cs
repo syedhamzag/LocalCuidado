@@ -14,6 +14,9 @@ using AwesomeCare.Admin.ViewModels.Admin;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Services.ClientRotaName;
+using AwesomeCare.Admin.Services.ClientCareDetails;
+using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsHeading;
+using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsTask;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -21,12 +24,12 @@ namespace AwesomeCare.Admin.Controllers
     {
         private readonly IBaseRecordService _baseRecordService;
         private readonly IClientInvolvingPartyBase _clientInvolvingPartyBaseService;
-       
-        public AdminController(IBaseRecordService baseRecordService, IClientInvolvingPartyBase clientInvolvingPartyBaseService)
+        private readonly IClientCareDetails _clientCareDetails;
+        public AdminController(IBaseRecordService baseRecordService, IClientInvolvingPartyBase clientInvolvingPartyBaseService, IClientCareDetails clientCareDetails)
         {
             _baseRecordService = baseRecordService;
             _clientInvolvingPartyBaseService = clientInvolvingPartyBaseService;
-            
+            _clientCareDetails = clientCareDetails;
         }
         #region BaseRecord
         public async Task<IActionResult> BaseRecord()
@@ -127,7 +130,7 @@ namespace AwesomeCare.Admin.Controllers
                     var updateItem = new PutClientInvolvingPartyItem
                     {
                         ClientInvolvingPartyItemId = model.Id,
-                        Deleted= false,
+                        Deleted = false,
                         Description = model.Description,
                         ItemName = model.ItemName
                     };
@@ -144,7 +147,66 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         #endregion
-    
 
+        #region CareDetails
+        public async Task<IActionResult> ClientCareDetailsHeading()
+        {
+            var model = new ClientCareDetailsHeading();
+            model.Headings = await _clientCareDetails.GetAll();
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClientCareDetailsHeading(ClientCareDetailsHeading model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var newEntity = new PostClientCareDetailsHeading()
+            {
+                Deleted = false,
+                Heading = model.Heading
+            };
+            var result =  await _clientCareDetails.Post(newEntity);
+            SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New CareDetails successfully registered" : "An Error Occurred" });
+
+            return RedirectToAction("ClientCareDetailsHeading");
+        }
+
+        public async Task<IActionResult> ClientCareDetailsTasks(int? headingId)
+        {
+            if (!headingId.HasValue)
+            {
+                return NotFound();
+            }
+
+            var model = new ClientCareDetailsTask();
+            var result = await _clientCareDetails.GetHeadingWithTasks(headingId.Value);
+            model.HeaderId = result.ClientCareDetailsHeadingId;
+            model.Tasks = result.Tasks;
+            model.Heading = result.Heading;
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClientCareDetailsTasks(ClientCareDetailsTask model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var newEntity = new PostClientCareDetailsTask()
+            {
+                ClientCareDetailsHeadingId = model.HeaderId,
+                Task = model.Task
+            };
+            var result = await _clientCareDetails.PostClientDetailsTask(newEntity);
+            SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New CareDetails Task successfully registered" : "An Error Occurred" });
+
+            return RedirectToAction("ClientCareDetailsTasks", new { headingId = model.HeaderId });
+        }
+        #endregion
     }
 }
