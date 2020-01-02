@@ -116,7 +116,6 @@ namespace AwesomeCare.Admin.Controllers
                                              }).ToList();
             }
             #endregion
-
             return View(client);
         }
         [HttpPost]
@@ -256,7 +255,7 @@ namespace AwesomeCare.Admin.Controllers
                                      }).ToList();
 
             var result = await _clientCareDetails.PostClientDetails(clientCareDetails);
-
+            var content = await result.Content.ReadAsStringAsync();
             if (!result.IsSuccessStatusCode)
             {
                 createClient.ActiveTab = "caredetails";

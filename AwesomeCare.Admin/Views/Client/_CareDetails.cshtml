@@ -52,6 +52,7 @@
                                         <td>
                                             @Model.CareDetails[r].Tasks[i].Task
                                             <input type="hidden" asp-for="@Model.CareDetails[r].Tasks[i].CareDetailsHeadingId" />
+                                            <input type="hidden" asp-for="@Model.CareDetails[r].Tasks[i].CareDetailsTaskId" />
                                             <input type="hidden" asp-for="@Model.CareDetails[r].Tasks[i].Task" />
 
                                         </td>

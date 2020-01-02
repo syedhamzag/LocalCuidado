@@ -299,7 +299,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => false));
 
             CreateMap<ClientCareDetailsHeading, GetClientCareDetailsHeadingWithTasks>()
-                .ForMember(dto => dto.Tasks, mem => mem.MapFrom(src => src.ClientCareDetailsTasks.Select(s => s.Task).ToList()));
+                .ForMember(dto => dto.Tasks, mem => mem.MapFrom(src => src.ClientCareDetailsTasks));
             #endregion
 
             #region ClientCareDetailsTask

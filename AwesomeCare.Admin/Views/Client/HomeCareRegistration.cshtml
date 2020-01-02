@@ -71,10 +71,10 @@
                         <form id="caredetailsform" enctype="multipart/form-data" asp-action="_CareDetails" asp-controller="client" method="post">
                             <partial name="_caredetails" model="Model" />
                             <br>
-                            <button type="submit" class="btn btn-primary pull-right">save & continue</button>
+
                             @if (Model.ActiveTab == "caredetails")
                             {
-
+                                <button type="submit" class="btn btn-primary pull-right">save & continue</button>
                             }
 
                         </form>
