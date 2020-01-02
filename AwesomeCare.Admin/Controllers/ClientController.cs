@@ -22,6 +22,7 @@ using QRCoder;
 using System.Drawing;
 using Dropbox.Api;
 using System.IO;
+using AwesomeCare.Admin.Services.ClientCareDetails;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -30,6 +31,7 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientService _clientService;
         private readonly IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
+        private readonly IClientCareDetails _clientCareDetails;
         private readonly IHostingEnvironment _env;
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
@@ -37,7 +39,10 @@ namespace AwesomeCare.Admin.Controllers
         private readonly QRCodeGenerator _qRCodeGenerator;
         private readonly DropboxClient _dropboxClient;
 
-        public ClientController(DropboxClient dropboxClient, QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
+        public ClientController(DropboxClient dropboxClient, QRCodeGenerator qRCodeGenerator, IMemoryCache cache, 
+            IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, 
+            IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger,
+            IClientCareDetails clientCareDetails)
         {
             _dropboxClient = dropboxClient;
             _clientService = clientService;
@@ -47,6 +52,7 @@ namespace AwesomeCare.Admin.Controllers
             _cache = cache;
             _clientRegulatoryContactService = clientRegulatoryContactService;
             _qRCodeGenerator = qRCodeGenerator;
+            _clientCareDetails = clientCareDetails;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -59,8 +65,11 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> HomeCareRegistration()
         {
             List<ClientInvolvingParty> clientInvolvingPartyItems = new List<ClientInvolvingParty>();
+            List<ClientCareDetailsHeading> careDetailsItems = new List<ClientCareDetailsHeading>();
+
             var client = new CreateClient();
             var involvingPartyItems = await _clientService.GetClientInvolvingPartyBase();
+            var clientCareDetails = await _clientCareDetails.GetHeadingsWithTasks();
             foreach (var item in involvingPartyItems)
             {
                 clientInvolvingPartyItems.Add(new ClientInvolvingParty
@@ -71,8 +80,26 @@ namespace AwesomeCare.Admin.Controllers
                     Deleted = item.Deleted
                 });
             }
+            var careDetails = clientCareDetails.Where(c => c.Tasks.Count > 0).ToList();
+            foreach (var item in careDetails)
+            {
+                careDetailsItems.Add(new ClientCareDetailsHeading
+                {
+                    CareDetailsHeadingId = item.ClientCareDetailsHeadingId,
+                    Heading = item.Heading,
+                   // Header = item.Heading.Replace(" ",""),
+                    Tasks = (from tk in item.Tasks
+                             select new ClientCareDetailsTask
+                             {
+                                 Task = tk,
+                                 CareDetailsHeadingId = item.ClientCareDetailsHeadingId
+                             }).ToList()
+                });
+            }
             HttpContext.Session.Set<List<ClientInvolvingParty>>("involvingPartyItems", clientInvolvingPartyItems);
+            HttpContext.Session.Set<List<ClientCareDetailsHeading>>("caredetailsItems", careDetailsItems);
             client.InvolvingParties = clientInvolvingPartyItems;
+            client.CareDetails = careDetailsItems;
             #region Regulatory Contact
             if (_cache.TryGetValue(cacheKey, out List<GetBaseRecordWithItems> baseRecords))
             {
@@ -217,7 +244,13 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCareDetails", new { clientId = createClient.ClientId });
         }
 
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _CareDetails(CreateClient createClient)
+        {
+           
+            return View();
+        }
         #endregion
 
         #region Edit
