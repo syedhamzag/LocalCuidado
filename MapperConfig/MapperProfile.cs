@@ -286,6 +286,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientCareDetailsHeading, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareDetailsHeadingId, mem => mem.Ignore())
+                .ForMember(dto => dto.Deleted, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareDetailsTaskId, mem => mem.Ignore());
 
             //CreateMap<PostClientCareDetailsHeadingTask, ClientCareDetailsTask>()
@@ -299,7 +300,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => false));
 
             CreateMap<ClientCareDetailsHeading, GetClientCareDetailsHeadingWithTasks>()
-                .ForMember(dto => dto.Tasks, mem => mem.MapFrom(src => src.ClientCareDetailsTasks));
+                .ForMember(dto => dto.Tasks, mem => mem.MapFrom(src => src.ClientCareDetailsTasks.Where(t=>!t.Deleted)));
             #endregion
 
             #region ClientCareDetailsTask
@@ -308,6 +309,7 @@ namespace MapperConfig
             CreateMap<PostClientCareDetailsTask, ClientCareDetailsTask>()
                 .ForMember(dto => dto.ClientCareDetailsTaskId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
+                .ForMember(dto => dto.Deleted, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareDetailsHeading, mem => mem.Ignore());
 
             CreateMap<PutClientCareDetailsTask, ClientCareDetailsTask>()

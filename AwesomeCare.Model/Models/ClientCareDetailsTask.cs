@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AwesomeCare.Model.Models
 {
-  public  class ClientCareDetailsTask
+  public  class ClientCareDetailsTask:Base.BaseModel
     {
         public ClientCareDetailsTask()
         {

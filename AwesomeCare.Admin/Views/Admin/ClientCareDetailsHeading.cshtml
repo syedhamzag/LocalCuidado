@@ -17,17 +17,28 @@
                 </div>
                 <div class="body clearfix">
                     <form asp-action="ClientCareDetailsHeading" asp-controller="Admin" method="post">
+                        <input type="hidden" class="form-control" asp-for="ActionType">
+                        <input type="hidden" class="form-control" asp-for="ClientCareDetailsHeadingId">
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             <div class="form-group">
                                 <label asp-for="Heading" class="control-label"></label>
                                 <input type="text" class="form-control" asp-for="Heading">
                                 <span asp-validation-for="Heading" class="text-danger"></span>
                             </div>
-
+                            @if (Model.ClientCareDetailsHeadingId > 0)
+                            {
+                                <div class="fancy-checkbox">
+                                    <label><input type="checkbox" asp-for="Delete"><span>Mark as Deleted</span></label>
+                                </div>
+                            }
                             <br>
+                            @if (Model.ClientCareDetailsHeadingId > 0)
+                            {
+                                <a asp-action="ClientCareDetailsHeading" asp-controller="Admin" class="btn btn-default pull-left">Cancel</a>
+                            }
                             <button type="submit" class="btn btn-primary pull-right">Submit</button>
                         </div>
-                        
+
 
                     </form>
                 </div>
@@ -46,6 +57,8 @@
                                 <tr>
                                     <th></th>
                                     <th>Heading</th>
+                                    
+                                    <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -53,13 +66,13 @@
                             <tbody>
                                 @foreach (var item in Model.Headings.Select((d, i) => new { i = i + 1, data = d }).ToList())
                                 {
-                                    <tr>
-                                        <td>@item.i</td>
-                                        <td>@item.data.Heading</td>
-                                        <td>
-                                            <a asp-controller="Admin" asp-action="ClientCareDetailsTasks" asp-route-headingId="@item.data.ClientCareDetailsHeadingId">Tasks</a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td>@item.i</td>
+                                    <td>@item.data.Heading</td>
+                                   
+                                    <td><a asp-controller="Admin" asp-action="ClientCareDetailsTasks" asp-route-headingId="@item.data.ClientCareDetailsHeadingId" class="btn btn-success btn-sm">Tasks</a></td>
+                                    <td><a asp-controller="Admin" asp-action="ClientCareDetailsHeading"  asp-route-headingId="@item.data.ClientCareDetailsHeadingId" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a></td>
+                                </tr>
                                 }
                             </tbody>
                         </table>

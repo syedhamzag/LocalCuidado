@@ -35,6 +35,7 @@ namespace AwesomeCare.API.Controllers
         [HttpGet("{id}", Name = "GetClientCareDetailsTaskById")]
         [ProducesResponseType(type: typeof(GetClientCareDetailsTask), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Get(int? id)
         {
@@ -43,7 +44,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("Parameter id is required");
             }
 
-            var getEntity = _clientCareDetailsTaskRepository.Table.ProjectTo<GetClientCareDetailsTask>().FirstOrDefault(d => d.ClientCareDetailsTaskId == id );
+            var getEntity = _clientCareDetailsTaskRepository.Table.ProjectTo<GetClientCareDetailsTask>().FirstOrDefault(d => d.ClientCareDetailsTaskId == id  && !d.Deleted);
 
             return Ok(getEntity);
         }
@@ -86,5 +87,27 @@ namespace AwesomeCare.API.Controllers
             return CreatedAtRoute("GetClientCareDetailsTaskById", new { id = getEntity.ClientCareDetailsTaskId }, getEntity);
         }
 
+
+        /// <summary>
+        /// Update ClientCareDetailsTask. Can also be used to delete a record
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [ProducesResponseType( StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put([FromBody]PutClientCareDetailsTask model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var postEntity = Mapper.Map<ClientCareDetailsTask>(model);
+            var newEntity = await _clientCareDetailsTaskRepository.UpdateEntity(postEntity);
+
+            return Ok(newEntity);
+        }
     }
 }

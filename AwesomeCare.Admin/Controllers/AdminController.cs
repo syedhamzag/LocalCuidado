@@ -149,10 +149,24 @@ namespace AwesomeCare.Admin.Controllers
         #endregion
 
         #region CareDetails
-        public async Task<IActionResult> ClientCareDetailsHeading()
+        public async Task<IActionResult> ClientCareDetailsHeading(int? headingId)
         {
             var model = new ClientCareDetailsHeading();
-            model.Headings = await _clientCareDetails.GetAll();
+            if (headingId.HasValue)
+            {
+                var careDetailsHeading = await _clientCareDetails.Get(headingId.Value);
+                model.Delete = careDetailsHeading.Deleted;
+                model.ClientCareDetailsHeadingId = careDetailsHeading.ClientCareDetailsHeadingId;
+                model.Heading = careDetailsHeading.Heading;
+                model.ActionType = ActionType.Put;
+            }
+            else
+            {
+                model.Headings = await _clientCareDetails.GetAll();
+                model.ActionType = ActionType.Post;
+            }
+
+
             return View(model);
         }
         [HttpPost]
@@ -163,18 +177,35 @@ namespace AwesomeCare.Admin.Controllers
             {
                 return View(model);
             }
-            var newEntity = new PostClientCareDetailsHeading()
+
+            if(model.ClientCareDetailsHeadingId > 0 && model.ActionType == ActionType.Put)
             {
-                Deleted = false,
-                Heading = model.Heading
-            };
-            var result =  await _clientCareDetails.Post(newEntity);
-            SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New CareDetails successfully registered" : "An Error Occurred" });
+                var updateEntity = new PutClientCareDetailsHeading()
+                {
+                    Deleted = model.Delete,
+                    Heading = model.Heading,
+                    ClientCareDetailsHeadingId = model.ClientCareDetailsHeadingId
+                };
+                var result = await _clientCareDetails.Put(updateEntity);
+                SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "CareDetails successfully updated" : "An Error Occurred" });
+
+            }
+            else
+            {
+                var newEntity = new PostClientCareDetailsHeading()
+                {
+                    Deleted = false,
+                    Heading = model.Heading
+                };
+                var result = await _clientCareDetails.Post(newEntity);
+                SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New CareDetails successfully registered" : "An Error Occurred" });
+
+            }
 
             return RedirectToAction("ClientCareDetailsHeading");
         }
 
-        public async Task<IActionResult> ClientCareDetailsTasks(int? headingId)
+        public async Task<IActionResult> ClientCareDetailsTasks(int? headingId,int? taskId)
         {
             if (!headingId.HasValue)
             {
@@ -183,9 +214,22 @@ namespace AwesomeCare.Admin.Controllers
 
             var model = new ClientCareDetailsTask();
             var result = await _clientCareDetails.GetHeadingWithTasks(headingId.Value);
-            model.HeaderId = result.ClientCareDetailsHeadingId;
-            model.Tasks = result.Tasks;
-            model.Heading = result.Heading;
+            if (taskId.HasValue)
+            {
+                model.SelectedTaskId = taskId.Value;
+                model.ActionType = ActionType.Put;
+                model.Task = result.Tasks.FirstOrDefault(c => c.ClientCareDetailsTaskId == taskId.Value)?.Task;
+                model.HeaderId = result.ClientCareDetailsHeadingId;
+                model.Heading = result.Heading;
+            }
+            else
+            {
+                model.HeaderId = result.ClientCareDetailsHeadingId;
+                model.Tasks = result.Tasks;
+                model.Heading = result.Heading;
+                model.ActionType = ActionType.Post;
+            }
+            
             return View(model);
         }
         [HttpPost]
@@ -196,14 +240,30 @@ namespace AwesomeCare.Admin.Controllers
             {
                 return View(model);
             }
-
-            var newEntity = new PostClientCareDetailsTask()
+            if(model.ActionType == ActionType.Put && model.SelectedTaskId > 0)
             {
-                ClientCareDetailsHeadingId = model.HeaderId,
-                Task = model.Task
-            };
-            var result = await _clientCareDetails.PostClientDetailsTask(newEntity);
-            SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New CareDetails Task successfully registered" : "An Error Occurred" });
+                var putEntity = new PutClientCareDetailsTask
+                {
+                    Task = model.Task,
+                    ClientCareDetailsHeadingId = model.HeaderId,
+                    ClientCareDetailsTaskId = model.SelectedTaskId,
+                    Deleted = model.Delete
+                };
+                var result = await _clientCareDetails.PutClientDetailsTask(putEntity);
+                SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "CareDetails Task successfully updated" : "An Error Occurred" });
+
+            }
+            else
+            {
+                var newEntity = new PostClientCareDetailsTask()
+                {
+                    ClientCareDetailsHeadingId = model.HeaderId,
+                    Task = model.Task
+                };
+                var result = await _clientCareDetails.PostClientDetailsTask(newEntity);
+                SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New CareDetails Task successfully registered" : "An Error Occurred" });
+
+            }
 
             return RedirectToAction("ClientCareDetailsTasks", new { headingId = model.HeaderId });
         }

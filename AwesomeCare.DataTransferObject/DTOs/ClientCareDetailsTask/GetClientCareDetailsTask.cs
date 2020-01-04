@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsTask
 {
-    public class GetClientCareDetailsTask
+    public class GetClientCareDetailsTask:BaseDTO
     {
         public int ClientCareDetailsTaskId { get; set; }
         public int ClientCareDetailsHeadingId { get; set; }

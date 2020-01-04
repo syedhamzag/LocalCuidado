@@ -12,7 +12,7 @@
                     <h2>Add Task</h2>
                 </div>
                 <div class="body clearfix">
-
+                    <input type="hidden" class="form-control" asp-for="ActionType">
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="form-group">
                             <label asp-for="Heading" class="control-label"></label>
@@ -23,9 +23,22 @@
                             <label asp-for="Task" class="control-label"></label>
                             <input type="text" class="form-control" asp-for="Task">
                             <span asp-validation-for="Task" class="text-danger"></span>
+                            <input type="hidden" asp-for="SelectedTaskId">
                         </div>
-                        <br>
-                        <a asp-action="ClientCareDetailsHeading" asp-controller="Admin" class="btn btn-default pull-left">Cancel</a>
+
+                        @if (Model.SelectedTaskId > 0)
+                        {
+                            <div class="fancy-checkbox">
+                                <label><input type="checkbox" asp-for="Delete"><span>Mark as Deleted</span></label>
+                            </div>
+                            <a asp-action="ClientCareDetailsTasks" asp-route-headingId="@Model.HeaderId" asp-controller="Admin" class="btn btn-default pull-left">Cancel</a>
+                        }
+                        else
+                        {
+
+                            <br />
+                            <a asp-action="ClientCareDetailsHeading" asp-controller="Admin" class="btn btn-default pull-left">Back</a>
+                        }
                         <button type="submit" class="btn btn-primary pull-right">Submit</button>
                     </div>
 
@@ -42,11 +55,13 @@
                 </div>
                 <div class="body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-condensed table-hover">
+                        <table class="table center-aligned-table">
                             <thead>
                                 <tr>
                                     <th></th>
                                     <th>Tasks</th>
+                                    <th></th>
+                                    
                                 </tr>
                             </thead>
 
@@ -64,6 +79,7 @@
                                             @Model.Tasks[i].Task
                                             <input type="hidden" value="@Model.Tasks[i].Task" />
                                         </td>
+                                        <td><a asp-controller="Admin" asp-action="ClientCareDetailsTasks" asp-route-headingId="@Model.Tasks[i].ClientCareDetailsHeadingId" asp-route-taskId="@Model.Tasks[i].ClientCareDetailsTaskId" class="btn btn-info" title="Edit"><i class="fa fa-edit"></i></a></td>
 
                                     </tr>
                                 }

@@ -26,6 +26,10 @@ namespace AwesomeCare.Model.Models.Map
                 .HasColumnName("Task")
                 .HasMaxLength(225)
                 .IsRequired();
+
+            builder.Property(p => p.Deleted)
+                .HasColumnName("Deleted")
+                .HasDefaultValue<bool>(false);
             #endregion
 
             #region Relationship

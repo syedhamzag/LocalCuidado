@@ -27,6 +27,9 @@ namespace AwesomeCare.Admin.Services.ClientCareDetails
         [Post("/ClientCareDetailsHeading")]
         Task<GetClientCareDetailsHeading> Post([Body]PostClientCareDetailsHeading model);
 
+        [Put("/ClientCareDetailsHeading")]
+        Task<GetClientCareDetailsHeading> Put([Body]PutClientCareDetailsHeading model);
+
         [Post("/ClientCareDetailsHeading/PostHeadingwithTasks")]
         Task<HttpResponseMessage> PostWithTasks([Body]List<PostClientCareDetailsHeadingWithTasks> models);
 
@@ -44,7 +47,10 @@ namespace AwesomeCare.Admin.Services.ClientCareDetails
         #region ClientCareDetailsTask 
         [Post("/ClientCareDetailsTask")]
         Task<HttpResponseMessage> PostClientDetailsTask([Body]PostClientCareDetailsTask model);
-       
+
+        [Put("/ClientCareDetailsTask")]
+        Task<HttpResponseMessage> PutClientDetailsTask([Body]PutClientCareDetailsTask model);
+
         [Get("/ClientCareDetailsTask/{id}")]
         Task<GetClientCareDetails> GetClientDetailsTaskById(int id);
         [Get("/ClientCareDetailsTask")]
