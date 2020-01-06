@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200101104259_tbl_ClientCareDetailsTask")]
+    partial class tbl_ClientCareDetailsTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,49 +204,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_Client");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetails", b =>
-                {
-                    b.Property<int>("ClientCareDetailsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientCareDetailsId")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientCareDetailsTaskId")
-                        .HasColumnName("ClientCareDetailsTaskId");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId");
-
-                    b.Property<string>("Description")
-                        .HasColumnName("Description")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Location")
-                        .HasColumnName("Location")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Mitigation")
-                        .HasColumnName("Mitigation")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Remark")
-                        .HasColumnName("Remark")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Risk")
-                        .IsRequired()
-                        .HasColumnName("Risk")
-                        .HasMaxLength(250);
-
-                    b.HasKey("ClientCareDetailsId");
-
-                    b.HasIndex("ClientCareDetailsTaskId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_ClientCareDetails");
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetailsHeading", b =>
                 {
                     b.Property<int>("ClientCareDetailsHeadingId")
@@ -277,11 +236,6 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.Property<int>("ClientCareDetailsHeadingId")
                         .HasColumnName("ClientCareDetailsHeadingId");
-
-                    b.Property<bool>("Deleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Deleted")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("Task")
                         .IsRequired()
@@ -689,19 +643,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.BaseRecordModel", "BaseRecord")
                         .WithMany("BaseRecordItems")
                         .HasForeignKey("BaseRecordId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetails", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.ClientCareDetailsTask", "ClientCareDetailsTask")
-                        .WithMany("ClientCareDetails")
-                        .HasForeignKey("ClientCareDetailsTaskId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("ClientCareDetails")
-                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

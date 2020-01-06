@@ -22,6 +22,8 @@ using QRCoder;
 using System.Drawing;
 using Dropbox.Api;
 using System.IO;
+using AwesomeCare.Admin.Services.ClientCareDetails;
+using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -30,6 +32,7 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientService _clientService;
         private readonly IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
+        private readonly IClientCareDetails _clientCareDetails;
         private readonly IHostingEnvironment _env;
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
@@ -37,7 +40,10 @@ namespace AwesomeCare.Admin.Controllers
         private readonly QRCodeGenerator _qRCodeGenerator;
         private readonly DropboxClient _dropboxClient;
 
-        public ClientController(DropboxClient dropboxClient, QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger)
+        public ClientController(DropboxClient dropboxClient, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
+            IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService,
+            IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger,
+            IClientCareDetails clientCareDetails)
         {
             _dropboxClient = dropboxClient;
             _clientService = clientService;
@@ -47,6 +53,7 @@ namespace AwesomeCare.Admin.Controllers
             _cache = cache;
             _clientRegulatoryContactService = clientRegulatoryContactService;
             _qRCodeGenerator = qRCodeGenerator;
+            _clientCareDetails = clientCareDetails;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -59,8 +66,11 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> HomeCareRegistration()
         {
             List<ClientInvolvingParty> clientInvolvingPartyItems = new List<ClientInvolvingParty>();
+            List<ClientCareDetailsHeading> careDetailsItems = new List<ClientCareDetailsHeading>();
+
             var client = new CreateClient();
             var involvingPartyItems = await _clientService.GetClientInvolvingPartyBase();
+            var clientCareDetails = await _clientCareDetails.GetHeadingsWithTasks();
             foreach (var item in involvingPartyItems)
             {
                 clientInvolvingPartyItems.Add(new ClientInvolvingParty
@@ -71,8 +81,27 @@ namespace AwesomeCare.Admin.Controllers
                     Deleted = item.Deleted
                 });
             }
+            var careDetails = clientCareDetails.Where(c => c.Tasks.Count > 0).ToList();
+            foreach (var item in careDetails)
+            {
+                careDetailsItems.Add(new ClientCareDetailsHeading
+                {
+                    CareDetailsHeadingId = item.ClientCareDetailsHeadingId,
+                    Heading = item.Heading,
+                    // Header = item.Heading.Replace(" ",""),
+                    Tasks = (from tk in item.Tasks
+                             select new ClientCareDetailsTask
+                             {
+                                 Task = tk.Task,
+                                 CareDetailsTaskId = tk.ClientCareDetailsTaskId,
+                                 CareDetailsHeadingId = item.ClientCareDetailsHeadingId
+                             }).ToList()
+                });
+            }
             HttpContext.Session.Set<List<ClientInvolvingParty>>("involvingPartyItems", clientInvolvingPartyItems);
+            HttpContext.Session.Set<List<ClientCareDetailsHeading>>("caredetailsItems", careDetailsItems);
             client.InvolvingParties = clientInvolvingPartyItems;
+            client.CareDetails = careDetailsItems;
             #region Regulatory Contact
             if (_cache.TryGetValue(cacheKey, out List<GetBaseRecordWithItems> baseRecords))
             {
@@ -87,7 +116,6 @@ namespace AwesomeCare.Admin.Controllers
                                              }).ToList();
             }
             #endregion
-
             return View(client);
         }
         [HttpPost]
@@ -186,23 +214,11 @@ namespace AwesomeCare.Admin.Controllers
             foreach (var c in items)
             {
                 string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
-                string filename = string.Concat(c.RegulatoryContact.Replace(" ",""),"_", createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
+                string filename = string.Concat(c.RegulatoryContact.Replace(" ", ""), "_", createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
                 string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
                 c.Evidence = path;
             }
 
-            //items.ForEach(async c =>
-            //{
-            //    string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
-            //    string filename = string.Concat(c.RegulatoryContact,createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
-            //    string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
-                
-            //    // string fileName = string.Concat(createClient.ClientId, "_", Path.GetFileNameWithoutExtension(formFile.FileName), Path.GetExtension(formFile.FileName));
-            //    // string folder = $"ClientRegulatoryContact/{createClient.ClientId}";
-            //    // string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, c.EvidenceFile.FileName);
-            //    // string filePath = await this.HttpContext.Request.UploadFileAsync(_env, c.EvidenceFile, "clientregulatorycontact", "");
-            //    c.Evidence = path;
-            //});
 
             var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
             var result = await _clientRegulatoryContactService.Post(regulatoryContacts);
@@ -211,13 +227,44 @@ namespace AwesomeCare.Admin.Controllers
                 createClient.ActiveTab = "regulatorycontact";
                 return View("HomeCareRegistration", createClient);
             }
-            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Regulotary Contact successfully added to Client" : "An Error Occurred" });
 
-            // return View("HomeCareRegistration", createClient);
-            return RedirectToAction("HomeCareDetails", new { clientId = createClient.ClientId });
+            createClient.ActiveTab = "caredetails";
+            createClient.CareDetails = HttpContext.Session.Get<List<ClientCareDetailsHeading>>("caredetailsItems");
+            return View("HomeCareRegistration", createClient);
+
+
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _CareDetails(CreateClient createClient)
+        {
 
+            var clientCareDetails = (from cl in createClient.CareDetails
+                                     from tk in cl.Tasks
+                                     where tk.IsSelected
+                                     select new PostClientCareDetails
+                                     {
+                                         ClientCareDetailsTaskId = tk.CareDetailsTaskId,
+                                         ClientId = createClient.ClientId,
+                                         Description = tk.Description,
+                                         Location = tk.Location,
+                                         Mitigation = tk.Mitigation,
+                                         Remark = tk.Remark,
+                                         Risk = tk.Risk
+                                     }).ToList();
+
+            var result = await _clientCareDetails.PostClientDetails(clientCareDetails);
+            var content = await result.Content.ReadAsStringAsync();
+            if (!result.IsSuccessStatusCode)
+            {
+                createClient.ActiveTab = "caredetails";
+                return View("HomeCareRegistration", createClient);
+            }
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "CareDetails successfully added to Client" : "An Error Occurred" });
+
+            return RedirectToAction("HomeCareDetails", new { clientId = createClient.ClientId });
+        }
         #endregion
 
         #region Edit

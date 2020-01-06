@@ -2,6 +2,9 @@
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecordItem;
 using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
+using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsHeading;
+using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
 using AwesomeCare.DataTransferObject.DTOs.ClientRota;
@@ -111,6 +114,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -119,18 +123,19 @@ namespace MapperConfig
                 .ForMember(dto => dto.Status, mem => mem.Ignore());
 
             CreateMap<Client, GetClientForEdit>()
-                .ForMember(dto=>dto.ClientImage,mem=>mem.Ignore())
+                .ForMember(dto => dto.ClientImage, mem => mem.Ignore())
                 .ForMember(dto => dto.InvolvingParties, mem => mem.MapFrom(src => src.InvolvingParties))
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.MapFrom(src => src.RegulatoryContact));
             // .ForMember(dto=>dto.)
 
             CreateMap<GetClientForEdit, PutClient>();
 
-            CreateMap<PutClient,Client>()
+            CreateMap<PutClient, Client>()
                  .ForMember(dto => dto.ClientId, mem => mem.Ignore())
                 .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
             #endregion
 
@@ -143,7 +148,7 @@ namespace MapperConfig
             CreateMap<PutClientInvolvingPartyItem, ClientInvolvingPartyItem>()
                 .ForMember(dto => dto.ClientInvolvingParty, mem => mem.Ignore());
 
-            
+
             #endregion
 
             #region ClientInvolvingParty
@@ -184,12 +189,12 @@ namespace MapperConfig
             #region ClientRotaType
             CreateMap<ClientRotaType, GetClientRotaType>();
             CreateMap<PutClientRotaType, ClientRotaType>()
-                .ForMember(dto=>dto.ClientRota,mem=>mem.Ignore());
+                .ForMember(dto => dto.ClientRota, mem => mem.Ignore());
 
             CreateMap<PostClientRotaType, ClientRotaType>()
-                .ForMember(dto=>dto.RotaType,mem=>mem.MapFrom(src=>src.RotaType.ToUpper()))
-                .ForMember(dto=>dto.ClientRota,mem=>mem.Ignore())
-                .ForMember(dto=>dto.ClientRotaTypeId,mem=>mem.Ignore());
+                .ForMember(dto => dto.RotaType, mem => mem.MapFrom(src => src.RotaType.ToUpper()))
+                .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaTypeId, mem => mem.Ignore());
             #endregion
 
             #region RotaTask
@@ -198,17 +203,17 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientRotaTask, mem => mem.Ignore())
                 .ForMember(dto => dto.RotaTaskId, mem => mem.Ignore());
             CreateMap<PutRotaTask, RotaTask>()
-                .ForMember(dto=>dto.ClientRotaTask,mem=>mem.Ignore());
+                .ForMember(dto => dto.ClientRotaTask, mem => mem.Ignore());
             #endregion
 
             #region RotaDayofWeek
             CreateMap<RotaDayofWeek, GetRotaDayofWeek>();
             CreateMap<PostRotaDayofWeek, RotaDayofWeek>()
-                .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src=> false))
+                .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => false))
                 .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore())
                 .ForMember(dto => dto.RotaDayofWeekId, mem => mem.Ignore());
             CreateMap<PutRotaDayofWeek, RotaDayofWeek>()
-                .ForMember(dto=>dto.ClientRotaDays,mem=>mem.Ignore());
+                .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
             #endregion
 
             #region ClientRota
@@ -243,11 +248,11 @@ namespace MapperConfig
               .ForMember(dto => dto.RotaDayofWeek, mem => mem.Ignore())
               .ForMember(dto => dto.ClientRotaTask, mem => mem.Ignore());
 
-            CreateMap<CreateClientRotaDays,ClientRotaDays>()
+            CreateMap<CreateClientRotaDays, ClientRotaDays>()
                  .ForMember(dto => dto.ClientRotaDaysId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
                 .ForMember(dto => dto.RotaDayofWeek, mem => mem.Ignore())
-                .ForMember(dto => dto.ClientRotaTask, mem => mem.MapFrom(src=>src.RotaTasks));
+                .ForMember(dto => dto.ClientRotaTask, mem => mem.MapFrom(src => src.RotaTasks));
             #endregion
 
             #region ClientRotaTask
@@ -265,6 +270,61 @@ namespace MapperConfig
                .ForMember(dto => dto.ClientRotaTaskId, mem => mem.Ignore())
                .ForMember(dto => dto.RotaTask, mem => mem.Ignore())
                .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
+            #endregion
+
+            #region ClientCareDetailsHeading
+            CreateMap<ClientCareDetailsHeading, GetClientCareDetailsHeading>();
+
+            CreateMap<PostClientCareDetailsHeading, ClientCareDetailsHeading>()
+                .ForMember(dto => dto.ClientCareDetailsHeadingId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetailsTasks, mem => mem.Ignore());
+
+            CreateMap<PutClientCareDetailsHeading, ClientCareDetailsHeading>()
+              .ForMember(dto => dto.ClientCareDetailsTasks, mem => mem.Ignore());
+
+            CreateMap<PostClientCareDetailsHeadingTask, ClientCareDetailsTask>()
+                .ForMember(dto => dto.ClientCareDetailsHeading, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetailsHeadingId, mem => mem.Ignore())
+                .ForMember(dto => dto.Deleted, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetailsTaskId, mem => mem.Ignore());
+
+            //CreateMap<PostClientCareDetailsHeadingTask, ClientCareDetailsTask>()
+            //    .ForMember(dto => dto.ClientCareDetailsHeading, mem => mem.Ignore())
+            //    .ForMember(dto => dto.ClientCareDetailsHeadingId, mem => mem.Ignore())
+            //    .ForMember(dto => dto.ClientCareDetailsTaskId, mem => mem.Ignore());
+
+            CreateMap<PostClientCareDetailsHeadingWithTasks, ClientCareDetailsHeading>()
+                .ForMember(dto => dto.ClientCareDetailsHeadingId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetailsTasks, mem => mem.MapFrom(src => src.Tasks))
+                .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => false));
+
+            CreateMap<ClientCareDetailsHeading, GetClientCareDetailsHeadingWithTasks>()
+                .ForMember(dto => dto.Tasks, mem => mem.MapFrom(src => src.ClientCareDetailsTasks.Where(t=>!t.Deleted)));
+            #endregion
+
+            #region ClientCareDetailsTask
+            CreateMap<ClientCareDetailsTask, GetClientCareDetailsTask>();
+
+            CreateMap<PostClientCareDetailsTask, ClientCareDetailsTask>()
+                .ForMember(dto => dto.ClientCareDetailsTaskId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
+                .ForMember(dto => dto.Deleted, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCareDetailsHeading, mem => mem.Ignore());
+
+            CreateMap<PutClientCareDetailsTask, ClientCareDetailsTask>()
+                .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
+               .ForMember(dto => dto.ClientCareDetailsHeading, mem => mem.Ignore());
+            #endregion
+
+            #region ClientCareDetails
+
+            CreateMap<ClientCareDetails, GetClientCareDetails>();
+
+            CreateMap<PostClientCareDetails, ClientCareDetails>()
+               .ForMember(dto => dto.ClientCareDetailsId, mem => mem.Ignore())
+               .ForMember(dto => dto.Client, mem => mem.Ignore())
+               .ForMember(dto => dto.ClientCareDetailsTask, mem => mem.Ignore());
             #endregion
         }
     }

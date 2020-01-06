@@ -27,6 +27,7 @@ using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.ClientRota;
 using QRCoder;
 using Dropbox.Api;
+using AwesomeCare.Admin.Services.ClientCareDetails;
 
 namespace AwesomeCare.Admin
 {
@@ -151,6 +152,11 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IRotaDayofWeekService>(r));
+
+            services.AddHttpClient("clientcaredetails", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientCareDetails>(r));
             
         }
     }
