@@ -124,12 +124,9 @@ namespace AwesomeCare.Admin.Controllers
         {
             try
             {
-                if (_env.IsDevelopment())
+                
                     model.StatusId = 14;
-                else
-                    model.StatusId = 8;
-
-
+                
                 if (model == null || !ModelState.IsValid)
                 {
                     return View(model);
