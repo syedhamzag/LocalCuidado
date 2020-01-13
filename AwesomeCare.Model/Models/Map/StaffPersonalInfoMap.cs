@@ -191,8 +191,12 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.Self_PYEAttachment)
             .HasColumnName("Self_PYEAttachment")
             .IsRequired(false);
-            
+
             #endregion
+            builder.HasIndex(p => p.RegistrationId)
+                     .HasName("IX_tbl_StaffPersonalInfo_RegistrationId")
+                     .IsUnique(true);
+        
         }
     }
 }

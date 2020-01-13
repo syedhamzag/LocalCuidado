@@ -17,6 +17,7 @@ using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.DataTransferObject.DTOs.RotaTask;
+using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.Model.Models;
 using System.Linq;
 
@@ -325,6 +326,17 @@ namespace MapperConfig
                .ForMember(dto => dto.ClientCareDetailsId, mem => mem.Ignore())
                .ForMember(dto => dto.Client, mem => mem.Ignore())
                .ForMember(dto => dto.ClientCareDetailsTask, mem => mem.Ignore());
+            #endregion
+
+            #region Staff
+            CreateMap<StaffPersonalInfo, GetStaffPersonalInfo>();
+
+            CreateMap<PostStaffPersonalInfo, StaffPersonalInfo>()
+                .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore())
+                .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
+
+            CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
+               .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
             #endregion
         }
     }

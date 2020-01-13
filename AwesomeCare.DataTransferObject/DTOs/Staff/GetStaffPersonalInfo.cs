@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AwesomeCare.Model.Models
+namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
-   public class StaffPersonalInfo
+   public class GetStaffPersonalInfo
     {
         public int StaffPersonalInfoId { get; set; }
         public string RegistrationId { get; set; }
@@ -46,6 +46,5 @@ namespace AwesomeCare.Model.Models
         public string CoverLetter { get; set; }
         public string Self_PYE { get; set; }
         public string Self_PYEAttachment { get; set; }
-
     }
 }
