@@ -333,9 +333,15 @@ namespace MapperConfig
 
             CreateMap<PostStaffPersonalInfo, StaffPersonalInfo>()
                 .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore())
+                .ForMember(dto => dto.Education, mem => mem.Ignore())
+                .ForMember(dto => dto.Trainings, mem => mem.Ignore())
+                .ForMember(dto => dto.References, mem => mem.Ignore())
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
+               .ForMember(dto => dto.Education, mem => mem.Ignore())
+               .ForMember(dto => dto.Trainings, mem => mem.Ignore())
+               .ForMember(dto => dto.References, mem => mem.Ignore())
                .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
             #endregion
         }

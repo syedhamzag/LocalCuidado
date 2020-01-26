@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AwesomeCare.Web.Middlewares;
+using AwesomeCare.Web.Services.Admin;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,7 +33,11 @@ namespace AwesomeCare.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            MapperConfig.AutoMapperConfiguration.Configure();
+            services.AddLogging();
+            AddRefitServices(services);
+            services.AddMemoryCache();
+            services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
          //   services.AddRefitClient()
          //.ConfigureHttpClient(c => c.BaseAddress = new Uri("https://api.example.com"));
@@ -49,7 +55,7 @@ namespace AwesomeCare.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            app.UseBaseRecordMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -58,8 +64,17 @@ namespace AwesomeCare.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Staff}/{action=Registration}/{id?}");
             });
+        }
+
+        void AddRefitServices(IServiceCollection services)
+        {
+            string uri = Configuration["AwesomeCareBaseApi"];
+           
+            services.AddRefitClient<IBaseRecordService>()
+               .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
+           
         }
     }
 }

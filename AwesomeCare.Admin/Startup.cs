@@ -75,7 +75,7 @@ namespace AwesomeCare.Admin
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            app.UseBaseRecordMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             //app.UseStaticFiles(

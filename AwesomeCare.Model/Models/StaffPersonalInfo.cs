@@ -6,6 +6,12 @@ namespace AwesomeCare.Model.Models
 {
    public class StaffPersonalInfo
     {
+        public StaffPersonalInfo()
+        {
+            Education = new HashSet<StaffEducation>();
+            Trainings = new HashSet<StaffTraining>();
+            References = new HashSet<StaffReferee>();
+        }
         public int StaffPersonalInfoId { get; set; }
         public string RegistrationId { get; set; }
         public string FirstName { get; set; }
@@ -46,6 +52,11 @@ namespace AwesomeCare.Model.Models
         public string CoverLetter { get; set; }
         public string Self_PYE { get; set; }
         public string Self_PYEAttachment { get; set; }
+
+
+        public virtual ICollection<StaffEducation> Education { get; set; }
+        public virtual ICollection<StaffTraining> Trainings { get; set; }
+        public virtual ICollection<StaffReferee> References { get; set; }
 
     }
 }

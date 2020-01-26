@@ -684,6 +684,55 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_RotaTask");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffEducation", b =>
+                {
+                    b.Property<int>("StaffEducationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffEducationId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnName("Address")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Certificate")
+                        .IsRequired()
+                        .HasColumnName("Certificate")
+                        .HasMaxLength(125);
+
+                    b.Property<string>("CertificateAttachment")
+                        .HasColumnName("CertificateAttachment");
+
+                    b.Property<string>("EndDate")
+                        .HasColumnName("EndDate")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Institution")
+                        .IsRequired()
+                        .HasColumnName("Institution")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnName("Location")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasColumnName("StartDate")
+                        .HasMaxLength(25);
+
+                    b.HasKey("StaffEducationId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffEducation");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfo", b =>
                 {
                     b.Property<int>("StaffPersonalInfoId")
@@ -854,6 +903,105 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_StaffPersonalInfo");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffReferee", b =>
+                {
+                    b.Property<int>("StaffRefereeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffRefereeId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnName("Address")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Attachment")
+                        .HasColumnName("Attachment");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnName("CompanyName")
+                        .HasMaxLength(125);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnName("Email")
+                        .HasMaxLength(125);
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnName("PhoneNumber")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("PositionofReferee")
+                        .IsRequired()
+                        .HasColumnName("PositionofReferee")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Referee")
+                        .IsRequired()
+                        .HasColumnName("Referee")
+                        .HasMaxLength(125);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.HasKey("StaffRefereeId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffReferee");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>
+                {
+                    b.Property<int>("StaffTrainingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffTrainingId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Certificate")
+                        .IsRequired()
+                        .HasColumnName("Certificate")
+                        .HasMaxLength(125);
+
+                    b.Property<string>("CertificateAttachment")
+                        .HasColumnName("CertificateAttachment");
+
+                    b.Property<string>("ExpiredDate")
+                        .HasColumnName("ExpiredDate")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnName("Location")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasColumnName("StartDate")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Trainer")
+                        .IsRequired()
+                        .HasColumnName("Trainer")
+                        .HasMaxLength(125);
+
+                    b.Property<string>("Training")
+                        .IsRequired()
+                        .HasColumnName("Training")
+                        .HasMaxLength(255);
+
+                    b.HasKey("StaffTrainingId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffTraining");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.BaseRecordItemModel", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.BaseRecordModel", "BaseRecord")
@@ -953,6 +1101,30 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.CompanyModel", "Company")
                         .WithOne("CompanyContact")
                         .HasForeignKey("AwesomeCare.Model.Models.CompanyContactModel", "CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffEducation", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("Education")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffReferee", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("References")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("Trainings")
+                        .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

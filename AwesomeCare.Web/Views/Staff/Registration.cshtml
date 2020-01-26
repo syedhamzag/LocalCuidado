@@ -1,0 +1,615 @@
+﻿@using AwesomeCare.Web.ViewModels.Staff;
+@model CreateStaff
+
+@{
+    ViewData["Title"] = "Staff Registration";
+}
+
+@section HeaderScripts{
+    <link rel="stylesheet" href="../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../assets/vendor/dropify/css/dropify.min.css">
+}
+<form id="basic-form" enctype="multipart/form-data" asp-controller="Staff" method="post">
+    <div class="row clearfix">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-lg-12 col-md-12">
+            <div class="card planned_task">
+                <div class="header">
+                    <h2>Registration</h2>
+                    @*<ul class="header-dropdown">
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another Action</a></li>
+                                    <li><a href="javascript:void(0);">Something else</a></li>
+                                </ul>
+                            </li>
+                        </ul>*@
+                </div>
+                <div class="body">
+                    <h4>Personal Info.</h4>
+
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="FirstName" class="control-label"></label>
+                                        <input type="text" class="form-control" asp-for="FirstName">
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="MiddleName" class="control-label"></label>
+                                        <input type="text" class="form-control" asp-for="MiddleName">
+                                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="LastName" class="control-label"></label>
+                                        <input type="text" class="form-control" asp-for="LastName">
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="GenderId" class="control-label"></label>
+                                        <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
+                                        <span asp-validation-for="GenderId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="DateOfBirth" class="control-label"></label>
+                                        <input data-provide="datepicker" asp-for="DateOfBirth" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input type="email" class="form-control" asp-for="Email">
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="IdNumber" class="control-label"></label>
+                                        <input type="text" class="form-control" asp-for="IdNumber">
+                                        <span asp-validation-for="IdNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="PostCode" class="control-label"></label>
+                                        <input type="text" asp-for="PostCode" class="form-control">
+                                        <span asp-validation-for="PostCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Telephone" class="control-label"></label>
+                                        <input type="text" asp-for="Telephone" class="form-control">
+                                        <span asp-validation-for="Telephone" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="CanDrive" class="control-label"></label>
+
+                                        <br />
+                                        <label class="fancy-radio custom-color-green"><input name="candrive" asp-for="CanDrive" value="No" type="radio" checked><span><i></i>No</span></label>
+                                        <label class="fancy-radio custom-color-green"><input name="candrive" asp-for="CanDrive" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                        <span asp-validation-for="CanDrive" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="DrivingLicense" class="control-label"></label>
+                                        <div class="custom-file">
+                                            <input type="file" asp-for="DrivingLicense" class="custom-file-input" id="inputGroupFile01">
+                                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                        </div>
+                                        <span asp-validation-for="DrivingLicense" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="DrivingLicenseExpiryDate" class="control-label"></label>
+                                        <input data-provide="datepicker" asp-for="DrivingLicenseExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                        <span asp-validation-for="DrivingLicenseExpiryDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Profile Pix<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <input type="file" asp-for="ProfilePix" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="ProfilePix" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="RightToWork" class="control-label"></label>
+                                        <br />
+                                        <label class="fancy-radio custom-color-green"><input name="RightToWork" asp-for="RightToWork" value="No" type="radio" checked><span><i></i>No</span></label>
+                                        <label class="fancy-radio custom-color-green"><input name="RightToWork" asp-for="RightToWork" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                        <span asp-validation-for="RightToWork" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="RightToWorkAttachment" class="control-label"></label>
+                                        <div class="custom-file">
+                                            <input type="file" asp-for="RightToWorkAttachment" class="custom-file-input">
+                                            <label class="custom-file-label" f>Choose file</label>
+                                        </div>
+                                        <span asp-validation-for="RightToWorkAttachment" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="RightToWorkExpiryDate" class="control-label"></label>
+                                        <input data-provide="datepicker" asp-for="RightToWorkExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                        <span asp-validation-for="RightToWorkExpiryDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3">
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="DBS" class="control-label"></label>
+                                        <br />
+                                        <label class="fancy-radio custom-color-green"><input name="dbs" asp-for="DBS" value="No" type="radio" checked><span><i></i>No</span></label>
+                                        <label class="fancy-radio custom-color-green"><input name="dbs" asp-for="DBS" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                        <span asp-validation-for="DBS" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="DBSAttachment" class="control-label"></label>
+                                        <div class="custom-file">
+                                            <input type="file" asp-for="DBSAttachment" class="custom-file-input">
+                                            <label class="custom-file-label" f>Choose file</label>
+                                        </div>
+                                        <span asp-validation-for="DBSAttachment" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="DBSExpiryDate" class="control-label"></label>
+                                        <input data-provide="datepicker" asp-for="DBSExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                        <span asp-validation-for="DBSExpiryDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="DBSUpdateNo" class="control-label"></label>
+                                <input type="text" asp-for="DBSUpdateNo" class="form-control">
+                                <span asp-validation-for="DBSUpdateNo" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="NI" class="control-label"></label>
+                                        <br />
+                                        <label class="fancy-radio custom-color-green"><input name="ni" asp-for="NI" value="No" type="radio" checked><span><i></i>No</span></label>
+                                        <label class="fancy-radio custom-color-green"><input name="ni" asp-for="NI" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                        <span asp-validation-for="NI" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="NIAttachment" class="control-label"></label>
+                                        <div class="custom-file">
+                                            <input type="file" asp-for="NIAttachment" class="custom-file-input">
+                                            <label class="custom-file-label" f>Choose file</label>
+                                        </div>
+                                        <span asp-validation-for="NIAttachment" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="NIExpiryDate" class="control-label"></label>
+                                        <input data-provide="datepicker" asp-for="NIExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                        <span asp-validation-for="NIExpiryDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-3">
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="SelfPYE" class="control-label"></label>
+                                        <br />
+                                        <label class="fancy-radio custom-color-green"><input name="selfpye" asp-for="SelfPYE" value="No" type="radio" checked><span><i></i>No</span></label>
+                                        <label class="fancy-radio custom-color-green"><input name="selfpye" asp-for="SelfPYE" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                        <span asp-validation-for="SelfPYE" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Self_PYEAttachment" class="control-label"></label>
+                                        <div class="custom-file">
+                                            <input type="file" asp-for="Self_PYEAttachment" class="custom-file-input">
+                                            <label class="custom-file-label" f>Choose file</label>
+                                        </div>
+                                        <span asp-validation-for="Self_PYEAttachment" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="WorkTeam" class="control-label"></label>
+                                        <input type="text" asp-for="WorkTeam" class="form-control">
+                                        <span asp-validation-for="WorkTeam" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="CV" class="control-label"></label>
+                                        <div class="custom-file">
+                                            <input type="file" asp-for="CV" class="custom-file-input">
+                                            <label class="custom-file-label" f>Choose file</label>
+                                        </div>
+                                        <span asp-validation-for="CV" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="CoverLetter" class="control-label"></label>
+                                        <div class="custom-file">
+                                            <input type="file" asp-for="CoverLetter" class="custom-file-input">
+                                            <label class="custom-file-label" f>Choose file</label>
+                                        </div>
+                                        <span asp-validation-for="CoverLetter" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-3 col-md-3">
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label"></label>
+                                <textarea class="form-control" asp-for="Address"></textarea>
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="AboutMe" class="control-label"></label>
+                                <textarea class="form-control" asp-for="AboutMe"></textarea>
+                                <span asp-validation-for="AboutMe" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Hobbies" class="control-label"></label>
+                                <textarea class="form-control" asp-for="Hobbies"></textarea>
+                                <span asp-validation-for="Hobbies" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-responsive table-bordered">
+                        <h4>Education</h4>
+                        <table class="table tblEducation">
+                            <thead>
+                                <tr>
+                                    <th>Name of Institution</th>
+                                    <th>Certification</th>
+                                    <th>Location</th>
+                                    <th>Address</th>
+                                    <th>StartDate</th>
+                                    <th>EndDate</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.Education.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Institution" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Certificate" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Location" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Address" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Education[i].StartDate" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Education[i].EndDate" />
+                                        </td>
+                                        <td>
+                                            <input type="file" class="form-control" asp-for="@Model.Education[i].CertificateAttachment" />
+                                        </td>
+                                        @*<td>
+                                                <a class="col-sm-offset-1 col-sm-1 text-danger removeEducation" title="Remove"><span class="sr-only">Remove</span> <i class="fa fa-times"></i></a>
+
+                                            </td>*@
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <a class="col-sm-offset-1 col-sm-1 text-success addEducation" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+                        <br />
+                    </div>
+
+                    <div class="table-responsive table-bordered">
+                        <h4>Trainings</h4>
+                        <table class="table tblTraining">
+                            <thead>
+                                <tr>
+                                    <th>Training Name</th>
+                                    <th>Certificate</th>
+                                    <th>Location</th>
+                                    <th>Trainer</th>
+                                    <th>StartDate</th>
+                                    <th>ExpiredDate</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.Trainings.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Training" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Certificate" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Location" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Trainer" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].StartDate" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].ExpiredDate" />
+                                        </td>
+                                        <td>
+                                            <input type="file" class="form-control" asp-for="@Model.Trainings[i].CertificateAttachment" />
+                                        </td>
+                                        @*<td>
+                                                <a class="col-sm-offset-1 col-sm-1 text-danger removeEducation" title="Remove"><span class="sr-only">Remove</span> <i class="fa fa-times"></i></a>
+
+                                            </td>*@
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <a class="col-sm-offset-1 col-sm-1 text-success addTraining" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+
+                    </div>
+
+                    <div class="table-responsive table-bordered">
+                        <h4>References</h4>
+                        <table class="table tblReferences">
+                            <thead>
+                                <tr>
+                                    <th>Name of Referee</th>
+                                    <th>Company Name</th>
+                                    <th>Address</th>
+                                    <th>PhoneNumber</th>
+                                    <th>Email</th>
+                                    <th>Position of Referee</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (int i = 0; i < Model.References.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.References[i].Referee" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.References[i].CompanyName" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.References[i].Address" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.References[i].PhoneNumber" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.References[i].Email" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" asp-for="@Model.References[i].PositionofReferee" />
+                                        </td>
+                                        <td>
+                                            <input type="file" class="form-control" asp-for="@Model.References[i].Attachment" />
+                                        </td>
+                                        @*<td>
+                                                <a class="col-sm-offset-1 col-sm-1 text-danger removeEducation" title="Remove"><span class="sr-only">Remove</span> <i class="fa fa-times"></i></a>
+
+                                            </td>*@
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        <a class="col-sm-offset-1 col-sm-1 text-success addReferences" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+</form>
+
+@section VendorScripts{
+    <script src="../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../assets/js/pages/forms/dropify.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.addEducation').click(function () {
+                var eduTable = $('table.tblEducation tbody');
+                var rowKount = eduTable.find('tr').length;
+                var institution = '<input name="Education[' + rowKount + '].Institution" class="form-control" type="text"/>';
+                var certificate = '<input name="Education[' + rowKount + '].Certificate" class="form-control" type="text"/>';
+                var location = '<input name="Education[' + rowKount + '].Location" class="form-control" type="text"/>';
+                var address = '<input name="Education[' + rowKount + '].Address" class="form-control" type="text"/>';
+                var startDate = '<input name="Education[' + rowKount + '].StartDate" class="form-control" type="text"/>';
+                var endDate = '<input name="Education[' + rowKount + '].EndDate" class="form-control" type="text"/>';
+                var attachment = '<input name="Education[' + rowKount + '].CertificateAttachment" class="form-control" type="file"/>';
+
+                eduTable.append(' <tr><td>' + institution + '</td><td>' + certificate + '</td><td>' + location + '</td><td>' + address + '</td><td>' + startDate + '</td><td>' + endDate + '</td><td>' + attachment + '</td></tr>')
+
+
+            })
+
+            $('.addTraining').click(function () {
+                var eduTable = $('table.tblTraining tbody');
+                var rowKount = eduTable.find('tr').length;
+                var training = '<input name="Trainings[' + rowKount + '].Training" class="form-control" type="text"/>';
+                var certificate = '<input name="Trainings[' + rowKount + '].Certificate" class="form-control" type="text"/>';
+                var location = '<input name="Trainings[' + rowKount + '].Location" class="form-control" type="text"/>';
+                var trainer = '<input name="Trainings[' + rowKount + '].Trainer" class="form-control" type="text"/>';
+                var startDate = '<input name="Trainings[' + rowKount + '].StartDate" class="form-control" type="text"/>';
+                var expiredDate = '<input name="Trainings[' + rowKount + '].ExpiredDate" class="form-control" type="text"/>';
+                var attachment = '<input name="Trainings[' + rowKount + '].CertificateAttachment" class="form-control" type="file"/>';
+
+                eduTable.append(' <tr><td>' + training + '</td><td>' + certificate + '</td><td>' + location + '</td><td>' + trainer + '</td><td>' + startDate + '</td><td>' + expiredDate + '</td><td>' + attachment + '</td></tr>')
+
+
+            })
+
+            $('.addReferences').click(function () {
+                var eduTable = $('table.tblReferences tbody');
+                var rowKount = eduTable.find('tr').length;
+                var referee = '<input name="References[' + rowKount + '].Referee" class="form-control" type="text"/>';
+                var companyName = '<input name="References[' + rowKount + '].CompanyName" class="form-control" type="text"/>';
+                var address = '<input name="References[' + rowKount + '].Address" class="form-control" type="text"/>';
+                var phoneNumber = '<input name="References[' + rowKount + '].PhoneNumber" class="form-control" type="text"/>';
+                var email = '<input name="References[' + rowKount + '].Email" class="form-control" type="text"/>';
+                var positionofReferee = '<input name="References[' + rowKount + '].PositionofReferee" class="form-control" type="text"/>';
+                var attachment = '<input name="References[' + rowKount + '].Attachment" class="form-control" type="file"/>';
+
+                eduTable.append(' <tr><td>' + referee + '</td><td>' + companyName + '</td><td>' + address + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + positionofReferee + '</td><td>' + attachment + '</td></tr>')
+
+
+            })
+
+
+            $('a.removeEducation').on('click', function () {
+                console.log(this)
+                $(this).parent('td').parent('tr').remove();
+            })
+
+        })
+    </script>
+}
