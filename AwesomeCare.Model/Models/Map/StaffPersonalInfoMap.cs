@@ -82,7 +82,7 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.Keyworker)
                .HasColumnName("Keyworker")
                .HasMaxLength(50)
-               .IsRequired(true);
+               .IsRequired(false);
 
             builder.Property(p => p.IdNumber)
                .HasColumnName("IdNumber")

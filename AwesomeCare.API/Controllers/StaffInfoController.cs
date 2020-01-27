@@ -24,14 +24,14 @@ namespace AwesomeCare.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("{id}",Name ="GetStaffById")]
+        [HttpGet("{id}", Name = "GetStaffById")]
         [ProducesResponseType(type: typeof(GetStaffPersonalInfo), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAsync(int? id)
         {
 
-            var entity =await _staffInfoRepository.GetEntity(id);
+            var entity = await _staffInfoRepository.GetEntity(id);
             var getEntity = Mapper.Map<GetStaffPersonalInfo>(entity);
             return Ok(getEntity);
         }
@@ -74,7 +74,38 @@ namespace AwesomeCare.API.Controllers
             entity = await _staffInfoRepository.UpdateEntity(entity);
 
             return CreatedAtAction("GetAsync", new { id = entity.StaffPersonalInfoId }, entity);
-            
+
         }
+
+        [Route("PostStaffFullInfo")]
+        [HttpPost]
+        [ProducesResponseType( statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PostStaffFullInfo([FromBody]PostStaffFullInfo model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            bool isEmailRegistered = _staffInfoRepository.Table.Any(s => s.Email.Equals(model.Email));
+            if (isEmailRegistered)
+            {
+                ModelState.AddModelError("Email", $"Email {model.Email} is registered");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var postEntity = Mapper.Map<StaffPersonalInfo>(model);
+            var entity = await _staffInfoRepository.InsertEntity(postEntity);
+            entity.RegistrationId = $"AHS/ST/{DateTime.Now.ToString("yy")}/{ entity.StaffPersonalInfoId.ToString("D6")}";
+            entity = await _staffInfoRepository.UpdateEntity(entity);
+
+            return Ok();
+        }
+
     }
 }

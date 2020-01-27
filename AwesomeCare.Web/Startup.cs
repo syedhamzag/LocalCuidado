@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.Web.Middlewares;
 using AwesomeCare.Web.Services.Admin;
+using AwesomeCare.Web.Services.Staff;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,7 @@ namespace AwesomeCare.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            MapperConfig.AutoMapperConfiguration.Configure();
+          AutoMapperConfiguration.Configure();
             services.AddLogging();
             AddRefitServices(services);
             services.AddMemoryCache();
@@ -72,9 +73,19 @@ namespace AwesomeCare.Web
         {
             string uri = Configuration["AwesomeCareBaseApi"];
            
-            services.AddRefitClient<IBaseRecordService>()
-               .ConfigureHttpClient(c => c.BaseAddress = new Uri(uri));
            
+
+            services.AddHttpClient("baserecordservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IBaseRecordService>(r));
+
+            services.AddHttpClient("staffservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffService>(r));
+
+            
         }
     }
 }

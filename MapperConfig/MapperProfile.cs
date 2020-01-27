@@ -328,7 +328,7 @@ namespace MapperConfig
                .ForMember(dto => dto.ClientCareDetailsTask, mem => mem.Ignore());
             #endregion
 
-            #region Staff
+            #region StaffPersonalInfo
             CreateMap<StaffPersonalInfo, GetStaffPersonalInfo>();
 
             CreateMap<PostStaffPersonalInfo, StaffPersonalInfo>()
@@ -343,6 +343,32 @@ namespace MapperConfig
                .ForMember(dto => dto.Trainings, mem => mem.Ignore())
                .ForMember(dto => dto.References, mem => mem.Ignore())
                .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
+
+            CreateMap<PostStaffFullInfo, StaffPersonalInfo>()
+                .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore())
+                .ForMember(dto => dto.Education, mem => mem.MapFrom(src=>src.StaffEducations))
+                .ForMember(dto => dto.Trainings, mem => mem.MapFrom(src=>src.StaffTrainings))
+                .ForMember(dto => dto.References, mem => mem.MapFrom(sr=>sr.StaffReferees))
+                .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
+
+            #endregion
+
+            #region StaffTraining
+            CreateMap<PostStaffTraining, StaffTraining>()
+                .ForMember(dto => dto.StaffTrainingId, mem => mem.Ignore())
+                .ForMember(dto => dto.Staff, mem => mem.Ignore());
+            #endregion
+
+            #region StaffEducation
+            CreateMap<PostStaffEducation, StaffEducation>()
+                .ForMember(dto => dto.Staff, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffEducationId, mem => mem.Ignore());
+            #endregion
+
+            #region StaffReferee
+            CreateMap<PostStaffReferee, StaffReferee>()
+                .ForMember(dto => dto.Staff, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffRefereeId, mem => mem.Ignore());
             #endregion
         }
     }
