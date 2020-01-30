@@ -4,18 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AwesomeCare.Admin.AutoMapperConfiguration
+namespace AwesomeCare.Admin
 {
-    public class AutoMapperConfig
+    public class AutoMapperConfiguration
     {
-       
-
         public static void Configure()
         {
-            Mapper.Initialize(config =>
+            Mapper.Initialize(cfg =>
             {
-                config.AddProfile<MapperProfile>();
+                cfg.AddProfile<MapperProfile>();
             });
+
             Mapper.Configuration.AssertConfigurationIsValid();
         }
     }

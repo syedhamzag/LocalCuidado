@@ -148,7 +148,7 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.UniqueId)
               .HasColumnName("UniqueId")
-              .IsRequired();
+              .IsRequired(false);
 
             builder.Property(p => p.PassportFilePath)
              .HasColumnName("PassportFilePath")

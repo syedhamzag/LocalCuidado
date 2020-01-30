@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AwesomeCare.Admin.AutoMapperConfiguration;
 using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Company;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +13,6 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
 using AwesomeCare.Admin.Services.ClientInvolvingPartyBase;
 using AwesomeCare.Admin.Services.ClientRegulatoryContact;
-using Microsoft.Extensions.FileProviders;
-using System.IO;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaTask;
@@ -52,8 +45,8 @@ namespace AwesomeCare.Admin
             services.AddScoped(typeof(QRCodeGenerator));
             services.AddScoped(typeof(DropboxClient),c=> new DropboxClient(Configuration["dropboxApiKey"]));
             //AutoMapper
-            //AutoMapperConfig.Configure();
-            MapperConfig.AutoMapperConfiguration.Configure();
+            AutoMapperConfiguration.Configure();
+          //  MapperConfig.AutoMapperConfiguration.Configure();
             services.AddLogging();
             AddRefitServices(services);
             services.AddMemoryCache();
@@ -91,7 +84,7 @@ namespace AwesomeCare.Admin
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Client}/{action=HomeCare}/{id?}");
             });
         }
 

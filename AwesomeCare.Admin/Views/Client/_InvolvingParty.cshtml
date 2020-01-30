@@ -4,7 +4,6 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<h5>Involving Parties</h5>
 <input type="hidden" asp-for="@Model.ClientId" />
 <input type="hidden" asp-for="@Model.Firstname" />
 <input type="hidden" asp-for="@Model.Middlename" />
@@ -35,11 +34,26 @@
                     <input type="hidden" asp-for="@Model.InvolvingParties[r].ItemName" />
 
                 </td>
-                <td><input asp-for="@Model.InvolvingParties[r].Name" type="text" class="form-control" /></td>
-                <td><input asp-for="@Model.InvolvingParties[r].Address" type="text" class="form-control" /></td>
-                <td><input asp-for="@Model.InvolvingParties[r].Email" type="text" class="form-control" /></td>
-                <td><input asp-for="@Model.InvolvingParties[r].Telephone" type="text" class="form-control" /></td>
-                <td><input asp-for="@Model.InvolvingParties[r].Relationship" type="text" class="form-control" /></td>
+                <td>
+                    <input asp-for="@Model.InvolvingParties[r].Name" type="text" class="form-control" />
+                    <span asp-validation-for="@Model.InvolvingParties[r].Name" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="@Model.InvolvingParties[r].Address" type="text" class="form-control" />
+                    <span asp-validation-for="@Model.InvolvingParties[r].Address" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="@Model.InvolvingParties[r].Email" type="text" class="form-control" />
+                    <span asp-validation-for="@Model.InvolvingParties[r].Email" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="@Model.InvolvingParties[r].Telephone" type="text" class="form-control" />
+                    <span asp-validation-for="@Model.InvolvingParties[r].Telephone" class="text-danger"></span>
+                </td>
+                <td>
+                    <input asp-for="@Model.InvolvingParties[r].Relationship" type="text" class="form-control" />
+                    <span asp-validation-for="@Model.InvolvingParties[r].Relationship" class="text-danger"></span>
+                </td>
             </tr>
         }
         @*@foreach (var item in Model)

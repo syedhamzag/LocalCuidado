@@ -9,7 +9,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientCareDetails
     {
         [Required(ErrorMessage = "Please provide Task")]
         public int ClientCareDetailsTaskId { get; set; }
-        [Required(ErrorMessage ="Please provide Client")]
+       // [Required(ErrorMessage ="Please provide Client")]
         public int ClientId { get; set; }
         [Required]
         [MaxLength(250)]

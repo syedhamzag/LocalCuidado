@@ -17,69 +17,19 @@
                 <h2>Registration</h2>
             </div>
             <div class="body">
-                <ul class="nav nav-tabs-new2">
-                    <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalInfo">Personal Info</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#involvingparties">Involving Parties</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#caredetails">Care Details</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="personalInfo">
+                <form enctype="multipart/form-data" asp-controller="Client"  method="post">
+                    <h4>Personal Info.</h4>
+                    <partial name="_ClientPersonalInfo" model="Model" />
+                    <h4>Involving Parties</h4>
+                    <partial name="_InvolvingParty" model="Model" />
+                    <h4>Regulatory Contact</h4>
+                    <partial name="_regulatorycontact" model="Model" />
+                    <h4>Care Details</h4>
+                    <partial name="_caredetails" model="Model" />
 
 
-                        <form id="basic-form" enctype="multipart/form-data" asp-action="HomeCareRegistration" asp-controller="Client" method="post">
-                            <partial name="_ClientPersonalInfo" model="Model" />
-                            <br>
-                            @if (Model.ActiveTab == "personalInfo")
-                            {
-                                <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                            }
-
-                        </form>
-
-
-                    </div>
-                    <div class="tab-pane" id="involvingparties">
-
-                        <form id="basic-formII" asp-action="_InvolvingParty" asp-controller="Client" method="post">
-                            <partial name="_InvolvingParty" model="Model" />
-                            <br>
-                            @if (Model.ActiveTab == "involvingparties")
-                            {
-                                <button type="submit" class="btn btn-primary pull-right">Save & Continue</button>
-                            }
-
-                        </form>
-
-                    </div>
-
-                    <div class="tab-pane" id="regulatorycontact">
-
-                        <form id="regulatorycontactform" enctype="multipart/form-data" asp-action="_RegulatoryContact" asp-controller="client" method="post">
-                            <partial name="_regulatorycontact" model="Model" />
-                            <br>
-                            @if (Model.ActiveTab == "regulatorycontact")
-                            {
-                                <button type="submit" class="btn btn-primary pull-right">save & continue</button>
-                            }
-
-                        </form>
-
-                    </div>
-
-                    <div class="tab-pane" id="caredetails">
-                        <form id="caredetailsform" enctype="multipart/form-data" asp-action="_CareDetails" asp-controller="client" method="post">
-                            <partial name="_caredetails" model="Model" />
-                            <br>
-
-                            @if (Model.ActiveTab == "caredetails")
-                            {
-                                <button type="submit" class="btn btn-primary pull-right">save & continue</button>
-                            }
-
-                        </form>
-                    </div>
-                </div>
+                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                </form>
             </div>
         </div>
     </div>

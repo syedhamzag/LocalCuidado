@@ -111,12 +111,12 @@ namespace MapperConfig
 
             #region Client
             CreateMap<PostClient, Client>()
+                .ForMember(dto=>dto.RegulatoryContact,mem=>mem.MapFrom(src=>src.RegulatoryContacts))
+                .ForMember(dto=>dto.ClientCareDetails,mem=>mem.MapFrom(src=>src.CareDetails))
+                .ForMember(dto=>dto.InvolvingParties,mem=>mem.MapFrom(src=>src.InvolvingParties))
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore())
-                .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
-                .ForMember(dto => dto.UniqueId, mem => mem.Ignore())
-                .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
-                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
+                .ForMember(dto => dto.UniqueId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())

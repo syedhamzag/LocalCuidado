@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.ViewModels.Client
 {
-    public class CreateClient: DataTransferObject.DTOs.Client.PostClient
+    public class CreateClient
     {
         
         public CreateClient()
@@ -39,9 +39,98 @@ namespace AwesomeCare.Admin.ViewModels.Client
 
         #region Tabs
         public string ActiveTab { get; set; } =  "personalInfo";
-       // public string[] Tabs { get; set; } = new string[] { "" };
+        // public string[] Tabs { get; set; } = new string[] { "" };
         #endregion
 
+        #region PersonalInfo
+        [Required]
+        [MaxLength(50)]
+        public string Firstname { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Middlename { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Surname { get; set; }
+        [Required]
+        [MaxLength(50)]
+        [EmailAddress]
+        public string Email { get; set; }
+        [Required]
+        [MaxLength(255)]
+        public string About { get; set; }
+        [Required]
+        [MaxLength(255)]
+        public string Hobbies { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Keyworker { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string IdNumber { get; set; }
+        [Required]
+        [Display(Name = "Gender")]
+        public int GenderId { get; set; }
+        [Required]
+        [Display(Name = "Number of Calls")]
+        public int NumberOfCalls { get; set; }
+        [Required]
+        [Display(Name = "Area Code")]
+        public int AreaCodeId { get; set; }
+        [Required]
+        [Display(Name = "Teritory")]
+        public int TeritoryId { get; set; }
+        [Required]
+        [Display(Name = "Service")]
+        public int ServiceId { get; set; }
+        [Required]
+        [MaxLength(50)]
+        [Display(Name = "Provision Venue")]
+        public string ProvisionVenue { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string PostCode { get; set; }
+        [Required]
+        public decimal Rate { get; set; }
+        [Required]
+        [MaxLength(50)]
+        [Display(Name = "Team Leader")]
+        public string TeamLeader { get; set; }
+        [Required]
+        [MaxLength(15)]
+        [Display(Name = "Date of Birth")]
+        public string DateOfBirth { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Telephone { get; set; }
+        [Required]
+        [Display(Name = "Language")]
+        public int LanguageId { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string KeySafe { get; set; }
+        [Required]
+        [Display(Name = "Choice Of Staff")]
+        public int ChoiceOfStaffId { get; set; }
+        [Required]
+        [Display(Name = "Status")]
+        public int StatusId { get; set; }
+        [Required]
+        [Display(Name = "Capacity")]
+        public int CapacityId { get; set; }
+        [Required]
+        [MaxLength(50)]
+        [Display(Name = "Provider Reference")]
+        public string ProviderReference { get; set; }
+        [Required]
+        [Display(Name = "Number of Staff")]
+        public int NumberOfStaff { get; set; }
+        public string PassportFilePath { get; set; }
+        #endregion
         public List<ClientInvolvingParty> InvolvingParties { get; set; }
         public List<ClientRegulatoryContact> RegulatoryContacts { get; set; }
         public List<ClientCareDetailsHeading> CareDetails { get; set; }

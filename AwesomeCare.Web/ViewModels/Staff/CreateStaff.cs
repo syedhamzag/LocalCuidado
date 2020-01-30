@@ -72,43 +72,43 @@ namespace AwesomeCare.Web.ViewModels.Staff
         public string CanDrive { get; set; }
         [Display(Name = "Attach Driving License if you can drive")]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
-        [RequiredDependant("Yes",nameof(CanDrive),ErrorMessage ="Please attach Driving License if you can drive")]
+        [RequiredDependant("Yes",nameof(CanDrive),typeof(string),ErrorMessage ="Please attach Driving License if you can drive")]
         public IFormFile DrivingLicense { get; set; }
         [Display(Name = "Driving License ExpiryDate")]
-        [RequiredDependant("Yes", nameof(CanDrive), ErrorMessage = "Please provide Driving License Expiry Date if you can drive")]
+        [RequiredDependant("Yes", nameof(CanDrive), typeof(string), ErrorMessage = "Please provide Driving License Expiry Date if you can drive")]
         public DateTime? DrivingLicenseExpiryDate { get; set; }
         [Required]
         [Display(Name = "Right to work?")]
         public string RightToWork { get; set; }
         [Display(Name = "Right to work attachment")]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
-        [RequiredDependant("Yes", nameof(RightToWork), ErrorMessage = "Please attach Right to Work")]
+        [RequiredDependant("Yes", nameof(RightToWork), typeof(string), ErrorMessage = "Please attach Right to Work")]
         public IFormFile RightToWorkAttachment { get; set; }
         [Display(Name = "Right to work attachment ExpiryDate")]
-        [RequiredDependant("Yes", nameof(RightToWork), ErrorMessage = "Please provice Right to Work Expiry Date")]
+        [RequiredDependant("Yes", nameof(RightToWork), typeof(string), ErrorMessage = "Please provice Right to Work Expiry Date")]
         public DateTime? RightToWorkExpiryDate { get; set; }
         [Required]
         public string DBS { get; set; }
         [Display(Name = "DBS attachment")]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
-        [RequiredDependant("Yes", nameof(DBS), ErrorMessage = "Please attach DBS")]
+        [RequiredDependant("Yes", nameof(DBS), typeof(string), ErrorMessage = "Please attach DBS")]
         public IFormFile DBSAttachment { get; set; }
         [Display(Name = "DBS ExpiryDate")]
 
-        [RequiredDependant("Yes", nameof(DBS), ErrorMessage = "Please provide DBS Expiry Date")]
+        [RequiredDependant("Yes", nameof(DBS), typeof(string), ErrorMessage = "Please provide DBS Expiry Date")]
         public DateTime? DBSExpiryDate { get; set; }
         [Display(Name = "DBS Update No")]
-        [RequiredDependant("Yes", nameof(DBS), ErrorMessage = "Please provide DBS Update No.")]
+        [RequiredDependant("Yes", nameof(DBS), typeof(string), ErrorMessage = "Please provide DBS Update No.")]
         public string DBSUpdateNo { get; set; }
        
         [Display(Name = "NI")]
         public string NI { get; set; }
         [Display(Name = "NI attachment")]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
-        [RequiredDependant("Yes", nameof(NI), ErrorMessage = "Please attach NI")]
+        [RequiredDependant("Yes", nameof(NI), typeof(string), ErrorMessage = "Please attach NI")]
         public IFormFile NIAttachment { get; set; }
         [Display(Name = "NI expiry date")]
-        [RequiredDependant("Yes", nameof(NI), ErrorMessage = "Please provide NI Expiry Date")]
+        [RequiredDependant("Yes", nameof(NI), typeof(string), ErrorMessage = "Please provide NI Expiry Date")]
         public DateTime? NIExpiryDate { get; set; }
         [Required]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
@@ -121,7 +121,7 @@ namespace AwesomeCare.Web.ViewModels.Staff
         public string SelfPYE { get; set; }
         [Display(Name = "Self PYE attachment")]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
-        [RequiredDependant("Yes", nameof(SelfPYE), ErrorMessage = "Please attach Self PYE")]
+        [RequiredDependant("Yes", nameof(SelfPYE), typeof(string), ErrorMessage = "Please attach Self PYE")]
         public IFormFile Self_PYEAttachment { get; set; }
     }
 }

@@ -4,7 +4,6 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<h5>Regulatory Contact</h5>
 <input type="hidden" asp-for="@Model.ClientId" />
 <input type="hidden" asp-for="@Model.Firstname" />
 <input type="hidden" asp-for="@Model.Middlename" />
@@ -36,11 +35,16 @@
                 </td>
                 <td>
                     <input data-provide="datepicker" type="text" asp-for="@Model.RegulatoryContacts[r].DatePerformed" data-date-autoclose="true" class="form-control">
+                    <span asp-validation-for="@Model.RegulatoryContacts[r].DatePerformed" class="text-danger"></span>
                 </td>
                 <td>
                     <input data-provide="datepicker" type="text" asp-for="@Model.RegulatoryContacts[r].DueDate" data-date-autoclose="true" class="form-control">
+                    <span asp-validation-for="@Model.RegulatoryContacts[r].DueDate" class="text-danger"></span>
                 </td>
-                <td><input asp-for="@Model.RegulatoryContacts[r].EvidenceFile" type="file" class="dropify" /></td>
+                <td>
+                    <input asp-for="@Model.RegulatoryContacts[r].EvidenceFile" type="file" class="dropify" />
+                    <span asp-validation-for="@Model.RegulatoryContacts[r].EvidenceFile" class="text-danger"></span>
+                </td>
 
             </tr>
         }

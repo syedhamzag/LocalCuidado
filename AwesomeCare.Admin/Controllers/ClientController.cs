@@ -24,6 +24,7 @@ using Dropbox.Api;
 using System.IO;
 using AwesomeCare.Admin.Services.ClientCareDetails;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
+using Newtonsoft.Json;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -63,6 +64,8 @@ namespace AwesomeCare.Admin.Controllers
 
 
         #region Registration
+
+
         public async Task<IActionResult> HomeCareRegistration()
         {
             List<ClientInvolvingParty> clientInvolvingPartyItems = new List<ClientInvolvingParty>();
@@ -124,41 +127,113 @@ namespace AwesomeCare.Admin.Controllers
         {
             try
             {
-                
-                    model.StatusId = 14;
-                
+                model.StatusId = 14;
+
                 if (model == null || !ModelState.IsValid)
                 {
+                    //model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
+
                     return View(model);
                 }
-                // await model.SaveFileToDisk(_env);
 
+
+                #region PersonalInfo
                 string folder = $"ClientPassport/{model.Telephone}";
                 string filename = string.Concat(model.Firstname, "_", model.Surname, Path.GetExtension(model.ClientImage.FileName));
-                string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, model.ClientImage, folder, filename);
-                model.PassportFilePath = path;
-                var result = await _clientService.PostClient(model);
+                // string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, model.ClientImage, folder, filename);
+                model.PassportFilePath = "path";// path;
+                #endregion
+
+                #region Involving Parties
+                var involvingParties = InvolvingParty(model);
+                model.InvolvingParties = involvingParties;
+                #endregion
+
+                #region Regulatory Contact
+                var regulatoryContact = await RegulatoryContact(model);
+                model.RegulatoryContacts = regulatoryContact;
+                #endregion
+
+                var postClient =   Mapper.Map<PostClient>(model);
+                #region CareDetails
+                var careDetails = CareDetails(model);
+                postClient.CareDetails = careDetails;
+                #endregion
+                var json = JsonConvert.SerializeObject(postClient);
+                var result = await _clientService.PostClient(postClient);
                 // var content = await result.Content.ReadAsStringAsync();
 
                 SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Client successfully registered" : "An Error Occurred" });
-                if (result == null)
+                return RedirectToAction("HomeCareDetails", new { clientId = result.ClientId });
+            }
+            catch(Refit.ApiException e)
+            {
+                var error = e.Content;
+                if(e.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
-                    await _dropboxClient.Files.DeleteV2Async(folder);
-                    return View(model);
+                    SetOperationStatus(new OperationStatus { IsSuccessful =  false, Message = error });
+                }else if(e.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    SetOperationStatus(new OperationStatus { IsSuccessful = false, Message = error });
                 }
-                model.ActiveTab = "involvingparties";
-                model.ClientId = result.ClientId;
-                model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
+                _logger.LogError(e, "HomeCareRegistration", null);
                 return View("HomeCareRegistration", model);
             }
             catch (Exception ex)
             {
+                SetOperationStatus(new OperationStatus { IsSuccessful = false, Message = "An Error Occurred" });
                 _logger.LogError(ex, "HomeCareRegistration", null);
                 return View("HomeCareRegistration", model);
             }
 
             // return RedirectToAction("HomeCare");
         }
+
+         List<ClientInvolvingParty> InvolvingParty(CreateClient model)
+        {
+            var items = model.InvolvingParties.Where(s => s.IsSelected).ToList();
+          //  var involvingParties = Mapper.Map<List<PostClientInvolvingParty>>(items);
+
+            return items;
+        }
+        async Task<List<ClientRegulatoryContact>> RegulatoryContact(CreateClient createClient)
+        {
+            var items = createClient.RegulatoryContacts.Where(s => s.IsSelected).ToList();
+            foreach (var c in items)
+            {
+                //string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
+                //string filename = string.Concat(c.RegulatoryContact.Replace(" ", ""), "_", createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
+                //string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
+                c.Evidence = "hello";// path;
+            }
+            
+
+          //  var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
+
+            return items;
+        }
+
+
+        List<PostClientCareDetails> CareDetails(CreateClient createClient)
+        {
+            var clientCareDetails = (from cl in createClient.CareDetails
+                                     from tk in cl.Tasks
+                                     where tk.IsSelected
+                                     select new PostClientCareDetails
+                                     {
+                                         ClientCareDetailsTaskId = tk.CareDetailsTaskId,
+                                         Description = tk.Description,
+                                         Location = tk.Location,
+                                         Mitigation = tk.Mitigation,
+                                         Remark = tk.Remark,
+                                         Risk = tk.Risk
+                                     }).ToList();
+
+            return clientCareDetails;
+        }
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

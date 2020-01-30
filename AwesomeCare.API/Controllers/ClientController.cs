@@ -54,10 +54,12 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var client = Mapper.Map<Client>(postClient);
-            var uniqueId = _clientRepository.Table.Count() + 1;
-            client.UniqueId = $"AHS/CT/{DateTime.Now.ToString("yy")}/{ uniqueId.ToString("D6")}";
+            var client = Mapper.Map<Client>(postClient);            
             var newClient = await _clientRepository.InsertEntity(client);
+
+            newClient.UniqueId = $"AHS/CT/{DateTime.Now.ToString("yy")}/{ newClient.ClientId.ToString("D6")}";
+            newClient = await _clientRepository.UpdateEntity(newClient);
+
             var getClient = Mapper.Map<GetClient>(newClient);
             return CreatedAtAction("GetClient", new { id = getClient.ClientId }, getClient);
 
