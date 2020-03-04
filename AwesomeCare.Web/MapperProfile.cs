@@ -16,6 +16,7 @@ namespace AwesomeCare.Web
                 .ForMember(dto=>dto.StaffTrainings,mem=>mem.MapFrom(src=>src.Trainings))
                 .ForMember(dto=>dto.StaffEducations,mem=>mem.MapFrom(src=>src.Education))
                 .ForMember(dto=>dto.StaffReferees,mem=>mem.MapFrom(src=>src.References))
+                .ForMember(dto=>dto.StaffRegulatoryContacts,mem=>mem.MapFrom(src=>src.RegulatoryContacts))
                 .ForMember(dto=>dto.StartDate,mem=>mem.MapFrom(src=>DateTime.Now))
                 .ForMember(dto=>dto.Gender,mem=>mem.MapFrom(src=>src.GenderId));
 
@@ -27,6 +28,10 @@ namespace AwesomeCare.Web
 
             CreateMap<CreateStaffReference, PostStaffReferee>()
                 .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore());
+
+            CreateMap<CreateStaffRegulatoryContact, PostStaffRegulatoryContact>()
+                 .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore());
+
         }
     }
 }

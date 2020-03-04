@@ -10,6 +10,7 @@ namespace AwesomeCare.Admin.Controllers
 {
     public class BaseController : Controller
     {
+        public const string cacheKey = "baserecord_key";
         public BaseController()
         {
            

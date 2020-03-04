@@ -40,11 +40,12 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.DateOfBirth)
                .HasColumnName("DateOfBirth")
+               .HasMaxLength(50)
                .IsRequired(true);
 
             builder.Property(p => p.Telephone)
                .HasColumnName("Telephone")
-               .HasMaxLength(25)
+               .HasMaxLength(50)
                .IsRequired(true);
 
             builder.Property(p => p.ProfilePix)
@@ -191,6 +192,10 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.Self_PYEAttachment)
             .HasColumnName("Self_PYEAttachment")
             .IsRequired(false);
+
+            builder.Property(p => p.Status)
+                .HasColumnName("Status")
+                .IsRequired();
 
             #endregion
             builder.HasIndex(p => p.RegistrationId)

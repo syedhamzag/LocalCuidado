@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.Services.Services;
 using AwesomeCare.Web.Services.Staff;
 using AwesomeCare.Web.ViewModels.Staff;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -16,11 +20,14 @@ namespace AwesomeCare.Web.Controllers
     {
         private IStaffService _staffService;
         private ILogger<StaffController> _logger;
-
-        public StaffController(IStaffService staffService, ILogger<StaffController> logger)
+        private IFileUpload _fileUpload;
+        private readonly IMemoryCache _cache;
+        public StaffController(IFileUpload fileUpload, IMemoryCache cache, IStaffService staffService, ILogger<StaffController> logger)
         {
             _staffService = staffService;
             _logger = logger;
+            _cache = cache;
+            _fileUpload = fileUpload;
         }
         public IActionResult Index()
         {
@@ -38,6 +45,23 @@ namespace AwesomeCare.Web.Controllers
 
             model.References = new List<CreateStaffReference>();
             model.References.Add(new CreateStaffReference());
+
+            #region Regulatory Contact
+            model.RegulatoryContacts = new List<CreateStaffRegulatoryContact>();
+            if (_cache.TryGetValue(cacheKey, out List<GetBaseRecordWithItems> baseRecords))
+            {
+
+                model.RegulatoryContacts = (from rec in baseRecords
+                                            where rec.KeyName == "Staff_RegulatoryContact"
+                                            from recItem in rec.BaseRecordItems
+                                            select new CreateStaffRegulatoryContact
+                                            {
+                                                BaseRecordItemId = recItem.BaseRecordItemId,
+                                                RegulatoryContact = recItem.ValueName
+                                            }).ToList();
+            }
+            #endregion
+
             return View(model);
         }
         [HttpPost]
@@ -51,25 +75,114 @@ namespace AwesomeCare.Web.Controllers
             }
 
             var staffinfo = Mapper.Map<PostStaffFullInfo>(model);
-           
 
+            string profilePixFolder = "staffprofilepix";
+            var profilePix = await UploadFile(profilePixFolder, string.Concat(profilePixFolder, "_", model.Telephone), true, model.ProfilePix.OpenReadStream());
+            staffinfo.ProfilePix = profilePix;
+
+            if (model.CanDrive.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                string drivingFolder = "drivinglicense";
+                var drivingLicense = await UploadFile(drivingFolder, string.Concat(drivingFolder, "_", model.Telephone), false, model.DrivingLicense.OpenReadStream());
+                staffinfo.DrivingLicense = drivingLicense;
+            }
+
+            if (model.RightToWork.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                string rightToFolder = "righttowork";
+                var righttowork = await UploadFile(rightToFolder, string.Concat(rightToFolder, "_", model.Telephone), false, model.RightToWorkAttachment.OpenReadStream());
+                staffinfo.RightToWorkAttachment = righttowork;
+            }
+
+            if (model.DBS.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                string dbsFolder = "dbsfolder";
+                var dbs = await UploadFile(dbsFolder, string.Concat(dbsFolder, "_", model.Telephone), false, model.DBSAttachment.OpenReadStream());
+                staffinfo.DBSAttachment = dbs;
+            }
+
+            if (model.NI.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                string niFolder = "nifolder";
+                var ni = await UploadFile(niFolder, string.Concat(niFolder, "_", model.Telephone), false, model.NIAttachment.OpenReadStream());
+                staffinfo.NIAttachment = ni;
+            }
+
+            if (model.SelfPYE.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                string selfpyeFolder = "selfpye";
+                var selfpye = await UploadFile(selfpyeFolder, string.Concat(selfpyeFolder, "_", model.Telephone), false, model.Self_PYEAttachment.OpenReadStream());
+                staffinfo.Self_PYEAttachment = selfpye;
+            }
+
+            string coverLetterFolder = "coverletter";
+            var coverletter = await UploadFile(coverLetterFolder, string.Concat(coverLetterFolder, "_", model.Telephone), true, model.CoverLetter.OpenReadStream());
+            staffinfo.CoverLetter = coverletter;
+
+            string cvFolder = "cvfolder";
+            var cv = await UploadFile(cvFolder, string.Concat(cvFolder, "_", model.Telephone), true, model.CV.OpenReadStream());
+            staffinfo.CV = cv;
+
+            #region RegulatoryContact
+            var regulatoryContact = await RegulatoryContact(model);
+            staffinfo.StaffRegulatoryContacts = regulatoryContact;
+            #endregion
+
+            var json = JsonConvert.SerializeObject(staffinfo);
             var result = await _staffService.PostStaffFullInfo(staffinfo);
 
             var content = await result.Content.ReadAsStringAsync();
             if (result.IsSuccessStatusCode)
             {
                 SetOperationStatus(new Models.OperationStatus { IsSuccessful = true, Message = "Your registration was successful" });
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Profile", "Staff", new { id = content });
             }
-            else if(result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            else if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = content });
             }
             else
             {
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = true, Message = "An error occurred" });
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An error occurred" });
             }
             return View(model);
+        }
+
+        async Task<List<PostStaffRegulatoryContact>> RegulatoryContact(CreateStaff createStaff)
+        {
+            var items = createStaff.RegulatoryContacts.Where(s => s.IsSelected).ToList();
+            foreach (var c in items)
+            {
+
+                string folder = "staffregulatorycontact";
+                string filename = string.Concat(folder, "_", c.RegulatoryContact, "_", createStaff.Telephone);
+                string path = await UploadFile(folder, filename, true, c.EvidenceFile.OpenReadStream());
+
+                c.Evidence = path;
+            }
+
+            var regulatoryContact = Mapper.Map<List<PostStaffRegulatoryContact>>(items);
+            return regulatoryContact;
+        }
+
+
+        async Task<string> UploadFile(string folder, string filename, bool isPublic, Stream fileStream)
+        {
+            string path = await _fileUpload.UploadFile(folder, isPublic, filename, fileStream);
+            return path;
+        }
+
+        public async Task<IActionResult> Profile(int id)
+        {
+            var profile = await _staffService.Profile(id);
+            return View(profile);
+        }
+
+        public async Task<IActionResult> DownloadFile(string file)
+        {
+            var filestream = await _fileUpload.DownloadFile(file);
+            filestream.Item1.Position = 0;
+            return File(filestream.Item1, filestream.Item2);
         }
     }
 }

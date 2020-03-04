@@ -1,0 +1,518 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Staff;
+@model GetStaffProfile;
+
+@{
+    ViewData["Title"] = "Staff Profile";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Profile</h2>
+                <ul class="header-dropdown">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="javascript:void(0);">Edit</a></li>
+                           
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="body">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card">
+
+                        <div class="body">
+                            <ul class="nav nav-tabs-new2">
+                                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalinfo">Personal Info</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#education">Education</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainings">Training</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#referee">Referee</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="personalinfo">
+                                    <h6>Personal Info.</h6>
+                                    <div class="row">
+                                        <div class="col-xs-8 col-sm-8 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="FirstName" class="control-label"></label>
+                                                        <input type="text" class="form-control" asp-for="FirstName" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="MiddleName" class="control-label"></label>
+                                                        <input type="text" class="form-control" asp-for="MiddleName" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="LastName" class="control-label"></label>
+                                                        <input type="text" class="form-control" asp-for="LastName" readonly>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="Gender" class="control-label"></label>
+                                                        <baserecord asp-key="Gender" asp-for="Gender" asp-items="null" />
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="DateOfBirth" class="control-label"></label>
+                                                        <input asp-for="DateOfBirth" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="Email" class="control-label"></label>
+                                                        <input type="email" class="form-control" asp-for="Email" readonly>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="IdNumber" class="control-label"></label>
+                                                        <input type="text" class="form-control" asp-for="IdNumber" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="PostCode" class="control-label"></label>
+                                                        <input type="text" asp-for="PostCode" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="Telephone" class="control-label"></label>
+                                                        <input type="text" asp-for="Telephone" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="CanDrive" class="control-label"></label>
+
+                                                        <br />
+                                                        <label class="fancy-radio custom-color-green"><span><i></i>@Model.CanDrive</span></label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        @if (Model.CanDrive.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                                        {
+                                                            <label asp-for="DrivingLicense" class="control-label"></label>
+                                                            <br />
+                                                            <a asp-action="DownloadFile" asp-route-file="@Model.DrivingLicense">Download</a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="DrivingLicenseExpiryDate" class="control-label"></label>
+                                                        <input asp-for="DrivingLicenseExpiryDate" type="text" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <div class="card">
+                                                <div class="header">
+                                                    <h2>Profile Pix<small></small></h2>
+                                                </div>
+                                                <div class="body">
+                                                    <img alt="profilepix" src="@Model.ProfilePix" height="150" width="150">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-8 col-sm-8 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="RightToWork" class="control-label"></label>
+                                                        <br />
+                                                        <label class="fancy-radio custom-color-green"><span><i></i>@Model.RightToWork</span></label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        @if (Model.RightToWork.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                                        {
+                                                            <label asp-for="RightToWorkAttachment" class="control-label"></label>
+                                                            <br />
+                                                            <a asp-action="DownloadFile" asp-route-file="@Model.RightToWorkAttachment">Download</a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="RightToWorkExpiryDate" class="control-label"></label>
+                                                        <input type="text" asp-for="RightToWorkExpiryDate" class="form-control" readonly>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3 col-md-3">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-8 col-sm-8 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="DBS" class="control-label"></label>
+                                                        <br />
+                                                        <label class="fancy-radio custom-color-green"><span><i></i>@Model.DBS</span></label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        @if (Model.DBS.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                                        {
+                                                            <label asp-for="DBSAttachment" class="control-label"></label>
+                                                            <br />
+                                                            <a asp-action="DownloadFile" asp-route-file="@Model.DBSAttachment">Download</a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="DBSExpiryDate" class="control-label"></label>
+                                                        <input type="text" asp-for="DBSExpiryDate" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="DBSUpdateNo" class="control-label"></label>
+                                                <input type="text" asp-for="DBSUpdateNo" class="form-control" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-8 col-sm-8 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="NI" class="control-label"></label>
+                                                        <br />
+                                                        <label class="fancy-radio custom-color-green"><span><i></i>@Model.NI</span></label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        @if (Model.NI.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                                        {
+                                                            <label asp-for="NIAttachment" class="control-label"></label>
+                                                            <br />
+                                                            <a asp-action="DownloadFile" asp-route-file="@Model.NIAttachment">Download</a>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="NIExpiryDate" class="control-label"></label>
+                                                        <input type="text" asp-for="NIExpiryDate" class="form-control" readonly>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-3 col-md-3">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-8 col-sm-8 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="Self_PYE" class="control-label"></label>
+                                                        <br />
+                                                        <label class="fancy-radio custom-color-green"><span><i></i>@Model.Self_PYE</span></label>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        @if (Model.Self_PYE.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                                        {
+                                                            <label asp-for="Self_PYEAttachment" class="control-label"></label>
+                                                            <br />
+                                                            <a asp-action="DownloadFile" asp-route-file="@Model.Self_PYEAttachment">Download</a>
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="WorkTeam" class="control-label"></label>
+                                                        <input type="text" asp-for="WorkTeam" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-8 col-sm-8 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="CV" class="control-label"></label>
+                                                        <br />
+                                                        <a asp-action="DownloadFile" asp-route-file="@Model.CV">Download</a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="CoverLetter" class="control-label"></label>
+                                                        <br />
+                                                        <a asp-action="DownloadFile" asp-route-file="@Model.CoverLetter">Download</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12 col-sm-3 col-md-3">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Address" class="control-label"></label>
+                                                <textarea class="form-control" asp-for="Address" readonly></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="AboutMe" class="control-label"></label>
+                                                <textarea class="form-control" asp-for="AboutMe" readonly></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Hobbies" class="control-label"></label>
+                                                <textarea class="form-control" asp-for="Hobbies" readonly></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                                <div class="tab-pane" id="education">
+                                    <h6>Education</h6>
+                                    <div class="table-responsive table-bordered">
+                                        <h4>Education</h4>
+                                        <table class="table tblEducation">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name of Institution</th>
+                                                    <th>Certification</th>
+                                                    <th>Location</th>
+                                                    <th>Address</th>
+                                                    <th>StartDate</th>
+                                                    <th>EndDate</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                @for (int i = 0; i < Model.Education.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Institution" readonly />
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Certificate" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Location" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Address" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].StartDate" readonly />
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].EndDate" readonly />
+                                                        </td>
+                                                        <td>
+
+                                                            <a href="@Model.Education[i].CertificateAttachment"> Download</a>
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="trainings">
+                                    <h6>Trainings</h6>
+                                    <div class="table-responsive table-bordered">
+                                        <h4>Trainings</h4>
+                                        <table class="table tblTraining">
+                                            <thead>
+                                                <tr>
+                                                    <th>Training Name</th>
+                                                    <th>Certificate</th>
+                                                    <th>Location</th>
+                                                    <th>Trainer</th>
+                                                    <th>StartDate</th>
+                                                    <th>ExpiredDate</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                @for (int i = 0; i < Model.Trainings.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Training" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Certificate" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Location" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Trainer" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].StartDate" readonly />
+
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].ExpiredDate" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <a href="@Model.Trainings[i].CertificateAttachment">Download</a>
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="referee">
+                                    <h6>Referees</h6>
+                                    <div class="table-responsive table-bordered">
+                                        <h4>References</h4>
+                                        <table class="table tblReferences">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name of Referee</th>
+                                                    <th>Company Name</th>
+                                                    <th>Address</th>
+                                                    <th>PhoneNumber</th>
+                                                    <th>Email</th>
+                                                    <th>Position of Referee</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                @for (int i = 0; i < Model.References.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.References[i].Referee" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.References[i].CompanyName" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.References[i].Address" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.References[i].PhoneNumber" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.References[i].Email" readonly />
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control" asp-for="@Model.References[i].PositionofReferee" readonly />
+
+                                                        </td>
+                                                        <td>
+                                                            <a href="@Model.References[i].Attachment">Download</a>
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -25,6 +25,7 @@ using System.IO;
 using AwesomeCare.Admin.Services.ClientCareDetails;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
 using Newtonsoft.Json;
+using AwesomeCare.Services.Services;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -34,14 +35,14 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
         private readonly IClientCareDetails _clientCareDetails;
+        private readonly IFileUpload _fileUpload;
         private readonly IHostingEnvironment _env;
         private ILogger<ClientController> _logger;
-        private readonly IMemoryCache _cache;
-        private const string cacheKey = "baserecord_key";
+        private readonly IMemoryCache _cache;      
         private readonly QRCodeGenerator _qRCodeGenerator;
         private readonly DropboxClient _dropboxClient;
 
-        public ClientController(DropboxClient dropboxClient, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
+        public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
             IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService,
             IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger,
             IClientCareDetails clientCareDetails)
@@ -55,6 +56,7 @@ namespace AwesomeCare.Admin.Controllers
             _clientRegulatoryContactService = clientRegulatoryContactService;
             _qRCodeGenerator = qRCodeGenerator;
             _clientCareDetails = clientCareDetails;
+            _fileUpload = fileUpload;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -138,10 +140,11 @@ namespace AwesomeCare.Admin.Controllers
 
 
                 #region PersonalInfo
-                string folder = $"ClientPassport/{model.Telephone}";
-                string filename = string.Concat(model.Firstname, "_", model.Surname, Path.GetExtension(model.ClientImage.FileName));
-                // string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, model.ClientImage, folder, filename);
-                model.PassportFilePath = "path";// path;
+                string folder = "clientpassport";
+                string filename = string.Concat(folder, "_", model.Telephone);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ClientImage.OpenReadStream());
+
+                model.PassportFilePath = path;
                 #endregion
 
                 #region Involving Parties
@@ -154,25 +157,26 @@ namespace AwesomeCare.Admin.Controllers
                 model.RegulatoryContacts = regulatoryContact;
                 #endregion
 
-                var postClient =   Mapper.Map<PostClient>(model);
+                var postClient = Mapper.Map<PostClient>(model);
                 #region CareDetails
                 var careDetails = CareDetails(model);
                 postClient.CareDetails = careDetails;
                 #endregion
-                var json = JsonConvert.SerializeObject(postClient);
+
                 var result = await _clientService.PostClient(postClient);
-                // var content = await result.Content.ReadAsStringAsync();
+
 
                 SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Client successfully registered" : "An Error Occurred" });
                 return RedirectToAction("HomeCareDetails", new { clientId = result.ClientId });
             }
-            catch(Refit.ApiException e)
+            catch (Refit.ApiException e)
             {
                 var error = e.Content;
-                if(e.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                if (e.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
-                    SetOperationStatus(new OperationStatus { IsSuccessful =  false, Message = error });
-                }else if(e.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    SetOperationStatus(new OperationStatus { IsSuccessful = false, Message = error });
+                }
+                else if (e.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
                     SetOperationStatus(new OperationStatus { IsSuccessful = false, Message = error });
                 }
@@ -189,10 +193,10 @@ namespace AwesomeCare.Admin.Controllers
             // return RedirectToAction("HomeCare");
         }
 
-         List<ClientInvolvingParty> InvolvingParty(CreateClient model)
+        List<ClientInvolvingParty> InvolvingParty(CreateClient model)
         {
             var items = model.InvolvingParties.Where(s => s.IsSelected).ToList();
-          //  var involvingParties = Mapper.Map<List<PostClientInvolvingParty>>(items);
+            //  var involvingParties = Mapper.Map<List<PostClientInvolvingParty>>(items);
 
             return items;
         }
@@ -201,14 +205,16 @@ namespace AwesomeCare.Admin.Controllers
             var items = createClient.RegulatoryContacts.Where(s => s.IsSelected).ToList();
             foreach (var c in items)
             {
-                //string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
-                //string filename = string.Concat(c.RegulatoryContact.Replace(" ", ""), "_", createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
-                //string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
-                c.Evidence = "hello";// path;
-            }
-            
 
-          //  var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
+                string folder = "clientregulatorycontact";
+                string filename = string.Concat(folder, "_", c.RegulatoryContact, "_", createClient.Telephone);
+                string path = await _fileUpload.UploadFile(folder, true, filename, c.EvidenceFile.OpenReadStream());
+
+                c.Evidence = path;
+            }
+
+
+            //  var regulatoryContacts = Mapper.Map<List<PostClientRegulatoryContact>>(items);
 
             return items;
         }

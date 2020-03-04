@@ -46,5 +46,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public string CoverLetter { get; set; }
         public string Self_PYE { get; set; }
         public string Self_PYEAttachment { get; set; }
+        public string Status { get; set; }
     }
 }

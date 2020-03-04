@@ -11,6 +11,8 @@ namespace AwesomeCare.Model.Models
             Education = new HashSet<StaffEducation>();
             Trainings = new HashSet<StaffTraining>();
             References = new HashSet<StaffReferee>();
+            StaffPersonalInfoComments = new HashSet<StaffPersonalInfoComment>();
+            RegulatoryContact = new HashSet<StaffRegulatoryContact>();
         }
         public int StaffPersonalInfoId { get; set; }
         public string RegistrationId { get; set; }
@@ -52,11 +54,12 @@ namespace AwesomeCare.Model.Models
         public string CoverLetter { get; set; }
         public string Self_PYE { get; set; }
         public string Self_PYEAttachment { get; set; }
-
+        public int Status { get; set; }
 
         public virtual ICollection<StaffEducation> Education { get; set; }
         public virtual ICollection<StaffTraining> Trainings { get; set; }
         public virtual ICollection<StaffReferee> References { get; set; }
-
+        public virtual ICollection<StaffPersonalInfoComment> StaffPersonalInfoComments { get; set; }
+        public virtual ICollection<StaffRegulatoryContact> RegulatoryContact { get; set; }
     }
 }

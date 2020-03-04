@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AwesomeCare.Services.Services;
 using AwesomeCare.Web.Middlewares;
 using AwesomeCare.Web.Services.Admin;
 using AwesomeCare.Web.Services.Staff;
@@ -35,6 +36,7 @@ namespace AwesomeCare.Web
             });
 
           AutoMapperConfiguration.Configure();
+            services.AddScoped<IFileUpload, FileUpload>();
             services.AddLogging();
             AddRefitServices(services);
             services.AddMemoryCache();

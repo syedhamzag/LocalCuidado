@@ -10,6 +10,8 @@ namespace AwesomeCare.Model.Models
         {
             InvolvingParties = new HashSet<ClientInvolvingParty>();
             ClientCareDetails = new HashSet<ClientCareDetails>();
+            RegulatoryContact = new HashSet<ClientRegulatoryContact>();
+            ClientRota = new HashSet<ClientRota>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }

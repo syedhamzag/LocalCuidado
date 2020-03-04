@@ -25,6 +25,7 @@ namespace AwesomeCare.Web.ViewModels.Staff
         public List<CreateStaffEducation> Education { get; set; }
         public List<CreateStaffTraining> Trainings { get; set; }
         public List<CreateStaffReference> References { get; set; }
+        public List<CreateStaffRegulatoryContact> RegulatoryContacts { get; set; }
 
         [Required]
         public string FirstName { get; set; }

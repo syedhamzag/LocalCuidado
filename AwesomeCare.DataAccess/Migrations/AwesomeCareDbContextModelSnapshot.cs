@@ -683,6 +683,57 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_RotaTask");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffCommunication", b =>
+                {
+                    b.Property<int>("StaffCommunicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffCommunicationId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionTaken")
+                        .IsRequired()
+                        .HasColumnName("ActionTaken")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Attachment")
+                        .HasColumnName("Attachment");
+
+                    b.Property<int>("CommunicationClassId")
+                        .HasColumnName("CommunicationClass");
+
+                    b.Property<string>("Concern")
+                        .IsRequired()
+                        .HasColumnName("Concern")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("ExpectedAction")
+                        .IsRequired()
+                        .HasColumnName("ExpectedAction")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("PersonInvolved")
+                        .HasColumnName("PersonInvolved");
+
+                    b.Property<int>("PersonResponsibleForAction")
+                        .HasColumnName("PersonResponsibleForAction");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status");
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasColumnName("Telephone")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("ValueDate")
+                        .HasColumnName("ValueDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("StaffCommunicationId");
+
+                    b.ToTable("tbl_StaffCommunication");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffEducation", b =>
                 {
                     b.Property<int>("StaffEducationId")
@@ -778,7 +829,8 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.Property<string>("DateOfBirth")
                         .IsRequired()
-                        .HasColumnName("DateOfBirth");
+                        .HasColumnName("DateOfBirth")
+                        .HasMaxLength(50);
 
                     b.Property<string>("DrivingLicense")
                         .HasColumnName("DrivingLicense");
@@ -878,6 +930,9 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnName("StartDate");
 
+                    b.Property<int>("Status")
+                        .HasColumnName("Status");
+
                     b.Property<string>("TeamLeader")
                         .HasColumnName("TeamLeader")
                         .HasMaxLength(50);
@@ -885,7 +940,7 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.Property<string>("Telephone")
                         .IsRequired()
                         .HasColumnName("Telephone")
-                        .HasMaxLength(25);
+                        .HasMaxLength(50);
 
                     b.Property<string>("WorkTeam")
                         .HasColumnName("WorkTeam")
@@ -899,6 +954,35 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasFilter("[RegistrationId] IS NOT NULL");
 
                     b.ToTable("tbl_StaffPersonalInfo");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfoComment", b =>
+                {
+                    b.Property<int>("StaffPersonalInfoCommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffPersonalInfoCommentId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasMaxLength(250);
+
+                    b.Property<int?>("CommentBy_UserId")
+                        .HasColumnName("CommentBy_UserId");
+
+                    b.Property<DateTime>("CommentOn")
+                        .HasColumnName("CommentOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.HasKey("StaffPersonalInfoCommentId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffPersonalInfoComment");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffReferee", b =>
@@ -949,6 +1033,39 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("StaffPersonalInfoId");
 
                     b.ToTable("tbl_StaffReferee");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRegulatoryContact", b =>
+                {
+                    b.Property<int>("StaffRegulatoryContactId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffRegulatoryContactId")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseRecordItemId")
+                        .HasColumnName("BaseRecordItemId");
+
+                    b.Property<DateTime?>("DatePerformed")
+                        .HasColumnName("DatePerformed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnName("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Evidence")
+                        .HasColumnName("Evidence");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.HasKey("StaffRegulatoryContactId");
+
+                    b.HasIndex("BaseRecordItemId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffRegulatoryContact");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>
@@ -1110,10 +1227,31 @@ namespace AwesomeCare.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfoComment", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffPersonalInfoComments")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffReferee", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("References")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRegulatoryContact", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.BaseRecordItemModel", "BaseRecordItem")
+                        .WithMany()
+                        .HasForeignKey("BaseRecordItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("RegulatoryContact")
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

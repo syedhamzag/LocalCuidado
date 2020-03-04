@@ -18,7 +18,10 @@ using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.DataTransferObject.DTOs.RotaTask;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
+using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
+using System;
 using System.Linq;
 
 namespace MapperConfig
@@ -329,19 +332,26 @@ namespace MapperConfig
             #endregion
 
             #region StaffPersonalInfo
-            CreateMap<StaffPersonalInfo, GetStaffPersonalInfo>();
+            CreateMap<StaffPersonalInfo, GetStaffPersonalInfo>()
+                .ForMember(dto=>dto.Status,mem=>mem.MapFrom(src=>Enum.GetName(typeof(StaffRegistrationEnum),src.Status)));
 
             CreateMap<PostStaffPersonalInfo, StaffPersonalInfo>()
                 .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore())
                 .ForMember(dto => dto.Education, mem => mem.Ignore())
                 .ForMember(dto => dto.Trainings, mem => mem.Ignore())
                 .ForMember(dto => dto.References, mem => mem.Ignore())
+                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.Ignore())
+                .ForMember(dto => dto.Status, mem => mem.MapFrom(src=> (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
                .ForMember(dto => dto.Education, mem => mem.Ignore())
                .ForMember(dto => dto.Trainings, mem => mem.Ignore())
                .ForMember(dto => dto.References, mem => mem.Ignore())
+               .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore())
+               .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.MapFrom(src=> (int)src.Status))
+               .ForMember(dto => dto.Status, mem => mem.MapFrom(src=> (int)src.Status))
                .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
 
             CreateMap<PostStaffFullInfo, StaffPersonalInfo>()
@@ -349,8 +359,18 @@ namespace MapperConfig
                 .ForMember(dto => dto.Education, mem => mem.MapFrom(src=>src.StaffEducations))
                 .ForMember(dto => dto.Trainings, mem => mem.MapFrom(src=>src.StaffTrainings))
                 .ForMember(dto => dto.References, mem => mem.MapFrom(sr=>sr.StaffReferees))
+                .ForMember(dto => dto.RegulatoryContact, mem => mem.MapFrom(sr=>sr.StaffRegulatoryContacts))
+                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.Ignore())
+                .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
 
+            CreateMap<StaffPersonalInfo, GetStaffProfile>()
+                .ForMember(dto=>dto.RegulatoryContacts,mem=>mem.MapFrom(src=>src.RegulatoryContact))
+                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => Enum.GetName(typeof(StaffRegistrationEnum), src.Status)));
+
+            CreateMap<StaffPersonalInfo, GetStaffs>()
+                .ForMember(dto => dto.Fullname, mem => mem.MapFrom(src => string.Concat(src.FirstName, " ", src.MiddleName, " ", src.LastName)))
+                .ForMember(dto => dto.Status, mem => mem.MapFrom(src => Enum.GetName(typeof(StaffRegistrationEnum), src.Status)));
             #endregion
 
             #region StaffTraining
@@ -369,6 +389,20 @@ namespace MapperConfig
             CreateMap<PostStaffReferee, StaffReferee>()
                 .ForMember(dto => dto.Staff, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRefereeId, mem => mem.Ignore());
+
+            CreateMap<PostStaffRegulatoryContact, StaffRegulatoryContact>()
+               .ForMember(dto => dto.StaffRegulatoryContactId, mem => mem.Ignore())
+               .ForMember(dto => dto.BaseRecordItem, mem => mem.Ignore())
+               .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            #endregion
+
+            #region StaffRegulatoryContact
+            //  CreateMap<StaffRegulatoryContact, GetStaffRegulatoryContact>();
+            #endregion
+
+            #region StaffCommunication
+            CreateMap<PostStaffCommunication, StaffCommunication>()
+                .ForMember(dto=>dto.StaffCommunicationId,mem=>mem.Ignore());
             #endregion
         }
     }

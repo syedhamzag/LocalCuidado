@@ -12,5 +12,8 @@ namespace AwesomeCare.Web.Services.Staff
     {
         [Post("/StaffInfo/PostStaffFullInfo")]
         Task<HttpResponseMessage> PostStaffFullInfo([Body]PostStaffFullInfo model);
+
+        [Get("/StaffInfo/Profile/{id}")]
+        Task<GetStaffProfile> Profile(int id);
     }
 }

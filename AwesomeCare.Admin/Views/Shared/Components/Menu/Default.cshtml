@@ -14,7 +14,7 @@
                                             <li><label>Home Care</label></li>
                                             <li><a asp-controller="Client" asp-action="HomeCare">Home Care</a></li>
                                             <li><a asp-controller="Client" asp-action="HomeCareRegistration">Registration</a></li>
-                                           
+
                                         </ul>
                                     </div>
                                 </div>
@@ -23,17 +23,40 @@
                                         <ul class="list-unstyled">
                                             <li><label>Nursing Home</label></li>
                                             @*<li><a href="patients-all.html">All Patients</a></li>*@
-                                           
+
                                         </ul>
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-lg-6 col-md-4 hidden-sm">
                                     <div class="img-box" style="background-image: url(../assets/images/menu-img/1.jpg)"></div>
                                 </div>
                             </div>
                         </div>
                     </li>
+
+                    <li class="nav-item dropdown mega-menu">
+                        <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="icon-user-follow"></i> <span> Staff</span></a>
+                        <div class="dropdown-menu mega-main padding-0 animated fadeIn">
+                            <div class="row">
+                                <div class="col-lg-2 col-lg-auto col-md-4 col-sm-4">
+                                    <div class="mega-list">
+                                        <ul class="list-unstyled">
+                                            <li><label>Staff</label></li>
+                                            <li><a asp-controller="Staff" asp-action="Index">All Staffs</a></li>
+                                            <li><a asp-controller="Staff" asp-action="Communication">Communication</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="col-lg-6 col-md-4 hidden-sm">
+                                    <div class="img-box" style="background-image: url(../assets/images/menu-img/1.jpg)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
                     <li class="nav-item dropdown mega-menu">
                         <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="icon-user-follow"></i> <span> Admin</span></a>
                         <div class="dropdown-menu mega-main padding-0 animated fadeIn">
@@ -43,17 +66,17 @@
                                         <ul class="list-unstyled">
                                             <li><label>Settings</label></li>
 
-                                            <li><a asp-controller="Admin" asp-action="BaseRecord" >BaseRecord</a></li>
-                                            <li><a asp-controller="Admin" asp-action="InvolvingParty" >Client Involving Party</a></li>
-                                            <li><a asp-controller="Rota" asp-action="Index" >Rota</a></li>
-                                            <li><a asp-controller="RotaType" asp-action="Index" >RotaType</a></li>
-                                            <li><a asp-controller="RotaTask" asp-action="Index" >Task</a></li>
-                                            <li><a asp-controller="Admin" asp-action="ClientCareDetailsHeading" >Client CareDetails</a></li>
-                                            
+                                            <li><a asp-controller="Admin" asp-action="BaseRecord">BaseRecord</a></li>
+                                            <li><a asp-controller="Admin" asp-action="InvolvingParty">Client Involving Party</a></li>
+                                            <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
+                                            <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
+                                            <li><a asp-controller="RotaTask" asp-action="Index">Task</a></li>
+                                            <li><a asp-controller="Admin" asp-action="ClientCareDetailsHeading">Client CareDetails</a></li>
+
                                         </ul>
                                     </div>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </li>

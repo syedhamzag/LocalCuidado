@@ -12,11 +12,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             StaffEducations = new List<PostStaffEducation>();
             StaffReferees = new List<PostStaffReferee>();
             StaffEducations = new List<PostStaffEducation>();
+            StaffRegulatoryContacts = new List<PostStaffRegulatoryContact>();
         }
         public List<PostStaffTraining> StaffTrainings { get; set; }
         public List<PostStaffReferee> StaffReferees { get; set; }
         public List<PostStaffEducation> StaffEducations { get; set; }
-
+        public List<PostStaffRegulatoryContact> StaffRegulatoryContacts { get; set; }
 
         [Required]
         public string FirstName { get; set; }

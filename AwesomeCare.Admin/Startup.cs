@@ -21,6 +21,9 @@ using AwesomeCare.Admin.Services.ClientRota;
 using QRCoder;
 using Dropbox.Api;
 using AwesomeCare.Admin.Services.ClientCareDetails;
+using AwesomeCare.Services.Services;
+using AwesomeCare.Admin.Services.Staff;
+using AwesomeCare.Admin.Services.StaffCommunication;
 
 namespace AwesomeCare.Admin
 {
@@ -44,6 +47,7 @@ namespace AwesomeCare.Admin
             });
             services.AddScoped(typeof(QRCodeGenerator));
             services.AddScoped(typeof(DropboxClient),c=> new DropboxClient(Configuration["dropboxApiKey"]));
+            services.AddScoped<IFileUpload, FileUpload>();
             //AutoMapper
             AutoMapperConfiguration.Configure();
           //  MapperConfig.AutoMapperConfiguration.Configure();
@@ -150,6 +154,17 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientCareDetails>(r));
+
+            services.AddHttpClient("staffservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffService>(r));
+
+            services.AddHttpClient("staffcommunication", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffCommunication>(r));
+
             
         }
     }
