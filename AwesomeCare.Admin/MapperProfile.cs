@@ -1,5 +1,6 @@
 ﻿using AwesomeCare.Admin.ViewModels.Client;
 using AwesomeCare.Admin.ViewModels.StaffCommunication;
+using AwesomeCare.Admin.ViewModels.Untowards;
 using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
@@ -7,6 +8,7 @@ using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
+using AwesomeCare.DataTransferObject.DTOs.Untowards;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +37,9 @@ namespace AwesomeCare.Admin
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore());
 
             CreateMap<CreateStaffCommunication, PostStaffCommunication>();
-           // CreateMap<GetCompanyDto, UpdateCompanyDto>();
+            // CreateMap<GetCompanyDto, UpdateCompanyDto>();
+
+            CreateMap<CreateUntowards, PostUntowards>();
         }
     }
 }

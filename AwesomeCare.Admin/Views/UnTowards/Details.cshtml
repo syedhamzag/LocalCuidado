@@ -1,0 +1,260 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Untowards;
+
+@model GetUntowardsDetails
+@{
+    ViewData["Title"] = "Untowards Details";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Details</h2>
+
+            </div>
+            <div class="body">
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Subject" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="@Model.Subject" readonly>
+
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PersonReporting" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="PersonReporting" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Date" class="control-label"></label>
+                            <input type="text" asp-for="Date" class="form-control" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="PersonReportingEmail" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="PersonReportingEmail" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="TimeOfCall" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="TimeOfCall" readonly>
+
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PersonReportingTelephone" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="PersonReportingTelephone" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Details" class="control-label"></label>
+                            <textarea type="text" class="form-control" asp-for="Details" readonly></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ActionStatus" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="ActionStatus" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="ActionRequired" class="control-label"></label>
+                            <textarea type="text" class="form-control" asp-for="ActionRequired" readonly></textarea>
+
+
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Priority" class="control-label"></label>
+                            <input type="text" asp-for="Priority" asp-items="Priorities" class="form-control" readonly />
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="ActionTaken" class="control-label"></label>
+                            <textarea type="text" class="form-control" asp-for="ActionTaken" readonly></textarea>
+
+
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ExpectedDateAndTimeOfFeedback" class="control-label"></label>
+                            <input type="text" asp-for="ExpectedDateAndTimeOfFeedback" class="form-control" readonly>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row clearfix">
+                    <div class="col-sm-4">
+
+                        <div class="form-group">
+                            <label asp-for="StaffInvolved" class="control-label"></label>
+                            <br />
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Staff</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.StaffInvolved.Select((d, i) => new { Data = d, Index = i + 1 }))
+                                    {
+                                        <tr>
+                                            <th>@item.Index</th>
+                                            <th>@item.Data.Staff</th>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                           
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="IsBlackListRequired" class="control-label"></label>
+                            <input type="text" asp-for="IsBlackListRequired" class="form-control" readonly>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4">
+
+                        <div class="form-group">
+                            <label asp-for="OfficerToAct" class="control-label"></label>
+                            <br />
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Staff</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OfficerToAct.Select((d, i) => new { Data = d, Index = i + 1 }))
+                                    {
+                                        <tr>
+                                            <th>@item.Index</th>
+                                            <th>@item.Data.Staff</th>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="IsHospitalEntry" class="control-label"></label>
+                            <input type="text" asp-for="IsHospitalEntry"  class="form-control" readonly/>
+                           
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="HomeCareClient" class="control-label"></label>
+                            <input type="text" asp-for="HomeCareClient"  class="form-control" readonly/>
+                            
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="IsHospitalExit" class="control-label"></label>
+                            <input type="text" asp-for="IsHospitalExit"  class="form-control" readonly/>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="FinalActionToCloseCase" class="control-label"></label>
+                            <textarea type="text" class="form-control" asp-for="FinalActionToCloseCase" readonly></textarea>
+
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="HospitalEntryReason" class="control-label"></label>
+                            <textarea type="text" class="form-control" asp-for="HospitalEntryReason" readonly></textarea>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="HospitalExitDetails" class="control-label"></label>
+                            <textarea type="text" class="form-control" asp-for="HospitalExitDetails" readonly></textarea>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="ShouldNotifyInvolvingStaff" class="control-label"></label>
+                            <input type="text" asp-for="ShouldNotifyInvolvingStaff" class="form-control" readonly/>
+                          
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="TypeofRequiredNotification" class="control-label"></label>
+                            <input type="text" asp-for="TypeofRequiredNotification"  class="form-control" readonly/>
+                           
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Attachment" class="control-label"></label>
+                            @if (!string.IsNullOrEmpty(Model.Attachment))
+                            {
+                                <a asp-action="DownloadFile" asp-route-file="@Model.Attachment">Download</a>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="Others" class="control-label"></label>
+                            <textarea type="text" class="form-control" asp-for="Others" readonly></textarea>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label asp-for="TicketNumber" class="control-label"></label>
+                            <input  type="text" class="form-control" asp-for="@Model.TicketNumber" readonly/>
+
+                        </div>
+
+                    </div>
+                </div>
+                <br>
+                <a asp-action="Index" asp-controller="Untowards" class="btn btn-default">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+

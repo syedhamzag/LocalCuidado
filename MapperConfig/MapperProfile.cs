@@ -19,6 +19,7 @@ using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.DataTransferObject.DTOs.RotaTask;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
+using AwesomeCare.DataTransferObject.DTOs.Untowards;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using System;
@@ -125,6 +126,12 @@ namespace MapperConfig
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
                 .ForMember(dto => dto.Gender, mem => mem.Ignore())
                 .ForMember(dto => dto.Status, mem => mem.Ignore());
+
+            CreateMap<Client, GetClientDetail>()
+               .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname," ",src.Middlename," ",src.Surname)));
+              
+            
+
 
             CreateMap<Client, GetClientForEdit>()
                 .ForMember(dto => dto.ClientImage, mem => mem.Ignore())
@@ -403,6 +410,35 @@ namespace MapperConfig
             #region StaffCommunication
             CreateMap<PostStaffCommunication, StaffCommunication>()
                 .ForMember(dto=>dto.StaffCommunicationId,mem=>mem.Ignore());
+            #endregion
+
+            #region UnTowards
+            CreateMap<PostUntowards, Untowards>()
+                .ForMember(dto=>dto.UntowardsId,mem=>mem.Ignore())
+                .ForMember(dto=>dto.TicketNumber,mem=>mem.Ignore())
+                .ForMember(dto=>dto.StaffInvolved,mem=>mem.MapFrom(src=>src.StaffInvolved))
+                .ForMember(dto=>dto.OfficerToAct,mem=>mem.MapFrom(src=>src.OfficerToAct));
+
+            CreateMap<Untowards, GetUntowards>();
+          
+            #endregion
+
+            #region UntowardsOfficerToAct
+            CreateMap<PostUntowardsOfficerToAct, UntowardsOfficerToAct>()
+                .ForMember(dto => dto.UntowardsId, mem => mem.Ignore())
+                .ForMember(dto => dto.Untowards, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.UntowardsOfficerToActId, mem => mem.Ignore());
+            #endregion
+
+            #region UntowardsStaffInvolved
+           
+            CreateMap<PostUntowardsStaffInvolved, UntowardsStaffInvolved>()
+                .ForMember(dto=>dto.StaffPersonalInfoId,mem=>mem.MapFrom(sr=>sr.StaffPersonalInfoId))
+                .ForMember(dto => dto.UntowardsId, mem => mem.Ignore())
+                .ForMember(dto => dto.Untowards, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.UntowardsStaffInvolvedId, mem => mem.Ignore());
             #endregion
         }
     }

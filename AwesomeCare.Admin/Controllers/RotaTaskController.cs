@@ -7,6 +7,7 @@ using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.ViewModels.RotaTask;
 using AwesomeCare.DataTransferObject.DTOs.RotaTask;
 using Microsoft.AspNetCore.Mvc;
+using AwesomeCare.Services.Services;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -14,7 +15,7 @@ namespace AwesomeCare.Admin.Controllers
     {
 
         private readonly IRotaTaskService _rotaTaskService;
-        public RotaTaskController(IRotaTaskService rotaTaskService)
+        public RotaTaskController(IRotaTaskService rotaTaskService, IFileUpload fileUpload) :base(fileUpload)
         {
             _rotaTaskService = rotaTaskService;
         }

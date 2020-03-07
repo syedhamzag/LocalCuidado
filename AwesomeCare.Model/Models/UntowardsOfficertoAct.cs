@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models
         public int StaffPersonalInfoId { get; set; }
         public int UntowardsId { get; set; }
 
-
+        public virtual StaffPersonalInfo StaffPersonalInfo { get; set; }
         public virtual Untowards Untowards { get; set; }
     }
 }

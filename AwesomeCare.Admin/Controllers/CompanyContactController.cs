@@ -6,6 +6,7 @@ using AwesomeCare.Admin.Services.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using Microsoft.AspNetCore.Mvc;
 using Refit;
+using AwesomeCare.Services.Services;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -13,7 +14,7 @@ namespace AwesomeCare.Admin.Controllers
     {
         private ICompanyContactService _companyContactService;
 
-        public CompanyContactController(ICompanyContactService companyContactService)
+        public CompanyContactController(ICompanyContactService companyContactService, IFileUpload fileUpload):base(fileUpload)
         {
             _companyContactService = companyContactService;
         }

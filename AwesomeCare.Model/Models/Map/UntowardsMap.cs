@@ -85,7 +85,7 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.ExpectedDateAndTimeOfFeedback)
              .HasColumnName("ExpectedDateAndTimeOfFeedback")
-             .HasMaxLength(225)
+             .HasMaxLength(50)
              .IsRequired();
 
             builder.Property(p => p.IsBlackListRequired)
@@ -103,7 +103,7 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.HospitalEntryReason)
              .HasColumnName("HospitalEntryReason")
              .HasMaxLength(225)
-             .IsRequired();
+             .IsRequired(false);
 
             builder.Property(p => p.IsHospitalExit)
              .HasColumnName("IsHospitalExit")
@@ -112,7 +112,7 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.HospitalExitDetails)
             .HasColumnName("HospitalExitDetails")
             .HasMaxLength(225)
-            .IsRequired();
+            .IsRequired(false);
 
             builder.Property(p => p.ShouldNotifyInvolvingStaff)
              .HasColumnName("ShouldNotifyInvolvingStaff")
@@ -120,12 +120,12 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Attachment)
              .HasColumnName("Attachment")
-             .IsRequired();
+             .IsRequired(false);
 
             builder.Property(p => p.Others)
              .HasColumnName("Others")
              .HasMaxLength(225)
-             .IsRequired();
+             .IsRequired(false);
 
             builder.Property(p => p.TypeofRequiredNotification)
              .HasColumnName("TypeofRequiredNotification")

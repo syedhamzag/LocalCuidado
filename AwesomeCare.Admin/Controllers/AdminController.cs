@@ -17,6 +17,7 @@ using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientCareDetails;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsHeading;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsTask;
+using AwesomeCare.Services.Services;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -25,7 +26,7 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IBaseRecordService _baseRecordService;
         private readonly IClientInvolvingPartyBase _clientInvolvingPartyBaseService;
         private readonly IClientCareDetails _clientCareDetails;
-        public AdminController(IBaseRecordService baseRecordService, IClientInvolvingPartyBase clientInvolvingPartyBaseService, IClientCareDetails clientCareDetails)
+        public AdminController(IBaseRecordService baseRecordService, IFileUpload fileUpload, IClientInvolvingPartyBase clientInvolvingPartyBaseService, IClientCareDetails clientCareDetails):base(fileUpload)
         {
             _baseRecordService = baseRecordService;
             _clientInvolvingPartyBaseService = clientInvolvingPartyBaseService;

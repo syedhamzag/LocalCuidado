@@ -24,6 +24,7 @@ using AwesomeCare.Admin.Services.ClientCareDetails;
 using AwesomeCare.Services.Services;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.StaffCommunication;
+using AwesomeCare.Admin.Services.Untowards;
 
 namespace AwesomeCare.Admin
 {
@@ -164,6 +165,11 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffCommunication>(r));
+
+            services.AddHttpClient("untowardsService", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IUntowardsService>(r));
 
             
         }

@@ -410,7 +410,20 @@
     <script src="/assets/bundles/mainscripts.bundle.js"></script>
     <script src="/assets/js/pages/forms/advanced-form-elements.js"></script>
 
-       
+    <script>
+        $(document).ready(function () {
+            // Multiselect
+            //$('.multiselect').multiselect({
+            //    maxHeight: 300
+            //});
+            $('.multiselectfilter').multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                maxHeight: 200
+            });
+            
+        })
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

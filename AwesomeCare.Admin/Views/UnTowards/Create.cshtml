@@ -1,0 +1,252 @@
+﻿@using AwesomeCare.Admin.ViewModels.Untowards;
+@model CreateUntowards
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+            </div>
+            <div class="body">
+                <h4>Create</h4>
+
+                <form asp-controller="UnTowards" asp-action="Create" method="post">
+
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="Subject" class="control-label"></label>
+                                <input type="text" class="form-control" asp-for="Subject">
+
+                                <span asp-validation-for="Subject" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PersonReporting" class="control-label"></label>
+                                <input type="text" class="form-control" asp-for="PersonReporting">
+                                <span asp-validation-for="PersonReporting" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="Date" class="control-label"></label>
+                                <input type="text" data-provide="datepicker" asp-for="Date" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+
+                                <span asp-validation-for="Date" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PersonReportingEmail" class="control-label"></label>
+                                <input type="text" class="form-control" asp-for="PersonReportingEmail">
+                                <span asp-validation-for="PersonReportingEmail" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="TimeOfCall" class="control-label" ></label>
+                                <input type="text" class="form-control" asp-for="TimeOfCall" data-provide="timepicker" data-minute-step="5">
+                                <span asp-validation-for="TimeOfCall" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="PersonReportingTelephone" class="control-label"></label>
+                                <input type="text" class="form-control" asp-for="PersonReportingTelephone">
+                                <span asp-validation-for="PersonReportingTelephone" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="Details" class="control-label"></label>
+                                <textarea type="text" class="form-control" asp-for="Details"></textarea>
+
+                                <span asp-validation-for="Details" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ActionStatus" class="control-label"></label>
+                                <select asp-for="ActionStatus" asp-items="@Model.ActionStatuses" class="form-control">
+                                </select>
+                                <span asp-validation-for="ActionStatus" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="ActionRequired" class="control-label"></label>
+                                <textarea type="text" class="form-control" asp-for="ActionRequired"></textarea>
+
+                                <span asp-validation-for="ActionRequired" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Priority" class="control-label"></label>
+                                <select asp-for="Priority" asp-items="@Model.Priorities" class="form-control">
+                                </select>
+                                <span asp-validation-for="Priority" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="ActionTaken" class="control-label"></label>
+                                <textarea type="text" class="form-control" asp-for="ActionTaken"></textarea>
+                                <span asp-validation-for="ActionTaken" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ExpectedDateAndTimeOfFeedback" class="control-label"></label>
+                                <input type="text" data-provide="datepicker" asp-for="ExpectedDateAndTimeOfFeedback" data-date-autoclose="true" class="form-control">
+
+                                <span asp-validation-for="ExpectedDateAndTimeOfFeedback" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-sm-4">
+
+                            <div class="form-group">
+                                <label asp-for="StaffsInvolved" class="control-label"></label>
+                                <br />
+                                <select asp-for="StaffsInvolved" asp-items="@Model.Staffs" class="multiselectfilter multiselect multiselect-custom form-control" multiple="multiple">
+                                </select>
+                                <span asp-validation-for="StaffInvolved" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="IsBlackListRequired" class="control-label"></label>
+                                <select asp-for="IsBlackListed" asp-items="@Model.YesNo" class="form-control">
+                                </select>
+                                <span asp-validation-for="IsBlackListRequired" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4">
+
+                            <div class="form-group">
+                                <label asp-for="OfficerToAct" class="control-label"></label>
+                                <br />
+                                <select asp-for="OfficersToAct" asp-items="@Model.Staffs" class="multiselectfilter multiselect multiselect-custom" multiple="multiple">
+                                </select>
+                                <span asp-validation-for="OfficerToAct" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="IsHospitalEntry" class="control-label"></label>
+                                <select asp-for="HospitalEntry" asp-items="@Model.YesNo" class="form-control">
+                                </select>
+                                <span asp-validation-for="IsHospitalEntry" class="text-danger"></span>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="HomeCareClientId" class="control-label"></label>
+                                <select asp-for="HomeCareClientId" asp-items="@Model.HomeCareClients" class="form-control">
+                                </select>
+                                <span asp-validation-for="HomeCareClientId" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="IsHospitalExit" class="control-label"></label>
+                                <select asp-for="HospitalExit" asp-items="@Model.YesNo" class="form-control">
+                                </select>
+                                <span asp-validation-for="IsHospitalExit" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="FinalActionToCloseCase" class="control-label"></label>
+                                <textarea type="text" class="form-control" asp-for="FinalActionToCloseCase"></textarea>
+
+                                <span asp-validation-for="FinalActionToCloseCase" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="HospitalEntryReason" class="control-label"></label>
+                                <textarea type="text" class="form-control" asp-for="HospitalEntryReason"></textarea>
+
+                                <span asp-validation-for="HospitalEntryReason" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="HospitalExitDetails" class="control-label"></label>
+                                <textarea type="text" class="form-control" asp-for="HospitalExitDetails"></textarea>
+                                <span asp-validation-for="HospitalExitDetails" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="ShouldNotifyInvolvingStaff" class="control-label"></label>
+                                <select asp-for="NotifyInvolvingStaff" asp-items="@Model.YesNo" class="form-control">
+                                </select>
+
+                                <span asp-validation-for="ShouldNotifyInvolvingStaff" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="TypeofRequiredNotification" class="control-label"></label>
+                                <select asp-for="TypeofRequiredNotification" asp-items="@Model.ClientInvolvingParties" class="form-control">
+                                </select>
+                                <span asp-validation-for="TypeofRequiredNotification" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="FileAttachment" class="control-label"></label>
+                                <input type="file" class="form-control" asp-for="FileAttachment" />
+                                <span asp-validation-for="FileAttachment" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="Others" class="control-label"></label>
+                                <textarea type="text" class="form-control" asp-for="Others"></textarea>
+
+                                <span asp-validation-for="Others" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                       
+                    </div>
+                    <br>
+                    <button id="btnSubmit" type="submit" class="btn btn-primary float-right">Submit</button>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

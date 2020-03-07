@@ -84,7 +84,7 @@ namespace AwesomeCare.API.Controllers
             var getClient = await (from client in _clientRepository.Table
                                    join baseRecItem in _baseRecordItemRepository.Table on client.StatusId equals baseRecItem.BaseRecordItemId
                                    join baseRec in _baseRecordRepository.Table on baseRecItem.BaseRecordId equals baseRec.BaseRecordId
-                                   where baseRec.KeyName == "Client_Status" && client.ClientId == id.Value
+                                   where  client.ClientId == id.Value
                                    select new GetClient
                                    {
                                        ClientId = client.ClientId,
@@ -134,7 +134,7 @@ namespace AwesomeCare.API.Controllers
             var getClient = await (from client in _clientRepository.Table
                                    join baseRecItem in _baseRecordItemRepository.Table on client.StatusId equals baseRecItem.BaseRecordItemId
                                    join baseRec in _baseRecordRepository.Table on baseRecItem.BaseRecordId equals baseRec.BaseRecordId
-                                   where baseRec.KeyName == "Client_Status"
+                                  // where baseRec.KeyName == "Client_Status"
                                    select new GetClient
                                    {
                                        ClientId = client.ClientId,
@@ -174,6 +174,26 @@ namespace AwesomeCare.API.Controllers
 
             return Ok(getClient);
         }
+
+        /// <summary>
+        /// Get Client with few properties
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetClientDetails")]
+        [ProducesResponseType(type: typeof(List<GetClientDetail>), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetClientDetails()
+        {
+            //var kk = (from client in _clientRepository.Table
+            //          join baseRecItem in _baseRecordItemRepository.Table on client.StatusId equals baseRecItem.BaseRecordItemId
+            //          join baseRec in _baseRecordRepository.Table on baseRecItem.BaseRecordId equals baseRec.BaseRecordId
+            //          where client.ClientId == id.Value
+            //          select client).pro
+
+
+            var clientDetails = await _clientRepository.Table.ProjectTo<GetClientDetail>().ToListAsync();
+            return Ok(clientDetails);
+        }
+
 
         [HttpGet("{clientId}")]
         [ProducesResponseType(type: typeof(List<GetClient>), statusCode: StatusCodes.Status201Created)]

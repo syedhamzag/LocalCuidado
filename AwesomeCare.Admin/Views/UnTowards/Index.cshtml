@@ -1,0 +1,70 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Untowards;
+@model List<GetUntowards>
+
+        @{
+        ViewData["Title"] = "Untowards";
+        }
+               
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12">
+                <div class="card planned_task">
+                    <div class="header">
+                        <h2>Index</h2>
+                        <ul class="header-dropdown">
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a asp-controller="UnTowards" asp-action="Create">Create</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="body">
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table id="involvingPartyTable" class="table table-hover js-basic-example dataTable table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th>Ticket Number</th>
+                                            <th>Subject</th>
+                                            <th>Date</th>
+                                            <th>Time of Call</th>
+                                            <th>Person Reporting</th>
+                                            <th>Person Reporting Telephone</th>
+                                            <th>Status</th>
+                                            <th>Priority</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+
+                                        <tr class="gradeA">
+                                            <td>@item.TicketNumber</td>
+                                            <td>@item.Subject</td>
+                                            <td>@item.Date</td>
+                                            <td>@item.TimeOfCall</td>
+                                            <td>@item.PersonReporting</td>
+                                            <td>@item.PersonReportingTelephone</td>
+                                            <td>@item.ActionStatus</td>
+                                            <td>@item.Priority</td>
+                                            <td class="actions">
+                                                <a asp-action="Details" asp-route-id="@item.UntowardsId" asp-controller="Untowards" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-pen">
+                                                    <i class="icon-pencil" aria-hidden="true"></i>
+                                                </a>
+
+                                            </td>
+                                        </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 

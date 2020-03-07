@@ -26,7 +26,7 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<StaffController> _logger;
         private IFileUpload _fileUpload;
         private IStaffCommunication _staffCommunication;
-        public StaffController(IStaffService staffService, ILogger<StaffController> logger, IFileUpload fileUpload, IStaffCommunication staffCommunication)
+        public StaffController(IStaffService staffService, ILogger<StaffController> logger, IFileUpload fileUpload, IStaffCommunication staffCommunication):base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
@@ -141,11 +141,6 @@ namespace AwesomeCare.Admin.Controllers
             return View(details);
         }
 
-        public async Task<IActionResult> DownloadFile(string file)
-        {
-            var filestream = await _fileUpload.DownloadFile(file);
-            filestream.Item1.Position = 0;
-            return File(filestream.Item1, filestream.Item2);
-        }
+       
     }
 }

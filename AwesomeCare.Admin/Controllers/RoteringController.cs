@@ -18,6 +18,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientRotaTask;
 using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.Admin.Services.ClientRota;
 using AwesomeCare.Admin.Models;
+using AwesomeCare.Services.Services;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -28,7 +29,7 @@ namespace AwesomeCare.Admin.Controllers
         IRotaTaskService _rotaTaskService;
         IRotaDayofWeekService _rotaDayOfWeekService;
         IClientRotaService _clientRotaService;
-        public RoteringController(IClientRotaService clientRotaService, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService)
+        public RoteringController(IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService):base(fileUpload)
         {
             _clientRotaTypeService = clientRotaTypeService;
             _clientRotaNameService = clientRotaNameService;

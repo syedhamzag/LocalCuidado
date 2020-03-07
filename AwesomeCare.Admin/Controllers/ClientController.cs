@@ -45,7 +45,7 @@ namespace AwesomeCare.Admin.Controllers
         public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
             IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService,
             IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger,
-            IClientCareDetails clientCareDetails)
+            IClientCareDetails clientCareDetails):base(fileUpload)
         {
             _dropboxClient = dropboxClient;
             _clientService = clientService;
