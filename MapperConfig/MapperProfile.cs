@@ -349,6 +349,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.References, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.Ignore())
+                .ForMember(dto => dto.EmergencyContacts, mem => mem.Ignore())
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src=> (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
 
@@ -357,12 +358,14 @@ namespace MapperConfig
                .ForMember(dto => dto.Trainings, mem => mem.Ignore())
                .ForMember(dto => dto.References, mem => mem.Ignore())
                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore())
+               .ForMember(dto => dto.EmergencyContacts, mem => mem.Ignore())
                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.MapFrom(src=> (int)src.Status))
                .ForMember(dto => dto.Status, mem => mem.MapFrom(src=> (int)src.Status))
                .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
 
             CreateMap<PostStaffFullInfo, StaffPersonalInfo>()
                 .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore())
+                .ForMember(dto => dto.EmergencyContacts, mem => mem.MapFrom(src=>src.EmergencyContacts))
                 .ForMember(dto => dto.Education, mem => mem.MapFrom(src=>src.StaffEducations))
                 .ForMember(dto => dto.Trainings, mem => mem.MapFrom(src=>src.StaffTrainings))
                 .ForMember(dto => dto.References, mem => mem.MapFrom(sr=>sr.StaffReferees))
@@ -378,6 +381,12 @@ namespace MapperConfig
             CreateMap<StaffPersonalInfo, GetStaffs>()
                 .ForMember(dto => dto.Fullname, mem => mem.MapFrom(src => string.Concat(src.FirstName, " ", src.MiddleName, " ", src.LastName)))
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => Enum.GetName(typeof(StaffRegistrationEnum), src.Status)));
+            #endregion
+
+            #region StaffEmergencyContact
+            CreateMap<PostStaffEmergencyContact, StaffEmergencyContact>()
+                .ForMember(dto => dto.StaffEmergencyContactId, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
             #endregion
 
             #region StaffTraining

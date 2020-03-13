@@ -23,6 +23,7 @@
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainings">Training</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#referee">Referee</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#emergencyContact">Emergency Contact</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane show active" id="personalinfo">
@@ -110,9 +111,9 @@
                                                         <div class="form-group">
                                                             @if (Model.CanDrive.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
                                                             {
-                                                            <label asp-for="DrivingLicense" class="control-label"></label>
-                                                            <br />
-                                                            <a asp-action="DownloadFile" asp-route-file="@Model.DrivingLicense">Download</a>
+                                                                <label asp-for="DrivingLicense" class="control-label"></label>
+                                                                <br />
+                                                                <a asp-action="DownloadFile" asp-route-file="@Model.DrivingLicense">Download</a>
                                                             }
                                                         </div>
                                                     </div>
@@ -152,9 +153,9 @@
                                                         <div class="form-group">
                                                             @if (Model.RightToWork.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
                                                             {
-                                                            <label asp-for="RightToWorkAttachment" class="control-label"></label>
-                                                            <br />
-                                                            <a asp-action="DownloadFile" asp-route-file="@Model.RightToWorkAttachment">Download</a>
+                                                                <label asp-for="RightToWorkAttachment" class="control-label"></label>
+                                                                <br />
+                                                                <a asp-action="DownloadFile" asp-route-file="@Model.RightToWorkAttachment">Download</a>
                                                             }
                                                         </div>
                                                     </div>
@@ -190,9 +191,9 @@
                                                         <div class="form-group">
                                                             @if (Model.DBS.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
                                                             {
-                                                            <label asp-for="DBSAttachment" class="control-label"></label>
-                                                            <br />
-                                                            <a asp-action="DownloadFile" asp-route-file="@Model.DBSAttachment">Download</a>
+                                                                <label asp-for="DBSAttachment" class="control-label"></label>
+                                                                <br />
+                                                                <a asp-action="DownloadFile" asp-route-file="@Model.DBSAttachment">Download</a>
                                                             }
                                                         </div>
                                                     </div>
@@ -229,9 +230,9 @@
                                                         <div class="form-group">
                                                             @if (Model.NI.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
                                                             {
-                                                            <label asp-for="NIAttachment" class="control-label"></label>
-                                                            <br />
-                                                            <a asp-action="DownloadFile" asp-route-file="@Model.NIAttachment">Download</a>
+                                                                <label asp-for="NIAttachment" class="control-label"></label>
+                                                                <br />
+                                                                <a asp-action="DownloadFile" asp-route-file="@Model.NIAttachment">Download</a>
                                                             }
                                                         </div>
                                                     </div>
@@ -267,9 +268,9 @@
                                                         <div class="form-group">
                                                             @if (Model.Self_PYE.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
                                                             {
-                                                            <label asp-for="Self_PYEAttachment" class="control-label"></label>
-                                                            <br />
-                                                            <a asp-action="DownloadFile" asp-route-file="@Model.Self_PYEAttachment">Download</a>
+                                                                <label asp-for="Self_PYEAttachment" class="control-label"></label>
+                                                                <br />
+                                                                <a asp-action="DownloadFile" asp-route-file="@Model.Self_PYEAttachment">Download</a>
                                                             }
                                                         </div>
                                                     </div>
@@ -360,33 +361,33 @@
                                                 <tbody>
                                                     @for (int i = 0; i < Model.Education.Count; i++)
                                                     {
-                                                    <tr>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Institution" readonly />
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].Institution" readonly />
 
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Certificate" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Location" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].Address" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].StartDate" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].Certificate" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].Location" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].Address" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].StartDate" readonly />
 
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Education[i].EndDate" readonly />
-                                                        </td>
-                                                        <td>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].EndDate" readonly />
+                                                            </td>
+                                                            <td>
 
-                                                            <a href="@Model.Education[i].CertificateAttachment"> Download</a>
-                                                        </td>
+                                                                <a href="@Model.Education[i].CertificateAttachment"> Download</a>
+                                                            </td>
 
-                                                    </tr>
+                                                        </tr>
                                                     }
 
                                                 </tbody>
@@ -415,31 +416,31 @@
                                                 <tbody>
                                                     @for (int i = 0; i < Model.Trainings.Count; i++)
                                                     {
-                                                    <tr>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Training" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Certificate" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Location" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].Trainer" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].StartDate" readonly />
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].Training" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].Certificate" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].Location" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].Trainer" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].StartDate" readonly />
 
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.Trainings[i].ExpiredDate" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <a href="@Model.Trainings[i].CertificateAttachment">Download</a>
-                                                        </td>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].ExpiredDate" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <a href="@Model.Trainings[i].CertificateAttachment">Download</a>
+                                                            </td>
 
-                                                    </tr>
+                                                        </tr>
                                                     }
 
                                                 </tbody>
@@ -468,31 +469,31 @@
                                                 <tbody>
                                                     @for (int i = 0; i < Model.References.Count; i++)
                                                     {
-                                                    <tr>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.References[i].Referee" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.References[i].CompanyName" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.References[i].Address" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.References[i].PhoneNumber" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.References[i].Email" readonly />
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control" asp-for="@Model.References[i].PositionofReferee" readonly />
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].Referee" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].CompanyName" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].Address" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].PhoneNumber" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].Email" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].PositionofReferee" readonly />
 
-                                                        </td>
-                                                        <td>
-                                                            <a href="@Model.References[i].Attachment">Download</a>
-                                                        </td>
+                                                            </td>
+                                                            <td>
+                                                                <a href="@Model.References[i].Attachment">Download</a>
+                                                            </td>
 
-                                                    </tr>
+                                                        </tr>
                                                     }
 
                                                 </tbody>
@@ -514,30 +515,75 @@
                                                 </thead>
                                                 <tbody>
                                                     @for (int r = 0; r < Model.RegulatoryContacts.Count; r++)
-                                {
-                                                    <tr>
+                                                    {
+                                                        <tr>
 
-                                                        <td>
+                                                            <td>
 
-                                                            @Model.RegulatoryContacts[r].RegulatoryContact
-                                                        </td>
-                                                        <td>
-                                                            @Model.RegulatoryContacts[r].DatePerformed
-                                                        </td>
-                                                        <td>
-                                                            @Model.RegulatoryContacts[r].DueDate
-                                                        </td>
-                                                        <td>
+                                                                @Model.RegulatoryContacts[r].RegulatoryContact
+                                                            </td>
+                                                            <td>
+                                                                @Model.RegulatoryContacts[r].DatePerformed
+                                                            </td>
+                                                            <td>
+                                                                @Model.RegulatoryContacts[r].DueDate
+                                                            </td>
+                                                            <td>
 
-                                                            <a asp-action="DownloadFile" asp-route-file="@Model.RegulatoryContacts[r].Evidence">Download</a>
-                                                        </td>
+                                                                <a asp-action="DownloadFile" asp-route-file="@Model.RegulatoryContacts[r].Evidence">Download</a>
+                                                            </td>
 
-                                                    </tr>
-                                }
+                                                        </tr>
+                                                    }
 
                                                 </tbody>
                                             </table>
 
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="emergencyContact">
+                                        <h6>Emergency Contact</h6>
+                                        <div class="table-responsive table-bordered">
+
+                                            <table class="table tblContacts">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Telephone</th>
+                                                        <th>Email</th>
+                                                        <th>Relationship</th>
+                                                        <th>Address</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @for (int i = 0; i < Model.EmergencyContacts.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].ContactName" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Telephone" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Email" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Relationship" readonly />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Address" readonly />
+                                                            </td>
+                                                           
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
 
                                         </div>
                                     </div>

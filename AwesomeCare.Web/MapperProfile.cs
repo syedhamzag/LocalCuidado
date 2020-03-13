@@ -32,6 +32,8 @@ namespace AwesomeCare.Web
             CreateMap<CreateStaffRegulatoryContact, PostStaffRegulatoryContact>()
                  .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore());
 
+            CreateMap<CreateStaffEmergencyContact, PostStaffEmergencyContact>()
+               .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore());
         }
     }
 }

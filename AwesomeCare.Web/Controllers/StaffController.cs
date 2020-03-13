@@ -46,6 +46,9 @@ namespace AwesomeCare.Web.Controllers
             model.References = new List<CreateStaffReference>();
             model.References.Add(new CreateStaffReference());
 
+            model.EmergencyContacts = new List<CreateStaffEmergencyContact>();
+            model.EmergencyContacts.Add(new CreateStaffEmergencyContact());
+
             #region Regulatory Contact
             model.RegulatoryContacts = new List<CreateStaffRegulatoryContact>();
             if (_cache.TryGetValue(cacheKey, out List<GetBaseRecordWithItems> baseRecords))
