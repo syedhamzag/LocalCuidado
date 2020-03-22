@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20191013142935_tbl_ClientInvolvingPartyItem.Designer.cs" />
     <Compile Remove="Migrations\20191124191441_tbl_RotaTask.cs" />
     <Compile Remove="Migrations\20191124191441_tbl_RotaTask.Designer.cs" />
+    <Compile Remove="Migrations\20200314114347_tbl_StaffWorkTeam.cs" />
+    <Compile Remove="Migrations\20200314114347_tbl_StaffWorkTeam.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

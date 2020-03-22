@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\DateTimeExtension.cs" />
     <Compile Remove="Validations\AllowedExtensionsAttribute.cs" />
     <Compile Remove="Validations\MaxFileSizeAttribute.cs" />
   </ItemGroup>

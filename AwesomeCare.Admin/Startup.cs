@@ -25,6 +25,8 @@ using AwesomeCare.Services.Services;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.StaffCommunication;
 using AwesomeCare.Admin.Services.Untowards;
+using AwesomeCare.Admin.Services.ShiftBooking;
+using AwesomeCare.Admin.Services.StaffWorkTeam;
 
 namespace AwesomeCare.Admin
 {
@@ -170,6 +172,16 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IUntowardsService>(r));
+
+            services.AddHttpClient("shiftbookingservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IShiftBookingService>(r));
+
+            services.AddHttpClient("staffworkteamservie", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffWorkTeamService>(r));
 
             
         }

@@ -1,4 +1,5 @@
 ﻿using AwesomeCare.Admin.ViewModels.Client;
+using AwesomeCare.Admin.ViewModels.ShiftBooking;
 using AwesomeCare.Admin.ViewModels.StaffCommunication;
 using AwesomeCare.Admin.ViewModels.Untowards;
 using AwesomeCare.DataTransferObject.DTOs.Client;
@@ -6,6 +7,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
+using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.Untowards;
@@ -40,6 +42,10 @@ namespace AwesomeCare.Admin
             // CreateMap<GetCompanyDto, UpdateCompanyDto>();
 
             CreateMap<CreateUntowards, PostUntowards>();
+          
+            CreateMap<CreateShiftBooking, PostShiftBooking>();
+
+
         }
     }
 }

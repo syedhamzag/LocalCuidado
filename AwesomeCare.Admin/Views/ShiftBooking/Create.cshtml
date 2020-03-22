@@ -1,0 +1,92 @@
+﻿@using AwesomeCare.Admin.ViewModels.ShiftBooking;
+
+@model CreateShiftBooking
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Create Shift Booking</h2>
+                
+            </div>
+            <div class="body">
+
+                <form asp-route="Create" method="post">
+                    <div class="row">
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="ShiftDate"></label>
+                            <input type="text" asp-for="ShiftDate" class="form-control datepickerfromtoday" data-date-format="mm/yyyy">
+                            <span asp-validation-for="ShiftDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Rota"></label>
+                            <select asp-for="Rota" asp-items="@Model.Rotas" class="form-control">
+                            </select>
+                            <span asp-validation-for="Rota" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="NumberOfStaff"></label>
+                            <input type="number" class="form-control" asp-for="NumberOfStaff">
+                            <span asp-validation-for="NumberOfStaff" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="StartTime"></label>
+                            <input type="text" class="form-control" asp-for="StartTime" data-provide="timepicker" data-minute-step="5">
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                        </div>
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="StopTime"></label>
+                            <input type="text" class="form-control" asp-for="StopTime" data-provide="timepicker" data-minute-step="5">
+                            <span asp-validation-for="StopTime" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Team"></label>
+                            <select asp-for="Team" asp-items="@Model.Staffs" class="form-control">
+                            </select>
+                            <span asp-validation-for="Team" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="DriverRequired"></label>
+                            <select asp-for="RequiresDriver" asp-items="@Model.YesNo" class="form-control">
+                            </select>
+                            <span asp-validation-for="DriverRequired" class="text-danger"></span>
+                        </div>
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="PublishTo"></label>
+                            <select asp-for="PublishTo" asp-items="@Model.WorkTeams" class="form-control">
+                            </select>
+                            <span asp-validation-for="PublishTo" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Remark"></label>
+                            <textarea type="text" class="form-control" asp-for="Remark"></textarea>
+
+                            <span asp-validation-for="Remark" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+

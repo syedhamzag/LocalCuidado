@@ -75,7 +75,6 @@ namespace AwesomeCare.API.Controllers
         /// <summary>
         /// Get ClientCareDetailsHeadings with Tasks
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetHeadingsWithTasks", Name = "GetClientCareDetailsHeadingsWithTasks")]
         [ProducesResponseType(type: typeof(List<GetClientCareDetailsHeadingWithTasks>), statusCode: StatusCodes.Status200OK)]

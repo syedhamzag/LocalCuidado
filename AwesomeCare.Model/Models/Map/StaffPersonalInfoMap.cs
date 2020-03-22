@@ -114,6 +114,11 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(50)
                .IsRequired(false);
 
+            builder.Property(p => p.StaffWorkTeamId)
+              .HasColumnName("StaffWorkTeamId")
+              .IsRequired(false);
+
+
             builder.Property(p => p.Passcode)
               .HasColumnName("Passcode")
               .HasMaxLength(15)

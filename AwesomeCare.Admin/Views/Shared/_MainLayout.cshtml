@@ -421,7 +421,12 @@
                 enableCaseInsensitiveFiltering: true,
                 maxHeight: 200
             });
-            
+
+            var date = new Date();
+            date.setDate(date.getDate());
+            $('.datepickerfromtoday').datepicker({
+                 startDate: date
+            })
         })
     </script>
 

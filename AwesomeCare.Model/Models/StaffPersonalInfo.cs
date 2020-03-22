@@ -14,6 +14,7 @@ namespace AwesomeCare.Model.Models
             StaffPersonalInfoComments = new HashSet<StaffPersonalInfoComment>();
             RegulatoryContact = new HashSet<StaffRegulatoryContact>();
             EmergencyContacts = new HashSet<StaffEmergencyContact>();
+            ShiftBookings = new HashSet<StaffShiftBooking>();
         }
         public int StaffPersonalInfoId { get; set; }
         public string RegistrationId { get; set; }
@@ -36,6 +37,7 @@ namespace AwesomeCare.Model.Models
         public decimal? Rate { get; set; }
         public string TeamLeader { get; set; }
         public string WorkTeam { get; set; }
+        public int? StaffWorkTeamId { get; set; }
         public string Passcode { get; set; }
         public string CanDrive { get; set; }
         public string DrivingLicense { get; set; }
@@ -63,5 +65,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffPersonalInfoComment> StaffPersonalInfoComments { get; set; }
         public virtual ICollection<StaffRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<StaffEmergencyContact> EmergencyContacts { get; set; }
+        public virtual ICollection<StaffShiftBooking> ShiftBookings { get; set; }
+
+        public virtual StaffWorkTeam StaffWorkTeam { get; set; }
     }
 }

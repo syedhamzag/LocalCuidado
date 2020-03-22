@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200322043103_tbl_StaffShiftBooking")]
+    partial class tbl_StaffShiftBooking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1193,33 +1195,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_StaffShiftBooking");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBookingDay", b =>
-                {
-                    b.Property<int>("StaffShiftBookingDayId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffShiftBookingDayId")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Day")
-                        .IsRequired()
-                        .HasColumnName("Day")
-                        .HasMaxLength(2);
-
-                    b.Property<int>("StaffShiftBookingId")
-                        .HasColumnName("StaffShiftBookingId");
-
-                    b.Property<string>("WeekDay")
-                        .IsRequired()
-                        .HasColumnName("WeekDay")
-                        .HasMaxLength(15);
-
-                    b.HasKey("StaffShiftBookingDayId");
-
-                    b.HasIndex("StaffShiftBookingId");
-
-                    b.ToTable("tbl_StaffShiftBookingDay");
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>
                 {
                     b.Property<int>("StaffTrainingId")
@@ -1604,14 +1579,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
                         .WithMany("ShiftBookings")
                         .HasForeignKey("StaffPersonalInfoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBookingDay", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.StaffShiftBooking", "ShiftBooking")
-                        .WithMany("Days")
-                        .HasForeignKey("StaffShiftBookingId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

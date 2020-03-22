@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using AwesomeCare.Services.Services;
 using AwesomeCare.Web.Middlewares;
 using AwesomeCare.Web.Services.Admin;
+using AwesomeCare.Web.Services.ClientRotaName;
+using AwesomeCare.Web.Services.ShiftBooking;
 using AwesomeCare.Web.Services.Staff;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -62,12 +64,12 @@ namespace AwesomeCare.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Staff}/{action=Registration}/{id?}");
+                    template: "{controller=ShiftBooking}/{action=Shifts}/{id?}");
             });
         }
 
@@ -87,6 +89,15 @@ namespace AwesomeCare.Web
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffService>(r));
 
+            services.AddHttpClient("shiftbookingservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IShiftBookingService>(r));
+
+            services.AddHttpClient("clientrotanameservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientRotaNameService>(r));
             
         }
     }

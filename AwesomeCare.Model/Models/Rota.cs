@@ -6,10 +6,16 @@ namespace AwesomeCare.Model.Models
 {
     public class Rota:Base.BaseModel
     {
+        public Rota()
+        {
+            ShiftBookings = new HashSet<StaffShiftBooking>();
+        }
         public int RotaId { get; set; }
         public int NumberOfStaff { get; set; }
         public string RotaName { get; set; }
         public string Gender { get; set; }
         public string Area { get; set; }
+
+        public virtual ICollection<StaffShiftBooking> ShiftBookings { get; set; }
     }
 }
