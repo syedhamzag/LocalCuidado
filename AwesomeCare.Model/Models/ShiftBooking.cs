@@ -6,6 +6,10 @@ namespace AwesomeCare.Model.Models
 {
    public class ShiftBooking
     {
+        public ShiftBooking()
+        {
+            StaffShiftBooking = new HashSet<StaffShiftBooking>();
+        }
         public int ShiftBookingId { get; set; }
         public string ShiftDate { get; set; }
         public int Rota { get; set; }
@@ -20,5 +24,6 @@ namespace AwesomeCare.Model.Models
         public bool DriverRequired { get; set; }
         public int? PublishTo { get; set; }
 
+        public virtual ICollection<StaffShiftBooking> StaffShiftBooking { get; set; }
     }
 }

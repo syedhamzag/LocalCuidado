@@ -93,7 +93,7 @@ namespace AwesomeCare.Admin.Controllers
             return View(entity);
         }
 
-        [Route("/ShiftBooking/View-Shift")]
+        [Route("/ShiftBooking/View-Shift",Name ="ViewShift")]
         public IActionResult ViewShift()
         {
             var model = new ViewShiftViewModel();

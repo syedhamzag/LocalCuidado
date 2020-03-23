@@ -466,10 +466,11 @@ namespace MapperConfig
             #region ShiftBooking
             CreateMap<ShiftBooking, GetShiftBooking>();
             CreateMap<PostShiftBooking, ShiftBooking>()
+                .ForMember(dto=>dto.StaffShiftBooking, mem=>mem.Ignore())
                 .ForMember(dto=>dto.ShiftBookingId,mem=>mem.Ignore());
 
             CreateMap<PostStaffShiftBooking, StaffShiftBooking>()
-                .ForMember(dto=>dto.Rota,mem=>mem.Ignore())
+                .ForMember(dto=>dto.ShiftBooking,mem=>mem.Ignore())
                 .ForMember(dto=>dto.StaffPersonalInfo,mem=>mem.Ignore())
                 .ForMember(dto=>dto.StaffShiftBookingId,mem=>mem.Ignore());
 

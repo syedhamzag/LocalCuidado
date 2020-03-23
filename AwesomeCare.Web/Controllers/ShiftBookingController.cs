@@ -12,9 +12,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
 using AwesomeCare.Web.Extensions;
+using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
+
 namespace AwesomeCare.Web.Controllers
 {
-    public class ShiftBookingController : Controller
+    public class ShiftBookingController : BaseController
     {
         private IShiftBookingService _shiftBookingService;
         private ILogger<ShiftBookingController> _logger;
@@ -26,24 +28,24 @@ namespace AwesomeCare.Web.Controllers
             _logger = logger;
             _clientRotaNameService = clientRotaNameService;
         }
-        public async Task<IActionResult> Create(string month)
+        public IActionResult Create(string month, int shiftId)
         {
             var model = new CreateBookingViewModel();
 
-            var savedRota = HttpContext.Session.Get<List<GetClientRotaName>>("rotas");
-            if (savedRota == null)
-            {
-                var rotas = await _clientRotaNameService.Get();
-                model.Rotas = rotas.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
-                HttpContext.Session.Set<List<GetClientRotaName>>("rotas", rotas);
-            }
-            else
-            {
-                model.Rotas = savedRota.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
-            }
-           
+            //var savedRota = HttpContext.Session.Get<List<GetClientRotaName>>("rotas");
+            //if (savedRota == null)
+            //{
+            //    var rotas = await _clientRotaNameService.Get();
+            //    model.Rotas = rotas.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
+            //    HttpContext.Session.Set<List<GetClientRotaName>>("rotas", rotas);
+            //}
+            //else
+            //{
+            //    model.Rotas = savedRota.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
+            //}
 
 
+            model.ShiftBookingId = shiftId;
 
             var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             model.DaysInMonth = daysInMonth;
@@ -60,21 +62,49 @@ namespace AwesomeCare.Web.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreateBookingViewModel model, IFormCollection formCollection)
+        public async Task<IActionResult> Create(CreateBookingViewModel model, IFormCollection formCollection)
         {
+            var staffShiftBooking = new PostStaffShiftBooking()
+            {
+                ShiftBookingId = model.ShiftBookingId,
+                StaffPersonalInfoId = 1
+            };
+            //PostStaffShiftBookingDay
             for (int i = 1; i <= model.DaysInMonth; i++)
             {
                 var dt = i.ToString("D2");
                 var selectedDate = formCollection[dt];
-                if (selectedDate.Count > 0)
+                string dayweek = $"{dt}_day";
+                var selectedDay = formCollection[dayweek];
+                if (selectedDate.Count > 0 && selectedDay.Count > 0)
                 {
-
+                    staffShiftBooking.Days.Add(new PostStaffShiftBookingDay
+                    {
+                        Day = dt,
+                        WeekDay = selectedDay.FirstOrDefault()
+                    }); ;
                 }
             }
-            return RedirectToAction("Create");
+
+            var result =await _shiftBookingService.CreateBooking(staffShiftBooking);
+            var content = await result.Content.ReadAsStringAsync();
+            if (result.IsSuccessStatusCode)
+            {
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = true, Message = "Your booking was successful" });
+                return RedirectToAction("Shifts");
+            }
+            else if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = content });
+            }
+            else
+            {
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An error occurred" });
+            }
+            return View(model);
         }
-   
-    public async Task<IActionResult> Shifts()
+
+        public async Task<IActionResult> Shifts()
         {
             var shifts = await _shiftBookingService.Get();
             return View(shifts);

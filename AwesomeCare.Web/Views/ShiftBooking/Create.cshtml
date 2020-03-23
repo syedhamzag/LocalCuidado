@@ -12,21 +12,18 @@
 
             </div>
             <div class="body">
-                <form id="Form1" asp-controller="ShiftBooking" asp-action="ChangeMonth" method="post">
-                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                        <label>Month</label>
-                        <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control" onchange="document.getElementById('Form1').submit();">
-                        </select>
-                    </div>
-                </form>
+                @*<form id="Form1" asp-controller="ShiftBooking" asp-action="ChangeMonth" method="post">
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label>Month</label>
+                            <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control" onchange="document.getElementById('Form1').submit();">
+                            </select>
+                        </div>
+                    </form>*@
                 <form id="Form2" asp-controller="ShiftBooking" asp-action="Create" method="post">
-                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                        <label>Rota</label>
-                        <select asp-for="Rota" asp-items="@Model.Rotas" class="form-control">
-                        </select>
-                        <span asp-validation-for="Rota" class="text-danger"></span>
-                    </div>
+
                     <input type="hidden" asp-for="DaysInMonth" />
+                    <input type="hidden" asp-for="ShiftBookingId" />
+                    <input type="hidden" asp-for="SelectedMonth" />
 
                     <table class="table table-bordered">
                         <thead>
@@ -70,9 +67,13 @@
                                             <div class="col-sm-12 align-right">
                                                 <label class="fancy-checkbox">
                                                     <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
                                                     <span></span>
                                                 </label>
-
+                                                @{
+                                                    string dayName = $"{d.ToString("D2")}_day";
+                                                    <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                }
                                             </div>
                                         </div>
 

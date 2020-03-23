@@ -18,22 +18,11 @@ namespace AwesomeCare.Model.Models.Map
                 .HasColumnName("StaffShiftBookingId")
                 .IsRequired();
 
-            builder.Property(p => p.RotaId)
-               .HasColumnName("RotaId")
+            builder.Property(p => p.ShiftBookingId)
+               .HasColumnName("ShiftBookingId")
                .IsRequired();
 
-            builder.Property(p => p.MonthIndex)
-              .HasColumnName("MonthIndex")
-              .IsRequired();
-
-            builder.Property(p => p.MonthName)
-              .HasColumnName("MonthName")
-              .HasMaxLength(25)
-              .IsRequired();
-
-            builder.Property(p => p.Year)
-              .HasColumnName("Year")
-              .IsRequired();
+           
 
             builder.Property(p => p.StaffPersonalInfoId)
               .HasColumnName("StaffPersonalInfoId")
@@ -46,9 +35,9 @@ namespace AwesomeCare.Model.Models.Map
                 .HasForeignKey(k=>k.StaffPersonalInfoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Rota)
-                .WithMany(p => p.ShiftBookings)
-                .HasForeignKey(k => k.RotaId);
+            builder.HasOne(p => p.ShiftBooking)
+                .WithMany(p => p.StaffShiftBooking)
+                .HasForeignKey(k => k.ShiftBookingId);
               
             #endregion
         }

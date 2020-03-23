@@ -11,10 +11,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking
             Days = new List<GetStaffShiftBookingDay>();
         }
         public int StaffShiftBookingId { get; set; }
-        public int RotaId { get; set; }
-        public int MonthIndex { get; set; }
-        public string MonthName { get; set; }
-        public int Year { get; set; }
+        public int ShiftBookingId { get; set; }
         public int StaffPersonalInfoId { get; set; }
 
         

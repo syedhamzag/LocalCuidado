@@ -38,5 +38,20 @@ namespace System
 
             }
         }
+
+        public static string ToMonthName(this string month,int year)
+        {
+            try
+            {
+                var mnt = int.Parse(month);
+                var date = new DateTime(year, mnt, 1);
+                return date.ToString("MMMM", CultureInfo.InvariantCulture);
+            }
+            catch (Exception ex)
+            {
+                return "";
+
+            }
+        }
     }
 }

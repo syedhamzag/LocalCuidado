@@ -1,4 +1,5 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
+using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,8 @@ namespace AwesomeCare.Web.Services.ShiftBooking
         Task<List<GetShiftBookingDetails>> Get();
         [Get("/ShiftBooking/{id}")]
         Task<GetShiftBookingDetails> Get(int id);
+        [Post("/ShiftBooking/Staff/CreateBooking")]
+        Task<HttpResponseMessage> CreateBooking([Body]PostStaffShiftBooking shiftBooking);
+        
     }
 }
