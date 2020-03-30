@@ -21,8 +21,8 @@ namespace AwesomeCare.API.Controllers
     {
         private IGenericRepository<ClientCareDetailsHeading> _clientCareDetailsHeadingRepository;
         private ILogger<ClientCareDetailsHeadingController> _logger;
-        private IDbContext _dbContext;
-        public ClientCareDetailsHeadingController(IDbContext dbContext, IGenericRepository<ClientCareDetailsHeading> clientCareDetailsHeadingRepository, ILogger<ClientCareDetailsHeadingController> logger)
+        private AwesomeCareDbContext _dbContext;
+        public ClientCareDetailsHeadingController(AwesomeCareDbContext dbContext, IGenericRepository<ClientCareDetailsHeading> clientCareDetailsHeadingRepository, ILogger<ClientCareDetailsHeadingController> logger)
         {
             _clientCareDetailsHeadingRepository = clientCareDetailsHeadingRepository;
             _logger = logger;

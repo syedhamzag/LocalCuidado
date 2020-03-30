@@ -15,5 +15,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string Status { get; set; }
+        public string ApplicationUserId { get; set; }
     }
 }

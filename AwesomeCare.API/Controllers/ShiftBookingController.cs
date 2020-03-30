@@ -24,10 +24,10 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Rota> _rota;
         private IGenericRepository<StaffWorkTeam> _staffWorkTeamRepo;
         private IGenericRepository<StaffShiftBooking> _stafShiftBookingRepo;
-        private IDbContext _dbContext;
+        private AwesomeCareDbContext _dbContext;
         private ILogger<ShiftBookingController> _logger;
 
-        public ShiftBookingController(IGenericRepository<StaffShiftBooking> stafShiftBookingRepo,IGenericRepository<StaffWorkTeam> staffWorkTeamRepo, IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository, IGenericRepository<Rota> rota, ILogger<ShiftBookingController> logger, IGenericRepository<ShiftBooking> shiftBookingRepository,IDbContext dbContext)
+        public ShiftBookingController(IGenericRepository<StaffShiftBooking> stafShiftBookingRepo,IGenericRepository<StaffWorkTeam> staffWorkTeamRepo, IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository, IGenericRepository<Rota> rota, ILogger<ShiftBookingController> logger, IGenericRepository<ShiftBooking> shiftBookingRepository, AwesomeCareDbContext dbContext)
         {
             _shiftBookingRepository = shiftBookingRepository;
             _dbContext = dbContext;

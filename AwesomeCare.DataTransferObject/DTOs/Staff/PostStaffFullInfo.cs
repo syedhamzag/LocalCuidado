@@ -20,7 +20,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<PostStaffEducation> StaffEducations { get; set; }
         public List<PostStaffRegulatoryContact> StaffRegulatoryContacts { get; set; }
         public List<PostStaffEmergencyContact> EmergencyContacts { get; set; }
-
+       
+        [Required]
+        public string ApplicationUserId { get; set; }
         [Required]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

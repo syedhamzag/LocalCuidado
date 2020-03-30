@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
-   public class GetStaffProfile
+    public class GetStaffProfile
     {
         public GetStaffProfile()
         {
@@ -21,11 +21,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetStaffRegulatoryContact> RegulatoryContacts { get; set; }
         public List<GetStaffEmergencyContact> EmergencyContacts { get; set; }
         public int StaffPersonalInfoId { get; set; }
+        public string ApplicationUserId { get; set; }
         public string RegistrationId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        [Display(Name ="Date Of Birth")]
+        [Display(Name = "Date Of Birth")]
         public string DateOfBirth { get; set; }
         public string Telephone { get; set; }
         [Display(Name = "Profile Pix")]

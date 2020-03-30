@@ -22,8 +22,8 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Client> _clientRepository;
         private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
         private IGenericRepository<BaseRecordModel> _baseRecordRepository;
-        private IDbContext _dbContext;
-        public ClientController(IDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
+        private AwesomeCareDbContext _dbContext;
+        public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
         {
             _clientRepository = clientRepository;
             _baseRecordItemRepository = baseRecordItemRepository;

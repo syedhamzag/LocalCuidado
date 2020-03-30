@@ -13,9 +13,11 @@ using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
 using AwesomeCare.Web.Extensions;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AwesomeCare.Web.Controllers
 {
+    [Authorize]
     public class ShiftBookingController : BaseController
     {
         private IShiftBookingService _shiftBookingService;

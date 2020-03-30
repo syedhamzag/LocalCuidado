@@ -20,9 +20,9 @@ namespace AwesomeCare.API.Controllers
     {
         private IGenericRepository<StaffCommunication> _staffCommunicationRepository;
         private ILogger<StaffCommunicationController> _logger;
-        private IDbContext _dbContext;
+        private AwesomeCareDbContext _dbContext;
 
-        public StaffCommunicationController(IGenericRepository<StaffCommunication> staffCommunicationRepository, ILogger<StaffCommunicationController> logger, IDbContext dbContext)
+        public StaffCommunicationController(IGenericRepository<StaffCommunication> staffCommunicationRepository, ILogger<StaffCommunicationController> logger, AwesomeCareDbContext dbContext)
         {
             _staffCommunicationRepository = staffCommunicationRepository;
             _logger = logger;

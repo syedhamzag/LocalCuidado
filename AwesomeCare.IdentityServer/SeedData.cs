@@ -6,12 +6,12 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using IdentityModel;
-using AwesomeCare.IdentityServer.Data;
-using AwesomeCare.IdentityServer.Models;
+using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using AwesomeCare.DataAccess.Database;
 
 namespace AwesomeCare.IdentityServer
 {
@@ -21,18 +21,18 @@ namespace AwesomeCare.IdentityServer
         {
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<AwesomeCareDbContext>(options =>
                options.UseSqlite(connectionString));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<AwesomeCareDbContext>()
                 .AddDefaultTokenProviders();
 
             using (var serviceProvider = services.BuildServiceProvider())
             {
                 using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                    var context = scope.ServiceProvider.GetService<AwesomeCareDbContext>();
                     context.Database.Migrate();
 
                     var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();

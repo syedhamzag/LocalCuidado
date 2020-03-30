@@ -8,6 +8,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
    public class PostStaffPersonalInfo
     {
         [Required]
+        public string ApplicationUserId { get; set; }
+        [Required]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         [Required]

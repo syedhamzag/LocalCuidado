@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-
+using AwesomeCare.API.AppSettings;
 using AwesomeCare.API.Middlewares;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
@@ -16,8 +17,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace AwesomeCare.API
@@ -27,6 +30,8 @@ namespace AwesomeCare.API
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            // prevent from mapping "sub" claim to nameidentifier.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         public IConfiguration Configuration { get; }
@@ -34,27 +39,27 @@ namespace AwesomeCare.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddControllers();
             services.AddDbContext<AwesomeCareDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
             });
             services.AddLogging();
-
+            services.Configure<JwtBearerSettings>(Configuration);
             #region AutoMapper
             //AutoMapper
             //  AutoMapperConfiguration.Configure();
             MapperConfig.AutoMapperConfiguration.Configure();
             #endregion
             #region Database
-            services.AddScoped(typeof(IDbContext), typeof(AwesomeCareDbContext));
+            services.AddScoped(typeof(DbContext));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             #endregion
             #region Swagger
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "AwesomeCare API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AwesomeCare API", Version = "v1" });
                // c.ResolveConflictingActions(r => r.First());
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -63,11 +68,23 @@ namespace AwesomeCare.API
             });
             #endregion
 
-          //  services.AddOData();
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+
+                    var settings = Configuration.GetSection("JwtBearerSettings").Get<JwtBearerSettings>();
+                    options.Authority =settings.Authority;
+                    options.RequireHttpsMetadata = settings.RequireHttpsMetadata;
+                    options.SaveToken = settings.SaveToken;
+                    options.Audience = settings.Audience;
+                    
+                });
+
+            //  services.AddOData();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
            
             if (env.IsDevelopment())
@@ -104,14 +121,17 @@ namespace AwesomeCare.API
                 c.RoutePrefix = string.Empty;
             });
 
-          
-
             app.UseHttpsRedirection();
-            app.UseMvc();
-            //app.UseMvc(routeBuilder=> {
-            //    routeBuilder.EnableDependencyInjection();
-            //    routeBuilder.Expand().Select().OrderBy().Filter().MaxTop(1000);
-            //});
+
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers().RequireAuthorization();
+            });
+           
         }
     }
 }

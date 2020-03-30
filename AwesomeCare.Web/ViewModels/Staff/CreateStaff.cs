@@ -28,6 +28,7 @@ namespace AwesomeCare.Web.ViewModels.Staff
         public List<CreateStaffRegulatoryContact> RegulatoryContacts { get; set; }
         public List<CreateStaffEmergencyContact> EmergencyContacts { get; set; }
 
+        public string ApplicationUserId { get; set; }
         [Required]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

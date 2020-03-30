@@ -24,8 +24,8 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffPersonalInfo> _staffRepository;
         private IGenericRepository<Client> _clientRepository;
         private IGenericRepository<ClientInvolvingPartyItem> _clientInvolvingPartyRepository;
-        private IDbContext _dbContext;
-        public UntowardsController(IDbContext dbContext, IGenericRepository<ClientInvolvingPartyItem> clientInvolvingPartyRepository, IGenericRepository<Client> clientRepository, IGenericRepository<StaffPersonalInfo> staffRepository, IGenericRepository<Model.Models.Untowards> unTowardsRepository, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
+        private AwesomeCareDbContext _dbContext;
+        public UntowardsController(AwesomeCareDbContext dbContext, IGenericRepository<ClientInvolvingPartyItem> clientInvolvingPartyRepository, IGenericRepository<Client> clientRepository, IGenericRepository<StaffPersonalInfo> staffRepository, IGenericRepository<Model.Models.Untowards> unTowardsRepository, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
         {
             _unTowardsRepository = unTowardsRepository;
             _baseRecordItemRepository = baseRecordItemRepository;

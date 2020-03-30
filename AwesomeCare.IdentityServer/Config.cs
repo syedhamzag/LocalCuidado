@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
@@ -20,67 +21,63 @@ namespace AwesomeCare.IdentityServer
         public static IEnumerable<ApiResource> Apis =>
             new ApiResource[]
             {
-                new ApiResource("api1", "My API #1")
+                new ApiResource("awesomecareapi", "AwesomeCare API")
             };
 
 
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
-                // client credentials flow client
-                new Client
+                 new Client
                 {
-                    ClientId = "client",
-                    ClientName = "Client Credentials Client",
-
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
-
-                    AllowedScopes = { "api1" }
-                },
-
-                // MVC client using code flow + pkce
-                new Client
-                {
-                    ClientId = "mvc",
-                    ClientName = "MVC Client",
-
-                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                    RequirePkce = true,
-                    ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-
-                    RedirectUris = { "http://localhost:5003/signin-oidc" },
-                    FrontChannelLogoutUri = "http://localhost:5003/signout-oidc",
-                    PostLogoutRedirectUris = { "http://localhost:5003/signout-callback-oidc" },
-
-                    AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "api1" }
-                },
-
-                // SPA client using code flow + pkce
-                new Client
-                {
-                    ClientId = "spa",
-                    ClientName = "SPA Client",
-                    ClientUri = "http://identityserver.io",
-
+                    AccessTokenLifetime = 300,//i.e 5 mins
+                    AllowOfflineAccess = true,//to make refresh token expire 
+                    ClientName = "Awesome Care Web",
+                    ClientId = "awesomecareweb",
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
-                    RequireClientSecret = false,
-
-                    RedirectUris =
+                    RequireConsent=false,
+                    RedirectUris = new List<string>
                     {
-                        "http://localhost:5002/index.html",
-                        "http://localhost:5002/callback.html",
-                        "http://localhost:5002/silent.html",
-                        "http://localhost:5002/popup.html",
+                        "https://localhost:44362/signin-oidc"
                     },
-
-                    PostLogoutRedirectUris = { "http://localhost:5002/index.html" },
-                    AllowedCorsOrigins = { "http://localhost:5002" },
-
-                    AllowedScopes = { "openid", "profile", "api1" }
+                    PostLogoutRedirectUris = new List<string>{
+                        "https://localhost:44362/signout-callback-oidc"
+                    },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "awesomecareapi"
+                    },
+                    ClientSecrets =
+                    {
+                        new Secret("1234567890".Sha256())
+                    }
+                },
+            new Client
+                {
+                    ClientName = "AwesomeCare Admin",
+                ClientId = "mvcapp1",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                RedirectUris = new List<string>
+                {
+                    "https://localhost:44384/signin-oidc"
+                },
+                PostLogoutRedirectUris = new List<string>{
+                    "https://localhost:44384/signout-callback-oidc"
+                },
+                AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
+                },
+                ClientSecrets =
+                {
+                    new Secret("secret".Sha256())
                 }
+                },
             };
     }
 }

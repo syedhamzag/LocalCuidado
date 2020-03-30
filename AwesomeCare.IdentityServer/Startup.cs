@@ -2,8 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
-using AwesomeCare.IdentityServer.Data;
-using AwesomeCare.IdentityServer.Models;
+
+
+
+using AwesomeCare.DataAccess.Database;
+using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -43,7 +46,7 @@ namespace AwesomeCare.IdentityServer
                 iis.AutomaticAuthentication = false;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<AwesomeCareDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options=> {
@@ -55,7 +58,7 @@ namespace AwesomeCare.IdentityServer
                 options.User.RequireUniqueEmail = true;
                 
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<AwesomeCareDbContext>()
                 .AddDefaultTokenProviders();
             
             var builder = services.AddIdentityServer(options =>
@@ -73,15 +76,7 @@ namespace AwesomeCare.IdentityServer
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
-            services.AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to http://localhost:5000/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
-                });
+            services.AddAuthentication();
         }
 
         public void Configure(IApplicationBuilder app)

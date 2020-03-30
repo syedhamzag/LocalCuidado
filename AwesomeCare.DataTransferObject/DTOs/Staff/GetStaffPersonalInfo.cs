@@ -7,6 +7,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
    public class GetStaffPersonalInfo
     {
         public int StaffPersonalInfoId { get; set; }
+        public string ApplicationUserId { get; set; }
         public string RegistrationId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

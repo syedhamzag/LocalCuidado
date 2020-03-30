@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AwesomeCare.Model.Models
 {
-   public class StaffPersonalInfo
+    public class StaffPersonalInfo
     {
         public StaffPersonalInfo()
         {
@@ -16,7 +16,12 @@ namespace AwesomeCare.Model.Models
             EmergencyContacts = new HashSet<StaffEmergencyContact>();
             ShiftBookings = new HashSet<StaffShiftBooking>();
         }
+       
         public int StaffPersonalInfoId { get; set; }
+        /// <summary>
+        ///  ApplicationUser Id
+        /// </summary>
+        public string ApplicationUserId { get; set; }
         public string RegistrationId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -68,5 +73,6 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffShiftBooking> ShiftBookings { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

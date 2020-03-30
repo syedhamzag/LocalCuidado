@@ -9,9 +9,9 @@ using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Web.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataAccess.Database;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -22,12 +22,14 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<BaseRecordModel> _baseRecordRepository;
         private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
         private ILogger<BaseRecordController> _logger;
+        private AwesomeCareDbContext _dbContext;
 
-        public BaseRecordController(IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository, ILogger<BaseRecordController> logger)
+        public BaseRecordController(AwesomeCareDbContext dbContext, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository, ILogger<BaseRecordController> logger)
         {
             _baseRecordItemRepository = baseRecordItemRepository;
             _baseRecordRepository = baseRecordRepository;
             _logger = logger;
+            _dbContext = dbContext;
         }
 
         [HttpPost]
@@ -119,7 +121,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetBaseRecordsWithItemsAsync()
         {
-            var baseRecords = await _baseRecordRepository.Table.ProjectTo<GetBaseRecordWithItems>().Include(c=>c.BaseRecordItems).ToListAsync();
+            var baseRecords = await _baseRecordRepository.Table.AsNoTracking().Include(c=>c.BaseRecordItems).ProjectTo<GetBaseRecordWithItems>().ToListAsync();
             return Ok(baseRecords);
         }
 

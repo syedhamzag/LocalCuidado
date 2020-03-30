@@ -22,9 +22,9 @@ namespace AwesomeCare.API.Controllers
     {
         private IGenericRepository<StaffPersonalInfo> _staffInfoRepository;
         private ILogger<StaffInfoController> _logger;
-        private IDbContext _dbContext;
+        private AwesomeCareDbContext _dbContext;
         
-        public StaffInfoController(IGenericRepository<StaffPersonalInfo> staffInfoRepository, ILogger<StaffInfoController> logger, IDbContext dbContext)
+        public StaffInfoController(IGenericRepository<StaffPersonalInfo> staffInfoRepository, ILogger<StaffInfoController> logger, AwesomeCareDbContext dbContext)
         {
             _staffInfoRepository = staffInfoRepository;
             _logger = logger;

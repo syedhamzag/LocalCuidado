@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿
+
+using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using AwesomeCare.IdentityServer.Models;
+
 
 namespace AwesomeCare.IdentityServer.Data
 {

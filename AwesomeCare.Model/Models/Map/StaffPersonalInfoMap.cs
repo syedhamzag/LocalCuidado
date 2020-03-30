@@ -14,6 +14,7 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasKey(k => k.StaffPersonalInfoId);
 
             #region Properties
+          
             builder.Property(p => p.StaffPersonalInfoId)
                 .HasColumnName("StaffPersonalInfoId")
                 .IsRequired(true);
@@ -206,7 +207,9 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasIndex(p => p.RegistrationId)
                      .HasName("IX_tbl_StaffPersonalInfo_RegistrationId")
                      .IsUnique(true);
-        
+        builder.HasOne<ApplicationUser>(p=>p.ApplicationUser)
+                .WithOne(p=>p.StaffPersonalInfo)
+                .HasForeignKey<StaffPersonalInfo>(f=>f.ApplicationUserId);
         }
     }
 }
