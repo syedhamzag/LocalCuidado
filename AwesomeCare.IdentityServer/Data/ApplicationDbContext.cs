@@ -10,7 +10,7 @@ namespace AwesomeCare.IdentityServer.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationDbContext(DbContextOptions<AwesomeCareDbContext> options)
             : base(options)
         {
         }
