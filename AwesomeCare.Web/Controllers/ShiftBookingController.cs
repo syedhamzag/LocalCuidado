@@ -108,6 +108,8 @@ namespace AwesomeCare.Web.Controllers
 
         public async Task<IActionResult> Shifts()
         {
+            var user = User.Identities;
+            var isStaffRole = User.IsInRole("Staff");
             var shifts = await _shiftBookingService.Get();
             return View(shifts);
         }

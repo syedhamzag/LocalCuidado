@@ -27,6 +27,7 @@ using AwesomeCare.Admin.Services.StaffCommunication;
 using AwesomeCare.Admin.Services.Untowards;
 using AwesomeCare.Admin.Services.ShiftBooking;
 using AwesomeCare.Admin.Services.StaffWorkTeam;
+using Microsoft.Extensions.Hosting;
 
 namespace AwesomeCare.Admin
 {
@@ -58,11 +59,12 @@ namespace AwesomeCare.Admin
             AddRefitServices(services);
             services.AddMemoryCache();
             services.AddSession();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseBaseRecordMiddleware();
             if (env.IsDevelopment())
@@ -78,20 +80,15 @@ namespace AwesomeCare.Admin
             app.UseBaseRecordMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            //app.UseStaticFiles(
-            //    new StaticFileOptions
-            //    {
-            //        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath,"Uploads")),
-            //        RequestPath = new PathString("/Files")
-            //    }
-            //    );
+            app.UseRouting();
+
             app.UseCookiePolicy();
             app.UseSession();
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Client}/{action=HomeCare}/{id?}");
+                     "{controller=Client}/{action=HomeCare}/{id?}");
             });
         }
 

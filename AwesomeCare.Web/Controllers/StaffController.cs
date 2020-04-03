@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
@@ -71,6 +72,9 @@ namespace AwesomeCare.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registration(CreateStaff model)
         {
+
+            model.ApplicationUserId = User.Claims.GetClaimValue("sub");
+
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Ensure to re-upload required files");

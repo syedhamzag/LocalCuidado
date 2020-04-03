@@ -9,10 +9,12 @@ using AwesomeCare.API.AppSettings;
 using AwesomeCare.API.Middlewares;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
+using AwesomeCare.Model.Models;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -54,6 +56,13 @@ namespace AwesomeCare.API
             #region Database
             services.AddScoped(typeof(DbContext));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            #endregion
+            #region AspNetIdentity
+            
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AwesomeCareDbContext>()
+                .AddRoles<IdentityRole>();
             #endregion
             #region Swagger
             // Register the Swagger generator, defining 1 or more Swagger documents
@@ -71,7 +80,6 @@ namespace AwesomeCare.API
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-
                     var settings = Configuration.GetSection("JwtBearerSettings").Get<JwtBearerSettings>();
                     options.Authority =settings.Authority;
                     options.RequireHttpsMetadata = settings.RequireHttpsMetadata;

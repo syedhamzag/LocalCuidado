@@ -17,6 +17,8 @@ namespace AwesomeCare.DataAccess.Database
         {
 
         }
+
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

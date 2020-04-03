@@ -30,9 +30,12 @@ namespace AwesomeCare.IdentityServer
             {
                  new Client
                 {
-                    AccessTokenLifetime = 300,//i.e 5 mins
-                    AllowOfflineAccess = true,//to make refresh token expire 
-                    ClientName = "Awesome Care Web",
+                     
+                    AccessTokenLifetime = 60,//i.e 1 mins
+                    AllowOfflineAccess = true,//to enable access to the Identity Server using Refresh Token to get a new access Token
+                   // RefreshTokenExpiration = TokenExpiration.Sliding,//To get a new Refresh Token after using the previous one i.e if Sliding, Refresh Token lifetime will be renewed
+                   UpdateAccessTokenClaimsOnRefresh = true,
+                     ClientName = "Awesome Care Web",
                     ClientId = "awesomecareweb",
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
@@ -57,26 +60,29 @@ namespace AwesomeCare.IdentityServer
                 },
             new Client
                 {
-                    ClientName = "AwesomeCare Admin",
-                ClientId = "mvcapp1",
-                AllowedGrantTypes = GrantTypes.Code,
-                RequirePkce = true,
-                RedirectUris = new List<string>
-                {
-                    "https://localhost:44384/signin-oidc"
-                },
-                PostLogoutRedirectUris = new List<string>{
-                    "https://localhost:44384/signout-callback-oidc"
-                },
-                AllowedScopes =
-                {
-                    IdentityServerConstants.StandardScopes.OpenId,
-                    IdentityServerConstants.StandardScopes.Profile
-                },
-                ClientSecrets =
-                {
-                    new Secret("secret".Sha256())
-                }
+                         AllowOfflineAccess = true,
+                         RequireConsent=false,
+                         ClientName = "AwesomeCare Admin",
+                        ClientId = "mvcapp1",
+                        AllowedGrantTypes = GrantTypes.Code,
+                        RequirePkce = true,
+                        RedirectUris = new List<string>
+                        {
+                            "https://localhost:44384/signin-oidc"
+                        },
+                        PostLogoutRedirectUris = new List<string>{
+                            "https://localhost:44384/signout-callback-oidc"
+                        },
+                        AllowedScopes =
+                        {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+                             "awesomecareapi"
+                        },
+                        ClientSecrets =
+                        {
+                            new Secret("secret".Sha256())
+                        }
                 },
             };
     }
