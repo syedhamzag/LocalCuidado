@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Data\ApplicationDbContext.cs" />
+    <Compile Remove="Data\Migrations\20180109192453_CreateIdentitySchema.cs" />
+    <Compile Remove="Data\Migrations\20180109192453_CreateIdentitySchema.Designer.cs" />
+    <Compile Remove="Data\Migrations\ApplicationDbContextModelSnapshot.cs" />
     <Compile Remove="Models\ApplicationUser.cs" />
   </ItemGroup>
 
