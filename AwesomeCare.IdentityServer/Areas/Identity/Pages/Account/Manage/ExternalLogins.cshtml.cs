@@ -60,7 +60,7 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account.Manage
             if (!result.Succeeded)
             {
                 StatusMessage = "The external login was not removed.";
-                return RedirectToPage();onException($"Unexpected error occurred removing external login for user with ID '{userId}'.");
+                return RedirectToPage();//onException($"Unexpected error occurred removing external login for user with ID '{userId}'.");
             }
 
             await _signInManager.RefreshSignInAsync(user);

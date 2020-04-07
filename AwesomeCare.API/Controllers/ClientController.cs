@@ -41,28 +41,30 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostClient([FromBody]PostClient postClient)
         {
-            if (postClient == null || !ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            //Check if client is not already registered
+            
+                if (postClient == null || !ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                //Check if client is not already registered
+              
+                var isClientRegistered = _clientRepository.Table.Any(c => c.Email.Trim().ToLower().Equals(postClient.Email.Trim().ToLower()));
+                if (isClientRegistered)
+                {
+                    ModelState.AddModelError("", $"Client with email address {postClient.Email} is already registered");
+                    return BadRequest(ModelState);
+                }
 
-            var isClientRegistered = _clientRepository.Table.Any(c => c.Email.Trim().Equals(postClient.Email.Trim(), StringComparison.InvariantCultureIgnoreCase));
-            if (isClientRegistered)
-            {
-                ModelState.AddModelError("", $"Client with email address {postClient.Email} is already registered");
-                return BadRequest(ModelState);
-            }
+                var client = Mapper.Map<Client>(postClient);
+                var newClient = await _clientRepository.InsertEntity(client);
 
-            var client = Mapper.Map<Client>(postClient);            
-            var newClient = await _clientRepository.InsertEntity(client);
+                newClient.UniqueId = $"AHS/CT/{DateTime.Now.ToString("yy")}/{ newClient.ClientId.ToString("D6")}";
+                newClient = await _clientRepository.UpdateEntity(newClient);
 
-            newClient.UniqueId = $"AHS/CT/{DateTime.Now.ToString("yy")}/{ newClient.ClientId.ToString("D6")}";
-            newClient = await _clientRepository.UpdateEntity(newClient);
+                var getClient = Mapper.Map<GetClient>(newClient);
+                return CreatedAtAction("GetClient", new { id = getClient.ClientId }, getClient);
 
-            var getClient = Mapper.Map<GetClient>(newClient);
-            return CreatedAtAction("GetClient", new { id = getClient.ClientId }, getClient);
-
+           
         }
 
         /// <summary>

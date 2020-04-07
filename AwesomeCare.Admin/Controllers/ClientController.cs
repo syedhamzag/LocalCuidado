@@ -162,7 +162,7 @@ namespace AwesomeCare.Admin.Controllers
                 var careDetails = CareDetails(model);
                 postClient.CareDetails = careDetails;
                 #endregion
-
+                var json = JsonConvert.SerializeObject(postClient);
                 var result = await _clientService.PostClient(postClient);
 
 

@@ -137,7 +137,7 @@ namespace AwesomeCare.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers().RequireAuthorization();
+                endpoints.MapControllers();//.RequireAuthorization();
             });
            
         }
