@@ -48,5 +48,6 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<ClientRota> ClientRota { get; set; }
         public virtual ICollection<ClientCareDetails> ClientCareDetails { get; set; }
+        public virtual ICollection<ClientMedication> ClientMedication { get; set; }
     }
 }

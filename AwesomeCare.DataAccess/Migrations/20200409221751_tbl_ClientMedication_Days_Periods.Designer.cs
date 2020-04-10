@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200409221751_tbl_ClientMedication_Days_Periods")]
+    partial class tbl_ClientMedication_Days_Periods
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -507,10 +509,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Dossage")
                         .IsRequired()
                         .HasColumnName("Dossage")
@@ -572,8 +570,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasMaxLength(50);
 
                     b.HasKey("ClientMedicationId");
-
-                    b.HasIndex("ClientId");
 
                     b.HasIndex("MedicationId");
 
@@ -2168,12 +2164,6 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedication", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("ClientMedication")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AwesomeCare.Model.Models.Medication", "Medication")
                         .WithMany()
                         .HasForeignKey("MedicationId")

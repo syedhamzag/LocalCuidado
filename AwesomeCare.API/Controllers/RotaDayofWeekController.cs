@@ -73,7 +73,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool isweekDayRegistered = _rotaDayofWeekRepository.Table.Any(r => r.DayofWeek.Equals(model.DayofWeek, StringComparison.InvariantCultureIgnoreCase));
+            bool isweekDayRegistered = _rotaDayofWeekRepository.Table.Any(r => r.DayofWeek.ToLower().Equals(model.DayofWeek.ToLower()));
             if (isweekDayRegistered)
             {
                 return BadRequest($"Week Day {model.DayofWeek} already exist");

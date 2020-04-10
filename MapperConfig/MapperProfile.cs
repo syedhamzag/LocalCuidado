@@ -7,6 +7,9 @@ using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsHeading;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
 using AwesomeCare.DataTransferObject.DTOs.ClientRota;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaDays;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
@@ -14,6 +17,8 @@ using AwesomeCare.DataTransferObject.DTOs.ClientRotaTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
+using AwesomeCare.DataTransferObject.DTOs.Medication;
+using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.DataTransferObject.DTOs.RotaTask;
@@ -123,6 +128,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.InvolvingParties, mem => mem.MapFrom(src => src.InvolvingParties))
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedication, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -149,6 +155,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.InvolvingParties, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedication, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
             #endregion
@@ -205,11 +212,13 @@ namespace MapperConfig
             #region ClientRotaType
             CreateMap<ClientRotaType, GetClientRotaType>();
             CreateMap<PutClientRotaType, ClientRotaType>()
+                .ForMember(dto => dto.ClientMedicationPeriod, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore());
 
             CreateMap<PostClientRotaType, ClientRotaType>()
                 .ForMember(dto => dto.RotaType, mem => mem.MapFrom(src => src.RotaType.ToUpper()))
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedicationPeriod, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaTypeId, mem => mem.Ignore());
             #endregion
 
@@ -227,8 +236,10 @@ namespace MapperConfig
             CreateMap<PostRotaDayofWeek, RotaDayofWeek>()
                 .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => false))
                 .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedicationDay, mem => mem.Ignore())
                 .ForMember(dto => dto.RotaDayofWeekId, mem => mem.Ignore());
             CreateMap<PutRotaDayofWeek, RotaDayofWeek>()
+                .ForMember(dto => dto.ClientMedicationDay, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
             #endregion
 
@@ -499,6 +510,75 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffWorkTeamId, mem => mem.Ignore());
             CreateMap<PutStaffWorkTeam, StaffWorkTeam>()
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            #endregion
+
+            #region Medication
+            CreateMap<PostMedication, Medication>()
+                .ForMember(dto=>dto.MedicationId,mem=>mem.Ignore())
+                .ForMember(dto=>dto.Deleted,mem=>mem.MapFrom(src=>false));
+
+            CreateMap<Medication, GetMedication>();
+
+            CreateMap<PutMedication, Medication>();
+            #endregion
+
+            #region MedicationManufacturer
+            CreateMap<PostMedicationManufacturer, MedicationManufacturer>()
+                .ForMember(dto => dto.MedicationManufacturerId, mem => mem.Ignore())
+                .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => false));
+
+            CreateMap<MedicationManufacturer, GetMedicationManufacturer>();
+
+            CreateMap<PutMedicationManufacturer, MedicationManufacturer>();
+            #endregion
+
+            #region ClientMedication
+            CreateMap<PostClientMedication, ClientMedication>()
+                .ForMember(dto => dto.ClientMedicationId, mem => mem.Ignore())
+                .ForMember(dto => dto.MedicationManufacturer, mem => mem.Ignore())
+                .ForMember(dto => dto.Medication, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedicationDay, mem => mem.MapFrom(src => src.ClientMedicationDay));
+
+            CreateMap<PutClientMedication, ClientMedication>()
+                .ForMember(dto => dto.MedicationManufacturer, mem => mem.Ignore())
+                .ForMember(dto => dto.Medication, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedicationDay, mem => mem.MapFrom(src => src.ClientMedicationDay));
+
+            CreateMap<ClientMedication, GetClientMedication>()
+                 .ForMember(dto => dto.Medication, mem => mem.Ignore())
+                 .ForMember(dto => dto.MedicationManufacturer, mem => mem.Ignore());
+            #endregion
+
+            #region ClientMedicationDay
+            CreateMap<PostClientMedicationDay, ClientMedicationDay>()
+                .ForMember(dto => dto.ClientMedicationDayId, mem => mem.Ignore())
+                .ForMember(dto => dto.RotaDayofWeek, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedication, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedicationPeriod, mem => mem.MapFrom(src => src.ClientMedicationPeriod));
+
+            CreateMap<PutClientMedicationDay, ClientMedicationDay>()
+               .ForMember(dto => dto.RotaDayofWeek, mem => mem.Ignore())
+               .ForMember(dto => dto.ClientMedication, mem => mem.Ignore())
+               .ForMember(dto => dto.ClientMedicationPeriod, mem => mem.MapFrom(src => src.ClientMedicationPeriod));
+
+            CreateMap<ClientMedicationDay, GetClientMedicationDay>()
+                 .ForMember(dto => dto.DayOfWeek, mem => mem.Ignore()); 
+            #endregion
+
+            #region ClientMedicationPeriod
+            CreateMap<PostClientMedicationPeriod, ClientMedicationPeriod>()
+                .ForMember(dto => dto.ClientMedicationPeriodId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMedicationDay, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
+
+            CreateMap<PutClientMedicationPeriod, ClientMedicationPeriod>()
+                .ForMember(dto => dto.ClientMedicationDay, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
+
+            CreateMap<ClientMedicationPeriod, GetClientMedicationPeriod>()
+                 .ForMember(dto => dto.RotaType, mem => mem.Ignore());
             #endregion
         }
     }

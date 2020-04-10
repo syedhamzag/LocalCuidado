@@ -1,5 +1,6 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingPartyBase;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
 using Refit;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -16,7 +17,7 @@ namespace AwesomeCare.Admin.Services.Client
         [Get("/Client/GetClientDetails")]
         Task<List<GetClientDetail>> GetClientDetail();
 
-        [Get("/Client/{id}")]
+        [Get("/Client/GetClient/{id}")]
         Task<GetClient> GetClient(int id);
 
         [Get("/Client/{clientId}")]
@@ -33,5 +34,19 @@ namespace AwesomeCare.Admin.Services.Client
 
         [Get("/ClientInvolvingPartyBase/{id}")]
         Task<GetClientInvolvingPartyItem> GetClientInvolvingPartyBase(int id);
+
+        #region ClientMedication
+        [Get("/Client/Medication/{clientId}")]
+        Task<List<GetClientMedication>> GetMedications(int clientId);
+
+        [Post("/Client/Medication")]
+        Task<HttpResponseMessage> PostMedication([Body]PostClientMedication model);
+
+        [Get("/Client/Medication/{clientId}/{id}")]
+        Task<GetClientMedication> GetMedication( int clientId, int id);
+
+        [Put("/Client/Medication")]
+        Task<GetClientMedication> PutMedication([Body]PutClientMedication model);
+        #endregion
     }
 }

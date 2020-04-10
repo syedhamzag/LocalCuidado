@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200409091218_tbl_MedicationManufacturer")]
+    partial class tbl_MedicationManufacturer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -497,145 +499,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasName("IX_tbl_ClientInvolvingPartyItem_ItemName");
 
                     b.ToTable("tbl_ClientInvolvingPartyItem");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedication", b =>
-                {
-                    b.Property<int>("ClientMedicationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientMedicationId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Dossage")
-                        .IsRequired()
-                        .HasColumnName("Dossage")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ExpiryDate")
-                        .IsRequired()
-                        .HasColumnName("ExpiryDate")
-                        .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
-
-                    b.Property<string>("Frequency")
-                        .IsRequired()
-                        .HasColumnName("Frequency")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("Gap_Hour")
-                        .HasColumnName("Gap_Hour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MedicationId")
-                        .HasColumnName("MedicationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MedicationManufacturerId")
-                        .HasColumnName("MedicationManufacturerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Remark")
-                        .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<string>("Route")
-                        .IsRequired()
-                        .HasColumnName("Route")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("StartDate")
-                        .IsRequired()
-                        .HasColumnName("StartDate")
-                        .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnName("Status")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("StopDate")
-                        .IsRequired()
-                        .HasColumnName("StopDate")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("ClientMedicationId");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("MedicationId");
-
-                    b.HasIndex("MedicationManufacturerId");
-
-                    b.ToTable("tbl_ClientMedication");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationDay", b =>
-                {
-                    b.Property<int>("ClientMedicationDayId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientMedicationDayId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientMedicationId")
-                        .HasColumnName("ClientMedicationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ClientMedicationId1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RotaDayofWeekId")
-                        .HasColumnName("RotaDayofWeekId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ClientMedicationDayId");
-
-                    b.HasIndex("ClientMedicationId");
-
-                    b.HasIndex("ClientMedicationId1");
-
-                    b.HasIndex("RotaDayofWeekId")
-                        .IsUnique();
-
-                    b.ToTable("tbl_ClientMedicationDay");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationPeriod", b =>
-                {
-                    b.Property<int>("ClientMedicationPeriodId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientMedicationPeriodId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientMedicationDayId")
-                        .HasColumnName("ClientMedicationDayId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientRotaTypeId")
-                        .HasColumnName("ClientRotaTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ClientMedicationPeriodId");
-
-                    b.HasIndex("ClientMedicationDayId");
-
-                    b.HasIndex("ClientRotaTypeId");
-
-                    b.ToTable("tbl_ClientMedicationPeriod");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRegulatoryContact", b =>
@@ -2162,61 +2025,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.ClientInvolvingPartyItem", "ClientInvolvingPartyItem")
                         .WithMany("ClientInvolvingParty")
                         .HasForeignKey("ClientInvolvingPartyItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedication", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("ClientMedication")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AwesomeCare.Model.Models.Medication", "Medication")
-                        .WithMany()
-                        .HasForeignKey("MedicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AwesomeCare.Model.Models.MedicationManufacturer", "MedicationManufacturer")
-                        .WithMany()
-                        .HasForeignKey("MedicationManufacturerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationDay", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.ClientMedication", null)
-                        .WithMany("ClientMedicationDay")
-                        .HasForeignKey("ClientMedicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AwesomeCare.Model.Models.ClientMedication", "ClientMedication")
-                        .WithMany()
-                        .HasForeignKey("ClientMedicationId1");
-
-                    b.HasOne("AwesomeCare.Model.Models.RotaDayofWeek", "RotaDayofWeek")
-                        .WithOne("ClientMedicationDay")
-                        .HasForeignKey("AwesomeCare.Model.Models.ClientMedicationDay", "RotaDayofWeekId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationPeriod", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.ClientMedicationDay", "ClientMedicationDay")
-                        .WithMany("ClientMedicationPeriod")
-                        .HasForeignKey("ClientMedicationDayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AwesomeCare.Model.Models.ClientRotaType", "ClientRotaType")
-                        .WithMany("ClientMedicationPeriod")
-                        .HasForeignKey("ClientRotaTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

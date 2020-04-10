@@ -26,6 +26,14 @@ using AwesomeCare.Admin.Services.ClientCareDetails;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
 using Newtonsoft.Json;
 using AwesomeCare.Services.Services;
+using AwesomeCare.Admin.Services.Medication;
+using AwesomeCare.DataTransferObject.DTOs.Medication;
+using AwesomeCare.Admin.Services.ClientRotaType;
+using AwesomeCare.Admin.Services.RotaDayofWeek;
+using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
+using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -36,16 +44,19 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
         private readonly IClientCareDetails _clientCareDetails;
         private readonly IFileUpload _fileUpload;
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;      
         private readonly QRCodeGenerator _qRCodeGenerator;
         private readonly DropboxClient _dropboxClient;
+        private readonly IMedicationService _medicationService;
+        private readonly IClientRotaTypeService _clientRotaTypeService;
+        private readonly IRotaDayofWeekService _rotaDayofWeekService;
 
         public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
             IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService,
-            IClientService clientService, IHostingEnvironment env, ILogger<ClientController> logger,
-            IClientCareDetails clientCareDetails):base(fileUpload)
+            IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger,
+            IClientCareDetails clientCareDetails,IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) :base(fileUpload)
         {
             _dropboxClient = dropboxClient;
             _clientService = clientService;
@@ -57,6 +68,9 @@ namespace AwesomeCare.Admin.Controllers
             _qRCodeGenerator = qRCodeGenerator;
             _clientCareDetails = clientCareDetails;
             _fileUpload = fileUpload;
+            _medicationService = medicationService;
+            _clientRotaTypeService = clientRotaTypeService;
+            _rotaDayofWeekService = rotaDayofWeekService;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -219,7 +233,6 @@ namespace AwesomeCare.Admin.Controllers
             return items;
         }
 
-
         List<PostClientCareDetails> CareDetails(CreateClient createClient)
         {
             var clientCareDetails = (from cl in createClient.CareDetails
@@ -237,9 +250,6 @@ namespace AwesomeCare.Admin.Controllers
 
             return clientCareDetails;
         }
-
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -276,7 +286,6 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
             return View("HomeCareRegistration", createClient);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -401,6 +410,38 @@ namespace AwesomeCare.Admin.Controllers
             Bitmap qrCodeImage = qrCode.GetGraphic(5);
             result.QRCode = qrCodeImage.ToByteArray();
             return View(result);
+        }
+        #endregion
+
+        #region Medication
+
+        [Route("[Controller]/Medication/{clientId}", Name = "Medication")]
+        public async Task<IActionResult> Medications(int clientId)
+        {
+            var medications = await _clientService.GetMedications(clientId);
+            return View(medications);
+        }
+
+        [Route("[Controller]/Medication/Create/{clientId}",Name ="CreateMedication")]
+        public async Task<IActionResult> CreateMedication(int? clientId)
+        {
+            var model = new CreateMedicationViewModel();
+            var medNames = await _medicationService.Get();
+            var medManufacturers = await _medicationService.GetManufacturers();
+            var weekdays = await _rotaDayofWeekService.Get();
+            var rotaTypes = await _clientRotaTypeService.Get();
+            model.Medications = medNames.Select(s=>new SelectListItem(string.Concat(s.MedicationName," (",s.Strength,")"),s.MedicationId.ToString())).ToList();
+            model.MedicationManufacturers = medManufacturers.Select(s=>new SelectListItem(s.Manufacturer,s.MedicationManufacturerId.ToString())).ToList();
+            model.WeekDays = weekdays;
+            model.RotaTypes = rotaTypes;
+
+            HttpContext.Session.Set<List<GetMedication>>("medNames", medNames);
+            HttpContext.Session.Set<List<GetRotaDayofWeek>>("weekdays", weekdays);
+            HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
+            HttpContext.Session.Set<List<GetMedicationManufacturer>>("medManufacturers", medManufacturers);
+
+
+            return View(model);
         }
         #endregion
     }

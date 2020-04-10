@@ -8,6 +8,9 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,13 +25,31 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Client> _clientRepository;
         private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
         private IGenericRepository<BaseRecordModel> _baseRecordRepository;
+        private IGenericRepository<ClientMedication> _clientMedicationRepository;
+        private IGenericRepository<ClientMedicationDay> _clientMedicationDayRepository;
+        private IGenericRepository<ClientMedicationPeriod> _clientMedicationPeriodRepository;
+        private IGenericRepository<RotaDayofWeek> _rotaDayOfWeekRepository;
+        private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
+        private IGenericRepository<Medication> _medicationRepository;
+        private IGenericRepository<MedicationManufacturer> _medicationManufacturerRepository;
         private AwesomeCareDbContext _dbContext;
-        public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
+        public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<ClientMedicationPeriod> clientMedicationPeriodRepository,
+            IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<ClientMedicationDay> clientMedicationDayRepository,
+            IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<ClientMedication> clientMedicationRepository,
+            IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
+            IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository)
         {
             _clientRepository = clientRepository;
             _baseRecordItemRepository = baseRecordItemRepository;
             _baseRecordRepository = baseRecordRepository;
             _dbContext = dbContext;
+            _clientMedicationRepository = clientMedicationRepository;
+            _clientMedicationDayRepository = clientMedicationDayRepository;
+            _clientMedicationPeriodRepository = clientMedicationPeriodRepository;
+            _rotaDayOfWeekRepository = rotaDayOfWeekRepository;
+            _clientRotaTypeRepository = clientRotaTypeRepository;
+            _medicationRepository = medicationRepository;
+            _medicationManufacturerRepository = medicationManufacturerRepository;
         }
         /// <summary>
         /// Create Client
@@ -41,30 +62,30 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostClient([FromBody]PostClient postClient)
         {
-            
-                if (postClient == null || !ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                //Check if client is not already registered
-              
-                var isClientRegistered = _clientRepository.Table.Any(c => c.Email.Trim().ToLower().Equals(postClient.Email.Trim().ToLower()));
-                if (isClientRegistered)
-                {
-                    ModelState.AddModelError("", $"Client with email address {postClient.Email} is already registered");
-                    return BadRequest(ModelState);
-                }
 
-                var client = Mapper.Map<Client>(postClient);
-                var newClient = await _clientRepository.InsertEntity(client);
+            if (postClient == null || !ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            //Check if client is not already registered
 
-                newClient.UniqueId = $"AHS/CT/{DateTime.Now.ToString("yy")}/{ newClient.ClientId.ToString("D6")}";
-                newClient = await _clientRepository.UpdateEntity(newClient);
+            var isClientRegistered = _clientRepository.Table.Any(c => c.Email.Trim().ToLower().Equals(postClient.Email.Trim().ToLower()));
+            if (isClientRegistered)
+            {
+                ModelState.AddModelError("", $"Client with email address {postClient.Email} is already registered");
+                return BadRequest(ModelState);
+            }
 
-                var getClient = Mapper.Map<GetClient>(newClient);
-                return CreatedAtAction("GetClient", new { id = getClient.ClientId }, getClient);
+            var client = Mapper.Map<Client>(postClient);
+            var newClient = await _clientRepository.InsertEntity(client);
 
-           
+            newClient.UniqueId = $"AHS/CT/{DateTime.Now.ToString("yy")}/{ newClient.ClientId.ToString("D6")}";
+            newClient = await _clientRepository.UpdateEntity(newClient);
+
+            var getClient = Mapper.Map<GetClient>(newClient);
+            return CreatedAtAction("GetClient", new { id = getClient.ClientId }, getClient);
+
+
         }
 
         /// <summary>
@@ -72,7 +93,7 @@ namespace AwesomeCare.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("GetClient/{id}")]
         [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -86,7 +107,7 @@ namespace AwesomeCare.API.Controllers
             var getClient = await (from client in _clientRepository.Table
                                    join baseRecItem in _baseRecordItemRepository.Table on client.StatusId equals baseRecItem.BaseRecordItemId
                                    join baseRec in _baseRecordRepository.Table on baseRecItem.BaseRecordId equals baseRec.BaseRecordId
-                                   where  client.ClientId == id.Value
+                                   where client.ClientId == id.Value
                                    select new GetClient
                                    {
                                        ClientId = client.ClientId,
@@ -136,7 +157,7 @@ namespace AwesomeCare.API.Controllers
             var getClient = await (from client in _clientRepository.Table
                                    join baseRecItem in _baseRecordItemRepository.Table on client.StatusId equals baseRecItem.BaseRecordItemId
                                    join baseRec in _baseRecordRepository.Table on baseRecItem.BaseRecordId equals baseRec.BaseRecordId
-                                  // where baseRec.KeyName == "Client_Status"
+                                   // where baseRec.KeyName == "Client_Status"
                                    select new GetClient
                                    {
                                        ClientId = client.ClientId,
@@ -232,5 +253,150 @@ namespace AwesomeCare.API.Controllers
             var id = await _dbContext.SaveChangesAsync();
             return Ok(id);
         }
+
+        #region Medication
+        /// <summary>
+        /// Create Client Medication
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("Medication")]
+        [ProducesResponseType(type: typeof(GetClientMedication), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PostMedication([FromBody]PostClientMedication model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+            var entity = Mapper.Map<ClientMedication>(model);
+            var newEntity = await _clientMedicationRepository.InsertEntity(entity);
+            var getEntity = Mapper.Map<GetClientMedication>(newEntity);
+            return CreatedAtAction("GetMedication", new { id = newEntity.ClientMedicationId }, getEntity);
+
+        }
+
+        /// <summary>
+        ///  Get Client Medication By clientId and Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        [HttpGet("Medication/{clientId}/{id}", Name = "GetClientMedication")]
+        [ProducesResponseType(type: typeof(GetClientMedication), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetMedication(int? id, int? clientId)
+        {
+            if (!id.HasValue || !clientId.HasValue)
+            {
+                return BadRequest("All Parameters are required");
+            }
+
+            var entity = await (from clmd in _clientMedicationRepository.Table
+                                join med in _medicationRepository.Table on clmd.MedicationId equals med.MedicationId
+                                join medMf in _medicationManufacturerRepository.Table on clmd.MedicationManufacturerId equals medMf.MedicationManufacturerId
+                                where clmd.ClientMedicationId == id && clmd.ClientId == clientId
+                                select new GetClientMedication
+                                {
+                                    ClientMedicationId = clmd.ClientMedicationId,
+                                    ClientMedicationDay = (from dy in clmd.ClientMedicationDay
+                                                           join rtwk in _rotaDayOfWeekRepository.Table on dy.RotaDayofWeekId equals rtwk.RotaDayofWeekId
+                                                           select new GetClientMedicationDay
+                                                           {
+                                                               ClientMedicationDayId = dy.ClientMedicationDayId,
+                                                               ClientMedicationId = dy.ClientMedicationId,
+                                                               DayOfWeek = rtwk.DayofWeek,
+                                                               RotaDayofWeekId = dy.RotaDayofWeekId,
+                                                               ClientMedicationPeriod = (from pd in dy.ClientMedicationPeriod
+                                                                                         join cltp in _clientRotaTypeRepository.Table on pd.ClientRotaTypeId equals cltp.ClientRotaTypeId
+                                                                                         select new GetClientMedicationPeriod
+                                                                                         {
+                                                                                             ClientRotaTypeId = cltp.ClientRotaTypeId,
+                                                                                             ClientMedicationDayId = pd.ClientMedicationDayId,
+                                                                                             ClientMedicationPeriodId = pd.ClientMedicationPeriodId,
+                                                                                             RotaType = cltp.RotaType
+                                                                                         }).ToList(),
+                                                           }).ToList(),
+                                    Dossage = clmd.Dossage,
+                                    ExpiryDate = clmd.ExpiryDate,
+                                    Frequency = clmd.Frequency,
+                                    Gap_Hour = clmd.Gap_Hour,
+                                    MedicationId = clmd.MedicationId,
+                                    MedicationManufacturerId = clmd.MedicationManufacturerId,
+                                    ClientId = clmd.ClientId,
+                                    Medication = med.MedicationName,
+                                    MedicationManufacturer = medMf.Manufacturer,
+                                    Remark = clmd.Remark,
+                                    Route = clmd.Route,
+                                    StartDate = clmd.StartDate,
+                                    Status = clmd.Status,
+                                    StopDate = clmd.StopDate
+                                }).FirstOrDefaultAsync();
+
+            return Ok(entity);
+        }
+
+        /// <summary>
+        /// Get Client Medications by ClientId
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        [HttpGet("Medication/{clientId}", Name = "GetClientMedications")]
+        [ProducesResponseType(type: typeof(List<GetClientMedication>), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetMedication(int? clientId)
+        {
+            if ( !clientId.HasValue)
+            {
+                return BadRequest("All Parameters are required");
+            }
+            var entity = await (from clmd in _clientMedicationRepository.Table
+                                join med in _medicationRepository.Table on clmd.MedicationId equals med.MedicationId
+                                join medMf in _medicationManufacturerRepository.Table on clmd.MedicationManufacturerId equals medMf.MedicationManufacturerId
+                                where clmd.ClientId == clientId
+                                select new GetClientMedication
+                                {
+                                    ClientMedicationId = clmd.ClientMedicationId,
+                                    ClientMedicationDay = (from dy in clmd.ClientMedicationDay
+                                                           join rtwk in _rotaDayOfWeekRepository.Table on dy.RotaDayofWeekId equals rtwk.RotaDayofWeekId
+                                                           select new GetClientMedicationDay
+                                                           {
+                                                               ClientMedicationDayId = dy.ClientMedicationDayId,
+                                                               ClientMedicationId = dy.ClientMedicationId,
+                                                               DayOfWeek = rtwk.DayofWeek,
+                                                               RotaDayofWeekId = dy.RotaDayofWeekId,
+                                                               ClientMedicationPeriod = (from pd in dy.ClientMedicationPeriod
+                                                                                         join cltp in _clientRotaTypeRepository.Table on pd.ClientRotaTypeId equals cltp.ClientRotaTypeId
+                                                                                         select new GetClientMedicationPeriod
+                                                                                         {
+                                                                                             ClientRotaTypeId = cltp.ClientRotaTypeId,
+                                                                                             ClientMedicationDayId = pd.ClientMedicationDayId,
+                                                                                             ClientMedicationPeriodId = pd.ClientMedicationPeriodId,
+                                                                                             RotaType = cltp.RotaType
+                                                                                         }).ToList(),
+                                                           }).ToList(),
+                                    Dossage = clmd.Dossage,
+                                    ExpiryDate = clmd.ExpiryDate,
+                                    Frequency = clmd.Frequency,
+                                    Gap_Hour = clmd.Gap_Hour,
+                                    MedicationId = clmd.MedicationId,
+                                    MedicationManufacturerId = clmd.MedicationManufacturerId,
+                                    ClientId = clmd.ClientId,
+                                    Medication = med.MedicationName,
+                                    MedicationManufacturer = medMf.Manufacturer,
+                                    Remark = clmd.Remark,
+                                    Route = clmd.Route,
+                                    StartDate = clmd.StartDate,
+                                    Status = clmd.Status,
+                                    StopDate = clmd.StopDate
+                                }).ToListAsync();
+
+            return Ok(entity);
+        }
+
+        #endregion
+
     }
 }

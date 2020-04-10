@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20191124191441_tbl_RotaTask.Designer.cs" />
     <Compile Remove="Migrations\20200314114347_tbl_StaffWorkTeam.cs" />
     <Compile Remove="Migrations\20200314114347_tbl_StaffWorkTeam.Designer.cs" />
+    <Compile Remove="Migrations\20200409203145_tbl_ClientMedication_Days_Periods.cs" />
+    <Compile Remove="Migrations\20200409203145_tbl_ClientMedication_Days_Periods.Designer.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
   </ItemGroup>

@@ -28,6 +28,7 @@ using AwesomeCare.Admin.Services.Untowards;
 using AwesomeCare.Admin.Services.ShiftBooking;
 using AwesomeCare.Admin.Services.StaffWorkTeam;
 using Microsoft.Extensions.Hosting;
+using AwesomeCare.Admin.Services.Medication;
 
 namespace AwesomeCare.Admin
 {
@@ -179,6 +180,11 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffWorkTeamService>(r));
+
+            services.AddHttpClient("medicationservie", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IMedicationService>(r));
 
             
         }
