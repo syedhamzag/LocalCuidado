@@ -34,6 +34,9 @@ using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -46,7 +49,7 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IFileUpload _fileUpload;
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
-        private readonly IMemoryCache _cache;      
+        private readonly IMemoryCache _cache;
         private readonly QRCodeGenerator _qRCodeGenerator;
         private readonly DropboxClient _dropboxClient;
         private readonly IMedicationService _medicationService;
@@ -56,7 +59,7 @@ namespace AwesomeCare.Admin.Controllers
         public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
             IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService,
             IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger,
-            IClientCareDetails clientCareDetails,IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) :base(fileUpload)
+            IClientCareDetails clientCareDetails, IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) : base(fileUpload)
         {
             _dropboxClient = dropboxClient;
             _clientService = clientService;
@@ -415,14 +418,16 @@ namespace AwesomeCare.Admin.Controllers
 
         #region Medication
 
-        [Route("[Controller]/Medication/{clientId}", Name = "Medication")]
+        [Route("[Controller]/[action]/{clientId}", Name = "Medication")]
         public async Task<IActionResult> Medications(int clientId)
         {
+            ViewBag.ClientId = clientId;
             var medications = await _clientService.GetMedications(clientId);
             return View(medications);
         }
 
-        [Route("[Controller]/Medication/Create/{clientId}",Name ="CreateMedication")]
+
+        [Route("[Controller]/Medication/Create/{clientId}", Name = "CreateMedication")]
         public async Task<IActionResult> CreateMedication(int? clientId)
         {
             var model = new CreateMedicationViewModel();
@@ -430,18 +435,110 @@ namespace AwesomeCare.Admin.Controllers
             var medManufacturers = await _medicationService.GetManufacturers();
             var weekdays = await _rotaDayofWeekService.Get();
             var rotaTypes = await _clientRotaTypeService.Get();
-            model.Medications = medNames.Select(s=>new SelectListItem(string.Concat(s.MedicationName," (",s.Strength,")"),s.MedicationId.ToString())).ToList();
-            model.MedicationManufacturers = medManufacturers.Select(s=>new SelectListItem(s.Manufacturer,s.MedicationManufacturerId.ToString())).ToList();
-            model.WeekDays = weekdays;
-            model.RotaTypes = rotaTypes;
+            model.ClientId = clientId.Value;
 
-            HttpContext.Session.Set<List<GetMedication>>("medNames", medNames);
-            HttpContext.Session.Set<List<GetRotaDayofWeek>>("weekdays", weekdays);
-            HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
-            HttpContext.Session.Set<List<GetMedicationManufacturer>>("medManufacturers", medManufacturers);
+            model.Medications = medNames.Select(s => new SelectListItem(string.Concat(s.MedicationName, " (", s.Strength, ")"), s.MedicationId.ToString())).ToList();
+            model.MedicationManufacturers = medManufacturers.Select(s => new SelectListItem(s.Manufacturer, s.MedicationManufacturerId.ToString())).ToList();
+            model.Days = weekdays.Select(d => new CreateMedicationDay()
+            {
+                DayOfWeek = d.DayofWeek,
+                RotaDayofWeekId = d.RotaDayofWeekId,
+                RotaTypes = rotaTypes.Select(r => new CreateMedicationPeriod()
+                {
+                    RotaType = r.RotaType,
+                    ClientRotaTypeId = r.ClientRotaTypeId
+                }).ToList()
+            }).ToList();
+
+
+            //HttpContext.Session.Set<List<GetMedication>>("medNames", medNames);
+            //HttpContext.Session.Set<List<GetRotaDayofWeek>>("weekdays", weekdays);
+            //HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
+            //HttpContext.Session.Set<List<GetMedicationManufacturer>>("medManufacturers", medManufacturers);
 
 
             return View(model);
+        }
+
+        [HttpPost("[Controller]/Medication/Create/{clientId}", Name = "CreateMedication")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMedication(CreateMedicationViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                await ResetModel(model);
+                return View(model);
+            }
+
+            var daysPeriods = model.Days.Where(d => d.IsSelected).ToList();
+            foreach (var item in daysPeriods)
+            {
+                model.ClientMedicationDay.Add(new PostClientMedicationDay()
+                {
+                    RotaDayofWeekId = item.RotaDayofWeekId,
+                    ClientMedicationPeriod = item.RotaTypes.Where(s => s.IsSelected).Select(n => new PostClientMedicationPeriod
+                    {
+                        ClientRotaTypeId = n.ClientRotaTypeId
+                    }).ToList()
+                });
+            }
+            var postClientMed = Mapper.Map<PostClientMedication>(model);
+            //   var j = JsonConvert.SerializeObject(postClientMed);
+            var result = await _clientService.PostMedication(postClientMed);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus
+            {
+                IsSuccessful = result.IsSuccessStatusCode,
+                Message = result.IsSuccessStatusCode ? "Operation Successful" : "Operation Failed"
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Medications", new { clientId = model.ClientId });
+            }
+            else
+            {
+                _logger.LogError(content, new[] { $"{this.HttpContext.Request.Path.ToUriComponent()}" });
+                await ResetModel(model);
+                return View(model);
+            }
+
+        }
+
+        [Route("[Controller]/Medication/Details/{clientId}/{id}", Name = "MedicationDetails")]
+        public async Task<IActionResult> MedicationDetails(int clientId, int id)
+        {
+            ViewBag.ClientId = clientId;
+            ViewBag.Id = id;
+            var medication = await _clientService.GetMedication(clientId, id);
+            if (medication == null)
+                return NotFound();
+
+            return View(medication);
+        }
+
+        async Task ResetModel(CreateMedicationViewModel model)
+        {
+            var medNames = await _medicationService.Get();
+            var medManufacturers = await _medicationService.GetManufacturers();
+            var weekdays = await _rotaDayofWeekService.Get();
+            var rotaTypes = await _clientRotaTypeService.Get();
+
+            model.Medications = medNames.Select(s => new SelectListItem(string.Concat(s.MedicationName, " (", s.Strength, ")"), s.MedicationId.ToString())).ToList();
+            model.MedicationManufacturers = medManufacturers.Select(s => new SelectListItem(s.Manufacturer, s.MedicationManufacturerId.ToString())).ToList();
+            model.Days = weekdays.Select(d => new CreateMedicationDay()
+            {
+                DayOfWeek = d.DayofWeek,
+                RotaDayofWeekId = d.RotaDayofWeekId,
+                RotaTypes = rotaTypes.Select(r => new CreateMedicationPeriod()
+                {
+                    RotaType = r.RotaType,
+                    ClientRotaTypeId = r.ClientRotaTypeId
+                }).ToList()
+            }).ToList();
+
         }
         #endregion
     }

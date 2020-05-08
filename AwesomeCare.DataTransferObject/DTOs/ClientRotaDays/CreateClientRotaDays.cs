@@ -12,6 +12,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientRotaDays
         {
             RotaTasks = new List<CreateClientRotaTask>();
         }
+        public int ClientRotaDaysId { get; set; }
         [Required(ErrorMessage = "please provide  ClientRota")]
         public int ClientRotaId { get; set; }
         [Required(ErrorMessage = "Please provide Day of Week")]
@@ -20,7 +21,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientRotaDays
         public string StartTime { get; set; }
         [Required]
         public string StopTime { get; set; }
-
+        [Required]
+        public int RotaId { get; set; }
         public List<CreateClientRotaTask> RotaTasks { get; set; }
     }
 }

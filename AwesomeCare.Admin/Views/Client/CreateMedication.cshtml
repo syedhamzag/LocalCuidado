@@ -1,146 +1,150 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Client;
 @model CreateMedicationViewModel
 
-        @{
-        ViewData["Title"] = "Client - Create Medication";
-        }
-               
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12">
-                <div class="card planned_task">
-                    <div class="header">
-                        <h2>Create Medication</h2>
-                        
+@{
+    ViewData["Title"] = "Client - Create Medication";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Create Medication</h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="CreateMedication" method="post">
+                    <input type="hidden" asp-for="ClientId" />
+                    <div class="row">
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="MedicationId"></label>
+                            <select asp-for="MedicationId" asp-items="Model.Medications" class="form-control"></select>
+                            <span asp-validation-for="MedicationId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="MedicationManufacturerId"></label>
+                            <select asp-for="MedicationManufacturerId" asp-items="Model.MedicationManufacturers" class="form-control"></select>
+                            <span asp-validation-for="MedicationManufacturerId" class="text-danger"></span>
+                        </div>
+
+
                     </div>
-                    <div class="body">
-                        <form asp-route="CreateMedication" method="post">
-                            <div class="row">
 
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="MedicationId"></label>
-                                    <select asp-for="MedicationId" asp-items="Model.Medications" class="form-control"></select>
-                                    <span asp-validation-for="MedicationId" class="text-danger"></span>
-                                </div>
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="ExpiryDate"></label>
+                            <input type="text" asp-for="ExpiryDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy">
+                            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                        </div>
 
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="MedicationManufacturerId"></label>
-                                    <select asp-for="MedicationManufacturerId" asp-items="Model.MedicationManufacturers" class="form-control"></select>
-                                    <span asp-validation-for="MedicationManufacturerId" class="text-danger"></span>
-                                </div>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Dossage"></label>
+                            <input type="text" asp-for="Dossage" class="form-control">
+                            <span asp-validation-for="Dossage" class="text-danger"></span>
+                        </div>
 
-                                
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="ExpiryDate"></label>
-                                    <input type="text" asp-for="ExpiryDate" class="form-control" data-provide="datepicker"  data-date-autoclose="true" data-date-format="mm/dd/yyyy">
-                                    <span asp-validation-for="ExpiryDate" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="Dossage"></label>
-                                    <input type="text" asp-for="Dossage" class="form-control">
-                                    <span asp-validation-for="Dossage" class="text-danger"></span>
-                                </div>
-
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="Frequency"></label>
-                                    <select asp-for="Frequency" class="form-control">
-                                        <option value="Continuous">Continuous</option>
-                                        <option value="PRN">PRN</option>
-                                    </select>
-                                    <span asp-validation-for="Frequency" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Frequency"></label>
+                            <select asp-for="Frequency" class="form-control">
+                                <option value="Continuous">Continuous</option>
+                                <option value="PRN">PRN</option>
+                            </select>
+                            <span asp-validation-for="Frequency" class="text-danger"></span>
+                        </div>
+                    </div>
 
 
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="Gap_Hour"></label>
-                                    <select asp-for="Gap_Hour" asp-items="Gaps" class="form-control">
-                                    </select>
-                                    <span asp-validation-for="Gap_Hour" class="text-danger"></span>
-                                </div>
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Gap_Hour"></label>
+                            <select asp-for="Gap_Hour" asp-items="Model.Gaps" class="form-control">
+                            </select>
+                            <span asp-validation-for="Gap_Hour" class="text-danger"></span>
+                        </div>
 
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="Route"></label>
-                                    <select asp-for="Route" class="form-control">
-                                        <option value="Injection">Injection</option>
-                                        <option value="Oral">Oral</option>
-                                    </select>
-                                    <span asp-validation-for="Route" class="text-danger"></span>
-                                </div>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Route"></label>
+                            <select asp-for="Route" class="form-control">
+                                <option value="Injection">Injection</option>
+                                <option value="Oral">Oral</option>
+                            </select>
+                            <span asp-validation-for="Route" class="text-danger"></span>
+                        </div>
 
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="Status"></label>
-                                    <select asp-for="Status" class="form-control">
-                                        <option class="text-success" value="Continue">Continue</option>
-                                        <option class="text-danger" value="Stop">Stop</option>
-                                    </select>
-                                    <span asp-validation-for="Status" class="text-danger"></span>
-                                </div>
-                            </div>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Status"></label>
+                            <select asp-for="Status" class="form-control">
+                                <option class="text-success" value="Continue">Continue</option>
+                                <option class="text-danger" value="Stop">Stop</option>
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+                    </div>
 
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="StartDate"></label>
-                                    <input type="text" asp-for="StartDate" class="form-control" data-provide="datepicker"  data-date-autoclose="true" data-date-format="mm/dd/yyyy">
-                                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                                </div>
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="StartDate"></label>
+                            <input type="text" asp-for="StartDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy">
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
 
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="StopDate"></label>
-                                    <input type="text" asp-for="StopDate" class="form-control" data-provide="datepicker"  data-date-autoclose="true" data-date-format="mm/dd/yyyy">
-                                    <span asp-validation-for="StopDate" class="text-danger"></span>
-                                </div>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="StopDate"></label>
+                            <input type="text" asp-for="StopDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy">
+                            <span asp-validation-for="StopDate" class="text-danger"></span>
+                        </div>
 
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="Remark"></label>
-                                   <textarea asp-for="Remark" class="form-control"></textarea>
-                                    <span asp-validation-for="Remark" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <p>Days/Period</p>
-                            <table class="table table-condensed table-light table-bordered">
-                                <thead>
-                                    <tr>
-                                        @foreach (var day in Model.WeekDays)
-                                        {
-                                            <th>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Remark"></label>
+                            <textarea asp-for="Remark" class="form-control"></textarea>
+                            <span asp-validation-for="Remark" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <p>Days/Period</p>
+                    <table class="table table-condensed table-light table-bordered">
+                        <thead>
+                            <tr>
+                                @for (int i = 0; i < Model.Days.Count; i++)
+                                {
+                                    <th>
+                                        <label class="fancy-checkbox">
+                                            <input asp-for="@Model.Days[i].RotaDayofWeekId" type="hidden">
+                                            <input asp-for="@Model.Days[i].IsSelected" type="checkbox">
+                                            <span>@Model.Days[i].DayOfWeek</span>
+                                        </label>
+                                    </th>
+                                }
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @for (int i = 0; i < Model.Days.Count; i++)
+                                {
+                                    <td>
+                                        <div>
+                                            @for (int j = 0; j < Model.Days[i].RotaTypes.Count; j++)
+                                            {
                                                 <label class="fancy-checkbox">
-                                                    <input type="checkbox">
-                                                    <span>@day.DayofWeek</span>
+                                                    <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
+                                                    <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox">
+                                                    <span> @Model.Days[i].RotaTypes[j].RotaType</span>
                                                 </label>
-                                            </th>
-                                        }
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        @for (int i = 0; i < Model.WeekDays.Count; i++)
-                                        {
-                                            <td>
-                                                <div>
-                                                    @foreach (var rotaType in Model.RotaTypes)
-                                                    {
-                                                        <label class="fancy-checkbox">
-                                                            <input type="checkbox">
-                                                            <span> @rotaType.RotaType</span>
-                                                        </label>
-                                                        <br />
-                                                    }
-                                                </div>
-                                            </td>
-                                        }
-                                    </tr>
-                                </tbody>
-                            </table>
-                            @*<button type="submit" class="btn btn-primary">Submit</button>*@
-                            <a asp-action="Medications"  asp-controller="Client" class="btn btn-primary pull-right">Cancel</a>
-                        </form>
-                    </div>
-                </div>
+                                                <br />
+                                            }
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    <a asp-action="Medications" asp-route-clientId="@Model.ClientId" asp-controller="Client" class="btn btn-primary pull-left">Cancel</a>
+                </form>
             </div>
         </div>
- 
+    </div>
+</div>
+

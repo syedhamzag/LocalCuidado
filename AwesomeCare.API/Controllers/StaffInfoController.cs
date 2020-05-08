@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,6 +8,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Http;
@@ -21,14 +23,28 @@ namespace AwesomeCare.API.Controllers
     public class StaffInfoController : ControllerBase
     {
         private IGenericRepository<StaffPersonalInfo> _staffInfoRepository;
+        private IGenericRepository<StaffRotaPeriod> _staffRotaPeriodRepository;
+        private IGenericRepository<StaffRotaPartner> _staffRotaPartnerRepository;
+        private IGenericRepository<StaffRota> _staffRotaRepository;
+        private IGenericRepository<StaffRotaDynamicAddition> _staffDynamicAdditionRepository;
+        private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
         private ILogger<StaffInfoController> _logger;
         private AwesomeCareDbContext _dbContext;
-        
-        public StaffInfoController(IGenericRepository<StaffPersonalInfo> staffInfoRepository, ILogger<StaffInfoController> logger, AwesomeCareDbContext dbContext)
+
+        public StaffInfoController(IGenericRepository<StaffPersonalInfo> staffInfoRepository,
+            IGenericRepository<StaffRotaDynamicAddition> staffDynamicAdditionRepository,
+            IGenericRepository<StaffRota> staffRotaRepository, ILogger<StaffInfoController> logger,
+            AwesomeCareDbContext dbContext, IGenericRepository<StaffRotaPartner> staffRotaPartnerRepository,
+            IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository)
         {
             _staffInfoRepository = staffInfoRepository;
             _logger = logger;
             _dbContext = dbContext;
+            _staffRotaRepository = staffRotaRepository;
+            _staffDynamicAdditionRepository = staffDynamicAdditionRepository;
+            _staffRotaPartnerRepository = staffRotaPartnerRepository;
+            _staffRotaPeriodRepository = staffRotaPeriodRepository;
+            _clientRotaTypeRepository = clientRotaTypeRepository;
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
@@ -132,7 +148,7 @@ namespace AwesomeCare.API.Controllers
             var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
             var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
 
-           // var profile = Mapper.Map<GetStaffProfile>(staffDetails);
+            // var profile = Mapper.Map<GetStaffProfile>(staffDetails);
 
             var staffProfile = (from st in _staffInfoRepository.Table
                                 where st.StaffPersonalInfoId == id
@@ -200,7 +216,7 @@ namespace AwesomeCare.API.Controllers
                                     RightToWorkExpiryDate = st.RightToWorkExpiryDate,
                                     Self_PYE = st.Self_PYE,
                                     Self_PYEAttachment = st.Self_PYEAttachment,
-                                    Status = st.Status.ToString(),
+                                    Status = st.Status,
                                     TeamLeader = st.TeamLeader,
                                     Telephone = st.Telephone,
                                     Trainings = (from t in st.Trainings
@@ -220,14 +236,15 @@ namespace AwesomeCare.API.Controllers
                                     RegulatoryContacts = (from rc in st.RegulatoryContact
                                                           join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
                                                           join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId
-                                                          select new GetStaffRegulatoryContact { 
-                                                          BaseRecordItemId = bitem.BaseRecordItemId,
-                                                          DatePerformed =rc.DatePerformed,
-                                                          DueDate=rc.DueDate,
-                                                          Evidence=rc.Evidence,
-                                                          RegulatoryContact=bitem.ValueName,
-                                                          StaffPersonalInfoId =rc.StaffPersonalInfoId,
-                                                          StaffRegulatoryContactId=rc.StaffRegulatoryContactId
+                                                          select new GetStaffRegulatoryContact
+                                                          {
+                                                              BaseRecordItemId = bitem.BaseRecordItemId,
+                                                              DatePerformed = rc.DatePerformed,
+                                                              DueDate = rc.DueDate,
+                                                              Evidence = rc.Evidence,
+                                                              RegulatoryContact = bitem.ValueName,
+                                                              StaffPersonalInfoId = rc.StaffPersonalInfoId,
+                                                              StaffRegulatoryContactId = rc.StaffRegulatoryContactId
                                                           }).ToList()
                                 }).FirstOrDefault();
 
@@ -242,7 +259,21 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(List<GetStaffs>), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> GetStaffs()
         {
-            var staffs = await _staffInfoRepository.Table.ProjectTo<GetStaffs>().ToListAsync();
+            //  var staffs = await _staffInfoRepository.Table.ProjectTo<GetStaffs>().ToListAsync();
+            var staffs = await (from st in _staffInfoRepository.Table
+                                select new GetStaffs
+                                {
+                                    Address = st.Address,
+                                    ApplicationUserId = st.ApplicationUserId,
+                                    Email = st.Email,
+                                    EndDate = st.EndDate.ToString(),
+                                    Fullname = string.Concat(st.FirstName, " ", st.MiddleName, " ", st.LastName),
+                                    RegistrationId = st.RegistrationId,
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    StartDate = st.StartDate.ToString(),
+                                    Status = st.Status.ToString(),
+                                    Telephone = st.Telephone
+                                }).ToListAsync();
             return Ok(staffs);
         }
 
@@ -261,7 +292,7 @@ namespace AwesomeCare.API.Controllers
                 return NotFound();
 
             staff.Rate = model.Rate;
-            staff.Status = (int)Enum.Parse(typeof(StaffRegistrationEnum), model.Status);
+            staff.Status = model.Status;// (int)Enum.Parse(typeof(StaffRegistrationEnum), model.Status);
             staff.StaffPersonalInfoComments.Add(new StaffPersonalInfoComment
             {
                 Comment = model.Comment,
@@ -272,5 +303,144 @@ namespace AwesomeCare.API.Controllers
             await _dbContext.SaveChangesAsync();
             return Ok();
         }
+
+
+        #region Rota
+        [HttpPost("Rota/Create")]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateStaffRota([FromBody]List<PostStaffRota> model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+            var postEntity = Mapper.Map<List<StaffRota>>(model);
+            await _staffRotaRepository.InsertEntities(postEntity);
+
+
+            return Ok();
+        }
+              
+        [HttpGet("Rota/Get/{id}")]
+        [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
+        public async Task<IActionResult> GetStaffRota(int id)
+        {
+            return Ok();
+        }
+
+        [HttpPost("Rota/Dynamic")]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateStaffRotaAddition([FromBody]PostStaffRotaDynamicAddition model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+            var isExisting = _staffDynamicAdditionRepository.Table.Any(e => e.ItemName.ToLower() == model.ItemName.ToLower() && !e.Deleted);
+            if (isExisting)
+            {
+                ModelState.AddModelError("", $"Item Name {model.ItemName} is already existing");
+                return BadRequest(model);
+            }
+            var entity = Mapper.Map<StaffRotaDynamicAddition>(model);
+            var result = await _staffDynamicAdditionRepository.InsertEntity(entity);
+            return Ok();
+        }
+
+        [HttpPut("Rota/Dynamic")]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdateStaffRotaAddition([FromBody]PutStaffRotaDynamicAddition model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+            var entity = _staffDynamicAdditionRepository.Table.FirstOrDefault(e => e.StaffRotaDynamicAdditionId == model.StaffRotaDynamicAdditionId);
+            if (entity == null) return NotFound();
+
+
+            var result = Mapper.Map<PutStaffRotaDynamicAddition, StaffRotaDynamicAddition>(model, entity);
+            await _staffDynamicAdditionRepository.UpdateEntity(result);
+            return Ok();
+        }
+
+
+        [HttpGet("Rota/Dynamic")]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(List<GetStaffRotaDynamicAddition>), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetStaffRotaAddition()
+        {
+            var entities = _staffDynamicAdditionRepository.Table.Where(e => !e.Deleted).ToList();
+            var records = Mapper.Map<List<GetStaffRotaDynamicAddition>>(entities);
+            return Ok(records);
+        }
+
+        [HttpGet("Rota/Dynamic/{id}")]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(GetStaffRotaDynamicAddition), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetStaffRotaAddition(int id)
+        {
+            var entity = _staffDynamicAdditionRepository.Table.FirstOrDefault(e => !e.Deleted && e.StaffRotaDynamicAdditionId == id);
+            if (entity == null) return NotFound();
+
+            var records = Mapper.Map<GetStaffRotaDynamicAddition>(entity);
+            return Ok(records);
+        }
+
+        /// <summary>
+        /// Get Staff Rotas
+        /// </summary>
+        /// <param name="sDate">StartDate (yyyy-MM-dd)</param>
+        /// <param name="eDate">EndDate (yyyy-MM-dd)</param>
+        /// <returns></returns>
+        [HttpGet("Rota/Get/{sDate}/{eDate}")]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetRotaLive(string sDate,string eDate)
+        {
+
+            string format = "yyyy-MM-dd";
+            bool isStartDateValid = DateTime.TryParseExact(sDate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime startDate);
+            bool isEndDateValid = DateTime.TryParseExact(eDate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime endDate);
+            if (isStartDateValid || isEndDateValid)
+            {
+                return BadRequest("Invalid Date format, Format is yyyy-MM-dd");
+            }
+            var staffRotas =await (from sr in _staffRotaRepository.Table
+                              join staff in _staffInfoRepository.Table on sr.Staff equals staff.StaffPersonalInfoId
+                              where sr.RotaDate >= startDate && sr.RotaDate <= endDate
+                              select new GetStaffRota {
+                                  Staff = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName,
+                                  ReferenceNumber = sr.ReferenceNumber,
+                                  Remark = sr.Remark,
+                                  RotaDate = sr.RotaDate,
+                                  RotaId = sr.RotaId,
+                                  StaffId = sr.Staff,
+                                  Partners = (from pt in sr.StaffRotaPartners
+                                              join partner in _staffInfoRepository.Table on pt.StaffId equals partner.StaffPersonalInfoId
+                                              select new GetStaffRotaPartner
+                                              {
+                                                  Partner = partner.FirstName + " " + partner.MiddleName + " " + partner.LastName,
+                                                  PartnerId = pt.StaffId,
+                                                  StaffRotaId = pt.StaffRotaId,
+                                                  StaffRotaPartnerId = pt.StaffRotaPartnerId,
+                                                  Telephone = partner.Telephone
+                                              }).ToList(),
+                                  Periods = (from p in sr.StaffRotaPeriods
+                                             join ct in _clientRotaTypeRepository.Table on p.ClientRotaTypeId equals ct.ClientRotaTypeId
+                                             select new GetStaffRotaPeriod {
+                                                 ClientRotaTypeId=p.ClientRotaTypeId,
+                                                 RotaType = ct.RotaType,
+                                                 StaffRotaId = p.StaffRotaId,
+                                                 StaffRotaPeriodId = p.StaffRotaPeriodId
+                                             }).ToList()
+                              }).OrderBy(b=>b.RotaDate).ToListAsync();
+
+
+            return Ok(staffRotas);
+
+        }
+
+        #endregion
+
     }
 }

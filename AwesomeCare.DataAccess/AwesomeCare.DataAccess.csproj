@@ -23,6 +23,14 @@
     <Compile Remove="Migrations\20200314114347_tbl_StaffWorkTeam.Designer.cs" />
     <Compile Remove="Migrations\20200409203145_tbl_ClientMedication_Days_Periods.cs" />
     <Compile Remove="Migrations\20200409203145_tbl_ClientMedication_Days_Periods.Designer.cs" />
+    <Compile Remove="Migrations\20200420132526_tbl_StaffRota_tbl_StaffRotaPeriod.cs" />
+    <Compile Remove="Migrations\20200420132526_tbl_StaffRota_tbl_StaffRotaPeriod.Designer.cs" />
+    <Compile Remove="Migrations\20200424111749_tbl_StaffRotaPartner.cs" />
+    <Compile Remove="Migrations\20200424111749_tbl_StaffRotaPartner.Designer.cs" />
+    <Compile Remove="Migrations\20200424154356_tbl_StaffRota_ReferenceNumber.cs" />
+    <Compile Remove="Migrations\20200424154356_tbl_StaffRota_ReferenceNumber.Designer.cs" />
+    <Compile Remove="Migrations\20200424225557_tbl_StaffRotaPeriod_StaffRotaId_Fk.cs" />
+    <Compile Remove="Migrations\20200424225557_tbl_StaffRotaPeriod_StaffRotaId_Fk.Designer.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
   </ItemGroup>

@@ -19,6 +19,8 @@ using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.Admin.Services.ClientRota;
 using AwesomeCare.Admin.Models;
 using AwesomeCare.Services.Services;
+using Newtonsoft.Json;
+using AwesomeCare.Model.Models;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -29,7 +31,7 @@ namespace AwesomeCare.Admin.Controllers
         IRotaTaskService _rotaTaskService;
         IRotaDayofWeekService _rotaDayOfWeekService;
         IClientRotaService _clientRotaService;
-        public RoteringController(IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService):base(fileUpload)
+        public RoteringController(IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
         {
             _clientRotaTypeService = clientRotaTypeService;
             _clientRotaNameService = clientRotaNameService;
@@ -39,6 +41,7 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Index(int client)
         {
+
             RoteringViewModel model = new RoteringViewModel();
             model.ClientId = client;
             var rotaTypes = await _clientRotaTypeService.Get();
@@ -46,10 +49,18 @@ namespace AwesomeCare.Admin.Controllers
             var rotaTasks = await _rotaTaskService.Get();
             var weekDays = await _rotaDayOfWeekService.Get();
 
+            var clientRotas = await _clientRotaService.GetForEdit(client);
+
             model.Rotas = rotas.Select(r => new SelectListItem { Text = r.RotaName, Value = r.RotaId.ToString() }).ToList();
             model.RotaTasks = rotaTasks.Select(r => new SelectListItem { Text = r.TaskName, Value = r.RotaTaskId.ToString() }).ToList();
             model.RotaTypes = rotaTypes;
             model.WeekDays = weekDays;
+            model.ClientRotas = clientRotas;
+            if (clientRotas.Count > 0)
+            {
+                model.ActionName = "Update";
+            }
+
             HttpContext.Session.Set<List<GetRotaDayofWeek>>("weekDays", model.WeekDays);
             HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
             return View(model);
@@ -57,8 +68,9 @@ namespace AwesomeCare.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(RoteringViewModel model,IFormCollection formsCollection)
+        public async Task<IActionResult> Index(RoteringViewModel model, IFormCollection formsCollection)
         {
+
             List<GetClientRotaType> rotaTypes = HttpContext.Session.Get<List<GetClientRotaType>>("rotaTypes");
             List<GetRotaDayofWeek> weekDays = HttpContext.Session.Get<List<GetRotaDayofWeek>>("weekDays");
 
@@ -67,54 +79,111 @@ namespace AwesomeCare.Admin.Controllers
             foreach (var rotaType in rotaTypes)
             {
                 var rotatype = formsCollection[rotaType.RotaType];
-                if (rotatype.Count > 0 && rotatype[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
+                string clientRotaid = $"{rotaType.RotaType}-ClientRotaId";
+               
+
+                if(rotaType != null)
                 {
-                    var clientRota = new CreateClientRota();
-                    clientRota.ClientId = model.ClientId;
-                    clientRota.ClientRotaTypeId = rotaTypes.FirstOrDefault(r => r.RotaType.Equals(rotaType.RotaType)).ClientRotaTypeId;
-                    var rotaDays = new List<CreateClientRotaDays>();
-                    foreach (var weekDay in weekDays)
+                    var clientrota = formsCollection[clientRotaid];
+
+                    if (rotatype.Count > 0 && rotatype[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        //Weekdays
-                        var rotaDay = new CreateClientRotaDays();
-
-                        string rotaId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-rota";
-                        string tastId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-rotaTask";
-                        string startTimeId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-StartTime";
-                        string stopTimeId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-StopTime";
-                        string weekDayId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-Day";
-
-                        var rota = formsCollection[rotaId];
-                        var task = formsCollection[tastId];
-                        var startTime = formsCollection[startTimeId];
-                        var stopTime = formsCollection[stopTimeId];
-                        var weekday = formsCollection[weekDayId];
-
-                        rotaDay.StartTime = startTime[0].ToString();
-                        rotaDay.StopTime = stopTime[0].ToString();
-                        rotaDay.RotaDayofWeekId = int.Parse(weekday);
-                        //Count the number of Task
-                        var tasks = new List<CreateClientRotaTask>();
-                        for (int i = 0; i < task.Count; i++)
+                        var clientRota = new CreateClientRota();
+                        clientRota.ClientId = model.ClientId;
+                        clientRota.ClientRotaTypeId = rotaTypes.FirstOrDefault(r => r.RotaType.Equals(rotaType.RotaType)).ClientRotaTypeId;
+                        clientRota.ClientRotaId = int.TryParse(clientrota, out int clrtId) ? clrtId : 0;
+                        var rotaDays = new List<CreateClientRotaDays>();
+                        foreach (var weekDay in weekDays)
                         {
-                            var newtask = new CreateClientRotaTask();
-                            newtask.RotaTaskId = int.Parse(task[i].ToString());
-                            rotaDay.RotaTasks.Add(newtask);
+                            //Weekdays
+                            var rotaDay = new CreateClientRotaDays();
+
+                            string rotaId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-rota";
+                            string tastId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-rotaTask";
+                            string startTimeId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-StartTime";
+                            string stopTimeId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-StopTime";
+                            string weekDayId = $"{rotaType.RotaType}-{weekDay.DayofWeek}-Day";
+                            string clientRotaDay = $"{rotaType.RotaType}-{weekDay.DayofWeek}-DayId";
+                            // string clientRotaid = $"{rotaType.RotaType}-{weekDay.DayofWeek}-ClientRotaId";
+
+                            //
+
+                            var rota = formsCollection[rotaId];
+                            var task = formsCollection[tastId];
+                            var startTime = formsCollection[startTimeId];
+                            var stopTime = formsCollection[stopTimeId];
+                            var weekday = formsCollection[weekDayId];
+                            var clientRotaDayId = formsCollection[clientRotaDay];
+
+
+                            rotaDay.StartTime = startTime[0].ToString();
+                            rotaDay.StopTime = stopTime[0].ToString();
+                            rotaDay.RotaDayofWeekId = int.Parse(weekday);
+                            rotaDay.RotaId = int.TryParse(rota, out int rtid) ? rtid : 0;
+                            rotaDay.ClientRotaDaysId = int.TryParse(clientRotaDayId, out int dayId) ? dayId : 0;
+                            // rotaDay.ClientRotaId = int.TryParse(clientRotaid, out int crId) ? crId : 0;
+                            //Count the number of Task
+                            var tasks = new List<CreateClientRotaTask>();
+                            for (int i = 0; i < task.Count; i++)
+                            {
+                                var newtask = new CreateClientRotaTask();
+                                newtask.RotaTaskId = int.Parse(task[i].ToString());
+                                newtask.ClientRotaTaskId = 0;
+                                rotaDay.RotaTasks.Add(newtask);
+                            }
+                            clientRota.ClientRotaDays.Add(rotaDay);
                         }
-                        clientRota.ClientRotaDays.Add(rotaDay);
+                        clientRotas.Add(clientRota);
                     }
-                    clientRotas.Add(clientRota);
+
                 }
 
             }
 
             if (clientRotas.Count > 0)
             {
-                var result = await _clientRotaService.CreateRota(clientRotas);
-                SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "New Rota successfully registered" : "An Error Occurred" });
-                var content = await result.Content.ReadAsStringAsync();
+                if (model.ActionName == "Update")
+                {
+                    var kk = JsonConvert.SerializeObject(clientRotas);
+                    var result = await _clientRotaService.EditRota(clientRotas, model.ClientId);
+                    SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully Updated" : "An Error Occurred" });
+                    var content = await result.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    var result = await _clientRotaService.CreateRota(clientRotas);
+                    SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "New Rota successfully registered" : "An Error Occurred" });
+                    var content = await result.Content.ReadAsStringAsync();
+                }
+
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index",new { client = model.ClientId});
+        }
+        [HttpGet]
+        public async Task<IActionResult> RotaAdmin(string startDate, string stopDate)
+        {
+            var model = new RotaAdminViewModel();
+            model.StartDate = string.IsNullOrEmpty(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            model.StopDate = string.IsNullOrEmpty(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+
+            var rotaAdmin = await _rotaTaskService.RotaAdmin(model.StartDate, model.StopDate);
+            model.RotaAdmin = rotaAdmin;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RotaAdmin(RotaAdminViewModel model)
+        {
+            // var model = new RotaAdminViewModel();
+            // model.StartDate = string.IsNullOrEmpty(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            // model.StopDate = string.IsNullOrEmpty(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+
+            var rotaAdmin = await _rotaTaskService.RotaAdmin(model.StartDate, model.StopDate);
+            model.RotaAdmin = rotaAdmin;
+
+            return View(model);
         }
     }
 }

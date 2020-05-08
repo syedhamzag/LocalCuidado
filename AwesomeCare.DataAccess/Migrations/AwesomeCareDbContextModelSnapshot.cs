@@ -716,6 +716,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("RotaDayofWeekId")
                         .HasColumnType("int");
 
+                    b.Property<int>("RotaId")
+                        .HasColumnName("RotaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("StartTime")
                         .IsRequired()
                         .HasColumnName("StartTime")
@@ -733,6 +737,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("ClientRotaId");
 
                     b.HasIndex("RotaDayofWeekId");
+
+                    b.HasIndex("RotaId");
 
                     b.ToTable("tbl_ClientRotaDays");
                 });
@@ -1664,6 +1670,137 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_StaffRegulatoryContact");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRota", b =>
+                {
+                    b.Property<int>("StaffRotaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffRotaId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ReferenceNumber")
+                        .IsRequired()
+                        .HasColumnName("ReferenceNumber")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Remark")
+                        .HasColumnName("Remark")
+                        .HasColumnType("nvarchar(225)")
+                        .HasMaxLength(225);
+
+                    b.Property<DateTime>("RotaDate")
+                        .HasColumnName("RotaDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("RotaId")
+                        .HasColumnName("RotaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Staff")
+                        .HasColumnName("Staff")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffRotaId");
+
+                    b.HasIndex("RotaId");
+
+                    b.ToTable("tbl_StaffRota");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaDynamicAddition", b =>
+                {
+                    b.Property<int>("StaffRotaDynamicAdditionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffRotaDynamicAdditionId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnName("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnName("ItemName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("StaffRotaDynamicAdditionId");
+
+                    b.ToTable("tbl_StaffRotaDynamicAddition");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaItem", b =>
+                {
+                    b.Property<int>("StaffRotaItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffRotaItemId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffRotaDynamicAdditionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffRotaId")
+                        .HasColumnName("StaffRotaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffRotaItemId");
+
+                    b.HasIndex("StaffRotaId");
+
+                    b.ToTable("tbl_StaffRotaItem");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPartner", b =>
+                {
+                    b.Property<int>("StaffRotaPartnerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffRotaPartnerId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffRotaId")
+                        .HasColumnName("StaffRotaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffRotaPartnerId");
+
+                    b.HasIndex("StaffRotaId");
+
+                    b.ToTable("tbl_StaffRotaPartner");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPeriod", b =>
+                {
+                    b.Property<int>("StaffRotaPeriodId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("StaffRotaPeriodId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientRotaTypeId")
+                        .HasColumnName("ClientRotaTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffRotaId")
+                        .HasColumnName("StaffRotaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffRotaPeriodId");
+
+                    b.HasIndex("ClientRotaTypeId");
+
+                    b.HasIndex("StaffRotaId");
+
+                    b.ToTable("tbl_StaffRotaPeriod");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBooking", b =>
                 {
                     b.Property<int>("StaffShiftBookingId")
@@ -2264,6 +2401,12 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("RotaDayofWeekId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.Rota", "Rota")
+                        .WithMany("ClientRotaDays")
+                        .HasForeignKey("RotaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaTask", b =>
@@ -2348,6 +2491,48 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
                         .WithMany("RegulatoryContact")
                         .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRota", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Rota", "Rota")
+                        .WithMany("StaffRota")
+                        .HasForeignKey("RotaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaItem", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffRota", "StaffRota")
+                        .WithMany("StaffRotaItem")
+                        .HasForeignKey("StaffRotaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPartner", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffRota", "StaffRota")
+                        .WithMany("StaffRotaPartners")
+                        .HasForeignKey("StaffRotaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPeriod", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientRotaType", "ClientRotaType")
+                        .WithMany("StaffRotaPeriods")
+                        .HasForeignKey("ClientRotaTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffRota", "StaffRota")
+                        .WithMany("StaffRotaPeriods")
+                        .HasForeignKey("StaffRotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

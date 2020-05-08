@@ -1,4 +1,6 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.RotaTask;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientRotaTask;
+using AwesomeCare.DataTransferObject.DTOs.RotaTask;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -20,5 +22,8 @@ namespace AwesomeCare.Admin.Services.RotaTask
 
         [Put("/RotaTask")]
         Task<GetRotaTask> Put([Body]PutRotaTask model);
+
+        [Get("/Rotering/RotaAdmin/{sDate}/{eDate}")]
+        Task<List<RotaAdmin>> RotaAdmin(string sDate, string eDate);
     }
 }

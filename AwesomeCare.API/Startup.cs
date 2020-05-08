@@ -36,6 +36,12 @@ namespace AwesomeCare.API
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
+        public static readonly ILoggerFactory DbLoggerFactory
+    = LoggerFactory.Create(builder => { builder
+         .AddFilter((category, level) =>
+                    category == DbLoggerCategory.Database.Command.Name
+                    && level == LogLevel.Information).AddConsole().AddDebug();
+    });
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -44,7 +50,9 @@ namespace AwesomeCare.API
             services.AddControllers();
             services.AddDbContext<AwesomeCareDbContext>(options =>
             {
+                options.UseLoggerFactory(DbLoggerFactory);
                 options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
+                options.EnableSensitiveDataLogging(true);
             });
             services.AddLogging();
             services.Configure<JwtBearerSettings>(Configuration);
@@ -59,7 +67,7 @@ namespace AwesomeCare.API
 
             #endregion
             #region AspNetIdentity
-            
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AwesomeCareDbContext>()
                 .AddRoles<IdentityRole>();
@@ -69,7 +77,7 @@ namespace AwesomeCare.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AwesomeCare API", Version = "v1" });
-               // c.ResolveConflictingActions(r => r.First());
+                // c.ResolveConflictingActions(r => r.First());
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -81,11 +89,11 @@ namespace AwesomeCare.API
                 .AddJwtBearer("Bearer", options =>
                 {
                     var settings = Configuration.GetSection("JwtBearerSettings").Get<JwtBearerSettings>();
-                    options.Authority =settings.Authority;
+                    options.Authority = settings.Authority;
                     options.RequireHttpsMetadata = settings.RequireHttpsMetadata;
                     options.SaveToken = settings.SaveToken;
                     options.Audience = settings.Audience;
-                    
+
                 });
 
             //  services.AddOData();
@@ -94,7 +102,7 @@ namespace AwesomeCare.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-           
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -109,7 +117,7 @@ namespace AwesomeCare.API
                 //  app.UseHsts();
             }
 
-          //  app.UseMiddleware<RemoveResponseHeaderMiddleware>();
+            //  app.UseMiddleware<RemoveResponseHeaderMiddleware>();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -139,7 +147,7 @@ namespace AwesomeCare.API
             {
                 endpoints.MapControllers();//.RequireAuthorization();
             });
-           
+
         }
     }
 }

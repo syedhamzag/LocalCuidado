@@ -15,7 +15,8 @@ namespace AwesomeCare.DataAccess.Database
 
         public AwesomeCareDbContext(DbContextOptions<AwesomeCareDbContext> options) : base(options)
         {
-
+            //'DbContextOptionsBuilder.EnableSensitiveDataLogging
+            
         }
 
        

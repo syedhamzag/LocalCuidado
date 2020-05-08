@@ -9,6 +9,8 @@ namespace AwesomeCare.Model.Models
         public Rota()
         {
             ShiftBookings = new HashSet<StaffShiftBooking>();
+            StaffRota = new HashSet<StaffRota>();
+            ClientRotaDays = new HashSet<ClientRotaDays>();
         }
         public int RotaId { get; set; }
         public int NumberOfStaff { get; set; }
@@ -17,5 +19,7 @@ namespace AwesomeCare.Model.Models
         public string Area { get; set; }
 
         public virtual ICollection<StaffShiftBooking> ShiftBookings { get; set; }
+        public virtual ICollection<StaffRota> StaffRota { get; set; }
+        public virtual ICollection<ClientRotaDays> ClientRotaDays { get; set; }
     }
 }

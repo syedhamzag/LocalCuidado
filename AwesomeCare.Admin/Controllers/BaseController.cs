@@ -18,10 +18,11 @@ namespace AwesomeCare.Admin.Controllers
             _fileUpload = fileUpload;
         }
 
-      
-      public  void SetOperationStatus(OperationStatus operationStatus)
+
+        public void SetOperationStatus(OperationStatus operationStatus)
         {
             TempData["OperationStatus"] = JsonConvert.SerializeObject(operationStatus);
+           
         }
 
 

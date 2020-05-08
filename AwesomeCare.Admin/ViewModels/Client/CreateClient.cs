@@ -135,7 +135,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public List<ClientRegulatoryContact> RegulatoryContacts { get; set; }
         public List<ClientCareDetailsHeading> CareDetails { get; set; }
         #region Methods
-        public async Task SaveFileToDisk(IHostingEnvironment env)
+        public async Task SaveFileToDisk(IWebHostEnvironment env)
         {
             string filePath = GetFilePath(env);
             using (var stream = new FileStream(filePath, FileMode.Create))
@@ -143,12 +143,12 @@ namespace AwesomeCare.Admin.ViewModels.Client
                 await this.ClientImage.CopyToAsync(stream);
             }
         }
-        public void DeleteFileFromDisk(IHostingEnvironment env)
+        public void DeleteFileFromDisk(IWebHostEnvironment env)
         {
             string filePath = GetFilePath(env);
             System.IO.File.Delete(filePath);
         }
-        string GetFilePath(IHostingEnvironment env)
+        string GetFilePath(IWebHostEnvironment env)
         {
             string fileName = string.Concat(IdNumber, Path.GetExtension(ClientImage.FileName));
             string filePath = Path.Combine(env.ContentRootPath, "Uploads", fileName);

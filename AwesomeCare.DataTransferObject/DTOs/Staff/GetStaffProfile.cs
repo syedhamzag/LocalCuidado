@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -76,6 +77,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public string Self_PYE { get; set; }
         [Display(Name = "Self/PYE Attachment")]
         public string Self_PYEAttachment { get; set; }
-        public string Status { get; set; }
+        public StaffRegistrationEnum Status { get; set; }
     }
 }

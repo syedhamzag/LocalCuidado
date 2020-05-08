@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -62,7 +63,7 @@ namespace AwesomeCare.Model.Models
         public string CoverLetter { get; set; }
         public string Self_PYE { get; set; }
         public string Self_PYEAttachment { get; set; }
-        public int Status { get; set; }
+        public StaffRegistrationEnum Status { get; set; }
 
         public virtual ICollection<StaffEducation> Education { get; set; }
         public virtual ICollection<StaffTraining> Trainings { get; set; }

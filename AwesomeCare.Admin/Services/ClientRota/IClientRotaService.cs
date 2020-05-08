@@ -12,5 +12,11 @@ namespace AwesomeCare.Admin.Services.ClientRota
     {
         [Post("/ClientRota/CreateRota")]
         Task<HttpResponseMessage> CreateRota([Body]List<CreateClientRota> model);
+
+        [Get("/ClientRota/GetForEdit/{id}")]
+        Task<List<GetClientRota>> GetForEdit(int id);
+
+        [Put("/ClientRota/Edit/{id}")]
+        Task<HttpResponseMessage> EditRota([Body]List<CreateClientRota> model, int id);
     }
 }

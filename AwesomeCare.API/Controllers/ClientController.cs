@@ -265,14 +265,22 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PostMedication([FromBody]PostClientMedication model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(model);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(model);
+                }
+                var entity = Mapper.Map<ClientMedication>(model);
+                var newEntity = await _clientMedicationRepository.InsertEntity(entity);
+                var getEntity = Mapper.Map<GetClientMedication>(newEntity);
+                return CreatedAtAction("GetMedication", new { id = newEntity.ClientMedicationId, clientId=newEntity.ClientId }, getEntity);
             }
-            var entity = Mapper.Map<ClientMedication>(model);
-            var newEntity = await _clientMedicationRepository.InsertEntity(entity);
-            var getEntity = Mapper.Map<GetClientMedication>(newEntity);
-            return CreatedAtAction("GetMedication", new { id = newEntity.ClientMedicationId }, getEntity);
+            catch (Exception ex)
+            {
+
+                throw;
+            }
 
         }
 

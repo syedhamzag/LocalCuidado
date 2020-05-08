@@ -38,7 +38,7 @@
                     <button id="btnSubmit" type="submit" class="btn btn-primary float-right">Submit</button>
                     @if (Model.ClientRotaTypeId > 0)
                     {
-                        <a href="/RotaType" class="btn btn-default float-left">Cancel</a>
+                        <a asp-action="Index" asp-controller="RotaType" class="btn btn-default float-left">Cancel</a>
                     }
 
                 </form>
@@ -76,7 +76,7 @@
                                     <td>@item.RotaType</td>
                                     
                                     <td class="actions">
-                                        <a asp-action="Index" asp-route-id="@item.ClientRotaTypeId" asp-controller="Rota" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit">
+                                        <a asp-action="Index" asp-route-id="@item.ClientRotaTypeId" asp-controller="RotaType" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit">
                                             <i class="icon-pencil" aria-hidden="true"></i>
                                         </a>
                                        

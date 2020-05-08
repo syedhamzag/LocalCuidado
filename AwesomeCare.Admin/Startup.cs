@@ -58,10 +58,17 @@ namespace AwesomeCare.Admin
           //  MapperConfig.AutoMapperConfiguration.Configure();
             services.AddLogging();
             AddRefitServices(services);
-            services.AddMemoryCache();
-            services.AddSession();
+            // services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options=> {
+                options.Cookie.Name = ".Awesomecare.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddSessionStateTempDataProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
