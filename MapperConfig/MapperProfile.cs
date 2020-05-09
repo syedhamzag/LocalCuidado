@@ -602,6 +602,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffRotaPeriodId, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRota, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInTime, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutTime, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
 
             //  CreateMap<StaffRotaPeriod, GetStaffRotaPeriod>();

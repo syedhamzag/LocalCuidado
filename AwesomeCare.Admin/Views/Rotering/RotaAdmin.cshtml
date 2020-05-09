@@ -1,4 +1,6 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Rotering;
+@using System.Globalization;
+ 
 @model RotaAdminViewModel
 @{
     ViewData["Title"] = "RotaAdmin";
@@ -9,12 +11,12 @@
         <div class="card planned_task">
             <div class="header">
                 <h2>Rota Admin</h2>
-               
+
             </div>
             <div class="body">
 
                 <form asp-action="RotaAdmin" method="post">
-                   
+
                     <div class="row">
                         <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                             <label asp-for="StartDate"></label>
@@ -42,6 +44,107 @@
 
                 </form>
 
+                <table class="table table-condensed table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th>Period</th>
+                            <th>Client</th>
+                            <th>Client PostCode</th>
+                            <th>Keysafe</th>
+                            <th></th>
+
+                        </tr>
+                    </thead>
+                    @foreach (var item in Model.RotaAdmin)
+                    {
+                        <tr>
+                            <td>@item.Period</td>
+                            <td>@item.ClientName</td>
+                            <td>@item.ClientPostCode</td>
+                            <td>@item.ClientKeySafe</td>
+                            <td>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            @foreach (var dd in item.RotaDays.GroupBy(s => s.RotaDate).ToList())
+                                            {
+
+                                                <th class="text-center"> @dd.Key.DayOfWeek (@dd.Key.ToString("dd-MMM-yyyy"))</th>
+                                            }
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var d in item.RotaDays.GroupBy(s => s.RotaDate).ToList())
+                                        {
+                                            @foreach (var rota in d)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Ref. No.</th>
+                                                                    <th>Rota</th>
+                                                                    <th>Staff</th>
+                                                                    <th>StartTime</th>
+                                                                    <th>StopTime</th>
+                                                                    <th>Diff. (Minutes)</th>
+                                                                    <th>Clock In</th>
+                                                                    <th>Clock Out</th>
+                                                                    <th>Diff. (Minutes)</th>
+                                                                    <th>Remark</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>@rota.ReferenceNumber</td>
+                                                                    <td>@rota.Rota</td>
+                                                                    <td>@rota.Staff</td>
+                                                                    <td>@rota.StartTime</td>
+                                                                    <td>@rota.StopTime</td>
+                                                                    <td>
+                                                                        @{ 
+                                                                            bool isStartTimeValid = TimeSpan.TryParseExact(rota.StartTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan startTime);
+                                                                            bool isStopTimeValid = TimeSpan.TryParseExact(rota.StopTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan stopTime);
+                                                                            if(isStartTimeValid && isStopTimeValid)
+                                                                            {
+                                                                                var diff = stopTime.Subtract(startTime).TotalMinutes;
+                                                                                @diff
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>@rota.ClockInTime</td>
+                                                                    <td>@rota.ClockOutTime</td>
+                                                                    <td>
+
+                                                                        @{
+                                                                            bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
+                                                                            bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
+                                                                            if (isClockInTimeValid && isClockOutTimeValid)
+                                                                            {
+                                                                                var clockDiff = clockOut.Subtract(clockIn).TotalMinutes;
+                                                                                @clockDiff
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                    <td>@rota.Remark</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                   
+                                                </tr>
+                                            }
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                </table>
+
                 <table class="table table-condensed table-bordered table-scroll-vertical">
                     <tbody>
 
@@ -61,6 +164,12 @@
                                                 <th>Allocated Date</th>
                                                 <th>Staff</th>
                                                 <th>Partners</th>
+                                                <th>StartTime</th>
+                                                <th>StopTime</th>
+                                                <th>Diff.</th>
+                                                <th>Clock In</th>
+                                                <th>Clock Out</th>
+                                                <th>Diff.</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -111,6 +220,12 @@
 
                                                         }
                                                     </td>
+                                                    <td>@day.StartTime</td>
+                                                    <td>@day.StopTime</td>
+                                                    <td></td>
+                                                    <td>@day.ClockInTime</td>
+                                                    <td>@day.ClockOutTime</td>
+                                                    <td></td>
                                                 </tr>
                                             }
                                         </tbody>

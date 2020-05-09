@@ -25,12 +25,13 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<RotaDayofWeek> _rotaDayofWeekRepository;
         private IGenericRepository<StaffRota> _staffRotaRepository;
         private IGenericRepository<StaffPersonalInfo> _staffPersonalInfoRepository;
+        private IGenericRepository<StaffRotaPeriod> _staffRotaPeriodRepository;
 
         public RoteringController(ILogger<RoteringController> logger, IGenericRepository<ClientRota> clientRotaRepository,
             IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<Client> clientRepository,
              IGenericRepository<ClientRotaDays> clientRotaDaysRepository, IGenericRepository<Rota> rotaRepository,
               IGenericRepository<RotaDayofWeek> rotaDayofWeekRepository, IGenericRepository<StaffRota> staffRotaRepository,
-              IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository)
+             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository)
         {
             _logger = logger;
             _clientRotaRepository = clientRotaRepository;
@@ -41,6 +42,7 @@ namespace AwesomeCare.API.Controllers
             _rotaDayofWeekRepository = rotaDayofWeekRepository;
             _staffRotaRepository = staffRotaRepository;
             _staffPersonalInfoRepository = staffPersonalInfoRepository;
+            _staffRotaPeriodRepository = staffRotaPeriodRepository;
         }
         /// <summary>
         /// 
@@ -76,13 +78,17 @@ namespace AwesomeCare.API.Controllers
                                          join r in _rotaRepository.Table on crd.RotaId equals r.RotaId
                                          join rd in _rotaDayofWeekRepository.Table on crd.RotaDayofWeekId equals rd.RotaDayofWeekId
                                          join sr in _staffRotaRepository.Table on crd.RotaId equals sr.RotaId
+                                         join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
                                          join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
-                                         where sr.RotaDate >= startDate && sr.RotaDate <= endDate
+                                         where sr.RotaDate >= startDate && sr.RotaDate <= endDate && srp.ClientRotaTypeId == cr.ClientRotaTypeId
+                                       //  group sr by sr.RotaDate into grp 
                                          select new RotaDays
                                          {
-                                             DayofWeek = rd.DayofWeek,
-                                             StartTime = crd.StartTime,
+
+                                             StartTime =crd.StartTime,
                                              StopTime = crd.StopTime,
+                                             ClockInTime = srp.ClockInTime,
+                                             ClockOutTime = srp.ClockOutTime,
                                              Rota = r.RotaName,
                                              Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
                                              RotaDate = sr.RotaDate,
@@ -95,7 +101,7 @@ namespace AwesomeCare.API.Controllers
                                                              Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
                                                              Telephone = stp.Telephone
                                                          }).ToList()
-                                         }).ToList()
+                                         }).OrderBy(o => o.RotaDate).ToList()
 
                          }).ToList();
 

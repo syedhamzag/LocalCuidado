@@ -25,6 +25,16 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.ClientRotaTypeId)
               .HasColumnName("ClientRotaTypeId")
               .IsRequired();
+
+            builder.Property(p => p.ClockInTime)
+             .HasColumnName("ClockInTime")
+             .HasMaxLength(15)
+             .IsRequired(false);
+
+            builder.Property(p => p.ClockOutTime)
+            .HasColumnName("ClockOutTime")
+            .HasMaxLength(15)
+            .IsRequired(false);
             #endregion
 
             #region Relationship
