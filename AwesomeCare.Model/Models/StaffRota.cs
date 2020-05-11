@@ -14,6 +14,7 @@ namespace AwesomeCare.Model.Models
         }
         public int StaffRotaId { get; set; }
         public DateTime RotaDate { get; set; }
+        public int? RotaDayofWeekId { get; set; }
         public int Staff { get; set; }
         public int RotaId { get; set; }
         public string Remark { get; set; }

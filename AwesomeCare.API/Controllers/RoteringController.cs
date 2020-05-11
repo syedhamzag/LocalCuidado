@@ -63,9 +63,64 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest("Invalid Date format, Format is yyyy-MM-dd");
             }
-            var rotas = (from cr in _clientRotaRepository.Table
+            //var rotas = (from cr in _clientRotaRepository.Table
+            //             join crt in _clientRotaTypeRepository.Table on cr.ClientRotaTypeId equals crt.ClientRotaTypeId
+            //             join c in _clientRepository.Table on cr.ClientId equals c.ClientId
+            //             select new RotaAdmin
+            //             {
+            //                 ClientRotaId = cr.ClientRotaId,
+            //                 ClientId = cr.ClientId,
+            //                 Period = crt.RotaType,
+            //                 ClientName = c.Firstname + " " + c.Middlename + " " + c.Surname,
+            //                 ClientPostCode = c.PostCode,
+            //                 ClientKeySafe = c.KeySafe,
+            //                 RotaDays = (from crd in cr.ClientRotaDays
+            //                                 // join r in _rotaRepository.Table on new {rotaId = crd.RotaId, dayofweekId = crd.RotaDayofWeekId } crd.RotaId equals r.RotaId
+            //                                 //  join rd in _rotaDayofWeekRepository.Table on crd.RotaDayofWeekId equals rd.RotaDayofWeekId
+            //                             join sr in _staffRotaRepository.Table on new { key1 = crd.RotaId, key2 = crd.RotaDayofWeekId } equals new { key1 = sr.RotaId, key2 = sr.RotaDayofWeekId.Value }
+            //                             join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
+            //                             join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
+            //                             where sr.RotaDate >= startDate && sr.RotaDate <= endDate && srp.ClientRotaTypeId == cr.ClientRotaTypeId
+            //                             select new RotaDays
+            //                             {
+
+            //                                 StartTime = crd.StartTime,
+            //                                 StopTime = crd.StopTime,
+            //                                 ClockInTime = srp.ClockInTime,
+            //                                 ClockOutTime = srp.ClockOutTime,
+            //                                 Rota = "",// r.RotaName,
+            //                                 Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
+            //                                 RotaDate = sr.RotaDate,
+            //                                 Remark = sr.Remark,
+            //                                 ReferenceNumber = sr.ReferenceNumber,
+            //                                 Partners = (from p in sr.StaffRotaPartners
+            //                                             join stp in _staffPersonalInfoRepository.Table on p.StaffId equals stp.StaffPersonalInfoId
+            //                                             select new StaffPartner
+            //                                             {
+            //                                                 Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
+            //                                                 Telephone = stp.Telephone
+            //                                             }).ToList()
+            //                             }).OrderByDescending(o => o.RotaDate).ToList()
+
+            //             }).ToList();
+
+            var rotas = GetRotaAdmins(startDate, endDate);
+
+            return Ok(rotas);
+        }
+
+        List<RotaAdmin> GetRotaAdmins(DateTime startDate,DateTime endDate)
+        {
+            var rotas = (from sr in _staffRotaRepository.Table
+                         join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
+                         join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
+                         join crd in _clientRotaDaysRepository.Table on new { key1 = sr.RotaId, key2 = sr.RotaDayofWeekId.Value } equals new { key1 = crd.RotaId, key2 = crd.RotaDayofWeekId }
+                         join rd in _rotaDayofWeekRepository.Table on crd.RotaDayofWeekId equals rd.RotaDayofWeekId
+                         join r in _rotaRepository.Table on crd.RotaId equals r.RotaId
+                         join cr in _clientRotaRepository.Table on crd.ClientRotaId equals cr.ClientRotaId
                          join crt in _clientRotaTypeRepository.Table on cr.ClientRotaTypeId equals crt.ClientRotaTypeId
                          join c in _clientRepository.Table on cr.ClientId equals c.ClientId
+                         where sr.RotaDate >= startDate && sr.RotaDate <= endDate
                          select new RotaAdmin
                          {
                              ClientRotaId = cr.ClientRotaId,
@@ -73,41 +128,27 @@ namespace AwesomeCare.API.Controllers
                              Period = crt.RotaType,
                              ClientName = c.Firstname + " " + c.Middlename + " " + c.Surname,
                              ClientPostCode = c.PostCode,
-                             ClientKeySafe = c.KeySafe,
-                             RotaDays = (from crd in cr.ClientRotaDays
-                                         join r in _rotaRepository.Table on crd.RotaId equals r.RotaId
-                                         join rd in _rotaDayofWeekRepository.Table on crd.RotaDayofWeekId equals rd.RotaDayofWeekId
-                                         join sr in _staffRotaRepository.Table on crd.RotaId equals sr.RotaId
-                                         join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
-                                         join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
-                                         where sr.RotaDate >= startDate && sr.RotaDate <= endDate && srp.ClientRotaTypeId == cr.ClientRotaTypeId
-                                       //  group sr by sr.RotaDate into grp 
-                                         select new RotaDays
+                             RotaDate = sr.RotaDate,
+                             DayofWeek = rd.DayofWeek,
+                             StartTime = crd.StartTime,
+                             StopTime = crd.StopTime,
+                             ClockInTime = srp.ClockInTime,
+                             ClockOutTime = srp.ClockOutTime,
+                             Rota = r.RotaName,
+                             Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
+                             Remark = sr.Remark,
+                             ReferenceNumber = sr.ReferenceNumber,
+                             Partners = (from p in sr.StaffRotaPartners
+                                         join stp in _staffPersonalInfoRepository.Table on p.StaffId equals stp.StaffPersonalInfoId
+                                         select new StaffPartner
                                          {
+                                             Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
+                                             Telephone = stp.Telephone
+                                         }).ToList()
+                         }).OrderBy(o => o.RotaDate).ToList();
 
-                                             StartTime =crd.StartTime,
-                                             StopTime = crd.StopTime,
-                                             ClockInTime = srp.ClockInTime,
-                                             ClockOutTime = srp.ClockOutTime,
-                                             Rota = r.RotaName,
-                                             Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
-                                             RotaDate = sr.RotaDate,
-                                             Remark = sr.Remark,
-                                             ReferenceNumber = sr.ReferenceNumber,
-                                             Partners = (from p in sr.StaffRotaPartners
-                                                         join stp in _staffPersonalInfoRepository.Table on p.StaffId equals stp.StaffPersonalInfoId
-                                                         select new StaffPartner
-                                                         {
-                                                             Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
-                                                             Telephone = stp.Telephone
-                                                         }).ToList()
-                                         }).OrderBy(o => o.RotaDate).ToList()
-
-                         }).ToList();
-
-
-
-            return Ok(rotas);
+            return rotas;
         }
+
     }
 }

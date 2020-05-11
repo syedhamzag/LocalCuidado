@@ -32,6 +32,10 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("RotaId")
                .IsRequired();
 
+            builder.Property(p => p.RotaDayofWeekId)
+             .HasColumnName("RotaDayofWeekId")
+             .IsRequired(false);
+
             builder.Property(p => p.ReferenceNumber)
              .HasColumnName("ReferenceNumber")
               .HasMaxLength(50)

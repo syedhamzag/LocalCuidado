@@ -7,6 +7,7 @@ using AutoMapper;
 using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
+using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.StaffCommunication;
 using AwesomeCare.Admin.ViewModels.Client;
@@ -32,7 +33,9 @@ namespace AwesomeCare.Admin.Controllers
         private IStaffCommunication _staffCommunication;
         private IClientRotaTypeService _clientRotaTypeService;
         private IClientRotaNameService _clientRotaNameService;
-        public StaffController(IStaffService staffService, IClientRotaNameService clientRotaNameService, ILogger<StaffController> logger, IFileUpload fileUpload, IStaffCommunication staffCommunication, IClientRotaTypeService clientRotaTypeService) : base(fileUpload)
+        private IRotaDayofWeekService _rotaDayofWeekService;
+
+        public StaffController(IStaffService staffService, IRotaDayofWeekService rotaDayofWeekService, IClientRotaNameService clientRotaNameService, ILogger<StaffController> logger, IFileUpload fileUpload, IStaffCommunication staffCommunication, IClientRotaTypeService clientRotaTypeService) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
@@ -40,6 +43,7 @@ namespace AwesomeCare.Admin.Controllers
             _staffCommunication = staffCommunication;
             _clientRotaTypeService = clientRotaTypeService;
             _clientRotaNameService = clientRotaNameService;
+            _rotaDayofWeekService = rotaDayofWeekService;
         }
         public async Task<IActionResult> Index()
         {
@@ -200,16 +204,20 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> PreviewRota(PreviewStaffRota model)
         {
             List<PostStaffRota> rotas = new List<PostStaffRota>();
+            var rotaDayofWeeks = await _rotaDayofWeekService.Get();
             foreach (var day in model.RotaDays)
             {
 
                 foreach (var staff in day.SelectedStaffs)
                 {
+                    string dayOfWeek = day.Date.DayOfWeek.ToString();
+                    int? dayOfWeekId = rotaDayofWeeks.FirstOrDefault(d => d.DayofWeek.Equals(dayOfWeek, StringComparison.InvariantCultureIgnoreCase))?.RotaDayofWeekId;
                     var rota = new PostStaffRota();
                     rota.Remark = day.Remark;
                     rota.ReferenceNumber = DateTime.Now.ToString("yyyyMMddhhmmssms") + day.SelectedStaffs.IndexOf(staff);
                     rota.RotaDate = day.Date;//.ToString("MM/dd/yyyy");
                     rota.RotaId = day.RotaId;
+                    rota.RotaDayofWeekId = dayOfWeekId;
                     rota.StaffRotaPeriods = (from rp in day.RotaTypes
                                              where rp.IsSelected
                                              select new PostStaffRotaPeriod
@@ -248,8 +256,11 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
 
+          
+            string sdate = DateTime.TryParseExact(model.StartDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime sdatetime) ? sdatetime.ToString("yyyy-MM-dd") : model.StartDate;
+            string edate = DateTime.TryParseExact(model.StopDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime edatetime) ? edatetime.ToString("yyyy-MM-dd") : model.StopDate;
 
-            return RedirectToAction("RotaAdmin", "Rotering", new { startDate = model.StartDate, stopDate = model.StopDate });
+            return RedirectToAction("RotaAdmin", "Rotering", new { startDate = sdate, stopDate = edate });
 
         }
 

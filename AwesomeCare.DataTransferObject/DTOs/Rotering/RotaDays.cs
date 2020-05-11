@@ -10,7 +10,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         {
             Partners = new List<StaffPartner>();
         }
-       // public string DayofWeek { get; set; }
+        public string DayofWeek { get; set; }
         public string StartTime { get; set; }
         public string StopTime { get; set; }
         public string ClockInTime { get; set; }
