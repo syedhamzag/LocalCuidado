@@ -31,6 +31,8 @@
     <Compile Remove="Migrations\20200424154356_tbl_StaffRota_ReferenceNumber.Designer.cs" />
     <Compile Remove="Migrations\20200424225557_tbl_StaffRotaPeriod_StaffRotaId_Fk.cs" />
     <Compile Remove="Migrations\20200424225557_tbl_StaffRotaPeriod_StaffRotaId_Fk.Designer.cs" />
+    <Compile Remove="Migrations\20200513114202_tbl_StaffRotaPeriod_Edit.cs" />
+    <Compile Remove="Migrations\20200513114202_tbl_StaffRotaPeriod_Edit.Designer.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
   </ItemGroup>

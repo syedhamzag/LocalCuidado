@@ -35,6 +35,34 @@ namespace AwesomeCare.Model.Models.Map
             .HasColumnName("ClockOutTime")
             .HasMaxLength(15)
             .IsRequired(false);
+
+            builder.Property(p => p.ClockInAddress)
+           .HasColumnName("ClockInAddress")
+           .HasMaxLength(100)
+           .IsRequired(false);
+
+            builder.Property(p => p.ClockOutAddress)
+         .HasColumnName("ClockOutAddress")
+         .HasMaxLength(100)
+         .IsRequired(false);
+
+
+            builder.Property(p => p.Feedback)
+         .HasColumnName("Feedback")
+         .HasMaxLength(225)
+         .IsRequired(false);
+
+
+            builder.Property(p => p.Comment)
+         .HasColumnName("Comment")
+         .HasMaxLength(225)
+         .IsRequired(false);
+
+            builder.Property(p => p.HandOver)
+        .HasColumnName("HandOver")
+        .HasMaxLength(225)
+        .IsRequired(false);
+
             #endregion
 
             #region Relationship

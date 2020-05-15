@@ -95,7 +95,7 @@
                                                 bool isStopTimeValid = TimeSpan.TryParseExact(item.StopTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan stopTime);
                                                 if (isStartTimeValid && isStopTimeValid)
                                                 {
-                                                    var diff = stopTime.Subtract(startTime).TotalMinutes.ToString() + " Mins.";
+                                                    var diff = stopTime.Subtract(startTime);
                                                     @diff
                                                 }
                                             }
@@ -109,7 +109,7 @@
                                                 bool isClockOutTimeValid = TimeSpan.TryParseExact(item.ClockOutTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
                                                 if (isClockInTimeValid && isClockOutTimeValid)
                                                 {
-                                                    var clockDiff = clockOut.Subtract(clockIn).TotalMinutes.ToString() + " Mins.";
+                                                    var clockDiff = clockOut.Subtract(clockIn);
                                                     @clockDiff
                                                 }
                                             }

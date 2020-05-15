@@ -19,6 +19,7 @@ using AwesomeCare.Model.Models;
 using AwesomeCare.DataAccess.Database;
 using IdentityServer4.Services;
 using AwesomeCare.IdentityServer.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace AwesomeCare.IdentityServer
 {
@@ -36,20 +37,20 @@ namespace AwesomeCare.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages();
+            //// configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
+            //services.Configure<IISOptions>(iis =>
+            //{
+            //    iis.AuthenticationDisplayName = "Windows";
+            //    iis.AutomaticAuthentication = false;
+            //});
 
-            // configures IIS out-of-proc settings (see https://github.com/aspnet/AspNetCore/issues/14882)
-            services.Configure<IISOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
-
-            // configures IIS in-proc settings
-            services.Configure<IISServerOptions>(iis =>
-            {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
-            });
+            //// configures IIS in-proc settings
+            //services.Configure<IISServerOptions>(iis =>
+            //{
+            //    iis.AuthenticationDisplayName = "Windows";
+            //    iis.AutomaticAuthentication = false;
+            //});
 
             services.AddDbContext<AwesomeCareDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString")));
@@ -125,7 +126,8 @@ namespace AwesomeCare.IdentityServer
 
             services.UseAdminUI();
             services.AddScoped<IProfileService, ProfileService>();
-            services.AddScoped<IdentityExpressDbContext, SqliteIdentityDbContext>();
+            services.AddSingleton<IEmailSender, EmailSender>();
+          //  services.AddScoped<IdentityExpressDbContext, SqliteIdentityDbContext>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -149,7 +151,7 @@ namespace AwesomeCare.IdentityServer
 
             app.UseAdminUI();
 
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); endpoints.MapRazorPages(); });
         }
     }
 }

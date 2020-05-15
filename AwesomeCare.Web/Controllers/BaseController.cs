@@ -16,14 +16,14 @@ namespace AwesomeCare.Web.Controllers
 
         public BaseController()
         {
-
+            if (!IsUserRegistered())
+                RedirectToAction("Registration", "Staff");
         }
 
         public void SetOperationStatus(OperationStatus operationStatus)
         {
             TempData["OperationStatus"] = JsonConvert.SerializeObject(operationStatus);
         }
-
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -42,6 +42,14 @@ namespace AwesomeCare.Web.Controllers
 
             }
             base.OnActionExecuting(context);
+        }
+
+        public bool IsUserRegistered()
+        {
+            var hasStaffProfile = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "hasStaffInfo")?.Value;
+            if (hasStaffProfile == null) return false;
+
+            return bool.Parse(hasStaffProfile);
         }
     }
 }

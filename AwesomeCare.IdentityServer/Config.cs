@@ -15,6 +15,7 @@ namespace AwesomeCare.IdentityServer
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email(),
             };
 
 
@@ -36,10 +37,11 @@ namespace AwesomeCare.IdentityServer
                    // RefreshTokenExpiration = TokenExpiration.Sliding,//To get a new Refresh Token after using the previous one i.e if Sliding, Refresh Token lifetime will be renewed
                    UpdateAccessTokenClaimsOnRefresh = true,
                      ClientName = "Awesome Care Web",
-                    ClientId = "awesomecareweb",
+                    ClientId = "ce9e033f-d2db-42ca-a5d0-be45bfab34bf",
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireConsent=false,
+                    Description="Awesome Care Web",
                     RedirectUris = new List<string>
                     {
                         "https://localhost:44362/signin-oidc"
@@ -62,10 +64,12 @@ namespace AwesomeCare.IdentityServer
                 {
                          AllowOfflineAccess = true,
                          RequireConsent=false,
+                         UpdateAccessTokenClaimsOnRefresh = true,
                          ClientName = "AwesomeCare Admin",
-                        ClientId = "mvcapp1",
+                        ClientId = "a33ea42e-90c6-43a0-aa1f-198ddf3c95be",
+                         Description="Awesome Care Admin",
                         AllowedGrantTypes = GrantTypes.Code,
-                        RequirePkce = true,
+                        RequirePkce = true,                        
                         RedirectUris = new List<string>
                         {
                             "https://localhost:44384/signin-oidc"

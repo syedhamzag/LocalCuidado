@@ -21,6 +21,8 @@ using AwesomeCare.Admin.Models;
 using AwesomeCare.Services.Services;
 using Newtonsoft.Json;
 using AwesomeCare.Model.Models;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
+using AutoMapper;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -80,9 +82,9 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var rotatype = formsCollection[rotaType.RotaType];
                 string clientRotaid = $"{rotaType.RotaType}-ClientRotaId";
-               
 
-                if(rotaType != null)
+
+                if (rotaType != null)
                 {
                     var clientrota = formsCollection[clientRotaid];
 
@@ -157,7 +159,7 @@ namespace AwesomeCare.Admin.Controllers
                 }
 
             }
-            return RedirectToAction("Index",new { client = model.ClientId});
+            return RedirectToAction("Index", new { client = model.ClientId });
         }
         [HttpGet]
         public async Task<IActionResult> RotaAdmin(string startDate, string stopDate)
@@ -176,14 +178,44 @@ namespace AwesomeCare.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RotaAdmin(RotaAdminViewModel model)
         {
-            // var model = new RotaAdminViewModel();
-            // model.StartDate = string.IsNullOrEmpty(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
-            // model.StopDate = string.IsNullOrEmpty(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
-
             var rotaAdmin = await _rotaTaskService.RotaAdmin(model.StartDate, model.StopDate);
             model.RotaAdmin = rotaAdmin;
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LiveRota()
+        {
+            var date = DateTime.Now.ToString("yyyy-MM-dd");
+            var rotaAdmin = await _rotaTaskService.LiveRota(date);
+
+            return View(rotaAdmin);
+        }
+
+
+        [HttpGet("LiveRota/Edit",Name ="LiveRotaEdit")]
+        public async Task<IActionResult> EditLiveRota(int staffRotaPeriodId)
+        {
+            var staffRotaPeriod = await _rotaTaskService.GetStaffRotaPeriod(staffRotaPeriodId);
+            var editLiveRota = Mapper.Map<EditStaffRotaPeriod>(staffRotaPeriod);
+            return View(editLiveRota);
+        }
+        [HttpPost("LiveRota/Edit", Name = "LiveRotaEdit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditLiveRota(EditStaffRotaPeriod model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var kk = JsonConvert.SerializeObject(model);
+            var result = await _rotaTaskService.PatchStaffRotaPeriod(model);
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Live Tracker successfully updated" : "An Error Occurred" });
+            if (!result.IsSuccessStatusCode)
+                return View(model);
+
+            return RedirectToAction("LiveRota");
         }
     }
 }

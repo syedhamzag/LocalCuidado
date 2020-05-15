@@ -26,6 +26,7 @@ using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.StaffWorkTeam;
 using AwesomeCare.DataTransferObject.DTOs.Untowards;
@@ -604,8 +605,20 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockInTime, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockOutTime, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInAddress, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutAddress, mem => mem.Ignore())
+                .ForMember(dto => dto.Feedback, mem => mem.Ignore())
+                .ForMember(dto => dto.Comment, mem => mem.Ignore())
+                .ForMember(dto => dto.HandOver, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
 
+            CreateMap<StaffRotaPeriod, GetStaffRotaPeriodForEdit>();
+            CreateMap<GetStaffRotaPeriodForEdit, EditStaffRotaPeriod>();
+            CreateMap<EditStaffRotaPeriod, StaffRotaPeriod>()
+                .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaTypeId, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffRota, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
             //  CreateMap<StaffRotaPeriod, GetStaffRotaPeriod>();
             #endregion
 
@@ -614,6 +627,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffRotaPartnerId, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRota, mem => mem.Ignore());
+
+          
             #endregion
 
             #region StaffRotaItem

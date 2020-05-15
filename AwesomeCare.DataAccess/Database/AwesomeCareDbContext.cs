@@ -19,7 +19,8 @@ namespace AwesomeCare.DataAccess.Database
             
         }
 
-       
+       // public DbSet<ClientModel> ClientModel { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

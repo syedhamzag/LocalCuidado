@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using IdentityServer4.Quickstart.UI;
 
 namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
 {
@@ -105,5 +106,7 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+      
     }
 }
