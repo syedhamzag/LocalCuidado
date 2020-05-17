@@ -37,10 +37,12 @@ namespace AwesomeCare.API
         }
 
         public static readonly ILoggerFactory DbLoggerFactory
-    = LoggerFactory.Create(builder => { builder
-         .AddFilter((category, level) =>
-                    category == DbLoggerCategory.Database.Command.Name
-                    && level == LogLevel.Information).AddConsole().AddDebug();
+    = LoggerFactory.Create(builder =>
+    {
+        builder
+.AddFilter((category, level) =>
+category == DbLoggerCategory.Database.Command.Name
+&& level == LogLevel.Information).AddConsole().AddDebug();
     });
         public IConfiguration Configuration { get; }
 
@@ -143,9 +145,13 @@ namespace AwesomeCare.API
             app.UseAuthentication();
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();//.RequireAuthorization();
+                if (env.IsDevelopment())
+                    endpoints.MapControllers();//.RequireAuthorization();
+                else
+                    endpoints.MapControllers();//.RequireAuthorization();
             });
 
         }

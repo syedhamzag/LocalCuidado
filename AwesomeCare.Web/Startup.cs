@@ -49,16 +49,17 @@ namespace AwesomeCare.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
             });
+            //the AddAuthentication and AddCookie  must be same thing configured on the IdentityServer Project
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
             })
                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                {
                  //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                   options.Cookie.Name = ".AwesomeCareWeb.Cookie";
+                   options.Cookie.Name = ".AwesomeCare.Cookie";
                })
                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                {
@@ -71,6 +72,7 @@ namespace AwesomeCare.Web
                    //options.Scope.Add("openid");
                    //options.Scope.Add("profile");
                    //options.Scope.Add("offline_access");
+                  // options.Scope.Add("awesomecareapi");
                    foreach (string scope in settings.Scopes)
                    {
                        options.Scope.Add(scope);
@@ -79,7 +81,7 @@ namespace AwesomeCare.Web
                    options.ClientSecret = settings.ClientSecret;
                    // options.SignedOutCallbackPath = "";
                   // options.AccessDeniedPath = "";
-                   options.Scope.Add("awesomecareapi");
+                 
                    options.GetClaimsFromUserInfoEndpoint = true;
                    //Remove Unnecessary claims
                    options.ClaimActions.DeleteClaim("s_hash");
@@ -94,6 +96,11 @@ namespace AwesomeCare.Web
                    {
                        NameClaimType = JwtClaimTypes.Name,
                        RoleClaimType = JwtClaimTypes.Role
+                   };
+
+                   options.Events.OnRedirectToIdentityProvider =async context =>
+                   {
+                       //https://developers.de/2019/11/29/how-to-pass-custom-parameters-in/
                    };
                });
             AutoMapperConfiguration.Configure();

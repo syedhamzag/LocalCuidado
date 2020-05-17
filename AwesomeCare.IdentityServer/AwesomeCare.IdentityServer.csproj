@@ -14,6 +14,7 @@
     <Compile Remove="Data\Migrations\20180109192453_CreateIdentitySchema.Designer.cs" />
     <Compile Remove="Data\Migrations\ApplicationDbContextModelSnapshot.cs" />
     <Compile Remove="Models\ApplicationUser.cs" />
+    <Compile Remove="Quickstart\TestUsers.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +43,8 @@
     <PackageReference Include="IdentityServer4" Version="3.0.1" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="3.0.1" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
     
     <PackageReference Include="RSK.Audit" Version="2.0.0-preview1" />

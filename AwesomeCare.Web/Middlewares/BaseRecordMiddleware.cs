@@ -36,7 +36,7 @@ namespace AwesomeCare.Web.Middlewares
                     var records = await _baseRecordService.GetBaseRecordsWithItems();
 
                     //Save BaseRecords to Cache
-                    _cache.Set(cacheKey, records, DateTimeOffset.Now.AddMinutes(1));
+                    _cache.Set(cacheKey, records, DateTimeOffset.Now.AddMinutes(60));
                 }
             }
             catch (Exception ex)

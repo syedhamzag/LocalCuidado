@@ -20,6 +20,9 @@ using AwesomeCare.DataAccess.Database;
 using IdentityServer4.Services;
 using AwesomeCare.IdentityServer.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace AwesomeCare.IdentityServer
 {
@@ -27,6 +30,15 @@ namespace AwesomeCare.IdentityServer
     {
         public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
+        public static readonly ILoggerFactory DbLoggerFactory
+   = LoggerFactory.Create(builder =>
+   {
+       builder
+.AddFilter((category, level) =>
+category == DbLoggerCategory.Database.Command.Name
+&& level == LogLevel.Information).AddConsole().AddDebug();
+   });
+
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
@@ -53,7 +65,11 @@ namespace AwesomeCare.IdentityServer
             //});
 
             services.AddDbContext<AwesomeCareDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString")));
+            {
+                options.UseLoggerFactory(DbLoggerFactory);
+                options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
+                options.EnableSensitiveDataLogging(true);
+            });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
@@ -69,7 +85,7 @@ namespace AwesomeCare.IdentityServer
                 .AddEntityFrameworkStores<AwesomeCareDbContext>()
                 .AddDefaultTokenProviders();
 
-            
+
             var connectionString = Configuration.GetConnectionString("AwesomeCareConnectionString");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
@@ -97,14 +113,14 @@ namespace AwesomeCare.IdentityServer
                 {
                     options.ConfigureDbContext = db =>
                         db.UseSqlServer(connectionString,
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
+                                                            sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
                 // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = db =>
                         db.UseSqlServer(connectionString,
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
+                                                            sql => sql.MigrationsAssembly(migrationsAssembly));
 
                     // this enables automatic token cleanup. this is optional.
                     options.EnableTokenCleanup = true;
@@ -113,6 +129,19 @@ namespace AwesomeCare.IdentityServer
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
+
+            //this must be the same thing configured on all clients
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+
+            })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+                {
+                    //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                    options.Cookie.Name = ".AwesomeCare.Cookie";
+                });
 
             //services.AddAuthentication()
             //    .AddGoogle(options =>
@@ -124,10 +153,12 @@ namespace AwesomeCare.IdentityServer
             //        options.ClientSecret = "copy client secret from Google here";
             //    });
 
-            services.UseAdminUI();
+            if (Environment.IsDevelopment())
+                services.UseAdminUI();
+
             services.AddScoped<IProfileService, ProfileService>();
             services.AddSingleton<IEmailSender, EmailSender>();
-          //  services.AddScoped<IdentityExpressDbContext, SqliteIdentityDbContext>();
+            // services.AddScoped<IdentityExpressDbContext, SqliteIdentityDbContext>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -149,9 +180,17 @@ namespace AwesomeCare.IdentityServer
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.UseAdminUI();
+            if (Environment.IsDevelopment())
+                app.UseAdminUI();
 
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); endpoints.MapRazorPages(); });
+            app.UseEndpoints(endpoints => {
+                endpoints.MapRazorPages();
+                //endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                     "{controller=Client}/{action=Index}/{id?}");
+               
+            });
         }
     }
 }

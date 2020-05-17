@@ -8,6 +8,7 @@ using AutoMapper;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.Services.Services;
+using AwesomeCare.Web.Services.Admin;
 using AwesomeCare.Web.Services.Staff;
 using AwesomeCare.Web.ViewModels.Staff;
 using Microsoft.AspNetCore.Mvc;
@@ -22,22 +23,25 @@ namespace AwesomeCare.Web.Controllers
         private IStaffService _staffService;
         private ILogger<StaffController> _logger;
         private IFileUpload _fileUpload;
+        private IBaseRecordService _baseRecordService;
         private readonly IMemoryCache _cache;
-        public StaffController(IFileUpload fileUpload, IMemoryCache cache, IStaffService staffService, ILogger<StaffController> logger)
+        public StaffController(IFileUpload fileUpload, IMemoryCache cache, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger)
         {
             _staffService = staffService;
             _logger = logger;
             _cache = cache;
             _fileUpload = fileUpload;
+            _baseRecordService = baseRecordService;
         }
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Registration()
+        public async Task<IActionResult> Registration()
         {
             var model = new CreateStaff();
+            model.Email = HttpContext.User.Claims.GetClaimValue("name");
             model.Education = new List<CreateStaffEducation>();
             model.Education.Add(new CreateStaffEducation());
 
@@ -63,6 +67,23 @@ namespace AwesomeCare.Web.Controllers
                                                 BaseRecordItemId = recItem.BaseRecordItemId,
                                                 RegulatoryContact = recItem.ValueName
                                             }).ToList();
+            }
+            else
+            {
+                var records = await _baseRecordService.GetBaseRecordsWithItems();
+
+                model.RegulatoryContacts = (from rec in records
+                                            where rec.KeyName == "Staff_RegulatoryContact"
+                                            from recItem in rec.BaseRecordItems
+                                            select new CreateStaffRegulatoryContact
+                                            {
+                                                BaseRecordItemId = recItem.BaseRecordItemId,
+                                                RegulatoryContact = recItem.ValueName
+                                            }).ToList();
+
+
+                //Save BaseRecords to Cache
+                _cache.Set(cacheKey, records, DateTimeOffset.Now.AddMinutes(60));
             }
             #endregion
 

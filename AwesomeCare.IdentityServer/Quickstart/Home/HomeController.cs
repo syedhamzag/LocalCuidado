@@ -52,11 +52,11 @@ namespace IdentityServer4.Quickstart.UI
             {
                 vm.Error = message;
 
-                if (!_environment.IsDevelopment())
-                {
-                    // only show in development
-                    message.ErrorDescription = null;
-                }
+                //if (!_environment.IsDevelopment())
+                //{
+                //    // only show in development
+                //    message.ErrorDescription = null;
+                //}
             }
 
             return View("Error", vm);

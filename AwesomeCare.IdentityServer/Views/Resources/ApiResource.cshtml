@@ -1,0 +1,40 @@
+﻿@using IdentityServer4.Extensions;
+@model List<IdentityServer4.EntityFramework.Entities.ApiResource>
+@{
+    ViewData["Title"] = "ApiResource";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Api Resource</h2>
+@if (!User.IsAuthenticated())
+{
+    <a asp-route="AddApiResource" class="btn btn-primary pull-right">Add Api Resource</a>
+}
+
+<br />
+<div class="table-responsive">
+    <table class="table table-condensed table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Display Name</th>
+                <th>Description</th>
+                <th>Created On</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in Model)
+            {
+                <tr>
+                    <td>@client.Name</td>
+                    <td>@client.DisplayName</td>
+                    <td>@client.Description</td>
+
+                    <td>@client.Created.ToString("dd-MMM-yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
