@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AwesomeCare.Admin.AutoMapperConfiguration;
 using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Company;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +13,6 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
 using AwesomeCare.Admin.Services.ClientInvolvingPartyBase;
 using AwesomeCare.Admin.Services.ClientRegulatoryContact;
-using Microsoft.Extensions.FileProviders;
-using System.IO;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaTask;
@@ -28,6 +21,14 @@ using AwesomeCare.Admin.Services.ClientRota;
 using QRCoder;
 using Dropbox.Api;
 using AwesomeCare.Admin.Services.ClientCareDetails;
+using AwesomeCare.Services.Services;
+using AwesomeCare.Admin.Services.Staff;
+using AwesomeCare.Admin.Services.StaffCommunication;
+using AwesomeCare.Admin.Services.Untowards;
+using AwesomeCare.Admin.Services.ShiftBooking;
+using AwesomeCare.Admin.Services.StaffWorkTeam;
+using Microsoft.Extensions.Hosting;
+using AwesomeCare.Admin.Services.Medication;
 
 namespace AwesomeCare.Admin
 {
@@ -51,18 +52,27 @@ namespace AwesomeCare.Admin
             });
             services.AddScoped(typeof(QRCodeGenerator));
             services.AddScoped(typeof(DropboxClient),c=> new DropboxClient(Configuration["dropboxApiKey"]));
+            services.AddScoped<IFileUpload, FileUpload>();
             //AutoMapper
-            //AutoMapperConfig.Configure();
-            MapperConfig.AutoMapperConfiguration.Configure();
+            AutoMapperConfiguration.Configure();
+          //  MapperConfig.AutoMapperConfiguration.Configure();
             services.AddLogging();
             AddRefitServices(services);
-            services.AddMemoryCache();
-            services.AddSession();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // services.AddMemoryCache();
+            services.AddDistributedMemoryCache();
+            services.AddSession(options=> {
+                options.Cookie.Name = ".Awesomecare.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            services.AddControllersWithViews()
+                .AddSessionStateTempDataProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseBaseRecordMiddleware();
             if (env.IsDevelopment())
@@ -75,23 +85,18 @@ namespace AwesomeCare.Admin
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
+            app.UseBaseRecordMiddleware();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            //app.UseStaticFiles(
-            //    new StaticFileOptions
-            //    {
-            //        FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath,"Uploads")),
-            //        RequestPath = new PathString("/Files")
-            //    }
-            //    );
+            app.UseRouting();
+
             app.UseCookiePolicy();
             app.UseSession();
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                     "{controller=Client}/{action=HomeCare}/{id?}");
             });
         }
 
@@ -157,6 +162,37 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientCareDetails>(r));
+
+            services.AddHttpClient("staffservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffService>(r));
+
+            services.AddHttpClient("staffcommunication", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffCommunication>(r));
+
+            services.AddHttpClient("untowardsService", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IUntowardsService>(r));
+
+            services.AddHttpClient("shiftbookingservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IShiftBookingService>(r));
+
+            services.AddHttpClient("staffworkteamservie", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffWorkTeamService>(r));
+
+            services.AddHttpClient("medicationservie", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IMedicationService>(r));
+
             
         }
     }

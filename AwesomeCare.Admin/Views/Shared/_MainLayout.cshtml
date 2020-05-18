@@ -1,5 +1,6 @@
 ﻿@using AwesomeCare.Admin.Components;
-@using Microsoft.AspNetCore.Http;
+@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Mvc.Razor;
 <!doctype html>
 <html lang="en">
 
@@ -10,19 +11,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="description" content="Cuidado Admin">
     <meta name="author" content="Cuidado Admin, design by: olamidejames.com">
-
+    @RenderSection("Meta", required: false)
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <!-- VENDOR CSS -->
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
-    <link href="/assets/vendor/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-timepicker/css/bootstrap-timepicker.min.css" />
     <link rel="stylesheet" href="/assets/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css" />
     <link rel="stylesheet" href="/assets/vendor/multi-select/css/multi-select.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="/assets/vendor/nouislider/nouislider.min.css" />
     <link rel="stylesheet" href="/assets/vendor/parsleyjs/css/parsley.css">
+    <!-- Material Design Bootstrap -->
+    @*<link href="/assets/vendor/mdb/css/mdb.css" rel="stylesheet" />*@
+    <link href="/assets/vendor/boostrap-multiselect2/css/bootstrap-select.css" rel="stylesheet" />
 
     @RenderSection("VenderStyleSheets", required: false)
 
@@ -360,10 +366,10 @@
                     </div>
                 </div>
 
-                @if (this.OperationStatus() != null)
+                @if ( TempData["OperationStatus"] != null)
                 {
 
-                    var operationStatus = this.OperationStatus();
+                    var operationStatus =  JsonConvert.DeserializeObject<AwesomeCare.Admin.Models.OperationStatus>(TempData["OperationStatus"]?.ToString());
                     if (operationStatus.IsSuccessful)
                     {
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -389,6 +395,7 @@
     </div>
 
     <!-- Javascript -->
+
     <script src="/assets/bundles/libscripts.bundle.js"></script>
     <script src="/assets/bundles/vendorscripts.bundle.js"></script>
 
@@ -402,7 +409,7 @@
     <script src="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js -->
     <script src="/assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js -->
     <script src="/assets/vendor/parsleyjs/js/parsley.min.js"></script>
-
+    <script src="/assets/vendor/boostrap-multiselect2/js/bootstrap-select.js"></script>
 
     @RenderSection("VendorScripts", required: false)
 
@@ -410,7 +417,29 @@
     <script src="/assets/bundles/mainscripts.bundle.js"></script>
     <script src="/assets/js/pages/forms/advanced-form-elements.js"></script>
 
-       
+    <script>
+        $(document).ready(function () {
+            
+            // Multiselect
+            //$('.multiselect').multiselect({
+            //    maxHeight: 300
+            //});
+            $('.multiselectfilter').multiselect({
+                enableFiltering: true,
+                enableCaseInsensitiveFiltering: true,
+                maxHeight: 200
+            });
+
+            var date = new Date();
+            date.setDate(date.getDate());
+            $('.datepickerfromtoday').datepicker({
+                startDate: date,
+                todayBtn: true
+            })
+
+           
+        })
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>

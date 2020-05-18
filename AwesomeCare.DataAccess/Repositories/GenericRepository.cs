@@ -10,9 +10,9 @@ namespace AwesomeCare.DataAccess.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        private IDbContext _dbContext;
+        private AwesomeCareDbContext _dbContext;
         private DbSet<TEntity> _entities;
-        public GenericRepository(IDbContext dbContext)
+        public GenericRepository(AwesomeCareDbContext dbContext)
         {
             _dbContext = dbContext;
         }

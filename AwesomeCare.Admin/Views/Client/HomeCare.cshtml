@@ -31,7 +31,7 @@
                             <th>PostCode</th>
                             <th>BirthDay</th>
                             <th>Start Date</th>
-                            <th>END Date</th>
+                            <th>End Date</th>
                             <th>Status</th>
                             <th></th>
                         </tr>
@@ -59,7 +59,7 @@
                                             @Html.ActionLink("Rotering","Index","Rotering",new  {client=client.data.ClientId },new {@class="dropdown-item" })
                                             @Html.ActionLink("Details","HomeCareDetails","Client",new  {clientId=client.data.ClientId },new {@class="dropdown-item" })
                                             @Html.ActionLink("Edit","EditRegistration","Client",new  {clientId=client.data.ClientId },new {@class="dropdown-item" })
-                                            
+                                            <a class="dropdown-item" asp-route-clientId="@client.data.ClientId" asp-action="Medications">Medications</a>
                                         </div>
                                     </div>
                                 </td>

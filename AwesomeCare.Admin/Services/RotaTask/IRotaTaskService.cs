@@ -1,8 +1,12 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.RotaTask;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientRotaTask;
+using AwesomeCare.DataTransferObject.DTOs.RotaTask;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using Refit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Services.RotaTask
@@ -20,5 +24,18 @@ namespace AwesomeCare.Admin.Services.RotaTask
 
         [Put("/RotaTask")]
         Task<GetRotaTask> Put([Body]PutRotaTask model);
+
+        [Get("/Rotering/RotaAdmin/{sDate}/{eDate}")]
+        Task<List<RotaAdmin>> RotaAdmin(string sDate, string eDate);
+
+        [Get("/Rotering/LiveRota/{sDate}")]
+        Task<List<LiveTracker>> LiveRota(string sDate);
+
+
+        [Get("/Rotering/GetStaffRotaPeriodById/{staffRotaPeriodId}")]
+        Task<GetStaffRotaPeriodForEdit> GetStaffRotaPeriod(int staffRotaPeriodId);
+
+        [Put("/Rotering/PatchStaffRotaPeriod")]
+        Task<HttpResponseMessage> PatchStaffRotaPeriod([Body] EditStaffRotaPeriod model);
     }
 }

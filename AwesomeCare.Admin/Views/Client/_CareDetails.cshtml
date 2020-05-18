@@ -5,7 +5,6 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<h5>Client Details</h5>
 <input type="hidden" asp-for="@Model.ClientId" />
 <input type="hidden" asp-for="@Model.Firstname" />
 <input type="hidden" asp-for="@Model.Middlename" />
@@ -43,7 +42,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (int i = 0; i <  Model.CareDetails[r].Tasks.Count; i++)
+                                @for (int i = 0; i < Model.CareDetails[r].Tasks.Count; i++)
                                 {
                                     <tr>
                                         <td>
@@ -56,14 +55,29 @@
                                             <input type="hidden" asp-for="@Model.CareDetails[r].Tasks[i].Task" />
 
                                         </td>
-                                        <td><input asp-for="@Model.CareDetails[r].Tasks[i].Description" type="text" class="form-control" /></td>
-                                        <td><input asp-for="@Model.CareDetails[r].Tasks[i].Risk" type="text" class="form-control" /></td>
-                                        <td><input asp-for="@Model.CareDetails[r].Tasks[i].Mitigation" type="text" class="form-control" /></td>
-                                        <td><input asp-for="@Model.CareDetails[r].Tasks[i].Location" type="text" class="form-control" /></td>
-                                        <td><input asp-for="@Model.CareDetails[r].Tasks[i].Remark" type="text" class="form-control" /></td>
+                                        <td>
+                                            <input asp-for="@Model.CareDetails[r].Tasks[i].Description" type="text" class="form-control" />
+                                            <span asp-validation-for="@Model.CareDetails[r].Tasks[i].Description" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                            <input asp-for="@Model.CareDetails[r].Tasks[i].Risk" type="text" class="form-control" />
+                                            <span asp-validation-for="@Model.CareDetails[r].Tasks[i].Risk" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                        <input asp-for="@Model.CareDetails[r].Tasks[i].Mitigation" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.CareDetails[r].Tasks[i].Mitigation" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                        <input asp-for="@Model.CareDetails[r].Tasks[i].Location" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.CareDetails[r].Tasks[i].Location" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                        <input asp-for="@Model.CareDetails[r].Tasks[i].Remark" type="text" class="form-control" />
+                                        <span asp-validation-for="@Model.CareDetails[r].Tasks[i].Remark" class="text-danger"></span>
+                                        </td>
                                     </tr>
                                 }
-                               
+
                             </tbody>
                         </table>
                     </div>

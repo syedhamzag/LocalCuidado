@@ -12,6 +12,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientRota
         {
             ClientRotaDays = new List<CreateClientRotaDays>();
         }
+        public int ClientRotaId { get; set; }
         [Required(ErrorMessage = "Client is required")]
         public int ClientId { get; set; }
         [Required(ErrorMessage = "Client RotaType is required")]

@@ -1,13 +1,21 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientCareDetails;
+using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
+using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
     public class PostClient
     {
-        #region Dropdowns
+        public PostClient()
+        {
+            InvolvingParties = new List<PostClientInvolvingParty>();
+            RegulatoryContacts = new List<PostClientRegulatoryContact>();
+            CareDetails = new List<PostClientCareDetails>();
 
-        #endregion
+        }
 
         [Required]
         [MaxLength(50)]
@@ -96,5 +104,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [Display(Name = "Number of Staff")]
         public int NumberOfStaff { get; set; }
         public string PassportFilePath { get; set; }
+
+
+        public List<PostClientInvolvingParty> InvolvingParties { get; set; }
+        public List<PostClientRegulatoryContact> RegulatoryContacts { get; set; }
+        public List<PostClientCareDetails> CareDetails { get; set; }
+
     }
 }

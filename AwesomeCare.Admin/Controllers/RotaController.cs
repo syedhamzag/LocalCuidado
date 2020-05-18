@@ -7,13 +7,14 @@ using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.ViewModels.ClientRota;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
 using Microsoft.AspNetCore.Mvc;
+using AwesomeCare.Services.Services;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class RotaController : BaseController
     {
         private readonly IClientRotaNameService _clientRotaService;
-        public RotaController(IClientRotaNameService clientRotaService)
+        public RotaController(IClientRotaNameService clientRotaService, IFileUpload fileUpload):base(fileUpload)
         {
             _clientRotaService = clientRotaService;
         }

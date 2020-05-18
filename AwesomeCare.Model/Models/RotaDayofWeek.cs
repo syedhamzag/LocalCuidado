@@ -9,6 +9,7 @@ namespace AwesomeCare.Model.Models
         public int RotaDayofWeekId { get; set; }
         public string DayofWeek { get; set; }
 
+        public virtual ClientMedicationDay ClientMedicationDay { get; set; }
         public virtual ICollection<ClientRotaDays> ClientRotaDays { get; set; }
     }
 }

@@ -1,0 +1,133 @@
+﻿@using AwesomeCare.Web.ViewModels.ShiftBooking;
+@model CreateBookingViewModel
+@{
+    ViewData["Title"] = "Create Shift Booking";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Create</h2>
+
+            </div>
+            <div class="body">
+                @*<form id="Form1" asp-controller="ShiftBooking" asp-action="ChangeMonth" method="post">
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label>Month</label>
+                            <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control" onchange="document.getElementById('Form1').submit();">
+                            </select>
+                        </div>
+                    </form>*@
+                <form id="Form2" asp-controller="ShiftBooking" asp-action="Create" method="post">
+
+                    <input type="hidden" asp-for="DaysInMonth" />
+                    <input type="hidden" asp-for="ShiftBookingId" />
+                    <input type="hidden" asp-for="SelectedMonth" />
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                @foreach (string day in Model.WeekDays)
+                                {
+                                <th>@day</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var totalDays = 7;
+                                var remainder = Model.DaysInMonth % 7;
+                                var totalRows = remainder > 0 ? (Model.DaysInMonth / totalDays) + 1 : Model.DaysInMonth / totalDays;
+                                var start = 1;
+                                bool isLastDay = false;
+                                bool isEnded = false;
+                                for (int r = 1; r <= 6; r++)
+                                {
+                                <tr>
+
+                                    @for (int d = start; d <= Model.DaysInMonth; d++)
+                                        {
+                                    @foreach (string wday in Model.WeekDays)
+                                            {
+                                    <td>
+
+                                        @if (d.IsSameDay(wday, Model.SelectedMonth))
+                                                    {
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <p class="align-right">
+                                                    <span>
+                                                        @d.ToString("D2")
+                                                    </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 align-right">
+                                                <label class="fancy-checkbox">
+                                                    <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                    <span></span>
+                                                </label>
+                                                @{
+                                                    string dayName = $"{d.ToString("D2")}_day";
+                                                    <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                }
+                                            </div>
+                                        </div>
+
+
+                                                        if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
+                                                        {
+                                                            isLastDay = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            if (d == Model.DaysInMonth)
+                                                            {
+                                                                isEnded = true;
+                                                                break;
+                                                            }
+                                                            else
+                                                            {
+                                                                ++d;
+                                                            }
+
+                                                        }
+                                                    }
+                                    </td>
+                                            }
+                                            if (isEnded)
+                                            {
+                                                break;
+                                            }
+                                            else
+                                            {
+                                                if (isLastDay)
+                                                {
+                                                    start = d + 1;
+                                                    break;
+                                                }
+                                            }
+
+                                        }
+                                </tr>
+
+                                    if (isEnded)
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <a asp-controller="ShiftBooking" asp-action="Shifts" class="btn btn-primary btn-sm pull-left">Cancel</a>
+                    <input type="submit" id="btnSubmit" name="btnSubmit" value="Create" class="btn btn-primary pull-right" onclick="document.getElementById('Form2').submit();" />
+                    @*<button type="submit"  id="btnSubmit" value="btnSubmit" class="btn btn-primary pull-right">Submit</button>*@
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,94 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod; 
+@model EditStaffRotaPeriod
+        @{
+        ViewData["Title"] = "Edit Live Rota";
+        }
+               
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12">
+                <div class="card planned_task">
+                    <div class="header">
+                        <h2>Edit Live Rota</h2>
+                        
+                    </div>
+                    <div class="body">
+                        <form  asp-route="LiveRotaEdit"  method="post">
+
+                            <input type="hidden" asp-for="StaffRotaPeriodId" />
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="ClockInTime" class="control-label"></label>
+                                        <input type="text" class="form-control" asp-for="ClockInTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1">
+                                        <span asp-validation-for="ClockInTime" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="ClockOutTime" class="control-label"></label>
+                                        <input type="text" class="form-control" asp-for="ClockOutTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1">
+                                        <span asp-validation-for="ClockOutTime" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="ClockInAddress" class="control-label"></label>
+                                        <input type="text" class="form-control" asp-for="ClockInAddress">
+                                        <span asp-validation-for="ClockInAddress" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="ClockOutAddress" class="control-label"></label>
+                                        <input type="text" class="form-control" asp-for="ClockOutAddress">
+                                        <span asp-validation-for="ClockOutAddress" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Feedback" class="control-label"></label>
+                                        <textarea class="form-control" asp-for="Feedback"></textarea>
+                                        <span asp-validation-for="Feedback" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="Comment" class="control-label"></label>
+                                        <textarea class="form-control" asp-for="Comment"></textarea>
+                                        <span asp-validation-for="Comment" class="text-danger"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label asp-for="HandOver" class="control-label"></label>
+                                        <textarea class="form-control" asp-for="HandOver"></textarea>
+                                        <span asp-validation-for="HandOver" class="text-danger"></span>
+                                    </div>
+                                </div>                               
+                            </div>
+
+                            <br>
+                            <button id="btnSubmit" type="submit" class="btn btn-primary float-right">Submit</button>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 

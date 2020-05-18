@@ -35,6 +35,11 @@ namespace AwesomeCare.Model.Models.Map
              .HasColumnName("StopTime")
               .HasMaxLength(25)
              .IsRequired();
+
+            builder.Property(p => p.RotaId)
+                .HasColumnName("RotaId")
+                .IsRequired();
+
             #endregion
 
             #region Relationships
@@ -46,6 +51,11 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasOne(p => p.RotaDayofWeek)
                 .WithMany(p => p.ClientRotaDays)
                 .HasForeignKey(p => p.RotaDayofWeekId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(r => r.Rota)
+                .WithMany(m => m.ClientRotaDays)
+                .HasForeignKey(f => f.RotaId)
                 .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }

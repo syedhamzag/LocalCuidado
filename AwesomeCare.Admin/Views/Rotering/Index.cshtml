@@ -10,22 +10,23 @@
         <div class="card planned_task  table-responsive">
             <div class="header">
                 <h2>Create Client Rota</h2>
-                <ul class="header-dropdown">
-                    <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="javascript:void(0);">Action</a></li>
-                            <li><a href="javascript:void(0);">Another Action</a></li>
-                            <li><a href="javascript:void(0);">Something else</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                @*<ul class="header-dropdown">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="javascript:void(0);">Action</a></li>
+                                <li><a href="javascript:void(0);">Another Action</a></li>
+                                <li><a href="javascript:void(0);">Something else</a></li>
+                            </ul>
+                        </li>
+                    </ul>*@
             </div>
             <div class="body">
 
                 <form id="roteringForm" asp-action="Index" asp-controller="Rotering" method="post">
 
-                    @Html.HiddenFor(m=>m.ClientId)
+                    @Html.HiddenFor(m => m.ClientId)
+                    @Html.HiddenFor(m => m.ActionName)
                     @*<table class="table table-hover table-bordered">
                             <thead>
                                 <tr>
@@ -80,42 +81,104 @@
                                 <tr>
                                     <td>
                                         <div class="fancy-checkbox">
-                                            <label><input type="checkbox" name="@rotaType.RotaType"><span>@rotaType.RotaType</span></label>
+                                            @{
+
+                                                <input type="hidden" asp-for="@rotaType.ClientRotaTypeId" />
+                                                var clientRotaType = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId);
+                                                if (clientRotaType != null)
+                                                {
+                                                    //display and for edit
+                                                    <label><input type="checkbox" name="@rotaType.RotaType" checked><span>@rotaType.RotaType</span></label>
+                                                    @Html.Hidden($"{rotaType.RotaType}-ClientRotaId", @clientRotaType.ClientRotaId)
+                                                }
+                                                else
+                                                {
+                                                    //new
+                                                    <label><input type="checkbox" name="@rotaType.RotaType"><span>@rotaType.RotaType</span></label>
+                                                    @Html.Hidden($"{rotaType.RotaType}-ClientRotaId", 0)
+                                                }
+                                            }
+
                                         </div>
-                                        
+
                                     </td>
                                     @foreach (var weekDay in Model.WeekDays)
                                     {
                                         <td>
-                                            @Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-Day",weekDay.RotaDayofWeekId)
-                                            <div class="form-group">
-                                                <label>Rota</label>
-                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rota", Model.Rotas, "select rota", new { @class = "form-control" })
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">Tasks</label>
-                                                <br />
-                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rotaTask", Model.RotaTasks,  new { @multiple = "multiple", @class = "multiselect multiselect-custom taskMultiselect" })
-                                                @*<select class="multiselect multiselect-custom taskMultiselect" multiple="multiple">
-                                                        <option value="cheese">Cheese</option>
-                                                        <option value="tomatoes">Tomatoes</option>
-                                                        <option value="mozarella">Mozzarella</option>
-                                                        <option value="mushrooms">Mushrooms</option>
-                                                        <option value="pepperoni">Pepperoni</option>
-                                                        <option value="onions">Onions</option>
-                                                    </select>*@
-                                                
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Start Time</label>
-                                                <input type="text" name="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
 
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Stop Time</label>
-                                                <input type="text" name="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                            @Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
+                                            @{
+                                                var rotaDywk = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == weekDay.RotaDayofWeekId);
+                                                if (rotaDywk != null)
+                                                {
 
-                                            </div>
+                                                    @Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-DayId", rotaDywk.ClientRotaDaysId)
+                                                    var rotasList = new List<SelectListItem>();
+                                                    foreach (var m in Model.Rotas)
+                                                    {
+                                                        var sl = new SelectListItem(m.Text, m.Value);
+                                                        sl.Selected = sl.Value == rotaDywk.RotaId.ToString();
+                                                        rotasList.Add(sl);
+                                                    }
+
+                                                    var rotaTaskList = new List<SelectListItem>();
+                                                    var rotaDays = rotaDywk.RotaTasks.Where(rd => rd.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
+                                                    foreach (var tk in Model.RotaTasks)
+                                                    {
+                                                        var sl = new SelectListItem(tk.Text, tk.Value);
+                                                        sl.Selected = rotaDays.FirstOrDefault(c => c.RotaTaskId.ToString() == tk.Value) != null;
+                                                        rotaTaskList.Add(sl);
+                                                    }
+
+                                                    <div class="form-group">
+                                                        <label>Rota</label>
+                                                        @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rota", rotasList, "select rota", new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Tasks</label>
+                                                        <br />
+                                                        @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rotaTask", rotaTaskList, new { @multiple = "multiple", @class = "multiselect multiselect-custom taskMultiselect" })
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Start Time</label>
+                                                        <input type="text" value="@rotaDywk.StartTime" name="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Stop Time</label>
+                                                        <input type="text" value="@rotaDywk.StopTime" name="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+
+                                                    @Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-DayId", 0)
+                                                    <div class="form-group">
+                                                        <label>Rota</label>
+                                                        @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rota", Model.Rotas, "select rota", new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Tasks</label>
+                                                        <br />
+                                                        @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rotaTask", Model.RotaTasks, new { @multiple = "multiple", @class = "multiselect multiselect-custom taskMultiselect" })
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Start Time</label>
+                                                        <input type="text" name="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Stop Time</label>
+                                                        <input type="text" name="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+
+                                                    </div>
+                                                }
+
+                                            }
+
                                         </td>
                                     }
                                 </tr>
@@ -123,7 +186,7 @@
                         </tbody>
                     </table>
 
-                    <button type="submit" class="btn btn-primary pull-right">save & continue</button>
+                    <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
                 </form>
 
             </div>
@@ -138,8 +201,8 @@
             $('.taskMultiselect').multiselect({
                 enableFiltering: false,
                 nonSelectedText: "Select Task",
-                numberDisplayed:0
-        });
+                numberDisplayed: 0
+            });
 
 
         });

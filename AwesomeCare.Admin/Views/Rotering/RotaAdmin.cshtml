@@ -1,0 +1,158 @@
+﻿@using AwesomeCare.Admin.ViewModels.Rotering;
+@using System.Globalization;
+
+@model RotaAdminViewModel
+@{
+    ViewData["Title"] = "RotaAdmin";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Rota Admin</h2>
+
+            </div>
+            <div class="body">
+
+                <form asp-action="RotaAdmin" method="post">
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="StartDate"></label>
+                            <input type="text" asp-for="StartDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="StopDate"></label>
+                            <input type="text" asp-for="StopDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+                            <span asp-validation-for="StopDate" class="text-danger"></span>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-8 col-xs-12 col-md-8 col-lg-8">
+                            <button type="submit" class="btn btn-primary pull-right">Preview</button>
+                        </div>
+                    </div>
+
+
+                </form>
+
+                <ul class="nav nav-tabs-new2">
+                    @foreach (var day in Model.RotaAdmin.GroupBy(d => d.RotaDate).ToList())
+                    {
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#@day.Key.DayOfWeek.ToString()">@day.Key.DayOfWeek.ToString() (@day.Key.ToString("dd-MMM-yyyy"))</a></li>
+                    }
+
+                </ul>
+                <div class="tab-content">
+                    @foreach (var day in Model.RotaAdmin.GroupBy(d => d.RotaDate).ToList())
+                    {
+                    <div class="tab-pane" id="@day.Key.DayOfWeek.ToString()">
+
+                        @foreach (var rota in day.GroupBy(c => c.Period).ToList())
+                        {
+                            <h6>@rota.Key</h6>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Ref. No.</th>
+                                        <th>Rota</th>
+                                        <th>Client</th>
+                                        <th>Client PostCode</th>
+                                        <th>Client KeySafe</th>
+                                        <th>StartTime</th>
+                                        <th>StopTime</th>
+                                        <th>Diff.</th>
+                                        <th>Clock In</th>
+                                        <th>Clock Out</th>
+                                        <th>Diff</th>
+                                        <th>Staff</th>
+                                        <th>Remark</th>
+                                        <th>Partners</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in rota)
+                                    {
+                                    <tr>
+                                        <td>@item.ReferenceNumber</td>
+                                        <td>@item.Rota</td>
+                                        <td>@item.ClientName</td>
+                                        <td>@item.ClientPostCode</td>
+                                        <td>@item.ClientKeySafe</td>
+                                        <td>@item.StartTime</td>
+                                        <td>@item.StopTime</td>
+                                        <td>
+                                            @{
+                                                bool isStartTimeValid = TimeSpan.TryParseExact(item.StartTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan startTime);
+                                                bool isStopTimeValid = TimeSpan.TryParseExact(item.StopTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan stopTime);
+                                                if (isStartTimeValid && isStopTimeValid)
+                                                {
+                                                    var diff = stopTime.Subtract(startTime);
+                                                    @diff
+                                                }
+                                            }
+
+                                        </td>
+                                        <td>@item.ClockInTime</td>
+                                        <td>@item.ClockOutTime</td>
+                                        <td>
+                                            @{
+                                                bool isClockInTimeValid = TimeSpan.TryParseExact(item.ClockInTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
+                                                bool isClockOutTimeValid = TimeSpan.TryParseExact(item.ClockOutTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
+                                                if (isClockInTimeValid && isClockOutTimeValid)
+                                                {
+                                                    var clockDiff = clockOut.Subtract(clockIn);
+                                                    @clockDiff
+                                                }
+                                            }
+                                        </td>
+                                        <td>@item.Staff</td>
+                                        <td>@item.Remark</td>
+                                        <td>
+                                            @if (item.Partners.Count > 0)
+                                            {
+                                                <table class="table table-condensed table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <td>Partner</td>
+                                                            <td>Telephone</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var part in item.Partners)
+                                                        {
+                                                            <tr>
+                                                                <td>@part.Partner</td>
+                                                                <td>@part.Telephone</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+
+                                            }
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                    }
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,4 +1,5 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.RotaTask;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientRotaTask;
+using AwesomeCare.DataTransferObject.DTOs.RotaTask;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

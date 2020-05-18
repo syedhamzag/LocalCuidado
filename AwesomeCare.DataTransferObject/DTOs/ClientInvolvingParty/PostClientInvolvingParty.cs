@@ -10,7 +10,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty
       
         [Required]
         public int ClientInvolvingPartyItemId { get; set; }
-        [Required]
+       
         public int ClientId { get; set; }
         [Required]
         [MaxLength(50)]

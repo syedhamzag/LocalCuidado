@@ -6,14 +6,14 @@ using AutoMapper;
 using AwesomeCare.Admin.Services.Company;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
-
+using AwesomeCare.Services.Services;
 namespace AwesomeCare.Admin.Controllers
 {
     public class CompanyController : BaseController
     {
         private ICompanyService _companyService;
 
-        public CompanyController(ICompanyService companyService)
+        public CompanyController(ICompanyService companyService,IFileUpload fileUpload):base(fileUpload)
         {
             _companyService = companyService;
         }

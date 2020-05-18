@@ -21,8 +21,8 @@ namespace AwesomeCare.API.Controllers
     {
         private IGenericRepository<ClientCareDetailsHeading> _clientCareDetailsHeadingRepository;
         private ILogger<ClientCareDetailsHeadingController> _logger;
-        private IDbContext _dbContext;
-        public ClientCareDetailsHeadingController(IDbContext dbContext, IGenericRepository<ClientCareDetailsHeading> clientCareDetailsHeadingRepository, ILogger<ClientCareDetailsHeadingController> logger)
+        private AwesomeCareDbContext _dbContext;
+        public ClientCareDetailsHeadingController(AwesomeCareDbContext dbContext, IGenericRepository<ClientCareDetailsHeading> clientCareDetailsHeadingRepository, ILogger<ClientCareDetailsHeadingController> logger)
         {
             _clientCareDetailsHeadingRepository = clientCareDetailsHeadingRepository;
             _logger = logger;
@@ -75,7 +75,6 @@ namespace AwesomeCare.API.Controllers
         /// <summary>
         /// Get ClientCareDetailsHeadings with Tasks
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetHeadingsWithTasks", Name = "GetClientCareDetailsHeadingsWithTasks")]
         [ProducesResponseType(type: typeof(List<GetClientCareDetailsHeadingWithTasks>), statusCode: StatusCodes.Status200OK)]
