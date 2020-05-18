@@ -306,6 +306,7 @@ namespace AwesomeCare.Admin.Controllers
                 string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
                 string filename = string.Concat(c.RegulatoryContact.Replace(" ", ""), "_", createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
                 string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
+                _logger.LogInformation("Uploaded file to Dropbox: {0}", path);
                 c.Evidence = path;
             }
 
