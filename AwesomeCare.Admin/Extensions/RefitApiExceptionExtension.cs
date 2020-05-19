@@ -12,6 +12,9 @@ namespace AwesomeCare.Admin.Extensions
     {
         public static string GetException(this Refit.ApiException apiException)
         {
+            if (apiException.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                return "";
+
             List<string> messages = new List<string>();
             string exception = apiException.Content;
             var errors = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(exception);

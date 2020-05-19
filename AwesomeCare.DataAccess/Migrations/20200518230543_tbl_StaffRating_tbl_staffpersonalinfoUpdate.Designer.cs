@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200518230543_tbl_StaffRating_tbl_staffpersonalinfoUpdate")]
+    partial class tbl_StaffRating_tbl_staffpersonalinfoUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1621,16 +1623,16 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("CommentDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("RatedBy")
+                        .HasColumnName("RatedBy")
+                        .HasColumnType("int");
+
                     b.Property<int>("Rating")
                         .HasColumnName("Rating")
                         .HasColumnType("int");
 
                     b.Property<int>("StaffPersonalInfoId")
                         .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubmittedBy")
-                        .HasColumnName("SubmittedBy")
                         .HasColumnType("int");
 
                     b.HasKey("StaffRatingId");

@@ -74,11 +74,13 @@ namespace AwesomeCare.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateStaffRecord(StaffDetails staff)
+        public async Task<IActionResult> Details(StaffDetails staff)
         {
             if (!ModelState.IsValid)
             {
-                return View(staff);
+                SetOperationStatus(new OperationStatus { IsSuccessful = false, Message =  "All fields in the official section are required" });
+
+                return RedirectToAction("Details",new { staffId= staff.StaffPersonalInfoId });
             }
 
             var postApproval = new PostStaffApproval
@@ -86,8 +88,13 @@ namespace AwesomeCare.Admin.Controllers
                 Comment = staff.Comment,
                 Rate = staff.Rate,
                 StaffPersonalInfoId = staff.StaffPersonalInfoId,
-                Status = staff.Status
+                Status = staff.Status,
+                EmploymentDate = staff.EmploymentDate,
+                HasIdCard = staff.HasIdCard.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
+                HasUniform= staff.HasUniform.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
+                IsTeamLeader= staff.IsTeamLeader.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
             };
+            var kk = JsonConvert.SerializeObject(postApproval);
             var result = await _staffService.Approval(postApproval);
             var content = await result.Content.ReadAsStringAsync();
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Staff Successfully Updated" : "An Error Occurred" });

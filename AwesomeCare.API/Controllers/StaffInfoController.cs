@@ -8,6 +8,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
@@ -28,6 +29,8 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffRota> _staffRotaRepository;
         private IGenericRepository<StaffRotaDynamicAddition> _staffDynamicAdditionRepository;
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
+        private IGenericRepository<Client> _clientRepository;
+        private IGenericRepository<StaffRating> _staffRatingRepository;
         private ILogger<StaffInfoController> _logger;
         private AwesomeCareDbContext _dbContext;
 
@@ -35,7 +38,8 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<StaffRotaDynamicAddition> staffDynamicAdditionRepository,
             IGenericRepository<StaffRota> staffRotaRepository, ILogger<StaffInfoController> logger,
             AwesomeCareDbContext dbContext, IGenericRepository<StaffRotaPartner> staffRotaPartnerRepository,
-            IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository)
+            IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
+            IGenericRepository<StaffRating> staffRatingRepository, IGenericRepository<Client> clientRepository)
         {
             _staffInfoRepository = staffInfoRepository;
             _logger = logger;
@@ -45,6 +49,8 @@ namespace AwesomeCare.API.Controllers
             _staffRotaPartnerRepository = staffRotaPartnerRepository;
             _staffRotaPeriodRepository = staffRotaPeriodRepository;
             _clientRotaTypeRepository = clientRotaTypeRepository;
+            _staffRatingRepository = staffRatingRepository;
+            _clientRepository = clientRepository;
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
@@ -167,6 +173,10 @@ namespace AwesomeCare.API.Controllers
                                     DBSUpdateNo = st.DBSUpdateNo,
                                     DrivingLicense = st.DrivingLicense,
                                     DrivingLicenseExpiryDate = st.DrivingLicenseExpiryDate,
+                                    EmploymentDate = st.EmploymentDate,
+                                    HasIdCard = st.HasIdCard.Value ? "Yes" : "No",
+                                    HasUniform = st.HasUniform.Value ? "Yes" : "No",
+                                    IsTeamLeader = st.IsTeamLeader.Value ? "Yes" : "No",
                                     Education = (from edu in st.Education
                                                  select new GetStaffEducation
                                                  {
@@ -197,6 +207,8 @@ namespace AwesomeCare.API.Controllers
                                     PostCode = st.PostCode,
                                     ProfilePix = st.ProfilePix,
                                     Rate = st.Rate,
+                                    PlaceOfBirth = st.PlaceOfBirth,
+                                    JobCategory = st.JobCategory,
                                     References = (from rf in st.References
                                                   select new GetStaffReferee
                                                   {
@@ -293,6 +305,11 @@ namespace AwesomeCare.API.Controllers
 
             staff.Rate = model.Rate;
             staff.Status = model.Status;// (int)Enum.Parse(typeof(StaffRegistrationEnum), model.Status);
+            staff.HasUniform = model.HasUniform;
+            staff.IsTeamLeader = model.IsTeamLeader;
+            staff.HasIdCard = model.HasIdCard;
+            staff.EmploymentDate = model.EmploymentDate;
+
             staff.StaffPersonalInfoComments.Add(new StaffPersonalInfoComment
             {
                 Comment = model.Comment,
@@ -320,7 +337,7 @@ namespace AwesomeCare.API.Controllers
 
             return Ok();
         }
-              
+
         [HttpGet("Rota/Get/{id}")]
         [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
         public async Task<IActionResult> GetStaffRota(int id)
@@ -395,7 +412,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpGet("Rota/Get/{sDate}/{eDate}")]
         [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetRotaLive(string sDate,string eDate)
+        public async Task<IActionResult> GetRotaLive(string sDate, string eDate)
         {
 
             string format = "yyyy-MM-dd";
@@ -405,35 +422,37 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest("Invalid Date format, Format is yyyy-MM-dd");
             }
-            var staffRotas =await (from sr in _staffRotaRepository.Table
-                              join staff in _staffInfoRepository.Table on sr.Staff equals staff.StaffPersonalInfoId
-                              where sr.RotaDate >= startDate && sr.RotaDate <= endDate
-                              select new GetStaffRota {
-                                  Staff = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName,
-                                  ReferenceNumber = sr.ReferenceNumber,
-                                  Remark = sr.Remark,
-                                  RotaDate = sr.RotaDate,
-                                  RotaId = sr.RotaId,
-                                  StaffId = sr.Staff,
-                                  Partners = (from pt in sr.StaffRotaPartners
-                                              join partner in _staffInfoRepository.Table on pt.StaffId equals partner.StaffPersonalInfoId
-                                              select new GetStaffRotaPartner
-                                              {
-                                                  Partner = partner.FirstName + " " + partner.MiddleName + " " + partner.LastName,
-                                                  PartnerId = pt.StaffId,
-                                                  StaffRotaId = pt.StaffRotaId,
-                                                  StaffRotaPartnerId = pt.StaffRotaPartnerId,
-                                                  Telephone = partner.Telephone
-                                              }).ToList(),
-                                  Periods = (from p in sr.StaffRotaPeriods
-                                             join ct in _clientRotaTypeRepository.Table on p.ClientRotaTypeId equals ct.ClientRotaTypeId
-                                             select new GetStaffRotaPeriod {
-                                                 ClientRotaTypeId=p.ClientRotaTypeId,
-                                                 RotaType = ct.RotaType,
-                                                 StaffRotaId = p.StaffRotaId,
-                                                 StaffRotaPeriodId = p.StaffRotaPeriodId
-                                             }).ToList()
-                              }).OrderBy(b=>b.RotaDate).ToListAsync();
+            var staffRotas = await (from sr in _staffRotaRepository.Table
+                                    join staff in _staffInfoRepository.Table on sr.Staff equals staff.StaffPersonalInfoId
+                                    where sr.RotaDate >= startDate && sr.RotaDate <= endDate
+                                    select new GetStaffRota
+                                    {
+                                        Staff = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName,
+                                        ReferenceNumber = sr.ReferenceNumber,
+                                        Remark = sr.Remark,
+                                        RotaDate = sr.RotaDate,
+                                        RotaId = sr.RotaId,
+                                        StaffId = sr.Staff,
+                                        Partners = (from pt in sr.StaffRotaPartners
+                                                    join partner in _staffInfoRepository.Table on pt.StaffId equals partner.StaffPersonalInfoId
+                                                    select new GetStaffRotaPartner
+                                                    {
+                                                        Partner = partner.FirstName + " " + partner.MiddleName + " " + partner.LastName,
+                                                        PartnerId = pt.StaffId,
+                                                        StaffRotaId = pt.StaffRotaId,
+                                                        StaffRotaPartnerId = pt.StaffRotaPartnerId,
+                                                        Telephone = partner.Telephone
+                                                    }).ToList(),
+                                        Periods = (from p in sr.StaffRotaPeriods
+                                                   join ct in _clientRotaTypeRepository.Table on p.ClientRotaTypeId equals ct.ClientRotaTypeId
+                                                   select new GetStaffRotaPeriod
+                                                   {
+                                                       ClientRotaTypeId = p.ClientRotaTypeId,
+                                                       RotaType = ct.RotaType,
+                                                       StaffRotaId = p.StaffRotaId,
+                                                       StaffRotaPeriodId = p.StaffRotaPeriodId
+                                                   }).ToList()
+                                    }).OrderBy(b => b.RotaDate).ToListAsync();
 
 
             return Ok(staffRotas);
@@ -442,5 +461,58 @@ namespace AwesomeCare.API.Controllers
 
         #endregion
 
+        #region Client Feedbacks i.e Staff Ratings
+        /// <summary>
+        /// Get Client Feedbacks by StaffPersonalInfo Id
+        /// </summary>
+        /// <param name="staffPersonalInfoId"></param>
+        /// <returns></returns>
+        [HttpGet("ClientFeedbacks/{staffPersonalInfoId}")]
+        [ProducesResponseType(type: typeof(List<GetStaffRating>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClientFeedbacks(int? staffPersonalInfoId)
+        {
+            if (!staffPersonalInfoId.HasValue)
+            {
+                return BadRequest("staffPersonalInfoId is required");
+            }
+            var feedbacks =await (from fb in _staffRatingRepository.Table
+                             join st in _staffInfoRepository.Table on fb.StaffPersonalInfoId equals st.StaffPersonalInfoId
+                             join cl in _clientRepository.Table on fb.ClientId equals cl.ClientId
+                             where fb.StaffPersonalInfoId == staffPersonalInfoId.Value
+                             select new GetStaffRating
+                             {
+                                 StaffPersonalInfoId = fb.StaffPersonalInfoId,
+                                 Client = cl.Firstname + " " + cl.Middlename + " " + cl.Surname,
+                                 ClientId = fb.ClientId,
+                                 Comment = fb.Comment,
+                                 CommentDate = fb.CommentDate,
+                                 Rating = fb.Rating,
+                                 Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
+                                 StaffRatingId = fb.StaffRatingId
+                             }
+                            ).ToListAsync();
+            return Ok(feedbacks);
+        }
+        /// <summary>
+        /// Post Client Feeedback for a staff
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost("ClientFeedback")]
+        [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PostClientFeedback([FromBody]PostStaffRating model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+           
+            var entity = Mapper.Map<StaffRating>(model);
+            var staffRating = await _staffRatingRepository.InsertEntity(entity);
+            return Ok();
+        }
+        #endregion
     }
 }

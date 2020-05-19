@@ -66,10 +66,12 @@ namespace AwesomeCare.Web.ViewModels.Staff
         
         [Required]
         public string PostCode { get; set; }
+        [Display(Name = "Passcode/PIN max = 4 ")]
+        [MaxLength(4)]
+        public string Passcode { get; set; }
         public decimal? Rate { get; set; }
         public string TeamLeader { get; set; }
         public string WorkTeam { get; set; }
-        public string Passcode { get; set; }
         [Required]
         [Display(Name ="Can you drive?")]
         public string CanDrive { get; set; }
@@ -126,5 +128,12 @@ namespace AwesomeCare.Web.ViewModels.Staff
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         [RequiredDependant("Yes", nameof(SelfPYE), typeof(string), ErrorMessage = "Please attach Self PYE")]
         public IFormFile Self_PYEAttachment { get; set; }
+
+        [Required]
+        [Display(Name = "Job Category")]
+        public int JobCategory { get; set; }
+        [Required]
+        [Display(Name = "Place Of Birth")]
+        public string PlaceOfBirth { get; set; }
     }
 }

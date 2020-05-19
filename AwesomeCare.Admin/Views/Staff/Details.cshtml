@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Staff Profile";
 }
-<form asp-action="UpdateStaffRecord" asp-controller="Staff" method="post">
+<form asp-action="Details" asp-controller="Staff" method="post">
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12">
             <div class="card planned_task">
@@ -173,6 +173,12 @@
 
                                             </div>
                                             <div class="col-xs-4 col-sm-4 col-md-4">
+
+                                                    @*<div class="form-group">
+                                                        <label asp-for="Rate" class="control-label"></label>
+                                                        <input type="text" asp-for="Rate" class="form-control" readonly>
+                                                    </div>*@
+
                                             </div>
                                         </div>
 
@@ -250,6 +256,10 @@
 
                                             </div>
                                             <div class="col-xs-4 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="JobCategory" class="control-label"></label>
+                                                    <baserecord asp-key="Staff_JobCategory" asp-for="JobCategory" asp-items="null" readonly/>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -285,6 +295,10 @@
 
                                             </div>
                                             <div class="col-xs-4 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="PlaceOfBirth" class="control-label"></label>
+                                                    <input type="text" asp-for="PlaceOfBirth" class="form-control" readonly>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -306,8 +320,11 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-xs-12 col-sm-3 col-md-3">
-
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="RegistrationId" class="control-label"></label>
+                                                            <input type="text" asp-for="RegistrationId" class="form-control" readonly>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -555,7 +572,7 @@
                                                         <th>Email</th>
                                                         <th>Relationship</th>
                                                         <th>Address</th>
-                                                        
+
                                                     </tr>
                                                 </thead>
 
@@ -578,7 +595,7 @@
                                                             <td>
                                                                 <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Address" readonly />
                                                             </td>
-                                                           
+
                                                         </tr>
                                                     }
 
@@ -611,12 +628,49 @@
                                 <span asp-validation-for="Rate" class="text-danger"></span>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="IsTeamLeader" class="control-label"></label>
+                                <br />
+                                <label class="fancy-radio custom-color-green"><input name="isteamleader" asp-for="IsTeamLeader" value="No" type="radio" checked><span><i></i>No</span></label>
+                                <label class="fancy-radio custom-color-green"><input name="isteamleader" asp-for="IsTeamLeader" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                <span asp-validation-for="IsTeamLeader" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="HasUniform" class="control-label"></label>
+                                <br />
+                                <label class="fancy-radio custom-color-green"><input name="hasuniform" asp-for="HasUniform" value="No" type="radio" checked><span><i></i>No</span></label>
+                                <label class="fancy-radio custom-color-green"><input name="hasuniform" asp-for="HasUniform" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                <span asp-validation-for="HasUniform" class="text-danger"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-4 col-md-4">
                             <div class="form-group">
                                 <label asp-for="Status" class="control-label"></label>
                                 <baserecord asp-for="Status" asp-items="Model.Statuses"></baserecord>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="HasIdCard" class="control-label"></label>
+                                <br />
+                                <label class="fancy-radio custom-color-green"><input name="hasidcard" asp-for="HasIdCard" value="No" type="radio" checked><span><i></i>No</span></label>
+                                <label class="fancy-radio custom-color-green"><input name="hasidcard" asp-for="HasIdCard" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                <span asp-validation-for="HasIdCard" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="EmploymentDate" class="control-label"></label>
+                                <input data-provide="datepicker" type="text" asp-for="EmploymentDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                <span asp-validation-for="EmploymentDate" class="text-danger"></span>
                             </div>
                         </div>
                     </div>

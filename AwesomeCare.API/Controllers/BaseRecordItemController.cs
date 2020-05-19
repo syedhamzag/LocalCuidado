@@ -72,7 +72,7 @@ namespace AwesomeCare.API.Controllers
             var baseRecordItem = Mapper.Map<BaseRecordItemModel>(item);
             //check if Item does not exist
 
-            var itemExist = _baseRecordItemRepository.Table.Any(i =>i.BaseRecordId==item.BaseRecordId && i.ValueName.Trim().Equals(item.ValueName.Trim(), StringComparison.InvariantCultureIgnoreCase));
+            var itemExist = _baseRecordItemRepository.Table.Any(i =>i.BaseRecordId==item.BaseRecordId && i.ValueName.Trim().ToLower()==item.ValueName.Trim().ToLower());
             if(itemExist)
             {
                 ModelState.AddModelError($"ValueName", $"Item name {item.ValueName} already exist for the selected BaseRecord");

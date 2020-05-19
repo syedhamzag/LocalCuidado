@@ -16,5 +16,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public StaffRegistrationEnum Status { get; set; }
         [Required]
         public decimal? Rate { get; set; }
+
+        public bool? IsTeamLeader { get; set; }
+        public bool? HasUniform { get; set; }
+        public bool? HasIdCard { get; set; }
+        public DateTime? EmploymentDate { get; set; }
     }
 }

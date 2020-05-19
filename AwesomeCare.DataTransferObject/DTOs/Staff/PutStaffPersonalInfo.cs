@@ -72,5 +72,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public string Self_PYE { get; set; }
         public string Self_PYEAttachment { get; set; }
         public StaffRegistrationEnum Status { get; set; }
+
     }
 }
