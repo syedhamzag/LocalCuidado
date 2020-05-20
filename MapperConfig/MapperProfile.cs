@@ -24,6 +24,7 @@ using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.DataTransferObject.DTOs.RotaTask;
 using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.StaffBlackList;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
@@ -132,6 +133,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedication, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -160,6 +162,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedication, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
             #endregion
 
@@ -387,6 +390,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.HasIdCard, mem => mem.Ignore())
                 .ForMember(dto => dto.EmploymentDate, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                 .ForMember(dto => dto.ApplicationUserId, mem => mem.MapFrom(src => src.ApplicationUserId))
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
@@ -407,6 +411,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
                 .ForMember(dto => dto.JobCategory, mem => mem.Ignore())
                 .ForMember(dto => dto.PlaceOfBirth, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.MapFrom(src => src.StaffPersonalInfoId))
                .ForMember(dto => dto.ApplicationUserId, mem => mem.MapFrom(src => src.ApplicationUserId))
                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.MapFrom(src => (int)src.Status))
@@ -431,6 +436,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.HasIdCard, mem => mem.Ignore())
                 .ForMember(dto => dto.EmploymentDate, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
 
@@ -669,6 +675,22 @@ namespace MapperConfig
             CreateMap<PostStaffRating, StaffRating>()
                 .ForMember(dto=>dto.StaffRatingId,mem=>mem.Ignore())
                 .ForMember(dto=>dto.StaffPersonalInfo,mem=>mem.Ignore());
+            #endregion
+
+            #region StaffBlackList
+            CreateMap<PostStaffBlackList, StaffBlackList>()
+                .ForMember(dto => dto.StaffBlackListId, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<PutStaffBlackList, StaffBlackList>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<StaffBlackList, GetStaffBlackList>()
+               .ForMember(dto => dto.Client, mem => mem.Ignore())
+               .ForMember(dto => dto.Staff, mem => mem.Ignore());
+
             #endregion
         }
     }
