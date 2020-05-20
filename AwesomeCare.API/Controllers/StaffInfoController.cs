@@ -467,10 +467,10 @@ namespace AwesomeCare.API.Controllers
         /// </summary>
         /// <param name="staffPersonalInfoId"></param>
         /// <returns></returns>
-        [HttpGet("ClientFeedbacks/{staffPersonalInfoId}")]
+        [HttpGet("ClientFeedback/{staffPersonalInfoId}")]
         [ProducesResponseType(type: typeof(List<GetStaffRating>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetClientFeedbacks(int? staffPersonalInfoId)
+        public async Task<IActionResult> GetClientFeedback(int? staffPersonalInfoId)
         {
             if (!staffPersonalInfoId.HasValue)
             {
