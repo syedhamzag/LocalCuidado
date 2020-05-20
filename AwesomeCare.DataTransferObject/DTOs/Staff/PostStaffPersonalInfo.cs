@@ -67,5 +67,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         [Required]
         public string Self_PYE { get; set; }
         public string Self_PYEAttachment { get; set; }
+        [Required]
+        public int? JobCategory { get; set; }
+        [Required]
+        public string PlaceOfBirth { get; set; }
     }
 }

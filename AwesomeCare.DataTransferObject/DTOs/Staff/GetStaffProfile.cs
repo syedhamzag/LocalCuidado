@@ -23,6 +23,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetStaffEmergencyContact> EmergencyContacts { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
+        [Display(Name ="Staff Number")]
         public string RegistrationId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -78,5 +79,22 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         [Display(Name = "Self/PYE Attachment")]
         public string Self_PYEAttachment { get; set; }
         public StaffRegistrationEnum Status { get; set; }
+        [Display(Name = "Job Category")]
+        public int? JobCategory { get; set; }
+        [Display(Name = "Place Of Birth")]
+        public string PlaceOfBirth { get; set; }
+
+       
+        [Display(Name = "Is Team Leader?")]
+        public string IsTeamLeader { get; set; }
+       
+        [Display(Name = "Has Uniform?")]
+        public string HasUniform { get; set; }
+       
+        [Display(Name = "Has Id Card?")]
+        public string HasIdCard { get; set; }
+       
+        [Display(Name = "Employment Date")]
+        public DateTime? EmploymentDate { get; set; }
     }
 }

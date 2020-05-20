@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AwesomeCare.Admin.ViewModels.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using Refit;
 
@@ -37,6 +38,14 @@ namespace AwesomeCare.Admin.Services.Staff
 
         [Get("/StaffInfo/Rota/Dynamic/{id}")]
         Task<GetStaffRotaDynamicAddition> GetRotaSelection(int id);
+        #endregion
+
+        #region Client Feedback/Rating
+        [Get("/StaffInfo/ClientFeedback/{staffPersonalInfoId}")]
+        Task<List<GetStaffRating>> GetClientFeedback(int? staffPersonalInfoId);
+
+        [Post("/StaffInfo/ClientFeedback")]
+        Task<HttpResponseMessage> PostClientFeedback([Body]PostStaffRating model);
         #endregion
     }
 }

@@ -14,7 +14,7 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasKey(k => k.StaffPersonalInfoId);
 
             #region Properties
-          
+
             builder.Property(p => p.StaffPersonalInfoId)
                 .HasColumnName("StaffPersonalInfoId")
                 .IsRequired(true);
@@ -168,7 +168,7 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("DBSUpdateNo")
                 .HasMaxLength(50)
                .IsRequired(false);
-            
+
             builder.Property(p => p.NI)
               .HasColumnName("NI")
               .HasMaxLength(3)
@@ -203,13 +203,40 @@ namespace AwesomeCare.Model.Models.Map
                 .HasColumnName("Status")
                 .IsRequired();
 
+            builder.Property(p => p.IsTeamLeader)
+           .HasColumnName("IsTeamLeader")
+           .IsRequired(false);
+
+            builder.Property(p => p.HasUniform)
+          .HasColumnName("HasUniform")
+          .IsRequired(false);
+
+            builder.Property(p => p.HasIdCard)
+          .HasColumnName("HasIdCard")
+          .IsRequired(false);
+
+            builder.Property(p => p.EmploymentDate)
+          .HasColumnName("EmploymentDate")
+          .IsRequired(false);
+
+            builder.Property(p => p.JobCategory)
+          .HasColumnName("JobCategory")
+          .IsRequired(false);
+
+            builder.Property(p => p.PlaceOfBirth)
+          .HasColumnName("PlaceOfBirth")
+          .HasMaxLength(50)
+          .IsRequired(false);
             #endregion
+
+
             builder.HasIndex(p => p.RegistrationId)
-                     .HasName("IX_tbl_StaffPersonalInfo_RegistrationId")
-                     .IsUnique(true);
-        builder.HasOne<ApplicationUser>(p=>p.ApplicationUser)
-                .WithOne(p=>p.StaffPersonalInfo)
-                .HasForeignKey<StaffPersonalInfo>(f=>f.ApplicationUserId);
+                         .HasName("IX_tbl_StaffPersonalInfo_RegistrationId")
+                         .IsUnique(true);
+
+            builder.HasOne<ApplicationUser>(p => p.ApplicationUser)
+                .WithOne(p => p.StaffPersonalInfo)
+                .HasForeignKey<StaffPersonalInfo>(f => f.ApplicationUserId);
         }
     }
 }

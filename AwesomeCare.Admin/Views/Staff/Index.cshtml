@@ -50,12 +50,12 @@
                                 <td>
                                     @*@{
 
-                                        string yes = "Yes";
-                                        var date = DateTime.TryParseExact(staff.data.StartDate, "MM/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime startDate)?startDate.ToString("MMM dd yyyy"):staff.data.StartDate;
-                                       // var date = DateTime.TryParseExact(staff.data.StartDate, "MM/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime startDate) ? "Yes" : "No";
+                                            string yes = "Yes";
+                                            var date = DateTime.TryParseExact(staff.data.StartDate, "MM/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime startDate)?startDate.ToString("MMM dd yyyy"):staff.data.StartDate;
+                                           // var date = DateTime.TryParseExact(staff.data.StartDate, "MM/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime startDate) ? "Yes" : "No";
 
-                                        @date;
-                                    }*@
+                                            @date;
+                                        }*@
                                     @staff.data.StartDate
                                 </td>
                                 <td>@staff.data.EndDate</td>
@@ -75,9 +75,15 @@
                                     <div class="btn-group" role="group">
                                         <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         </button>
+
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             @Html.ActionLink("Details", "Details", "Staff", new { staffId = staff.data.StaffPersonalInfoId }, new { @class = "dropdown-item" })
+                                            <a asp-controller="Staff" asp-action="Feedback" asp-route-staffpersonalInfoId="@staff.data.StaffPersonalInfoId">Feedback/Ratings</a>
+
                                         </div>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        </div>
+
                                     </div>
                                 </td>
                             </tr>

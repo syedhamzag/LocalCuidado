@@ -16,6 +16,7 @@ namespace AwesomeCare.Model.Models
             RegulatoryContact = new HashSet<StaffRegulatoryContact>();
             EmergencyContacts = new HashSet<StaffEmergencyContact>();
             ShiftBookings = new HashSet<StaffShiftBooking>();
+            StaffRating = new HashSet<StaffRating>();
         }
        
         public int StaffPersonalInfoId { get; set; }
@@ -65,6 +66,13 @@ namespace AwesomeCare.Model.Models
         public string Self_PYEAttachment { get; set; }
         public StaffRegistrationEnum Status { get; set; }
 
+        public bool? IsTeamLeader { get; set; }
+        public bool? HasUniform { get; set; }
+        public bool? HasIdCard { get; set; }
+        public DateTime? EmploymentDate { get; set; }
+        public int? JobCategory { get; set; }
+        public string PlaceOfBirth { get; set; }
+
         public virtual ICollection<StaffEducation> Education { get; set; }
         public virtual ICollection<StaffTraining> Trainings { get; set; }
         public virtual ICollection<StaffReferee> References { get; set; }
@@ -72,6 +80,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<StaffEmergencyContact> EmergencyContacts { get; set; }
         public virtual ICollection<StaffShiftBooking> ShiftBookings { get; set; }
+        public virtual ICollection<StaffRating> StaffRating { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }

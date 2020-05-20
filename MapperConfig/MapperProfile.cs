@@ -25,6 +25,7 @@ using AwesomeCare.DataTransferObject.DTOs.RotaTask;
 using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
+using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
@@ -381,6 +382,11 @@ namespace MapperConfig
                 .ForMember(dto => dto.ShiftBookings, mem => mem.Ignore())
                 .ForMember(dto => dto.ApplicationUser, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore())
+                .ForMember(dto => dto.IsTeamLeader, mem => mem.Ignore())
+                .ForMember(dto => dto.HasUniform, mem => mem.Ignore())
+                .ForMember(dto => dto.HasIdCard, mem => mem.Ignore())
+                .ForMember(dto => dto.EmploymentDate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
                 .ForMember(dto => dto.ApplicationUserId, mem => mem.MapFrom(src => src.ApplicationUserId))
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
@@ -394,6 +400,13 @@ namespace MapperConfig
                .ForMember(dto => dto.EmergencyContacts, mem => mem.Ignore())
                .ForMember(dto => dto.ShiftBookings, mem => mem.Ignore())
                .ForMember(dto => dto.ApplicationUser, mem => mem.Ignore())
+               .ForMember(dto => dto.IsTeamLeader, mem => mem.Ignore())
+                .ForMember(dto => dto.HasUniform, mem => mem.Ignore())
+                .ForMember(dto => dto.HasIdCard, mem => mem.Ignore())
+                .ForMember(dto => dto.EmploymentDate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
+                .ForMember(dto => dto.JobCategory, mem => mem.Ignore())
+                .ForMember(dto => dto.PlaceOfBirth, mem => mem.Ignore())
                .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.MapFrom(src => src.StaffPersonalInfoId))
                .ForMember(dto => dto.ApplicationUserId, mem => mem.MapFrom(src => src.ApplicationUserId))
                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.MapFrom(src => (int)src.Status))
@@ -413,6 +426,11 @@ namespace MapperConfig
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.MapFrom(sr => sr.StaffRegulatoryContacts))
                 .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.Ignore())
                 .ForMember(dto => dto.ShiftBookings, mem => mem.Ignore())
+                .ForMember(dto => dto.IsTeamLeader, mem => mem.Ignore())
+                .ForMember(dto => dto.HasUniform, mem => mem.Ignore())
+                .ForMember(dto => dto.HasIdCard, mem => mem.Ignore())
+                .ForMember(dto => dto.EmploymentDate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
 
@@ -647,7 +665,11 @@ namespace MapperConfig
             CreateMap<GetStaffRotaDynamicAddition, StaffRotaDynamicAddition>();
             #endregion
 
-
+            #region StaffRating
+            CreateMap<PostStaffRating, StaffRating>()
+                .ForMember(dto=>dto.StaffRatingId,mem=>mem.Ignore())
+                .ForMember(dto=>dto.StaffPersonalInfo,mem=>mem.Ignore());
+            #endregion
         }
     }
 }

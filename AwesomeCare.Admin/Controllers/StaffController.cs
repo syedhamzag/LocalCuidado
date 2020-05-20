@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeCare.Admin.Models;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
@@ -34,8 +35,9 @@ namespace AwesomeCare.Admin.Controllers
         private IClientRotaTypeService _clientRotaTypeService;
         private IClientRotaNameService _clientRotaNameService;
         private IRotaDayofWeekService _rotaDayofWeekService;
+        private IClientService _clientService;
 
-        public StaffController(IStaffService staffService, IRotaDayofWeekService rotaDayofWeekService, IClientRotaNameService clientRotaNameService, ILogger<StaffController> logger, IFileUpload fileUpload, IStaffCommunication staffCommunication, IClientRotaTypeService clientRotaTypeService) : base(fileUpload)
+        public StaffController(IStaffService staffService, IClientService clientService, IRotaDayofWeekService rotaDayofWeekService, IClientRotaNameService clientRotaNameService, ILogger<StaffController> logger, IFileUpload fileUpload, IStaffCommunication staffCommunication, IClientRotaTypeService clientRotaTypeService) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
@@ -44,6 +46,7 @@ namespace AwesomeCare.Admin.Controllers
             _clientRotaTypeService = clientRotaTypeService;
             _clientRotaNameService = clientRotaNameService;
             _rotaDayofWeekService = rotaDayofWeekService;
+            _clientService = clientService;
         }
         public async Task<IActionResult> Index()
         {
@@ -74,11 +77,13 @@ namespace AwesomeCare.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateStaffRecord(StaffDetails staff)
+        public async Task<IActionResult> Details(StaffDetails staff)
         {
             if (!ModelState.IsValid)
             {
-                return View(staff);
+                SetOperationStatus(new OperationStatus { IsSuccessful = false, Message =  "All fields in the official section are required" });
+
+                return RedirectToAction("Details",new { staffId= staff.StaffPersonalInfoId });
             }
 
             var postApproval = new PostStaffApproval
@@ -86,8 +91,13 @@ namespace AwesomeCare.Admin.Controllers
                 Comment = staff.Comment,
                 Rate = staff.Rate,
                 StaffPersonalInfoId = staff.StaffPersonalInfoId,
-                Status = staff.Status
+                Status = staff.Status,
+                EmploymentDate = staff.EmploymentDate,
+                HasIdCard = staff.HasIdCard.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
+                HasUniform= staff.HasUniform.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
+                IsTeamLeader= staff.IsTeamLeader.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
             };
+            var kk = JsonConvert.SerializeObject(postApproval);
             var result = await _staffService.Approval(postApproval);
             var content = await result.Content.ReadAsStringAsync();
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Staff Successfully Updated" : "An Error Occurred" });
@@ -289,5 +299,44 @@ namespace AwesomeCare.Admin.Controllers
         }
 
 
+        #region Client Feedback/Rating
+        [HttpGet]
+        public async Task<IActionResult> Feedback(int staffpersonalInfoId)
+        {
+            var model = new StaffFeedback();
+            await FeedbackItems(model, staffpersonalInfoId);
+           // var feedbacks = await _staffService.GetClientFeedback(staffpersonalInfoId);
+           // model.StaffRatings = feedbacks;
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Feedback(StaffFeedback model)
+        {
+            if (!ModelState.IsValid)
+            {
+                await FeedbackItems(model, model.StaffPersonalInfoId);
+                return View(model);
+            }
+          
+            var result = await _staffService.PostClientFeedback(model);
+            var content = await result.Content.ReadAsStringAsync();
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Feedback Successfully saved" : "An Error Occurred" });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                await FeedbackItems(model, model.StaffPersonalInfoId);
+                return View(model);
+            }
+            return RedirectToAction("Feedback", new { staffpersonalInfoId = model.StaffPersonalInfoId });
+        }
+
+        async Task FeedbackItems(StaffFeedback staffFeedback,int staffpersonalInfoId)
+        {
+            var clients = await _clientService.GetClients();
+            var feedbacks = await _staffService.GetClientFeedback(staffpersonalInfoId);
+            staffFeedback.StaffRatings = feedbacks;
+            staffFeedback.ClientSelectLists = clients.Select(c => new SelectListItem(string.Concat(c.Firstname, " ", c.Middlename, " ", c.Surname), c.ClientId.ToString())).ToList();
+        }
+        #endregion
     }
 }
