@@ -12,5 +12,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffBlackList
         public int ClientId { get; set; }
         public string Client { get; set; }
         public string Comment { get; set; }
+        public DateTime? Date { get; set; }
     }
 }

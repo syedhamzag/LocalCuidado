@@ -35,6 +35,11 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(model);
             }
+            var isStaffBlackListedAgainstClient = _staffBlackListRepository.Table.Any(s => s.ClientId == model.ClientId && s.StaffPersonalInfoId == model.StaffPersonalInfoId);
+            if (isStaffBlackListedAgainstClient)
+            {
+                return BadRequest("Staff is already blacklisted against client");
+            }
             var entity = Mapper.Map<StaffBlackList>(model);
             var result = await _staffBlackListRepository.InsertEntity(entity);
             var getEntity = Mapper.Map<GetStaffBlackList>(result);
@@ -58,7 +63,8 @@ namespace AwesomeCare.API.Controllers
                                 ClientId = cl.ClientId,
                                 Comment = sbl.Comment,
                                 Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
-                                StaffBlackListId = sbl.StaffBlackListId
+                                StaffBlackListId = sbl.StaffBlackListId,
+                                Date = sbl.Date
                             }).FirstOrDefault();
 
             return Ok(getEntity);
@@ -78,7 +84,8 @@ namespace AwesomeCare.API.Controllers
                                 ClientId = cl.ClientId,
                                 Comment = sbl.Comment,
                                 Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
-                                StaffBlackListId = sbl.StaffBlackListId
+                                StaffBlackListId = sbl.StaffBlackListId,
+                                Date = sbl.Date
                             }).ToList();
 
             return Ok(entities);

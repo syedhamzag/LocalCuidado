@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models
         public int StaffPersonalInfoId { get; set; }
         public int ClientId { get; set; }
         public string Comment { get; set; }
-
+        public DateTime? Date { get; set; }
         public virtual StaffPersonalInfo StaffPersonalInfo { get; set; }
         public virtual Client Client { get; set; }
     }

@@ -681,9 +681,11 @@ namespace MapperConfig
             CreateMap<PostStaffBlackList, StaffBlackList>()
                 .ForMember(dto => dto.StaffBlackListId, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.Date, mem => mem.MapFrom(src=>DateTime.Now))
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<PutStaffBlackList, StaffBlackList>()
+                .ForMember(dto => dto.Date, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 

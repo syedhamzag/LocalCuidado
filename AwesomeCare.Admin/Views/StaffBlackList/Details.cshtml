@@ -1,0 +1,57 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.StaffBlackList;
+@model GetStaffBlackList
+@{
+    ViewData["Title"] = "Staff BlackList Details";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Staff BlackList Details</h2>
+
+            </div>
+            <div class="body">
+                <form asp-action="Details" method="post">
+                    <input asp-for="StaffBlackListId" class="form-control" type="hidden" />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Staff" class="control-label"></label>
+                                <input asp-for="Staff" class="form-control" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Client" class="control-label"></label>
+                                <input asp-for="Client" class="form-control" readonly />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Comment" class="control-label"></label>
+                                <textarea class="form-control" asp-for="Comment" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <a asp-controller="StaffBlackList" asp-action="Index" class="btn btn-default pull-left">Cancel</a>
+                            <button type="submit" class="btn btn-danger pull-right">Delete</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
