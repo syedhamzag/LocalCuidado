@@ -17,6 +17,7 @@ namespace AwesomeCare.Model.Models
             EmergencyContacts = new HashSet<StaffEmergencyContact>();
             ShiftBookings = new HashSet<StaffShiftBooking>();
             StaffRating = new HashSet<StaffRating>();
+            StaffBlackList = new HashSet<StaffBlackList>();
         }
        
         public int StaffPersonalInfoId { get; set; }
@@ -81,6 +82,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffEmergencyContact> EmergencyContacts { get; set; }
         public virtual ICollection<StaffShiftBooking> ShiftBookings { get; set; }
         public virtual ICollection<StaffRating> StaffRating { get; set; }
+        public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
