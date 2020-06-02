@@ -1,4 +1,6 @@
-﻿using AwesomeCare.Model.Models;
+﻿using AwesomeCare.DataAccess.Database;
+using AwesomeCare.DataAccess.Repositories;
+using AwesomeCare.Model.Models;
 using IdentityModel;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
@@ -16,10 +18,12 @@ namespace AwesomeCare.IdentityServer.Services
     {
         private readonly IUserClaimsPrincipalFactory<ApplicationUser> _claimsFactory;
         private readonly UserManager<ApplicationUser> _userManager;
-        public ProfileService(UserManager<ApplicationUser> userManager, IUserClaimsPrincipalFactory<ApplicationUser> claimsFactory)
+        private readonly AwesomeCareDbContext _dbContext;
+        public ProfileService(UserManager<ApplicationUser> userManager, IUserClaimsPrincipalFactory<ApplicationUser> claimsFactory, AwesomeCareDbContext dbContext)
         {
             _userManager = userManager;
             _claimsFactory = claimsFactory;
+            _dbContext = dbContext;
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
@@ -32,10 +36,14 @@ namespace AwesomeCare.IdentityServer.Services
             claims = claims.Where(claim => context.RequestedClaimTypes.Contains(claim.Type)).ToList();
 
             // Add custom claims in token here based on user properties or any other source
-            bool hasStaffInfo = user.StaffPersonalInfo != null;
+            var staffPersonalInfoEntity = _dbContext.Set<StaffPersonalInfo>();
+
+            var staffPersonalInfo = staffPersonalInfoEntity.FirstOrDefault(u => u.ApplicationUserId == sub);
+            bool hasStaffInfo = staffPersonalInfo != null;
             IList<string> roles = await _userManager.GetRolesAsync(user);
             claims.Add(new Claim("hasStaffInfo", hasStaffInfo.ToString() ));
             claims.Add(new Claim(JwtClaimTypes.Role, string.Join(',',roles)));
+            claims.Add(new Claim(JwtClaimTypes.Email,user?.Email));
             
             context.IssuedClaims = claims;
         }

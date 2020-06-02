@@ -15,6 +15,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientRotaDays;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
+using AwesomeCare.DataTransferObject.DTOs.Communication;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
 using AwesomeCare.DataTransferObject.DTOs.Medication;
@@ -693,6 +694,14 @@ namespace MapperConfig
                .ForMember(dto => dto.Client, mem => mem.Ignore())
                .ForMember(dto => dto.Staff, mem => mem.Ignore());
 
+            #endregion
+
+            #region Communication
+            CreateMap<PostCommunication, Communication>()
+                .ForMember(dto => dto.CommunicationId, mem => mem.Ignore())
+                .ForMember(dto => dto.IsRead, mem => mem.MapFrom(src => false))
+                .ForMember(dto => dto.CommuncationDate, mem => mem.MapFrom(src => DateTime.Now))
+                .ForMember(dto => dto.From, mem => mem.Ignore());
             #endregion
         }
     }

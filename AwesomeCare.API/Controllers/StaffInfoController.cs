@@ -54,7 +54,7 @@ namespace AwesomeCare.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
-        [ProducesResponseType(type: typeof(GetStaffPersonalInfo), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(type: typeof(GetStaffPersonalInfo), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAsync(int? id)
@@ -64,6 +64,24 @@ namespace AwesomeCare.API.Controllers
             var getEntity = Mapper.Map<GetStaffPersonalInfo>(entity);
             return Ok(getEntity);
         }
+
+
+        [HttpGet("GetByApplicationUserId/{userId}", Name = "GetByApplicationUserId")]
+        [ProducesResponseType(type: typeof(GetStaffPersonalInfo), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetByApplicationUserIdAsync(string userId)
+        {
+
+            var entity = await _staffInfoRepository.Table.FirstOrDefaultAsync(u => u.ApplicationUserId == userId);
+            if (entity == null)
+                return NotFound();
+
+            var getEntity = Mapper.Map<GetStaffPersonalInfo>(entity);
+            return Ok(getEntity);
+        }
+
+
         [HttpGet()]
         [ProducesResponseType(type: typeof(List<GetStaffPersonalInfo>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

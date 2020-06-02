@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200529211456_tbl_Communication")]
+    partial class tbl_Communication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -807,10 +809,9 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("CommuncationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("From")
-                        .IsRequired()
+                    b.Property<int>("From")
                         .HasColumnName("FromUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsRead")
                         .HasColumnName("IsRead")
@@ -821,10 +822,9 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("Message")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("To")
-                        .IsRequired()
+                    b.Property<int>("To")
                         .HasColumnName("ToUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.HasKey("CommunicationId");
 

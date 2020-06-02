@@ -11,7 +11,6 @@ namespace AwesomeCare.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class AdminController : ControllerBase
     {
         private readonly RoleManager<IdentityRole> _roleManager;

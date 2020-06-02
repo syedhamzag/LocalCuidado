@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AwesomeCare.IdentityServer
 {
@@ -130,11 +131,12 @@ category == DbLoggerCategory.Database.Command.Name
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
+            
             //this must be the same thing configured on all clients
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme =  OpenIdConnectDefaults.AuthenticationScheme;
 
             })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -180,8 +182,8 @@ category == DbLoggerCategory.Database.Command.Name
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            if (Environment.IsDevelopment())
-                app.UseAdminUI();
+            //if (Environment.IsDevelopment())
+            //    app.UseAdminUI();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapRazorPages();

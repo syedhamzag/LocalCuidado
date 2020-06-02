@@ -61,9 +61,21 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
                 {
                     return View(model);
                 }
-                string redirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signin-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signin-oidc");
-                string postLogoutRedirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
+                string redirectUri = "";// model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signin-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signin-oidc");
+                string postLogoutRedirectUri = "";// model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
+                if (model.ClientType.Equals("SPA.Swagger", StringComparison.InvariantCultureIgnoreCase))
+                {
 
+                    redirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "oauth2-redirect.html") : string.Concat(model.CallBackUrl.Trim(), "/", "oauth2-redirect.html");
+                    postLogoutRedirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
+
+                }
+                else
+                {
+                    redirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signin-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signin-oidc");
+                    postLogoutRedirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
+
+                }
                 var identityClient = new IdentityServer4.EntityFramework.Entities.Client
                 {
                     AccessTokenLifetime = 3600,//i.e 60 mins
@@ -75,6 +87,7 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
                     AllowedGrantTypes = new List<IdentityServer4.EntityFramework.Entities.ClientGrantType>()
                     {
                         new IdentityServer4.EntityFramework.Entities.ClientGrantType { GrantType = "authorization_code" }
+
                     },
                     RequirePkce = true,
                     RequireConsent = false,
@@ -90,10 +103,14 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
 
                     ClientSecrets = new List<IdentityServer4.EntityFramework.Entities.ClientSecret>
                     {
-                        new IdentityServer4.EntityFramework.Entities.ClientSecret(){Value="1234567890".Sha256(),Description="AwesomeCare Web Client Secret"}
+                        new IdentityServer4.EntityFramework.Entities.ClientSecret(){Value=model.SharedSecret.Sha256(),Description=model.Description}
                     }
                 };
-
+                if (model.ClientType.Equals("SPA.Swagger", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    identityClient.AllowAccessTokensViaBrowser = true;
+                    identityClient.AllowedGrantTypes.Add(new IdentityServer4.EntityFramework.Entities.ClientGrantType { GrantType = "implicit" });
+                }
                 _dbContext.Clients.Add(identityClient);
                 _dbContext.SaveChanges();
                 return RedirectToAction("Index");
