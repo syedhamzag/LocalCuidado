@@ -9,6 +9,7 @@ using AwesomeCare.IdentityServer.ViewModels;
 using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,7 +18,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.IdentityServer.Quickstart.Client
 {
-    // [AllowAnonymous]
+    // [Authorize(AuthenticationSchemes = "Cookies")]
     public class ClientController : Controller
     {
         private ConfigurationDbContext _dbContext;

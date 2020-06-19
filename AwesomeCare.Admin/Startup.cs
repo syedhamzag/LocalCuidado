@@ -120,6 +120,7 @@ namespace AwesomeCare.Admin
                    options.Authority = Configuration["idp_url"].ToString();// "https://localhost:44392/";
                    options.ClientId = settings.ClientId;
                    options.ResponseType = "code";
+                   
                    foreach (string scope in settings.Scopes)
                    {
                        options.Scope.Add(scope);

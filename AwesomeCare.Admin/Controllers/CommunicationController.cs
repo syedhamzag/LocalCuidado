@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Services;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.Communication;
 using AwesomeCare.DataTransferObject.DTOs.Communication;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -24,18 +27,59 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var request = await _communicationService.Get();
-            var content = await request.Content.ReadAsStringAsync();
-            ViewBag.Content = content;
-            return View();
+            return View(request);
         }
         [HttpGet]
         public async Task<IActionResult> Compose()
         {
             var model = new ComposeMessage();
-            var staffs = await _staffService.GetStaffs();
-
-            model.Staffs = staffs.Select(s => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(s.Fullname, s.ApplicationUserId)).ToList();
+            await LoadData(model);
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Compose(ComposeMessage model)
+        {
+           
+            if (!ModelState.IsValid)
+            {
+                await LoadData(model);
+                return View(model);
+            }
+
+            var result = await _communicationService.Post(model);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode? "Message Sent" : "An error occurred, please try again" });
+
+            if (!result.IsSuccessStatusCode)
+            {
+                await LoadData(model);
+                return View(model);
+            }
+
+
+            return RedirectToAction("Index");
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Inbox(int messageId)
+        {
+            var messageInbox = await _communicationService.GetInbox(messageId);
+            return View(messageInbox);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Sent(int messageId)
+        {
+            var messageSent = await _communicationService.GetSent(messageId);
+            return View(messageSent);
+        }
+        async Task LoadData(ComposeMessage model)
+        {
+            string currentUser = User.SubClaim();
+            var staffs = await _staffService.GetStaffs();
+            model.Staffs = staffs.Where(u=>u.ApplicationUserId != currentUser && !string.IsNullOrEmpty(u.ApplicationUserId)).Select(s => new SelectListItem(s.Fullname, s.ApplicationUserId)).ToList();
         }
     }
 }

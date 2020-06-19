@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200605002639_tbl_Communication_Add_Subject")]
+    partial class tbl_Communication_Add_Subject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -822,9 +824,7 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Subject")
-                        .HasColumnName("Subject")
-                        .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("To")
                         .IsRequired()

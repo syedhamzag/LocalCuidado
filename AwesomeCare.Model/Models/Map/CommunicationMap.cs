@@ -37,6 +37,11 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.IsRead)
               .HasColumnName("IsRead")
               .IsRequired();
+
+            builder.Property(p => p.Subject)
+             .HasColumnName("Subject")
+             .HasMaxLength(125)
+             .IsRequired(false);
             #endregion
         }
     }

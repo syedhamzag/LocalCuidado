@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace AwesomeCare.Admin
@@ -24,12 +25,14 @@ namespace AwesomeCare.Admin
         private readonly IHttpContextAccessor _context;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthenticatedHttpClientHandler> _logger;
 
-        public AuthenticatedHttpClientHandler(IHttpContextAccessor context, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public AuthenticatedHttpClientHandler(IHttpContextAccessor context, IHttpClientFactory httpClientFactory,ILogger<AuthenticatedHttpClientHandler> logger, IConfiguration configuration)
         {
             _context = context;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _logger = logger;
         }
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -47,6 +50,7 @@ namespace AwesomeCare.Admin
             if ((expiresAtDateTimeOffset.AddSeconds(-60)).ToUniversalTime() > DateTime.UtcNow)
             {
                 var token = await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+                _logger.LogInformation($"Token: {token}");
                 return token; 
             }
 
@@ -54,6 +58,7 @@ namespace AwesomeCare.Admin
             //get the discovery document
             var discoveryResponse = await idpClient.GetDiscoveryDocumentAsync();
             var refreshToken = await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
+            _logger.LogInformation($"RefreshToken: {refreshToken}");
             var clientSettings = _configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
             var refreshResponse = await idpClient.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
@@ -64,7 +69,7 @@ namespace AwesomeCare.Admin
                 
                 //GrantType = GrantType.ClientCredentials
             });
-
+            _logger.LogInformation($"Token: {refreshResponse?.AccessToken}");
             //Store Tokens 
             var updateTokens = new List<AuthenticationToken>();
             updateTokens.Add(new AuthenticationToken

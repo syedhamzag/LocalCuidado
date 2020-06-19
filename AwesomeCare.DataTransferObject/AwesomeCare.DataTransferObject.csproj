@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Remove="DTOs\ClientRota\GetClientRotaDays.cs" />
+    <Compile Remove="DTOs\Communication\Message.cs" />
   </ItemGroup>
 
   <ItemGroup>

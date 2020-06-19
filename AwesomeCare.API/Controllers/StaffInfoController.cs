@@ -302,7 +302,8 @@ namespace AwesomeCare.API.Controllers
                                     StaffPersonalInfoId = st.StaffPersonalInfoId,
                                     StartDate = st.StartDate.ToString(),
                                     Status = st.Status.ToString(),
-                                    Telephone = st.Telephone
+                                    Telephone = st.Telephone,
+                                   
                                 }).ToListAsync();
             return Ok(staffs);
         }

@@ -1,26 +1,319 @@
-﻿
-        @{
-        ViewData["Title"] = "Index";
-        }
-               
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12">
-                <div class="card planned_task">
-                    <div class="header">
-                        <h2>Index</h2>
-                        <ul class="header-dropdown">
-                            <li class="dropdown">
-                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                <ul class="dropdown-menu dropdown-menu-right">
-                                    <li><a asp-controller="Communication" asp-action="Compose">Compose</a></li>
-                                </ul>
-                            </li>
+﻿@using AwesomeCare.DataTransferObject.DTOs.Communication;
+
+@model GetCommunication
+@{
+    ViewData["Title"] = "Messages";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="mobile-left">
+                <button type="button" class="btn btn-primary email-left" href="#">Menu</button>
+            </div>
+            <div class="mail-inbox">
+                <div class="mail-left">
+                    <div class="mail-compose m-b-20">
+                        <a asp-controller="Communication" asp-action="Compose" class="btn btn-danger btn-block">Compose</a>
+                    </div>
+                    <div class="mail-side">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#Inbox"><i class="icon-envelope"></i>Inbox<span class="badge badge-primary float-right">@Model.TotalReceived</span></a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Sent"><i class="icon-cursor"></i>Sent<span class="badge badge-primary float-right">@Model.TotalSent</span></a></li>
                         </ul>
+
                     </div>
-                    <div class="body">
-                        
+                </div>
+                <div class="mail-right">
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="Inbox">
+                            <div class="header d-flex align-center">
+                                <h2>Inbox</h2>
+                                @*<form class="ml-auto">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search Mail" aria-label="Search Mail" aria-describedby="search-mail">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="search-mail"><i class="icon-magnifier"></i></span>
+                                            </div>
+                                        </div>
+                                    </form>*@
+                            </div>
+
+                            <div class="mail-action clearfix">
+                                <div class="pull-left">
+                                    <div class="fancy-checkbox d-inline-block">
+                                        <label>
+                                            <input class="select-all" type="checkbox" name="checkbox">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="btn-group">
+                                        @*<a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm hidden-sm">Refresh</a>
+                                            <a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm hidden-sm">Archive</a>
+                                            <a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm">Trash</a>*@
+                                    </div>
+                                    <div class="btn-group">
+                                        @*<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 1</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 2</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 3</a>
+                                            </div>*@
+                                    </div>
+                                    <div class="btn-group">
+                                        @*<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);">Mark as read</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Mark as unread</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Spam</a>
+                                                <div role="separator" class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                            </div>*@
+                                    </div>
+                                </div>
+                                <div class="pull-right ml-auto">
+                                    <div class="pagination-email d-flex">
+                                        <p>1-50/295</p>
+                                        <div class="btn-group m-l-20">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-angle-left"></i></button>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-angle-right"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mail-list">
+                                <ul class="list-unstyled">
+                                    @foreach (var item in Model.InboxMessages)
+                                    {
+                                        if (item.IsRead)
+                                        {
+                                            <li class="clearfix">
+                                                <div class="mail-detail-left">
+                                                    <label class="fancy-checkbox">
+                                                        <input type="checkbox" name="checkbox" class="checkbox-tick">
+                                                        <span></span>
+                                                    </label>
+
+                                                </div>
+                                                <div class="mail-detail-right">
+                                                    <h6 class="sub"><a asp-controller="Communication" asp-action="Inbox" asp-route-messageId="@item.CommunicationId" class="mail-detail-expand">@item.Sender</a></h6>
+                                                    <p class="dep">
+                                                        @item.Subject
+                                                    </p>
+                                                    <span class="time">@item.CommuncationDate.ToString("dd MMM")</span>
+                                                </div>
+                                                <div class="hover-action">
+                                                    @*<a class="btn btn-warning mr-2" href="javascript:void(0);"><i class="fa fa-archive"></i></a>*@
+                                                    <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete"><i class="fa fa-trash-o"></i></button>
+                                                </div>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="clearfix unread">
+                                                <div class="mail-detail-left">
+                                                    <label class="fancy-checkbox">
+                                                        <input type="checkbox" name="checkbox" class="checkbox-tick">
+                                                        <span></span>
+                                                    </label>
+
+                                                </div>
+                                                <div class="mail-detail-right">
+                                                    <h6 class="sub"><a asp-controller="Communication" asp-action="Inbox" asp-route-messageId="@item.CommunicationId" class="mail-detail-expand">@item.Sender</a></h6>
+                                                    <p class="dep">
+                                                        @item.Subject
+                                                    </p>
+                                                    <span class="time">@item.CommuncationDate.ToString("dd MMM")</span>
+                                                </div>
+                                                <div class="hover-action">
+                                                    @*<a class="btn btn-warning mr-2" href="javascript:void(0);"><i class="fa fa-archive"></i></a>*@
+                                                    <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete"><i class="fa fa-trash-o"></i></button>
+                                                </div>
+                                            </li>
+                                        }
+
+                                    }
+                                </ul>
+                            </div>
+                            <div class="mail-detail-full" id="mail-detail-open" style="display: none;">
+                                <div class="mail-action clearfix">
+                                    <div class="pull-left">
+                                        <div class="fancy-checkbox d-inline-block">
+                                            <label>
+                                                <input class="select-all" type="checkbox" name="checkbox">
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        <div class="btn-group">
+                                            <a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm hidden-sm">Refresh</a>
+                                            <a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm hidden-sm">Archive</a>
+                                            <a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm">Trash</a>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 1</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 2</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 3</a>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);">Mark as read</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Mark as unread</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Spam</a>
+                                                <div role="separator" class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pull-right ml-auto">
+                                        <a href="javascript:void(0);" class="mail-back btn btn-danger btn-sm"><i class="fa fa-close"></i></a>
+                                    </div>
+                                </div>
+                                <div class="detail-header">
+                                    <div class="media">
+                                        <div class="float-left">
+                                            <div class="m-r-20"><img src="../assets/images/sm/avatar1.jpg" alt=""></div>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="mb-0"><strong class="text-muted m-r-5">From:</strong><a class="text-default" href="javascript:void(0);">info@thememakker.com</a> <span class="text-muted text-sm float-right">12:48, 23.06.2018</span></p>
+                                            <p class="mb-0"><strong class="text-muted m-r-5">To:</strong>Me <small class="text-muted float-right"><i class="zmdi zmdi-attachment m-r-5"></i>(2 files, 89.2 KB)</small></p>
+                                            <p class="mb-0"><strong class="text-muted m-r-5">CC:</strong><a class="text-default" href="javascript:void(0);">mail@thememakker.com</a></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mail-cnt">
+                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                    <p>printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrnturies, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                    <hr>
+                                    <strong>Click here to</strong>
+                                    <a href="app-compose.html">Reply</a> or
+                                    <a href="app-compose.html">Forward</a>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="tab-pane" id="Sent">
+                            <div class="header d-flex align-center">
+                                <h2>Sent</h2>
+                                @*<form class="ml-auto">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search Mail" aria-label="Search Mail" aria-describedby="search-mail">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text" id="search-mail"><i class="icon-magnifier"></i></span>
+                                            </div>
+                                        </div>
+                                    </form>*@
+                            </div>
+                            <div class="mail-action clearfix">
+                                <div class="pull-left">
+                                    <div class="fancy-checkbox d-inline-block">
+                                        <label>
+                                            <input class="select-all" type="checkbox" name="checkbox">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="btn-group">
+                                        @*<a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm hidden-sm">Refresh</a>
+                                            <a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm hidden-sm">Archive</a>
+                                            <a href="javascript:void(0);" class="btn btn-outline-secondary btn-sm">Trash</a>*@
+                                    </div>
+                                    <div class="btn-group">
+                                        @*<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tags</button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 1</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 2</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Tag 3</a>
+                                            </div>*@
+                                    </div>
+                                    <div class="btn-group">
+                                        @*<button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="javascript:void(0);">Mark as read</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Mark as unread</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Spam</a>
+                                                <div role="separator" class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                            </div>*@
+                                    </div>
+                                </div>
+                                <div class="pull-right ml-auto">
+                                    <div class="pagination-email d-flex">
+                                        <p>1-50/295</p>
+                                        <div class="btn-group m-l-20">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-angle-left"></i></button>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-angle-right"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mail-list">
+                                <ul class="list-unstyled">
+
+                                    @foreach (var item in Model.SentMessages)
+                                    {
+                                        if (item.IsRead)
+                                        {
+                                            <li class="clearfix">
+                                                <div class="mail-detail-left">
+                                                    <label class="fancy-checkbox">
+                                                        <input type="checkbox" name="checkbox" class="checkbox-tick">
+                                                        <span></span>
+                                                    </label>
+
+                                                </div>
+                                                <div class="mail-detail-right">
+                                                    <h6 class="sub"><a asp-controller="Communication" asp-action="Sent" asp-route-messageId="@item.CommunicationId" class="mail-detail-expand">@item.Receiver</a></h6>
+                                                    <p class="dep">
+                                                        @item.Subject
+                                                    </p>
+                                                    <span class="time">@item.CommuncationDate.ToString("dd MMM")</span>
+                                                </div>
+                                                <div class="hover-action">
+                                                    @*<a class="btn btn-warning mr-2" href="javascript:void(0);"><i class="fa fa-archive"></i></a>*@
+                                                    <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete"><i class="fa fa-trash-o"></i></button>
+                                                </div>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="clearfix unread">
+                                                <div class="mail-detail-left">
+                                                    <label class="fancy-checkbox">
+                                                        <input type="checkbox" name="checkbox" class="checkbox-tick">
+                                                        <span></span>
+                                                    </label>
+
+                                                </div>
+                                                <div class="mail-detail-right">
+                                                    <h6 class="sub"><a asp-controller="Communication" asp-action="Sent" asp-route-messageId="@item.CommunicationId" class="mail-detail-expand">@item.Receiver</a></h6>
+                                                    <p class="dep">
+                                                        @item.Subject
+                                                    </p>
+                                                    <span class="time">@item.CommuncationDate.ToString("dd MMM")</span>
+                                                </div>
+                                                <div class="hover-action">
+                                                    @*<a class="btn btn-warning mr-2" href="javascript:void(0);"><i class="fa fa-archive"></i></a>*@
+                                                    <button type="button" data-type="confirm" class="btn btn-danger js-sweetalert" title="Delete"><i class="fa fa-trash-o"></i></button>
+                                                </div>
+                                            </li>
+                                        }
+
+                                    }
+
+
+                                </ul>
+                            </div>
+
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
- 
+    </div>
+</div>   

@@ -11,7 +11,11 @@ namespace AwesomeCare.Admin.Services
    public interface ICommunicationService
     {
         [Get("/Communication")]
-        Task<HttpResponseMessage> Get();
+        Task<GetCommunication> Get();
+        [Get("/Communication/Inbox/{messageId}")]
+        Task<InboxMessage> GetInbox(int messageId);
+        [Get("/Communication/Sent/{messageId}")]
+        Task<SentMessage> GetSent(int messageId);
         [Post("/Communication")]
         Task<HttpResponseMessage> Post([Body]PostCommunication model);
     }

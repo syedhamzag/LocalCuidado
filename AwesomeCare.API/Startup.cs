@@ -48,21 +48,23 @@ namespace AwesomeCare.API
     = LoggerFactory.Create(builder =>
     {
         builder
-.AddFilter((category, level) =>
-category == DbLoggerCategory.Database.Command.Name
-&& level == LogLevel.Information).AddConsole().AddDebug();
+            .AddFilter((category, level) =>
+            category == DbLoggerCategory.Database.Command.Name
+            && level == LogLevel.Information).AddConsole().AddDebug();
     });
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment CurrentEnvironment { get; set; }
         //readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         // This method gets called by the runtime. Use this method to add services to the container.
+        const string apipolicyname = "api_bearerPolicy";
         public void ConfigureServices(IServiceCollection services)
         {
-
+         
            
             services.AddControllers();
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("bearerPolicy", policy =>
+                options.AddPolicy(apipolicyname, policy =>
                 {
                    policy.AddAuthenticationSchemes("Bearer");
                    // policy.RequireClaim("scope", "awesomecareapi");
@@ -182,49 +184,54 @@ category == DbLoggerCategory.Database.Command.Name
             //https://www.scottbrady91.com/Identity-Server/ASPNET-Core-Swagger-UI-Authorization-using-IdentityServer4
             services.AddSwaggerGen(c =>
             {
-                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                if (CurrentEnvironment.IsDevelopment())
                 {
-                    Flows = new OpenApiOAuthFlows()
+                    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                     {
-                        Implicit = new OpenApiOAuthFlow
+                        Flows = new OpenApiOAuthFlows()
                         {
-                            Scopes = new Dictionary<string, string>() { { "awesomecareapi", "Awesome Care Api" } },
-                            AuthorizationUrl = new Uri("https://localhost:44303/connect/authorize"),
-                            TokenUrl = new Uri("https://localhost:44303/connect/token")
-                        }
-                    },
-                    Description = "",
-                    // In= ParameterLocation.Cookie,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.OAuth2,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    OpenIdConnectUrl = new Uri("https://localhost:44303/.well-known/openid-configuration")
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                        {
-                            new OpenApiSecurityScheme
+                            Implicit = new OpenApiOAuthFlow
                             {
-                                Flows = new OpenApiOAuthFlows
+                                Scopes = new Dictionary<string, string>() { { "awesomecareapi", "Awesome Care Api" } },
+                                AuthorizationUrl = new Uri("https://localhost:44303/connect/authorize"),
+                                TokenUrl = new Uri("https://localhost:44303/connect/token")
+                            }
+                        },
+                        Description = "",
+                        // In= ParameterLocation.Cookie,
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.OAuth2,
+                        Scheme = "Bearer",
+                        BearerFormat = "JWT",
+                        OpenIdConnectUrl = new Uri("https://localhost:44303/.well-known/openid-configuration")
+                    });
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                            {
+                                new OpenApiSecurityScheme
                                 {
-                                     Implicit = new OpenApiOAuthFlow
-                                        {
-                                            Scopes = new Dictionary<string, string>() { { "awesomecareapi", "Awesome Care Api" } },
-                                            AuthorizationUrl = new Uri("https://localhost:44303/connect/authorize"),
-                                            TokenUrl = new Uri("https://localhost:44303/connect/token")
-                                        }
-                                },
-                               Description = "",
-                               Name = "Authorization",
-                               OpenIdConnectUrl = new Uri("https://localhost:44303/.well-known/openid-configuration"),
-                               Scheme="Bearer",
-                               Type = SecuritySchemeType.OAuth2,
-                               Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme,Id = "oauth2"}
-                            },new List<string>(){ "awesomecareapi", "awesomecareapi" }
-                        }
+                                    Flows = new OpenApiOAuthFlows
+                                    {
+                                         Implicit = new OpenApiOAuthFlow
+                                            {
+                                                Scopes = new Dictionary<string, string>() { { "awesomecareapi", "Awesome Care Api" } },
+                                                AuthorizationUrl = new Uri("https://localhost:44303/connect/authorize"),
+                                                TokenUrl = new Uri("https://localhost:44303/connect/token")
+                                            }
+                                    },
+                                   Description = "",
+                                   Name = "Authorization",
+                                   OpenIdConnectUrl = new Uri("https://localhost:44303/.well-known/openid-configuration"),
+                                   Scheme="Bearer",
+                                   Type = SecuritySchemeType.OAuth2,
+                                   Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme,Id = "oauth2"}
+                                },new List<string>(){ "awesomecareapi", "awesomecareapi" }
+                            }
 
-                });
+                    });
+                }
+
+
                 //  c.OperationFilter<AuthorizeCheckOperationFilter>();
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AwesomeCare API", Version = "v1" });
                 // c.ResolveConflictingActions(r => r.First());
@@ -241,7 +248,7 @@ category == DbLoggerCategory.Database.Command.Name
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
+            CurrentEnvironment = env;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -274,10 +281,13 @@ category == DbLoggerCategory.Database.Command.Name
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwesomeCare API V1");
                 }
                 c.RoutePrefix = string.Empty;
-                c.OAuthClientId("9e0024c1b7e7479d8fae56848499f35a");
-                c.OAuthClientSecret("80ElH7wqOmuPUcA+5KJFbvSLOQDT6aN6OcQwXnpvFCw=");
-                c.OAuthScopeSeparator(" ");
-                c.OAuthUsePkce();
+                if (env.IsDevelopment())
+                {
+                    c.OAuthClientId("9e0024c1b7e7479d8fae56848499f35a");
+                    c.OAuthClientSecret("80ElH7wqOmuPUcA+5KJFbvSLOQDT6aN6OcQwXnpvFCw=");
+                    c.OAuthScopeSeparator(" ");
+                    c.OAuthUsePkce();
+                }
 
             });
 
@@ -294,7 +304,7 @@ category == DbLoggerCategory.Database.Command.Name
                 //if (env.IsDevelopment())
                 //    endpoints.MapControllers();//.RequireAuthorization();
                 //else
-                endpoints.MapControllers().RequireAuthorization("bearerPolicy");
+                endpoints.MapControllers().RequireAuthorization(apipolicyname);
             });
 
         }
