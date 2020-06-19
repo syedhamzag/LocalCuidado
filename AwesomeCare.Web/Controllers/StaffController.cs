@@ -11,8 +11,10 @@ using AwesomeCare.Services.Services;
 using AwesomeCare.Web.Services.Admin;
 using AwesomeCare.Web.Services.Staff;
 using AwesomeCare.Web.ViewModels.Staff;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -24,14 +26,16 @@ namespace AwesomeCare.Web.Controllers
         private ILogger<StaffController> _logger;
         private IFileUpload _fileUpload;
         private IBaseRecordService _baseRecordService;
+        private readonly IWebHostEnvironment _env;
         private readonly IMemoryCache _cache;
-        public StaffController(IFileUpload fileUpload, IMemoryCache cache, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger)
+        public StaffController(IFileUpload fileUpload, IMemoryCache cache, IWebHostEnvironment env, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger)
         {
             _staffService = staffService;
             _logger = logger;
             _cache = cache;
             _fileUpload = fileUpload;
             _baseRecordService = baseRecordService;
+            _env = env;
         }
         public IActionResult Index()
         {
@@ -167,7 +171,9 @@ namespace AwesomeCare.Web.Controllers
             }
             else if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = content });
+                _logger.LogWarning(content, new[] { "Staff Registration" });
+
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = _env.IsDevelopment() ? content : "Some validation error occurred, please check and try again" });
             }
             else
             {

@@ -6,6 +6,7 @@ using AutoMapper;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.StaffBlackList;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace AwesomeCare.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class BlackListController : ControllerBase
     {
         private IGenericRepository<Client> _clientRepository;

@@ -795,6 +795,47 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_ClientRotaType");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.Communication", b =>
+                {
+                    b.Property<int>("CommunicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CommunicationId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CommuncationDate")
+                        .HasColumnName("CommuncationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnName("FromUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnName("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnName("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .HasColumnName("Subject")
+                        .HasColumnType("nvarchar(125)")
+                        .HasMaxLength(125);
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnName("ToUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CommunicationId");
+
+                    b.ToTable("tbl_Communication");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.CompanyContactModel", b =>
                 {
                     b.Property<int>("CompanyContactId")

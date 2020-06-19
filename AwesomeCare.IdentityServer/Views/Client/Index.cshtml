@@ -6,40 +6,42 @@
 }
 
 <h2>Clients</h2>
-@if (!User.IsAuthenticated())
+@if (User.IsAuthenticated())
 {
     <a asp-action="Registration" class="btn btn-primary pull-right" asp-controller="Client">Add Client</a>
+
+    <br />
+    <div class="table-responsive">
+        <table class="table table-condensed table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Client Name</th>
+                    <th>Description</th>
+                    <th>Uri</th>
+                    <th>IsEnabled</th>
+                    <th>Created On</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var client in Model)
+                {
+                    <tr>
+                        <td>@client.ClientName</td>
+                        <td>@client.Description</td>
+                        <td>@client.ClientUri</td>
+                        <td>
+                            @{
+                                var isEnabled = client.Enabled ? "Yes" : "No";
+                                @isEnabled
+                            }
+                        </td>
+                        <td>@client.Created.ToString("dd-MMM-yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
-<br />
-<div class="table-responsive">
-    <table class="table table-condensed table-hover table-bordered">
-        <thead>
-            <tr>
-                <th>Client Name</th>
-                <th>Description</th>
-                <th>Uri</th>
-                <th>IsEnabled</th>
-                <th>Created On</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var client in Model)
-            {
-                <tr>
-                    <td>@client.ClientName</td>
-                    <td>@client.Description</td>
-                    <td>@client.ClientUri</td>
-                    <td>
-                        @{
-                            var isEnabled = client.Enabled ? "Yes" : "No";
-                            @isEnabled
-                        }
-                    </td>
-                    <td>@client.Created.ToString("dd-MMM-yyyy")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+
 

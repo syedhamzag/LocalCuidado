@@ -67,8 +67,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         [Required]
         public string DBS { get; set; }
         public string DBSAttachment { get; set; }
-        public DateTime? DBSExpiryDate { get; set; }
-        [Required]
+        public DateTime? DBSExpiryDate { get; set; }       
         public string DBSUpdateNo { get; set; }
         [Required]
         public string NI { get; set; }

@@ -92,6 +92,7 @@ namespace AwesomeCare.Web
                    //Mapp Additional Claims as Configured in IProfileService in Identity Server Project
                    options.ClaimActions.MapUniqueJsonKey("hasStaffInfo", "hasStaffInfo");
                    options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
+                   options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Email, JwtClaimTypes.Email);
                    options.TokenValidationParameters = new TokenValidationParameters
                    {
                        NameClaimType = JwtClaimTypes.Name,

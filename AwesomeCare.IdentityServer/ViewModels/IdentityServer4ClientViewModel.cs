@@ -12,9 +12,15 @@ namespace AwesomeCare.IdentityServer.ViewModels
         public IdentityServer4ClientViewModel()
         {
             AllowedScopes = new List<string>();
-           // IdentityResources = new List<string>();
+            // IdentityResources = new List<string>();
             IdentityResourceListItems = new List<SelectListItem>();
             ProtectedResourcesListItems = new List<SelectListItem>();
+            ClientTypes = new List<SelectListItem>() 
+            { 
+                new SelectListItem("Web App", "WebApp") ,
+                new SelectListItem("SPA", "SPA") ,
+                new SelectListItem("SPA.Swagger", "SPA (Swagger)") 
+            };
         }
         [Display(Name = "Client Type")]
         [Required]
@@ -49,8 +55,9 @@ namespace AwesomeCare.IdentityServer.ViewModels
         public List<string> AllowedScopes { get; set; }
 
 
-        public List<SelectListItem>  IdentityResourceListItems { get; set; }
+        public List<SelectListItem> IdentityResourceListItems { get; set; }
         public List<SelectListItem> ProtectedResourcesListItems { get; set; }
+        public List<SelectListItem> ClientTypes { get; set; }
 
     }
 }
