@@ -11,5 +11,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.BaseRecord
         public string KeyName { get; set; }
         public string ValueName { get; set; }
         public bool Deleted { get; set; }
+        public bool HasGoogleForm { get; set; }
+        public string AddLink { get; set; }
+        public string ViewLink { get; set; }
     }
 }
