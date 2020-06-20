@@ -26,6 +26,18 @@ namespace AwesomeCare.Model.Models.Map
                 .IsRequired();
             builder.Property(p => p.Deleted)
                 .HasColumnName("Deleted");
+
+            builder.Property(p => p.HasGoogleForm)
+               .HasColumnName("HasGoogleForm")
+               .HasDefaultValue(false);
+
+            builder.Property(p => p.AddLink)
+              .HasColumnName("AddLink")
+              .IsRequired(false);
+
+            builder.Property(p => p.ViewLink)
+              .HasColumnName("ViewLink")
+              .IsRequired(false);
             #endregion
         }
     }
