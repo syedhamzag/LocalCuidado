@@ -150,12 +150,12 @@ namespace AwesomeCare.API
             //        }
             //    };
             //});
-
-
+          
+            var migrationAssembly = Assembly.Load("AwesomeCare.DataAccess").GetName().Name;
             services.AddDbContext<AwesomeCareDbContext>(options =>
             {
                 options.UseLoggerFactory(DbLoggerFactory);
-                options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
+                options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"),sql=>sql.MigrationsAssembly(migrationAssembly));
                 options.EnableSensitiveDataLogging(true);
             });
             services.AddLogging();
