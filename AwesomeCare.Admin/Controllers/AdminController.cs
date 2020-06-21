@@ -52,6 +52,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var updateItem = Mapper.Map<PutBaseRecordItem>(item);
                 var baseRecordItem = await _baseRecordService.UpdateBaseRecordItem(updateItem);
+                if (baseRecordItem != null)
+                    this.SetOperationStatus(new Models.OperationStatus { Message = "Operation Successful", IsSuccessful = true });
             }
             catch (Refit.ApiException ee)
             {

@@ -528,29 +528,44 @@
                                                         <th>Date Performed</th>
                                                         <th>Date Due</th>
                                                         <th>Evidence</th>
+                                                        <th>Add Form</th>
+                                                        <th>View Response</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @for (int r = 0; r < Model.RegulatoryContacts.Count; r++)
                                                     {
-                                                        <tr>
+                                                    <tr>
 
-                                                            <td>
+                                                        <td>
 
-                                                                @Model.RegulatoryContacts[r].RegulatoryContact
-                                                            </td>
-                                                            <td>
-                                                                @Model.RegulatoryContacts[r].DatePerformed
-                                                            </td>
-                                                            <td>
-                                                                @Model.RegulatoryContacts[r].DueDate
-                                                            </td>
-                                                            <td>
+                                                            @Model.RegulatoryContacts[r].RegulatoryContact
+                                                        </td>
+                                                        <td>
+                                                            @Model.RegulatoryContacts[r].DatePerformed
+                                                        </td>
+                                                        <td>
+                                                            @Model.RegulatoryContacts[r].DueDate
+                                                        </td>
+                                                        <td>
+                                                            <a asp-action="DownloadFile" asp-route-file="@Model.RegulatoryContacts[r].Evidence">Download</a>
 
-                                                                <a asp-action="DownloadFile" asp-route-file="@Model.RegulatoryContacts[r].Evidence">Download</a>
-                                                            </td>
+                                                        </td>
+                                                        <td>
+                                                            @if (Model.RegulatoryContacts[r].HasGoogleForm)
+                                                            {
+                                                                <a class="btn" target="_blank" href="@Model.RegulatoryContacts[r].AddLink">Add</a>
 
-                                                        </tr>
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            @if (Model.RegulatoryContacts[r].HasGoogleForm)
+                                                            {
+                                                                <a target="_blank" href="@Model.RegulatoryContacts[r].ViewLink">Response</a>
+
+                                                            }
+                                                        </td>
+                                                    </tr>
                                                     }
 
                                                 </tbody>
