@@ -18,6 +18,8 @@ namespace AwesomeCare.Web.Services.Staff
 
         [Get("/StaffInfo/GetByApplicationUserId/{userId}")]
         Task<GetStaffProfile> GetByApplicationUserId(string userId);
-        
+
+        [Get("/StaffInfo/GetStaffs")]
+        Task<List<GetStaffs>> GetStaffs();
     }
 }

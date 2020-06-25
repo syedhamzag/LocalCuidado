@@ -23,14 +23,16 @@
     <link rel="stylesheet" href="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
     <link rel="stylesheet" href="/assets/vendor/nouislider/nouislider.min.css" />
     <link rel="stylesheet" href="/assets/vendor/parsleyjs/css/parsley.css">
+    <link href="/assets/vendor/Chosen/css/chosen.min.css" rel="stylesheet" />
 
     @RenderSection("VenderStyleSheets", required: false)
-
+    @RenderSection("VendorStyleSheets", required: false)
 
     @RenderSection("HeaderScripts", required: false)
 
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="/assets/css/main.css">
+    <link href="/assets/css/inbox.css" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/color_skins.css">
 </head>
 <body class="theme-cyan layout-fullwidth">
@@ -97,13 +99,19 @@
     <script src="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js -->
     <script src="/assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js -->
     <script src="/assets/vendor/parsleyjs/js/parsley.min.js"></script>
+    <script src="/assets/vendor/Chosen/js/chosen.jquery.min.js"></script>
 
     @RenderSection("VendorScripts", required: false)
 
     <script src="/assets/bundles/mainscripts.bundle.js"></script>
 
 
-
+    <script>
+        $(document).ready(function ()
+        {
+            $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
+        })
+    </script>
 
     @RenderSection("Scripts", required: false)
 </body>
