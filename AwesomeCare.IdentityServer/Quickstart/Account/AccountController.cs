@@ -17,6 +17,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -182,9 +183,10 @@ namespace IdentityServer4.Quickstart.UI
             {
                 // delete local authentication cookie
                 await _signInManager.SignOutAsync();
-               // await HttpContext.SignOutAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                //await HttpContext.SignOutAsync();
+               
+              //  await HttpContext.SignOutAsync();
+
                 // raise the logout event
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
             }
@@ -200,7 +202,7 @@ namespace IdentityServer4.Quickstart.UI
                 // this triggers a redirect to the external provider for sign-out
                 return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
             }
-
+          
             return View("LoggedOut", vm);
         }
 
