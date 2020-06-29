@@ -54,6 +54,7 @@ namespace AwesomeCare.Admin
 
         public IConfiguration Configuration { get; }
         private ILogger<Startup> logger;
+        const string apipolicyname = "api_bearerPolicy";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -68,7 +69,7 @@ namespace AwesomeCare.Admin
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
 
@@ -129,6 +130,15 @@ namespace AwesomeCare.Admin
             //       };
             //   })
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(apipolicyname, policy =>
+                {
+                    policy.AddAuthenticationSchemes("OpenIdConnect");
+                    policy.RequireAuthenticatedUser();
+
+                });
+            });
             services.AddAuthentication("OpenIdConnect")
                 .AddCookie("Identity.Application", options =>
                 {
@@ -186,7 +196,7 @@ namespace AwesomeCare.Admin
                    options.ClientId = settings.ClientId;
                    options.ResponseType = "code";
                    options.SignedOutRedirectUri = Configuration["app_url"];// + "/signout-callback-oidc";
-                   options.SignedOutCallbackPath = new PathString("/Account/SignOut");
+                  // options.SignedOutCallbackPath = new PathString("/signout-callback-oidc");
                    foreach (string scope in settings.Scopes)
                    {
                        options.Scope.Add(scope);
@@ -262,12 +272,13 @@ namespace AwesomeCare.Admin
                        OnSignedOutCallbackRedirect = ctx =>
                         {
                             var tt = ctx;
-                            logger.LogInformation($"OnSignedOutCallbackRedirect {ctx.Options.SignedOutRedirectUri}");
-                            // ctx.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                            ctx.HttpContext.SignOutAsync("Identity.Application");
-                            //  ctx.Options.SignedOutRedirectUri;
-                            ctx.Response.Redirect(ctx.Options.SignedOutRedirectUri);
-                            ctx.HandleResponse();
+                            //logger.LogInformation($"OnSignedOutCallbackRedirect {ctx.Options.SignedOutRedirectUri}");
+                            //// ctx.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                           // ctx.HttpContext.SignOutAsync("Identity.Application");
+                          //  ctx.HttpContext.SignOutAsync("OpenIdConnect");
+                            ////  ctx.Options.SignedOutRedirectUri;
+                            //ctx.Response.Redirect(ctx.Options.SignedOutRedirectUri);
+                            //ctx.HandleResponse();
                             return Task.CompletedTask;
                         },
                        OnTicketReceived = ctx =>
@@ -354,7 +365,7 @@ namespace AwesomeCare.Admin
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization();
+                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization(apipolicyname);
             });
         }
 

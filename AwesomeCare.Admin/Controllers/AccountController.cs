@@ -38,6 +38,8 @@ namespace AwesomeCare.Admin.Controllers
                 var endSessionUrl = requestUrl.CreateEndSessionUrl(idtoken,url);
                 logger.LogInformation($"EndSessionUrl {endSessionUrl}");
 
+              await  this.HttpContext.SignOutAsync("Identity.Application");
+
                 return Redirect(endSessionUrl);
             }
             return RedirectToAction("Error","Home");
