@@ -24,11 +24,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Threading.Tasks;
+using Serilog;
 
 namespace AwesomeCare.IdentityServer
 {
     public class Startup
     {
+        private ILogger<Startup> logger;
         public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
         public static readonly ILoggerFactory DbLoggerFactory
@@ -131,19 +134,65 @@ category == DbLoggerCategory.Database.Command.Name
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
-            
-            //this must be the same thing configured on all clients
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
-                options.DefaultChallengeScheme =  OpenIdConnectDefaults.AuthenticationScheme;
 
-            })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-                {
-                    //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                    options.Cookie.Name = ".AwesomeCare.Cookie";
-                });
+            //this must be the same thing configured on all clients
+           // services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
+            //    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                
+
+            //})
+            //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            //    {
+            //        //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            //        options.Cookie.Name = ".AwesomeCare.Cookie";
+            //        options.Events = new CookieAuthenticationEvents
+            //        {
+            //            OnRedirectToAccessDenied = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRedirectToAccessDenied");
+            //                return Task.CompletedTask;
+            //            },
+            //            OnRedirectToLogin = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRedirectToLogin");
+            //                return Task.CompletedTask;
+            //            },
+            //            OnRedirectToLogout = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRedirectToLogout");
+            //                return Task.CompletedTask;
+            //            },
+            //            OnRedirectToReturnUrl = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRedirectToReturnUrl");
+            //                return Task.CompletedTask;
+            //            },
+            //            OnSignedIn = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnSignedIn");
+            //                return Task.CompletedTask;
+            //            },
+            //            OnSigningOut = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnSigningOut");
+            //                return Task.CompletedTask;
+            //            },
+            //            OnValidatePrincipal = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnValidatePrincipal");
+            //                return Task.CompletedTask;
+            //            }
+            //        };
+            //    });
 
             //services.AddAuthentication()
             //    .AddGoogle(options =>
@@ -163,8 +212,9 @@ category == DbLoggerCategory.Database.Command.Name
             // services.AddScoped<IdentityExpressDbContext, SqliteIdentityDbContext>();
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
         {
+            this.logger = logger;
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

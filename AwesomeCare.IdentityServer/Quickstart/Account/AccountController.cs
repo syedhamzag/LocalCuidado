@@ -182,8 +182,10 @@ namespace IdentityServer4.Quickstart.UI
             if (User?.Identity.IsAuthenticated == true)
             {
                 // delete local authentication cookie
-                await _signInManager.SignOutAsync();
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+              // await _signInManager.SignOutAsync();
+               // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+             //   await HttpContext.SignOutAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
+                await HttpContext.SignOutAsync("Identity.Application");
                
               //  await HttpContext.SignOutAsync();
 
