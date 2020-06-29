@@ -1,6 +1,8 @@
 ﻿@using AwesomeCare.Admin.Components;
 @using Newtonsoft.Json;
 @using Microsoft.AspNetCore.Mvc.Razor;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration configuration
 <!doctype html>
 <html lang="en">
 
@@ -46,7 +48,7 @@
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
-            <div class="m-t-30"><img src="/assets/images/logo-icon.svg" width="48" height="48" alt="Lucid"></div>
+            <div class="m-t-30"><img src="/assets/images/logo-icon.svg" width="48" height="48" alt="AwesomeCare"></div>
             <p>Please wait...</p>
         </div>
     </div>
@@ -57,7 +59,7 @@
         <nav class="navbar navbar-fixed-top">
             <div class="container">
                 <div class="navbar-brand">
-                    <a href="/"><img src="/assets/images/logo.svg" alt="Lucid Logo" class="img-responsive logo"></a>
+                    <a href="/"><img src="/assets/images/logo.svg" alt="AwesomeCare Logo" class="img-responsive logo"></a>
                 </div>
 
                 <div class="navbar-right">
@@ -141,7 +143,7 @@
                             </li>
                             <li class="dropdown">
                                 <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
-                                <ul class="dropdown-menu user-menu menu-icon">
+                                @*<ul class="dropdown-menu user-menu menu-icon">
                                     <li class="menu-heading">ACCOUNT SETTINGS</li>
                                     <li><a href="javascript:void(0);"><i class="icon-note"></i> <span>Basic</span></a></li>
                                     <li><a href="javascript:void(0);"><i class="icon-equalizer"></i> <span>Preferences</span></a></li>
@@ -151,13 +153,13 @@
                                     <li><a href="javascript:void(0);"><i class="icon-credit-card"></i> <span>Payments</span></a></li>
                                     <li><a href="javascript:void(0);"><i class="icon-printer"></i> <span>Invoices</span></a></li>
                                     <li><a href="javascript:void(0);"><i class="icon-refresh"></i> <span>Renewals</span></a></li>
-                                </ul>
+                                </ul>*@
                             </li>
                             <li class="d-none d-sm-inline-block">
                                 <a href="#" class="icon-menu rightbar_btn"><i class="icon-settings"></i></a>
                             </li>
                             <li>
-                                <a href="page-login.html" class="icon-menu"><i class="icon-login"></i></a>
+                                <a asp-controller="Account" asp-action="SignOut" class="icon-menu"><i class="icon-login"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -368,10 +370,10 @@
                     </div>
                 </div>
 
-                @if ( TempData["OperationStatus"] != null)
+                @if (TempData["OperationStatus"] != null)
                 {
 
-                    var operationStatus =  JsonConvert.DeserializeObject<AwesomeCare.Admin.Models.OperationStatus>(TempData["OperationStatus"]?.ToString());
+                    var operationStatus = JsonConvert.DeserializeObject<AwesomeCare.Admin.Models.OperationStatus>(TempData["OperationStatus"]?.ToString());
                     if (operationStatus.IsSuccessful)
                     {
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -421,7 +423,7 @@
 
     <script>
         $(document).ready(function () {
-            
+
             // Multiselect
             //$('.multiselect').multiselect({
             //    maxHeight: 300
@@ -439,7 +441,7 @@
                 todayBtn: true
             })
 
-            $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" }); 
+            $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
         })
     </script>
 

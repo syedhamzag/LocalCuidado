@@ -10,6 +10,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.BaseRecordItem
         [Required]
         [MaxLength(225)]
         public string ValueName { get; set; }
-                
+        public bool HasGoogleForm { get; set; }
+        public string AddLink { get; set; }
+        public string ViewLink { get; set; }
     }
 }

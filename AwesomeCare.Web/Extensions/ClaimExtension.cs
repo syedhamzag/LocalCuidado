@@ -12,5 +12,15 @@ namespace System.Security.Claims
 
             return claimValue;
         }
+
+        /// <summary>
+        /// Application UserId i.e sub claim in Identity Server
+        /// </summary>
+        /// <returns></returns>
+        public static string SubClaim(this System.Security.Claims.ClaimsPrincipal claimsPrincipal)
+        {
+            var sub = claimsPrincipal.FindFirst("sub")?.Value;
+            return sub;
+        }
     }
 }

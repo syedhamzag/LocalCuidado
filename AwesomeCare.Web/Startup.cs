@@ -9,6 +9,7 @@ using AwesomeCare.Web.AppSettings;
 using AwesomeCare.Web.Middlewares;
 using AwesomeCare.Web.Services.Admin;
 using AwesomeCare.Web.Services.ClientRotaName;
+using AwesomeCare.Web.Services.Communication;
 using AwesomeCare.Web.Services.ShiftBooking;
 using AwesomeCare.Web.Services.Staff;
 using IdentityModel;
@@ -156,9 +157,6 @@ namespace AwesomeCare.Web
         void AddRefitServices(IServiceCollection services)
         {
             string uri = Configuration["AwesomeCareBaseApi"];
-
-
-
             services.AddHttpClient("baserecordservice", c =>
             {
                 //  var serviceBusPersisterConnection = ServiceProviderServiceExtensions.GetService<IHttpContextAccessor>();
@@ -185,6 +183,11 @@ namespace AwesomeCare.Web
             }).AddTypedClient(r => RestService.For<IClientRotaNameService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
+            services.AddHttpClient("communicationService", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ICommunicationService>(r))
+           .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
 }

@@ -274,7 +274,10 @@ namespace AwesomeCare.API.Controllers
                                                               Evidence = rc.Evidence,
                                                               RegulatoryContact = bitem.ValueName,
                                                               StaffPersonalInfoId = rc.StaffPersonalInfoId,
-                                                              StaffRegulatoryContactId = rc.StaffRegulatoryContactId
+                                                              StaffRegulatoryContactId = rc.StaffRegulatoryContactId,
+                                                              AddLink = bitem.AddLink,
+                                                              HasGoogleForm = bitem.HasGoogleForm,
+                                                              ViewLink = bitem.ViewLink
                                                           }).ToList()
                                 }).FirstOrDefault();
 

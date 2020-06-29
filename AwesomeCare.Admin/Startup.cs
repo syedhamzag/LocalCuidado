@@ -40,6 +40,7 @@ using System.IdentityModel.Tokens.Jwt;
 using AwesomeCare.Admin.Services;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.Admin
 {
@@ -52,75 +53,150 @@ namespace AwesomeCare.Admin
         }
 
         public IConfiguration Configuration { get; }
-
+        private ILogger<Startup> logger;
+        const string apipolicyname = "api_bearerPolicy";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddLogging(logger =>
+            {
+                logger.AddConsole();
+                logger.AddDebug();
+                logger.AddAzureWebAppDiagnostics();
+            });
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
-            //the AddAuthentication and AddCookie  must be same thing configured on the IdentityServer Project
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
-            })
-               .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-               {
-                   //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                   options.Cookie.Name = ".AwesomeCare.Cookie";
-                   options.Events = new CookieAuthenticationEvents
-                   {
-                       OnRedirectToAccessDenied= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnRedirectToLogin= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnRedirectToLogout= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnRedirectToReturnUrl= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnSignedIn= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnSigningOut= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnValidatePrincipal= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       }
-                   };
-               })
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
+            //    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+
+            //})
+            //   .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            //   {
+            //       //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            //       options.Cookie.Name = ".AwesomeCare.Cookie";
+            //       options.Events = new CookieAuthenticationEvents
+            //       {
+            //           OnRedirectToAccessDenied = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRedirectToAccessDenied");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnRedirectToLogin = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRedirectToLogin");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnRedirectToLogout = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRedirectToLogout");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnRedirectToReturnUrl = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRedirectToReturnUrl");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnSignedIn = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnSignedIn");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnSigningOut = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnSigningOut");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnValidatePrincipal = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnValidatePrincipal");
+            //                return Task.CompletedTask;
+            //            }
+            //       };
+            //   })
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(apipolicyname, policy =>
+                {
+                    policy.AddAuthenticationSchemes("OpenIdConnect");
+                    policy.RequireAuthenticatedUser();
+
+                });
+            });
+            services.AddAuthentication("OpenIdConnect")
+                .AddCookie("Identity.Application", options =>
+                {
+                    options.Events = new CookieAuthenticationEvents
+                    {
+                        OnRedirectToAccessDenied = ctx =>
+                         {
+                             var tt = ctx;
+                             logger.LogInformation($"OnRedirectToAccessDenied");
+                             return Task.CompletedTask;
+                         },
+                        OnRedirectToLogin = ctx =>
+                         {
+                             var tt = ctx;
+                             logger.LogInformation($"OnRedirectToLogin");
+                             return Task.CompletedTask;
+                         },
+                        OnRedirectToLogout = ctx =>
+                         {
+                             var tt = ctx;
+                             logger.LogInformation($"OnRedirectToLogout");
+                             return Task.CompletedTask;
+                         },
+                        OnRedirectToReturnUrl = ctx =>
+                         {
+                             var tt = ctx;
+                             logger.LogInformation($"OnRedirectToReturnUrl");
+                             return Task.CompletedTask;
+                         },
+                        OnSignedIn = ctx =>
+                         {
+                             var tt = ctx;
+                             logger.LogInformation($"OnSignedIn");
+                             return Task.CompletedTask;
+                         },
+                        OnSigningOut = ctx =>
+                         {
+                             var tt = ctx;
+                             logger.LogInformation($"OnSigningOut");
+                             return Task.CompletedTask;
+                         },
+                        OnValidatePrincipal = ctx =>
+                         {
+                             var tt = ctx;
+                             logger.LogInformation($"OnValidatePrincipal");
+                             return Task.CompletedTask;
+                         }
+                    };
+                })
                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                {
                    var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
-                   options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                   options.Authority = Configuration["idp_url"].ToString();// "https://localhost:44392/";
+                   options.SignInScheme = "Identity.Application";//  CookieAuthenticationDefaults.AuthenticationScheme;
+                   options.Authority = Configuration["idp_url"].ToString();
                    options.ClientId = settings.ClientId;
                    options.ResponseType = "code";
-                   
+                   options.SignedOutRedirectUri = Configuration["app_url"];// + "/signout-callback-oidc";
+                  // options.SignedOutCallbackPath = new PathString("/signout-callback-oidc");
                    foreach (string scope in settings.Scopes)
                    {
                        options.Scope.Add(scope);
@@ -148,70 +224,89 @@ namespace AwesomeCare.Admin
                        OnAccessDenied = ctx =>
                        {
                            var tt = ctx;
+                           logger.LogInformation($"OnAccessDenied");
                            return Task.CompletedTask;
                        },
-                       OnAuthenticationFailed= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnAuthorizationCodeReceived= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnMessageReceived= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnRedirectToIdentityProvider= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnRedirectToIdentityProviderForSignOut= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnRemoteFailure= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnRemoteSignOut= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnSignedOutCallbackRedirect= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnTicketReceived= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnTokenResponseReceived= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnTokenValidated= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       },
-                       OnUserInformationReceived= ctx =>
-                       {
-                           var tt = ctx;
-                           return Task.CompletedTask;
-                       }
+                       OnAuthenticationFailed = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation($"OnAuthenticationFailed {ctx.Exception?.Message}");
+                            return Task.CompletedTask;
+                        },
+                       OnAuthorizationCodeReceived = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnAuthorizationCodeReceived");
+                            return Task.CompletedTask;
+                        },
+                       OnMessageReceived = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnMessageReceived");
+                            return Task.CompletedTask;
+                        },
+                       OnRedirectToIdentityProvider = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnRedirectToIdentityProvider");
+                            return Task.CompletedTask;
+                        },
+                       OnRedirectToIdentityProviderForSignOut = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnRedirectToIdentityProviderForSignOut");
+                            return Task.CompletedTask;
+                        },
+                       OnRemoteFailure = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation($"OnRemoteFailure {ctx.Failure?.Message}");
+                            return Task.CompletedTask;
+                        },
+                       OnRemoteSignOut = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnRemoteSignOut");
+                            return Task.CompletedTask;
+                        },
+                       OnSignedOutCallbackRedirect = ctx =>
+                        {
+                            var tt = ctx;
+                            //logger.LogInformation($"OnSignedOutCallbackRedirect {ctx.Options.SignedOutRedirectUri}");
+                            //// ctx.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                           // ctx.HttpContext.SignOutAsync("Identity.Application");
+                          //  ctx.HttpContext.SignOutAsync("OpenIdConnect");
+                            ////  ctx.Options.SignedOutRedirectUri;
+                            //ctx.Response.Redirect(ctx.Options.SignedOutRedirectUri);
+                            //ctx.HandleResponse();
+                            return Task.CompletedTask;
+                        },
+                       OnTicketReceived = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnTicketReceived");
+                            return Task.CompletedTask;
+                        },
+                       OnTokenResponseReceived = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnTokenResponseReceived");
+                            return Task.CompletedTask;
+                        },
+                       OnTokenValidated = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnTokenValidated");
+                            return Task.CompletedTask;
+                        },
+                       OnUserInformationReceived = ctx =>
+                        {
+                            var tt = ctx;
+                            logger.LogInformation("OnUserInformationReceived");
+                            return Task.CompletedTask;
+                        }
                    };
-                  
+
                });
 
             services.AddScoped(typeof(QRCodeGenerator));
@@ -220,7 +315,7 @@ namespace AwesomeCare.Admin
             //AutoMapper
             AutoMapperConfiguration.Configure();
             //  MapperConfig.AutoMapperConfiguration.Configure();
-            services.AddLogging();
+
             services.AddHttpContextAccessor();
             services.AddTransient<AuthenticatedHttpClientHandler>();
 
@@ -241,9 +336,9 @@ namespace AwesomeCare.Admin
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
-
+            this.logger = logger;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -270,7 +365,7 @@ namespace AwesomeCare.Admin
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization();
+                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization(apipolicyname);
             });
         }
 

@@ -16,5 +16,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         /// Link to attachement
         /// </summary>
         public string Evidence { get; set; }
+        public bool HasGoogleForm { get; set; }
+        public string AddLink { get; set; }
+        public string ViewLink { get; set; }
     }
 }
