@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Refit;
@@ -40,48 +41,99 @@ namespace AwesomeCare.Web
         }
 
         public IConfiguration Configuration { get; }
-
+        private ILogger<Startup> logger;
+        string apipolicyname = "openidcookiepolicy";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging(logger =>
+            {
+                logger.AddConsole();
+                logger.AddDebug();
+             //   logger.AddAzureWebAppDiagnostics();
+            });
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
             });
-            //the AddAuthentication and AddCookie  must be same thing configured on the IdentityServer Project
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
-            })
-               .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(apipolicyname, policy =>
+                {
+                    policy.AddAuthenticationSchemes("OpenIdConnect");
+                    policy.RequireAuthenticatedUser();
+
+                });
+            });
+
+            //the AddAuthentication and AddCookie  must be same thing configured on the IdentityServer Project
+            services.AddAuthentication("OpenIdConnect")
+               .AddCookie("Identity.Application", options =>
                {
-                 //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                   options.Cookie.Name = ".AwesomeCare.Cookie";
+                   options.Events = new CookieAuthenticationEvents
+                   {
+                       OnRedirectToAccessDenied = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnRedirectToAccessDenied");
+                           return Task.CompletedTask;
+                       },
+                       OnRedirectToLogin = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnRedirectToLogin");
+                           return Task.CompletedTask;
+                       },
+                       OnRedirectToLogout = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnRedirectToLogout");
+                           return Task.CompletedTask;
+                       },
+                       OnRedirectToReturnUrl = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnRedirectToReturnUrl");
+                           return Task.CompletedTask;
+                       },
+                       OnSignedIn = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnSignedIn");
+                           return Task.CompletedTask;
+                       },
+                       OnSigningOut = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnSigningOut");
+                           return Task.CompletedTask;
+                       },
+                       OnValidatePrincipal = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnValidatePrincipal");
+                           return Task.CompletedTask;
+                       }
+                   };
                })
                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                {
                    var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
-                   options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                   options.SignInScheme = "Identity.Application";// CookieAuthenticationDefaults.AuthenticationScheme;
                    options.Authority = Configuration["idp_url"].ToString();// "https://localhost:44392/";
                    options.ClientId = settings.ClientId;
                    options.ResponseType = "code";
-                   //options.UsePkce = false;
-                   //options.Scope.Add("openid");
-                   //options.Scope.Add("profile");
-                   //options.Scope.Add("offline_access");
-                  // options.Scope.Add("awesomecareapi");
+                   options.SignedOutRedirectUri = Configuration["app_url"];
                    foreach (string scope in settings.Scopes)
                    {
                        options.Scope.Add(scope);
                    }
                    options.SaveTokens = true;
                    options.ClientSecret = settings.ClientSecret;
-                   // options.SignedOutCallbackPath = "";
-                  // options.AccessDeniedPath = "";
                  
                    options.GetClaimsFromUserInfoEndpoint = true;
                    //Remove Unnecessary claims
@@ -99,11 +151,89 @@ namespace AwesomeCare.Web
                        NameClaimType = JwtClaimTypes.Name,
                        RoleClaimType = JwtClaimTypes.Role
                    };
-
-                   options.Events.OnRedirectToIdentityProvider =async context =>
+                   options.Events = new OpenIdConnectEvents
                    {
-                       //https://developers.de/2019/11/29/how-to-pass-custom-parameters-in/
+                       OnAccessDenied = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnAccessDenied");
+                           return Task.CompletedTask;
+                       },
+                       OnAuthenticationFailed = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnAuthenticationFailed {ctx.Exception?.Message}");
+                           return Task.CompletedTask;
+                       },
+                       OnAuthorizationCodeReceived = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation("OnAuthorizationCodeReceived");
+                           return Task.CompletedTask;
+                       },
+                       OnMessageReceived = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation("OnMessageReceived");
+                           return Task.CompletedTask;
+                       },
+                       OnRedirectToIdentityProvider = ctx =>
+                       {
+                           //https://developers.de/2019/11/29/how-to-pass-custom-parameters-in/
+                           var tt = ctx;
+                           logger.LogInformation("OnRedirectToIdentityProvider");
+                           return Task.CompletedTask;
+                       },
+                       OnRedirectToIdentityProviderForSignOut = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation("OnRedirectToIdentityProviderForSignOut");
+                           return Task.CompletedTask;
+                       },
+                       OnRemoteFailure = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation($"OnRemoteFailure {ctx.Failure?.Message}");
+                           return Task.CompletedTask;
+                       },
+                       OnRemoteSignOut = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation("OnRemoteSignOut");
+                           return Task.CompletedTask;
+                       },
+                       OnSignedOutCallbackRedirect = ctx =>
+                       {
+                           var tt = ctx;
+                           
+                           return Task.CompletedTask;
+                       },
+                       OnTicketReceived = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation("OnTicketReceived");
+                           return Task.CompletedTask;
+                       },
+                       OnTokenResponseReceived = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation("OnTokenResponseReceived");
+                           return Task.CompletedTask;
+                       },
+                       OnTokenValidated = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation("OnTokenValidated");
+                           return Task.CompletedTask;
+                       },
+                       OnUserInformationReceived = ctx =>
+                       {
+                           var tt = ctx;
+                           logger.LogInformation("OnUserInformationReceived");
+                           return Task.CompletedTask;
+                       }
                    };
+                  
                });
             AutoMapperConfiguration.Configure();
             services.AddHttpContextAccessor();
@@ -125,8 +255,9 @@ namespace AwesomeCare.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            this.logger = logger;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -149,7 +280,7 @@ namespace AwesomeCare.Web
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=ShiftBooking}/{action=Shifts}/{id?}").RequireAuthorization();
+                endpoints.MapControllerRoute("default", "{controller=ShiftBooking}/{action=Shifts}/{id?}").RequireAuthorization(apipolicyname);
             });
             app.UseBaseRecordMiddleware();
         }

@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Configuration;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -31,14 +32,14 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
-
+        private readonly IConfiguration configuration;
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
-            IEventService events)
+            IEventService events, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -46,6 +47,7 @@ namespace IdentityServer4.Quickstart.UI
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -131,7 +133,11 @@ namespace IdentityServer4.Quickstart.UI
                     }
                     else if (string.IsNullOrEmpty(model.ReturnUrl))
                     {
-                        return Redirect("~/");
+
+                        string staffWebSite = configuration["staffwebsite"];
+                        return RedirectPermanent(staffWebSite);
+
+                        // return Redirect("~/");
                     }
                     else
                     {
@@ -182,12 +188,12 @@ namespace IdentityServer4.Quickstart.UI
             if (User?.Identity.IsAuthenticated == true)
             {
                 // delete local authentication cookie
-              // await _signInManager.SignOutAsync();
-               // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-             //   await HttpContext.SignOutAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
+                // await _signInManager.SignOutAsync();
+                // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                //   await HttpContext.SignOutAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
                 await HttpContext.SignOutAsync("Identity.Application");
-               
-              //  await HttpContext.SignOutAsync();
+
+                //  await HttpContext.SignOutAsync();
 
                 // raise the logout event
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
@@ -204,7 +210,7 @@ namespace IdentityServer4.Quickstart.UI
                 // this triggers a redirect to the external provider for sign-out
                 return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
             }
-          
+
             return View("LoggedOut", vm);
         }
 

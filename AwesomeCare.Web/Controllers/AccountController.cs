@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.Web.Controllers
 {
@@ -13,12 +14,14 @@ namespace AwesomeCare.Web.Controllers
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IConfiguration configuration;
         private readonly IHttpContextAccessor context;
+        private readonly ILogger<AccountController> logger;
 
-        public AccountController(IHttpContextAccessor context, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public AccountController(IHttpContextAccessor context, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger<AccountController> logger)
         {
             this.httpClientFactory = httpClientFactory;
             this.configuration = configuration;
             this.context = context;
+            this.logger = logger;
         }
         public async Task<IActionResult> Logout()
         {
@@ -33,6 +36,10 @@ namespace AwesomeCare.Web.Controllers
                 var url = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host.Value; 
                 var requestUrl = new RequestUrl(discoveryDoc.EndSessionEndpoint);
                 var endSessionUrl = requestUrl.CreateEndSessionUrl(idtoken, url);
+                logger.LogInformation($"EndSessionUrl {endSessionUrl}");
+
+                await this.HttpContext.SignOutAsync("Identity.Application");
+
                 return Redirect(endSessionUrl);
             }
             return RedirectToAction("Error", "Home");

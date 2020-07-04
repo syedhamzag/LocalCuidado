@@ -22,6 +22,7 @@
     <Content Remove="Areas\Identity\Pages\Account\LoginWith2fa.cshtml" />
     <Content Remove="Areas\Identity\Pages\Account\LoginWithRecoveryCode.cshtml" />
     <Content Remove="Areas\Identity\Pages\Account\Logout.cshtml" />
+    <Content Remove="Views\Client\SampleRegistration.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

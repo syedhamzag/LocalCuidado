@@ -54,7 +54,7 @@ namespace AwesomeCare.Admin
 
         public IConfiguration Configuration { get; }
         private ILogger<Startup> logger;
-        const string apipolicyname = "api_bearerPolicy";
+        const string apipolicyname = "openidcookiepolicy";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
