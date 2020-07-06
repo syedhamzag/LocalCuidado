@@ -12,7 +12,7 @@ namespace AwesomeCare.Admin.Controllers
     public class BaseController : Controller
     {
         public const string cacheKey = "baserecord_key";
-        private readonly IFileUpload _fileUpload;
+        public readonly IFileUpload _fileUpload;
         public BaseController(IFileUpload fileUpload)
         {
             _fileUpload = fileUpload;
