@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AwesomeCare.DataTransferObject.DTOs;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecordItem;
 using AwesomeCare.DataTransferObject.DTOs.Client;
@@ -702,6 +703,13 @@ namespace MapperConfig
                 .ForMember(dto => dto.IsRead, mem => mem.MapFrom(src => false))
                 .ForMember(dto => dto.CommuncationDate, mem => mem.MapFrom(src => DateTime.Now))
                 .ForMember(dto => dto.From, mem => mem.Ignore());
+            #endregion
+
+            #region StaffIncidentReporting
+            CreateMap<PostReportStaff, StaffIncidentReporting>()
+                .ForMember(dto => dto.StaffIncidentReportingId, mem => mem.Ignore())
+                .ForMember(dto => dto.LoggedById, mem => mem.Ignore())
+                .ForMember(dto => dto.LoggedDate, mem => mem.MapFrom(src => DateTimeOffset.Now));
             #endregion
         }
     }

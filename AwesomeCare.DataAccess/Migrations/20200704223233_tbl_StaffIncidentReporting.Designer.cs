@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200704223233_tbl_StaffIncidentReporting")]
+    partial class tbl_StaffIncidentReporting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1433,16 +1435,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.Property<int>("IncidentType")
                         .HasColumnName("IncidentType")
                         .HasColumnType("int");
-
-                    b.Property<string>("LoggedById")
-                        .IsRequired()
-                        .HasColumnName("LoggedById")
-                        .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
-
-                    b.Property<DateTimeOffset>("LoggedDate")
-                        .HasColumnName("LoggedDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("ReportingStaffId")
                         .HasColumnName("ReportingStaffId")

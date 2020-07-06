@@ -41,6 +41,7 @@ using AwesomeCare.Admin.Services;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using AwesomeCare.Admin.Services.IncidentReport;
 
 namespace AwesomeCare.Admin
 {
@@ -130,15 +131,15 @@ namespace AwesomeCare.Admin
             //       };
             //   })
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(apipolicyname, policy =>
-                {
-                    policy.AddAuthenticationSchemes("OpenIdConnect");
-                    policy.RequireAuthenticatedUser();
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy(apipolicyname, policy =>
+            //    {
+            //        policy.AddAuthenticationSchemes("OpenIdConnect");
+            //        policy.RequireAuthenticatedUser();
 
-                });
-            });
+            //    });
+            //});
             services.AddAuthentication("OpenIdConnect")
                 .AddCookie("Identity.Application", options =>
                 {
@@ -365,7 +366,7 @@ namespace AwesomeCare.Admin
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization(apipolicyname);
+                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization();
             });
         }
 
@@ -507,7 +508,12 @@ namespace AwesomeCare.Admin
             }).AddTypedClient(r => RestService.For<ICommunicationService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
-
+            services.AddHttpClient("incidentreportService", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IIncidentReportService>(r))
+           .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+            
         }
     }
 }

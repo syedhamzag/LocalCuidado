@@ -1,0 +1,1 @@
+dotnet ef migrations script -p "C:\Users\akinnagbeeo\source\repos\VictorSolomonSolution\AwesomeCare.DataAccess\AwesomeCare.DataAccess.csproj" -o "C:\Users\akinnagbeeo\source\repos\VictorSolomonSolution\MigrationsScript\script.txt" -i

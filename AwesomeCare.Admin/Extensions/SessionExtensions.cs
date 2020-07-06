@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
-namespace AwesomeCare.Admin.Extensions
+namespace  AwesomeCare.Admin.Extensions
 {
     public static class SessionExtensions
     {

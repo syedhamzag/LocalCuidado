@@ -1,0 +1,82 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs;
+@model GetStaffIncidentReport
+
+@{
+    ViewData["Title"] = "Staff-Incident-Report-Details";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Incident Reporting</h2>
+            </div>
+            <div class="body">
+              
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label>Reporting Staff <span><small>(optional)</small></span></label>
+                            <input type="text" asp-for="ReportingStaff" class="form-control" readonly>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label>Staff Involved </label>
+                            <input type="text" asp-for="StaffInvolved" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="IncidentType"></label>
+                            <input type="text" asp-for="IncidentType" class="form-control" readonly>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label >Client <span class="text-danger">*</span></label>
+                            <input type="text" asp-for="Client" class="form-control" readonly>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="ActionTaken"></label>
+                            <input type="text" asp-for="ActionTaken" class="form-control" readonly>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Witness"></label>
+                            <input type="text" asp-for="Witness" class="form-control" readonly>
+                           
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="IncidentDetails"></label>
+                            <textarea type="text" asp-for="IncidentDetails" class="form-control" readonly></textarea>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Attachment"></label>
+                            <br />
+                            <a asp-action="DownloadFile" asp-route-file="@Model.Attachment">Download</a>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-8 col-xs-12 col-md-8 col-lg-8">
+                            <a asp-controller="IncidentReporting" class="btn btn-primary pull-right" asp-action="Reports">Cancel</a>                           
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

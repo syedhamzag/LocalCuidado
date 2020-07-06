@@ -94,11 +94,11 @@ namespace AwesomeCare.Admin
             });
 
             //get authenticated Principal to update the Cookie
-            var currentAuthenticateResult = await _context.HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var currentAuthenticateResult = await _context.HttpContext.AuthenticateAsync("Identity.Application");
             //store the updated tokens
             currentAuthenticateResult.Properties.StoreTokens(updateTokens);
             //sign in
-            await _context.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+            await _context.HttpContext.SignInAsync("Identity.Application",
                 currentAuthenticateResult.Principal,
                 currentAuthenticateResult.Properties);
 
