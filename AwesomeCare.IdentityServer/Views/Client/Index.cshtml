@@ -5,9 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Clients</h2>
-@if (User.IsAuthenticated())
+
+@if (User.IsAuthenticated() && User.IsInRole("SuperAdmin"))
 {
+    <h2>
+        Clients
+    </h2>
     <a asp-action="Registration" class="btn btn-primary pull-right" asp-controller="Client">Add Client</a>
 
     <br />
