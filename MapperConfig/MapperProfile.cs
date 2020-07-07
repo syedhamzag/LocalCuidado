@@ -711,6 +711,22 @@ namespace MapperConfig
                 .ForMember(dto => dto.LoggedById, mem => mem.Ignore())
                 .ForMember(dto => dto.LoggedDate, mem => mem.MapFrom(src => DateTimeOffset.Now));
             #endregion
+
+            #region ClientServiceDetail
+            CreateMap<PostClientServiceDetail, ClientServiceDetail>()
+                .ForMember(dto => dto.ClientServiceDetailId, mem => mem.Ignore())
+                .ForMember(dto => dto.ServiceDate, mem => mem.MapFrom(src => DateTimeOffset.Now));
+
+            CreateMap<PostClientServiceDetailItem, ClientServiceDetailItem>()
+                .ForMember(dto => dto.ClientServiceDetailItemId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientServiceDetail, mem => mem.Ignore());
+
+            CreateMap<PostClientServiceDetailReceipt, ClientServiceDetailReceipt>()
+                .ForMember(dto => dto.ClientServiceDetailReceiptId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientServiceDetail, mem => mem.Ignore());
+            #endregion
+
+
         }
     }
 }

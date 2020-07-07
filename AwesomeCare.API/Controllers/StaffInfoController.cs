@@ -30,6 +30,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffRotaDynamicAddition> _staffDynamicAdditionRepository;
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
         private IGenericRepository<Client> _clientRepository;
+        private readonly IGenericRepository<ApplicationUser> applicationUserRepository;
         private IGenericRepository<StaffRating> _staffRatingRepository;
         private ILogger<StaffInfoController> _logger;
         private AwesomeCareDbContext _dbContext;
@@ -39,7 +40,9 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<StaffRota> staffRotaRepository, ILogger<StaffInfoController> logger,
             AwesomeCareDbContext dbContext, IGenericRepository<StaffRotaPartner> staffRotaPartnerRepository,
             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
-            IGenericRepository<StaffRating> staffRatingRepository, IGenericRepository<Client> clientRepository)
+            IGenericRepository<StaffRating> staffRatingRepository, 
+            IGenericRepository<Client> clientRepository,
+            IGenericRepository<ApplicationUser> applicationUserRepository)
         {
             _staffInfoRepository = staffInfoRepository;
             _logger = logger;
@@ -51,6 +54,7 @@ namespace AwesomeCare.API.Controllers
             _clientRotaTypeRepository = clientRotaTypeRepository;
             _staffRatingRepository = staffRatingRepository;
             _clientRepository = clientRepository;
+            this.applicationUserRepository = applicationUserRepository;
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
@@ -284,6 +288,125 @@ namespace AwesomeCare.API.Controllers
             return Ok(staffProfile);
         }
 
+        [HttpGet("MyProfile")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> MyProfile()
+        {
+            
+            var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
+            var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
+
+            var identityUserId = this.User.SubClaim();
+
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.ApplicationUserId == identityUserId
+                                select new GetStaffProfile
+                                {
+                                    AboutMe = st.AboutMe,
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    Address = st.Address,
+                                    CanDrive = st.CanDrive,
+                                    CoverLetter = st.CoverLetter,
+                                    CV = st.CV,
+                                    DateOfBirth = st.DateOfBirth,
+                                    DBS = st.DBS,
+                                    DBSAttachment = st.DBSAttachment,
+                                    DBSExpiryDate = st.DBSExpiryDate,
+                                    DBSUpdateNo = st.DBSUpdateNo,
+                                    DrivingLicense = st.DrivingLicense,
+                                    DrivingLicenseExpiryDate = st.DrivingLicenseExpiryDate,
+                                    EmploymentDate = st.EmploymentDate,
+                                    HasIdCard = st.HasIdCard.Value ? "Yes" : "No",
+                                    HasUniform = st.HasUniform.Value ? "Yes" : "No",
+                                    IsTeamLeader = st.IsTeamLeader.Value ? "Yes" : "No",
+                                    Education = (from edu in st.Education
+                                                 select new GetStaffEducation
+                                                 {
+                                                     Address = edu.Address,
+                                                     Certificate = edu.Certificate,
+                                                     CertificateAttachment = edu.CertificateAttachment,
+                                                     EndDate = edu.EndDate,
+                                                     Institution = edu.Institution,
+                                                     Location = edu.Location,
+                                                     StaffEducationId = edu.StaffEducationId,
+                                                     StaffPersonalInfoId = edu.StaffPersonalInfoId,
+                                                     StartDate = edu.StartDate
+                                                 }).ToList(),
+                                    Email = st.Email,
+                                    StartDate = st.StartDate,
+                                    EndDate = st.EndDate,
+                                    FirstName = st.FirstName,
+                                    Gender = st.Gender,
+                                    Hobbies = st.Hobbies,
+                                    IdNumber = st.IdNumber,
+                                    Keyworker = st.Keyworker,
+                                    LastName = st.LastName,
+                                    MiddleName = st.MiddleName,
+                                    NI = st.NI,
+                                    NIAttachment = st.NIAttachment,
+                                    NIExpiryDate = st.NIExpiryDate,
+                                    Passcode = st.Passcode,
+                                    PostCode = st.PostCode,
+                                    ProfilePix = st.ProfilePix,
+                                    Rate = st.Rate,
+                                    PlaceOfBirth = st.PlaceOfBirth,
+                                    JobCategory = st.JobCategory,
+                                    References = (from rf in st.References
+                                                  select new GetStaffReferee
+                                                  {
+                                                      Address = rf.Address,
+                                                      Attachment = rf.Attachment,
+                                                      CompanyName = rf.CompanyName,
+                                                      Email = rf.Email,
+                                                      PhoneNumber = rf.PhoneNumber,
+                                                      PositionofReferee = rf.PositionofReferee,
+                                                      Referee = rf.Referee,
+                                                      StaffPersonalInfoId = rf.StaffPersonalInfoId,
+                                                      StaffRefereeId = rf.StaffRefereeId
+                                                  }).ToList(),
+                                    RegistrationId = st.RegistrationId,
+                                    RightToWork = st.RightToWork,
+                                    RightToWorkAttachment = st.RightToWorkAttachment,
+                                    RightToWorkExpiryDate = st.RightToWorkExpiryDate,
+                                    Self_PYE = st.Self_PYE,
+                                    Self_PYEAttachment = st.Self_PYEAttachment,
+                                    Status = st.Status,
+                                    TeamLeader = st.TeamLeader,
+                                    Telephone = st.Telephone,
+                                    Trainings = (from t in st.Trainings
+                                                 select new GetStaffTraining
+                                                 {
+                                                     StaffPersonalInfoId = t.StaffPersonalInfoId,
+                                                     Certificate = t.Certificate,
+                                                     CertificateAttachment = t.CertificateAttachment,
+                                                     ExpiredDate = t.ExpiredDate,
+                                                     Location = t.Location,
+                                                     StaffTrainingId = t.StaffTrainingId,
+                                                     StartDate = t.StartDate,
+                                                     Trainer = t.Trainer,
+                                                     Training = t.Training
+                                                 }).ToList(),
+                                    WorkTeam = st.WorkTeam,
+                                    RegulatoryContacts = (from rc in st.RegulatoryContact
+                                                          join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
+                                                          join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId
+                                                          select new GetStaffRegulatoryContact
+                                                          {
+                                                              BaseRecordItemId = bitem.BaseRecordItemId,
+                                                              DatePerformed = rc.DatePerformed,
+                                                              DueDate = rc.DueDate,
+                                                              Evidence = rc.Evidence,
+                                                              RegulatoryContact = bitem.ValueName,
+                                                              StaffPersonalInfoId = rc.StaffPersonalInfoId,
+                                                              StaffRegulatoryContactId = rc.StaffRegulatoryContactId,
+                                                              AddLink = bitem.AddLink,
+                                                              HasGoogleForm = bitem.HasGoogleForm,
+                                                              ViewLink = bitem.ViewLink
+                                                          }).ToList()
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
         /// <summary>
         /// Get staffs with few properties
         /// </summary>

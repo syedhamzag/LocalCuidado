@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200707000948_tbl_ClientServiceDetailReceipt")]
+    partial class tbl_ClientServiceDetailReceipt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -840,43 +842,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasKey("ClientServiceDetailId");
 
                     b.ToTable("tbl_ClientServiceDetail");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetailItem", b =>
-                {
-                    b.Property<int>("ClientServiceDetailItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientServiceDetailItemId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnName("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ClientServiceDetailId")
-                        .HasColumnName("ClientServiceDetailId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ItemName")
-                        .IsRequired()
-                        .HasColumnName("ItemName")
-                        .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
-
-                    b.Property<int>("Quantity")
-                        .HasColumnName("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Rate")
-                        .HasColumnName("Rate")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("ClientServiceDetailItemId");
-
-                    b.HasIndex("ClientServiceDetailId");
-
-                    b.ToTable("tbl_ClientServiceDetailItem");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetailReceipt", b =>
@@ -2765,15 +2730,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.RotaTask", "RotaTask")
                         .WithMany("ClientRotaTask")
                         .HasForeignKey("RotaTaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetailItem", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.ClientServiceDetail", "ClientServiceDetail")
-                        .WithMany("ClientServiceDetailItems")
-                        .HasForeignKey("ClientServiceDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

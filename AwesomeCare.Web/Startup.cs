@@ -280,7 +280,7 @@ namespace AwesomeCare.Web
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=ShiftBooking}/{action=Shifts}/{id?}").RequireAuthorization(apipolicyname);
+                endpoints.MapControllerRoute("default", "{controller=Staff}/{action=Profile}/{id?}").RequireAuthorization(apipolicyname);
             });
             app.UseBaseRecordMiddleware();
         }

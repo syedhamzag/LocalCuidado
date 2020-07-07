@@ -206,9 +206,9 @@ namespace AwesomeCare.Web.Controllers
             return path;
         }
 
-        public async Task<IActionResult> Profile(int id)
+        public async Task<IActionResult> Profile()
         {
-            var profile = await _staffService.Profile(id);
+            var profile = await _staffService.MyProfile();
             return View(profile);
         }
 
