@@ -4,19 +4,27 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AwesomeCare.Web.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace AwesomeCare.Web.Controllers
 {
     public class BaseController : Controller
     {
+       
         public const string cacheKey = "baserecord_key";
+        private readonly ILogger<BaseController> baseLogger;
 
         public BaseController()
         {
-           
+
+        }
+        public BaseController(ILogger<BaseController> logger)
+        {
+            this.baseLogger = logger;
         }
 
         public void SetOperationStatus(OperationStatus operationStatus)
@@ -39,6 +47,12 @@ namespace AwesomeCare.Web.Controllers
 
                 }
 
+            }
+            else
+            {
+                baseLogger.LogError("User not authenticated");
+                context.HttpContext.ChallengeAsync("Identity.Application");
+               
             }
             base.OnActionExecuting(context);
         }

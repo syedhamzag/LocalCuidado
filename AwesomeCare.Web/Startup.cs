@@ -4,9 +4,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Services.Services;
 using AwesomeCare.Web.AppSettings;
 using AwesomeCare.Web.Middlewares;
+using AwesomeCare.Web.Services;
 using AwesomeCare.Web.Services.Admin;
 using AwesomeCare.Web.Services.ClientRotaName;
 using AwesomeCare.Web.Services.Communication;
@@ -249,7 +251,13 @@ namespace AwesomeCare.Web
                 options.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             });
             services.AddMemoryCache();
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".Awesomecare.Web.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddControllersWithViews();
 
         }
@@ -319,6 +327,19 @@ namespace AwesomeCare.Web
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICommunicationService>(r))
            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientServiceDetail", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientServiceDetailService>(r))
+          .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientService", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientService>(r))
+         .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
         }
     }
 }

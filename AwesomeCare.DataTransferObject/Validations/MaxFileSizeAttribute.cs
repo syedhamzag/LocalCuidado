@@ -26,7 +26,7 @@ namespace AwesomeCare.DataTransferObject.Validations
             {
                 if (!(file.Length <= (Lenght * 1024 * 1024)))
                 {
-                    ErrorMessage = $"Invalid file length, max length is {Lenght}";
+                    ErrorMessage = $"Invalid file length, max length is {Lenght}MB";
                     return false;
                 }
             }

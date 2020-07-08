@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs
@@ -13,6 +14,7 @@ namespace AwesomeCare.DataTransferObject.DTOs
         }
         
         public int StaffPersonalInfoId { get; set; }
+        [Required(ErrorMessage ="please select a client")]
         public int ClientId { get; set; }
         public decimal AmountGiven { get; set; }
         public decimal AmountReturned { get; set; }

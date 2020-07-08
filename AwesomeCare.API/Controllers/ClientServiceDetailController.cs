@@ -124,5 +124,88 @@ namespace AwesomeCare.API.Controllers
                                         }).FirstOrDefaultAsync();
             return Ok(clientService);
         }
+
+
+        [HttpGet("UserClientService")]
+        [ProducesResponseType(typeof(List<GetClientServiceDetail>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UserClientService()
+        {
+            var identityUserId = this.User.SubClaim();
+            var clientServices = await (from clserv in clientServiceDetailRepository.Table
+                                        join client in clientRepository.Table on clserv.ClientId equals client.ClientId
+                                        join staff in staffPersonalInfoRepository.Table on clserv.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                        where staff.ApplicationUserId == identityUserId
+                                        select new GetClientServiceDetail
+                                        {
+                                            StaffPersonalInfoId = clserv.StaffPersonalInfoId,
+                                            AmountGiven = clserv.AmountGiven,
+                                            AmountReturned = clserv.AmountReturned,
+                                            Client = client.Firstname + " " + client.Middlename + " " + client.Surname,
+                                            ClientId = clserv.ClientId,
+                                            ClientServiceDetailId = clserv.ClientServiceDetailId,
+                                            ClientServiceDetailItems = (from item in clserv.ClientServiceDetailItems
+                                                                        select new GetClientServiceDetailItem
+                                                                        {
+                                                                            Amount = item.Amount,
+                                                                            ClientServiceDetailId = item.ClientServiceDetailId,
+                                                                            ClientServiceDetailItemId = item.ClientServiceDetailItemId,
+                                                                            ItemName = item.ItemName,
+                                                                            Quantity = item.Quantity,
+                                                                            Rate = item.Rate
+                                                                        }).ToList(),
+                                            ClientServiceDetailReceipts = (from receipt in clserv.ClientServiceDetailReceipts
+                                                                           select new GetClientServiceDetailReceipt
+                                                                           {
+                                                                               ClientServiceDetailId = receipt.ClientServiceDetailId,
+                                                                               Attachment = receipt.Attachment,
+                                                                               ClientServiceDetailReceiptId = receipt.ClientServiceDetailReceiptId
+                                                                           }).ToList(),
+                                            ServiceDate = clserv.ServiceDate,
+                                            Staff = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName
+                                        }).ToListAsync();
+            return Ok(clientServices);
+        }
+
+        [HttpGet("UserClientService/{id}")]
+        [ProducesResponseType(typeof(GetClientServiceDetail), StatusCodes.Status200OK)]
+        public async Task<IActionResult> UserClientService(int id)
+        {
+            var identityUserId = this.User.SubClaim();
+            var clientService = await (from clserv in clientServiceDetailRepository.Table
+                                       join client in clientRepository.Table on clserv.ClientId equals client.ClientId
+                                       join staff in staffPersonalInfoRepository.Table on clserv.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                       where clserv.ClientServiceDetailId == id && staff.ApplicationUserId == identityUserId
+                                       select new GetClientServiceDetail
+                                       {
+                                           StaffPersonalInfoId = clserv.StaffPersonalInfoId,
+                                           AmountGiven = clserv.AmountGiven,
+                                           AmountReturned = clserv.AmountReturned,
+                                           Client = client.Firstname + " " + client.Middlename + " " + client.Surname,
+                                           ClientId = clserv.ClientId,
+                                           ClientServiceDetailId = clserv.ClientServiceDetailId,
+                                           ClientServiceDetailItems = (from item in clserv.ClientServiceDetailItems
+                                                                       select new GetClientServiceDetailItem
+                                                                       {
+                                                                           Amount = item.Amount,
+                                                                           ClientServiceDetailId = item.ClientServiceDetailId,
+                                                                           ClientServiceDetailItemId = item.ClientServiceDetailItemId,
+                                                                           ItemName = item.ItemName,
+                                                                           Quantity = item.Quantity,
+                                                                           Rate = item.Rate
+                                                                       }).ToList(),
+                                           ClientServiceDetailReceipts = (from receipt in clserv.ClientServiceDetailReceipts
+                                                                          select new GetClientServiceDetailReceipt
+                                                                          {
+                                                                              ClientServiceDetailId = receipt.ClientServiceDetailId,
+                                                                              Attachment = receipt.Attachment,
+                                                                              ClientServiceDetailReceiptId = receipt.ClientServiceDetailReceiptId
+                                                                          }).ToList(),
+                                           ServiceDate = clserv.ServiceDate,
+                                           Staff = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName
+                                       }).FirstOrDefaultAsync();
+            return Ok(clientService);
+        }
+
+
     }
 }

@@ -76,7 +76,7 @@ namespace AwesomeCare.Admin.Controllers
             }
             if (model.UploadAttachment.Length > 0)
             {
-                var kk = model.UploadAttachment.FileName;
+             
                 var filename = model.Staffs.FirstOrDefault(s => s.Value == model.StaffInvolvedId.ToString())?.Text + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + model.UploadAttachment.FileName;
                 string filepath = await this._fileUpload.UploadFile("incidentreport", true, filename, model.UploadAttachment.OpenReadStream());
 

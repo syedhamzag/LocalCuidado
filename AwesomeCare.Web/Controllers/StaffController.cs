@@ -209,6 +209,12 @@ namespace AwesomeCare.Web.Controllers
         public async Task<IActionResult> Profile()
         {
             var profile = await _staffService.MyProfile();
+
+            if(profile == null)
+            {
+                return RedirectToAction("Registration");
+            }
+
             return View(profile);
         }
 

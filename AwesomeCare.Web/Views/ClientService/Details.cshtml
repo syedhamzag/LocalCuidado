@@ -1,0 +1,127 @@
+﻿
+@model GetClientServiceDetail
+@{
+    ViewData["Title"] = "Add Client Service";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Add Client Service</h2>
+
+            </div>
+            <div class="body">
+               
+
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label>Client</label>
+                        <input type="text" asp-for="Client" class="form-control" readonly>
+                    </div>
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="ServiceDate"></label>
+                        <input type="text" asp-for="ServiceDate" class="form-control" readonly>
+
+                    </div>
+                </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="AmountGiven"></label>
+                            <input type="text"  asp-for="AmountGiven" class="form-control" readonly>
+                           
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="AmountReturned">Amount Returned <span class="text-danger">*</span></label>
+                            <input type="text"  asp-for="AmountReturned" class="form-control" readonly>
+                           
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6 table-responsive">
+                            <h5>Items</h5>
+
+                            <table class="table tblItems">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Rate</th>
+                                        <th>Quantity</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.ClientServiceDetailItems)
+                                    {
+                                        <tr>
+                                            <td>@item.ItemName</td>
+                                            <td>@item.Rate</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Amount.ToString("##,###.##")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            @{
+                                                var total = Model.ClientServiceDetailItems.Sum(a => a.Amount);
+                                                @total.ToString("##,###.##")
+                                            }
+                                        </td>
+
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                            <h5>Receipts</h5>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var receipt in Model.ClientServiceDetailReceipts)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a asp-action="DownloadFile" asp-route-file="@receipt.Attachment">Download</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <a asp-controller="ClientService" class="btn btn-default pull-left" asp-action="Index">Cancel</a>
+                           
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+   
+    
+}

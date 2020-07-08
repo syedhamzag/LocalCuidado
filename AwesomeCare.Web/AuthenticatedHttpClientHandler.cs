@@ -39,6 +39,7 @@ namespace AwesomeCare.Web
 
         private async Task<string> GetAccessToken()
         {
+           
             var expiresAt = await _context.HttpContext.GetTokenAsync("expires_at");
             var expiresAtDateTimeOffset = DateTimeOffset.Parse(expiresAt, CultureInfo.InvariantCulture);
             if((expiresAtDateTimeOffset.AddSeconds(-60)).ToUniversalTime() > DateTime.UtcNow)
@@ -50,6 +51,13 @@ namespace AwesomeCare.Web
             //get the discovery document
             var discoveryResponse = await idpClient.GetDiscoveryDocumentAsync();
             var refreshToken = await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                await _context.HttpContext.ChallengeAsync("Identity.Application");
+                return "";
+            }
+
             var clientSettings = _configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
             var refreshResponse = await idpClient.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
