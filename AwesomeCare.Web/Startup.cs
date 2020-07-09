@@ -286,13 +286,15 @@ namespace AwesomeCare.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseBaseRecordMiddleware();
+
             app.UseCookiePolicy();
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=Staff}/{action=Profile}/{id?}").RequireAuthorization(apipolicyname);
+                endpoints.MapControllerRoute("default", "{controller=Staff}/{action=Profile}/{id?}").RequireAuthorization();
             });
-            app.UseBaseRecordMiddleware();
+           
         }
 
         void AddRefitServices(IServiceCollection services)

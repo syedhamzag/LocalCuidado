@@ -24,7 +24,7 @@ namespace AwesomeCare.Web
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthenticatedHttpClientHandler> logger;
-        private string accessToken = "";
+      
         public AuthenticatedHttpClientHandler(IHttpContextAccessor context, IHttpClientFactory httpClientFactory, IConfiguration configuration,
             ILogger<AuthenticatedHttpClientHandler> logger)
         {
@@ -36,7 +36,7 @@ namespace AwesomeCare.Web
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
 
-            await GetAccessToken();// await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+          var accessToken=  await GetAccessToken();// await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
             //if (string.IsNullOrEmpty(accessToken))
             //{
             //    return Task.FromResult(HttpResponseMessage);
@@ -45,78 +45,78 @@ namespace AwesomeCare.Web
             //        StatusCode = System.Net.HttpStatusCode.OK
             //    };
             //}
-            request.SetBearerToken(accessToken);            
+            request.SetBearerToken(accessToken);
             return await base.SendAsync(request, cancellationToken);
         }
 
-        private async Task GetAccessToken()
+        private async Task<string> GetAccessToken()
         {
-           
+
             var expiresAt = await _context.HttpContext.GetTokenAsync("expires_at");
-            var isExpiredAtValid = DateTimeOffset.TryParse(expiresAt, CultureInfo.InvariantCulture,DateTimeStyles.None, out DateTimeOffset expiresAtDateTimeOffset);
-            if(isExpiredAtValid && (expiresAtDateTimeOffset.AddSeconds(-60)).ToUniversalTime() > DateTime.UtcNow)
+            var isExpiredAtValid = DateTimeOffset.TryParse(expiresAt, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset expiresAtDateTimeOffset);
+            if (isExpiredAtValid && (expiresAtDateTimeOffset.AddSeconds(-60)).ToUniversalTime() > DateTime.UtcNow)
             {
-                accessToken =  await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-                return;
+                return await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+               
             }
 
             var idpClient = _httpClientFactory.CreateClient("IdpClient");
             //get the discovery document
             var discoveryResponse = await idpClient.GetDiscoveryDocumentAsync();
             var refreshToken = await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
-            logger.LogInformation(refreshToken);
-            if (string.IsNullOrEmpty(refreshToken))
+            logger.LogInformation($"AuthenticatedHttpClientHandler refresh_token {refreshToken}");
+            //if (string.IsNullOrEmpty(refreshToken))
+            //{
+            //    await _context.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/" });
+
+            //}
+            //else
+            //{
+            var clientSettings = _configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
+            var refreshResponse = await idpClient.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
-                await _context.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/" });
-             
-            }
-            else
+                Address = discoveryResponse.TokenEndpoint,
+                ClientId = clientSettings.ClientId,
+                ClientSecret = clientSettings.ClientSecret,
+                RefreshToken = refreshToken
+            });
+
+            //Store Tokens 
+            var updateTokens = new List<AuthenticationToken>();
+            updateTokens.Add(new AuthenticationToken
             {
-                var clientSettings = _configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
-                var refreshResponse = await idpClient.RequestRefreshTokenAsync(new RefreshTokenRequest
-                {
-                    Address = discoveryResponse.TokenEndpoint,
-                    ClientId = clientSettings.ClientId,
-                    ClientSecret = clientSettings.ClientSecret,
-                    RefreshToken = refreshToken
-                });
+                Name = OpenIdConnectParameterNames.IdToken,
+                Value = refreshResponse.IdentityToken
+            });
+            updateTokens.Add(new AuthenticationToken
+            {
+                Name = OpenIdConnectParameterNames.AccessToken,
+                Value = refreshResponse.AccessToken
+            });
+            updateTokens.Add(new AuthenticationToken
+            {
+                Name = OpenIdConnectParameterNames.RefreshToken,
+                Value = refreshResponse.RefreshToken
+            });
+            updateTokens.Add(new AuthenticationToken
+            {
+                Name = "expires_at",
+                Value = (DateTime.UtcNow + TimeSpan.FromSeconds(refreshResponse.ExpiresIn)).ToString("o", CultureInfo.InvariantCulture)
+            });
 
-                //Store Tokens 
-                var updateTokens = new List<AuthenticationToken>();
-                updateTokens.Add(new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.IdToken,
-                    Value = refreshResponse.IdentityToken
-                });
-                updateTokens.Add(new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.AccessToken,
-                    Value = refreshResponse.AccessToken
-                });
-                updateTokens.Add(new AuthenticationToken
-                {
-                    Name = OpenIdConnectParameterNames.RefreshToken,
-                    Value = refreshResponse.RefreshToken
-                });
-                updateTokens.Add(new AuthenticationToken
-                {
-                    Name = "expires_at",
-                    Value = (DateTime.UtcNow + TimeSpan.FromSeconds(refreshResponse.ExpiresIn)).ToString("o", CultureInfo.InvariantCulture)
-                });
+            //get authenticated Principal to update the Cookie
+            var currentAuthenticateResult = await _context.HttpContext.AuthenticateAsync("Identity.Application");
+            //store the updated tokens
+            currentAuthenticateResult.Properties.StoreTokens(updateTokens);
+            //sign in
+            await _context.HttpContext.SignInAsync("Identity.Application",
+                currentAuthenticateResult.Principal,
+                currentAuthenticateResult.Properties);
 
-                //get authenticated Principal to update the Cookie
-                var currentAuthenticateResult = await _context.HttpContext.AuthenticateAsync("Identity.Application");
-                //store the updated tokens
-                currentAuthenticateResult.Properties.StoreTokens(updateTokens);
-                //sign in
-                await _context.HttpContext.SignInAsync("Identity.Application",
-                    currentAuthenticateResult.Principal,
-                    currentAuthenticateResult.Properties);
+            return refreshResponse.AccessToken;
+            // }
 
-                accessToken =  refreshResponse.AccessToken;
-            }
 
-           
 
         }
     }

@@ -17,22 +17,19 @@ namespace AwesomeCare.Web.Controllers
     {
        
         public const string cacheKey = "baserecord_key";
-        private readonly ILogger<BaseController> baseLogger;
-
+       
         public BaseController()
         {
 
         }
-        public BaseController(ILogger<BaseController> logger)
-        {
-            this.baseLogger = logger;
-        }
+       
 
         public void SetOperationStatus(OperationStatus operationStatus)
         {
             TempData["OperationStatus"] = JsonConvert.SerializeObject(operationStatus);
         }
-        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {
@@ -48,14 +45,20 @@ namespace AwesomeCare.Web.Controllers
                 }
 
             }
-            else
-            {
-               
-                await context.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/" });
-
-            }
-             await base.OnActionExecutionAsync(context, next);
+            base.OnActionExecuting(context);
         }
+
+        //public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        //{
+            
+        //    //else
+        //    //{
+               
+        //    //    await context.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/" });
+
+        //    //}
+        //     await base.OnActionExecutionAsync(context, next);
+        //}
        
 
         
