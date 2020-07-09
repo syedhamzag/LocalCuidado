@@ -16,6 +16,7 @@ using AwesomeCare.Web.Services.ShiftBooking;
 using AwesomeCare.Web.Services.Staff;
 using IdentityModel;
 using IdentityModel.Client;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -73,7 +74,7 @@ namespace AwesomeCare.Web
             });
 
             //the AddAuthentication and AddCookie  must be same thing configured on the IdentityServer Project
-            services.AddAuthentication("OpenIdConnect")
+            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                .AddCookie("Identity.Application", options =>
                {
                    options.Events = new CookieAuthenticationEvents
@@ -125,7 +126,7 @@ namespace AwesomeCare.Web
                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                {
                    var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
-                   options.SignInScheme = "Identity.Application";// CookieAuthenticationDefaults.AuthenticationScheme;
+                   options.SignInScheme = "Identity.Application";// CookieAuthenticationDefaults.AuthenticationScheme; OpenIdConnectDefaults.AuthenticationScheme
                    options.Authority = Configuration["idp_url"].ToString();// "https://localhost:44392/";
                    options.ClientId = settings.ClientId;
                    options.ResponseType = "code";
@@ -242,6 +243,7 @@ namespace AwesomeCare.Web
             services.AddScoped<IFileUpload, FileUpload>();
             services.AddTransient<AuthenticatedHttpClientHandler>();
             services.AddScoped<HttpClient>();
+          
             services.AddLogging();
             AddRefitServices(services);
             services.AddHttpClient("IdpClient", options =>

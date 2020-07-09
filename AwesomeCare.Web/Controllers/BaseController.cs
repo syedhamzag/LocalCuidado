@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AwesomeCare.Web.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -31,8 +32,7 @@ namespace AwesomeCare.Web.Controllers
         {
             TempData["OperationStatus"] = JsonConvert.SerializeObject(operationStatus);
         }
-
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {
@@ -50,12 +50,13 @@ namespace AwesomeCare.Web.Controllers
             }
             else
             {
-                baseLogger.LogError("User not authenticated");
-                context.HttpContext.ChallengeAsync("Identity.Application");
                
+                await context.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/" });
+
             }
-            base.OnActionExecuting(context);
+             await base.OnActionExecutionAsync(context, next);
         }
+       
 
         
     }

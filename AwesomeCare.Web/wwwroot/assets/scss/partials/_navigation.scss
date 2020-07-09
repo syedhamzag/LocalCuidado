@@ -1,5 +1,3 @@
-/* Navigation */
-
 /* Top Nav Bar */
 .navbar-fixed-top{
 	@extend .padding-0;
@@ -33,7 +31,7 @@
 			margin-left: 0;
         }
 
-        @include max-screen($break-large) {
+        @include max-screen($break-medium - 1px) {
 			display: block;
         }
     }
@@ -43,7 +41,8 @@
         position: relative;
         
         @include max-screen($break-medium){
-            padding: 15px;
+			padding: 15px;
+			margin-right: 0;
         }
     
         img{
@@ -57,11 +56,11 @@
 		width: calc(100% - 250px);
 		
 		@include max-screen($break-1024){
-			width: calc(100% - 150px);
+			width: calc(100% - 180px);
 		}
 
 		@include max-screen($break-small){
-			width: calc(100% - 160px);
+			width: calc(100% - 180px);
 		}
 
         #navbar-search {
@@ -84,9 +83,11 @@
         }
 
         .navbar-nav{
-            @extend .inlineblock;
+			@extend .inlineblock;
+			font-size: 0;
             > li{
-                @extend .inlineblock;
+				@extend .inlineblock;
+				vertical-align: middle;
             }
         }
 	}
@@ -238,12 +239,9 @@
 		}
 
 		&.menu-icon {
-			color: $col-white;
-
 			> li > a {
 				@extend .p-t-5;
 				@extend .p-b-5;
-				color: $col-white;
 
                 span {
                     @extend .m-l-10;

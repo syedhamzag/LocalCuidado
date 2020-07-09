@@ -16,10 +16,6 @@ $orange-600: #fb8c00 !default;
     .page-loader-wrapper{
         background: $orange-500;
     }
-    
-    #left-sidebar .nav-tabs .nav-link.active{
-        color: $orange-500;
-    }
 
     &:before,
     &:after{
@@ -32,14 +28,19 @@ $orange-600: #fb8c00 !default;
             background: $orange-500;
         }
     }
-    
-    .sidebar-nav .metismenu>li.active>a{
-        border-left-color: $orange-500;
-    }
 
-    
-    .navbar-nav ul.menu-icon{
-        background: $orange-500;
+    .main_menu{
+        .navbar{
+            .navbar-nav{
+                .nav-item{
+                    &.active{
+                        > a{
+                            color: $orange-500;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     .fancy-checkbox {    
@@ -84,11 +85,7 @@ $orange-600: #fb8c00 !default;
             border-color: $orange-500;
         }        
     }
-
-    .sidebar-nav .metismenu>li i{
-        color: $orange-500;
-    }
-
+    
     .right_chat li a:hover{
         .media-object {
             border-color: $orange-500;

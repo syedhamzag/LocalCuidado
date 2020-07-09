@@ -57,16 +57,16 @@ function CustomJs() {
 	$('.main-menu').metisMenu();
 
 	// sidebar nav scrolling
-	// $('#left-sidebar .sidebar-scroll').slimScroll({
-	// 	height: 'calc(100vh - 65px)',
-	// 	wheelStep: 10,
-	// 	touchScrollStep: 50,
-	// 	color: '#efefef',
-	// 	size: '2px',
-	// 	borderRadius: '3px',
-	// 	alwaysVisible: false,
-	// 	position: 'right',
-	// });
+	$('#left-sidebar .sidebar-scroll').slimScroll({
+		height: 'calc(100vh - 65px)',
+		wheelStep: 10,
+		touchScrollStep: 50,
+		color: '#efefef',
+		size: '2px',
+		borderRadius: '3px',
+		alwaysVisible: false,
+		position: 'right',
+	});
 
 	// cwidget scroll
 	$('.cwidget-scroll').slimScroll({
@@ -83,28 +83,13 @@ function CustomJs() {
 	// toggle fullwidth layout
 	$('.btn-toggle-fullwidth').on('click', function() {
 		if(!$('body').hasClass('layout-fullwidth')) {
-			console.log('if');
 			$('body').addClass('layout-fullwidth');
-			$('#left-sidebar').addClass('mini-sidebar');
-			$(this).find(".fa").toggleClass('fa-arrow-right fa-arrow-left');
+			$(this).find(".fa").toggleClass('fa-arrow-left fa-arrow-right');
 
 		} else {
-			console.log('else');
 			$('body').removeClass('layout-fullwidth');
-			$('#left-sidebar').removeClass('mini-sidebar');
-			$(this).find(".fa").toggleClass('fa-arrow-right fa-arrow-left');
+			$(this).find(".fa").toggleClass('fa-arrow-left fa-arrow-right');
 		}
-	});
-
-    // Mini sidebar hover js
-	$( "#left-sidebar" ).mouseleave(function() {
-		$("#left-sidebar #menu").addClass('active show').siblings().removeClass("active show");
-		$("#left-sidebar .nav-tabs .nav-item .nav-link").removeClass("active show");
-		$("#left-sidebar .nav-tabs .nav-item:first .nav-link").addClass("active show");
-    });
-    
-	$("#left-sidebar").hover(function () {
-		$(this).toggleClass("mini-sidebar-hover");
 	});
 
 	// off-canvas menu toggle
@@ -163,6 +148,10 @@ function CustomJs() {
 		} else {
 			$('.navbar-brand logo-icon.svg').attr('src', '../assets/images/logo.svg');
 		}
+	});
+	
+	$(".rightbar_btn").on('click',function() {
+        $("#rightbar").toggleClass("open");
     });
     
     // Select all checkbox
@@ -204,13 +193,3 @@ $.fn.clickToggle = function( f1, f2 ) {
 	});
 };
 
-// Wraptheme Website live chat widget js please remove on your project
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/5c6d4867f324050cfe342c69/default';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
