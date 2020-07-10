@@ -4,9 +4,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Services.Services;
 using AwesomeCare.Web.AppSettings;
 using AwesomeCare.Web.Middlewares;
+using AwesomeCare.Web.Services;
 using AwesomeCare.Web.Services.Admin;
 using AwesomeCare.Web.Services.ClientRotaName;
 using AwesomeCare.Web.Services.Communication;
@@ -14,6 +16,7 @@ using AwesomeCare.Web.Services.ShiftBooking;
 using AwesomeCare.Web.Services.Staff;
 using IdentityModel;
 using IdentityModel.Client;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -71,7 +74,7 @@ namespace AwesomeCare.Web
             });
 
             //the AddAuthentication and AddCookie  must be same thing configured on the IdentityServer Project
-            services.AddAuthentication("OpenIdConnect")
+            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                .AddCookie("Identity.Application", options =>
                {
                    options.Events = new CookieAuthenticationEvents
@@ -123,7 +126,7 @@ namespace AwesomeCare.Web
                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                {
                    var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
-                   options.SignInScheme = "Identity.Application";// CookieAuthenticationDefaults.AuthenticationScheme;
+                   options.SignInScheme = "Identity.Application";// CookieAuthenticationDefaults.AuthenticationScheme; OpenIdConnectDefaults.AuthenticationScheme
                    options.Authority = Configuration["idp_url"].ToString();// "https://localhost:44392/";
                    options.ClientId = settings.ClientId;
                    options.ResponseType = "code";
@@ -240,6 +243,7 @@ namespace AwesomeCare.Web
             services.AddScoped<IFileUpload, FileUpload>();
             services.AddTransient<AuthenticatedHttpClientHandler>();
             services.AddScoped<HttpClient>();
+          
             services.AddLogging();
             AddRefitServices(services);
             services.AddHttpClient("IdpClient", options =>
@@ -249,7 +253,13 @@ namespace AwesomeCare.Web
                 options.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             });
             services.AddMemoryCache();
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".Awesomecare.Web.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddControllersWithViews();
 
         }
@@ -276,13 +286,15 @@ namespace AwesomeCare.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseBaseRecordMiddleware();
+
             app.UseCookiePolicy();
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=ShiftBooking}/{action=Shifts}/{id?}").RequireAuthorization(apipolicyname);
+                endpoints.MapControllerRoute("default", "{controller=Staff}/{action=Profile}/{id?}").RequireAuthorization();
             });
-            app.UseBaseRecordMiddleware();
+           
         }
 
         void AddRefitServices(IServiceCollection services)
@@ -319,6 +331,19 @@ namespace AwesomeCare.Web
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICommunicationService>(r))
            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientServiceDetail", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientServiceDetailService>(r))
+          .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientService", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientService>(r))
+         .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
         }
     }
 }

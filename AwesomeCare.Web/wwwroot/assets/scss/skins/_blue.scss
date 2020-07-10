@@ -16,10 +16,6 @@ $blue-600: #0d97ff !default;
         background: $blue-500;
     }
     
-    #left-sidebar .nav-tabs .nav-link.active{
-        color: $blue-500;
-    }
-
     &:before,
     &:after{
         background: $blue-500;
@@ -31,13 +27,19 @@ $blue-600: #0d97ff !default;
             background: $blue-500;
         }
     }
-    
-    .sidebar-nav .metismenu>li.active>a{
-        border-left-color: $blue-500;
-    }
 
-    .navbar-nav ul.menu-icon{
-        background: $blue-500;
+    .main_menu{
+        .navbar{
+            .navbar-nav{
+                .nav-item{
+                    &.active{
+                        > a{
+                            color: $blue-500;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     .fancy-checkbox {    
@@ -81,10 +83,6 @@ $blue-600: #0d97ff !default;
             background: $blue-500;
             border-color: $blue-500;
         }        
-    }
-
-    .sidebar-nav .metismenu>li i{
-        color: $blue-500;
     }
 
     .right_chat li a:hover{

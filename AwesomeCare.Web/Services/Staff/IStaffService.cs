@@ -16,6 +16,9 @@ namespace AwesomeCare.Web.Services.Staff
         [Get("/StaffInfo/Profile/{id}")]
         Task<GetStaffProfile> Profile(int id);
 
+        [Get("/StaffInfo/MyProfile")]
+        Task<GetStaffProfile> MyProfile();
+        
         [Get("/StaffInfo/GetByApplicationUserId/{userId}")]
         Task<GetStaffProfile> GetByApplicationUserId(string userId);
 

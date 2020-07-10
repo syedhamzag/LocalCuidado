@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace AwesomeCare.Web
@@ -22,40 +23,61 @@ namespace AwesomeCare.Web
         private readonly IHttpContextAccessor _context;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-
-        public AuthenticatedHttpClientHandler(IHttpContextAccessor context, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        private readonly ILogger<AuthenticatedHttpClientHandler> logger;
+      
+        public AuthenticatedHttpClientHandler(IHttpContextAccessor context, IHttpClientFactory httpClientFactory, IConfiguration configuration,
+            ILogger<AuthenticatedHttpClientHandler> logger)
         {
             _context = context;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            this.logger = logger;
         }
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
 
-            var accessToken = await GetAccessToken();// await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-            request.SetBearerToken(accessToken);            
+          var accessToken=  await GetAccessToken();// await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            //if (string.IsNullOrEmpty(accessToken))
+            //{
+            //    return Task.FromResult(HttpResponseMessage);
+            //    return new HttpResponseMessage
+            //    {
+            //        StatusCode = System.Net.HttpStatusCode.OK
+            //    };
+            //}
+            request.SetBearerToken(accessToken);
             return await base.SendAsync(request, cancellationToken);
         }
 
         private async Task<string> GetAccessToken()
         {
+
             var expiresAt = await _context.HttpContext.GetTokenAsync("expires_at");
-            var expiresAtDateTimeOffset = DateTimeOffset.Parse(expiresAt, CultureInfo.InvariantCulture);
-            if((expiresAtDateTimeOffset.AddSeconds(-60)).ToUniversalTime() > DateTime.UtcNow)
+            var isExpiredAtValid = DateTimeOffset.TryParse(expiresAt, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset expiresAtDateTimeOffset);
+            if (isExpiredAtValid && (expiresAtDateTimeOffset.AddSeconds(-60)).ToUniversalTime() > DateTime.UtcNow)
             {
                 return await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+               
             }
 
             var idpClient = _httpClientFactory.CreateClient("IdpClient");
             //get the discovery document
             var discoveryResponse = await idpClient.GetDiscoveryDocumentAsync();
             var refreshToken = await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
+            logger.LogInformation($"AuthenticatedHttpClientHandler refresh_token {refreshToken}");
+            //if (string.IsNullOrEmpty(refreshToken))
+            //{
+            //    await _context.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/" });
+
+            //}
+            //else
+            //{
             var clientSettings = _configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
             var refreshResponse = await idpClient.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
-                ClientId =clientSettings.ClientId,
-                ClientSecret =clientSettings.ClientSecret,
+                ClientId = clientSettings.ClientId,
+                ClientSecret = clientSettings.ClientSecret,
                 RefreshToken = refreshToken
             });
 
@@ -79,7 +101,7 @@ namespace AwesomeCare.Web
             updateTokens.Add(new AuthenticationToken
             {
                 Name = "expires_at",
-                Value =(DateTime.UtcNow + TimeSpan.FromSeconds(refreshResponse.ExpiresIn)).ToString("o",CultureInfo.InvariantCulture)
+                Value = (DateTime.UtcNow + TimeSpan.FromSeconds(refreshResponse.ExpiresIn)).ToString("o", CultureInfo.InvariantCulture)
             });
 
             //get authenticated Principal to update the Cookie
@@ -92,6 +114,9 @@ namespace AwesomeCare.Web
                 currentAuthenticateResult.Properties);
 
             return refreshResponse.AccessToken;
+            // }
+
+
 
         }
     }

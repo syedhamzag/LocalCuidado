@@ -16,10 +16,6 @@ $blush-600: #e25985 !default;
         background: $blush-500;
     }
     
-    #left-sidebar .nav-tabs .nav-link.active{
-        color: $blush-500;
-    }
-
     &:before,
     &:after{
         background: $blush-500;
@@ -31,14 +27,19 @@ $blush-600: #e25985 !default;
             background: $blush-500;
         }
     }
-    
-    .sidebar-nav .metismenu>li.active>a{
-        border-left-color: $blush-500;
-    }
 
-    
-    .navbar-nav ul.menu-icon{
-        background: $blush-500;
+    .main_menu{
+        .navbar{
+            .navbar-nav{
+                .nav-item{
+                    &.active{
+                        > a{
+                            color: $blush-500;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     .fancy-checkbox {    
@@ -82,10 +83,6 @@ $blush-600: #e25985 !default;
             background: $blush-500;
             border-color: $blush-500;
         }        
-    }
-
-    .sidebar-nav .metismenu>li i{
-        color: $blush-500;
     }
 
     .right_chat li a:hover{

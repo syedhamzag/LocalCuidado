@@ -1,7 +1,5 @@
 /* Layout */
-
 #wrapper{
-
 	&:before,
     &:after{
         height: 100vh;
@@ -27,16 +25,10 @@
 }
 
 #main-content {
-	@include transition(all .3s ease-in-out);	
-	width: calc(100% - #{$sidebar-width});
-	float: right;
+	@include transition(all .3s ease-in-out);
 	position: relative;
-	margin-top: 65px;
+	margin-top: 85px;
 	padding:0 10px;
-	@include max-screen($break-large) {
-		width: 100%;
-		padding:0;
-	}
 }
 
 html.fullscreen-bg, 

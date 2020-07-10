@@ -11,13 +11,13 @@
 @import "base/variables";
 @import "base/general";
 
-@import "metisMenu/metisMenu";
+@import "partials/navigation";
+@import "partials/topmenu";
+@import "partials/rightbar";
 
 @import "partials/badges";
 @import "partials/layout";
 @import "partials/card";
-@import "partials/navigation";
-@import "partials/leftbar";
 @import "partials/forms";
 @import "partials/authentication";
 @import "partials/buttons";

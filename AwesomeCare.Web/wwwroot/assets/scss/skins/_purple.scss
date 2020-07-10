@@ -16,10 +16,6 @@ $purple-600: #a27ce6 !default;
     .page-loader-wrapper{
         background: $purple-500;
     }
-    
-    #left-sidebar .nav-tabs .nav-link.active{
-        color: $purple-500;
-    }
 
     &:before,
     &:after{
@@ -32,14 +28,19 @@ $purple-600: #a27ce6 !default;
             background: $purple-500;
         }
     }
-    
-    .sidebar-nav .metismenu>li.active>a{
-        border-left-color: $purple-500;
-    }
 
-    
-    .navbar-nav ul.menu-icon{
-        background: $purple-500;
+    .main_menu{
+        .navbar{
+            .navbar-nav{
+                .nav-item{
+                    &.active{
+                        > a{
+                            color: $purple-500;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     .fancy-checkbox {    
@@ -83,10 +84,6 @@ $purple-600: #a27ce6 !default;
             background: $purple-500;
             border-color: $purple-500;
         }        
-    }
-
-    .sidebar-nav .metismenu>li i{
-        color: $purple-500;
     }
 
     .right_chat li a:hover{

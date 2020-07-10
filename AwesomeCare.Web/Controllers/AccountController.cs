@@ -23,7 +23,7 @@ namespace AwesomeCare.Web.Controllers
             this.context = context;
             this.logger = logger;
         }
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> SignOut()
         {
             var idpClient = httpClientFactory.CreateClient("IdpClient");
             //get the discovery document
