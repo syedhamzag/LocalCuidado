@@ -19,6 +19,8 @@ using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.Communication;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.DataTransferObject.DTOs.CompanyContact;
+using AwesomeCare.DataTransferObject.DTOs.Investigation;
+using AwesomeCare.DataTransferObject.DTOs.InvestigationAttachment;
 using AwesomeCare.DataTransferObject.DTOs.Medication;
 using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
@@ -726,6 +728,14 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientServiceDetail, mem => mem.Ignore());
             #endregion
 
+            #region Investigation
+            CreateMap<PostInvestigation, Investigation>()
+                .ForMember(dto => dto.InvestigationId, mem => mem.Ignore());
+
+            CreateMap<PostInvestigationAttachment, InvestigationAttachment>()
+                .ForMember(dto => dto.InvestigationAttachmentId, mem => mem.Ignore())
+                .ForMember(dto => dto.Investigation, mem => mem.Ignore());
+            #endregion
 
         }
     }
