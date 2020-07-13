@@ -32,6 +32,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Refit;
+using AwesomeCare.Web.Services.IncidentReport;
 
 namespace AwesomeCare.Web
 {
@@ -53,7 +54,7 @@ namespace AwesomeCare.Web
             {
                 logger.AddConsole();
                 logger.AddDebug();
-             //   logger.AddAzureWebAppDiagnostics();
+                //   logger.AddAzureWebAppDiagnostics();
             });
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -137,7 +138,7 @@ namespace AwesomeCare.Web
                    }
                    options.SaveTokens = true;
                    options.ClientSecret = settings.ClientSecret;
-                 
+
                    options.GetClaimsFromUserInfoEndpoint = true;
                    //Remove Unnecessary claims
                    options.ClaimActions.DeleteClaim("s_hash");
@@ -147,6 +148,7 @@ namespace AwesomeCare.Web
 
                    //Mapp Additional Claims as Configured in IProfileService in Identity Server Project
                    options.ClaimActions.MapUniqueJsonKey("hasStaffInfo", "hasStaffInfo");
+                   options.ClaimActions.MapUniqueJsonKey("staffPersonalInfoId", "staffPersonalInfoId");
                    options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
                    options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Email, JwtClaimTypes.Email);
                    options.TokenValidationParameters = new TokenValidationParameters
@@ -208,7 +210,7 @@ namespace AwesomeCare.Web
                        OnSignedOutCallbackRedirect = ctx =>
                        {
                            var tt = ctx;
-                           
+
                            return Task.CompletedTask;
                        },
                        OnTicketReceived = ctx =>
@@ -236,14 +238,14 @@ namespace AwesomeCare.Web
                            return Task.CompletedTask;
                        }
                    };
-                  
+
                });
             AutoMapperConfiguration.Configure();
             services.AddHttpContextAccessor();
             services.AddScoped<IFileUpload, FileUpload>();
             services.AddTransient<AuthenticatedHttpClientHandler>();
             services.AddScoped<HttpClient>();
-          
+
             services.AddLogging();
             AddRefitServices(services);
             services.AddHttpClient("IdpClient", options =>
@@ -294,7 +296,7 @@ namespace AwesomeCare.Web
             {
                 endpoints.MapControllerRoute("default", "{controller=Staff}/{action=Profile}/{id?}").RequireAuthorization();
             });
-           
+
         }
 
         void AddRefitServices(IServiceCollection services)
@@ -344,6 +346,11 @@ namespace AwesomeCare.Web
             }).AddTypedClient(r => RestService.For<IClientService>(r))
          .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
+            services.AddHttpClient("incidentreportingService", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IIncidentReportService>(r))
+         .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
 }

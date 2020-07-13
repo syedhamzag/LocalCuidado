@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200710224859_tbl_Investigation")]
+    partial class tbl_Investigation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1056,7 +1058,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.Property<string>("Remark")
                         .IsRequired()
                         .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)")
+                        .HasMaxLength(500);
 
                     b.Property<int>("StaffPersonalInfoId")
                         .HasColumnName("StaffPersonalInfoId")
@@ -1065,30 +1068,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasKey("InvestigationId");
 
                     b.ToTable("tbl_Investigation");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.InvestigationAttachment", b =>
-                {
-                    b.Property<int>("InvestigationAttachmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("InvestigationAttachmentId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Attachment")
-                        .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("InvestigationId")
-                        .HasColumnName("InvestigationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("InvestigationAttachmentId");
-
-                    b.HasIndex("InvestigationId");
-
-                    b.ToTable("tbl_InvestigationAttachment");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Medication", b =>
@@ -2854,15 +2833,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.CompanyModel", "Company")
                         .WithOne("CompanyContact")
                         .HasForeignKey("AwesomeCare.Model.Models.CompanyContactModel", "CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.InvestigationAttachment", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Investigation", "Investigation")
-                        .WithMany("InvestigationAttachments")
-                        .HasForeignKey("InvestigationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

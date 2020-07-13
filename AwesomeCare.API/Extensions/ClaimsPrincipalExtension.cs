@@ -16,7 +16,17 @@ namespace Microsoft.AspNetCore.Mvc
             var sub = claimsPrincipal.FindFirst("sub")?.Value;
             return sub;
         }
-
+        /// <summary>
+        /// StaffPersonal Info Id
+        /// </summary>
+        /// <param name="claimsPrincipal"></param>
+        /// <returns></returns>
+        public static string StaffPersonalInfoId(this System.Security.Claims.ClaimsPrincipal claimsPrincipal)
+        {
+            var sub = claimsPrincipal.FindFirst("staffPersonalInfoId")?.Value;
+            return sub;
+        }
+        
         public static string Email(this System.Security.Claims.ClaimsPrincipal claimsPrincipal)
         {
             var claim = claimsPrincipal.FindFirst("email")?.Value;

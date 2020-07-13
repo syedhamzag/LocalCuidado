@@ -123,5 +123,82 @@ namespace AwesomeCare.API.Controllers
 
             return Ok(incidentReport);
         }
+
+
+        [HttpGet]
+        [Route("Staff/IncidentReport/BySignedInUser")]
+        [ProducesResponseType(typeof(List<GetStaffIncidentReport>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetIncidentReportsByLoggedInUser()
+        {
+            var staffPersonalInfoId = int.TryParse(this.User.StaffPersonalInfoId(), out int id) ? id : 0;
+
+            var incidentReport = await (from incident in staffIncidentReportingRepository.Table
+                                        join client in clientRepository.Table on incident.ClientId equals client.ClientId
+                                        join baseRecord in baseRecordItemRepository.Table on incident.IncidentType equals baseRecord.BaseRecordItemId
+                                        join staffInv in staffPersonalInfoRepository.Table on incident.StaffInvolvedId equals staffInv.StaffPersonalInfoId
+                                        join user in applicationUserRepository.Table on incident.LoggedById equals user.Id
+                                        join reportingStaff in staffPersonalInfoRepository.Table on incident.ReportingStaffId equals reportingStaff.StaffPersonalInfoId into rpS
+                                        from st in rpS.DefaultIfEmpty()
+                                        where incident.ReportingStaffId == staffPersonalInfoId || incident.StaffInvolvedId == staffPersonalInfoId
+                                        select new GetStaffIncidentReport
+                                        {
+                                            ActionTaken = incident.ActionTaken,
+                                            Attachment = incident.Attachment,
+                                            Client = client.Firstname + " " + client.Middlename + " " + client.Surname,
+                                            ClientId = incident.ClientId,
+                                            IncidentDetails = incident.IncidentDetails,
+                                            IncidentTypeId = incident.IncidentType,
+                                            IncidentType = baseRecord.ValueName,
+                                            LoggedBy = "",
+                                            LoggedById = incident.LoggedById,
+                                            LoggedDate = incident.LoggedDate,
+                                            ReportingStaff = st == null ? "" : st.FirstName + " " + st.MiddleName + " " + st.LastName,
+                                            ReportingStaffId = incident.ReportingStaffId,
+                                            StaffIncidentReportingId = incident.StaffIncidentReportingId,
+                                            StaffInvolved = staffInv.FirstName + " " + staffInv.MiddleName + " " + staffInv.LastName,
+                                            StaffInvolvedId = incident.StaffInvolvedId,
+                                            Witness = incident.Witness
+                                        }).ToListAsync();
+
+            return Ok(incidentReport);
+        }
+
+        [HttpGet]
+        [Route("Staff/IncidentReport/BySignedInUser/{id}")]
+        [ProducesResponseType(typeof(GetStaffIncidentReport), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetIncidentReportsByLoggedInUser(int id)
+        {
+            var staffPersonalInfoId = int.TryParse(this.User.StaffPersonalInfoId(), out int staffid) ? staffid : 0;
+
+            var incidentReport = await (from incident in staffIncidentReportingRepository.Table
+                                        join client in clientRepository.Table on incident.ClientId equals client.ClientId
+                                        join baseRecord in baseRecordItemRepository.Table on incident.IncidentType equals baseRecord.BaseRecordItemId
+                                        join staffInv in staffPersonalInfoRepository.Table on incident.StaffInvolvedId equals staffInv.StaffPersonalInfoId
+                                        join user in applicationUserRepository.Table on incident.LoggedById equals user.Id
+                                        join reportingStaff in staffPersonalInfoRepository.Table on incident.ReportingStaffId equals reportingStaff.StaffPersonalInfoId into rpS
+                                        from st in rpS.DefaultIfEmpty()
+                                        where incident.StaffIncidentReportingId == id && incident.ReportingStaffId == staffPersonalInfoId || incident.StaffInvolvedId == staffPersonalInfoId
+                                        select new GetStaffIncidentReport
+                                        {
+                                            ActionTaken = incident.ActionTaken,
+                                            Attachment = incident.Attachment,
+                                            Client = client.Firstname + " " + client.Middlename + " " + client.Surname,
+                                            ClientId = incident.ClientId,
+                                            IncidentDetails = incident.IncidentDetails,
+                                            IncidentTypeId = incident.IncidentType,
+                                            IncidentType = baseRecord.ValueName,
+                                            LoggedBy = "",
+                                            LoggedById = incident.LoggedById,
+                                            LoggedDate = incident.LoggedDate,
+                                            ReportingStaff = st == null ? "" : st.FirstName + " " + st.MiddleName + " " + st.LastName,
+                                            ReportingStaffId = incident.ReportingStaffId,
+                                            StaffIncidentReportingId = incident.StaffIncidentReportingId,
+                                            StaffInvolved = staffInv.FirstName + " " + staffInv.MiddleName + " " + staffInv.LastName,
+                                            StaffInvolvedId = incident.StaffInvolvedId,
+                                            Witness = incident.Witness
+                                        }).FirstOrDefaultAsync();
+
+            return Ok(incidentReport);
+        }
     }
 }

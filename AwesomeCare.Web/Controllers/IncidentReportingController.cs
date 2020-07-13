@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.Admin.Services.Client;
-using AwesomeCare.Admin.Services.IncidentReport;
-using AwesomeCare.Admin.Services.Staff;
-using AwesomeCare.Admin.ViewModels.IncidentReport;
+using AwesomeCare.Web.Services.IncidentReport;
+using AwesomeCare.Web.Services.Staff;
+using AwesomeCare.Web.ViewModels.IncidentReport;
 using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using AwesomeCare.Admin.Extensions;
-using AwesomeCare.Admin.Models;
+using AwesomeCare.Web.Extensions;
+using AwesomeCare.Web.Models;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
-namespace AwesomeCare.Admin.Controllers
+namespace AwesomeCare.Web.Controllers
 {
     public class IncidentReportingController : BaseController
     {
@@ -24,17 +24,19 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IStaffService staffService;
         private readonly IClientService clientService;
         private readonly ILogger<IncidentReportingController> logger;
+        private readonly IFileUpload fileUpload;
 
         public IncidentReportingController(IFileUpload fileUpload,
             IIncidentReportService incidentReportService,
             IStaffService staffService,
             IClientService clientService,
-            ILogger<IncidentReportingController> logger) : base(fileUpload)
+            ILogger<IncidentReportingController> logger) 
         {
             this.incidentReportService = incidentReportService;
             this.staffService = staffService;
             this.clientService = clientService;
             this.logger = logger;
+            this.fileUpload = fileUpload;
         }
         [HttpGet]
         public async Task<IActionResult> Reports()
@@ -50,8 +52,10 @@ namespace AwesomeCare.Admin.Controllers
             var staffs = await staffService.GetStaffs();
             var clients = await clientService.GetClientDetail();
 
-         
-            model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+
+            var staffPersonalInfoId = this.User.StaffPersonalInfoId();
+
+            model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString(), s.StaffPersonalInfoId.ToString() == staffPersonalInfoId)).ToList();
             model.Clients = clients.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
 
             model.Staffs.Insert(0, new SelectListItem("", ""));
@@ -76,11 +80,14 @@ namespace AwesomeCare.Admin.Controllers
             {
                 return View(model);
             }
+
+            model.ReportingStaffId = int.Parse(this.User.StaffPersonalInfoId());
+
             if (model.UploadAttachment?.Length > 0)
             {
 
-                var filename = model.Staffs.FirstOrDefault(s => s.Value == model.StaffInvolvedId.ToString())?.Text + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + model.UploadAttachment.FileName;
-                string filepath = await this._fileUpload.UploadFile("incidentreport", true, filename, model.UploadAttachment.OpenReadStream());
+                var filename = model.Staffs.FirstOrDefault(s => s.Value == model.ReportingStaffId.ToString())?.Text + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + model.UploadAttachment.FileName;
+                string filepath = await this.fileUpload.UploadFile("incidentreport", true, filename, model.UploadAttachment.OpenReadStream());
 
                 model.Attachment = filepath;
             }
