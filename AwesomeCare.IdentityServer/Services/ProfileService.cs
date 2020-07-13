@@ -41,10 +41,11 @@ namespace AwesomeCare.IdentityServer.Services
             var staffPersonalInfo = staffPersonalInfoEntity.FirstOrDefault(u => u.ApplicationUserId == sub);
             bool hasStaffInfo = staffPersonalInfo != null;
             IList<string> roles = await _userManager.GetRolesAsync(user);
-            claims.Add(new Claim("hasStaffInfo", hasStaffInfo.ToString() ));
-            claims.Add(new Claim(JwtClaimTypes.Role, string.Join(',',roles)));
-            claims.Add(new Claim(JwtClaimTypes.Email,user?.Email));
-            
+            claims.Add(new Claim("hasStaffInfo", hasStaffInfo.ToString()));
+            claims.Add(new Claim("staffPersonalInfoId", hasStaffInfo ? staffPersonalInfo.StaffPersonalInfoId.ToString() : ""));
+            claims.Add(new Claim(JwtClaimTypes.Role, string.Join(',', roles)));
+            claims.Add(new Claim(JwtClaimTypes.Email, user?.Email));
+
             context.IssuedClaims = claims;
         }
 

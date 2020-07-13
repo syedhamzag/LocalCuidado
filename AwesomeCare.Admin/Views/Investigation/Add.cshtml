@@ -1,0 +1,96 @@
+﻿@using AwesomeCare.Admin.ViewModels.Investigation;
+@model PostInvestigationViewModel
+
+@{
+    ViewData["Title"] = "Add-Investigation";
+}
+
+@section VendorStyleSheets{
+
+    <link href="/assets/vendor/summernote/dist/summernote.css" rel="stylesheet" />
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Incident Reporting</h2>
+            </div>
+            <div class="body">
+                <form asp-route="Add" method="post" enctype="multipart/form-data">
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label>Staff <span class="text-danger">*</span></label>
+                            <select asp-for="StaffPersonalInfoId" class="form-control chosen-select" data-placeholder="Choose a Staff..." asp-items="@Model.Staffs"></select>
+                            <span asp-validation-for="StaffPersonalInfoId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="ClientId">Client <span class="text-danger">*</span></label>
+                            <select asp-for="ClientId" asp-items="@Model.Clients" class="form-control chosen-select" data-placeholder="Choose a Client..."></select>
+                            <span asp-validation-for="ClientId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="IncidentClass">Incident Class<span class="text-danger">*</span></label>
+                            <baserecord asp-key="investigation" asp-for="IncidentClass" asp-items="null" />
+                            <span asp-validation-for="IncidentClass" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="IncidentDate">Incident Date <span class="text-danger">*</span></label>
+                            <input type="text" asp-for="IncidentDate" class="form-control datepickerbeforeOrtoday" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy">
+                            <span asp-validation-for="IncidentDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="ConclusionDate"></label>
+                            <input type="text" asp-for="ConclusionDate" class="form-control datepickerbeforeOrtoday" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy">
+                            <span asp-validation-for="ConclusionDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Files">Attachment <span><small>(if any,file formats are .png, .jpg, .jpeg)</small></span></label>
+                            <input type="file" asp-for="Files" class="form-control" multiple>
+                            <span asp-validation-for="Files" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <label asp-for="Remark" class="control-label"></label>
+                            <textarea class="form-control summernote" asp-for="Remark"></textarea>
+                            <span asp-validation-for="Remark" class="text-danger"></span>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <a asp-controller="Investigation" class="btn btn-default pull-left" asp-action="Index">Cancel</a>
+                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section VendorScripts{
+
+    <script src="/assets/vendor/summernote/dist/summernote.js"></script>
+}

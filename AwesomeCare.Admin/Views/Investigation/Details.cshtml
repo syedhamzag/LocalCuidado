@@ -1,0 +1,89 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Investigation;
+@model GetInvestigation
+
+@{
+    ViewData["Title"] = "Investigation-Details";
+}
+
+@section VendorStyleSheets{
+
+    <link href="/assets/vendor/summernote/dist/summernote.css" rel="stylesheet" />
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Incident Reporting</h2>
+            </div>
+            <div class="body">
+
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label>Staff</label>
+                        <input type="text" asp-for="Staff" class="form-control" readonly>
+                    </div>
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="Client"></label>
+                        <input type="text" asp-for="Client" class="form-control" readonly>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="IncidentClass"></label>
+                        <input type="text" asp-for="IncidentClass" class="form-control" readonly>
+                    </div>
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="IncidentDate"></label>
+                        <input type="text" asp-for="IncidentDate" class="form-control" readonly>
+                       
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="ConclusionDate"></label>
+                        <input type="text" asp-for="ConclusionDate" class="form-control" readonly>
+                        
+                    </div>
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="InvestigationAttachments"></label>
+                       
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                        <label asp-for="Remark" class="control-label"></label>
+                        <textarea class="form-control summernote" asp-for="Remark" readonly></textarea>
+                        
+                    </div>
+
+
+                </div>
+
+
+
+
+
+                <div class="row">
+                    <div class="form-group col-sm-8 col-xs-12 col-md-8 col-lg-8">
+                        <a asp-controller="Investigation" class="btn btn-default pull-left" asp-action="Index">Cancel</a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section VendorScripts{
+
+    <script src="/assets/vendor/summernote/dist/summernote.js"></script>
+}

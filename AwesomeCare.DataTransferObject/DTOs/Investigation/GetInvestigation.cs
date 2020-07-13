@@ -1,6 +1,7 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.InvestigationAttachment;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Investigation
@@ -19,13 +20,16 @@ namespace AwesomeCare.DataTransferObject.DTOs.Investigation
         public string Client { get; set; }
         /// <summary>
         /// From BaseRecord Item
-        /// </summary>
+        /// </summary>       
         public int IncidentClassId { get; set; }
+        [Display(Name = "Incident Class")]
         public string IncidentClass { get; set; }
         public string Remark { get; set; }
+        [Display(Name = "Incident Date")]
         public DateTimeOffset IncidentDate { get; set; }
+        [Display(Name = "Conclusion Date")]
         public DateTimeOffset? ConclusionDate { get; set; }
-
+        [Display(Name = "Attachments")]
         public List<GetInvestigationAttachment> InvestigationAttachments { get; set; }
     }
 }

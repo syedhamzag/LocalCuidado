@@ -32,7 +32,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remark)
                .HasColumnName("Remark")
-               .HasMaxLength(500)
                .IsRequired();
 
             builder.Property(p => p.IncidentDate)

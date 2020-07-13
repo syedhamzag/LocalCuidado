@@ -16,5 +16,6 @@ namespace System.Security.Claims
             var sub = claimsPrincipal.FindFirst("sub")?.Value;
             return sub;
         }
+
     }
 }

@@ -42,6 +42,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using AwesomeCare.Admin.Services.IncidentReport;
+using AwesomeCare.Admin.Services.Investigation;
 
 namespace AwesomeCare.Admin
 {
@@ -273,13 +274,7 @@ namespace AwesomeCare.Admin
                        OnSignedOutCallbackRedirect = ctx =>
                         {
                             var tt = ctx;
-                            //logger.LogInformation($"OnSignedOutCallbackRedirect {ctx.Options.SignedOutRedirectUri}");
-                            //// ctx.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                           // ctx.HttpContext.SignOutAsync("Identity.Application");
-                          //  ctx.HttpContext.SignOutAsync("OpenIdConnect");
-                            ////  ctx.Options.SignedOutRedirectUri;
-                            //ctx.Response.Redirect(ctx.Options.SignedOutRedirectUri);
-                            //ctx.HandleResponse();
+                           
                             return Task.CompletedTask;
                         },
                        OnTicketReceived = ctx =>
@@ -513,6 +508,12 @@ namespace AwesomeCare.Admin
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IIncidentReportService>(r))
            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("investigationService", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IInvestigationService>(r))
+          .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
             
         }
     }
