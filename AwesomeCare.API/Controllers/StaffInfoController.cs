@@ -407,6 +407,34 @@ namespace AwesomeCare.API.Controllers
 
             return Ok(staffProfile);
         }
+
+        [HttpGet("MyProfile/GetPersonalInfo")]
+        [ProducesResponseType(type: typeof(GetStaffPersonalInfo), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPersonalInfo()
+        {
+                        
+            var identityUserId = this.User.SubClaim();
+
+            var entity = await _staffInfoRepository.Table.FirstOrDefaultAsync(s => s.ApplicationUserId == identityUserId); ;
+            var staffProfile = Mapper.Map<GetStaffPersonalInfo>(entity);
+            return Ok(staffProfile);
+
+        }
+        [HttpPut("MyProfile/Edit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdatePersonalInfo([FromBody]PutStaffPersonalInfo model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+
+            var profile = Mapper.Map<StaffPersonalInfo>(model);
+
+            await _staffInfoRepository.UpdateEntity(profile);
+            return Ok();
+        }
+
         /// <summary>
         /// Get staffs with few properties
         /// </summary>

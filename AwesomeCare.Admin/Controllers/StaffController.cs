@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -36,6 +37,16 @@ namespace AwesomeCare.Admin.Controllers
         private IClientRotaNameService _clientRotaNameService;
         private IRotaDayofWeekService _rotaDayofWeekService;
         private IClientService _clientService;
+
+        const string profilePixFolder = "staffprofilepix";
+        const string drivingFolder = "drivinglicense";
+        const string rightToFolder = "righttowork";
+        const string dbsFolder = "dbsfolder";
+        const string niFolder = "nifolder";
+        const string selfpyeFolder = "selfpye";
+        const string coverLetterFolder = "coverletter";
+        const string cvFolder = "cvfolder";
+
 
         public StaffController(IStaffService staffService, IClientService clientService, IRotaDayofWeekService rotaDayofWeekService, IClientRotaNameService clientRotaNameService, ILogger<StaffController> logger, IFileUpload fileUpload, IStaffCommunication staffCommunication, IClientRotaTypeService clientRotaTypeService) : base(fileUpload)
         {
@@ -274,6 +285,96 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
+        [HttpGet("Profile/Edit",Name = "EditProfile")]
+        public async Task<IActionResult> EditProfile(int staffId)
+        {
+            var staffInfo = await _staffService.GetStaff(staffId);
+            var putProfile = Mapper.Map<UpdateStaffPersonalInfo>(staffInfo);
+            return View(putProfile);
+        }
+
+        [HttpPost("Profile/Edit", Name = "EditProfile")]
+        public async Task<IActionResult> EditProfile(UpdateStaffPersonalInfo model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.ProfilePixFile != null && model.ProfilePixFile.Length > 0)
+            {
+                var profilePix = await UploadFile(profilePixFolder, string.Concat(profilePixFolder, "_", model.Telephone), true, model.ProfilePixFile.OpenReadStream());
+                model.ProfilePix = profilePix;
+            }
+
+            if (model.DrivingLicenseFile != null && model.DrivingLicenseFile.Length > 0)
+            {
+                var drivingLicense = await UploadFile(drivingFolder, string.Concat(drivingFolder, "_", model.Telephone), false, model.DrivingLicenseFile.OpenReadStream());
+                model.DrivingLicense = drivingLicense;
+            }
+
+
+            if (model.RightToWorkFile != null && model.RightToWorkFile.Length > 0)
+            {
+                var righttowork = await UploadFile(rightToFolder, string.Concat(rightToFolder, "_", model.Telephone), false, model.RightToWorkFile.OpenReadStream());
+                model.RightToWorkAttachment = righttowork;
+            }
+
+            if (model.DbsFile != null && model.DbsFile.Length > 0)
+            {
+
+                var dbs = await UploadFile(dbsFolder, string.Concat(dbsFolder, "_", model.Telephone), false, model.DbsFile.OpenReadStream());
+                model.DBSAttachment = dbs;
+            }
+
+            if (model.NiFile != null && model.NiFile.Length > 0)
+            {
+                var ni = await UploadFile(niFolder, string.Concat(niFolder, "_", model.Telephone), false, model.NiFile.OpenReadStream());
+                model.NIAttachment = ni;
+            }
+
+            if (model.SelfPyeFile != null && model.SelfPyeFile.Length > 0)
+            {
+                var selfpye = await UploadFile(selfpyeFolder, string.Concat(selfpyeFolder, "_", model.Telephone), false, model.SelfPyeFile.OpenReadStream());
+                model.SelfPYEAttachment = selfpye;
+            }
+
+            if (model.CoverLetterFile != null && model.CoverLetterFile.Length > 0)
+            {
+                var coverletter = await UploadFile(coverLetterFolder, string.Concat(coverLetterFolder, "_", model.Telephone), true, model.CoverLetterFile.OpenReadStream());
+                model.CoverLetter = coverletter;
+            }
+
+            if (model.CvFile != null && model.CvFile.Length > 0)
+            {
+                var cv = await UploadFile(cvFolder, string.Concat(cvFolder, "_", model.Telephone), true, model.CvFile.OpenReadStream());
+                model.CV = cv;
+            }
+
+
+            if (model.StaffWorkTeamId == 0)
+                model.StaffWorkTeamId = default(int?);
+
+            var profile = Mapper.Map<PutStaffPersonalInfo>(model);
+
+            var json = JsonConvert.SerializeObject(profile);
+            var result = await _staffService.UpdateStaffPersonalProfile(profile);
+            var content = await result.Content.ReadAsStringAsync();
+
+
+
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Operation successful" : "An Error Occurred" });
+            if (!result.IsSuccessStatusCode)
+            {
+                _logger.LogError(content);
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
         async Task SetPreviewRota(PreviewStaffRota model, List<DateTime> dates)
         {
             var rotaTypes = await _clientRotaTypeService.Get();
@@ -296,6 +397,12 @@ namespace AwesomeCare.Admin.Controllers
                 model.RotaDays.Add(rotaDate);
             }
 
+        }
+
+        async Task<string> UploadFile(string folder, string filename, bool isPublic, Stream fileStream)
+        {
+            string path = await _fileUpload.UploadFile(folder, isPublic, filename, fileStream);
+            return path;
         }
 
 

@@ -14,7 +14,7 @@
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                         <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="javascript:void(0);">Edit</a></li>
+                            <li><a asp-route="EditProfile">Edit</a></li>
                            
                         </ul>
                     </li>
@@ -256,6 +256,11 @@
 
                                         </div>
                                         <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="PlaceOfBirth" class="control-label"></label>
+                                                <input type="text" asp-for="PlaceOfBirth"  class="form-control" readonly>
+                                                
+                                            </div>
                                         </div>
                                     </div>
 
@@ -291,6 +296,11 @@
 
                                         </div>
                                         <div class="col-xs-4 col-sm-4 col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="JobCategory" class="control-label"></label>
+                                                <baserecord asp-key="Staff_JobCategory" asp-for="JobCategory" asp-items="null" />
+                                                <span asp-validation-for="JobCategory" class="text-danger"></span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -319,6 +329,53 @@
 
                                         </div>
                                         <div class="col-xs-4 col-sm-4 col-md-4">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-8 col-sm-8 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="Rate" class="control-label"></label>
+                                                        <input type="text" asp-for="Rate" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="TeamLeader" class="control-label"></label>
+
+                                                        <input type="text" asp-for="TeamLeader" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12 col-sm-4 col-md-4">
+                                                    <div class="form-group">
+                                                        <label asp-for="HasUniform" class="control-label"></label>
+                                                        
+                                                        <input type="text" asp-for="HasUniform" class="form-control" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-2 col-sm-2 col-md-2">
+
+                                            <div class="form-group">
+                                                <label asp-for="IsTeamLeader" class="control-label"></label>
+                                                
+                                                <input type="text" asp-for="IsTeamLeader" class="form-control" readonly>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-2 col-sm-2 col-md-2">
+
+                                            <div class="form-group">
+                                                <label asp-for="HasIdCard" class="control-label"></label>
+                                                
+                                                <input type="text" asp-for="HasIdCard" class="form-control" readonly>
+                                            </div>
+
                                         </div>
                                     </div>
 

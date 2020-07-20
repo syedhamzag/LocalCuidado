@@ -1,0 +1,521 @@
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+@model UpdateStaffPersonalInfo;
+
+@{
+    ViewData["Title"] = "Edit Staff Profile";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Edit Profile</h2>
+
+            </div>
+            <div class="body">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card">
+
+                        <div class="body">
+                            <ul class="nav nav-tabs-new2">
+                                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalinfo">Personal Info</a></li>
+                                @*<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#education">Education</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainings">Training</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#referee">Referee</a></li>*@
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="personalinfo">
+                                    <h6>Personal Info.</h6>
+                                    <form id="basic-form" enctype="multipart/form-data" asp-controller="Staff" method="post">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" asp-for="StaffPersonalInfoId" />
+                                        <input type="hidden" asp-for="ApplicationUserId" />
+                                        <input type="hidden" asp-for="StartDate" />
+                                        <input type="hidden" asp-for="EndDate" />
+                                        <input type="hidden" asp-for="Keyworker" />
+                                        <input type="hidden" asp-for="Status" />
+                                        <input type="hidden" asp-for="RegistrationId" />
+                                        <input type="hidden" asp-for="StaffWorkTeamId" />
+
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="FirstName" class="control-label"></label>
+                                                            <input type="text" class="form-control" asp-for="FirstName">
+                                                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="MiddleName" class="control-label"></label>
+                                                            <input type="text" class="form-control" asp-for="MiddleName">
+                                                            <span asp-validation-for="MiddleName" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="LastName" class="control-label"></label>
+                                                            <input type="text" class="form-control" asp-for="LastName">
+                                                            <span asp-validation-for="LastName" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="Gender" class="control-label"></label>
+                                                            <baserecord asp-key="Gender" asp-for="Gender" asp-items="null" />
+                                                            <span asp-validation-for="Gender" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="DateOfBirth" class="control-label"></label>
+                                                            <input data-provide="datepicker" asp-for="DateOfBirth" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="Email" class="control-label"></label>
+                                                            <input type="email" class="form-control" asp-for="Email" readonly>
+                                                            <span asp-validation-for="Email" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div class="row">
+
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="IdNumber" class="control-label"></label>
+                                                            <input type="text" class="form-control" asp-for="IdNumber">
+                                                            <span asp-validation-for="IdNumber" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="PostCode" class="control-label"></label>
+                                                            <input type="text" asp-for="PostCode" class="form-control">
+                                                            <span asp-validation-for="PostCode" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="Telephone" class="control-label"></label>
+                                                            <input type="text" asp-for="Telephone" class="form-control">
+                                                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="CanDrive" class="control-label"></label>
+
+                                                            <br />
+                                                            <label class="fancy-radio custom-color-green"><input name="candrive" asp-for="CanDrive" value="No" type="radio" checked><span><i></i>No</span></label>
+                                                            <label class="fancy-radio custom-color-green"><input name="candrive" asp-for="CanDrive" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                                            <span asp-validation-for="CanDrive" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="DrivingLicense" class="control-label"></label>
+
+                                                            <input type="file" asp-for="DrivingLicenseFile" class="form-control">
+                                                            <input type="hidden" asp-for="DrivingLicense" class="form-control">
+
+                                                            <span asp-validation-for="DrivingLicenseFile" class="text-danger"></span>
+                                                            <span asp-validation-for="DrivingLicense" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="DrivingLicenseExpiryDate" class="control-label"></label>
+                                                            <input data-provide="datepicker" asp-for="DrivingLicenseExpiryDate" data-date-autoclose="true" type="text" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <span asp-validation-for="DrivingLicenseExpiryDate" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>Profile Pix<small></small></h2>
+                                                    </div>
+                                                    <div class="body">
+                                                        <input type="file" asp-for="ProfilePixFile" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                                        <input type="hidden" asp-for="ProfilePix">
+                                                        <span asp-validation-for="ProfilePix" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="RightToWork" class="control-label"></label>
+                                                            <br />
+                                                            <label class="fancy-radio custom-color-green"><input name="RightToWork" asp-for="RightToWork" value="No" type="radio" checked><span><i></i>No</span></label>
+                                                            <label class="fancy-radio custom-color-green"><input name="RightToWork" asp-for="RightToWork" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                                            <span asp-validation-for="RightToWork" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="RightToWorkAttachment" class="control-label"></label>
+
+                                                            <input type="file" asp-for="RightToWorkAttachment" class="form-control">
+
+                                                            <span asp-validation-for="RightToWorkFile" class="text-danger"></span>
+                                                            <span asp-validation-for="RightToWorkAttachment" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="RightToWorkExpiryDate" class="control-label"></label>
+                                                            <input data-provide="datepicker" type="text" asp-for="RightToWorkExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <span asp-validation-for="RightToWorkExpiryDate" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-3 col-md-3">
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="DBS" class="control-label"></label>
+                                                            <br />
+                                                            <label class="fancy-radio custom-color-green"><input name="dbs" asp-for="DBS" value="No" type="radio" checked><span><i></i>No</span></label>
+                                                            <label class="fancy-radio custom-color-green"><input name="dbs" asp-for="DBS" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                                            <span asp-validation-for="DBS" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="DBSAttachment" class="control-label"></label>
+
+                                                            <input type="file" asp-for="DbsFile" class="form-control">
+                                                            <input type="hidden" asp-for="DBSAttachment" class="form-control">
+
+                                                            <span asp-validation-for="DbsFile" class="text-danger"></span>
+                                                            <span asp-validation-for="DBSAttachment" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="DBSExpiryDate" class="control-label"></label>
+                                                            <input data-provide="datepicker" type="text" asp-for="DBSExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <span asp-validation-for="DBSExpiryDate" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="DBSUpdateNo" class="control-label"></label>
+                                                    <input type="text" asp-for="DBSUpdateNo" class="form-control">
+                                                    <span asp-validation-for="DBSUpdateNo" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="NI" class="control-label"></label>
+                                                            <br />
+                                                            <label class="fancy-radio custom-color-green"><input name="ni" asp-for="NI" value="No" type="radio" checked><span><i></i>No</span></label>
+                                                            <label class="fancy-radio custom-color-green"><input name="ni" asp-for="NI" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                                            <span asp-validation-for="NI" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="NIAttachment" class="control-label"></label>
+
+                                                            <input type="file" asp-for="NiFile" class="form-control">
+                                                            <input type="hidden" asp-for="NIAttachment" class="form-control">
+
+                                                            <span asp-validation-for="NiFile" class="text-danger"></span>
+                                                            <span asp-validation-for="NIAttachment" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="NIExpiryDate" class="control-label"></label>
+                                                            <input data-provide="datepicker" type="text" asp-for="NIExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <span asp-validation-for="NIExpiryDate" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="PlaceOfBirth" class="control-label"></label>
+                                                    <input type="text" asp-for="PlaceOfBirth" data-date-autoclose="true" class="form-control">
+                                                    <span asp-validation-for="PlaceOfBirth" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="SelfPYE" class="control-label"></label>
+                                                            <br />
+                                                            <label class="fancy-radio custom-color-green"><input name="selfpye" asp-for="SelfPYE" value="No" type="radio" checked><span><i></i>No</span></label>
+                                                            <label class="fancy-radio custom-color-green"><input name="selfpye" asp-for="SelfPYE" value="Yes" type="radio"><span><i></i>Yes</span></label>
+
+                                                            <span asp-validation-for="SelfPYE" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="SelfPYEAttachment" class="control-label"></label>
+
+                                                            <input type="file" asp-for="SelfPyeFile" class="form-control">
+                                                            <input type="hidden" asp-for="SelfPYEAttachment" class="form-control">
+
+                                                            <span asp-validation-for="SelfPyeFile" class="text-danger"></span>
+                                                            <span asp-validation-for="SelfPYEAttachment" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="WorkTeam" class="control-label"></label>
+                                                            <input type="text" asp-for="WorkTeam" class="form-control">
+                                                            <span asp-validation-for="WorkTeam" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="JobCategory" class="control-label"></label>
+                                                    <baserecord asp-key="Staff_JobCategory" asp-for="JobCategory" asp-items="null" />
+                                                    <span asp-validation-for="JobCategory" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="CV" class="control-label"></label>
+
+                                                            <input type="file" asp-for="CvFile" class="form-control">
+                                                            <input type="hidden" asp-for="CV" class="form-control">
+
+                                                            <span asp-validation-for="CvFile" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="CoverLetter" class="control-label"></label>
+
+                                                            <input type="file" asp-for="CoverLetterFile" class="form-control">
+                                                            <input type="hidden" asp-for="CoverLetter" class="form-control">
+
+                                                            <span asp-validation-for="CoverLetterFile" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="Passcode" class="control-label"></label>
+                                                            <input type="text" max="4" asp-for="Passcode" class="form-control">
+                                                            <span asp-validation-for="Passcode" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-xs-4 col-sm-4 col-md-4">
+
+                                                <div class="form-group">
+                                                    <label asp-for="EmploymentDate" class="control-label"></label>
+                                                    <input type="text" asp-for="EmploymentDate" class="form-control" readonly>
+                                                    <span asp-validation-for="EmploymentDate" class="text-danger"></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                                <div class="row">
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="Rate" class="control-label"></label>
+                                                            <input type="text" asp-for="Rate" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="TeamLeader" class="control-label"></label>
+
+                                                            <input type="text" asp-for="TeamLeader" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                                        <div class="form-group">
+                                                            <label asp-for="HasUniform" class="control-label"></label>
+                                                            <p>
+                                                                @{
+                                                                    string hasuniform = "No";
+                                                                    if (Model.HasUniform.HasValue)
+                                                                    {
+                                                                        hasuniform = Model.HasUniform.Value ? "Yes" : "No";
+                                                                    }
+                                                                   
+
+                                                                    @hasuniform
+                                                                }
+                                                            </p>
+                                                            <input type="hidden" asp-for="HasUniform" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-xs-2 col-sm-2 col-md-2">
+
+                                                <div class="form-group">
+                                                    <label asp-for="IsTeamLeader" class="control-label"></label>
+                                                    <p>
+                                                        @{
+                                                            string  isteamleader = "No";
+                                                            if (Model.IsTeamLeader.HasValue)
+                                                            {
+                                                                isteamleader = Model.IsTeamLeader.Value ? "Yes" : "No";
+                                                            }
+                                                            @isteamleader
+                                                        }
+                                                    </p>
+                                                    <input type="hidden" asp-for="IsTeamLeader" class="form-control">
+                                                </div>
+
+                                            </div>
+                                            <div class="col-xs-2 col-sm-2 col-md-2">
+
+                                                <div class="form-group">
+                                                    <label asp-for="HasIdCard" class="control-label"></label>
+                                                    <p>
+                                                        @{
+                                                            string  hasId = "No";
+                                                            if (Model.HasIdCard.HasValue)
+                                                            {
+                                                               hasId  = Model.HasIdCard.Value ? "Yes" : "No";
+                                                            }
+                                                            @hasId
+                                                        }
+                                                    </p>
+                                                    <input type="hidden" asp-for="HasIdCard" class="form-control">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="Address" class="control-label"></label>
+                                                    <textarea class="form-control" asp-for="Address"></textarea>
+                                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="AboutMe" class="control-label"></label>
+                                                    <textarea class="form-control" asp-for="AboutMe"></textarea>
+                                                    <span asp-validation-for="AboutMe" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="Hobbies" class="control-label"></label>
+                                                    <textarea class="form-control" asp-for="Hobbies"></textarea>
+                                                    <span asp-validation-for="Hobbies" class="text-danger"></span>
+                                                </div>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary pull-right">Update</button>
+                                            <a asp-action="Index" class="btn btn-default pull-left">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane" id="education">
+                                    <h6>Education</h6>
+                                    <div class="table-responsive table-bordered">
+                                        <h4>Education</h4>
+
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="trainings">
+                                    <h6>Trainings</h6>
+                                    <div class="table-responsive table-bordered">
+                                        <h4>Trainings</h4>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="referee">
+                                    <h6>Referees</h6>
+                                    <div class="table-responsive table-bordered">
+                                        <h4>References</h4>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -408,19 +408,13 @@ namespace MapperConfig
                .ForMember(dto => dto.EmergencyContacts, mem => mem.Ignore())
                .ForMember(dto => dto.ShiftBookings, mem => mem.Ignore())
                .ForMember(dto => dto.ApplicationUser, mem => mem.Ignore())
-               .ForMember(dto => dto.IsTeamLeader, mem => mem.Ignore())
-                .ForMember(dto => dto.HasUniform, mem => mem.Ignore())
-                .ForMember(dto => dto.HasIdCard, mem => mem.Ignore())
-                .ForMember(dto => dto.EmploymentDate, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
-                .ForMember(dto => dto.JobCategory, mem => mem.Ignore())
-                .ForMember(dto => dto.PlaceOfBirth, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.MapFrom(src => src.StaffPersonalInfoId))
                .ForMember(dto => dto.ApplicationUserId, mem => mem.MapFrom(src => src.ApplicationUserId))
                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.MapFrom(src => (int)src.Status))
                .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)src.Status))
-               .ForMember(dto => dto.RegistrationId, mem => mem.Ignore());
+               .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.Ignore());
 
             CreateMap<PostStaffFullInfo, StaffPersonalInfo>()
                 .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore())
