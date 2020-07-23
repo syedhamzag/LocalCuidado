@@ -375,7 +375,7 @@ namespace MapperConfig
 
             #region StaffPersonalInfo
             CreateMap<StaffPersonalInfo, GetStaffPersonalInfo>()
-                .ForMember(dto => dto.Status, mem => mem.MapFrom(src => Enum.GetName(typeof(StaffRegistrationEnum), src.Status)));
+                .ForMember(dto => dto.Status, mem => mem.MapFrom(src => src.Status));// mem.MapFrom(src => Enum.GetName(typeof(StaffRegistrationEnum), src.Status)));
 
             CreateMap<PostStaffPersonalInfo, StaffPersonalInfo>()
                 .ForMember(dto => dto.StaffWorkTeamId, mem => mem.Ignore())

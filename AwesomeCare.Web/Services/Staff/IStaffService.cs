@@ -19,7 +19,7 @@ namespace AwesomeCare.Web.Services.Staff
         [Get("/StaffInfo/MyProfile")]
         Task<GetStaffProfile> MyProfile();
 
-        [Get("/StaffInfo/MyProfile/GetPersonalInfo")]
+        [Get("/StaffInfo/MyProfile/PersonalInfo")]
         Task<GetStaffPersonalInfo> EditMyProfile();
 
         [Get("/StaffInfo/GetByApplicationUserId/{userId}")]

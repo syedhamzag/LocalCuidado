@@ -22,17 +22,16 @@ namespace AwesomeCare.Web.Controllers
         private readonly IClientService clientService;
         private readonly IStaffService staffService;
         private readonly IClientServiceDetailService clientServiceDetail;
-        private readonly IFileUpload fileUpload;
+       
         private readonly ILogger<ClientServiceController> logger;
 
         public ClientServiceController(IFileUpload fileUpload,
             IClientServiceDetailService clientServiceDetail,
             IClientService clientService,
             IStaffService staffService,
-            ILogger<ClientServiceController> logger) : base()
+            ILogger<ClientServiceController> logger) : base(fileUpload)
         {
-            this.clientServiceDetail = clientServiceDetail;
-            this.fileUpload = fileUpload;
+            this.clientServiceDetail = clientServiceDetail;           
             this.logger = logger;
             this.clientService = clientService;
             this.staffService = staffService;
@@ -75,7 +74,7 @@ namespace AwesomeCare.Web.Controllers
             {
                 var filename = currentStaff?.Fullname + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + file.FileName;
 
-                var filePath = await fileUpload.UploadFile("clientservice", true, filename, file.OpenReadStream());
+                var filePath = await _fileUpload.UploadFile("clientservice", true, filename, file.OpenReadStream());
                 model.ClientServiceDetailReceipts.Add(new PostClientServiceDetailReceipt
                 {
                     Attachment = filePath

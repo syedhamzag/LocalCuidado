@@ -45,6 +45,7 @@ namespace AwesomeCare.Web
                 .ForMember(dto => dto.NiFile, mem => mem.Ignore())
                 .ForMember(dto => dto.SelfPyeFile, mem => mem.Ignore())
                 .ForMember(dto => dto.CoverLetterFile, mem => mem.Ignore())
+                .ForMember(dto => dto.TabIndex, mem => mem.Ignore())
                 .ForMember(dto => dto.CvFile, mem => mem.Ignore());
         }
     }

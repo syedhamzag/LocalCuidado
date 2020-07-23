@@ -480,17 +480,76 @@
                                                 </div>
                                             </div>
 
-                                            <button type="submit" class="btn btn-primary pull-right">Update</button>
+
                                         </div>
+                                        <button type="submit" class="btn btn-primary pull-right">Update</button>
                                     </form>
                                 </div>
 
                                 <div class="tab-pane" id="education">
                                     <h6>Education</h6>
                                     <div class="table-responsive table-bordered">
-                                        <h4>Education</h4>
+                                        <form id="basic-form" enctype="multipart/form-data" asp-controller="Staff" asp-action="EditEducation" method="post">
+                                            <table class="table tblEducation">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name of Institution</th>
+                                                        <th>Certification</th>
+                                                        <th>Location</th>
+                                                        <th>Address</th>
+                                                        <th>StartDate</th>
+                                                        <th>EndDate</th>
+                                                        <th>Files</th>
+                                                        <th>Change Attachment</th>
+                                                    </tr>
+                                                </thead>
 
+                                                <tbody>
+                                                    @for (int i = 0; i < Model.Education.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].Institution" />
+                                                                <span asp-validation-for="@Model.Education[i].Institution" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].Certificate" />
+                                                                <span asp-validation-for="@Model.Education[i].Certificate" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].Location" />
+                                                                <span asp-validation-for="@Model.Education[i].Location" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].Address" />
+                                                                <span asp-validation-for="@Model.Education[i].Address" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].StartDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                                                <span asp-validation-for="@Model.Education[i].StartDate" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Education[i].EndDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                                                <span asp-validation-for="@Model.Education[i].EndDate" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <a asp-action="DownloadFile" asp-route-file="@Model.Education[i].CertificateAttachment"> Download</a>
+                                                            </td>
+                                                            <td>
+                                                                <input type="file" class="form-control" asp-for="@Model.Education[i].CertificateAttachment" />
+                                                                <span asp-validation-for="@Model.Education[i].CertificateAttachment" class="text-danger"></span>
+                                                            </td>
 
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                            <a class="col-sm-offset-1 col-sm-1 text-success addEducation" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+                                            <br />
+
+                                            <button type="submit" class="btn btn-primary pull-right">Update</button>
+                                        </form>
                                     </div>
                                 </div>
 

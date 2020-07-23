@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -7,6 +8,14 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
    public class GetStaffPersonalInfo
     {
+        public GetStaffPersonalInfo()
+        {
+            Education = new List<GetStaffEducation>();
+            Trainings = new List<GetStaffTraining>();
+            References = new List<GetStaffReferee>();
+            EmergencyContacts = new List<GetStaffEmergencyContact>();
+            RegulatoryContact = new List<GetStaffRegulatoryContact>();
+        }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         public string RegistrationId { get; set; }
@@ -62,7 +71,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public string Self_PYE { get; set; }
         [Display(Name = "Selft PYE Attachment")]
         public string Self_PYEAttachment { get; set; }
-        public string Status { get; set; }
+        public StaffRegistrationEnum Status { get; set; }
         public int? JobCategory { get; set; }
 
         public int StaffWorkTeamId { get; set; }
@@ -74,6 +83,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public bool? HasIdCard { get; set; }
        
         public DateTime? EmploymentDate { get; set; }
-       
+
+        public List<GetStaffEducation> Education { get; set; }
+        public virtual List<GetStaffTraining> Trainings { get; set; }
+        public virtual List<GetStaffReferee> References { get; set; }
+        public virtual List<GetStaffRegulatoryContact> RegulatoryContact { get; set; }
+        public virtual List<GetStaffEmergencyContact> EmergencyContacts { get; set; }
     }
 }

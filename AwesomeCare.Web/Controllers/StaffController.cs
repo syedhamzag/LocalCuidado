@@ -24,7 +24,7 @@ namespace AwesomeCare.Web.Controllers
     {
         private IStaffService _staffService;
         private ILogger<StaffController> _logger;
-        private IFileUpload _fileUpload;
+        
         private IBaseRecordService _baseRecordService;
         private readonly IWebHostEnvironment _env;
         private readonly IMemoryCache _cache;
@@ -40,12 +40,11 @@ namespace AwesomeCare.Web.Controllers
 
 
         public StaffController(IFileUpload fileUpload,
-            IMemoryCache cache, IWebHostEnvironment env, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger)
+            IMemoryCache cache, IWebHostEnvironment env, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger):base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
             _cache = cache;
-            _fileUpload = fileUpload;
             _baseRecordService = baseRecordService;
             _env = env;
         }
@@ -318,6 +317,14 @@ namespace AwesomeCare.Web.Controllers
 
             return RedirectToAction("Profile");
         }
+       
+        [HttpPost]
+        public async Task<IActionResult> EditEducation()
+        {
+
+        }
+
+
         public async Task<IActionResult> DownloadFile(string file)
         {
             var filestream = await _fileUpload.DownloadFile(file);

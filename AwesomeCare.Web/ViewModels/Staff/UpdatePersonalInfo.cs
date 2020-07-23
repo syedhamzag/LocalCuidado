@@ -11,6 +11,11 @@ namespace AwesomeCare.Web.ViewModels.Staff
 {
     public class UpdatePersonalInfo: PutStaffPersonalInfo
     {
+        public UpdatePersonalInfo()
+        {
+            Education = new List<PutStaffEducation>();
+        }
+        public List<PutStaffEducation> Education { get; set; }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
@@ -50,6 +55,8 @@ namespace AwesomeCare.Web.ViewModels.Staff
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile CvFile { get; set; }
+
+        public int TabIndex { get; set; }
 
     }
 }

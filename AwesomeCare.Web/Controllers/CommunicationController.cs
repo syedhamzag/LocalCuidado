@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AwesomeCare.Services.Services;
 using AwesomeCare.Web.Models;
 using AwesomeCare.Web.Services.Communication;
 using AwesomeCare.Web.Services.Staff;
@@ -17,7 +18,7 @@ namespace AwesomeCare.Web.Controllers
         private ICommunicationService _communicationService;
         private IStaffService _staffService;
 
-        public CommunicationController(ICommunicationService communicationService, IStaffService staffService) 
+        public CommunicationController(ICommunicationService communicationService, IStaffService staffService, IFileUpload fileUpload):base(fileUpload) 
         {
             _communicationService = communicationService;
             _staffService = staffService;

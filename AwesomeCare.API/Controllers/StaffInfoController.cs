@@ -408,18 +408,32 @@ namespace AwesomeCare.API.Controllers
             return Ok(staffProfile);
         }
 
-        [HttpGet("MyProfile/GetPersonalInfo")]
+        [HttpGet("MyProfile/PersonalInfo")]
         [ProducesResponseType(type: typeof(GetStaffPersonalInfo), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPersonalInfo()
         {
-                        
             var identityUserId = this.User.SubClaim();
 
-            var entity = await _staffInfoRepository.Table.FirstOrDefaultAsync(s => s.ApplicationUserId == identityUserId); ;
-            var staffProfile = Mapper.Map<GetStaffPersonalInfo>(entity);
+            var staffProfile = await _staffInfoRepository.Table.ProjectTo<GetStaffPersonalInfo>().FirstOrDefaultAsync(s => s.ApplicationUserId == identityUserId); ;
+
             return Ok(staffProfile);
 
         }
+
+        [HttpGet("MyProfile/Education")]
+        [ProducesResponseType(type: typeof(GetStaffEducation), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetMyEducation()
+        {
+
+            var identityUserId = this.User.SubClaim();
+
+            var staffProfile = await _staffInfoRepository.Table.ProjectTo<GetStaffPersonalInfo>().FirstOrDefaultAsync(s => s.ApplicationUserId == identityUserId); ;
+          
+            return Ok(staffProfile);
+
+        }
+
+
         [HttpPut("MyProfile/Edit")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdatePersonalInfo([FromBody]PutStaffPersonalInfo model)

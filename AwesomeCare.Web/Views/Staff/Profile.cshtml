@@ -447,7 +447,7 @@
                                                         </td>
                                                         <td>
 
-                                                            <a href="@Model.Education[i].CertificateAttachment"> Download</a>
+                                                            <a asp-action="DownloadFile" asp-route-file="@Model.Education[i].CertificateAttachment" > Download</a>
                                                         </td>
 
                                                     </tr>
