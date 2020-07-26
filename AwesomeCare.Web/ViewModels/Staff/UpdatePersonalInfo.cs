@@ -13,9 +13,10 @@ namespace AwesomeCare.Web.ViewModels.Staff
     {
         public UpdatePersonalInfo()
         {
-            Education = new List<PutStaffEducation>();
+            
+           
         }
-        public List<PutStaffEducation> Education { get; set; }
+       
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]

@@ -26,7 +26,7 @@ namespace AwesomeCare.Admin.Services.Staff
         [Post("/StaffInfo/Approval")]
         Task<HttpResponseMessage> Approval([Body]PostStaffApproval postStaffApproval);
 
-        [Put("/StaffInfo/Edit")]
+        [Put("/StaffInfo/MyProfile/Edit")]
         Task<HttpResponseMessage> UpdateStaffPersonalProfile([Body] PutStaffPersonalInfo model);
 
         #region StaffRota

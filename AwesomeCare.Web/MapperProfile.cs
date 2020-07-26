@@ -47,6 +47,19 @@ namespace AwesomeCare.Web
                 .ForMember(dto => dto.CoverLetterFile, mem => mem.Ignore())
                 .ForMember(dto => dto.TabIndex, mem => mem.Ignore())
                 .ForMember(dto => dto.CvFile, mem => mem.Ignore());
+
+            CreateMap<GetStaffEducation, PutStaffEducation>()
+                .ForMember(dto => dto.UploadCertificate, mem => mem.Ignore());
+
+            CreateMap<GetStaffTraining, PutStaffTraining>()
+                   .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
+
+            CreateMap<GetStaffReferee, PutStaffReferee>()
+                  .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
+
+            CreateMap<GetStaffRegulatoryContact, PutStaffRegulatoryContact>()
+                .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
+
         }
     }
 }

@@ -9,6 +9,18 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
     public class PutStaffPersonalInfo
     {
+        public PutStaffPersonalInfo()
+        {
+            Education = new List<PutStaffEducation>();
+            Trainings = new List<PutStaffTraining>();
+            References = new List<PutStaffReferee>();
+            EmergencyContacts = new List<PutStaffEmergencyContact>();
+        }
+
+        public List<PutStaffEducation> Education { get; set; }
+        public List<PutStaffTraining> Trainings { get; set; }
+        public List<PutStaffReferee> References { get; set; }
+        public List<PutStaffEmergencyContact> EmergencyContacts { get; set; }
         [Required]
         public int StaffPersonalInfoId { get; set; }
         [Required]

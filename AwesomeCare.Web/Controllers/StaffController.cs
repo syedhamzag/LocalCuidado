@@ -24,7 +24,7 @@ namespace AwesomeCare.Web.Controllers
     {
         private IStaffService _staffService;
         private ILogger<StaffController> _logger;
-        
+
         private IBaseRecordService _baseRecordService;
         private readonly IWebHostEnvironment _env;
         private readonly IMemoryCache _cache;
@@ -37,10 +37,12 @@ namespace AwesomeCare.Web.Controllers
         const string selfpyeFolder = "selfpye";
         const string coverLetterFolder = "coverletter";
         const string cvFolder = "cvfolder";
-
+        const string educationFolder = "staffeductaion";
+        const string trainingFolder = "stafftraining";
+        const string refereeFolder = "staffreferee";
 
         public StaffController(IFileUpload fileUpload,
-            IMemoryCache cache, IWebHostEnvironment env, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger):base(fileUpload)
+            IMemoryCache cache, IWebHostEnvironment env, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
@@ -296,6 +298,11 @@ namespace AwesomeCare.Web.Controllers
                 model.CV = cv;
             }
 
+            await EditEducation(model);
+
+            await EditTraining(model);
+
+            await EditReferee(model);
 
             if (model.StaffWorkTeamId == 0)
                 model.StaffWorkTeamId = default(int?);
@@ -306,7 +313,7 @@ namespace AwesomeCare.Web.Controllers
             var result = await _staffService.UpdateMyPersonalInfo(profile);
             var content = await result.Content.ReadAsStringAsync();
 
-            
+
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Operation successful" : "An Error Occurred" });
             if (!result.IsSuccessStatusCode)
@@ -317,19 +324,48 @@ namespace AwesomeCare.Web.Controllers
 
             return RedirectToAction("Profile");
         }
-       
-        [HttpPost]
-        public async Task<IActionResult> EditEducation()
-        {
 
+
+        public async Task EditEducation(UpdatePersonalInfo model)
+        {
+            for (int i = 0; i < model.Education.Count; i++)
+            {
+                var edu = model.Education[i];
+                if (edu.UploadCertificate != null && edu.UploadCertificate.Length > 0)
+                {
+                    var edufile = await UploadFile(educationFolder, string.Concat(educationFolder, "_", model.Telephone), false, edu.UploadCertificate.OpenReadStream());
+                    edu.CertificateAttachment = edufile;
+                };
+
+            }
         }
 
-
-        public async Task<IActionResult> DownloadFile(string file)
+        public async Task EditTraining(UpdatePersonalInfo model)
         {
-            var filestream = await _fileUpload.DownloadFile(file);
-            filestream.Item1.Position = 0;
-            return File(filestream.Item1, filestream.Item2);
+            for (int i = 0; i < model.Trainings.Count; i++)
+            {
+                var training = model.Trainings[i];
+                if (training.UploadAttachment != null && training.UploadAttachment.Length > 0)
+                {
+                    var edufile = await UploadFile(trainingFolder, string.Concat(trainingFolder, "_", model.Telephone), false, training.UploadAttachment.OpenReadStream());
+                    training.CertificateAttachment = edufile;
+                };
+
+            }
+        }
+
+        public async Task EditReferee(UpdatePersonalInfo model)
+        {
+            for (int i = 0; i < model.References.Count; i++)
+            {
+                var referee = model.References[i];
+                if (referee.UploadAttachment != null && referee.UploadAttachment.Length > 0)
+                {
+                    var refereefile = await UploadFile(refereeFolder, string.Concat(refereeFolder, "_", model.Telephone), false, referee.UploadAttachment.OpenReadStream());
+                    referee.Attachment = refereefile;
+                };
+
+            }
         }
     }
 }

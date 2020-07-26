@@ -15,18 +15,19 @@
             <div class="body">
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
+                        <form id="basic-form" enctype="multipart/form-data" asp-controller="Staff" asp-action="EditProfile" method="post">
+                            <div class="body">
+                                <ul class="nav nav-tabs-new2">
+                                    <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalinfo">Personal Info</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#education">Education</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainings">Training</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#referee">Referee</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#emergencyContact">Emergency Contact</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane show active" id="personalinfo">
+                                        <h6>Personal Info.</h6>
 
-                        <div class="body">
-                            <ul class="nav nav-tabs-new2">
-                                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalinfo">Personal Info</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#education">Education</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainings">Training</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#referee">Referee</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane show active" id="personalinfo">
-                                    <h6>Personal Info.</h6>
-                                    <form id="basic-form" enctype="multipart/form-data" asp-controller="Staff" method="post">
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                         <input type="hidden" asp-for="StaffPersonalInfoId" />
                                         <input type="hidden" asp-for="ApplicationUserId" />
@@ -482,14 +483,12 @@
 
 
                                         </div>
-                                        <button type="submit" class="btn btn-primary pull-right">Update</button>
-                                    </form>
-                                </div>
 
-                                <div class="tab-pane" id="education">
-                                    <h6>Education</h6>
-                                    <div class="table-responsive table-bordered">
-                                        <form id="basic-form" enctype="multipart/form-data" asp-controller="Staff" asp-action="EditEducation" method="post">
+                                    </div>
+
+                                    <div class="tab-pane" id="education">
+                                        <h6>Education</h6>
+                                        <div class="table-responsive table-bordered">
                                             <table class="table tblEducation">
                                                 <thead>
                                                     <tr>
@@ -507,8 +506,13 @@
                                                 <tbody>
                                                     @for (int i = 0; i < Model.Education.Count; i++)
                                                     {
+
                                                         <tr>
                                                             <td>
+                                                                <input type="hidden" class="form-control" asp-for="@Model.Education[i].StaffPersonalInfoId" />
+                                                                <input type="hidden" class="form-control" asp-for="@Model.Education[i].StaffEducationId" />
+                                                                <input type="hidden" class="form-control" asp-for="@Model.Education[i].CertificateAttachment" />
+
                                                                 <input type="text" class="form-control" asp-for="@Model.Education[i].Institution" />
                                                                 <span asp-validation-for="@Model.Education[i].Institution" class="text-danger"></span>
                                                             </td>
@@ -533,11 +537,17 @@
                                                                 <span asp-validation-for="@Model.Education[i].EndDate" class="text-danger"></span>
                                                             </td>
                                                             <td>
-                                                                <a asp-action="DownloadFile" asp-route-file="@Model.Education[i].CertificateAttachment"> Download</a>
+                                                                @{
+                                                                    if (!string.IsNullOrEmpty(Model.Education[i].CertificateAttachment))
+                                                                    {
+                                                                        <a asp-action="DownloadFile" asp-route-file="@Model.Education[i].CertificateAttachment"> Download</a>
+                                                                    }
+                                                                }
+
                                                             </td>
                                                             <td>
-                                                                <input type="file" class="form-control" asp-for="@Model.Education[i].CertificateAttachment" />
-                                                                <span asp-validation-for="@Model.Education[i].CertificateAttachment" class="text-danger"></span>
+                                                                <input type="file" class="form-control" asp-for="@Model.Education[i].UploadCertificate" />
+                                                                <span asp-validation-for="@Model.Education[i].UploadCertificate" class="text-danger"></span>
                                                             </td>
 
                                                         </tr>
@@ -548,32 +558,296 @@
                                             <a class="col-sm-offset-1 col-sm-1 text-success addEducation" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
                                             <br />
 
-                                            <button type="submit" class="btn btn-primary pull-right">Update</button>
-                                        </form>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="tab-pane" id="trainings">
-                                    <h6>Trainings</h6>
-                                    <div class="table-responsive table-bordered">
-                                        <h4>Trainings</h4>
+                                    <div class="tab-pane" id="trainings">
+                                        <h6>Trainings</h6>
+                                        <div class="table-responsive table-bordered">
 
+                                            <table class="table tblTraining">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Training Name</th>
+                                                        <th>Certificate</th>
+                                                        <th>Location</th>
+                                                        <th>Trainer</th>
+                                                        <th>StartDate</th>
+                                                        <th>ExpiredDate</th>
+                                                        <th>File</th>
+                                                        <th>Change File</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @for (int i = 0; i < Model.Trainings.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <input type="hidden" class="form-control" asp-for="@Model.Trainings[i].StaffPersonalInfoId" />
+                                                                <input type="hidden" class="form-control" asp-for="@Model.Trainings[i].StaffTrainingId" />
+                                                                <input type="hidden" class="form-control" asp-for="@Model.Trainings[i].CertificateAttachment" />
+
+
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].Training" />
+                                                                <span asp-validation-for="@Model.Trainings[i].Training" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].Certificate" />
+                                                                <span asp-validation-for="@Model.Trainings[i].Certificate" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].Location" />
+                                                                <span asp-validation-for="@Model.Trainings[i].Location" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].Trainer" />
+                                                                <span asp-validation-for="@Model.Trainings[i].Trainer" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].StartDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                                                <span asp-validation-for="@Model.Trainings[i].StartDate" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.Trainings[i].ExpiredDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                                                <span asp-validation-for="@Model.Trainings[i].ExpiredDate" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                @{
+                                                                    if (!string.IsNullOrEmpty(Model.Trainings[i].CertificateAttachment))
+                                                                    {
+                                                                        <a asp-action="DownloadFile" asp-route-file="@Model.Trainings[i].CertificateAttachment"> Download</a>
+                                                                    }
+                                                                }
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="file" class="form-control" asp-for="@Model.Trainings[i].UploadAttachment" />
+                                                                <span asp-validation-for="@Model.Trainings[i].UploadAttachment" class="text-danger"></span>
+                                                            </td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                            <a class="col-sm-offset-1 col-sm-1 text-success addTraining" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+                                            <br />
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="tab-pane" id="referee">
-                                    <h6>Referees</h6>
-                                    <div class="table-responsive table-bordered">
-                                        <h4>References</h4>
+                                    <div class="tab-pane" id="referee">
+                                        <h6>Referees</h6>
+                                        <div class="table-responsive table-bordered">
+                                            <table class="table tblReferences">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name of Referee</th>
+                                                        <th>Company Name</th>
+                                                        <th>Address</th>
+                                                        <th>PhoneNumber</th>
+                                                        <th>Email</th>
+                                                        <th>Position of Referee</th>
+                                                        <th>File</th>
+                                                        <th>Change Attachment</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @for (int i = 0; i < Model.References.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td>
+
+                                                                <input type="hidden" class="form-control" asp-for="@Model.References[i].StaffPersonalInfoId" />
+                                                                <input type="hidden" class="form-control" asp-for="@Model.References[i].StaffRefereeId" />
+                                                                <input type="hidden" class="form-control" asp-for="@Model.References[i].Attachment" />
 
 
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].Referee" />
+                                                                <span asp-validation-for="@Model.References[i].Referee" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].CompanyName" />
+                                                                <span asp-validation-for="@Model.References[i].CompanyName" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].Address" />
+                                                                <span asp-validation-for="@Model.References[i].Address" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].PhoneNumber" />
+                                                                <span asp-validation-for="@Model.References[i].PhoneNumber" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].Email" />
+                                                                <span asp-validation-for="@Model.References[i].Email" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.References[i].PositionofReferee" />
+                                                                <span asp-validation-for="@Model.References[i].PositionofReferee" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                @{
+                                                                    if (!string.IsNullOrEmpty(Model.References[i].Attachment))
+                                                                    {
+                                                                        <a asp-action="DownloadFile" asp-route-file="@Model.References[i].Attachment"> Download</a>
+                                                                    }
+                                                                }
+
+                                                            </td>
+                                                            <td>
+                                                                <input type="file" class="form-control" asp-for="@Model.References[i].UploadAttachment" />
+                                                                <span asp-validation-for="@Model.References[i].UploadAttachment" class="text-danger"></span>
+                                                            </td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                            <a class="col-sm-offset-1 col-sm-1 text-success addReferences" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="emergencyContact">
+                                        <h6>Emergency Contact</h6>
+                                        <div class="table-responsive table-bordered">
+                                            <table class="table tblEmergencyContact">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Telephone</th>
+                                                        <th>Email</th>
+                                                        <th>Relationship</th>
+                                                        <th>Address</th>
+
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @for (int i = 0; i < Model.EmergencyContacts.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <input type="hidden" class="form-control" asp-for="@Model.EmergencyContacts[i].StaffPersonalInfoId" />
+                                                                <input type="hidden" class="form-control" asp-for="@Model.EmergencyContacts[i].StaffEmergencyContactId" />
+
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].ContactName" />
+                                                                <span asp-validation-for="@Model.EmergencyContacts[i].ContactName" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Telephone" />
+                                                                <span asp-validation-for="@Model.EmergencyContacts[i].Telephone" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Email" />
+                                                                <span asp-validation-for="@Model.EmergencyContacts[i].Email" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Relationship" />
+                                                                <span asp-validation-for="@Model.EmergencyContacts[i].Relationship" class="text-danger"></span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" asp-for="@Model.EmergencyContacts[i].Address" />
+                                                                <span asp-validation-for="@Model.EmergencyContacts[i].Address" class="text-danger"></span>
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                            <a class="col-sm-offset-1 col-sm-1 text-success addEmergencyContact" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <button type="submit" class="btn btn-primary pull-right">Update</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+@section Scripts{
+    <script src="../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../assets/js/pages/forms/dropify.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.addEducation').click(function () {
+                var eduTable = $('table.tblEducation tbody');
+                var rowKount = eduTable.find('tr').length;
+                var institution = '<input name="Education[' + rowKount + '].Institution" class="form-control" type="text"/>';
+                var certificate = '<input name="Education[' + rowKount + '].Certificate" class="form-control" type="text"/>';
+                var location = '<input name="Education[' + rowKount + '].Location" class="form-control" type="text"/>';
+                var address = '<input name="Education[' + rowKount + '].Address" class="form-control" type="text"/>';
+                var startDate = '<input name="Education[' + rowKount + '].StartDate" class="form-control" type="text" data-provide="datepicker"  data-date-autoclose="true"  data-date-format="mm/dd/yyyy"/>';
+                var endDate = '<input name="Education[' + rowKount + '].EndDate" class="form-control" type="text" data-provide="datepicker"  data-date-autoclose="true"  data-date-format="mm/dd/yyyy"/>';
+                var attachment = '<input name="Education[' + rowKount + '].CertificateAttachment" class="form-control" type="file"/>';
+
+                eduTable.append(' <tr><td>' + institution + '</td><td>' + certificate + '</td><td>' + location + '</td><td>' + address + '</td><td>' + startDate + '</td><td>' + endDate + '</td><td></td><td>' + attachment + '</td></tr>')
+
+
+            })
+
+            $('.addTraining').click(function () {
+                var eduTable = $('table.tblTraining tbody');
+                var rowKount = eduTable.find('tr').length;
+                var training = '<input name="Trainings[' + rowKount + '].Training" class="form-control" type="text"/>';
+                var certificate = '<input name="Trainings[' + rowKount + '].Certificate" class="form-control" type="text"/>';
+                var location = '<input name="Trainings[' + rowKount + '].Location" class="form-control" type="text"/>';
+                var trainer = '<input name="Trainings[' + rowKount + '].Trainer" class="form-control" type="text"/>';
+                var startDate = '<input name="Trainings[' + rowKount + '].StartDate" class="form-control" type="text" data-provide="datepicker"  data-date-autoclose="true"  data-date-format="mm/dd/yyyy"/>';
+                var expiredDate = '<input name="Trainings[' + rowKount + '].ExpiredDate" class="form-control" type="text" data-provide="datepicker"  data-date-autoclose="true"  data-date-format="mm/dd/yyyy"/>';
+                var attachment = '<input name="Trainings[' + rowKount + '].CertificateAttachment" class="form-control" type="file"/>';
+
+                eduTable.append(' <tr><td>' + training + '</td><td>' + certificate + '</td><td>' + location + '</td><td>' + trainer + '</td><td>' + startDate + '</td><td>' + expiredDate + '</td><td></td><td>' + attachment + '</td></tr>')
+
+
+            })
+
+            $('.addReferences').click(function () {
+                var eduTable = $('table.tblReferences tbody');
+                var rowKount = eduTable.find('tr').length;
+                var referee = '<input name="References[' + rowKount + '].Referee" class="form-control" type="text"/>';
+                var companyName = '<input name="References[' + rowKount + '].CompanyName" class="form-control" type="text"/>';
+                var address = '<input name="References[' + rowKount + '].Address" class="form-control" type="text"/>';
+                var phoneNumber = '<input name="References[' + rowKount + '].PhoneNumber" class="form-control" type="text"/>';
+                var email = '<input name="References[' + rowKount + '].Email" class="form-control" type="text"/>';
+                var positionofReferee = '<input name="References[' + rowKount + '].PositionofReferee" class="form-control" type="text"/>';
+                var attachment = '<input name="References[' + rowKount + '].Attachment" class="form-control" type="file"/>';
+
+                eduTable.append(' <tr><td>' + referee + '</td><td>' + companyName + '</td><td>' + address + '</td><td>' + phoneNumber + '</td><td>' + email + '</td><td>' + positionofReferee + '</td><td></td><td>' + attachment + '</td></tr>')
+
+
+            })
+
+            $('.addEmergencyContact').click(function () {
+                var eduTable = $('table.tblEmergencyContact tbody');
+                var rowKount = eduTable.find('tr').length;
+                var contactname = '<input name="EmergencyContacts[' + rowKount + '].ContactName" class="form-control" type="text"/>';
+                var telephone = '<input name="EmergencyContacts[' + rowKount + '].Telephone" class="form-control" type="text"/>';
+                var email = '<input name="EmergencyContacts[' + rowKount + '].Email" class="form-control" type="text"/>';
+                var relationship = '<input name="EmergencyContacts[' + rowKount + '].Relationship" class="form-control" type="text"/>';
+                var address = '<input name="EmergencyContacts[' + rowKount + '].Address" class="form-control" type="text"/>';
+
+                eduTable.append(' <tr><td>' + contactname + '</td><td>' + telephone + '</td><td>' + email + '</td><td>' + relationship + '</td><td>' + address + '</td></tr>')
+
+
+            })
+
+
+            $('a.removeEducation').on('click', function () {
+                console.log(this)
+                $(this).parent('td').parent('tr').remove();
+            })
+
+        })
+    </script>
+}
