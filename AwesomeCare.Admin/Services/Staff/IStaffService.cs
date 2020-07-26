@@ -16,12 +16,18 @@ namespace AwesomeCare.Admin.Services.Staff
         [Get("/StaffInfo/GetStaffs")]
         Task<List<GetStaffs>> GetStaffs();
 
+        [Get("/StaffInfo/{id}")]
+        Task<GetStaffPersonalInfo> GetStaff(int id);
+
+
         [Get("/StaffInfo/Profile/{id}")]
         Task<StaffDetails> Profile(int id);
 
         [Post("/StaffInfo/Approval")]
         Task<HttpResponseMessage> Approval([Body]PostStaffApproval postStaffApproval);
 
+        [Put("/StaffInfo/MyProfile/Edit")]
+        Task<HttpResponseMessage> UpdateStaffPersonalProfile([Body] PutStaffPersonalInfo model);
 
         #region StaffRota
         [Post("/StaffInfo/Rota/Create")]

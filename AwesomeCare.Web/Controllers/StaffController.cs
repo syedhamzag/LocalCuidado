@@ -24,16 +24,29 @@ namespace AwesomeCare.Web.Controllers
     {
         private IStaffService _staffService;
         private ILogger<StaffController> _logger;
-        private IFileUpload _fileUpload;
+
         private IBaseRecordService _baseRecordService;
         private readonly IWebHostEnvironment _env;
         private readonly IMemoryCache _cache;
-        public StaffController(IFileUpload fileUpload, IMemoryCache cache, IWebHostEnvironment env, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger)
+
+        const string profilePixFolder = "staffprofilepix";
+        const string drivingFolder = "drivinglicense";
+        const string rightToFolder = "righttowork";
+        const string dbsFolder = "dbsfolder";
+        const string niFolder = "nifolder";
+        const string selfpyeFolder = "selfpye";
+        const string coverLetterFolder = "coverletter";
+        const string cvFolder = "cvfolder";
+        const string educationFolder = "staffeductaion";
+        const string trainingFolder = "stafftraining";
+        const string refereeFolder = "staffreferee";
+
+        public StaffController(IFileUpload fileUpload,
+            IMemoryCache cache, IWebHostEnvironment env, IBaseRecordService baseRecordService, IStaffService staffService, ILogger<StaffController> logger) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
             _cache = cache;
-            _fileUpload = fileUpload;
             _baseRecordService = baseRecordService;
             _env = env;
         }
@@ -108,50 +121,50 @@ namespace AwesomeCare.Web.Controllers
 
             var staffinfo = Mapper.Map<PostStaffFullInfo>(model);
 
-            string profilePixFolder = "staffprofilepix";
+
             var profilePix = await UploadFile(profilePixFolder, string.Concat(profilePixFolder, "_", model.Telephone), true, model.ProfilePix.OpenReadStream());
             staffinfo.ProfilePix = profilePix;
 
             if (model.CanDrive.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
             {
-                string drivingFolder = "drivinglicense";
+
                 var drivingLicense = await UploadFile(drivingFolder, string.Concat(drivingFolder, "_", model.Telephone), false, model.DrivingLicense.OpenReadStream());
                 staffinfo.DrivingLicense = drivingLicense;
             }
 
             if (model.RightToWork.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
             {
-                string rightToFolder = "righttowork";
+
                 var righttowork = await UploadFile(rightToFolder, string.Concat(rightToFolder, "_", model.Telephone), false, model.RightToWorkAttachment.OpenReadStream());
                 staffinfo.RightToWorkAttachment = righttowork;
             }
 
             if (model.DBS.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
             {
-                string dbsFolder = "dbsfolder";
+
                 var dbs = await UploadFile(dbsFolder, string.Concat(dbsFolder, "_", model.Telephone), false, model.DBSAttachment.OpenReadStream());
                 staffinfo.DBSAttachment = dbs;
             }
 
             if (model.NI.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
             {
-                string niFolder = "nifolder";
+
                 var ni = await UploadFile(niFolder, string.Concat(niFolder, "_", model.Telephone), false, model.NIAttachment.OpenReadStream());
                 staffinfo.NIAttachment = ni;
             }
 
             if (model.SelfPYE.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
             {
-                string selfpyeFolder = "selfpye";
+
                 var selfpye = await UploadFile(selfpyeFolder, string.Concat(selfpyeFolder, "_", model.Telephone), false, model.Self_PYEAttachment.OpenReadStream());
                 staffinfo.Self_PYEAttachment = selfpye;
             }
 
-            string coverLetterFolder = "coverletter";
+
             var coverletter = await UploadFile(coverLetterFolder, string.Concat(coverLetterFolder, "_", model.Telephone), true, model.CoverLetter.OpenReadStream());
             staffinfo.CoverLetter = coverletter;
 
-            string cvFolder = "cvfolder";
+
             var cv = await UploadFile(cvFolder, string.Concat(cvFolder, "_", model.Telephone), true, model.CV.OpenReadStream());
             staffinfo.CV = cv;
 
@@ -210,7 +223,7 @@ namespace AwesomeCare.Web.Controllers
         {
             var profile = await _staffService.MyProfile();
 
-            if(profile == null)
+            if (profile == null)
             {
                 return RedirectToAction("Registration");
             }
@@ -218,11 +231,141 @@ namespace AwesomeCare.Web.Controllers
             return View(profile);
         }
 
-        public async Task<IActionResult> DownloadFile(string file)
+        [HttpGet("Profile/Edit", Name = "EditProfile")]
+        public async Task<IActionResult> EditProfile()
         {
-            var filestream = await _fileUpload.DownloadFile(file);
-            filestream.Item1.Position = 0;
-            return File(filestream.Item1, filestream.Item2);
+            var profile = await _staffService.EditMyProfile();
+            var putProfile = Mapper.Map<UpdatePersonalInfo>(profile);
+            return View(putProfile);
+        }
+
+        [HttpPost("Profile/Edit", Name = "EditProfile")]
+        public async Task<IActionResult> EditProfile(UpdatePersonalInfo model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if (model.ProfilePixFile != null && model.ProfilePixFile.Length > 0)
+            {
+                var profilePix = await UploadFile(profilePixFolder, string.Concat(profilePixFolder, "_", model.Telephone), true, model.ProfilePixFile.OpenReadStream());
+                model.ProfilePix = profilePix;
+            }
+
+            if (model.DrivingLicenseFile != null && model.DrivingLicenseFile.Length > 0)
+            {
+                var drivingLicense = await UploadFile(drivingFolder, string.Concat(drivingFolder, "_", model.Telephone), false, model.DrivingLicenseFile.OpenReadStream());
+                model.DrivingLicense = drivingLicense;
+            }
+
+
+            if (model.RightToWorkFile != null && model.RightToWorkFile.Length > 0)
+            {
+                var righttowork = await UploadFile(rightToFolder, string.Concat(rightToFolder, "_", model.Telephone), false, model.RightToWorkFile.OpenReadStream());
+                model.RightToWorkAttachment = righttowork;
+            }
+
+            if (model.DbsFile != null && model.DbsFile.Length > 0)
+            {
+
+                var dbs = await UploadFile(dbsFolder, string.Concat(dbsFolder, "_", model.Telephone), false, model.DbsFile.OpenReadStream());
+                model.DBSAttachment = dbs;
+            }
+
+            if (model.NiFile != null && model.NiFile.Length > 0)
+            {
+                var ni = await UploadFile(niFolder, string.Concat(niFolder, "_", model.Telephone), false, model.NiFile.OpenReadStream());
+                model.NIAttachment = ni;
+            }
+
+            if (model.SelfPyeFile != null && model.SelfPyeFile.Length > 0)
+            {
+                var selfpye = await UploadFile(selfpyeFolder, string.Concat(selfpyeFolder, "_", model.Telephone), false, model.SelfPyeFile.OpenReadStream());
+                model.SelfPYEAttachment = selfpye;
+            }
+
+            if (model.CoverLetterFile != null && model.CoverLetterFile.Length > 0)
+            {
+                var coverletter = await UploadFile(coverLetterFolder, string.Concat(coverLetterFolder, "_", model.Telephone), true, model.CoverLetterFile.OpenReadStream());
+                model.CoverLetter = coverletter;
+            }
+
+            if (model.CvFile != null && model.CvFile.Length > 0)
+            {
+                var cv = await UploadFile(cvFolder, string.Concat(cvFolder, "_", model.Telephone), true, model.CvFile.OpenReadStream());
+                model.CV = cv;
+            }
+
+            await EditEducation(model);
+
+            await EditTraining(model);
+
+            await EditReferee(model);
+
+            if (model.StaffWorkTeamId == 0)
+                model.StaffWorkTeamId = default(int?);
+
+            var profile = Mapper.Map<PutStaffPersonalInfo>(model);
+
+            var json = JsonConvert.SerializeObject(profile);
+            var result = await _staffService.UpdateMyPersonalInfo(profile);
+            var content = await result.Content.ReadAsStringAsync();
+
+
+
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Operation successful" : "An Error Occurred" });
+            if (!result.IsSuccessStatusCode)
+            {
+                _logger.LogError(content);
+                return View(model);
+            }
+
+            return RedirectToAction("Profile");
+        }
+
+
+        public async Task EditEducation(UpdatePersonalInfo model)
+        {
+            for (int i = 0; i < model.Education.Count; i++)
+            {
+                var edu = model.Education[i];
+                if (edu.UploadCertificate != null && edu.UploadCertificate.Length > 0)
+                {
+                    var edufile = await UploadFile(educationFolder, string.Concat(educationFolder, "_", model.Telephone), false, edu.UploadCertificate.OpenReadStream());
+                    edu.CertificateAttachment = edufile;
+                };
+
+            }
+        }
+
+        public async Task EditTraining(UpdatePersonalInfo model)
+        {
+            for (int i = 0; i < model.Trainings.Count; i++)
+            {
+                var training = model.Trainings[i];
+                if (training.UploadAttachment != null && training.UploadAttachment.Length > 0)
+                {
+                    var edufile = await UploadFile(trainingFolder, string.Concat(trainingFolder, "_", model.Telephone), false, training.UploadAttachment.OpenReadStream());
+                    training.CertificateAttachment = edufile;
+                };
+
+            }
+        }
+
+        public async Task EditReferee(UpdatePersonalInfo model)
+        {
+            for (int i = 0; i < model.References.Count; i++)
+            {
+                var referee = model.References[i];
+                if (referee.UploadAttachment != null && referee.UploadAttachment.Length > 0)
+                {
+                    var refereefile = await UploadFile(refereeFolder, string.Concat(refereeFolder, "_", model.Telephone), false, referee.UploadAttachment.OpenReadStream());
+                    referee.Attachment = refereefile;
+                };
+
+            }
         }
     }
 }

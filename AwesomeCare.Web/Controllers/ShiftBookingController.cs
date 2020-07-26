@@ -14,6 +14,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
 using AwesomeCare.Web.Extensions;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using Microsoft.AspNetCore.Authorization;
+using AwesomeCare.Services.Services;
 
 namespace AwesomeCare.Web.Controllers
 {
@@ -24,7 +25,8 @@ namespace AwesomeCare.Web.Controllers
         private ILogger<ShiftBookingController> _logger;
         private IClientRotaNameService _clientRotaNameService;
 
-        public ShiftBookingController(IShiftBookingService shiftBookingService, IClientRotaNameService clientRotaNameService, ILogger<ShiftBookingController> logger)
+        public ShiftBookingController(IShiftBookingService shiftBookingService, IClientRotaNameService clientRotaNameService,
+            ILogger<ShiftBookingController> logger,IFileUpload fileUpload):base(fileUpload)
         {
             _shiftBookingService = shiftBookingService;
             _logger = logger;

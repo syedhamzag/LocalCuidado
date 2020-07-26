@@ -64,8 +64,9 @@ namespace AwesomeCare.API.Controllers
         public async Task<IActionResult> GetAsync(int? id)
         {
 
-            var entity = await _staffInfoRepository.GetEntity(id);
-            var getEntity = Mapper.Map<GetStaffPersonalInfo>(entity);
+            // var entity = await _staffInfoRepository.GetEntity(id);
+            var getEntity = await _staffInfoRepository.Table.ProjectTo<GetStaffPersonalInfo>().FirstOrDefaultAsync(s => s.StaffPersonalInfoId == id);
+           // var  = Mapper.Map<GetStaffPersonalInfo>(entity);
             return Ok(getEntity);
         }
 
@@ -332,6 +333,17 @@ namespace AwesomeCare.API.Controllers
                                                      StaffPersonalInfoId = edu.StaffPersonalInfoId,
                                                      StartDate = edu.StartDate
                                                  }).ToList(),
+                                    EmergencyContacts = (from em in st.EmergencyContacts 
+                                                         select new GetStaffEmergencyContact
+                                                         {
+                                                             Address = em.Address,
+                                                             ContactName = em.ContactName,
+                                                             Email = em.Email,
+                                                             Relationship = em.Relationship,
+                                                             StaffEmergencyContactId = em.StaffEmergencyContactId,
+                                                             StaffPersonalInfoId = em.StaffPersonalInfoId,
+                                                             Telephone = em.Telephone
+                                                         }).ToList(),
                                     Email = st.Email,
                                     StartDate = st.StartDate,
                                     EndDate = st.EndDate,
@@ -407,6 +419,58 @@ namespace AwesomeCare.API.Controllers
 
             return Ok(staffProfile);
         }
+
+        [HttpGet("MyProfile/PersonalInfo")]
+        [ProducesResponseType(type: typeof(GetStaffPersonalInfo), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPersonalInfo()
+        {
+            var identityUserId = this.User.SubClaim();
+
+            var staffProfile = await _staffInfoRepository.Table.ProjectTo<GetStaffPersonalInfo>().FirstOrDefaultAsync(s => s.ApplicationUserId == identityUserId); ;
+
+            return Ok(staffProfile);
+
+        }
+
+        //[HttpGet("MyProfile/Education")]
+        //[ProducesResponseType(type: typeof(GetStaffEducation), statusCode: StatusCodes.Status200OK)]
+        //public async Task<IActionResult> GetMyEducation()
+        //{
+
+        //    var identityUserId = this.User.SubClaim();
+
+        //    var staffProfile = await _staffInfoRepository.Table.ProjectTo<GetStaffPersonalInfo>().FirstOrDefaultAsync(s => s.ApplicationUserId == identityUserId); ;
+          
+        //    return Ok(staffProfile);
+
+        //}
+
+
+        [HttpPut("MyProfile/Edit")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> UpdatePersonalInfo([FromBody]PutStaffPersonalInfo model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+
+            var profile = Mapper.Map<StaffPersonalInfo>(model);
+
+            #region EmergencyContact
+            //foreach (var em in profile.EmergencyContacts)
+            //{
+            //    if(em.StaffEmergencyContactId == default(int))
+            //    {
+            //        _dbContext.Entry<StaffEmergencyContact>(em).State = EntityState.Added;                   
+            //    }
+            //}
+            #endregion
+
+            await _staffInfoRepository.UpdateEntity(profile);
+            return Ok();
+        }
+
         /// <summary>
         /// Get staffs with few properties
         /// </summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AwesomeCare.Services.Services;
 using AwesomeCare.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -17,11 +18,12 @@ namespace AwesomeCare.Web.Controllers
     {
        
         public const string cacheKey = "baserecord_key";
-       
-        public BaseController()
+        public readonly IFileUpload _fileUpload;
+        public BaseController(IFileUpload fileUpload)
         {
-
+            _fileUpload = fileUpload;
         }
+        
        
 
         public void SetOperationStatus(OperationStatus operationStatus)
@@ -48,19 +50,25 @@ namespace AwesomeCare.Web.Controllers
             base.OnActionExecuting(context);
         }
 
+        public async Task<IActionResult> DownloadFile(string file)
+        {
+            var filestream = await _fileUpload.DownloadFile(file);
+            filestream.Item1.Position = 0;
+            return File(filestream.Item1, filestream.Item2);
+        }
         //public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         //{
-            
+
         //    //else
         //    //{
-               
+
         //    //    await context.HttpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = "/" });
 
         //    //}
         //     await base.OnActionExecutionAsync(context, next);
         //}
-       
 
-        
+
+
     }
 }

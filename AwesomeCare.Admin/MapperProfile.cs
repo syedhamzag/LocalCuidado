@@ -1,5 +1,6 @@
 ﻿using AwesomeCare.Admin.ViewModels.Client;
 using AwesomeCare.Admin.ViewModels.ShiftBooking;
+using AwesomeCare.Admin.ViewModels.Staff;
 using AwesomeCare.Admin.ViewModels.StaffCommunication;
 using AwesomeCare.Admin.ViewModels.Untowards;
 using AwesomeCare.DataTransferObject.DTOs.Client;
@@ -52,6 +53,29 @@ namespace AwesomeCare.Admin
             CreateMap<CreateMedicationDay, PostClientMedicationDay>();
             CreateMap<CreateMedicationPeriod, PostClientMedicationPeriod>();
 
+            CreateMap<GetStaffPersonalInfo, UpdateStaffPersonalInfo>()
+              .ForMember(dto => dto.SelfPYE, mem => mem.MapFrom(src => src.Self_PYE))
+              .ForMember(dto => dto.SelfPYEAttachment, mem => mem.MapFrom(src => src.Self_PYEAttachment))
+              .ForMember(dto => dto.ProfilePixFile, mem => mem.Ignore())
+              .ForMember(dto => dto.DrivingLicenseFile, mem => mem.Ignore())
+              .ForMember(dto => dto.RightToWorkFile, mem => mem.Ignore())
+              .ForMember(dto => dto.DbsFile, mem => mem.Ignore())
+              .ForMember(dto => dto.NiFile, mem => mem.Ignore())
+              .ForMember(dto => dto.SelfPyeFile, mem => mem.Ignore())
+              .ForMember(dto => dto.CoverLetterFile, mem => mem.Ignore())
+              .ForMember(dto => dto.CvFile, mem => mem.Ignore());
+
+            CreateMap<GetStaffEducation, PutStaffEducation>()
+              .ForMember(dto => dto.UploadCertificate, mem => mem.Ignore());
+
+            CreateMap<GetStaffTraining, PutStaffTraining>()
+                   .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
+
+            CreateMap<GetStaffReferee, PutStaffReferee>()
+                  .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
+
+            CreateMap<GetStaffRegulatoryContact, PutStaffRegulatoryContact>()
+                .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
         }
     }
 }

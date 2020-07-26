@@ -24,19 +24,18 @@ namespace AwesomeCare.Web.Controllers
         private readonly IStaffService staffService;
         private readonly IClientService clientService;
         private readonly ILogger<IncidentReportingController> logger;
-        private readonly IFileUpload fileUpload;
 
         public IncidentReportingController(IFileUpload fileUpload,
             IIncidentReportService incidentReportService,
             IStaffService staffService,
             IClientService clientService,
-            ILogger<IncidentReportingController> logger) 
+            ILogger<IncidentReportingController> logger) :base(fileUpload)
         {
             this.incidentReportService = incidentReportService;
             this.staffService = staffService;
             this.clientService = clientService;
             this.logger = logger;
-            this.fileUpload = fileUpload;
+           
         }
         [HttpGet]
         public async Task<IActionResult> Reports()
@@ -87,7 +86,7 @@ namespace AwesomeCare.Web.Controllers
             {
 
                 var filename = model.Staffs.FirstOrDefault(s => s.Value == model.ReportingStaffId.ToString())?.Text + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + model.UploadAttachment.FileName;
-                string filepath = await this.fileUpload.UploadFile("incidentreport", true, filename, model.UploadAttachment.OpenReadStream());
+                string filepath = await this._fileUpload.UploadFile("incidentreport", true, filename, model.UploadAttachment.OpenReadStream());
 
                 model.Attachment = filepath;
             }

@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using AwesomeCare.Web.AppSettings;
 using System.Threading.Tasks;
 using AwesomeCare.Web.Services.Admin;
+using AwesomeCare.Services.Services;
 
 namespace AwesomeCare.Web.Controllers
 {
@@ -25,7 +26,7 @@ namespace AwesomeCare.Web.Controllers
 
         public TestController(IHttpContextAccessor context, IHttpClientFactory httpClientFactory, IConfiguration configuration,
             ILogger<TestController> logger,
-            IBaseRecordService baseRecordService)
+            IBaseRecordService baseRecordService, IFileUpload fileUpload):base(fileUpload)
         {
             _context = context;
             _httpClientFactory = httpClientFactory;

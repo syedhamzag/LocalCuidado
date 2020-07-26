@@ -13,12 +13,12 @@ namespace AwesomeCare.Web
         public MapperProfile()
         {
             CreateMap<CreateStaff, PostStaffFullInfo>()
-                .ForMember(dto=>dto.StaffTrainings,mem=>mem.MapFrom(src=>src.Trainings))
-                .ForMember(dto=>dto.StaffEducations,mem=>mem.MapFrom(src=>src.Education))
-                .ForMember(dto=>dto.StaffReferees,mem=>mem.MapFrom(src=>src.References))
-                .ForMember(dto=>dto.StaffRegulatoryContacts,mem=>mem.MapFrom(src=>src.RegulatoryContacts))
-                .ForMember(dto=>dto.StartDate,mem=>mem.MapFrom(src=>DateTime.Now))
-                .ForMember(dto=>dto.Gender,mem=>mem.MapFrom(src=>src.GenderId));
+                .ForMember(dto => dto.StaffTrainings, mem => mem.MapFrom(src => src.Trainings))
+                .ForMember(dto => dto.StaffEducations, mem => mem.MapFrom(src => src.Education))
+                .ForMember(dto => dto.StaffReferees, mem => mem.MapFrom(src => src.References))
+                .ForMember(dto => dto.StaffRegulatoryContacts, mem => mem.MapFrom(src => src.RegulatoryContacts))
+                .ForMember(dto => dto.StartDate, mem => mem.MapFrom(src => DateTime.Now))
+                .ForMember(dto => dto.Gender, mem => mem.MapFrom(src => src.GenderId));
 
             CreateMap<CreateStaffEducation, PostStaffEducation>()
                 .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore());
@@ -34,6 +34,32 @@ namespace AwesomeCare.Web
 
             CreateMap<CreateStaffEmergencyContact, PostStaffEmergencyContact>()
                .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.Ignore());
+
+            CreateMap<GetStaffPersonalInfo, UpdatePersonalInfo>()
+                .ForMember(dto => dto.SelfPYE, mem => mem.MapFrom(src=>src.Self_PYE))
+                .ForMember(dto => dto.SelfPYEAttachment, mem => mem.MapFrom(src=>src.Self_PYEAttachment))
+                .ForMember(dto => dto.ProfilePixFile, mem => mem.Ignore())
+                .ForMember(dto => dto.DrivingLicenseFile, mem => mem.Ignore())
+                .ForMember(dto => dto.RightToWorkFile, mem => mem.Ignore())
+                .ForMember(dto => dto.DbsFile, mem => mem.Ignore())
+                .ForMember(dto => dto.NiFile, mem => mem.Ignore())
+                .ForMember(dto => dto.SelfPyeFile, mem => mem.Ignore())
+                .ForMember(dto => dto.CoverLetterFile, mem => mem.Ignore())
+                .ForMember(dto => dto.TabIndex, mem => mem.Ignore())
+                .ForMember(dto => dto.CvFile, mem => mem.Ignore());
+
+            CreateMap<GetStaffEducation, PutStaffEducation>()
+                .ForMember(dto => dto.UploadCertificate, mem => mem.Ignore());
+
+            CreateMap<GetStaffTraining, PutStaffTraining>()
+                   .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
+
+            CreateMap<GetStaffReferee, PutStaffReferee>()
+                  .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
+
+            CreateMap<GetStaffRegulatoryContact, PutStaffRegulatoryContact>()
+                .ForMember(dto => dto.UploadAttachment, mem => mem.Ignore());
+
         }
     }
 }

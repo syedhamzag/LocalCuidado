@@ -4,6 +4,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
    public class PutStaffEmergencyContact
     {
+       
         [Required]
         public int StaffEmergencyContactId { get; set; }
         [Required]

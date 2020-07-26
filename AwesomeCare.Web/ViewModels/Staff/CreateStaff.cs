@@ -99,29 +99,34 @@ namespace AwesomeCare.Web.ViewModels.Staff
         [RequiredDependant("Yes", nameof(DBS), typeof(string), ErrorMessage = "Please attach DBS")]
         public IFormFile DBSAttachment { get; set; }
         [Display(Name = "DBS ExpiryDate")]
-
         [RequiredDependant("Yes", nameof(DBS), typeof(string), ErrorMessage = "Please provide DBS Expiry Date")]
         public DateTime? DBSExpiryDate { get; set; }
+
         [Display(Name = "DBS Update No")]
         [RequiredDependant("Yes", nameof(DBS), typeof(string), ErrorMessage = "Please provide DBS Update No.")]
         public string DBSUpdateNo { get; set; }
        
         [Display(Name = "NI")]
         public string NI { get; set; }
+
         [Display(Name = "NI attachment")]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         [RequiredDependant("Yes", nameof(NI), typeof(string), ErrorMessage = "Please attach NI")]
         public IFormFile NIAttachment { get; set; }
+
         [Display(Name = "NI expiry date")]
         [RequiredDependant("Yes", nameof(NI), typeof(string), ErrorMessage = "Please provide NI Expiry Date")]
         public DateTime? NIExpiryDate { get; set; }
+
         [Required]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile CV { get; set; }
+
         [Required]
         [Display(Name = "Attach Cover Letter")]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile CoverLetter { get; set; }
+
         [Display(Name = "Self PYE")]
         public string SelfPYE { get; set; }
         [Display(Name = "Self PYE attachment")]

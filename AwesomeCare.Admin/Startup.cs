@@ -132,15 +132,15 @@ namespace AwesomeCare.Admin
             //       };
             //   })
 
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy(apipolicyname, policy =>
-            //    {
-            //        policy.AddAuthenticationSchemes("OpenIdConnect");
-            //        policy.RequireAuthenticatedUser();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(apipolicyname, policy =>
+                {
+                    policy.AddAuthenticationSchemes("OpenIdConnect", "Identity.Application");
+                    policy.RequireAuthenticatedUser();
 
-            //    });
-            //});
+                });
+            });
             services.AddAuthentication("OpenIdConnect")
                 .AddCookie("Identity.Application", options =>
                 {
@@ -361,7 +361,7 @@ namespace AwesomeCare.Admin
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization();
+                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization(apipolicyname);
             });
         }
 
