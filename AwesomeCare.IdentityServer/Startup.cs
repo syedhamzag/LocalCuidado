@@ -26,6 +26,10 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
 using Serilog;
+using AwesomeCare.Services.Services;
+using System;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AwesomeCare.IdentityServer
 {
@@ -74,21 +78,39 @@ category == DbLoggerCategory.Database.Command.Name
                 options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
                 options.EnableSensitiveDataLogging(true);
             });
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.User.RequireUniqueEmail = true;
-
-
+          
+            var identityUser = services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+             {
+                 options.Password.RequireDigit = false;
+                 options.Password.RequiredLength = 6;
+                 options.Password.RequireLowercase = true;
+                 options.Password.RequireNonAlphanumeric = false;
+                 options.Password.RequireUppercase = false;
+                 options.User.RequireUniqueEmail = true;
+                //  options.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
+                
             })
-                .AddEntityFrameworkStores<AwesomeCareDbContext>()
-                .AddDefaultTokenProviders();
+                   .AddEntityFrameworkStores<AwesomeCareDbContext>();
+                //.AddDefaultTokenProviders();
 
+            //services.Configure<DataProtectionTokenProviderOptions>(opt => {
+            //    opt.TokenLifespan = TimeSpan.FromHours(2);
+            //    opt.Name = "Default";
+            //});
+
+            //  services.AddDefaultIdentity<IdentityUser>(options =>
+            //{
+            //    options.Password.RequireDigit = false;
+            //    options.Password.RequiredLength = 6;
+            //    options.Password.RequireLowercase = true;
+            //    options.Password.RequireNonAlphanumeric = false;
+            //    options.Password.RequireUppercase = false;
+            //    options.User.RequireUniqueEmail = true;
+            //})
+            //  .AddEntityFrameworkStores<AwesomeCareDbContext>();
+
+
+            //   services.AddTransient<PasswordResetTokenProvider<IdentityUser>>();
 
             var connectionString = Configuration.GetConnectionString("AwesomeCareConnectionString");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -134,13 +156,18 @@ category == DbLoggerCategory.Database.Command.Name
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
+            services.TryAddScoped<IUserTwoFactorTokenProvider<ApplicationUser>, DataProtectorTokenProvider<ApplicationUser>>();
+            identityUser.AddDefaultTokenProviders();
 
+
+          //  builder.Services.AddScoped<IUserTwoFactorTokenProvider<ApplicationUser>, PhoneNumberTokenProvider<ApplicationUser>>();
+                
             //this must be the same thing configured on all clients
-           // services.AddAuthentication(options =>
+            // services.AddAuthentication(options =>
             //{
             //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
             //    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-                
+
 
             //})
             //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
@@ -209,6 +236,11 @@ category == DbLoggerCategory.Database.Command.Name
 
             services.AddScoped<IProfileService, ProfileService>();
             services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailService>(c =>
+            {
+                string key = Configuration["sendgridKey"];
+                return new EmailService(key);
+            });
             // services.AddScoped<IdentityExpressDbContext, SqliteIdentityDbContext>();
         }
 

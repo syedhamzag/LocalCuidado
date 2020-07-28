@@ -57,5 +57,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AwesomeCare.DataAccess\AwesomeCare.DataAccess.csproj" />
     <ProjectReference Include="..\AwesomeCare.Model\AwesomeCare.Model.csproj" />
+    <ProjectReference Include="..\AwesomeCare.Services\AwesomeCare.Services.csproj" />
   </ItemGroup>
 </Project>
