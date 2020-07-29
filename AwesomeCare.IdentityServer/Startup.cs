@@ -30,6 +30,7 @@ using AwesomeCare.Services.Services;
 using System;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using IdentityExpress.Manager.BusinessLogic.Interfaces.Identity;
 
 namespace AwesomeCare.IdentityServer
 {
@@ -72,13 +73,18 @@ category == DbLoggerCategory.Database.Command.Name
             //    iis.AutomaticAuthentication = false;
             //});
 
+          //  services.AddScoped<UserManager<IdentityUser>>();
+
             services.AddDbContext<AwesomeCareDbContext>(options =>
             {
                 options.UseLoggerFactory(DbLoggerFactory);
                 options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
                 options.EnableSensitiveDataLogging(true);
             });
-          
+
+           //  services.AddTransient<IUserTwoFactorTokenProvider<ApplicationUser>, DataProtectorTokenProvider<ApplicationUser>>();
+          //  services.AddTransient<DataProtectorTokenProvider<ApplicationUser>>();
+
             var identityUser = services.AddIdentity<ApplicationUser, IdentityRole>(options =>
              {
                  options.Password.RequireDigit = false;
@@ -87,11 +93,11 @@ category == DbLoggerCategory.Database.Command.Name
                  options.Password.RequireNonAlphanumeric = false;
                  options.Password.RequireUppercase = false;
                  options.User.RequireUniqueEmail = true;
-                //  options.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
-                
-            })
-                   .AddEntityFrameworkStores<AwesomeCareDbContext>();
-                //.AddDefaultTokenProviders();
+                 //  options.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
+
+             })
+                   .AddEntityFrameworkStores<AwesomeCareDbContext>()
+                .AddDefaultTokenProviders();
 
             //services.Configure<DataProtectionTokenProviderOptions>(opt => {
             //    opt.TokenLifespan = TimeSpan.FromHours(2);
@@ -156,12 +162,11 @@ category == DbLoggerCategory.Database.Command.Name
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
-            services.TryAddScoped<IUserTwoFactorTokenProvider<ApplicationUser>, DataProtectorTokenProvider<ApplicationUser>>();
-            identityUser.AddDefaultTokenProviders();
-
-
-          //  builder.Services.AddScoped<IUserTwoFactorTokenProvider<ApplicationUser>, PhoneNumberTokenProvider<ApplicationUser>>();
-                
+            //builder.Services.Configure<IdentityOptions>(c =>
+            //{
+            //    c.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
+            //});
+            
             //this must be the same thing configured on all clients
             // services.AddAuthentication(options =>
             //{

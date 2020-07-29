@@ -53,7 +53,7 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
            
               //  var tt = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
-              //  var kk = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+             //   var kk = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Page(
