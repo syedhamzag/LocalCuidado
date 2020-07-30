@@ -73,7 +73,7 @@ category == DbLoggerCategory.Database.Command.Name
             //    iis.AutomaticAuthentication = false;
             //});
 
-          //  services.AddScoped<UserManager<IdentityUser>>();
+            //  services.AddScoped<UserManager<IdentityUser>>();
 
             services.AddDbContext<AwesomeCareDbContext>(options =>
             {
@@ -82,8 +82,8 @@ category == DbLoggerCategory.Database.Command.Name
                 options.EnableSensitiveDataLogging(true);
             });
 
-           //  services.AddTransient<IUserTwoFactorTokenProvider<ApplicationUser>, DataProtectorTokenProvider<ApplicationUser>>();
-          //  services.AddTransient<DataProtectorTokenProvider<ApplicationUser>>();
+            //  services.AddTransient<IUserTwoFactorTokenProvider<ApplicationUser>, DataProtectorTokenProvider<ApplicationUser>>();
+            //  services.AddTransient<DataProtectorTokenProvider<ApplicationUser>>();
 
             var identityUser = services.AddIdentity<ApplicationUser, IdentityRole>(options =>
              {
@@ -99,24 +99,6 @@ category == DbLoggerCategory.Database.Command.Name
                    .AddEntityFrameworkStores<AwesomeCareDbContext>()
                 .AddDefaultTokenProviders();
 
-            //services.Configure<DataProtectionTokenProviderOptions>(opt => {
-            //    opt.TokenLifespan = TimeSpan.FromHours(2);
-            //    opt.Name = "Default";
-            //});
-
-            //  services.AddDefaultIdentity<IdentityUser>(options =>
-            //{
-            //    options.Password.RequireDigit = false;
-            //    options.Password.RequiredLength = 6;
-            //    options.Password.RequireLowercase = true;
-            //    options.Password.RequireNonAlphanumeric = false;
-            //    options.Password.RequireUppercase = false;
-            //    options.User.RequireUniqueEmail = true;
-            //})
-            //  .AddEntityFrameworkStores<AwesomeCareDbContext>();
-
-
-            //   services.AddTransient<PasswordResetTokenProvider<IdentityUser>>();
 
             var connectionString = Configuration.GetConnectionString("AwesomeCareConnectionString");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -166,7 +148,7 @@ category == DbLoggerCategory.Database.Command.Name
             //{
             //    c.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
             //});
-            
+
             //this must be the same thing configured on all clients
             // services.AddAuthentication(options =>
             //{
@@ -236,17 +218,26 @@ category == DbLoggerCategory.Database.Command.Name
             //        options.ClientSecret = "copy client secret from Google here";
             //    });
 
-            if (Environment.IsDevelopment())
-                services.UseAdminUI();
+            //This is preventing Password Reset Toke, Phone Number Confirmation Token and other tokens from working
+            //if (Environment.IsDevelopment())
+            //    services.UseAdminUI();
 
             services.AddScoped<IProfileService, ProfileService>();
             services.AddSingleton<IEmailSender, EmailSender>();
             services.AddScoped<IEmailService>(c =>
             {
+                var logger = c.GetService(typeof(ILogger<EmailService>)) as ILogger<EmailService>;
                 string key = Configuration["sendgridKey"];
-                return new EmailService(key);
+                string senderEmail = Configuration["senderEmail"];
+                string senderName = Configuration["senderName"];
+                return new EmailService(key, senderEmail, senderName, logger);
             });
-            // services.AddScoped<IdentityExpressDbContext, SqliteIdentityDbContext>();
+            services.AddLogging(c =>
+            {
+                c.AddConsole();
+                c.AddDebug();
+                c.AddAzureWebAppDiagnostics();
+            });
         }
 
         public void Configure(IApplicationBuilder app, ILogger<Startup> logger)
@@ -272,13 +263,14 @@ category == DbLoggerCategory.Database.Command.Name
             //if (Environment.IsDevelopment())
             //    app.UseAdminUI();
 
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapRazorPages();
                 //endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute(
                     name: "default",
                      "{controller=Client}/{action=Index}/{id?}");
-               
+
             });
         }
     }

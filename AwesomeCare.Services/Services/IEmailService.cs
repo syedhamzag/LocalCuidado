@@ -7,6 +7,6 @@ namespace AwesomeCare.Services.Services
 {
   public  interface IEmailService
     {
-        Task SendAsync(string senderEmail, List<string> recipients, string subject, string htmlContent, bool showAllRecipients = false, string senderName = "MyCuidado");
+        Task SendAsync(List<string> recipients, string subject, string htmlContent, bool showAllRecipients = false);
     }
 }
