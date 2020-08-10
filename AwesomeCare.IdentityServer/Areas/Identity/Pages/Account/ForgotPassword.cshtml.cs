@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using AwesomeCare.Services.Services;
+using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
 {
@@ -18,12 +20,14 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailService emailService;
+        private readonly ILogger<ForgotPasswordModel> logger;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailService emailService,ILogger<ForgotPasswordModel> logger)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
+            this.emailService = emailService;
+            this.logger = logger;
         }
 
         [BindProperty]
@@ -49,6 +53,9 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
 
                 // For more information on how to enable account confirmation and password reset please 
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
+
+                //  var tt = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
+                //   var kk = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 var callbackUrl = Url.Page(
@@ -57,11 +64,14 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+                string content = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+                logger.LogInformation("Reset Password content: {0}", content);
+                await this.emailService.SendAsync(new List<string>() { Input.Email }, "Reset Password", content);
+                //await this.emailService.Send(
+                //    Input.Email,
+                //    "Reset Password",
+                //    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+             
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
