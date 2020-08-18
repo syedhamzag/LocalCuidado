@@ -15,6 +15,8 @@ namespace AwesomeCare.Web.Services.ShiftBooking
         Task<HttpResponseMessage> Post([Body]PostShiftBooking shiftBooking);
         [Get("/ShiftBooking")]
         Task<List<GetShiftBookingDetails>> Get();
+        [Get("/ShiftBooking/{month}/{year}")]
+        Task<GetShiftBookedByMonthYear> GetShiftByMonthAndYear(string month,string year);
         [Get("/ShiftBooking/{id}")]
         Task<GetShiftBookingDetails> Get(int id);
         [Post("/ShiftBooking/Staff/CreateBooking")]

@@ -34,6 +34,13 @@ namespace System.Security.Claims
             return sub;
         }
 
+        public static bool CanDrive(this System.Security.Claims.ClaimsPrincipal claimsPrincipal)
+        {
+            var claim = claimsPrincipal.FindFirst("canDrive")?.Value;
+            return claim.Equals("yes",StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        
         public static string Email(this System.Security.Claims.ClaimsPrincipal claimsPrincipal)
         {
             var claim = claimsPrincipal.FindFirst("email")?.Value;

@@ -40,7 +40,11 @@
                                         <td>@item.data.Remark</td>
                                         
                                         <td>
-                                            <a asp-controller="ShiftBooking" asp-action="Create" asp-route-shiftId="@item.data.ShiftBookingId" asp-route-month="@item.data.ShiftDate.ToMonthName()" class="btn btn-success btn-sm">Book</a>
+                                            @if (item.data.ShiftDate.ToMonth() >= DateTime.Now.Month)
+                                            {
+                                                <a asp-controller="ShiftBooking" asp-action="Create" asp-route-shiftId="@item.data.ShiftBookingId" asp-route-month="@item.data.ShiftDate.ToMonthName()" class="btn btn-success btn-sm">Book</a>
+
+                                            }
                                         </td>
                                     </tr>
                                 }

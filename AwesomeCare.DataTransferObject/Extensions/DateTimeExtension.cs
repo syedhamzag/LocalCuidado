@@ -39,6 +39,23 @@ namespace System
             }
         }
 
+        public static int ToMonth(this string monthYear)
+        {
+            try
+            {
+                var splittedDate = monthYear.Split('/');
+                int month = int.Parse(splittedDate[0]);
+                
+                return month;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+
+            }
+        }
+
+
         public static string ToMonthName(this string month,int year)
         {
             try

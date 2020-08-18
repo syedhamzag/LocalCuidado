@@ -9,8 +9,10 @@ using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.API.Controllers
@@ -23,11 +25,18 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffPersonalInfo> _staffPersonalInfoRepository;
         private IGenericRepository<Rota> _rota;
         private IGenericRepository<StaffWorkTeam> _staffWorkTeamRepo;
-        private IGenericRepository<StaffShiftBooking> _stafShiftBookingRepo;
+        private IGenericRepository<StaffShiftBooking> _staffShiftBookingRepo;
+        private IGenericRepository<StaffShiftBookingDay> _staffShiftBookingDayRepo;
         private AwesomeCareDbContext _dbContext;
         private ILogger<ShiftBookingController> _logger;
 
-        public ShiftBookingController(IGenericRepository<StaffShiftBooking> stafShiftBookingRepo,IGenericRepository<StaffWorkTeam> staffWorkTeamRepo, IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository, IGenericRepository<Rota> rota, ILogger<ShiftBookingController> logger, IGenericRepository<ShiftBooking> shiftBookingRepository, AwesomeCareDbContext dbContext)
+        public ShiftBookingController(IGenericRepository<StaffShiftBooking> staffShiftBookingRepo,
+            IGenericRepository<StaffWorkTeam> staffWorkTeamRepo,
+            IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository,
+            IGenericRepository<Rota> rota, ILogger<ShiftBookingController> logger,
+            IGenericRepository<ShiftBooking> shiftBookingRepository,
+            AwesomeCareDbContext dbContext,
+            IGenericRepository<StaffShiftBookingDay> staffShiftBookingDayRepo)
         {
             _shiftBookingRepository = shiftBookingRepository;
             _dbContext = dbContext;
@@ -35,7 +44,8 @@ namespace AwesomeCare.API.Controllers
             _staffPersonalInfoRepository = staffPersonalInfoRepository;
             _rota = rota;
             _staffWorkTeamRepo = staffWorkTeamRepo;
-            _stafShiftBookingRepo = stafShiftBookingRepo;
+            _staffShiftBookingRepo = staffShiftBookingRepo;
+            _staffShiftBookingDayRepo = staffShiftBookingDayRepo;
         }
 
 
@@ -81,7 +91,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Get()
         {
-           
+
             var getEntities = (from shift in _shiftBookingRepository.Table
                                join staff in _staffPersonalInfoRepository.Table on shift.Team equals staff.StaffPersonalInfoId
                                join rt in _rota.Table on shift.Rota equals rt.RotaId
@@ -89,23 +99,23 @@ namespace AwesomeCare.API.Controllers
                                select new GetShiftBookingDetails
                                {
                                    Team = shift.Team,
-                                   DriverRequired = shift.DriverRequired?"Yes":"No",
+                                   DriverRequired = shift.DriverRequired ? "Yes" : "No",
                                    NumberOfStaff = shift.NumberOfStaff,
                                    PublishTo = shift.PublishTo,
                                    Remark = shift.Remark,
                                    Rota = shift.Rota,
                                    ShiftBookingId = shift.ShiftBookingId,
-                                   ShiftDate= shift.ShiftDate,
-                                   StartTime=shift.StartTime,
+                                   ShiftDate = shift.ShiftDate,
+                                   StartTime = shift.StartTime,
                                    StopTime = shift.StopTime,
-                                   TeamStaff = string.Concat(staff.FirstName," ",staff.MiddleName," ",staff.LastName),
-                                   RotaName= rt.RotaName,
+                                   TeamStaff = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName),
+                                   RotaName = rt.RotaName,
                                    PublishToWorkTeam = wt.WorkTeam
                                }).ToList();
 
             return Ok(getEntities);
         }
-       
+
         /// <summary>
         /// Create Shift Booking
         /// </summary>
@@ -115,7 +125,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetShiftBooking), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post([FromBody]PostShiftBooking model)
+        public async Task<IActionResult> Post([FromBody] PostShiftBooking model)
         {
             if (!ModelState.IsValid)
             {
@@ -139,7 +149,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetStaffShiftBooking), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateStaffBooking([FromBody]PostStaffShiftBooking model)
+        public async Task<IActionResult> CreateStaffBooking([FromBody] PostStaffShiftBooking model)
         {
             if (!ModelState.IsValid)
             {
@@ -147,11 +157,48 @@ namespace AwesomeCare.API.Controllers
             }
 
             var postEntity = Mapper.Map<StaffShiftBooking>(model);
-            var newEntity = await _stafShiftBookingRepo.InsertEntity(postEntity);
+            var newEntity = await _staffShiftBookingRepo.InsertEntity(postEntity);
             var getEntity = Mapper.Map<GetStaffShiftBooking>(newEntity);
             return Ok(getEntity);
-           // return CreatedAtRoute("GetShiftBookingById", new { id = getEntity.ShiftBookingId }, getEntity);
+            // return CreatedAtRoute("GetShiftBookingById", new { id = getEntity.ShiftBookingId }, getEntity);
         }
+        [AllowAnonymous]
+        [HttpGet("{month}/{year}", Name = "GetShiftBookingByDate")]
+        [ProducesResponseType(type: typeof(GetShiftBookedByMonthYear), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetShiftBookingByMonthYear(string month, string year)
+        {
+            string monthyear = $"{month}/{year}";
+            var entity =await (from shift in _shiftBookingRepository.Table
+                          where shift.ShiftDate == monthyear
+                          // join staffShiftBooking in _stafShiftBookingRepo.Table on shift.ShiftBookingId equals staffShiftBooking.ShiftBookingId
+                          select new GetShiftBookedByMonthYear
+                          {
+                              TeamId = shift.Team,
+                              DriverRequired = shift.DriverRequired,
+                              NumberOfStaffRequired = shift.NumberOfStaff,
+                              PublishTo = shift.PublishTo,
+                              Remark = shift.Remark,
+                              RotaId = shift.Rota,
+                              ShiftBookingId = shift.ShiftBookingId,
+                              ShiftDate = shift.ShiftDate,
+                              StartTime = shift.StartTime,
+                              StopTime = shift.StopTime,
+                              NumberOfStaffRegistered = shift.StaffShiftBooking.Count,
+                              BookedDays = (from shiftStaff in shift.StaffShiftBooking
+                                            join shiftDay in _staffShiftBookingDayRepo.Table on shiftStaff.StaffShiftBookingId equals shiftDay.StaffShiftBookingId
+                                            select new BookedDays
+                                            {
+                                                Day = shiftDay.Day,
+                                                ShiftBookedById = shiftStaff.StaffPersonalInfoId,
+                                                StaffShiftBookingDayId = shiftDay.StaffShiftBookingDayId,
+                                                StaffShiftBookingId = shiftDay.StaffShiftBookingId,
+                                                WeekDay= shiftDay.WeekDay
+                                            }).ToList()
+                          }).FirstOrDefaultAsync();
 
+            return Ok(entity);
+
+        }
     }
 }
