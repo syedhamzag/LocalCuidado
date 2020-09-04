@@ -35,6 +35,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
 
     public class BookedDays
     {
+        public BookedDays()
+        {
+            Staffs = new List<StaffBooked>();
+        }
         public int StaffShiftBookingId { get; set; }
         public int StaffShiftBookingDayId { get; set; }
         public string WeekDay { get; set; }
@@ -43,5 +47,14 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
         /// StaffPersonalId
         /// </summary>
         public int ShiftBookedById { get; set; }
+
+        public List<StaffBooked> Staffs { get; set; }
+    }
+
+    public class StaffBooked
+    {
+        public int StaffPersonalInfoId { get; set; }
+        public string StaffName { get; set; }
+        public bool IsStaffDriver { get; set; }
     }
 }

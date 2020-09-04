@@ -21,7 +21,7 @@ using System.Security.Claims;
 
 namespace AwesomeCare.Web.Controllers
 {
-    [Authorize]
+   
     public class ShiftBookingController : BaseController
     {
         private IShiftBookingService _shiftBookingService;
@@ -35,6 +35,8 @@ namespace AwesomeCare.Web.Controllers
             _logger = logger;
             _clientRotaNameService = clientRotaNameService;
         }
+
+        [HttpGet("[controller]/[action]")]
         public async Task<IActionResult> Create(string month, int shiftId)
         {
           
