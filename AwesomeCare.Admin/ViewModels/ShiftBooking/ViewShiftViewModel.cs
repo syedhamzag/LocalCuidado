@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.ViewModels.ShiftBooking
 {
-    public class ViewShiftViewModel
+    public class ViewShiftViewModel: GetShiftBookedByMonthYear
     {
         public ViewShiftViewModel()
         {

@@ -201,7 +201,7 @@ namespace AwesomeCare.API.Controllers
 
         }
 
-        [AllowAnonymous]
+       
         [HttpGet("Admin/{monthId}", Name = "GetShiftForAdminByMonth")]
         [ProducesResponseType(type: typeof(GetShiftBookedByMonthYear), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -210,8 +210,11 @@ namespace AwesomeCare.API.Controllers
             string year = DateTime.Now.Year.ToString();
             string month = monthId.ToString("D2");
             string monthyear = $"{month}/{year}";
+
+            // var query =await ().ToListAsync();
+
+
             var entity = await (from shift in _shiftBookingRepository.Table
-                                //from sb in _shiftBookingRepository.Table
                                 where shift.ShiftDate == monthyear
                                 select new GetShiftBookedByMonthYear
                                 {
@@ -226,27 +229,46 @@ namespace AwesomeCare.API.Controllers
                                     StartTime = shift.StartTime,
                                     StopTime = shift.StopTime,
                                     NumberOfStaffRegistered = shift.StaffShiftBooking.Count,
-                                    BookedDays = (from shiftStaff in shift.StaffShiftBooking
-                                                  join shiftDay in _staffShiftBookingDayRepo.Table on shiftStaff.StaffShiftBookingId equals shiftDay.StaffShiftBookingId
-                                                 // join staff in _staffPersonalInfoRepository.Table on shiftStaff.StaffPersonalInfoId equals staff.StaffPersonalInfoId
-
-                                                  select new BookedDays
-                                                  {
-                                                      Day = shiftDay.Day,
-                                                      ShiftBookedById = shiftStaff.StaffPersonalInfoId,
-                                                      StaffShiftBookingDayId = shiftDay.StaffShiftBookingDayId,
-                                                      StaffShiftBookingId = shiftDay.StaffShiftBookingId,
-                                                      WeekDay = shiftDay.WeekDay,
-                                                      Staffs = (from booking in staff
-                                                              //  join staff in _staffPersonalInfoRepository.Table on booking.StaffPersonalInfoId equals staff.StaffPersonalInfoId
-                                                                //  where booking.ShiftBookingId == shift.ShiftBookingId
-                                                                select new StaffBooked
+                                    Staffs = (from shiftStaff in shift.StaffShiftBooking
+                                              join staff in _staffPersonalInfoRepository.Table on shiftStaff.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                              select new StaffBooked
+                                              {
+                                                  StaffShiftBookingId = shiftStaff.StaffShiftBookingId,
+                                                  ShiftBookingId = shiftStaff.ShiftBookingId,
+                                                  StaffPersonalInfoId = staff.StaffPersonalInfoId,
+                                                  StaffName = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName,
+                                                  IsStaffDriver = staff.CanDrive == "Yes",
+                                                  BookedDays = (from bookings in shiftStaff.Days
+                                                                select new BookedDays
                                                                 {
-                                                                    StaffPersonalInfoId = booking.StaffPersonalInfoId,
-                                                                    StaffName = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName,
-                                                                    IsStaffDriver = staff.CanDrive == "Yes"
+                                                                    StaffShiftBookingDayId = bookings.StaffShiftBookingDayId,
+                                                                    StaffShiftBookingId = bookings.StaffShiftBookingId,
+                                                                    Day = bookings.Day,
+                                                                    WeekDay = bookings.WeekDay
                                                                 }).ToList()
-                                                  }).ToList()
+                                              }).ToList()
+                                    //BookedDays = (from shiftStaff in shift.StaffShiftBooking
+                                    //              from st in sh.StaffShiftBooking
+                                    //              join shiftDay in _staffShiftBookingDayRepo.Table on shiftStaff.StaffShiftBookingId equals shiftDay.StaffShiftBookingId
+                                    //              join staff in _staffPersonalInfoRepository.Table on shiftStaff.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+
+                                    //              select new BookedDays
+                                    //              {
+                                    //                  Day = shiftDay.Day,
+                                    //                  ShiftBookedById = shiftStaff.StaffPersonalInfoId,
+                                    //                  StaffShiftBookingDayId = shiftDay.StaffShiftBookingDayId,
+                                    //                  StaffShiftBookingId = shiftDay.StaffShiftBookingId,
+                                    //                  WeekDay = shiftDay.WeekDay,
+                                    //                  Staffs = (from booking in
+                                    //                                //  join staff in _staffPersonalInfoRepository.Table on booking.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                    //                                //  where booking.ShiftBookingId == shift.ShiftBookingId
+                                    //                            select new StaffBooked
+                                    //                            {
+                                    //                                StaffPersonalInfoId = booking.StaffPersonalInfoId,
+                                    //                                StaffName = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName,
+                                    //                                IsStaffDriver = staff.CanDrive == "Yes"
+                                    //                            }).ToList()
+                                    //              }).ToList()
                                 }).FirstOrDefaultAsync();
             return Ok(entity);
         }

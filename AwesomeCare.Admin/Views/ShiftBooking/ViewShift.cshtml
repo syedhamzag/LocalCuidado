@@ -21,12 +21,15 @@
                     </ul>*@
             </div>
             <div class="body">
-                <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                    <label>Month</label>
-                    <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control">
-                    </select>
-
-                </div>
+                <form method="post" asp-route="ViewShift">
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label>Month</label>
+                        <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control">
+                        </select>
+                        <br />
+                        <input type="submit" class="btn btn-primary float-right" value="Search" />
+                    </div>
+                </form>
 
                 <table class="table table-bordered">
                     <thead>
@@ -53,52 +56,66 @@
                                     {
                                         @foreach (string wday in Model.WeekDays)
                                         {
-                                    <td>
+                                            <td>
 
-                                        @if (d.IsSameDay(wday, Model.SelectedMonth))
-                                        {
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <p class="align-right">
-                                                        <span>
-                                                            @d.ToString("D2")
-                                                        </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 displayblock align-center">
-                                                    
-                                                        <P>
-                                                            STAFF NAME (D)
-                                                        </P>
-                                                        <P>
-                                                            STAFF NAME
-                                                        </P>
-                                                    
-                                                </div>
-                                            </div>
-                                            
-
-                                            if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
-                                            {
-                                                isLastDay = true;
-                                            }
-                                            else
-                                            {
-                                                if (d == Model.DaysInMonth)
+                                                @if (d.IsSameDay(wday, Model.SelectedMonth))
                                                 {
-                                                    isEnded = true;
-                                                    break;
-                                                }
-                                                else
-                                                {
-                                                    ++d;
-                                                }
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <p class="align-right">
+                                                                <span>
+                                                                    @d.ToString("D2")
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 displayblock align-center">
+                                                            @foreach (var staff in Model.Staffs)
+                                                            {
+                                                                if (staff.BookedDays.Any(c => c.Day.Equals(d.ToString("D2"))))
+                                                                {
+                                                                    <P>
+                                                                        @{
+                                                                            var driver = @staff.IsStaffDriver ? " (D)" : "";
 
-                                            }
-                                        }
-                                    </td>
+                                                                            var staffandDriver = staff.StaffName + driver;
+
+                                                                        }
+                                                                        @staffandDriver
+                                                                    </P>
+                                                                }
+                                                            }
+                                                            @*<P>
+                                                                STAFF NAME (D)
+                                                            </P>
+                                                            <P>
+                                                                STAFF NAME
+                                                            </P>*@
+
+                                                        </div>
+                                                    </div>
+
+
+                                                    if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
+                                                    {
+                                                        isLastDay = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        if (d == Model.DaysInMonth)
+                                                        {
+                                                            isEnded = true;
+                                                            break;
+                                                        }
+                                                        else
+                                                        {
+                                                            ++d;
+                                                        }
+
+                                                    }
+                                                }
+                                            </td>
                                         }
                                         if (isEnded)
                                         {

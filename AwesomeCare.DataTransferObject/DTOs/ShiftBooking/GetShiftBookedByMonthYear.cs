@@ -8,6 +8,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
     {
         public GetShiftBookedByMonthYear()
         {
+            Staffs = new List<StaffBooked>();
             BookedDays = new List<BookedDays>();
         }
         public int TeamId { get; set; }
@@ -21,6 +22,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
         public string StartTime { get; set; }
         public string StopTime { get; set; }
         public int NumberOfStaffRegistered { get; set; }
+        public List<StaffBooked> Staffs { get; set; }
         public List<BookedDays> BookedDays { get; set; }
     }
     //public class ShiftBookingStaff
@@ -35,10 +37,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
 
     public class BookedDays
     {
-        public BookedDays()
-        {
-            Staffs = new List<StaffBooked>();
-        }
+       
         public int StaffShiftBookingId { get; set; }
         public int StaffShiftBookingDayId { get; set; }
         public string WeekDay { get; set; }
@@ -48,13 +47,21 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
         /// </summary>
         public int ShiftBookedById { get; set; }
 
-        public List<StaffBooked> Staffs { get; set; }
     }
 
     public class StaffBooked
     {
+        public StaffBooked()
+        {
+            BookedDays = new List<BookedDays>();
+        }
         public int StaffPersonalInfoId { get; set; }
         public string StaffName { get; set; }
         public bool IsStaffDriver { get; set; }
+        public int StaffShiftBookingId { get; set; }
+        public int ShiftBookingId { get; set; }
+        public int MyProperty { get; set; }
+
+        public List<BookedDays> BookedDays { get; set; }
     }
 }

@@ -18,6 +18,8 @@ using AwesomeCare.Admin.Services.StaffWorkTeam;
 using AwesomeCare.DataTransferObject.DTOs.StaffWorkTeam;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
+using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -93,16 +95,38 @@ namespace AwesomeCare.Admin.Controllers
             return View(entity);
         }
 
+       
         [Route("/ShiftBooking/View-Shift",Name ="ViewShift")]
-        public IActionResult ViewShift()
+        public async Task<IActionResult> ViewShift()
         {
             var model = new ViewShiftViewModel();
             var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             model.DaysInMonth = daysInMonth;
-            model.SelectedMonth = model.Months[DateTime.Now.Month-1].Text;
+            string selectedMonth = model.Months[DateTime.Now.Month - 1].Text;
+            model.SelectedMonth =selectedMonth;
 
+            var months = DateTimeFormatInfo.CurrentInfo.MonthNames;
+            var monthId = Array.IndexOf(months, selectedMonth) + 1;
+
+
+            var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId);
+            model.Staffs = staffShiftBookings.Staffs;
             return View(model);
         }
 
+
+        [Route("/ShiftBooking/View-Shift", Name = "ViewShift")]
+        [HttpPost]
+        public async Task<IActionResult> ViewShift(ViewShiftViewModel model)
+        {
+            var months = DateTimeFormatInfo.CurrentInfo.MonthNames;
+            var monthId = Array.IndexOf(months, model.SelectedMonth) + 1;
+            var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, monthId);
+            model.DaysInMonth = daysInMonth;
+            
+            var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId);
+            model.Staffs = staffShiftBookings.Staffs;
+            return View(model);
+        }
     }
 }

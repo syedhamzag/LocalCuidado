@@ -15,5 +15,8 @@ namespace AwesomeCare.Admin.Services.ShiftBooking
         Task<List<GetShiftBookingDetails>> Get();
         [Get("/ShiftBooking/{id}")]
         Task<GetShiftBookingDetails> Get(int id);
+
+        [Get("/ShiftBooking/Admin/{monthId}")]
+        Task<GetShiftBookedByMonthYear> GetStaffShiftBookingsByMonth(int monthId);
     }
 }
