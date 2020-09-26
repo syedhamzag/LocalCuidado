@@ -1,0 +1,384 @@
+﻿@using AwesomeCare.Admin.ViewModels.ShiftBooking;
+
+@model CreateStaffShiftViewModel
+
+@{
+    ViewData["Title"] = "Shift Booking - Create Staff Shift";
+}
+
+@section VendorStyleSheets{
+
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Create Shift Booking</h2>
+
+            </div>
+            <div class="body">
+                <form >
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="SelectedStaff" class="control-label"></label>
+                        <select asp-for="SelectedStaff" class="form-control chosen-select selectedStaff" data-placeholder="Choose a Staff..." asp-items="Model.Staffs">
+                        </select>
+                        <span asp-validation-for="SelectedStaff" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label>Month</label>
+                        <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control">
+                        </select>
+
+                    </div>
+
+                    <br />
+                    <div class="col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <input type="submit" name="search"  formaction="/ShiftBooking/SearchShiftBooking" formmethod="post" class="btn btn-primary float-right" value="Search" formnovalidate/>
+                    </div>
+
+               
+                <br />
+               
+                    <input type="hidden" asp-for="DaysInMonth" />
+                    <input type="hidden" asp-for="ShiftBookingId"  value="@Model.ShiftBookingId"/>
+                    <input type="hidden" asp-for="@Model.SelectedMonth" />
+                   
+
+
+                    @if (Model.Staff != null)
+                    {
+                       
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    @foreach (string day in Model.WeekDays)
+                                    {
+                                        <th>@day</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var totalDays = 7;
+                                    var remainder = Model.DaysInMonth % 7;
+                                    var totalRows = remainder > 0 ? (Model.DaysInMonth / totalDays) + 1 : Model.DaysInMonth / totalDays;
+                                    var start = 1;
+                                    bool isLastDay = false;
+                                    bool isEnded = false;
+                                    for (int r = 1; r <= 6; r++)
+                                    {
+                                        <tr>
+
+                                            @for (int d = start; d <= Model.DaysInMonth; d++)
+                                            {
+                                                @foreach (string wday in Model.WeekDays)
+                                                {
+                                                    <td>
+
+                                                        @if (d.IsSameDay(wday, Model.SelectedMonth))
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <p class="align-right">
+                                                                        <span>
+                                                                            @d.ToString("D2")
+                                                                        </span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 align-right">
+
+                                                                    @if (d >= DateTime.Now.Day)
+                                                                    {
+
+                                                                        if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2"))))
+                                                                        {
+                                                                            if (Model.ShiftBooked.NumberOfStaffRegistered == Model.ShiftBooked.NumberOfStaffRequired)
+                                                                            {
+                                                                                <p class="btn-success btn">Fully Booked</p>
+                                                                            }
+                                                                            else if (Model.ShiftBooked.NumberOfStaffRequired == 1)
+                                                                            {
+                                                                                if (Model.ShiftBooked.DriverRequired)
+                                                                                {
+                                                                                    if (Model.CanUserDrive)
+                                                                                    {
+
+                                                                                        var staffPersonalInfoId = Model.SelectedStaff;
+                                                                                        if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
+                                                                                        {
+                                                                                            <small>Booked</small>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <label class="fancy-checkbox">
+                                                                                                <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                                                <span></span>
+                                                                                            </label>
+
+                                                                                            string dayName = $"{d.ToString("D2")}_day";
+                                                                                            <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                        }
+
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <span class="text-warning">Driver Only</span>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    var staffPersonalInfoId = Model.SelectedStaff;
+                                                                                    if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
+                                                                                    {
+                                                                                        <small>Booked</small>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <label class="fancy-checkbox">
+                                                                                            <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                                            <span></span>
+                                                                                        </label>
+
+                                                                                        string dayName = $"{d.ToString("D2")}_day";
+                                                                                        <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            else if (Model.ShiftBooked.NumberOfStaffRegistered != 0 && (Model.ShiftBooked.NumberOfStaffRequired - Model.ShiftBooked.NumberOfStaffRegistered) == 1)
+                                                                            {
+                                                                                if (Model.ShiftBooked.DriverRequired)
+                                                                                {
+                                                                                    if (Model.CanUserDrive)
+                                                                                    {
+                                                                                        var staffPersonalInfoId = Model.SelectedStaff;
+                                                                                        if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
+                                                                                        {
+                                                                                            <small>Booked</small>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <label class="fancy-checkbox">
+                                                                                                <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                                                <span></span>
+                                                                                            </label>
+
+                                                                                            string dayName = $"{d.ToString("D2")}_day";
+                                                                                            <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <span class="text-warning">Driver Only</span>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    var staffPersonalInfoId = Model.SelectedStaff;
+                                                                                    if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
+                                                                                    {
+                                                                                        <small>Booked</small>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <label class="fancy-checkbox">
+                                                                                            <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                                            <span></span>
+                                                                                        </label>
+
+                                                                                        string dayName = $"{d.ToString("D2")}_day";
+                                                                                        <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var staffPersonalInfoId = Model.SelectedStaff;
+                                                                                if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
+                                                                                {
+                                                                                    <small>Booked</small>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <label class="fancy-checkbox">
+                                                                                        <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                                        <span></span>
+                                                                                    </label>
+
+                                                                                    string dayName = $"{d.ToString("D2")}_day";
+                                                                                    <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                }
+                                                                            }
+
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (Model.ShiftBooked.NumberOfStaffRequired == 1)
+                                                                            {
+                                                                                if (Model.ShiftBooked.DriverRequired)
+                                                                                {
+                                                                                    if (Model.CanUserDrive)
+                                                                                    {
+                                                                                        var staffPersonalInfoId = Model.SelectedStaff;
+                                                                                        if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
+                                                                                        {
+                                                                                            <small>Booked</small>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <label class="fancy-checkbox">
+                                                                                                <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                                                <span></span>
+                                                                                            </label>
+
+                                                                                            string dayName = $"{d.ToString("D2")}_day";
+                                                                                            <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <span class="text-warning">Driver Only</span>
+                                                                                    }
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    var staffPersonalInfoId = Model.SelectedStaff;
+                                                                                    if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
+                                                                                    {
+                                                                                        <small>Booked</small>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <label class="fancy-checkbox">
+                                                                                            <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                                            <span></span>
+                                                                                        </label>
+
+                                                                                        string dayName = $"{d.ToString("D2")}_day";
+                                                                                        <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var staffPersonalInfoId = Model.SelectedStaff;
+                                                                                if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
+                                                                                {
+                                                                                    <small>Booked</small>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <label class="fancy-checkbox">
+                                                                                        <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                                        <span></span>
+                                                                                    </label>
+
+                                                                                    string dayName = $"{d.ToString("D2")}_day";
+                                                                                    <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                }
+                                                                            }
+
+
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label class="fancy-checkbox">
+                                                                            <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+
+                                                                            <span></span>
+                                                                        </label>
+
+                                                                        string dayName = $"{d.ToString("D2")}_day";
+                                                                        <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+
+                                                                    }
+                                                                </div>
+                                                            </div>
+
+
+                                                            if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
+                                                            {
+                                                                isLastDay = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                if (d == Model.DaysInMonth)
+                                                                {
+                                                                    isEnded = true;
+                                                                    break;
+                                                                }
+                                                                else
+                                                                {
+                                                                    ++d;
+                                                                }
+
+                                                            }
+                                                        }
+                                                    </td>
+                                                }
+                                                if (isEnded)
+                                                {
+                                                    break;
+                                                }
+                                                else
+                                                {
+                                                    if (isLastDay)
+                                                    {
+                                                        start = d + 1;
+                                                        break;
+                                                    }
+                                                }
+
+                                            }
+                                        </tr>
+
+                                        if (isEnded)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                        <div class="m-t-30">
+                            <input type="submit" value="Create" name="create"  formaction="/ShiftBooking/CreateShift" formmethod="post" class="btn btn-success float-right" formnovalidate/>
+                        </div>
+                    }
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        //function LoadShifts() {
+        //    var staffSelect = document.getElementById('selectedStaff')
+        //    var dayOfWeekSelect = document.getElementById('selectedDayOfWeek')
+        //   // var option = staffSelect.options[staffSelect.selectedIndex];
+        //    console.log(staffSelect.value)
+        //    console.log(dayOfWeekSelect.value)
+
+        //    var form1 = document.forms[0];
+        //   // form1.action = '/ShiftBooking/CreateStaffShift?staff=1&month=May'
+        //    form1.method ='post'
+        //    form1.submit();
+        //}
+    </script>
+}

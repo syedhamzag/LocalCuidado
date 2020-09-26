@@ -53,19 +53,6 @@ namespace AwesomeCare.Web.Controllers
 
             HttpContext.Session.Set("shiftBooked", shiftBooked);
 
-            //var savedRota = HttpContext.Session.Get<List<GetClientRotaName>>("rotas");
-            //if (savedRota == null)
-            //{
-            //    var rotas = await _clientRotaNameService.Get();
-            //    model.Rotas = rotas.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
-            //    HttpContext.Session.Set<List<GetClientRotaName>>("rotas", rotas);
-            //}
-            //else
-            //{
-            //    model.Rotas = savedRota.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
-            //}
-
-
             model.ShiftBookingId = shiftId;
 
             var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);

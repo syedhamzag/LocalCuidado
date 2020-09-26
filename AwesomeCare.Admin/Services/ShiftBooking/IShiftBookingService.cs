@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
+using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using Refit;
 namespace AwesomeCare.Admin.Services.ShiftBooking
 {
@@ -18,5 +19,9 @@ namespace AwesomeCare.Admin.Services.ShiftBooking
 
         [Get("/ShiftBooking/Admin/{monthId}")]
         Task<GetShiftBookedByMonthYear> GetStaffShiftBookingsByMonth(int monthId);
+        [Get("/ShiftBooking/{month}/{year}")]
+        Task<GetShiftBookedByMonthYear> GetShiftByMonthAndYear(string month, string year);
+        [Post("/ShiftBooking/Staff/CreateBooking")]
+        Task<HttpResponseMessage> CreateBooking([Body] PostStaffShiftBooking shiftBooking);
     }
 }
