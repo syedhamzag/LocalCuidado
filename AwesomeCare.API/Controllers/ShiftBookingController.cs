@@ -7,6 +7,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
+using AwesomeCare.DataTransferObject.DTOs.ShiftBookingBlockedDays;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +28,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffWorkTeam> _staffWorkTeamRepo;
         private IGenericRepository<StaffShiftBooking> _staffShiftBookingRepo;
         private IGenericRepository<StaffShiftBookingDay> _staffShiftBookingDayRepo;
+        private IGenericRepository<ShiftBookingBlockedDays> _shiftBookingBlockedDaysRepo;
         private AwesomeCareDbContext _dbContext;
         private ILogger<ShiftBookingController> _logger;
 
@@ -36,7 +38,8 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<Rota> rota, ILogger<ShiftBookingController> logger,
             IGenericRepository<ShiftBooking> shiftBookingRepository,
             AwesomeCareDbContext dbContext,
-            IGenericRepository<StaffShiftBookingDay> staffShiftBookingDayRepo)
+            IGenericRepository<StaffShiftBookingDay> staffShiftBookingDayRepo,
+            IGenericRepository<ShiftBookingBlockedDays> shiftBookingBlockedDaysRepo)
         {
             _shiftBookingRepository = shiftBookingRepository;
             _dbContext = dbContext;
@@ -46,6 +49,7 @@ namespace AwesomeCare.API.Controllers
             _staffWorkTeamRepo = staffWorkTeamRepo;
             _staffShiftBookingRepo = staffShiftBookingRepo;
             _staffShiftBookingDayRepo = staffShiftBookingDayRepo;
+            _shiftBookingBlockedDaysRepo = shiftBookingBlockedDaysRepo;
         }
 
 
@@ -185,6 +189,14 @@ namespace AwesomeCare.API.Controllers
                                     StartTime = shift.StartTime,
                                     StopTime = shift.StopTime,
                                     NumberOfStaffRegistered = shift.StaffShiftBooking.Count,
+                                    BlockedDays = (from bd in shift.ShiftBookingBlockedDays
+                                                   select new GetShiftBookingBlockedDays
+                                                   {
+                                                       Day = bd.Day,
+                                                       ShiftBookingBlockedDaysId = bd.ShiftBookingBlockedDaysId,
+                                                       ShiftBookingId = bd.ShiftBookingId,
+                                                       WeekDay = bd.WeekDay
+                                                   }).ToList(),
                                     BookedDays = (from shiftStaff in shift.StaffShiftBooking
                                                   join shiftDay in _staffShiftBookingDayRepo.Table on shiftStaff.StaffShiftBookingId equals shiftDay.StaffShiftBookingId
                                                   select new BookedDays
@@ -201,7 +213,7 @@ namespace AwesomeCare.API.Controllers
 
         }
 
-       
+
         [HttpGet("Admin/{monthId}", Name = "GetShiftForAdminByMonth")]
         [ProducesResponseType(type: typeof(GetShiftBookedByMonthYear), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -272,5 +284,42 @@ namespace AwesomeCare.API.Controllers
                                 }).FirstOrDefaultAsync();
             return Ok(entity);
         }
+
+
+        [HttpPost("BlockDay")]
+        [ProducesResponseType(type: typeof(GetShiftBookingBlockedDays), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> BlockDays([FromBody] PostShiftBookingBlockedDays model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+
+            var postEntity = Mapper.Map<ShiftBookingBlockedDays>(model);
+            var entity = await _shiftBookingBlockedDaysRepo.InsertEntity(postEntity);
+            var getEntity = Mapper.Map<GetShiftBookingBlockedDays>(entity);
+
+
+            return Ok(getEntity);
+        }
+
+       
+        [HttpPost("BlockDays")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> BlockDays([FromBody] List<PostShiftBookingBlockedDays> model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+
+            var postEntities = Mapper.Map<List<ShiftBookingBlockedDays>>(model);
+            await _shiftBookingBlockedDaysRepo.InsertEntities(postEntities);
+
+            return Ok();
+        }
+
     }
 }

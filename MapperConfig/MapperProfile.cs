@@ -27,6 +27,7 @@ using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.DataTransferObject.DTOs.RotaTask;
 using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
+using AwesomeCare.DataTransferObject.DTOs.ShiftBookingBlockedDays;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffBlackList;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
@@ -532,7 +533,8 @@ namespace MapperConfig
             CreateMap<ShiftBooking, GetShiftBooking>();
             CreateMap<PostShiftBooking, ShiftBooking>()
                 .ForMember(dto => dto.StaffShiftBooking, mem => mem.Ignore())
-                .ForMember(dto => dto.ShiftBookingId, mem => mem.Ignore());
+                .ForMember(dto => dto.ShiftBookingId, mem => mem.Ignore())
+                .ForMember(dto => dto.ShiftBookingBlockedDays, mem => mem.Ignore());
 
             CreateMap<PostStaffShiftBooking, StaffShiftBooking>()
                 .ForMember(dto => dto.ShiftBooking, mem => mem.Ignore())
@@ -548,6 +550,15 @@ namespace MapperConfig
                  .ForMember(dto => dto.StaffShiftBookingDayId, mem => mem.Ignore())
                 .ForMember(dto => dto.ShiftBooking, mem => mem.Ignore());
 
+            #endregion
+
+            #region ShiftBookingBlockedDays
+            CreateMap<PostShiftBookingBlockedDays,ShiftBookingBlockedDays>()
+                .ForMember(dto=>dto.ShiftBookingBlockedDaysId,mem=>mem.Ignore())
+                .ForMember(dto=>dto.ShiftBooking,mem=>mem.Ignore());
+
+            CreateMap<ShiftBookingBlockedDays,GetShiftBookingBlockedDays>();
+           
             #endregion
 
             #region StaffWorkTeam

@@ -31,135 +31,157 @@
                     </div>
                 </form>
 
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            @foreach (string day in Model.WeekDays)
-                            {
-                                <th>@day</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            var totalDays = 7;
-                            var remainder = Model.DaysInMonth % 7;
-                            var totalRows = remainder > 0 ? (Model.DaysInMonth / totalDays) + 1 : Model.DaysInMonth / totalDays;
-                            var start = 1;
-                            bool isLastDay = false;
-                            bool isEnded = false;
-                            for (int r = 1; r <= 6; r++)
-                            {
-                                <tr>
+                <div id="divShift">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                @foreach (string day in Model.WeekDays)
+                                {
+                                    <th>@day</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var totalDays = 7;
+                                var remainder = Model.DaysInMonth % 7;
+                                var totalRows = remainder > 0 ? (Model.DaysInMonth / totalDays) + 1 : Model.DaysInMonth / totalDays;
+                                var start = 1;
+                                bool isLastDay = false;
+                                bool isEnded = false;
+                                for (int r = 1; r <= 6; r++)
+                                {
+                                    <tr>
 
-                                    @for (int d = start; d <= Model.DaysInMonth; d++)
-                                    {
-                                        @foreach (string wday in Model.WeekDays)
+                                        @for (int d = start; d <= Model.DaysInMonth; d++)
                                         {
-                                            <td>
+                                            @foreach (string wday in Model.WeekDays)
+                                            {
+                                                <td>
 
-                                                @if (d.IsSameDay(wday, Model.SelectedMonth))
-                                                {
-                                                    <div class="row">
-                                                        <div class="col-sm-12">
-                                                            <p class="align-right">
-                                                                <span>
-                                                                    @d.ToString("D2")
-                                                                </span>
-                                                            </p>
+                                                    @if (d.IsSameDay(wday, Model.SelectedMonth))
+                                                    {
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <p class="align-right">
+                                                                    <span>
+                                                                        @d.ToString("D2")
+                                                                    </span>
+                                                                </p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-12 displayblock align-center">
-                                                            @foreach (var staff in Model.Staffs)
-                                                            {
-                                                                if (staff.BookedDays.Any(c => c.Day.Equals(d.ToString("D2"))))
+                                                        <div class="row">
+                                                            <div class="col-sm-12 displayblock align-center">
+                                                                @foreach (var staff in Model.Staffs)
                                                                 {
-                                                                    <P>
-                                                                        @{
-                                                                            var driver = @staff.IsStaffDriver ? " (D)" : "";
+                                                                    if (staff.BookedDays.Any(c => c.Day.Equals(d.ToString("D2"))))
+                                                                    {
+                                                                        <P>
+                                                                            @{
+                                                                                var driver = @staff.IsStaffDriver ? " (D)" : "";
 
-                                                                            var staffandDriver = staff.StaffName + driver;
+                                                                                var staffandDriver = staff.StaffName + driver;
 
-                                                                        }
-                                                                        @staffandDriver
-                                                                    </P>
+                                                                            }
+                                                                            @staffandDriver
+                                                                        </P>
+                                                                    }
                                                                 }
-                                                            }
-                                                            @*<P>
-                                                                STAFF NAME (D)
-                                                            </P>
-                                                            <P>
-                                                                STAFF NAME
-                                                            </P>*@
+                                                                @*<P>
+                                                                        STAFF NAME (D)
+                                                                    </P>
+                                                                    <P>
+                                                                        STAFF NAME
+                                                                    </P>*@
 
+                                                            </div>
                                                         </div>
-                                                    </div>
 
 
-                                                    if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
-                                                    {
-                                                        isLastDay = true;
-                                                    }
-                                                    else
-                                                    {
-                                                        if (d == Model.DaysInMonth)
+                                                        if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
                                                         {
-                                                            isEnded = true;
-                                                            break;
+                                                            isLastDay = true;
                                                         }
                                                         else
                                                         {
-                                                            ++d;
-                                                        }
+                                                            if (d == Model.DaysInMonth)
+                                                            {
+                                                                isEnded = true;
+                                                                break;
+                                                            }
+                                                            else
+                                                            {
+                                                                ++d;
+                                                            }
 
+                                                        }
                                                     }
-                                                }
-                                            </td>
-                                        }
-                                        if (isEnded)
-                                        {
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            if (isLastDay)
+                                                </td>
+                                            }
+                                            if (isEnded)
                                             {
-                                                start = d + 1;
                                                 break;
                                             }
+                                            else
+                                            {
+                                                if (isLastDay)
+                                                {
+                                                    start = d + 1;
+                                                    break;
+                                                }
+                                            }
+
+
+                                            @*var kk = start.ToString("D2");
+                                                if (start <= Model.DaysInMonth)
+                                                {
+                                                    if (start.IsSameDay(wday, "March"))
+                                                    {
+                                                        @kk;
+                                                        break;
+                                                    }
+                                                }*@
                                         }
 
 
-                                        @*var kk = start.ToString("D2");
-                                            if (start <= Model.DaysInMonth)
-                                            {
-                                                if (start.IsSameDay(wday, "March"))
-                                                {
-                                                    @kk;
-                                                    break;
-                                                }
-                                            }*@
+
+
+
+
+                                    </tr>
+
+                                    if (isEnded)
+                                    {
+                                        break;
                                     }
-
-
-
-
-
-
-                                </tr>
-
-                                if (isEnded)
-                                {
-                                    break;
                                 }
                             }
-                        }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
 
+                <button class="btn btn-outline-primary" onclick="return PrintShift();">Print</button>
             </div>
         </div>
     </div>
 </div>
 
+@section scripts{
+
+    <script type="text/javascript">
+        function PrintShift() {
+            var panel = document.getElementById("divShift");
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head><title>Shifts</title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(panel.innerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            setTimeout(function () {
+                printWindow.print();
+            }, 500);
+            return false;
+        }
+    </script>
+
+}

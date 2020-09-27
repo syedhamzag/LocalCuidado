@@ -9,6 +9,7 @@ namespace AwesomeCare.Model.Models
         public ShiftBooking()
         {
             StaffShiftBooking = new HashSet<StaffShiftBooking>();
+            ShiftBookingBlockedDays = new HashSet<ShiftBookingBlockedDays>();
         }
         public int ShiftBookingId { get; set; }
         public string ShiftDate { get; set; }
@@ -25,5 +26,6 @@ namespace AwesomeCare.Model.Models
         public int? PublishTo { get; set; }
 
         public virtual ICollection<StaffShiftBooking> StaffShiftBooking { get; set; }
+        public virtual ICollection<ShiftBookingBlockedDays> ShiftBookingBlockedDays { get; set; }
     }
 }

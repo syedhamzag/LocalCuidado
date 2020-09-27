@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.DTOs.ShiftBookingBlockedDays;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
         {
             Staffs = new List<StaffBooked>();
             BookedDays = new List<BookedDays>();
+            BlockedDays = new List<GetShiftBookingBlockedDays>();
         }
         public int TeamId { get; set; }
         public bool DriverRequired { get; set; }
@@ -24,6 +26,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
         public int NumberOfStaffRegistered { get; set; }
         public List<StaffBooked> Staffs { get; set; }
         public List<BookedDays> BookedDays { get; set; }
+        public List<GetShiftBookingBlockedDays> BlockedDays { get; set; }
     }
     //public class ShiftBookingStaff
     //{

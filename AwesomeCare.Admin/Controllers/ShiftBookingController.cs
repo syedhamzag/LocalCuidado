@@ -23,6 +23,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Http;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using Newtonsoft.Json;
+using AwesomeCare.DataTransferObject.DTOs.ShiftBookingBlockedDays;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -139,7 +140,7 @@ namespace AwesomeCare.Admin.Controllers
             List<GetStaffs> staffs;
 
             var currentMonthName = DateTime.Now.ToString("MMMM");
-            string selectedMonth = model.Months.FirstOrDefault(m=> m.Text == currentMonthName)?.Text;
+            string selectedMonth = model.Months.FirstOrDefault(m => m.Text == currentMonthName)?.Text;
             model.SelectedMonth = selectedMonth;
 
             var selectedMonthId = (Array.IndexOf<string>(DateTimeFormatInfo.CurrentInfo.MonthNames, selectedMonth) + 1).ToString("D2");
@@ -204,7 +205,7 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         [HttpPost]
-        // [ValidateAntiForgeryToken]
+      //  [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateShift(CreateStaffShiftViewModel model, IFormCollection formCollection)
         {
             var staffPersonalInfoId = model.SelectedStaff;
@@ -260,6 +261,69 @@ namespace AwesomeCare.Admin.Controllers
             return View("CreateStaffShift", model);
         }
 
+        public IActionResult BlockDays(int month, int bookingId)
+        {
+            if(month < DateTime.Now.Month)
+                return RedirectToAction("Index");
+
+            var model = new CreateShiftBookingBlockedDays();
+
+            var monthArray = DateTimeFormatInfo.CurrentInfo.MonthNames;
+            model.SelectedMonth = monthArray[month - 1];
+            model.ShiftBookingId = bookingId;
+
+            var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, month);
+            model.DaysInMonth = daysInMonth;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BlockDays(CreateShiftBookingBlockedDays model, IFormCollection formCollection)
+        {
+
+            var blockedDays = new List<PostShiftBookingBlockedDays>();
+
+            for (int i = 1; i <= model.DaysInMonth; i++)
+            {
+                var dt = i.ToString("D2");
+                var selectedDate = formCollection[dt];
+                string dayweek = $"{dt}_day";
+                var selectedDay = formCollection[dayweek];
+                if (selectedDate.Count > 0 && selectedDay.Count > 0)
+                {
+                    blockedDays.Add(new PostShiftBookingBlockedDays
+                    {
+                        ShiftBookingId = model.ShiftBookingId,
+                        Day = dt,
+                        WeekDay = selectedDay.FirstOrDefault()
+                    }); ;
+                }
+            }
+
+            if (blockedDays.Count == 0)
+                return View(model);
+
+            var result = await _shiftBookingService.BlockDays(blockedDays);
+            var content = await result.Content.ReadAsStringAsync();
+           
+
+            if (result.IsSuccessStatusCode)
+            {
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = "Operation Successful" });
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                _logger.LogInformation(content);
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = "An error occurred" });
+                return View(model);
+            }
+               
+
+           
+        }
 
         //public async Task<IActionResult> CreatShift()
         //{

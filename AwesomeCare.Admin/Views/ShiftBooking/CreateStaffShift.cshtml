@@ -17,7 +17,7 @@
 
             </div>
             <div class="body">
-                <form >
+                <form>
 
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label asp-for="SelectedStaff" class="control-label"></label>
@@ -35,21 +35,21 @@
 
                     <br />
                     <div class="col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                        <input type="submit" name="search"  formaction="/ShiftBooking/SearchShiftBooking" formmethod="post" class="btn btn-primary float-right" value="Search" formnovalidate/>
+                        <input type="submit" name="search" formaction="/ShiftBooking/SearchShiftBooking" formmethod="post" class="btn btn-primary float-right" value="Search" formnovalidate />
                     </div>
 
-               
-                <br />
-               
+
+                    <br />
+
                     <input type="hidden" asp-for="DaysInMonth" />
-                    <input type="hidden" asp-for="ShiftBookingId"  value="@Model.ShiftBookingId"/>
+                    <input type="hidden" asp-for="ShiftBookingId" value="@Model.ShiftBookingId" />
                     <input type="hidden" asp-for="@Model.SelectedMonth" />
-                   
+
 
 
                     @if (Model.Staff != null)
                     {
-                       
+
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -110,7 +110,7 @@
                                                                                         var staffPersonalInfoId = Model.SelectedStaff;
                                                                                         if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
                                                                                         {
-                                                                                            <small>Booked</small>
+                                                                                            <small class="text-primary">Booked</small>
                                                                                         }
                                                                                         else
                                                                                         {
@@ -135,7 +135,7 @@
                                                                                     var staffPersonalInfoId = Model.SelectedStaff;
                                                                                     if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
                                                                                     {
-                                                                                        <small>Booked</small>
+                                                                                        <small class="text-primary">Booked</small>
                                                                                     }
                                                                                     else
                                                                                     {
@@ -159,7 +159,7 @@
                                                                                         var staffPersonalInfoId = Model.SelectedStaff;
                                                                                         if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
                                                                                         {
-                                                                                            <small>Booked</small>
+                                                                                            <small class="text-primary">Booked</small>
                                                                                         }
                                                                                         else
                                                                                         {
@@ -183,7 +183,7 @@
                                                                                     var staffPersonalInfoId = Model.SelectedStaff;
                                                                                     if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
                                                                                     {
-                                                                                        <small>Booked</small>
+                                                                                        <small class="text-primary">Booked</small>
                                                                                     }
                                                                                     else
                                                                                     {
@@ -203,7 +203,7 @@
                                                                                 var staffPersonalInfoId = Model.SelectedStaff;
                                                                                 if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
                                                                                 {
-                                                                                    <small>Booked</small>
+                                                                                    <small class="text-primary">Booked</small>
                                                                                 }
                                                                                 else
                                                                                 {
@@ -230,7 +230,7 @@
                                                                                         var staffPersonalInfoId = Model.SelectedStaff;
                                                                                         if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
                                                                                         {
-                                                                                            <small>Booked</small>
+                                                                                            <small class="text-primary">Booked</small>
                                                                                         }
                                                                                         else
                                                                                         {
@@ -254,7 +254,7 @@
                                                                                     var staffPersonalInfoId = Model.SelectedStaff;
                                                                                     if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
                                                                                     {
-                                                                                        <small>Booked</small>
+                                                                                        <small class="text-primary">Booked</small>
                                                                                     }
                                                                                     else
                                                                                     {
@@ -274,7 +274,7 @@
                                                                                 var staffPersonalInfoId = Model.SelectedStaff;
                                                                                 if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2")) && day.ShiftBookedById.ToString() == staffPersonalInfoId))
                                                                                 {
-                                                                                    <small>Booked</small>
+                                                                                    <small class="text-primary">Booked</small>
                                                                                 }
                                                                                 else
                                                                                 {
@@ -294,14 +294,26 @@
                                                                     }
                                                                     else
                                                                     {
-                                                                        <label class="fancy-checkbox">
-                                                                            <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
+                                                                        @if (!Model.SelectedMonth.Equals(DateTime.Now.ToString("MMMM"), StringComparison.InvariantCultureIgnoreCase))
+                                                                        {
+                                                                            if (Model.ShiftBooked.BlockedDays.Any(b => b.Day == d.ToString("D2")))
+                                                                            {
+                                                                                <small class="text-danger">Blocked</small>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label class="fancy-checkbox">
+                                                                                    <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
 
-                                                                            <span></span>
-                                                                        </label>
+                                                                                    <span></span>
+                                                                                </label>
 
-                                                                        string dayName = $"{d.ToString("D2")}_day";
-                                                                        <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+                                                                                string dayName = $"{d.ToString("D2")}_day";
+                                                                                <input type="hidden" name="@dayName" id="@dayName" value="@wday">
+
+                                                                            }
+
+                                                                        }
 
                                                                     }
                                                                 </div>
@@ -354,7 +366,7 @@
                         </table>
 
                         <div class="m-t-30">
-                            <input type="submit" value="Create" name="create"  formaction="/ShiftBooking/CreateShift" formmethod="post" class="btn btn-success float-right" formnovalidate/>
+                            <input type="submit" value="Create" name="create" formaction="/ShiftBooking/CreateShift" formmethod="post" class="btn btn-success float-right" formnovalidate />
                         </div>
                     }
 
@@ -368,17 +380,17 @@
 
 @section Scripts{
     <script>
-        //function LoadShifts() {
-        //    var staffSelect = document.getElementById('selectedStaff')
-        //    var dayOfWeekSelect = document.getElementById('selectedDayOfWeek')
-        //   // var option = staffSelect.options[staffSelect.selectedIndex];
-        //    console.log(staffSelect.value)
-        //    console.log(dayOfWeekSelect.value)
+            //function LoadShifts() {
+            //    var staffSelect = document.getElementById('selectedStaff')
+            //    var dayOfWeekSelect = document.getElementById('selectedDayOfWeek')
+            //   // var option = staffSelect.options[staffSelect.selectedIndex];
+            //    console.log(staffSelect.value)
+            //    console.log(dayOfWeekSelect.value)
 
-        //    var form1 = document.forms[0];
-        //   // form1.action = '/ShiftBooking/CreateStaffShift?staff=1&month=May'
-        //    form1.method ='post'
-        //    form1.submit();
-        //}
+            //    var form1 = document.forms[0];
+            //   // form1.action = '/ShiftBooking/CreateStaffShift?staff=1&month=May'
+            //    form1.method ='post'
+            //    form1.submit();
+            //}
     </script>
 }
