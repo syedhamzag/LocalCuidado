@@ -31,8 +31,8 @@
                     </div>
                 </form>
 
-                <div id="divShift">
-                    <table class="table table-bordered">
+               
+                    <table class="table table-bordered" id="divShift">
                         <thead>
                             <tr>
                                 @foreach (string day in Model.WeekDays)
@@ -158,9 +158,9 @@
                             }
                         </tbody>
                     </table>
-                </div>
+               
 
-                <button class="btn btn-outline-primary" onclick="return PrintShift();">Print</button>
+                @*<button class="btn btn-outline-primary" onclick="return PrintShift();">Print</button>*@
             </div>
         </div>
     </div>
@@ -169,6 +169,16 @@
 @section scripts{
 
     <script type="text/javascript">
+
+        $(document).ready(function () {
+            //$('#divShift').DataTable({
+            //    dom: 'Bfrtip',
+            //    buttons: [
+            //        'print'
+            //    ]
+            //});
+        });
+
         function PrintShift() {
             var panel = document.getElementById("divShift");
             var printWindow = window.open('', '', 'height=400,width=800');

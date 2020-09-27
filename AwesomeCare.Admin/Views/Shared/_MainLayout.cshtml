@@ -29,6 +29,10 @@
     <link rel="stylesheet" href="/assets/vendor/nouislider/nouislider.min.css" />
     <link rel="stylesheet" href="/assets/vendor/parsleyjs/css/parsley.css">
     <link href="/assets/vendor/Chosen/css/chosen.min.css" rel="stylesheet" />
+
+    <!--DataTabales-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
     <!-- Material Design Bootstrap -->
     @*<link href="/assets/vendor/mdb/css/mdb.css" rel="stylesheet" />*@
     <link href="/assets/vendor/boostrap-multiselect2/css/bootstrap-select.css" rel="stylesheet" />
@@ -144,16 +148,16 @@
                             <li class="dropdown">
                                 <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
                                 @*<ul class="dropdown-menu user-menu menu-icon">
-                                    <li class="menu-heading">ACCOUNT SETTINGS</li>
-                                    <li><a href="javascript:void(0);"><i class="icon-note"></i> <span>Basic</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-equalizer"></i> <span>Preferences</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-lock"></i> <span>Privacy</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-bell"></i> <span>Notifications</span></a></li>
-                                    <li class="menu-heading">BILLING</li>
-                                    <li><a href="javascript:void(0);"><i class="icon-credit-card"></i> <span>Payments</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-printer"></i> <span>Invoices</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-refresh"></i> <span>Renewals</span></a></li>
-                                </ul>*@
+                                        <li class="menu-heading">ACCOUNT SETTINGS</li>
+                                        <li><a href="javascript:void(0);"><i class="icon-note"></i> <span>Basic</span></a></li>
+                                        <li><a href="javascript:void(0);"><i class="icon-equalizer"></i> <span>Preferences</span></a></li>
+                                        <li><a href="javascript:void(0);"><i class="icon-lock"></i> <span>Privacy</span></a></li>
+                                        <li><a href="javascript:void(0);"><i class="icon-bell"></i> <span>Notifications</span></a></li>
+                                        <li class="menu-heading">BILLING</li>
+                                        <li><a href="javascript:void(0);"><i class="icon-credit-card"></i> <span>Payments</span></a></li>
+                                        <li><a href="javascript:void(0);"><i class="icon-printer"></i> <span>Invoices</span></a></li>
+                                        <li><a href="javascript:void(0);"><i class="icon-refresh"></i> <span>Renewals</span></a></li>
+                                    </ul>*@
                             </li>
                             <li class="d-none d-sm-inline-block">
                                 <a href="#" class="icon-menu rightbar_btn"><i class="icon-settings"></i></a>
@@ -415,6 +419,12 @@
     <script src="/assets/vendor/parsleyjs/js/parsley.min.js"></script>
     <script src="/assets/vendor/boostrap-multiselect2/js/bootstrap-select.js"></script>
     <script src="/assets/vendor/Chosen/js/chosen.jquery.min.js"></script>
+
+    <!--DataTables-->
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src=" https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script>
+    
     @RenderSection("VendorScripts", required: false)
 
 
