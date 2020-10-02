@@ -304,7 +304,7 @@ namespace AwesomeCare.API.Controllers
             return Ok(getEntity);
         }
 
-       
+
         [HttpPost("BlockDays")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -321,5 +321,19 @@ namespace AwesomeCare.API.Controllers
             return Ok();
         }
 
+        [HttpDelete]
+        public IActionResult DeleteStaffShiftDays([FromBody] DeleteStaffShiftBookingDay model)
+        {
+            if (model.StaffShiftBookingDayId.Count == 0)
+                return BadRequest();
+
+            var entities = _staffShiftBookingDayRepo.Table.Where(e => model.StaffShiftBookingDayId.Contains(e.StaffShiftBookingDayId)).ToList();
+            foreach (var entity in entities)
+            {
+                _dbContext.Entry(entity).State = EntityState.Deleted;
+            }
+            var rowCount = _dbContext.SaveChanges();
+            return Ok(rowCount);
+        }
     }
 }

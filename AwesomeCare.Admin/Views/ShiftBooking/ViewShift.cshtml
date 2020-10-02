@@ -21,17 +21,17 @@
                     </ul>*@
             </div>
             <div class="body">
-                <form method="post" asp-route="ViewShift">
+                <form >
                     <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label>Month</label>
                         <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control">
                         </select>
                         <br />
-                        <input type="submit" class="btn btn-primary float-right" value="Search" />
+                        <input type="submit" class="btn btn-primary float-right" value="Search"  formaction="/ShiftBooking/View-Shift" formmethod="post" formnovalidate/>
                     </div>
-                </form>
 
-               
+
+
                     <table class="table table-bordered" id="divShift">
                         <thead>
                             <tr>
@@ -76,23 +76,30 @@
                                                                 {
                                                                     if (staff.BookedDays.Any(c => c.Day.Equals(d.ToString("D2"))))
                                                                     {
-                                                                        <P>
+                                                                        <label class="fancy-checkbox">
+
                                                                             @{
                                                                                 var driver = @staff.IsStaffDriver ? " (D)" : "";
 
                                                                                 var staffandDriver = staff.StaffName + driver;
 
+                                                                                var dayId = staff.BookedDays.FirstOrDefault(b => b.Day == d.ToString("D2"))?.StaffShiftBookingDayId;
+                                                                                string dayName = "day_" + dayId;
                                                                             }
-                                                                            @staffandDriver
+                                                                            <input type="checkbox" name="@dayName" id="@dayName">
+                                                                            <span> @staffandDriver</span>
+                                                                        </label>
+                                                                        <P>
+
                                                                         </P>
                                                                     }
                                                                 }
                                                                 @*<P>
-                                                                        STAFF NAME (D)
-                                                                    </P>
-                                                                    <P>
-                                                                        STAFF NAME
-                                                                    </P>*@
+                                                        STAFF NAME (D)
+                                                    </P>
+                                                    <P>
+                                                        STAFF NAME
+                                                    </P>*@
 
                                                             </div>
                                                         </div>
@@ -133,14 +140,14 @@
 
 
                                             @*var kk = start.ToString("D2");
-                                                if (start <= Model.DaysInMonth)
-                                                {
-                                                    if (start.IsSameDay(wday, "March"))
-                                                    {
-                                                        @kk;
-                                                        break;
-                                                    }
-                                                }*@
+                                if (start <= Model.DaysInMonth)
+                                {
+                                    if (start.IsSameDay(wday, "March"))
+                                    {
+                                        @kk;
+                                        break;
+                                    }
+                                }*@
                                         }
 
 
@@ -158,9 +165,11 @@
                             }
                         </tbody>
                     </table>
-               
 
-                @*<button class="btn btn-outline-primary" onclick="return PrintShift();">Print</button>*@
+                    <input type="submit" class="btn btn-primary float-right" value="Delete Selected" formaction="/ShiftBooking/DeleteStaffShift" formmethod="post"  formnovalidate/>
+
+                    @*<button class="btn btn-outline-primary" onclick="return PrintShift();">Print</button>*@
+                </form>
             </div>
         </div>
     </div>

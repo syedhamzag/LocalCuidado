@@ -28,5 +28,8 @@ namespace AwesomeCare.Admin.Services.ShiftBooking
         Task<HttpResponseMessage> BlockDays([Body] PostShiftBookingBlockedDays blockDays);
         [Post("/ShiftBooking/BlockDays")]
         Task<HttpResponseMessage> BlockDays([Body] List<PostShiftBookingBlockedDays> blockDays);
+
+        [Delete("/ShiftBooking")]
+        Task<HttpResponseMessage> DeleteStaffShiftBooking([Body] DeleteStaffShiftBookingDay model);
     }
 }

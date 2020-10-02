@@ -15,6 +15,7 @@ namespace AwesomeCare.DataAccess.Repositories
         Task<TEntity> UpdateEntity(TEntity entity);
         Task InsertEntities(List<TEntity> entities);
         Task DeleteEntity(TEntity entity);
+        Task DeleteEntities(List<int> entityIds);
         Task<TEntity> GetEntityWithRelatedEntity<TRelatedProperty>(Expression<Func<TEntity, TRelatedProperty>> includeExpression, Expression<Func<TEntity, bool>> firstOrDefault);
         
     }

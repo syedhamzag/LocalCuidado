@@ -101,12 +101,17 @@ namespace AwesomeCare.Admin.Controllers
 
 
         [Route("/ShiftBooking/View-Shift", Name = "ViewShift")]
-        public async Task<IActionResult> ViewShift()
+        public async Task<IActionResult> ViewShift(string month)
         {
             var model = new ViewShiftViewModel();
             var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
             model.DaysInMonth = daysInMonth;
-            string selectedMonth = model.Months[DateTime.Now.Month - 1].Text;
+            string selectedMonth;
+            if (string.IsNullOrEmpty(month))
+                selectedMonth = model.Months[DateTime.Now.Month - 1].Text;
+            else
+                selectedMonth = month;
+
             model.SelectedMonth = selectedMonth;
 
             var months = DateTimeFormatInfo.CurrentInfo.MonthNames;
@@ -134,6 +139,34 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
         }
 
+        [HttpPost()]
+        public async Task<IActionResult> DeleteStaffShift(ViewShiftViewModel model, IFormCollection formCollection)
+        {
+            var itemsToDelete = new DeleteStaffShiftBookingDay();
+
+
+            foreach (var item in formCollection)
+            {
+                if (item.Key.Contains("day_"))
+                {
+                    if (item.Value.Contains("on"))
+                    {
+                        itemsToDelete.StaffShiftBookingDayId.Add(int.Parse(item.Key.Split('_')[1]));
+                    }
+
+                }
+            }
+
+            var result = await _shiftBookingService.DeleteStaffShiftBooking(itemsToDelete);
+            var content = await result.Content.ReadAsStringAsync();
+
+            if (result.IsSuccessStatusCode)
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = true, Message = $"{content} items deleted successfully" });
+            else
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An error occurred" });
+
+            return RedirectToAction("ViewShift", new { month = model.SelectedMonth });
+        }
         public async Task<IActionResult> CreateStaffShift()
         {
             var model = new CreateStaffShiftViewModel();
@@ -205,7 +238,7 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         [HttpPost]
-      //  [ValidateAntiForgeryToken]
+        //  [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateShift(CreateStaffShiftViewModel model, IFormCollection formCollection)
         {
             var staffPersonalInfoId = model.SelectedStaff;
@@ -263,7 +296,7 @@ namespace AwesomeCare.Admin.Controllers
 
         public IActionResult BlockDays(int month, int bookingId)
         {
-            if(month < DateTime.Now.Month)
+            if (month < DateTime.Now.Month)
                 return RedirectToAction("Index");
 
             var model = new CreateShiftBookingBlockedDays();
@@ -307,7 +340,7 @@ namespace AwesomeCare.Admin.Controllers
 
             var result = await _shiftBookingService.BlockDays(blockedDays);
             var content = await result.Content.ReadAsStringAsync();
-           
+
 
             if (result.IsSuccessStatusCode)
             {
@@ -320,9 +353,9 @@ namespace AwesomeCare.Admin.Controllers
                 SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = "An error occurred" });
                 return View(model);
             }
-               
 
-           
+
+
         }
 
         //public async Task<IActionResult> CreatShift()
