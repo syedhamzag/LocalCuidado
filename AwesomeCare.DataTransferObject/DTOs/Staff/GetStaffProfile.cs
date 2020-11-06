@@ -46,6 +46,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public decimal? Rate { get; set; }
         public string TeamLeader { get; set; }
         public string WorkTeam { get; set; }
+        public int? StaffWorkTeamId { get; set; }
         public string Passcode { get; set; }
         [Display(Name = "Can Drive?")]
         public string CanDrive { get; set; }

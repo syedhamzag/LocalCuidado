@@ -63,6 +63,7 @@ namespace AwesomeCare.Admin
               .ForMember(dto => dto.NiFile, mem => mem.Ignore())
               .ForMember(dto => dto.SelfPyeFile, mem => mem.Ignore())
               .ForMember(dto => dto.CoverLetterFile, mem => mem.Ignore())
+              .ForMember(dto => dto.WorkTeams, mem => mem.Ignore())
               .ForMember(dto => dto.CvFile, mem => mem.Ignore());
 
             CreateMap<GetStaffEducation, PutStaffEducation>()

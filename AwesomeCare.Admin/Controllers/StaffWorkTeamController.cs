@@ -56,7 +56,7 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _staffWorkTeamService.Post(model);
             var content = await result.Content.ReadAsStringAsync();
             string msg = result.StatusCode == System.Net.HttpStatusCode.InternalServerError ? "An Error Occurred" : content;
-            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "New record successfully created" : content });
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "New record successfully created" : "An error occurred" });
             if (result.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");

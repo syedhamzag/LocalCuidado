@@ -1,6 +1,7 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.Validations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +12,13 @@ namespace AwesomeCare.Admin.ViewModels.Staff
 {
     public class UpdateStaffPersonalInfo: PutStaffPersonalInfo
     {
+        public UpdateStaffPersonalInfo()
+        {
+            WorkTeams = new List<SelectListItem>();
+        }
+
+        public List<SelectListItem> WorkTeams { get; set; }
+
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]

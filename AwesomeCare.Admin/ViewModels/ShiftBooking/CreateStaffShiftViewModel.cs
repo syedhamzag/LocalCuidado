@@ -21,8 +21,10 @@ namespace AwesomeCare.Admin.ViewModels.ShiftBooking
             var currentMonthName = DateTime.Now.ToString("MMMM");
             var currentMonthIndex = Array.IndexOf(monthArray, currentMonthName);
             Months = DateTimeFormatInfo.CurrentInfo.MonthNames.Where(i=> Array.IndexOf(monthArray,i) >= currentMonthIndex).Select(s => new SelectListItem(s, s)).Where(s => !string.IsNullOrWhiteSpace(s.Text)).ToList();
+            Rotas = new List<SelectListItem>();
         }
         public List<SelectListItem> Staffs { get; set; }
+        public List<SelectListItem> Rotas { get; set; }
 
         [Required(ErrorMessage = "please select staff")]
         [Display(Name = "Staff")]
@@ -36,5 +38,7 @@ namespace AwesomeCare.Admin.ViewModels.ShiftBooking
         public GetShiftBookedByMonthYear ShiftBooked { get; set; }
         public bool CanUserDrive { get; set; }
         public GetStaffs Staff { get; set; }
+        [Required]
+        public int Rota { get; set; }
     }
 }

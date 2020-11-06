@@ -9,7 +9,7 @@
         <div class="card planned_task">
             <div class="header">
                 <h2>Create</h2>
-
+                <p>Month: <strong>@Model.SelectedMonth</strong></p>
             </div>
             <div class="body">
                 @*<form id="Form1" asp-controller="ShiftBooking" asp-action="ChangeMonth" method="post">
@@ -52,7 +52,7 @@
                                             {
                                                 <td>
 
-                                                    @if (d.IsSameDay(wday, Model.SelectedMonth))
+                                                    @if (d.IsSameDay(wday, Model.SelectedMonth)|| Model.SelectedMonthId > DateTime.Now.Month)
                                                     {
                                                         <div class="row">
                                                             <div class="col-sm-12">
@@ -66,7 +66,7 @@
                                                         <div class="row">
                                                             <div class="col-sm-12 align-right">
 
-                                                                @if (d >= DateTime.Now.Day)
+                                                                @if (d >= DateTime.Now.Day || Model.SelectedMonthId > DateTime.Now.Month)
                                                                 {
 
                                                                     if (Model.ShiftBooked.BookedDays.Any(day => day.Day.Equals(d.ToString("D2"))))
@@ -123,15 +123,6 @@
                                                                                     string dayName = $"{d.ToString("D2")}_day";
                                                                                     <input type="hidden" name="@dayName" id="@dayName" value="@wday">
                                                                                 }
-
-                                                                                @*<label class="fancy-checkbox">
-                            <input type="checkbox" name="@d.ToString("D2")" id="@d.ToString("D2")" required data-parsley-errors-container="#error-checkbox">
-
-                            <span></span>
-                        </label>
-
-                        string dayName = $"{d.ToString("D2")}_day";
-                        <input type="hidden" name="@dayName" id="@dayName" value="@wday">*@
                                                                             }
                                                                         }
                                                                         else if (Model.ShiftBooked.NumberOfStaffRegistered != 0 && (Model.ShiftBooked.NumberOfStaffRequired - Model.ShiftBooked.NumberOfStaffRegistered) == 1)

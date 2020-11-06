@@ -18,10 +18,10 @@ namespace AwesomeCare.Admin.Services.ShiftBooking
         [Get("/ShiftBooking/{id}")]
         Task<GetShiftBookingDetails> Get(int id);
 
-        [Get("/ShiftBooking/Admin/{monthId}")]
-        Task<GetShiftBookedByMonthYear> GetStaffShiftBookingsByMonth(int monthId);
-        [Get("/ShiftBooking/{month}/{year}")]
-        Task<GetShiftBookedByMonthYear> GetShiftByMonthAndYear(string month, string year);
+        [Get("/ShiftBooking/Admin/{monthId}/{rotaId}")]
+        Task<GetShiftBookedByMonthYear> GetStaffShiftBookingsByMonth(int monthId,int? rotaId);
+        [Get("/ShiftBooking/{month}/{year}/{rotaId}")]
+        Task<GetShiftBookedByMonthYear> GetShiftByMonthAndYear(string month, string year,int? rotaId);
         [Post("/ShiftBooking/Staff/CreateBooking")]
         Task<HttpResponseMessage> CreateBooking([Body] PostStaffShiftBooking shiftBooking);
         [Post("/ShiftBooking/BlockDay")]

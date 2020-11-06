@@ -21,16 +21,22 @@
                     </ul>*@
             </div>
             <div class="body">
-                <form >
+                <form>
                     <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label>Month</label>
                         <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control">
                         </select>
-                        <br />
-                        <input type="submit" class="btn btn-primary float-right" value="Search"  formaction="/ShiftBooking/View-Shift" formmethod="post" formnovalidate/>
                     </div>
-
-
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="Rota"></label>
+                        <select asp-for="Rota" asp-items="@Model.Rotas" class="form-control">
+                        </select>
+                        <span asp-validation-for="Rota" class="text-danger"></span>
+                    </div>
+                    <br />
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <input type="submit" class="btn btn-primary float-right" value="Search" formaction="/ShiftBooking/View-Shift" formmethod="post" formnovalidate />
+                    </div>
 
                     <table class="table table-bordered" id="divShift">
                         <thead>
@@ -95,11 +101,11 @@
                                                                     }
                                                                 }
                                                                 @*<P>
-                                                        STAFF NAME (D)
-                                                    </P>
-                                                    <P>
-                                                        STAFF NAME
-                                                    </P>*@
+                                                                        STAFF NAME (D)
+                                                                    </P>
+                                                                    <P>
+                                                                        STAFF NAME
+                                                                    </P>*@
 
                                                             </div>
                                                         </div>
@@ -140,14 +146,14 @@
 
 
                                             @*var kk = start.ToString("D2");
-                                if (start <= Model.DaysInMonth)
-                                {
-                                    if (start.IsSameDay(wday, "March"))
-                                    {
-                                        @kk;
-                                        break;
-                                    }
-                                }*@
+                                                if (start <= Model.DaysInMonth)
+                                                {
+                                                    if (start.IsSameDay(wday, "March"))
+                                                    {
+                                                        @kk;
+                                                        break;
+                                                    }
+                                                }*@
                                         }
 
 
@@ -166,7 +172,7 @@
                         </tbody>
                     </table>
 
-                    <input type="submit" class="btn btn-primary float-right" value="Delete Selected" formaction="/ShiftBooking/DeleteStaffShift" formmethod="post"  formnovalidate/>
+                    <input type="submit" class="btn btn-primary float-right" value="Delete Selected" formaction="/ShiftBooking/DeleteStaffShift" formmethod="post" formnovalidate />
 
                     @*<button class="btn btn-outline-primary" onclick="return PrintShift();">Print</button>*@
                 </form>

@@ -12,6 +12,7 @@ using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.StaffCommunication;
+using AwesomeCare.Admin.Services.StaffWorkTeam;
 using AwesomeCare.Admin.ViewModels.Client;
 using AwesomeCare.Admin.ViewModels.Staff;
 using AwesomeCare.Admin.ViewModels.StaffCommunication;
@@ -37,6 +38,7 @@ namespace AwesomeCare.Admin.Controllers
         private IClientRotaNameService _clientRotaNameService;
         private IRotaDayofWeekService _rotaDayofWeekService;
         private IClientService _clientService;
+        private IStaffWorkTeamService staffWorkTeamService;
 
         const string profilePixFolder = "staffprofilepix";
         const string drivingFolder = "drivinglicense";
@@ -50,7 +52,15 @@ namespace AwesomeCare.Admin.Controllers
         const string trainingFolder = "stafftraining";
         const string refereeFolder = "staffreferee";
 
-        public StaffController(IStaffService staffService, IClientService clientService, IRotaDayofWeekService rotaDayofWeekService, IClientRotaNameService clientRotaNameService, ILogger<StaffController> logger, IFileUpload fileUpload, IStaffCommunication staffCommunication, IClientRotaTypeService clientRotaTypeService) : base(fileUpload)
+        public StaffController(IStaffService staffService,
+            IClientService clientService,
+            IRotaDayofWeekService rotaDayofWeekService, 
+            IClientRotaNameService clientRotaNameService,
+            ILogger<StaffController> logger, 
+            IFileUpload fileUpload, 
+            IStaffCommunication staffCommunication,
+            IClientRotaTypeService clientRotaTypeService,
+            IStaffWorkTeamService staffWorkTeamService) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
@@ -60,6 +70,7 @@ namespace AwesomeCare.Admin.Controllers
             _clientRotaNameService = clientRotaNameService;
             _rotaDayofWeekService = rotaDayofWeekService;
             _clientService = clientService;
+            this.staffWorkTeamService = staffWorkTeamService;
         }
         public async Task<IActionResult> Index()
         {
@@ -291,7 +302,10 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> EditProfile(int staffId)
         {
             var staffInfo = await _staffService.GetStaff(staffId);
+            var workTeams = await staffWorkTeamService.Get();
             var putProfile = Mapper.Map<UpdateStaffPersonalInfo>(staffInfo);
+
+            putProfile.WorkTeams = workTeams.Select(w => new SelectListItem(w.WorkTeam, w.StaffWorkTeamId.ToString())).ToList();
             return View(putProfile);
         }
 

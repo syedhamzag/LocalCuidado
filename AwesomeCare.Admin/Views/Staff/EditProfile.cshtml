@@ -321,8 +321,9 @@
                                                     <div class="col-xs-12 col-sm-4 col-md-4">
                                                         <div class="form-group">
                                                             <label asp-for="WorkTeam" class="control-label"></label>
-                                                            <input type="text" asp-for="WorkTeam" class="form-control">
-                                                            <span asp-validation-for="WorkTeam" class="text-danger"></span>
+                                                            @*<input type="text" asp-for="WorkTeam" class="form-control">*@
+                                                            <select asp-items="Model.WorkTeams" asp-for="WorkTeam" class="form-control"></select>
+                                                              <span asp-validation-for="WorkTeam" class="text-danger"></span>
                                                         </div>
                                                     </div>
 

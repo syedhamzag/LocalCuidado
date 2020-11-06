@@ -20,7 +20,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffWorkTeam> _staffWorkTeamRepository;
         private ILogger<StaffWorkTeamController> _logger;
 
-        public StaffWorkTeamController(IGenericRepository<StaffWorkTeam> staffWorkTeamRepository,ILogger<StaffWorkTeamController> logger)
+        public StaffWorkTeamController(IGenericRepository<StaffWorkTeam> staffWorkTeamRepository, ILogger<StaffWorkTeamController> logger)
         {
             _staffWorkTeamRepository = staffWorkTeamRepository;
             _logger = logger;
@@ -42,7 +42,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("Parameter id is required");
             }
 
-            var getEntity = _staffWorkTeamRepository.Table.ProjectTo<GetStaffWorkTeam>().FirstOrDefault(d => d.StaffWorkTeamId == id );
+            var getEntity = _staffWorkTeamRepository.Table.ProjectTo<GetStaffWorkTeam>().FirstOrDefault(d => d.StaffWorkTeamId == id);
 
             return Ok(getEntity);
         }
@@ -55,14 +55,14 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetStaffWorkTeam), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post([FromBody]PostStaffWorkTeam model)
+        public async Task<IActionResult> Post([FromBody] PostStaffWorkTeam model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool isworkTeamRegistered =_staffWorkTeamRepository.Table.Any(r => r.WorkTeam.Equals(model.WorkTeam, StringComparison.InvariantCultureIgnoreCase));
+            bool isworkTeamRegistered = _staffWorkTeamRepository.Table.Any(r => r.WorkTeam.ToLower() == model.WorkTeam.ToLower());
             if (isworkTeamRegistered)
             {
                 return BadRequest($"WorkTeam {model.WorkTeam} already exist");
@@ -97,7 +97,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetStaffWorkTeam), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody]PutStaffWorkTeam model)
+        public async Task<IActionResult> Put([FromBody] PutStaffWorkTeam model)
         {
             if (!ModelState.IsValid)
             {

@@ -14,11 +14,14 @@ namespace AwesomeCare.Admin.ViewModels.ShiftBooking
         {
             WeekDays =  Enum.GetNames(typeof(DayOfWeek)).ToArray();// new string[] {  "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
             Months = DateTimeFormatInfo.CurrentInfo.MonthNames.Select(s => new SelectListItem(s, s)).Where(s=>!string.IsNullOrWhiteSpace(s.Text)).ToList() ;
+            Rotas = new List<SelectListItem>();
         }
 
         public int DaysInMonth { get; set; }
         public string[] WeekDays { get; set; }
         public string SelectedMonth { get; set; }
         public List<SelectListItem> Months { get; set; }
+        public List<SelectListItem> Rotas { get; set; }
+        public int Rota { get; set; }
     }
 }

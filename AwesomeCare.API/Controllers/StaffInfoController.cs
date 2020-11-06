@@ -12,6 +12,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
         private IGenericRepository<Client> _clientRepository;
         private readonly IGenericRepository<ApplicationUser> applicationUserRepository;
+        private readonly IGenericRepository<StaffWorkTeam> staffWorkTeamRepository;
         private IGenericRepository<StaffRating> _staffRatingRepository;
         private ILogger<StaffInfoController> _logger;
         private AwesomeCareDbContext _dbContext;
@@ -42,6 +44,7 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
             IGenericRepository<StaffRating> staffRatingRepository,
             IGenericRepository<Client> clientRepository,
+             IGenericRepository<StaffWorkTeam> staffWorkTeamRepository,
             IGenericRepository<ApplicationUser> applicationUserRepository)
         {
             _staffInfoRepository = staffInfoRepository;
@@ -55,6 +58,7 @@ namespace AwesomeCare.API.Controllers
             _staffRatingRepository = staffRatingRepository;
             _clientRepository = clientRepository;
             this.applicationUserRepository = applicationUserRepository;
+            this.staffWorkTeamRepository = staffWorkTeamRepository;
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
@@ -163,7 +167,7 @@ namespace AwesomeCare.API.Controllers
 
         }
 
-
+       
         [HttpGet("Profile/{id}")]
         [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> Profile(int id)
@@ -176,10 +180,12 @@ namespace AwesomeCare.API.Controllers
 
             var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
             var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
-
+            // var teamEntity = _dbContext.Set<StaffWorkTeam>();
             // var profile = Mapper.Map<GetStaffProfile>(staffDetails);
 
             var staffProfile = (from st in _staffInfoRepository.Table
+                                join wt in staffWorkTeamRepository.Table on st.WorkTeam equals wt.StaffWorkTeamId.ToString() into workTeamGroup
+                                from wk in workTeamGroup.DefaultIfEmpty()
                                 where st.StaffPersonalInfoId == id
                                 select new GetStaffProfile
                                 {
@@ -267,7 +273,7 @@ namespace AwesomeCare.API.Controllers
                                                      Trainer = t.Trainer,
                                                      Training = t.Training
                                                  }).ToList(),
-                                    WorkTeam = st.WorkTeam,
+                                    WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
                                     RegulatoryContacts = (from rc in st.RegulatoryContact
                                                           join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
                                                           join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId
@@ -300,6 +306,8 @@ namespace AwesomeCare.API.Controllers
             var identityUserId = this.User.SubClaim();
 
             var staffProfile = (from st in _staffInfoRepository.Table
+                                join wt in staffWorkTeamRepository.Table on st.WorkTeam equals wt.StaffWorkTeamId.ToString() into workTeamGroup
+                                from wk in workTeamGroup.DefaultIfEmpty()
                                 where st.ApplicationUserId == identityUserId
                                 select new GetStaffProfile
                                 {
@@ -398,7 +406,8 @@ namespace AwesomeCare.API.Controllers
                                                      Trainer = t.Trainer,
                                                      Training = t.Training
                                                  }).ToList(),
-                                    WorkTeam = st.WorkTeam,
+                                    WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
+                                    StaffWorkTeamId = wk == null ? 0 : wk.StaffWorkTeamId,
                                     RegulatoryContacts = (from rc in st.RegulatoryContact
                                                           join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
                                                           join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId

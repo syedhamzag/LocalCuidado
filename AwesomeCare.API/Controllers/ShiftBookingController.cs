@@ -52,7 +52,7 @@ namespace AwesomeCare.API.Controllers
             _shiftBookingBlockedDaysRepo = shiftBookingBlockedDaysRepo;
         }
 
-
+       
         [HttpGet("{id}", Name = "GetShiftBookingById")]
         [ProducesResponseType(type: typeof(GetShiftBooking), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -89,6 +89,7 @@ namespace AwesomeCare.API.Controllers
             return Ok(getEntity);
         }
 
+       
         [HttpGet()]
         [ProducesResponseType(type: typeof(List<GetShiftBookingDetails>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -167,14 +168,15 @@ namespace AwesomeCare.API.Controllers
             // return CreatedAtRoute("GetShiftBookingById", new { id = getEntity.ShiftBookingId }, getEntity);
         }
 
-        [HttpGet("{month}/{year}", Name = "GetShiftBookingByMonthYear")]
+       
+        [HttpGet("BookShift/{shiftId}/{month}/{year}", Name = "GetShiftByMonthAndYear")]
         [ProducesResponseType(type: typeof(GetShiftBookedByMonthYear), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetShiftBookingByMonthYear(string month, string year)
+        public async Task<IActionResult> GetShiftBookingByMonthAndYear(int shiftId,string month, string year)
         {
             string monthyear = $"{month}/{year}";
             var entity = await (from shift in _shiftBookingRepository.Table
-                                where shift.ShiftDate == monthyear
+                                where shift.ShiftDate == monthyear && shift.ShiftBookingId == shiftId
                                 // join staffShiftBooking in _stafShiftBookingRepo.Table on shift.ShiftBookingId equals staffShiftBooking.ShiftBookingId
                                 select new GetShiftBookedByMonthYear
                                 {
@@ -213,11 +215,57 @@ namespace AwesomeCare.API.Controllers
 
         }
 
-
-        [HttpGet("Admin/{monthId}", Name = "GetShiftForAdminByMonth")]
+        [HttpGet("{month}/{year}/{rotaId}", Name = "GetShiftBookingByMonthYear")]
         [ProducesResponseType(type: typeof(GetShiftBookedByMonthYear), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetShiftForAdminByMonth(int monthId)
+        public async Task<IActionResult> GetShiftBookingByMonthYear(string month, string year, int rotaId)
+        {
+            string monthyear = $"{month}/{year}";
+            var entity = await (from shift in _shiftBookingRepository.Table
+                                where shift.ShiftDate == monthyear && shift.Rota == rotaId
+                                // join staffShiftBooking in _stafShiftBookingRepo.Table on shift.ShiftBookingId equals staffShiftBooking.ShiftBookingId
+                                select new GetShiftBookedByMonthYear
+                                {
+                                    TeamId = shift.Team,
+                                    DriverRequired = shift.DriverRequired,
+                                    NumberOfStaffRequired = shift.NumberOfStaff,
+                                    PublishTo = shift.PublishTo,
+                                    Remark = shift.Remark,
+                                    RotaId = shift.Rota,
+                                    ShiftBookingId = shift.ShiftBookingId,
+                                    ShiftDate = shift.ShiftDate,
+                                    StartTime = shift.StartTime,
+                                    StopTime = shift.StopTime,
+                                    NumberOfStaffRegistered = shift.StaffShiftBooking.Count,
+                                    BlockedDays = (from bd in shift.ShiftBookingBlockedDays
+                                                   select new GetShiftBookingBlockedDays
+                                                   {
+                                                       Day = bd.Day,
+                                                       ShiftBookingBlockedDaysId = bd.ShiftBookingBlockedDaysId,
+                                                       ShiftBookingId = bd.ShiftBookingId,
+                                                       WeekDay = bd.WeekDay
+                                                   }).ToList(),
+                                    BookedDays = (from shiftStaff in shift.StaffShiftBooking
+                                                  join shiftDay in _staffShiftBookingDayRepo.Table on shiftStaff.StaffShiftBookingId equals shiftDay.StaffShiftBookingId
+                                                  select new BookedDays
+                                                  {
+                                                      Day = shiftDay.Day,
+                                                      ShiftBookedById = shiftStaff.StaffPersonalInfoId,
+                                                      StaffShiftBookingDayId = shiftDay.StaffShiftBookingDayId,
+                                                      StaffShiftBookingId = shiftDay.StaffShiftBookingId,
+                                                      WeekDay = shiftDay.WeekDay
+                                                  }).ToList()
+                                }).FirstOrDefaultAsync();
+
+            return Ok(entity);
+
+        }
+
+      
+        [HttpGet("Admin/{monthId}/{rotaId}", Name = "GetShiftForAdminByMonth")]
+        [ProducesResponseType(type: typeof(GetShiftBookedByMonthYear), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetShiftForAdminByMonth(int monthId, int rotaId)
         {
             string year = DateTime.Now.Year.ToString();
             string month = monthId.ToString("D2");
@@ -227,7 +275,7 @@ namespace AwesomeCare.API.Controllers
 
 
             var entity = await (from shift in _shiftBookingRepository.Table
-                                where shift.ShiftDate == monthyear
+                                where shift.ShiftDate == monthyear && shift.Rota == rotaId
                                 select new GetShiftBookedByMonthYear
                                 {
                                     TeamId = shift.Team,
@@ -248,7 +296,7 @@ namespace AwesomeCare.API.Controllers
                                                   StaffShiftBookingId = shiftStaff.StaffShiftBookingId,
                                                   ShiftBookingId = shiftStaff.ShiftBookingId,
                                                   StaffPersonalInfoId = staff.StaffPersonalInfoId,
-                                                  StaffName = staff.FirstName + " " + staff.MiddleName + " " + staff.LastName,
+                                                  StaffName = staff.FirstName +  " " + staff.LastName,
                                                   IsStaffDriver = staff.CanDrive == "Yes",
                                                   BookedDays = (from bookings in shiftStaff.Days
                                                                 select new BookedDays

@@ -23,6 +23,7 @@ namespace AwesomeCare.Web.ViewModels.ShiftBooking
         public int DaysInMonth { get; set; }
         public string[] WeekDays { get; set; }
         public string SelectedMonth { get; set; }
+        public int SelectedMonthId { get; set; }
         public int ShiftBookingId { get; set; }
         public List<SelectListItem> Months { get; set; }
         public GetShiftBookedByMonthYear ShiftBooked { get; set; }

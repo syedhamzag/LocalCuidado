@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -48,17 +49,18 @@ namespace AwesomeCare.API.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(type: typeof(GetClientRotaName), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post([FromBody]PostClientRotaName model)
+        public async Task<IActionResult> Post([FromBody] PostClientRotaName model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            bool isRotaNameRegistered = _rotaRepository.Table.Any(r => r.RotaName.Equals(model.RotaName, StringComparison.InvariantCultureIgnoreCase));
+            bool isRotaNameRegistered = _rotaRepository.Table.Any(r => r.RotaName.ToLower() == model.RotaName.ToLower());
             if (isRotaNameRegistered)
             {
                 return BadRequest($"Rota name {model.RotaName} already exist");
@@ -77,7 +79,7 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
 
-            var getEntities = _rotaRepository.Table.Where(r=>!r.Deleted).ProjectTo<GetClientRotaName>().ToList();
+            var getEntities = _rotaRepository.Table.Where(r => !r.Deleted).ProjectTo<GetClientRotaName>().ToList();
             return Ok(getEntities);
         }
 
@@ -85,19 +87,19 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetClientRotaName), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody]PutClientRotaName model)
+        public async Task<IActionResult> Put([FromBody] PutClientRotaName model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity =await _rotaRepository.GetEntity(model.RotaId);
+            var entity = await _rotaRepository.GetEntity(model.RotaId);
             var putRota = Mapper.Map(model, entity);
-            var updateEntity =await _rotaRepository.UpdateEntity(putRota);
+            var updateEntity = await _rotaRepository.UpdateEntity(putRota);
             var getEntity = Mapper.Map<GetClientRotaName>(updateEntity);
 
             return Ok(getEntity);
-           
+
 
         }
     }
