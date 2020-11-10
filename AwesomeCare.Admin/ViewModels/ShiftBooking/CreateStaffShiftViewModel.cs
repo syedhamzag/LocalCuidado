@@ -32,6 +32,7 @@ namespace AwesomeCare.Admin.ViewModels.ShiftBooking
         public List<SelectListItem> Months { get; set; }
         [Required(ErrorMessage = "please select month")]
         public string SelectedMonth { get; set; }
+        public int SelectedMonthId { get; set; }
         public int DaysInMonth { get; set; }
         public string[] WeekDays { get; set; }
         public int ShiftBookingId { get; set; }

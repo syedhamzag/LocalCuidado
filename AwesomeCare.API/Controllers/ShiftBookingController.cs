@@ -333,6 +333,17 @@ namespace AwesomeCare.API.Controllers
             return Ok(entity);
         }
 
+        [HttpDelete("{shiftId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Delete(int shiftId)
+        {
+            var shiftBooking = await _shiftBookingRepository.GetEntity(shiftId);
+            if (shiftBooking == null) return NotFound();
+
+          await  _shiftBookingRepository.DeleteEntity(shiftBooking);
+
+            return Ok();
+        }
 
         [HttpPost("BlockDay")]
         [ProducesResponseType(type: typeof(GetShiftBookingBlockedDays), statusCode: StatusCodes.Status200OK)]

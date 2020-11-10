@@ -122,7 +122,7 @@ namespace AwesomeCare.Admin.Controllers
             var rotaId = rotas?.FirstOrDefault()?.RotaId;
             HttpContext.Session.Set<List<GetClientRotaName>>("rotas", rotas);
 
-            var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId,rotaId);
+            var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId, rotaId);
             if (staffShiftBookings != null)
                 model.Staffs = staffShiftBookings.Staffs;
 
@@ -142,7 +142,7 @@ namespace AwesomeCare.Admin.Controllers
             var rotas = HttpContext.Session.Get<List<GetClientRotaName>>("rotas");
             model.Rotas = rotas?.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
 
-            var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId,model.Rota);
+            var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId, model.Rota);
             if (staffShiftBookings != null)
                 model.Staffs = staffShiftBookings.Staffs;
             return View(model);
@@ -186,19 +186,21 @@ namespace AwesomeCare.Admin.Controllers
             model.SelectedMonth = selectedMonth;
 
             var selectedMonthId = (Array.IndexOf<string>(DateTimeFormatInfo.CurrentInfo.MonthNames, selectedMonth) + 1).ToString("D2");
+            model.SelectedMonthId = int.Parse(selectedMonthId);
             var rotas = await _clientRotaNameService.Get();
             model.Rotas = rotas?.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
             var rotaId = rotas?.FirstOrDefault()?.RotaId;
             var shiftBooked = await _shiftBookingService.GetShiftByMonthAndYear(selectedMonthId, DateTime.Now.Year.ToString(), rotaId);
             staffs = await _staffService.GetStaffs();
-           
+
 
             HttpContext.Session.Set<List<GetStaffs>>("staffs", staffs);
             HttpContext.Session.Set<List<GetClientRotaName>>("rotas", rotas);
 
             if (shiftBooked == null)
             {
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = $"No shift scheduled for the month of {selectedMonth}" });
+                var selectedRota = rotas.FirstOrDefault(r => r.RotaId == model.Rota);
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = $"No shift scheduled for the month of {selectedMonth} for Rota {selectedRota?.RotaName}" });
                 //staffs = HttpContext.Session.Get<List<GetStaffs>>("staffs");
                 if (staffs != null)
                     model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
@@ -231,12 +233,14 @@ namespace AwesomeCare.Admin.Controllers
 
             List<GetStaffs> staffs;
             var selectedMonthId = (Array.IndexOf<string>(DateTimeFormatInfo.CurrentInfo.MonthNames, model.SelectedMonth) + 1).ToString("D2");
-            var shiftBooked = await _shiftBookingService.GetShiftByMonthAndYear(selectedMonthId, DateTime.Now.Year.ToString(),model.Rota);
+            model.SelectedMonthId = int.Parse(selectedMonthId);
+            var shiftBooked = await _shiftBookingService.GetShiftByMonthAndYear(selectedMonthId, DateTime.Now.Year.ToString(), model.Rota);
             var rotas = HttpContext.Session.Get<List<GetClientRotaName>>("rotas");
-            model.Rotas = rotas?.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList(); 
+            model.Rotas = rotas?.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
             if (shiftBooked == null)
             {
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = $"No shift scheduled for the month of {model.SelectedMonth}" });
+                var selectedRota = rotas.FirstOrDefault(r => r.RotaId == model.Rota);
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = $"No shift scheduled for the month of {model.SelectedMonth} for Rota {selectedRota?.RotaName}" });
                 staffs = HttpContext.Session.Get<List<GetStaffs>>("staffs");
 
                 model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
@@ -250,6 +254,7 @@ namespace AwesomeCare.Admin.Controllers
             model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
 
             model.Staff = staffs.FirstOrDefault(s => s.StaffPersonalInfoId.ToString() == model.SelectedStaff);
+            model.CanUserDrive = model.Staff == null ? false : model.Staff.CanDrive;
 
             var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, int.Parse(selectedMonthId));
             model.DaysInMonth = daysInMonth;
@@ -376,6 +381,17 @@ namespace AwesomeCare.Admin.Controllers
 
 
 
+        }
+
+
+        public async Task<IActionResult> DeleteShift(int shiftId)
+        {
+            var request = await _shiftBookingService.Delete(shiftId);
+            // var content = await request.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = request.IsSuccessStatusCode, Message = request.IsSuccessStatusCode ? "Shift successfully deleted" : "Could not delete shift, please try again later" });
+
+            return RedirectToAction("Index");
         }
 
         //public async Task<IActionResult> CreatShift()

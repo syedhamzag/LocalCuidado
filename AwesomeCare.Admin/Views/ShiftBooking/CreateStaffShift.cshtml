@@ -82,7 +82,7 @@
                                                 {
                                                     <td>
 
-                                                        @if (d.IsSameDay(wday, Model.SelectedMonth))
+                                                        @if (d.IsSameDay(wday, Model.SelectedMonth) || Model.SelectedMonthId > DateTime.Now.Month)
                                                         {
                                                             <div class="row">
                                                                 <div class="col-sm-12">
