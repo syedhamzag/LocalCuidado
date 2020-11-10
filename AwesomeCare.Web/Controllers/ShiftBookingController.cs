@@ -15,39 +15,48 @@ using AwesomeCare.Web.Extensions;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using Microsoft.AspNetCore.Authorization;
 using AwesomeCare.Services.Services;
+using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
+using System.Globalization;
+using System.Security.Claims;
+using AwesomeCare.Web.Services.Staff;
+using Newtonsoft.Json;
 
 namespace AwesomeCare.Web.Controllers
 {
-    [Authorize]
+   
     public class ShiftBookingController : BaseController
     {
         private IShiftBookingService _shiftBookingService;
         private ILogger<ShiftBookingController> _logger;
         private IClientRotaNameService _clientRotaNameService;
+        private readonly IStaffService staffService;
 
         public ShiftBookingController(IShiftBookingService shiftBookingService, IClientRotaNameService clientRotaNameService,
-            ILogger<ShiftBookingController> logger,IFileUpload fileUpload):base(fileUpload)
+            ILogger<ShiftBookingController> logger, IFileUpload fileUpload,
+            IStaffService staffService) : base(fileUpload)
         {
             _shiftBookingService = shiftBookingService;
             _logger = logger;
             _clientRotaNameService = clientRotaNameService;
+            this.staffService = staffService;
         }
-        public IActionResult Create(string month, int shiftId)
+
+        [HttpGet("[controller]/[action]")]
+        public async Task<IActionResult> Create(string month, int shiftId)
         {
+          
+            var selectedMonthId = (Array.IndexOf<string>(DateTimeFormatInfo.CurrentInfo.MonthNames, month) + 1).ToString("D2");
+            //if (int.TryParse(selectedMonth, out int mth) && mth < DateTime.Now.Month)
+            //   return RedirectToActionPermanent("Shifts");
+
             var model = new CreateBookingViewModel();
+            model.CanUserDrive = User.CanDrive();
 
-            //var savedRota = HttpContext.Session.Get<List<GetClientRotaName>>("rotas");
-            //if (savedRota == null)
-            //{
-            //    var rotas = await _clientRotaNameService.Get();
-            //    model.Rotas = rotas.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
-            //    HttpContext.Session.Set<List<GetClientRotaName>>("rotas", rotas);
-            //}
-            //else
-            //{
-            //    model.Rotas = savedRota.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
-            //}
+           
+            var shiftBooked = await _shiftBookingService.GetShiftByMonthAndYear(shiftId,selectedMonthId, DateTime.Now.Year.ToString());
+            model.ShiftBooked = shiftBooked;
 
+            HttpContext.Session.Set("shiftBooked", shiftBooked);
 
             model.ShiftBookingId = shiftId;
 
@@ -57,6 +66,8 @@ namespace AwesomeCare.Web.Controllers
                 model.SelectedMonth = month;
             else
                 model.SelectedMonth = model.Months[DateTime.Now.Month - 1].Text;
+
+            model.SelectedMonthId = int.Parse(selectedMonthId);
 
             return View(model);
         }
@@ -68,10 +79,12 @@ namespace AwesomeCare.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateBookingViewModel model, IFormCollection formCollection)
         {
+            var staffPersonalInfoId = User.StaffPersonalInfoId();
+
             var staffShiftBooking = new PostStaffShiftBooking()
             {
                 ShiftBookingId = model.ShiftBookingId,
-                StaffPersonalInfoId = 1
+                StaffPersonalInfoId = int.Parse(staffPersonalInfoId)
             };
             //PostStaffShiftBookingDay
             for (int i = 1; i <= model.DaysInMonth; i++)
@@ -90,7 +103,11 @@ namespace AwesomeCare.Web.Controllers
                 }
             }
 
-            var result =await _shiftBookingService.CreateBooking(staffShiftBooking);
+            if(staffShiftBooking.Days.Count == 0)
+                return RedirectToAction("Shifts");
+
+
+            var result = await _shiftBookingService.CreateBooking(staffShiftBooking);
             var content = await result.Content.ReadAsStringAsync();
             if (result.IsSuccessStatusCode)
             {
@@ -105,6 +122,8 @@ namespace AwesomeCare.Web.Controllers
             {
                 SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An error occurred" });
             }
+            var shiftBooked = HttpContext.Session.Get<GetShiftBookedByMonthYear>("shiftBooked");
+            model.ShiftBooked = shiftBooked;
             return View(model);
         }
 
@@ -113,7 +132,14 @@ namespace AwesomeCare.Web.Controllers
             var user = User.Identities;
             var isStaffRole = User.IsInRole("Staff");
             var shifts = await _shiftBookingService.Get();
-            return View(shifts);
+            _logger.LogInformation($"shifts {JsonConvert.SerializeObject(shifts)}");
+
+            var myProfile = await staffService.MyProfile();
+            _logger.LogInformation($"myProfile {JsonConvert.SerializeObject(myProfile)}");
+
+            var shiftsInTeam = shifts.Where(s => s.PublishTo == myProfile.StaffWorkTeamId).ToList();
+            _logger.LogInformation($"shiftsInTeam {JsonConvert.SerializeObject(shiftsInTeam)}");
+            return View(shiftsInTeam);
         }
     }
 }

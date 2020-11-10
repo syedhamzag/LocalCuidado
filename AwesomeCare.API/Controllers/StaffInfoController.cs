@@ -12,6 +12,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
         private IGenericRepository<Client> _clientRepository;
         private readonly IGenericRepository<ApplicationUser> applicationUserRepository;
+        private readonly IGenericRepository<StaffWorkTeam> staffWorkTeamRepository;
         private IGenericRepository<StaffRating> _staffRatingRepository;
         private ILogger<StaffInfoController> _logger;
         private AwesomeCareDbContext _dbContext;
@@ -40,8 +42,9 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<StaffRota> staffRotaRepository, ILogger<StaffInfoController> logger,
             AwesomeCareDbContext dbContext, IGenericRepository<StaffRotaPartner> staffRotaPartnerRepository,
             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
-            IGenericRepository<StaffRating> staffRatingRepository, 
+            IGenericRepository<StaffRating> staffRatingRepository,
             IGenericRepository<Client> clientRepository,
+             IGenericRepository<StaffWorkTeam> staffWorkTeamRepository,
             IGenericRepository<ApplicationUser> applicationUserRepository)
         {
             _staffInfoRepository = staffInfoRepository;
@@ -55,6 +58,7 @@ namespace AwesomeCare.API.Controllers
             _staffRatingRepository = staffRatingRepository;
             _clientRepository = clientRepository;
             this.applicationUserRepository = applicationUserRepository;
+            this.staffWorkTeamRepository = staffWorkTeamRepository;
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
@@ -66,7 +70,7 @@ namespace AwesomeCare.API.Controllers
 
             // var entity = await _staffInfoRepository.GetEntity(id);
             var getEntity = await _staffInfoRepository.Table.ProjectTo<GetStaffPersonalInfo>().FirstOrDefaultAsync(s => s.StaffPersonalInfoId == id);
-           // var  = Mapper.Map<GetStaffPersonalInfo>(entity);
+            // var  = Mapper.Map<GetStaffPersonalInfo>(entity);
             return Ok(getEntity);
         }
 
@@ -103,7 +107,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetStaffPersonalInfo), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostAsync([FromBody]PostStaffPersonalInfo model)
+        public async Task<IActionResult> PostAsync([FromBody] PostStaffPersonalInfo model)
         {
 
             if (!ModelState.IsValid)
@@ -136,7 +140,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostStaffFullInfo([FromBody]PostStaffFullInfo model)
+        public async Task<IActionResult> PostStaffFullInfo([FromBody] PostStaffFullInfo model)
         {
 
             if (!ModelState.IsValid)
@@ -163,7 +167,7 @@ namespace AwesomeCare.API.Controllers
 
         }
 
-
+       
         [HttpGet("Profile/{id}")]
         [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> Profile(int id)
@@ -176,10 +180,12 @@ namespace AwesomeCare.API.Controllers
 
             var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
             var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
-
+            // var teamEntity = _dbContext.Set<StaffWorkTeam>();
             // var profile = Mapper.Map<GetStaffProfile>(staffDetails);
 
             var staffProfile = (from st in _staffInfoRepository.Table
+                                join wt in staffWorkTeamRepository.Table on st.WorkTeam equals wt.StaffWorkTeamId.ToString() into workTeamGroup
+                                from wk in workTeamGroup.DefaultIfEmpty()
                                 where st.StaffPersonalInfoId == id
                                 select new GetStaffProfile
                                 {
@@ -267,7 +273,7 @@ namespace AwesomeCare.API.Controllers
                                                      Trainer = t.Trainer,
                                                      Training = t.Training
                                                  }).ToList(),
-                                    WorkTeam = st.WorkTeam,
+                                    WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
                                     RegulatoryContacts = (from rc in st.RegulatoryContact
                                                           join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
                                                           join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId
@@ -293,13 +299,15 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> MyProfile()
         {
-            
+
             var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
             var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
 
             var identityUserId = this.User.SubClaim();
 
             var staffProfile = (from st in _staffInfoRepository.Table
+                                join wt in staffWorkTeamRepository.Table on st.WorkTeam equals wt.StaffWorkTeamId.ToString() into workTeamGroup
+                                from wk in workTeamGroup.DefaultIfEmpty()
                                 where st.ApplicationUserId == identityUserId
                                 select new GetStaffProfile
                                 {
@@ -333,7 +341,7 @@ namespace AwesomeCare.API.Controllers
                                                      StaffPersonalInfoId = edu.StaffPersonalInfoId,
                                                      StartDate = edu.StartDate
                                                  }).ToList(),
-                                    EmergencyContacts = (from em in st.EmergencyContacts 
+                                    EmergencyContacts = (from em in st.EmergencyContacts
                                                          select new GetStaffEmergencyContact
                                                          {
                                                              Address = em.Address,
@@ -398,7 +406,8 @@ namespace AwesomeCare.API.Controllers
                                                      Trainer = t.Trainer,
                                                      Training = t.Training
                                                  }).ToList(),
-                                    WorkTeam = st.WorkTeam,
+                                    WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
+                                    StaffWorkTeamId = wk == null ? 0 : wk.StaffWorkTeamId,
                                     RegulatoryContacts = (from rc in st.RegulatoryContact
                                                           join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
                                                           join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId
@@ -440,7 +449,7 @@ namespace AwesomeCare.API.Controllers
         //    var identityUserId = this.User.SubClaim();
 
         //    var staffProfile = await _staffInfoRepository.Table.ProjectTo<GetStaffPersonalInfo>().FirstOrDefaultAsync(s => s.ApplicationUserId == identityUserId); ;
-          
+
         //    return Ok(staffProfile);
 
         //}
@@ -448,7 +457,7 @@ namespace AwesomeCare.API.Controllers
 
         [HttpPut("MyProfile/Edit")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdatePersonalInfo([FromBody]PutStaffPersonalInfo model)
+        public async Task<IActionResult> UpdatePersonalInfo([FromBody] PutStaffPersonalInfo model)
         {
             if (!ModelState.IsValid)
             {
@@ -493,7 +502,8 @@ namespace AwesomeCare.API.Controllers
                                     StartDate = st.StartDate.ToString(),
                                     Status = st.Status.ToString(),
                                     Telephone = st.Telephone,
-                                   
+                                    CanDrive = st.CanDrive == "Yes" ? true : false
+
                                 }).ToListAsync();
             return Ok(staffs);
         }
@@ -501,7 +511,7 @@ namespace AwesomeCare.API.Controllers
 
         [HttpPost("Approval")]
         [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
-        public async Task<IActionResult> Approval([FromBody]PostStaffApproval model)
+        public async Task<IActionResult> Approval([FromBody] PostStaffApproval model)
         {
             if (!ModelState.IsValid)
             {
@@ -534,7 +544,7 @@ namespace AwesomeCare.API.Controllers
         #region Rota
         [HttpPost("Rota/Create")]
         [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateStaffRota([FromBody]List<PostStaffRota> model)
+        public async Task<IActionResult> CreateStaffRota([FromBody] List<PostStaffRota> model)
         {
             if (!ModelState.IsValid)
             {
@@ -556,7 +566,7 @@ namespace AwesomeCare.API.Controllers
 
         [HttpPost("Rota/Dynamic")]
         [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateStaffRotaAddition([FromBody]PostStaffRotaDynamicAddition model)
+        public async Task<IActionResult> CreateStaffRotaAddition([FromBody] PostStaffRotaDynamicAddition model)
         {
             if (!ModelState.IsValid)
             {
@@ -575,7 +585,7 @@ namespace AwesomeCare.API.Controllers
 
         [HttpPut("Rota/Dynamic")]
         [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateStaffRotaAddition([FromBody]PutStaffRotaDynamicAddition model)
+        public async Task<IActionResult> UpdateStaffRotaAddition([FromBody] PutStaffRotaDynamicAddition model)
         {
             if (!ModelState.IsValid)
             {
@@ -685,21 +695,21 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest("staffPersonalInfoId is required");
             }
-            var feedbacks =await (from fb in _staffRatingRepository.Table
-                             join st in _staffInfoRepository.Table on fb.StaffPersonalInfoId equals st.StaffPersonalInfoId
-                             join cl in _clientRepository.Table on fb.ClientId equals cl.ClientId
-                             where fb.StaffPersonalInfoId == staffPersonalInfoId.Value
-                             select new GetStaffRating
-                             {
-                                 StaffPersonalInfoId = fb.StaffPersonalInfoId,
-                                 Client = cl.Firstname + " " + cl.Middlename + " " + cl.Surname,
-                                 ClientId = fb.ClientId,
-                                 Comment = fb.Comment,
-                                 CommentDate = fb.CommentDate,
-                                 Rating = fb.Rating,
-                                 Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
-                                 StaffRatingId = fb.StaffRatingId
-                             }
+            var feedbacks = await (from fb in _staffRatingRepository.Table
+                                   join st in _staffInfoRepository.Table on fb.StaffPersonalInfoId equals st.StaffPersonalInfoId
+                                   join cl in _clientRepository.Table on fb.ClientId equals cl.ClientId
+                                   where fb.StaffPersonalInfoId == staffPersonalInfoId.Value
+                                   select new GetStaffRating
+                                   {
+                                       StaffPersonalInfoId = fb.StaffPersonalInfoId,
+                                       Client = cl.Firstname + " " + cl.Middlename + " " + cl.Surname,
+                                       ClientId = fb.ClientId,
+                                       Comment = fb.Comment,
+                                       CommentDate = fb.CommentDate,
+                                       Rating = fb.Rating,
+                                       Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
+                                       StaffRatingId = fb.StaffRatingId
+                                   }
                             ).ToListAsync();
             return Ok(feedbacks);
         }
@@ -711,13 +721,13 @@ namespace AwesomeCare.API.Controllers
         [HttpPost("ClientFeedback")]
         [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PostClientFeedback([FromBody]PostStaffRating model)
+        public async Task<IActionResult> PostClientFeedback([FromBody] PostStaffRating model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(model);
             }
-           
+
             var entity = Mapper.Map<StaffRating>(model);
             var staffRating = await _staffRatingRepository.InsertEntity(entity);
             return Ok();

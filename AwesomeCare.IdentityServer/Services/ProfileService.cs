@@ -43,6 +43,7 @@ namespace AwesomeCare.IdentityServer.Services
             IList<string> roles = await _userManager.GetRolesAsync(user);
             claims.Add(new Claim("hasStaffInfo", hasStaffInfo.ToString()));
             claims.Add(new Claim("staffPersonalInfoId", hasStaffInfo ? staffPersonalInfo.StaffPersonalInfoId.ToString() : ""));
+            claims.Add(new Claim("canDrive", hasStaffInfo ? staffPersonalInfo.CanDrive.ToString() : "No"));
             claims.Add(new Claim(JwtClaimTypes.Role, string.Join(',', roles)));
             claims.Add(new Claim(JwtClaimTypes.Email, user?.Email));
 

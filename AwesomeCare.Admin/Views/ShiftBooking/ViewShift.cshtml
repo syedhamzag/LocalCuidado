@@ -21,128 +21,215 @@
                     </ul>*@
             </div>
             <div class="body">
-                <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                    <label>Month</label>
-                    <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control">
-                    </select>
+                <form>
+                    <div id="printablediv">
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label>Month</label>
+                            <select asp-for="SelectedMonth" asp-items="@Model.Months" class="form-control">
+                            </select>
+                        </div>
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Rota"></label>
+                            <select asp-for="Rota" asp-items="@Model.Rotas" class="form-control">
+                            </select>
+                            <span asp-validation-for="Rota" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <input type="submit" class="btn btn-primary float-right" value="Search" formaction="/ShiftBooking/View-Shift" formmethod="post" formnovalidate />
+                        </div>
 
-                </div>
-
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            @foreach (string day in Model.WeekDays)
-                            {
-                                <th>@day</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{
-                            var totalDays = 7;
-                            var remainder = Model.DaysInMonth % 7;
-                            var totalRows = remainder > 0 ? (Model.DaysInMonth / totalDays) + 1 : Model.DaysInMonth / totalDays;
-                            var start = 1;
-                            bool isLastDay = false;
-                            bool isEnded = false;
-                            for (int r = 1; r <= 6; r++)
-                            {
+                        <table class="table table-bordered" id="divShift">
+                            <thead>
                                 <tr>
-
-                                    @for (int d = start; d <= Model.DaysInMonth; d++)
+                                    @foreach (string day in Model.WeekDays)
                                     {
-                                        @foreach (string wday in Model.WeekDays)
-                                        {
-                                    <td>
+                                        <th>@day</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var totalDays = 7;
+                                    var remainder = Model.DaysInMonth % 7;
+                                    var totalRows = remainder > 0 ? (Model.DaysInMonth / totalDays) + 1 : Model.DaysInMonth / totalDays;
+                                    var start = 1;
+                                    bool isLastDay = false;
+                                    bool isEnded = false;
+                                    for (int r = 1; r <= 6; r++)
+                                    {
+                                        <tr>
 
-                                        @if (d.IsSameDay(wday, Model.SelectedMonth))
-                                        {
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <p class="align-right">
-                                                        <span>
-                                                            @d.ToString("D2")
-                                                        </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 displayblock align-center">
-                                                    
-                                                        <P>
+                                            @for (int d = start; d <= Model.DaysInMonth; d++)
+                                            {
+                                                @foreach (string wday in Model.WeekDays)
+                                                {
+                                                    <td>
+
+                                                        @if (d.IsSameDay(wday, Model.SelectedMonth))
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <p class="align-right">
+                                                                        <span>
+                                                                            @d.ToString("D2")
+                                                                        </span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 displayblock align-center">
+                                                                    @foreach (var staff in Model.Staffs)
+                                                                    {
+                                                                        if (staff.BookedDays.Any(c => c.Day.Equals(d.ToString("D2"))))
+                                                                        {
+                                                                            <label class="fancy-checkbox">
+
+                                                                                @{
+                                                                                    var driver = @staff.IsStaffDriver ? " (D)" : "";
+
+                                                                                    var staffandDriver = staff.StaffName + driver;
+
+                                                                                    var dayId = staff.BookedDays.FirstOrDefault(b => b.Day == d.ToString("D2"))?.StaffShiftBookingDayId;
+                                                                                    string dayName = "day_" + dayId;
+                                                                                }
+                                                                                <input type="checkbox" name="@dayName" id="@dayName">
+                                                                                <span> @staffandDriver</span>
+                                                                            </label>
+                                                                            <P>
+
+                                                                            </P>
+                                                                        }
+                                                                    }
+                                                                    @*<P>
                                                             STAFF NAME (D)
                                                         </P>
                                                         <P>
                                                             STAFF NAME
-                                                        </P>
-                                                    
-                                                </div>
-                                            </div>
-                                            
+                                                        </P>*@
 
-                                            if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
-                                            {
-                                                isLastDay = true;
-                                            }
-                                            else
-                                            {
-                                                if (d == Model.DaysInMonth)
+                                                                </div>
+                                                            </div>
+
+
+                                                            if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
+                                                            {
+                                                                isLastDay = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                if (d == Model.DaysInMonth)
+                                                                {
+                                                                    isEnded = true;
+                                                                    break;
+                                                                }
+                                                                else
+                                                                {
+                                                                    ++d;
+                                                                }
+
+                                                            }
+                                                        }
+                                                    </td>
+                                                }
+                                                if (isEnded)
                                                 {
-                                                    isEnded = true;
                                                     break;
                                                 }
                                                 else
                                                 {
-                                                    ++d;
+                                                    if (isLastDay)
+                                                    {
+                                                        start = d + 1;
+                                                        break;
+                                                    }
                                                 }
 
+
+                                                @*var kk = start.ToString("D2");
+                                    if (start <= Model.DaysInMonth)
+                                    {
+                                        if (start.IsSameDay(wday, "March"))
+                                        {
+                                            @kk;
+                                            break;
+                                        }
+                                    }*@
                                             }
-                                        }
-                                    </td>
-                                        }
+
+
+
+
+
+
+                                        </tr>
+
                                         if (isEnded)
                                         {
                                             break;
                                         }
-                                        else
-                                        {
-                                            if (isLastDay)
-                                            {
-                                                start = d + 1;
-                                                break;
-                                            }
-                                        }
-
-
-                                        @*var kk = start.ToString("D2");
-                                            if (start <= Model.DaysInMonth)
-                                            {
-                                                if (start.IsSameDay(wday, "March"))
-                                                {
-                                                    @kk;
-                                                    break;
-                                                }
-                                            }*@
                                     }
-
-
-
-
-
-
-                                </tr>
-
-                                if (isEnded)
-                                {
-                                    break;
                                 }
-                            }
-                        }
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
 
+                    </div>
+                    <input type="submit" class="btn btn-primary float-right" value="Delete Selected" formaction="/ShiftBooking/DeleteStaffShift" formmethod="post" formnovalidate />
+                    <input type="button" value="Print" class="btn btn-outline-primary" onclick="javascript:printerDiv('printablediv')" />
+
+                </form>
             </div>
         </div>
     </div>
 </div>
 
+@section scripts{
+
+    <script type="text/javascript">
+
+        function printerDiv(divID) {
+            //Get the HTML of div
+
+            var divElements = document.getElementById(divID).innerHTML;
+
+            //Get the HTML of whole page
+            var oldPage = document.body.innerHTML;
+
+            //Reset the pages HTML with divs HTML only
+
+            document.body.innerHTML =
+                "<html><head><title></title></head><body>" +
+                divElements + "</body>";
+
+            //Print Page
+            window.print();
+
+            //Restore orignal HTML
+            document.body.innerHTML = oldPage;
+        }
+
+        $(document).ready(function () {
+            //$('#divShift').DataTable({
+            //    dom: 'Bfrtip',
+            //    buttons: [
+            //        'print'
+            //    ]
+            //});
+        });
+
+        function PrintShift() {
+            var panel = document.getElementById("divShift");
+            var printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head><title>Shifts</title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(panel.innerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            setTimeout(function () {
+                printWindow.print();
+            }, 500);
+            return false;
+        }
+    </script>
+
+}

@@ -32,6 +32,7 @@
                             <th>Name</th>
                             <th>Telephone</th>
                             <th>Email</th>
+                            <th>Can Drive</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Registration Id</th>
@@ -47,6 +48,12 @@
                                 <td><span>@staff.data.Fullname</span></td>
                                 <td><span class="text-info">@staff.data.Telephone</span></td>
                                 <td>@staff.data.Email</td>
+                                <td>
+                                    @{ 
+                                        var canDrive = staff.data.CanDrive ? "Yes" : "No";
+                                        @canDrive;
+                                    }
+                                </td>
                                 <td>
                                     @*@{
 

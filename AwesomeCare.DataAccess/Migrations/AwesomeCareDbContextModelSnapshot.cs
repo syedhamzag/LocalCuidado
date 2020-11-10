@@ -1360,6 +1360,37 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_ShiftBooking");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.ShiftBookingBlockedDays", b =>
+                {
+                    b.Property<int>("ShiftBookingBlockedDaysId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ShiftBookingBlockedDaysId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Day")
+                        .IsRequired()
+                        .HasColumnName("Day")
+                        .HasColumnType("nvarchar(2)")
+                        .HasMaxLength(2);
+
+                    b.Property<int>("ShiftBookingId")
+                        .HasColumnName("ShiftBookingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WeekDay")
+                        .IsRequired()
+                        .HasColumnName("WeekDay")
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
+                    b.HasKey("ShiftBookingBlockedDaysId");
+
+                    b.HasIndex("ShiftBookingId");
+
+                    b.ToTable("tbl_ShiftBookingBlockedDays");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffBlackList", b =>
                 {
                     b.Property<int>("StaffBlackListId")
@@ -2863,6 +2894,15 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.Investigation", "Investigation")
                         .WithMany("InvestigationAttachments")
                         .HasForeignKey("InvestigationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ShiftBookingBlockedDays", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ShiftBooking", "ShiftBooking")
+                        .WithMany("ShiftBookingBlockedDays")
+                        .HasForeignKey("ShiftBookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

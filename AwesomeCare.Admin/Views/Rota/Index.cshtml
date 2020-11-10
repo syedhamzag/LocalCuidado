@@ -17,7 +17,7 @@
                 <h2>@Model.SubTitle</h2>
             </div>
             <div class="body clearfix">
-                <form asp-controller="Rota" asp-action="SaveEdit" method="post">
+                <form asp-controller="Rota" asp-action="Index" method="post">
 
 
                     <div class="row">
@@ -44,9 +44,9 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="Gender" class="control-label"></label>
+                                @*<baserecord asp-key="Gender" asp-for="Gender" asp-items="null" />*@
+                                <select asp-items="Model.Genders" asp-for="Gender" class="form-control"></select>
 
-                                @Html.DropDownListFor(m => m.Gender, Model.Genders, "select", new { @class = "form-control" })
-                                @*<input type="text" class="form-control" asp-for="Gender">*@
                                 <span asp-validation-for="Gender" class="text-danger"></span>
                             </div>
                         </div>

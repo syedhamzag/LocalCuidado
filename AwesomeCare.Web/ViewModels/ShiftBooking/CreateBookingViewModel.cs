@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,10 +23,13 @@ namespace AwesomeCare.Web.ViewModels.ShiftBooking
         public int DaysInMonth { get; set; }
         public string[] WeekDays { get; set; }
         public string SelectedMonth { get; set; }
+        public int SelectedMonthId { get; set; }
         public int ShiftBookingId { get; set; }
         public List<SelectListItem> Months { get; set; }
-       // public List<SelectListItem> Rotas { get; set; }
-      //  [Required]
-     //   public int Rota { get; set; }
+        public GetShiftBookedByMonthYear ShiftBooked { get; set; }
+        public bool CanUserDrive { get;  set; } 
+        // public List<SelectListItem> Rotas { get; set; }
+        //  [Required]
+        //   public int Rota { get; set; }
     }
 }

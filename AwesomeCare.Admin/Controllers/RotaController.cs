@@ -8,33 +8,51 @@ using AwesomeCare.Admin.ViewModels.ClientRota;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaName;
 using Microsoft.AspNetCore.Mvc;
 using AwesomeCare.Services.Services;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Memory;
+using AwesomeCare.Admin.Services.Admin;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using AwesomeCare.Admin.Extensions;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class RotaController : BaseController
     {
         private readonly IClientRotaNameService _clientRotaService;
-        public RotaController(IClientRotaNameService clientRotaService, IFileUpload fileUpload):base(fileUpload)
+        private readonly IBaseRecordService baseRecordService;
+
+        public RotaController(IClientRotaNameService clientRotaService, 
+            IFileUpload fileUpload,
+            IBaseRecordService baseRecordService) :base(fileUpload)
         {
             _clientRotaService = clientRotaService;
+            this.baseRecordService = baseRecordService;
         }
         public async Task<IActionResult> Index(int? id)
         {
             var model = new ClientRotaViewModel();
+           // model.Cache = cache;
+           // model.GetGendersFromCache();
+
             var rotas = await _clientRotaService.Get();
+            var baseRecords = await baseRecordService.GetBaseRecordsWithItems();
+            model.Genders = baseRecords.FirstOrDefault(i => i.KeyName == "Gender").BaseRecordItems.Select(b => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(b.ValueName, b.ValueName)).ToList();
+           
+            HttpContext.Session.Set<List<SelectListItem>>("genders", model.Genders);
+
             if (id.HasValue)
             {
                 model.SubTitle = "Update Rota";
                 var rota = await _clientRotaService.Get(id.Value);
                 model.Area = rota.Area;
                 model.Gender = rota.Gender;
-                model.NumberOfStaff = model.NumberOfStaff;
+                model.NumberOfStaff = rota.NumberOfStaff;
                 model.RotaId = rota.RotaId;
-                model.RotaName = model.RotaName;
+                model.RotaName = rota.RotaName;
 
                 model.Genders.ForEach(r =>
                 {
-                    r.Selected = r.Value == model.Gender;
+                    r.Selected = r.Value == rota.Gender;
                 });
             }
 
@@ -44,12 +62,13 @@ namespace AwesomeCare.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveEdit(ClientRotaViewModel model)
+        public async Task<IActionResult> Index(ClientRotaViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 var rotas = await _clientRotaService.Get();
                 model.Rotas = rotas;
+                model.Genders = HttpContext.Session.Get<List<SelectListItem>>("genders");
                 return View(model);
             }
 
@@ -63,6 +82,7 @@ namespace AwesomeCare.Admin.Controllers
                     NumberOfStaff = model.NumberOfStaff,
                     RotaName = model.RotaName
                 };
+               // var kk = JsonConvert.SerializeObject(postRota);
                 var result = await _clientRotaService.Post(postRota);
                 SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "Rota successfully added" : "An Error Occurred" });
 

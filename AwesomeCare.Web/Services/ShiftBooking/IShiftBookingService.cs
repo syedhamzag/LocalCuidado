@@ -9,16 +9,18 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.Web.Services.ShiftBooking
 {
-   public interface IShiftBookingService
+    public interface IShiftBookingService
     {
         [Post("/ShiftBooking")]
-        Task<HttpResponseMessage> Post([Body]PostShiftBooking shiftBooking);
+        Task<HttpResponseMessage> Post([Body] PostShiftBooking shiftBooking);
         [Get("/ShiftBooking")]
         Task<List<GetShiftBookingDetails>> Get();
+        [Get("/ShiftBooking/BookShift/{shiftId}/{month}/{year}")]
+        Task<GetShiftBookedByMonthYear> GetShiftByMonthAndYear(int shiftId, string month, string year);
         [Get("/ShiftBooking/{id}")]
         Task<GetShiftBookingDetails> Get(int id);
         [Post("/ShiftBooking/Staff/CreateBooking")]
-        Task<HttpResponseMessage> CreateBooking([Body]PostStaffShiftBooking shiftBooking);
-        
+        Task<HttpResponseMessage> CreateBooking([Body] PostStaffShiftBooking shiftBooking);
+
     }
 }

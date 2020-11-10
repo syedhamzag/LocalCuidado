@@ -28,6 +28,16 @@ namespace AwesomeCare.DataAccess.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task DeleteEntities(List<int> entityIds)
+        {
+            if (entityIds == null || entityIds.Count == 0)
+                throw new ArgumentNullException("entity");
+
+            var entities =await Entities.FindAsync(entityIds);
+          //  Entities..Remove(entity);
+            //await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<List<TEntity>> GetEntities()
         {
             return await Entities.ToListAsync();

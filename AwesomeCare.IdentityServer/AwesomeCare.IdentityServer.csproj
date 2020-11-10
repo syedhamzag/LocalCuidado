@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHost' " />
   <ItemGroup>
     <Compile Remove="Areas\Identity\Pages\Account\Login.cshtml.cs" />
     <Compile Remove="Areas\Identity\Pages\Account\LoginWith2fa.cshtml.cs" />
