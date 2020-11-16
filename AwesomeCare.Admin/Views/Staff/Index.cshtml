@@ -25,7 +25,7 @@
             <div class="body">
                 <h4>Staffs</h4>
 
-                <table class="table m-b-0">
+                <table class="table m-b-0 datatables">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -87,6 +87,11 @@
                                             @Html.ActionLink("Details", "Details", "Staff", new { staffId = staff.data.StaffPersonalInfoId }, new { @class = "dropdown-item" })
                                             <a asp-controller="Staff" asp-action="Feedback" class="dropdown-item" asp-route-staffpersonalInfoId="@staff.data.StaffPersonalInfoId">Feedback/Ratings</a>
                                             <a asp-controller="Staff" asp-action="EditProfile" class="dropdown-item" asp-route-staffId="@staff.data.StaffPersonalInfoId">Edit</a>
+                                            @if (!string.IsNullOrEmpty(staff.data.ApplicationUserId))
+                                            {
+                                                <a asp-controller="Staff" asp-action="ChangeEmail" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Email</a>
+
+                                            }
 
                                         </div>
                                     </div>

@@ -19,6 +19,7 @@ using AwesomeCare.Admin.ViewModels.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.User;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -82,7 +83,7 @@ namespace AwesomeCare.Admin.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetStaffs");
+                _logger.LogError(ex, "Index");
                 throw;
             }
 
@@ -468,6 +469,37 @@ namespace AwesomeCare.Admin.Controllers
             return path;
         }
 
+        public async Task<IActionResult> ChangeEmail(string userId)
+        {
+            var userProfile = await _staffService.GetChangeEmail(userId);
+            var postChangeEmail = new PostChangeEmail
+            {
+                EmailAddress = userProfile.Email,
+                UserId = userProfile.UserId
+            };
+            return View(postChangeEmail);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeEmail(PostChangeEmail model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = await _staffService.PostChangeEmail(model);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Operation successful" : content });
+            if (!result.IsSuccessStatusCode)
+            {
+                _logger.LogError(content);
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
 
         #region Client Feedback/Rating
         [HttpGet]

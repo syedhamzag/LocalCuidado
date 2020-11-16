@@ -7,6 +7,7 @@ using AwesomeCare.Admin.ViewModels.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.User;
 using Refit;
 
 namespace AwesomeCare.Admin.Services.Staff
@@ -52,6 +53,14 @@ namespace AwesomeCare.Admin.Services.Staff
 
         [Post("/StaffInfo/ClientFeedback")]
         Task<HttpResponseMessage> PostClientFeedback([Body]PostStaffRating model);
+        #endregion
+
+        #region ChangeEmail
+        [Get("/User/ChangeEmail/{userId}")]
+        Task<GetChangeEmail> GetChangeEmail(string userId);
+
+        [Post("/User/ChangeEmail")]
+        Task<HttpResponseMessage> PostChangeEmail(PostChangeEmail model);
         #endregion
     }
 }
