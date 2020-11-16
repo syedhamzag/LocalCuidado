@@ -1,0 +1,39 @@
+﻿@using  AwesomeCare.DataTransferObject.DTOs.User;
+@model PostChangeEmail
+@{
+    ViewData["Title"] = "Change Staff Email";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Change Email</h2>
+                
+            </div>
+            <div class="body">
+                
+                <form method="post">
+                    <div class="row">
+                        
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label  class="control-label">Email Address </label>
+                                <p><small><strong>please note the log in email/username will also change</strong></small></p>
+                                <input type="hidden" asp-for="UserId" class="form-control">
+                                <input type="text" asp-for="EmailAddress" class="form-control">
+                                <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary pull-right">Update</button>
+                            <a asp-action="Index" class="btn btn-default pull-left">Cancel</a>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
