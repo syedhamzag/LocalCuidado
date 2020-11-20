@@ -247,6 +247,15 @@ namespace AwesomeCare.Web
             services.AddTransient<AuthenticatedHttpClientHandler>();
             services.AddScoped<HttpClient>();
 
+            services.AddScoped<IEmailService>(c =>
+            {
+                var logger = c.GetService(typeof(ILogger<EmailService>)) as ILogger<EmailService>;
+                string key = Configuration["sendgridKey"];
+                string senderEmail = Configuration["senderEmail"];
+                string senderName = Configuration["senderName"];
+                return new EmailService(key, senderEmail, senderName, logger);
+            });
+
             services.AddLogging();
             AddRefitServices(services);
             services.AddHttpClient("IdpClient", options =>

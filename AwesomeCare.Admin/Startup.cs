@@ -308,6 +308,15 @@ namespace AwesomeCare.Admin
             services.AddScoped(typeof(QRCodeGenerator));
             services.AddScoped(typeof(DropboxClient), c => new DropboxClient(Configuration["dropboxApiKey"]));
             services.AddScoped<IFileUpload, FileUpload>();
+
+            services.AddScoped<IEmailService>(c =>
+            {
+                var logger = c.GetService(typeof(ILogger<EmailService>)) as ILogger<EmailService>;
+                string key = Configuration["sendgridKey"];
+                string senderEmail = Configuration["senderEmail"];
+                string senderName = Configuration["senderName"];
+                return new EmailService(key, senderEmail, senderName, logger);
+            });
             //AutoMapper
             AutoMapperConfiguration.Configure();
             //  MapperConfig.AutoMapperConfiguration.Configure();

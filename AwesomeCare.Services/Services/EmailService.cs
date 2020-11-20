@@ -3,13 +3,14 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Services.Services
 {
-   public class EmailService: IEmailService
+    public class EmailService : IEmailService
     {
         private string apiKey { get; set; }
         private string emailSender { get; set; }
@@ -17,14 +18,14 @@ namespace AwesomeCare.Services.Services
 
         private readonly ILogger<EmailService> logger;
 
-        public EmailService(string key,string senderEmail,string emailSender,ILogger<EmailService> logger)
+        public EmailService(string key, string senderEmail, string emailSender, ILogger<EmailService> logger)
         {
             apiKey = key;
             this.senderEmail = senderEmail;
             this.logger = logger;
             this.emailSender = emailSender;
         }
-        public async Task SendAsync(List<string> recipients,string subject,string htmlContent, bool showAllRecipients = false)
+        public async Task SendAsync(List<string> recipients, string subject, string htmlContent, bool showAllRecipients = false)
         {
             try
             {
@@ -33,6 +34,38 @@ namespace AwesomeCare.Services.Services
                 List<EmailAddress> tos = recipients.Select(e => new EmailAddress(e)).ToList();
 
                 var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, "", htmlContent, showAllRecipients);
+                var response = await client.SendEmailAsync(msg);
+                var content = await response.Body.ReadAsStringAsync();
+
+                logger.LogInformation(content);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "EmailService", null);
+            }
+        }
+
+        public async Task SendAsync(List<string> recipients, string subject, string htmlContent, byte[] attachment, string filename, string contentType, bool showAllRecipients = false)
+        {
+            try
+            {
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress(senderEmail, emailSender);
+                List<EmailAddress> tos = recipients.Select(e => new EmailAddress(e)).ToList();
+
+                var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, "", htmlContent, showAllRecipients);
+               
+                msg.Attachments = new List<Attachment>
+                {
+                    new Attachment()
+                    {
+                         Content =Convert.ToBase64String(attachment),
+                         ContentId = filename,
+                         Disposition ="attachment",
+                         Filename = filename,
+                         Type = contentType
+                    }
+                };
                 var response = await client.SendEmailAsync(msg);
                 var content = await response.Body.ReadAsStringAsync();
 
