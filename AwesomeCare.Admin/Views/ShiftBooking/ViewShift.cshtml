@@ -175,8 +175,18 @@
 
                     </div>
                     <input type="submit" class="btn btn-primary float-right" value="Delete Selected" formaction="/ShiftBooking/DeleteStaffShift" formmethod="post" formnovalidate />
-                    <input type="button" value="Print" class="btn btn-outline-primary" onclick="javascript:printerDiv('printablediv')" />
-
+                   
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           Actions
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            @*<input type="button" value="Print" class="btn btn-outline-primary" onclick="javascript:printerDiv('printablediv')" />*@
+                            <a class="dropdown-item" href="#" onclick="javascript:printerDiv('printablediv')">Print</a>
+                            <a class="dropdown-item" asp-controller="ShiftBooking" asp-action="EmailShift" target="_blank">Email</a>
+                           
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

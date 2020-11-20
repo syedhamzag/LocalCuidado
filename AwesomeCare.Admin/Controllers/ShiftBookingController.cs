@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.Http;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using Newtonsoft.Json;
 using AwesomeCare.DataTransferObject.DTOs.ShiftBookingBlockedDays;
+using OfficeOpenXml;
+using System.IO;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -124,7 +126,10 @@ namespace AwesomeCare.Admin.Controllers
 
             var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId, rotaId);
             if (staffShiftBookings != null)
+            {
                 model.Staffs = staffShiftBookings.Staffs;
+                HttpContext.Session.Set<ViewShiftViewModel>("shiftModel", model);
+            }
 
             return View(model);
         }
@@ -144,10 +149,109 @@ namespace AwesomeCare.Admin.Controllers
 
             var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId, model.Rota);
             if (staffShiftBookings != null)
+            {
                 model.Staffs = staffShiftBookings.Staffs;
+
+            }
+            HttpContext.Session.Set<ViewShiftViewModel>("shiftModel", model);
             return View(model);
         }
 
+        public IActionResult EmailShift()
+        {
+            var model = HttpContext.Session.Get<ViewShiftViewModel>("shiftModel");
+            if (model == null)
+                return null;
+
+            ExcelPackage excel = new ExcelPackage();
+            var workSheet = excel.Workbook.Worksheets.Add("Shifts");
+
+            workSheet.Row(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            workSheet.Row(1).Style.Font.Bold = true;
+
+            //Header
+            for (int i = 1; i <= model.WeekDays.Length; i++)
+            {
+                workSheet.Cells[1, i].Value = model.WeekDays[i - 1];
+            }
+
+            //Content/Body
+            var totalDays = 7;
+            var remainder = model.DaysInMonth % 7;
+            var totalRows = remainder > 0 ? (model.DaysInMonth / totalDays) + 1 : model.DaysInMonth / totalDays;
+            var start = 1;
+            bool isLastDay = false;
+            bool isEnded = false;
+
+            for (int r = 1; r <= 6; r++)
+            {
+                for (int d = start; d <= model.DaysInMonth; d++)
+                {
+                    foreach (string wday in model.WeekDays)
+                    {
+                        if (d.IsSameDay(wday, model.SelectedMonth))
+                        {
+                            workSheet.Cells[2, r].Value = d.ToString("D2");
+
+                            if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                isLastDay = true;
+                            }
+                            else
+                            {
+                                if (d == model.DaysInMonth)
+                                {
+                                    isEnded = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    ++d;
+                                }
+
+                            }
+                        }
+
+                    }
+
+                    if (isEnded)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (isLastDay)
+                        {
+                            start = d + 1;
+                            break;
+                        }
+                    }
+
+                }
+               
+                if (isEnded)
+                {
+                    break;
+                }
+            }
+
+            //AutoFit all Columns
+            for (int i = 1; i <= model.WeekDays.Length; i++)
+            {
+                workSheet.Column(i).AutoFit();
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                excel.SaveAs(stream);
+                var content = stream.ToArray();
+
+                return File(
+                    content,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "users.xlsx");
+            }
+        }
         [HttpPost()]
         public async Task<IActionResult> DeleteStaffShift(ViewShiftViewModel model, IFormCollection formCollection)
         {
