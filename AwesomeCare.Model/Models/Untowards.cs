@@ -39,7 +39,8 @@ namespace AwesomeCare.Model.Models
         public bool ShouldNotifyInvolvingStaff { get; set; }
         public string Attachment { get; set; }
         public string Others { get; set; }
-
+        public string EntryHospitalName { get; set; }
+        public string ExitHospitalName { get; set; }
 
         public virtual ICollection<UntowardsStaffInvolved> StaffInvolved { get; set; }
         public virtual ICollection<UntowardsOfficerToAct> OfficerToAct { get; set; }

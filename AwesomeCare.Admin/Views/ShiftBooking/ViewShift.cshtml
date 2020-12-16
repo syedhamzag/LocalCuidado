@@ -49,7 +49,7 @@
                                 <tr>
                                     @foreach (string day in Model.WeekDays)
                                     {
-                                    <th>@day</th>
+                                        <th>@day</th>
                                     }
                                 </tr>
                             </thead>
@@ -63,58 +63,58 @@
                                     bool isEnded = false;
                                     for (int r = 1; r <= 6; r++)
                                     {
-                                    <tr>
+                                        <tr>
 
-                                        @for (int d = start; d <= Model.DaysInMonth; d++)
+                                            @for (int d = start; d <= Model.DaysInMonth; d++)
                                             {
-                                        @foreach (string wday in Model.WeekDays)
+                                                @foreach (string wday in Model.WeekDays)
                                                 {
-                                        <td>
+                                                    <td>
 
-                                            @if (d.IsSameDay(wday, Model.SelectedMonth))
+                                                        @if (d.IsSameDay(wday, Model.SelectedMonth))
                                                         {
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <p class="align-right">
-                                                        <span>
-                                                            @d.ToString("D2")
-                                                        </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 displayblock align-center">
-                                                    @foreach (var staff in Model.Staffs)
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <p class="align-right">
+                                                                        <span>
+                                                                            @d.ToString("D2")
+                                                                        </span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 displayblock align-center">
+                                                                    @foreach (var staff in Model.Staffs)
                                                                     {
                                                                         if (staff.BookedDays.Any(c => c.Day.Equals(d.ToString("D2"))))
                                                                         {
-                                                    <label class="fancy-checkbox">
+                                                                            <label class="fancy-checkbox">
 
-                                                        @{
+                                                                                @{
                                                                                     var driver = @staff.IsStaffDriver ? " (D)" : "";
 
                                                                                     var staffandDriver = staff.StaffName + driver;
 
                                                                                     var dayId = staff.BookedDays.FirstOrDefault(b => b.Day == d.ToString("D2"))?.StaffShiftBookingDayId;
                                                                                     string dayName = "day_" + dayId;
-                                                        }
-                                                        <input type="checkbox" name="@dayName" id="@dayName">
-                                                        <span> @staffandDriver</span>
-                                                    </label>
-                                                    <P>
+                                                                                }
+                                                                                <input type="checkbox" name="@dayName" id="@dayName">
+                                                                                <span> @staffandDriver</span>
+                                                                            </label>
+                                                                            <P>
 
-                                                    </P>
+                                                                            </P>
                                                                         }
                                                                     }
-                                                    @*<P>
-                                                            STAFF NAME (D)
-                                                        </P>
-                                                        <P>
-                                                            STAFF NAME
-                                                        </P>*@
+                                                                    @*<P>
+                                                                STAFF NAME (D)
+                                                            </P>
+                                                            <P>
+                                                                STAFF NAME
+                                                            </P>*@
 
-                                                </div>
-                                            </div>
+                                                                </div>
+                                                            </div>
 
 
                                                             if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
@@ -135,7 +135,7 @@
 
                                                             }
                                                         }
-                                        </td>
+                                                    </td>
                                                 }
                                                 if (isEnded)
                                                 {
@@ -151,15 +151,15 @@
                                                 }
 
 
-                                        @*var kk = start.ToString("D2");
-                                            if (start <= Model.DaysInMonth)
+                                                @*var kk = start.ToString("D2");
+                                        if (start <= Model.DaysInMonth)
+                                        {
+                                            if (start.IsSameDay(wday, "March"))
                                             {
-                                                if (start.IsSameDay(wday, "March"))
-                                                {
-                                                    @kk;
-                                                    break;
-                                                }
-                                            }*@
+                                                @kk;
+                                                break;
+                                            }
+                                        }*@
                                             }
 
 
@@ -167,7 +167,7 @@
 
 
 
-                                    </tr>
+                                        </tr>
 
                                         if (isEnded)
                                         {
@@ -181,20 +181,20 @@
                     </div>
                     <input type="submit" class="btn btn-primary float-right" value="Delete Selected" formaction="/ShiftBooking/DeleteStaffShift" formmethod="post" formnovalidate />
 
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Actions
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @*<input type="button" value="Print" class="btn btn-outline-primary" onclick="javascript:printerDiv('printablediv')" />*@
-                            <a class="dropdown-item" href="#" onclick="javascript:printerDiv('printablediv')">Print</a>
-                            <a class="dropdown-item" asp-controller="ShiftBooking" asp-action="DownloadShift" target="_blank">Download</a>
-                           @* <a class="dropdown-item" asp-controller="ShiftBooking" asp-action="EmailShift" target="_blank">Email</a>*@
-                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#emailShiftModal">Email</a>
 
-                        </div>
-                    </div>
                 </form>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actions
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" onclick="javascript:printerDiv('printablediv')">Print</a>
+                        <a class="dropdown-item" asp-controller="ShiftBooking" asp-action="DownloadShift" target="_blank">Download</a>
+                        <a class="dropdown-item" asp-controller="ShiftBooking" asp-action="EmailShift" target="_blank">Email</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#emailShiftModal">Email</a>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>

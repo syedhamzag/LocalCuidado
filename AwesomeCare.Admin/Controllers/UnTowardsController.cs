@@ -26,14 +26,20 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<UnTowardsController> _logger;
         private IClientService _clientService;
         private IUntowardsService _untowardsService;
-        private readonly IFileUpload _fileUpload;
-        public UnTowardsController(IStaffService staffService, IFileUpload fileUpload, ILogger<UnTowardsController> logger, IClientService clientService, IUntowardsService untowardsService):base(fileUpload)
+        private readonly IEmailService emailService;
+
+        public UnTowardsController(IStaffService staffService,
+            IFileUpload fileUpload,
+            ILogger<UnTowardsController> logger,
+            IClientService clientService,
+            IUntowardsService untowardsService,
+            IEmailService emailService) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
             _clientService = clientService;
             _untowardsService = untowardsService;
-            _fileUpload = fileUpload;
+            this.emailService = emailService;
         }
         public async Task<IActionResult> Index()
         {
@@ -85,9 +91,14 @@ namespace AwesomeCare.Admin.Controllers
 
             TryValidateModel(model);
 
+            var staffs = HttpContext.Session.Get<List<GetStaffs>>("staffs");
+            if (staffs == null)
+            {
+                staffs = await _staffService.GetStaffs();
+            }
             if (model == null || !ModelState.IsValid)
             {
-                model.Staffs = HttpContext.Session.Get<List<GetStaffs>>("staffs").Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 model.HomeCareClients = HttpContext.Session.Get<List<GetClientDetail>>("clients").Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 model.ClientInvolvingParties = HttpContext.Session.Get<List<GetClientInvolvingPartyItem>>("clientInvolvingParties").Select(s => new SelectListItem(s.ItemName, s.ClientInvolvingPartyItemId.ToString())).ToList();
 
@@ -105,8 +116,50 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _untowardsService.PostUntowards(postModel);
             var content = await result.Content.ReadAsStringAsync();
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "New Untowards successfully saved" : "An Error Occurred" });
+
+            if (model.ShouldNotifyInvolvingStaff && result.IsSuccessStatusCode)
+            {
+                await SendEmailAsync(model, staffs);
+            }
+            //Send mail to Officer to act
+            await SendEmailToOfficerToAct(model, model.OfficersToAct);
+
             return RedirectToAction("Index");
 
+        }
+
+        async Task SendEmailToOfficerToAct(CreateUntowards model,List<string> emails)
+        {
+            try
+            {
+                if (emails.Count == 0) return;
+
+                await emailService.SendAsync(emails, $"Untowards - {model.Subject}", $"Hello, {Environment.NewLine} you have a pending untowards message.", true);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "SendEmail");
+            }
+        }
+
+        async Task SendEmailAsync(CreateUntowards model, List<GetStaffs> staffs)
+        {
+            try
+            {
+                List<string> staffToSendEmail = new List<string>();
+                foreach (var staff in model.StaffInvolved)
+                {
+                    var email = staffs.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId);
+                    if (email != null)
+                        staffToSendEmail.Add(email.Email);
+                }
+                await emailService.SendAsync(staffToSendEmail, $"Untowards - {model.Subject}", $"Hello, {Environment.NewLine} you have a pending untowards message.", true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "SendEmail");
+            }
         }
 
         public async Task<IActionResult> Details(int id)

@@ -46,7 +46,6 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
         private readonly IClientCareDetails _clientCareDetails;
-        private readonly IFileUpload _fileUpload;
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
@@ -70,7 +69,6 @@ namespace AwesomeCare.Admin.Controllers
             _clientRegulatoryContactService = clientRegulatoryContactService;
             _qRCodeGenerator = qRCodeGenerator;
             _clientCareDetails = clientCareDetails;
-            _fileUpload = fileUpload;
             _medicationService = medicationService;
             _clientRotaTypeService = clientRotaTypeService;
             _rotaDayofWeekService = rotaDayofWeekService;

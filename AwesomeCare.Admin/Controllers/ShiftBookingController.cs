@@ -346,7 +346,6 @@ namespace AwesomeCare.Admin.Controllers
         {
             var itemsToDelete = new DeleteStaffShiftBookingDay();
 
-
             foreach (var item in formCollection)
             {
                 if (item.Key.Contains("day_"))
@@ -358,14 +357,21 @@ namespace AwesomeCare.Admin.Controllers
 
                 }
             }
-
-            var result = await _shiftBookingService.DeleteStaffShiftBooking(itemsToDelete);
-            var content = await result.Content.ReadAsStringAsync();
-
-            if (result.IsSuccessStatusCode)
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = true, Message = $"{content} items deleted successfully" });
+            if(itemsToDelete.StaffShiftBookingDayId.Count == 0)
+            {
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = $"please select at least one staff to delete" });
+            }
             else
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An error occurred" });
+            {
+                var result = await _shiftBookingService.DeleteStaffShiftBooking(itemsToDelete);
+                var content = await result.Content.ReadAsStringAsync();
+
+                if (result.IsSuccessStatusCode)
+                    SetOperationStatus(new Models.OperationStatus { IsSuccessful = true, Message = $"{content} items deleted successfully" });
+                else
+                    SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An error occurred" });
+
+            }
 
             return RedirectToAction("ViewShift", new { month = model.SelectedMonth });
         }

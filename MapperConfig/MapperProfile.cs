@@ -207,7 +207,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.BaseRecordItem, mem => mem.Ignore());
 
             CreateMap<ClientRegulatoryContact, GetClientRegulatoryContact>();
-            CreateMap<ClientRegulatoryContact, GetClientRegulatoryContactForEdit>();
+            CreateMap<ClientRegulatoryContact, GetClientRegulatoryContactForEdit>()
+                .ForMember(dto=>dto.RegulatoryContact,mem=>mem.Ignore());
             #endregion
 
             #region ClientRotaName

@@ -70,7 +70,11 @@
                                 <th></th>
                                 @foreach (var weekDay in Model.WeekDays)
                                 {
-                                    <th>@weekDay.DayofWeek</th>
+                                    <th>
+                                        @weekDay.DayofWeek
+                                        <br />
+                                        <label><input type="checkbox" class="selectAll" name="@weekDay.DayofWeek"><span><small>all</small></span></label>
+                                    </th>
                                 }
                             </tr>
                         </thead>
@@ -204,7 +208,13 @@
                 numberDisplayed: 0
             });
 
-
+            $(':checkbox[class=.selectAll]').change(function () {
+                if ($(this).is(":checked")) {
+                    alert("ckecked");
+                } else {
+                    alert("unckecked");
+                }
+            })
         });
     </script>
 }
