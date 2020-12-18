@@ -64,7 +64,7 @@
                         </table>*@
 
 
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-hover table-bordered" id="tblRotering">
                         <thead>
                             <tr>
                                 <th></th>
@@ -73,7 +73,7 @@
                                     <th>
                                         @weekDay.DayofWeek
                                         <br />
-                                        <label><input type="checkbox" class="selectAll" name="@weekDay.DayofWeek"><span><small>all</small></span></label>
+                                        <label><input type="checkbox" class="selectAll" name="@weekDay.DayofWeek"><span><small>Repeat</small></span></label>
                                     </th>
                                 }
                             </tr>
@@ -208,13 +208,63 @@
                 numberDisplayed: 0
             });
 
-            $(':checkbox[class=.selectAll]').change(function () {
+            $(':checkbox[class=selectAll]').change(function () {
+                var dayOfWeek = $(this).attr('name')
+
                 if ($(this).is(":checked")) {
-                    alert("ckecked");
+                    RepeatRota(dayOfWeek);
+                    RepeatStartTime(dayOfWeek);
+                    RepeatStopTime(dayOfWeek);
+                    SetCheckBox();
+
                 } else {
-                    alert("unckecked");
+                    // alert("unckecked");
                 }
             })
+
+
+            function RepeatRota(dayofWeek) {
+                var amrota = $('#AM-' + dayofWeek + '-rota').find(":selected").val();
+
+                $('#tblRotering > tbody  > tr').each(function () {
+
+                    var rotaPeriod = $(this).children('td:first').text().trim();
+
+                    $('#' + rotaPeriod + '-' + dayofWeek + '-rota').val(amrota);
+                });
+            }
+
+            function RepeatStartTime(dayofWeek) {
+                var amStartTime = $('#AM-' + dayofWeek + '-StartTime').val();
+
+                $('#tblRotering > tbody  > tr').each(function () {
+
+                    var rotaPeriod = $(this).children('td:first').text().trim();
+
+                    $('#' + rotaPeriod + '-' + dayofWeek + '-StartTime').val(amStartTime);
+                });
+            }
+
+            function RepeatStopTime(dayofWeek) {
+                var amStopTime = $('#AM-' + dayofWeek + '-StopTime').val();
+
+                $('#tblRotering > tbody  > tr').each(function () {
+
+                    var rotaPeriod = $(this).children('td:first').text().trim();
+
+                    $('#' + rotaPeriod + '-' + dayofWeek + '-StopTime').val(amStopTime);
+                });
+            }
+
+            function SetCheckBox() {
+                //
+                $('#tblRotering > tbody  > tr').each(function () {
+
+                    var rotaPeriod = $(this).children('td:first').text().trim();
+                    //TEA-ClientRotaId
+                    $('#' + rotaPeriod + '-ClientRotaId').prop("checked", true);
+                });
+            }
         });
     </script>
 }
