@@ -215,10 +215,11 @@
                     RepeatRota(dayOfWeek);
                     RepeatStartTime(dayOfWeek);
                     RepeatStopTime(dayOfWeek);
-                    SetCheckBox();
+                    SetCheckBox(true);
 
                 } else {
                     // alert("unckecked");
+                    SetCheckBox(false);
                 }
             })
 
@@ -256,13 +257,19 @@
                 });
             }
 
-            function SetCheckBox() {
+            function SetCheckBox(isChecked) {
                 //
                 $('#tblRotering > tbody  > tr').each(function () {
 
                     var rotaPeriod = $(this).children('td:first').text().trim();
-                    //TEA-ClientRotaId
-                    $('#' + rotaPeriod + '-ClientRotaId').prop("checked", true);
+                    if (isChecked) {
+                        $('#' + rotaPeriod + '-ClientRotaId').val("1");
+                        $(':checkbox[name=' + rotaPeriod + ']').prop("checked", true);
+                    } else {
+                        $('#' + rotaPeriod + '-ClientRotaId').val("0");
+                        $(':checkbox[name=' + rotaPeriod + ']').prop("checked", false);
+                    }
+
                 });
             }
         });

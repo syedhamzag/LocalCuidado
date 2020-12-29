@@ -19,6 +19,11 @@ using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
+using System.Collections.Generic;
+using AwesomeCare.Services.Services;
+using System.Text.Encodings.Web;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -33,12 +38,14 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly IConfiguration configuration;
+        private readonly IEmailService _emailSender;
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
+             IEmailService emailSender,
             IEventService events, IConfiguration configuration)
         {
             _userManager = userManager;
@@ -47,6 +54,7 @@ namespace IdentityServer4.Quickstart.UI
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+            _emailSender = emailSender;
             this.configuration = configuration;
         }
 
@@ -112,7 +120,24 @@ namespace IdentityServer4.Quickstart.UI
                 {
                     var user = await _userManager.FindByNameAsync(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.ClientId));
+                    if (!user.EmailConfirmed)
+                    {
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { area = "Identity", userId = user.Id, code = code },
+                            protocol: Request.Scheme);
 
+                        await _emailSender.SendAsync(new List<string> { user.Email }, "Confirm your email",
+                             $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        {
+                            return RedirectToPage("RegisterConfirmation", new { email = user.Email });
+                        }
+                    }
                     if (context != null)
                     {
                         if (await _clientStore.IsPkceClientAsync(context.ClientId))

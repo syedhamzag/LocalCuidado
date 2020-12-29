@@ -63,7 +63,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            bool isRotaTaskRegistered = _rotaTaskRepository.Table.Any(r => r.TaskName.Equals(model.TaskName, StringComparison.InvariantCultureIgnoreCase));
+            bool isRotaTaskRegistered = _rotaTaskRepository.Table.Any(r => r.TaskName.ToLower() == model.TaskName.ToLower());
             if (isRotaTaskRegistered)
             {
                 return BadRequest($"Rota Task {model.TaskName} already exist");
