@@ -251,6 +251,8 @@ category == DbLoggerCategory.Database.Command.Name
             }
             else
             {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
                 app.UseExceptionHandler("/Home/Error");
             }
 

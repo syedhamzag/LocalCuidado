@@ -48,7 +48,7 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
             //return View(model);
 
 
-           
+
             var model = new IdentityServer4ClientViewModel();
             Init(model);
 
@@ -75,8 +75,8 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
                     return View(model);
                 }
                 string redirectUri = model.Url.EndsWith("/") ? string.Concat(model.Url.Trim(), model.CallbackPath) : string.Concat(model.Url.Trim(), "/", model.CallbackPath);
-                string postLogoutRedirectUri = "";// model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
-                
+                string postLogoutRedirectUri = model.Url.EndsWith("/") ? string.Concat(model.Url.Trim(), model.PostlogoutUrl) : string.Concat(model.Url.Trim(), "/", model.PostlogoutUrl); //;// model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
+
                 var identityClient = new IdentityServer4.EntityFramework.Entities.Client
                 {
                     // AccessTokenLifetime = 3600,//i.e 60 mins
@@ -100,7 +100,7 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
                     },
                     PostLogoutRedirectUris = new List<IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri>
                     {
-                        new IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri() { PostLogoutRedirectUri = model.PostlogoutUrl }
+                        new IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri() { PostLogoutRedirectUri =postLogoutRedirectUri }
                     },
                     AllowedScopes = model.AllowedScopes.Select(s => new IdentityServer4.EntityFramework.Entities.ClientScope() { Scope = s.ToLower() }).ToList(),
 
@@ -160,7 +160,7 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
         void Init(IdentityServer4ClientViewModel model)
         {
             model.SharedSecret = GetKey(32);
-            model.ProtectedResourcesListItems = _dbContext.ApiResources.Where(r => r.Enabled ).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
+            model.ProtectedResourcesListItems = _dbContext.ApiResources.Where(r => r.Enabled).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
             model.IdentityResourceListItems = _dbContext.IdentityResources.Where(r => r.Enabled && !r.NonEditable).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
 
         }
