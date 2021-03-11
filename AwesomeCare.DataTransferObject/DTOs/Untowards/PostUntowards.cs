@@ -42,7 +42,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Untowards
         [Required(ErrorMessage = "required")]
         public string Priority { get; set; }
         [MaxLength(225)]
-        [Required(ErrorMessage = "required")]
+       // [Required(ErrorMessage = "required")]
         [Display(Name = "Action Taken")]
         public string ActionTaken { get; set; }
         [MaxLength(225)]
@@ -66,6 +66,17 @@ namespace AwesomeCare.DataTransferObject.DTOs.Untowards
         [Display(Name = "Hospital Entry Reason")]
         [RequiredDependant("true", nameof(IsHospitalEntry), typeof(bool),ErrorMessage = "Hospital Entry Reason is required")]
         public string HospitalEntryReason { get; set; }
+
+        [RequiredDependant("true", nameof(IsHospitalEntry), typeof(bool), ErrorMessage = "Entry Hospital Name required")]
+        [Display(Name = "Entry Hospital Name")]
+        [MaxLength(250)]
+        public string EntryHospitalName { get; set; }
+
+        [RequiredDependant("true", nameof(IsHospitalExit), typeof(bool), ErrorMessage = "Exit Hospital Name required")]
+        [Display(Name = "Exit Hospital Name")]
+        [MaxLength(250)]
+        public string ExitHospitalName { get; set; }
+
         [Display(Name = "Is Hospital Exit?")]
         public bool IsHospitalExit { get; set; }
         [MaxLength(225)]

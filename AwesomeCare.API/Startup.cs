@@ -229,6 +229,7 @@ namespace AwesomeCare.API
             });
             #endregion
 
+
             //  services.AddOData();
         }
 

@@ -24,6 +24,9 @@ using Microsoft.AspNetCore.Http;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using Newtonsoft.Json;
 using AwesomeCare.DataTransferObject.DTOs.ShiftBookingBlockedDays;
+using OfficeOpenXml;
+using System.IO;
+using OfficeOpenXml.Style;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -35,14 +38,21 @@ namespace AwesomeCare.Admin.Controllers
         private IShiftBookingService _shiftBookingService;
         private IStaffWorkTeamService _staffWorkTeamService;
         private IClientRotaNameService _clientRotaNameService;
+        private readonly IEmailService emailService;
 
-        public ShiftBookingController(IStaffService staffService, IClientRotaNameService clientRotaNameService, IStaffWorkTeamService staffWorkTeamService, IFileUpload fileUpload, IShiftBookingService shiftBookingService, ILogger<ShiftBookingController> logger) : base(fileUpload)
+        public ShiftBookingController(IStaffService staffService,
+            IClientRotaNameService clientRotaNameService,
+            IStaffWorkTeamService staffWorkTeamService,
+            IFileUpload fileUpload, IShiftBookingService shiftBookingService,
+            ILogger<ShiftBookingController> logger,
+            IEmailService emailService) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
             _shiftBookingService = shiftBookingService;
             _staffWorkTeamService = staffWorkTeamService;
             _clientRotaNameService = clientRotaNameService;
+            this.emailService = emailService;
         }
         public async Task<IActionResult> Index()
         {
@@ -126,6 +136,7 @@ namespace AwesomeCare.Admin.Controllers
             if (staffShiftBookings != null)
                 model.Staffs = staffShiftBookings.Staffs;
 
+            HttpContext.Session.Set<ViewShiftViewModel>("shiftModel", model);
             return View(model);
         }
 
@@ -134,25 +145,206 @@ namespace AwesomeCare.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> ViewShift(ViewShiftViewModel model)
         {
+            List<GetClientRotaName> rotas;
             var months = DateTimeFormatInfo.CurrentInfo.MonthNames;
             var monthId = Array.IndexOf(months, model.SelectedMonth) + 1;
             var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, monthId);
             model.DaysInMonth = daysInMonth;
 
-            var rotas = HttpContext.Session.Get<List<GetClientRotaName>>("rotas");
+            rotas = HttpContext.Session.Get<List<GetClientRotaName>>("rotas");
+            if (rotas == null)
+            {
+                rotas = await _clientRotaNameService.Get();
+            }
             model.Rotas = rotas?.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
 
             var staffShiftBookings = await _shiftBookingService.GetStaffShiftBookingsByMonth(monthId, model.Rota);
             if (staffShiftBookings != null)
                 model.Staffs = staffShiftBookings.Staffs;
+
+            HttpContext.Session.Set<ViewShiftViewModel>("shiftModel", model);
             return View(model);
+        }
+
+        public IActionResult DownloadShift()
+        {
+            var model = HttpContext.Session.Get<ViewShiftViewModel>("shiftModel");
+            if (model == null)
+                return null;
+
+            (string sheetName, MemoryStream stream) shift = GetShiftForAttachment(model);
+
+            string filename = $"{shift.sheetName}.xlsx";
+            var content = shift.stream.ToArray();
+
+            return File(
+                content,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                filename);
+
+        }
+
+        [HttpPost]
+        public IActionResult EmailShift(IFormCollection formCollection)
+        {
+            try
+            {
+                var model = HttpContext.Session.Get<ViewShiftViewModel>("shiftModel");
+                if (model != null)
+                {
+                    var emailAddressesValue = formCollection["txtEmailAddresses"];
+                    var messageValue = formCollection["txtMessage"];
+                    var message = messageValue.FirstOrDefault();
+                    var emailAddresses = emailAddressesValue.FirstOrDefault()?.Split(",");
+
+                    if (emailAddresses == null || emailAddresses.Count() == 0 || string.IsNullOrEmpty(message))
+                    {
+                        SetOperationStatus(new OperationStatus { IsSuccessful = false, Message = "all fields are required" });
+                        return RedirectToAction("ViewShift");
+                    }
+
+                    (string sheetName, MemoryStream stream) shift = GetShiftForAttachment(model);
+
+                    string filename = $"{shift.sheetName}.xlsx";
+
+                    emailService.SendAsync(emailAddresses.ToList(), "Shift Booking", message, shift.stream.ToArray(), filename, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "");
+                SetOperationStatus(new OperationStatus { IsSuccessful = false, Message = "an error occurred" });
+            }
+
+            return RedirectToAction("ViewShift");
+        }
+
+        public (string, MemoryStream) GetShiftForAttachment(ViewShiftViewModel model)
+        {
+            var rota = model.Rotas.FirstOrDefault(r => r.Value == model.Rota.ToString());
+            string sheetName = $"shifts_{rota?.Text}_{model.SelectedMonth}";
+
+
+            ExcelPackage excel = new ExcelPackage();
+            var workSheet = excel.Workbook.Worksheets.Add(sheetName);
+
+            workSheet.Row(1).Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            workSheet.Row(1).Style.Font.Bold = true;
+
+            //Header
+            for (int i = 1; i <= model.WeekDays.Length; i++)
+            {
+                workSheet.Cells[1, i].Value = model.WeekDays[i - 1];
+            }
+
+            //Content/Body
+            var totalDays = 7;
+            var remainder = model.DaysInMonth % 7;
+            var totalRows = remainder > 0 ? (model.DaysInMonth / totalDays) + 1 : model.DaysInMonth / totalDays;
+            var start = 1;
+            bool isLastDay = false;
+            bool isEnded = false;
+            int row = 2;
+            for (int r = 1; r <= 6; r++)
+            {
+                for (int d = start; d <= model.DaysInMonth; d++)
+                {
+                    foreach (string wday in model.WeekDays)
+                    {
+                        if (d.IsSameDay(wday, model.SelectedMonth))
+                        {
+                            var dayIndex = Array.IndexOf(model.WeekDays, wday) + 1;
+                            var currentDay = d.ToString("D2");
+
+                            if (model.Staffs != null && model.Staffs.Count > 0)
+                            {
+                                var cell = workSheet.Cells[row, dayIndex];
+                                cell.Style.WrapText = true;
+                                cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+
+                                var r1 = cell.RichText.Add(currentDay + "\r\n");
+                                r1.Bold = true;
+
+                                foreach (var staff in model.Staffs)
+                                {
+                                    if (staff.BookedDays.Any(c => c.Day.Equals(d.ToString("D2"))))
+                                    {
+                                        var staffname = staff.StaffName.Replace(" ", "-");
+                                        var driver = staff.IsStaffDriver ? " (D)" : "";
+                                        var staffandDriver = staffname + driver;
+
+                                        var r2 = cell.RichText.Add(staffandDriver + "\r\n");
+                                        r2.Bold = false;
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                workSheet.Cells[row, dayIndex].Value = currentDay;
+                            }
+
+
+                            if (wday.Equals("Saturday", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                isLastDay = true;
+                            }
+                            else
+                            {
+                                if (d == model.DaysInMonth)
+                                {
+                                    isEnded = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    ++d;
+                                }
+
+                            }
+                        }
+
+                    }
+
+                    if (isEnded)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        if (isLastDay)
+                        {
+                            start = d + 1;
+                            break;
+                        }
+                    }
+
+                }
+                ++row;
+                if (isEnded)
+                {
+                    break;
+                }
+            }
+
+            //AutoFit all Columns
+            for (int i = 1; i <= model.WeekDays.Length; i++)
+            {
+                workSheet.Column(i).AutoFit();
+            }
+            string filename = $"{sheetName}.xlsx";
+            using (var stream = new MemoryStream())
+            {
+                excel.SaveAs(stream);
+
+                return (sheetName, stream);
+            }
         }
 
         [HttpPost()]
         public async Task<IActionResult> DeleteStaffShift(ViewShiftViewModel model, IFormCollection formCollection)
         {
             var itemsToDelete = new DeleteStaffShiftBookingDay();
-
 
             foreach (var item in formCollection)
             {
@@ -165,14 +357,21 @@ namespace AwesomeCare.Admin.Controllers
 
                 }
             }
-
-            var result = await _shiftBookingService.DeleteStaffShiftBooking(itemsToDelete);
-            var content = await result.Content.ReadAsStringAsync();
-
-            if (result.IsSuccessStatusCode)
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = true, Message = $"{content} items deleted successfully" });
+            if(itemsToDelete.StaffShiftBookingDayId.Count == 0)
+            {
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = $"please select at least one staff to delete" });
+            }
             else
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An error occurred" });
+            {
+                var result = await _shiftBookingService.DeleteStaffShiftBooking(itemsToDelete);
+                var content = await result.Content.ReadAsStringAsync();
+
+                if (result.IsSuccessStatusCode)
+                    SetOperationStatus(new Models.OperationStatus { IsSuccessful = true, Message = $"{content} items deleted successfully" });
+                else
+                    SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An error occurred" });
+
+            }
 
             return RedirectToAction("ViewShift", new { month = model.SelectedMonth });
         }

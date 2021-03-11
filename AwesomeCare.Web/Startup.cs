@@ -126,6 +126,7 @@ namespace AwesomeCare.Web
                })
                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                {
+               
                    var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
                    options.SignInScheme = "Identity.Application";// CookieAuthenticationDefaults.AuthenticationScheme; OpenIdConnectDefaults.AuthenticationScheme
                    options.Authority = Configuration["idp_url"].ToString();// "https://localhost:44392/";
@@ -247,6 +248,15 @@ namespace AwesomeCare.Web
             services.AddTransient<AuthenticatedHttpClientHandler>();
             services.AddScoped<HttpClient>();
 
+            services.AddScoped<IEmailService>(c =>
+            {
+                var logger = c.GetService(typeof(ILogger<EmailService>)) as ILogger<EmailService>;
+                string key = Configuration["sendgridKey"];
+                string senderEmail = Configuration["senderEmail"];
+                string senderName = Configuration["senderName"];
+                return new EmailService(key, senderEmail, senderName, logger);
+            });
+
             services.AddLogging();
             AddRefitServices(services);
             services.AddHttpClient("IdpClient", options =>
@@ -277,7 +287,8 @@ namespace AwesomeCare.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseDeveloperExceptionPage();
+              //  app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 

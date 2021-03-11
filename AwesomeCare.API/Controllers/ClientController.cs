@@ -8,10 +8,13 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
+using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +63,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostClient([FromBody]PostClient postClient)
+        public async Task<IActionResult> PostClient([FromBody] PostClient postClient)
         {
 
             if (postClient == null || !ModelState.IsValid)
@@ -141,7 +144,32 @@ namespace AwesomeCare.API.Controllers
                                        ProviderReference = client.ProviderReference,
                                        NumberOfStaff = client.NumberOfStaff,
                                        UniqueId = client.UniqueId,
-                                       PassportFilePath = client.PassportFilePath
+                                       PassportFilePath = client.PassportFilePath,
+                                       InvolvingParties = (from inv in client.InvolvingParties
+                                                           select new GetClientInvolvingPartyForEdit
+                                                           {
+                                                               Address = inv.Address,
+                                                               ClientId = inv.ClientId,
+                                                               ClientInvolvingPartyId = inv.ClientInvolvingPartyId,
+                                                               ClientInvolvingPartyItemId = inv.ClientInvolvingPartyItemId,
+                                                               Email = inv.Email,
+                                                               Name = inv.Name,
+                                                               Relationship = inv.Relationship,
+                                                               Telephone = inv.Telephone
+                                                           }).ToList(),
+                                       RegulatoryContact = (from reg in client.RegulatoryContact
+                                                            join baseRecordItem in _baseRecordItemRepository.Table on reg.BaseRecordItemId equals baseRecordItem.BaseRecordItemId
+                                                            join baseRecord in _baseRecordRepository.Table on baseRecordItem.BaseRecordId equals baseRecord.BaseRecordId
+                                                            select new GetClientRegulatoryContactForEdit
+                                                            {
+                                                                ClientId = reg.ClientId,
+                                                                ClientRegulatoryContactId = reg.ClientRegulatoryContactId,
+                                                                BaseRecordItemId = reg.BaseRecordItemId,
+                                                                DatePerformed = reg.DatePerformed,
+                                                                DueDate = reg.DueDate,
+                                                                Evidence = reg.Evidence,
+                                                                RegulatoryContact = baseRecordItem.ValueName
+                                                            }).ToList()
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);
@@ -235,7 +263,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PutClient([FromBody]PutClient model, int? clientId)
+        public async Task<IActionResult> PutClient([FromBody] PutClient model, int? clientId)
         {
             if (model == null || !ModelState.IsValid)
             {
@@ -263,7 +291,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(type: typeof(GetClientMedication), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostMedication([FromBody]PostClientMedication model)
+        public async Task<IActionResult> PostMedication([FromBody] PostClientMedication model)
         {
             try
             {
@@ -274,7 +302,7 @@ namespace AwesomeCare.API.Controllers
                 var entity = Mapper.Map<ClientMedication>(model);
                 var newEntity = await _clientMedicationRepository.InsertEntity(entity);
                 var getEntity = Mapper.Map<GetClientMedication>(newEntity);
-                return CreatedAtAction("GetMedication", new { id = newEntity.ClientMedicationId, clientId=newEntity.ClientId }, getEntity);
+                return CreatedAtAction("GetMedication", new { id = newEntity.ClientMedicationId, clientId = newEntity.ClientId }, getEntity);
             }
             catch (Exception ex)
             {
@@ -356,7 +384,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMedication(int? clientId)
         {
-            if ( !clientId.HasValue)
+            if (!clientId.HasValue)
             {
                 return BadRequest("All Parameters are required");
             }

@@ -93,6 +93,7 @@ category == DbLoggerCategory.Database.Command.Name
                  options.Password.RequireNonAlphanumeric = false;
                  options.Password.RequireUppercase = false;
                  options.User.RequireUniqueEmail = true;
+                 options.SignIn.RequireConfirmedAccount = true;
                  //  options.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
 
              })
@@ -250,6 +251,8 @@ category == DbLoggerCategory.Database.Command.Name
             }
             else
             {
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
                 app.UseExceptionHandler("/Home/Error");
             }
 

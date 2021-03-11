@@ -37,14 +37,21 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
         }
         public IActionResult Registration()
         {
-            // var apiResourceEntity = _dbContext.Set<IdentityServer4.EntityFramework.Entities.ApiResource>();
-            //  var identityResourceEntity = _dbContext.Set<IdentityServer4.EntityFramework.Entities.IdentityResource>();
+            //// var apiResourceEntity = _dbContext.Set<IdentityServer4.EntityFramework.Entities.ApiResource>();
+            ////  var identityResourceEntity = _dbContext.Set<IdentityServer4.EntityFramework.Entities.IdentityResource>();
+
+            //var model = new IdentityServer4ClientViewModel();
+            //model.ClientType = "Web App";//to be changed to a dropdown
+            //model.SharedSecret = GetKey(32);
+            //model.ProtectedResourcesListItems = _dbContext.ApiResources.Where(r => r.Enabled && !r.NonEditable).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
+            //model.IdentityResourceListItems = _dbContext.IdentityResources.Where(r => r.Enabled && !r.NonEditable).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
+            //return View(model);
+
+
 
             var model = new IdentityServer4ClientViewModel();
-            model.ClientType = "Web App";//to be changed to a dropdown
-            model.SharedSecret = GetKey(32);
-            model.ProtectedResourcesListItems = _dbContext.ApiResources.Where(r => r.Enabled && !r.NonEditable).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
-            model.IdentityResourceListItems = _dbContext.IdentityResources.Where(r => r.Enabled && !r.NonEditable).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
+            Init(model);
+
             return View(model);
         }
         [HttpPost]
@@ -52,6 +59,11 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    Init(model);
+                    return View(model);
+                }
                 // var clientEntity = _dbContext.Set<IdentityServer4.EntityFramework.Entities.Client>();
                 // var apiResourceEntity = _dbContext.Set<IdentityServer4.EntityFramework.Entities.ApiResource>();
                 // var identityResourceEntity = _dbContext.Set<IdentityServer4.EntityFramework.Entities.IdentityResource>();
@@ -62,56 +74,68 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
                 {
                     return View(model);
                 }
-                string redirectUri = "";// model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signin-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signin-oidc");
-                string postLogoutRedirectUri = "";// model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
-                if (model.ClientType.Equals("SPA.Swagger", StringComparison.InvariantCultureIgnoreCase))
-                {
+                string redirectUri = model.Url.EndsWith("/") ? string.Concat(model.Url.Trim(), model.CallbackPath) : string.Concat(model.Url.Trim(), "/", model.CallbackPath);
+                string postLogoutRedirectUri = model.Url.EndsWith("/") ? string.Concat(model.Url.Trim(), model.PostlogoutUrl) : string.Concat(model.Url.Trim(), "/", model.PostlogoutUrl); //;// model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
 
-                    redirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "oauth2-redirect.html") : string.Concat(model.CallBackUrl.Trim(), "/", "oauth2-redirect.html");
-                    postLogoutRedirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
-
-                }
-                else
-                {
-                    redirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signin-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signin-oidc");
-                    postLogoutRedirectUri = model.CallBackUrl.EndsWith("/") ? string.Concat(model.CallBackUrl.Trim(), "signout-callback-oidc") : string.Concat(model.CallBackUrl.Trim(), "/", "signout-callback-oidc");
-
-                }
                 var identityClient = new IdentityServer4.EntityFramework.Entities.Client
                 {
-                    AccessTokenLifetime = 3600,//i.e 60 mins
-                    AllowOfflineAccess = true,//to enable access to the Identity Server using Refresh Token to get a new access Token
-                                              // RefreshTokenExpiration = TokenExpiration.Sliding,//To get a new Refresh Token after using the previous one i.e if Sliding, Refresh Token lifetime will be renewed
-                    UpdateAccessTokenClaimsOnRefresh = true,
+                    // AccessTokenLifetime = 3600,//i.e 60 mins
+                    AllowOfflineAccess = model.AllowOfflineAccess,//to enable access to the Identity Server using Refresh Token to get a new access Token
+                                                                  // RefreshTokenExpiration = TokenExpiration.Sliding,//To get a new Refresh Token after using the previous one i.e if Sliding, Refresh Token lifetime will be renewed
+                                                                  // UpdateAccessTokenClaimsOnRefresh = true,
                     ClientName = model.DisplayName,
                     ClientId = model.ClientId,
                     AllowedGrantTypes = new List<IdentityServer4.EntityFramework.Entities.ClientGrantType>()
                     {
-                        new IdentityServer4.EntityFramework.Entities.ClientGrantType { GrantType = "authorization_code" }
+                        new IdentityServer4.EntityFramework.Entities.ClientGrantType { GrantType = model.GrantType }
 
                     },
-                    RequirePkce = true,
-                    RequireConsent = false,
+
+                    RequirePkce = model.RequirePkce,
+                    RequireConsent = model.RequireConsent,
                     Description = model.Description,
+
                     RedirectUris = new List<IdentityServer4.EntityFramework.Entities.ClientRedirectUri> {
                         new IdentityServer4.EntityFramework.Entities.ClientRedirectUri() { RedirectUri = redirectUri }
                     },
                     PostLogoutRedirectUris = new List<IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri>
                     {
-                        new IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri() { PostLogoutRedirectUri = postLogoutRedirectUri }
+                        new IdentityServer4.EntityFramework.Entities.ClientPostLogoutRedirectUri() { PostLogoutRedirectUri =postLogoutRedirectUri }
                     },
-                    AllowedScopes = model.AllowedScopes.Select(s => new IdentityServer4.EntityFramework.Entities.ClientScope() { Scope = s }).ToList(),
+                    AllowedScopes = model.AllowedScopes.Select(s => new IdentityServer4.EntityFramework.Entities.ClientScope() { Scope = s.ToLower() }).ToList(),
 
-                    ClientSecrets = new List<IdentityServer4.EntityFramework.Entities.ClientSecret>
+                    //{
+                    //    new IdentityServer4.EntityFramework.Entities.ClientCorsOrigin
+                    //    {
+                    //        Origin = model.CallBackUrl
+                    //    }
+                    //}).ToList()
+                    AllowAccessTokensViaBrowser = model.AllowAccessTokensViaBrowser
+                };
+                if (!string.IsNullOrEmpty(model.CorsOrigins))
+                {
+                    identityClient.AllowedCorsOrigins = model.CorsOrigins.Split(",").Select(o => new IdentityServer4.EntityFramework.Entities.ClientCorsOrigin
+                    {
+                        Origin = o
+                    }).ToList();
+                }
+                if (!model.IsPublicClient)
+                {
+                    identityClient.RequireClientSecret = true;
+                    identityClient.ClientSecrets = new List<IdentityServer4.EntityFramework.Entities.ClientSecret>
                     {
                         new IdentityServer4.EntityFramework.Entities.ClientSecret(){Value=model.SharedSecret.Sha256(),Description=model.Description}
-                    }
-                };
-                if (model.ClientType.Equals("SPA.Swagger", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    identityClient.AllowAccessTokensViaBrowser = true;
-                    identityClient.AllowedGrantTypes.Add(new IdentityServer4.EntityFramework.Entities.ClientGrantType { GrantType = "implicit" });
+                    };
                 }
+                else
+                {
+                    identityClient.RequireClientSecret = false;
+                }
+                //if (model.ClientType.Equals("SPA.Swagger", StringComparison.InvariantCultureIgnoreCase))
+                //{
+                //   // identityClient.AllowAccessTokensViaBrowser = true;
+                //    identityClient.AllowedGrantTypes.Add(new IdentityServer4.EntityFramework.Entities.ClientGrantType { GrantType = "implicit" });
+                //}
                 _dbContext.Clients.Add(identityClient);
                 _dbContext.SaveChanges();
                 return RedirectToAction("Index");
@@ -133,6 +157,13 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
         //    return View();
         //}
 
+        void Init(IdentityServer4ClientViewModel model)
+        {
+            model.SharedSecret = GetKey(32);
+            model.ProtectedResourcesListItems = _dbContext.ApiResources.Where(r => r.Enabled).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
+            model.IdentityResourceListItems = _dbContext.IdentityResources.Where(r => r.Enabled && !r.NonEditable).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
+
+        }
 
         public string GetKey(int length)
         {

@@ -18,15 +18,15 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row">
             <div class="form-group col-sm-6">
-                <label asp-for="ClientType" class="control-label"></label>
+                <label asp-for="GrantType" class="control-label"></label>
                 @*<input asp-for="ClientType" class="form-control" readonly />*@
-                <select asp-for="ClientType" class="form-control">
-                    @foreach (var item in Model.ClientTypes)
+                <select asp-for="GrantType" class="form-control">
+                    @foreach (var item in Model.GrantTypes)
                     {
                         <option value="@item.Value">@item.Text</option>
                     }
                 </select>
-                <span asp-validation-for="ClientType" class="text-danger"></span>
+                <span asp-validation-for="GrantType" class="text-danger"></span>
             </div>
             <div class="form-group  col-sm-6">
                 <label asp-for="DisplayName" class="control-label"></label>
@@ -50,9 +50,9 @@
 
         <div class="row">
             <div class="form-group col-sm-6">
-                <label asp-for="DisplayUrl" class="control-label"></label>
-                <input asp-for="DisplayUrl" class="form-control" />
-                <span asp-validation-for="DisplayUrl" class="text-danger"></span>
+                <label asp-for="Url" class="control-label"></label>
+                <input asp-for="Url" class="form-control" />
+                <span asp-validation-for="Url" class="text-danger"></span>
             </div>
             <div class="form-group  col-sm-6">
                 <label asp-for="Description" class="control-label"></label>
@@ -63,14 +63,14 @@
 
         <div class="row">
             <div class="form-group col-sm-6">
-                <label asp-for="CallBackUrl" class="control-label"></label>
-                <input asp-for="CallBackUrl" class="form-control" />
-                <span asp-validation-for="CallBackUrl" class="text-danger"></span>
+                <label asp-for="CallbackPath" class="control-label"></label>
+                <input asp-for="CallbackPath" class="form-control" />
+                <span asp-validation-for="CallbackPath" class="text-danger"></span>
             </div>
             <div class="form-group col-sm-6">
-                <label asp-for="LogoUrl" class="control-label"></label>
-                <input asp-for="LogoUrl" class="form-control" />
-                <span asp-validation-for="LogoUrl" class="text-danger"></span>
+                <label asp-for="PostlogoutUrl" class="control-label"></label>
+                <input asp-for="PostlogoutUrl" class="form-control" />
+                <span asp-validation-for="PostlogoutUrl" class="text-danger"></span>
             </div>
         </div>
 
@@ -100,12 +100,63 @@
 
         </div>
 
-        <div class="form-group">
-            <div class="checkbox">
-                <label>
-                    <input asp-for="RequireConsent" /> @Html.DisplayNameFor(model => model.RequireConsent)
-                </label>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label class="control-label" asp-for="CorsOrigins"></label>
+                <input asp-for="CorsOrigins" class="form-control" />
+
             </div>
+
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsPublicClient" /> @Html.DisplayNameFor(model => model.IsPublicClient)
+                    </label>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="RequirePkce" /> @Html.DisplayNameFor(model => model.RequirePkce)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="AllowOfflineAccess" /> @Html.DisplayNameFor(model => model.AllowOfflineAccess)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="RequireConsent" /> @Html.DisplayNameFor(model => model.RequireConsent)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="AllowAccessTokensViaBrowser" /> @Html.DisplayNameFor(model => model.AllowAccessTokensViaBrowser)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+
         </div>
 
 

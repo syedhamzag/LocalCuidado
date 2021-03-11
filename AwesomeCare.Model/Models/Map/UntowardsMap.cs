@@ -130,6 +130,16 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.TypeofRequiredNotification)
              .HasColumnName("TypeofRequiredNotification")
              .IsRequired();
+
+            builder.Property(p => p.EntryHospitalName)
+           .HasColumnName("EntryHospitalName")
+           .HasMaxLength(250)
+           .IsRequired(false);
+
+            builder.Property(p => p.ExitHospitalName)
+          .HasColumnName("ExitHospitalName")
+          .HasMaxLength(250)
+          .IsRequired(false);
             #endregion
 
             #region Relationship
