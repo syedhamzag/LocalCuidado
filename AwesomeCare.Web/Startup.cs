@@ -126,7 +126,7 @@ namespace AwesomeCare.Web
                })
                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                {
-                   options.RequireHttpsMetadata = false;
+               
                    var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
                    options.SignInScheme = "Identity.Application";// CookieAuthenticationDefaults.AuthenticationScheme; OpenIdConnectDefaults.AuthenticationScheme
                    options.Authority = Configuration["idp_url"].ToString();// "https://localhost:44392/";

@@ -9,6 +9,7 @@ using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,7 @@ namespace AwesomeCare.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class RoteringController : ControllerBase
     {
         private ILogger<RoteringController> _logger;
@@ -29,13 +31,18 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffRota> _staffRotaRepository;
         private IGenericRepository<StaffPersonalInfo> _staffPersonalInfoRepository;
         private IGenericRepository<StaffRotaPeriod> _staffRotaPeriodRepository;
+        private readonly IGenericRepository<ClientRotaTask> clientRotaTaskRepository;
+        private readonly IGenericRepository<RotaTask> rotaTaskRepository;
         private AwesomeCareDbContext _dbContext;
 
         public RoteringController(ILogger<RoteringController> logger, IGenericRepository<ClientRota> clientRotaRepository,
             IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<Client> clientRepository,
              IGenericRepository<ClientRotaDays> clientRotaDaysRepository, IGenericRepository<Rota> rotaRepository,
               IGenericRepository<RotaDayofWeek> rotaDayofWeekRepository, IGenericRepository<StaffRota> staffRotaRepository,
-             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository,
+             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository,
+             IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository,
+             IGenericRepository<ClientRotaTask> clientRotaTaskRepository,
+             IGenericRepository<RotaTask> rotaTaskRepository,
              AwesomeCareDbContext dbContext)
         {
             _logger = logger;
@@ -48,6 +55,8 @@ namespace AwesomeCare.API.Controllers
             _staffRotaRepository = staffRotaRepository;
             _staffPersonalInfoRepository = staffPersonalInfoRepository;
             _staffRotaPeriodRepository = staffRotaPeriodRepository;
+            this.clientRotaTaskRepository = clientRotaTaskRepository;
+            this.rotaTaskRepository = rotaTaskRepository;
             _dbContext = dbContext;
         }
         /// <summary>
@@ -175,7 +184,7 @@ namespace AwesomeCare.API.Controllers
                              ClientRotaDaysId = crd.ClientRotaDaysId,
                              StaffRotaId = sr.StaffRotaId,
                              StaffRotaPeriodId = srp.StaffRotaPeriodId
-                         }).OrderBy(o => o.RotaDate).ToList();
+                         }).OrderBy(o => o.RotaDate).Distinct().ToList();
 
             return Ok(rotas);
         }
@@ -187,7 +196,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetStaffRotaPeriod(int id)
         {
-            var entity =await _staffRotaPeriodRepository.GetEntity(id);
+            var entity = await _staffRotaPeriodRepository.GetEntity(id);
             if (entity == null) return NotFound();
             var mappedEntity = Mapper.Map<GetStaffRotaPeriodForEdit>(entity);
             return Ok(mappedEntity);
@@ -198,13 +207,13 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(typeof(GetStaffRotaPeriodForEdit), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PatchStaffRotaPeriod([FromBody]EditStaffRotaPeriod model)
+        public async Task<IActionResult> PatchStaffRotaPeriod([FromBody] EditStaffRotaPeriod model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(model);
             }
-          //  var entitySet = _dbContext.Set<StaffRotaPeriod>();
+            //  var entitySet = _dbContext.Set<StaffRotaPeriod>();
             var entity = await _staffRotaPeriodRepository.GetEntity(model.StaffRotaPeriodId);
             if (entity == null) return NotFound();
 
@@ -215,7 +224,87 @@ namespace AwesomeCare.API.Controllers
             return Ok(getEntity);
         }
 
-        
+        /// <summary>
+        /// Date Format is yyyy-MM-dd
+        /// </summary>
+        /// <param name="staffId"></param>
+        /// <param name="searchDate"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("StaffRota/{staffId}/{searchDate}")]
+        [ProducesResponseType( StatusCodes.Status200OK)]
+        public IActionResult StaffRota(int staffId,string searchDate)
+        {
+            string format = "yyyy-MM-dd";
+            bool isSearchDateValid = DateTime.TryParseExact(searchDate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime sDate);
+
+            if (!isSearchDateValid)
+            {
+                return BadRequest($"Invalid Date format, Format is {format}");
+            }
+
+           // int staffId = 2;
+
+            var staffRotas = (from crtd in _clientRotaDaysRepository.Table
+                             join crt in _clientRotaRepository.Table on crtd.ClientRotaId equals crt.ClientRotaId
+                         join crtt in _clientRotaTypeRepository.Table on crt.ClientRotaTypeId equals crtt.ClientRotaTypeId
+                         join cl in _clientRepository.Table on crt.ClientId equals cl.ClientId
+                         join strt in _staffRotaRepository.Table on crtd.RotaId equals strt.RotaId
+                         join strtp in _staffRotaPeriodRepository.Table on strt.StaffRotaId equals strtp.StaffRotaId
+                         join cltk in clientRotaTaskRepository.Table on crtd.ClientRotaDaysId equals cltk.ClientRotaDaysId
+                         join tk in rotaTaskRepository.Table on cltk.RotaTaskId equals tk.RotaTaskId
+                         where strt.RotaDate == sDate && strt.Staff == staffId
+                         select new
+                         {
+                             StaffRotaId = strt.StaffRotaId,
+                             //ClientRotaId= crtd.ClientRotaId,
+                             //RotaDayofWeekId = crtd.RotaDayofWeekId,
+                             StartTime = crtd.StartTime,
+                             StopTime = crtd.StopTime,
+                             ClockInTime = strtp.ClockInTime,
+                             ClockOutTime = strtp.ClockOutTime,
+                             Comment = strtp.Comment,
+                             Feedback = strtp.Feedback,
+                             RotaId = crtd.RotaId,
+                             //ClientRotaDaysId = crtd.ClientRotaDaysId,
+                             RotaType = crtt.RotaType,
+                             ClientId = cl.ClientId,
+                             ClientFirstName = cl.Firstname,
+                             ClientMiddleName = cl.Middlename,
+                             ClientSurName = cl.Surname,
+                             ClientAddress = "",
+                             ClientKeySafeNumber = cl.KeySafe,
+                             ClientPostCode = cl.PostCode,
+                             ClientTelephone = cl.Telephone,
+                             Client = $"{cl.Firstname} {cl.Middlename} {cl.Surname}",
+                             RotaDate = strt.RotaDate,
+                             StaffId = strt.Staff,
+                             ReferenceNumber = strt.ReferenceNumber,
+                             TaskName = tk.TaskName,
+                             GivenAcronym = tk.GivenAcronym,
+                             NotGivenAcronym = tk.NotGivenAcronym,
+                             Partners = (from str in strt.StaffRotaPartners
+                                         join stp in _staffPersonalInfoRepository.Table on str.StaffId equals stp.StaffPersonalInfoId
+                                         select new
+                                         {
+                                             Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
+                                             Telephone = stp.Telephone
+                                         }).ToList()
+                         }).ToList();
+
+            var groupedRota = (from rt in staffRotas
+                               group rt by rt.RotaType into rtgp
+                               select new
+                               {
+                                   RotaType = rtgp.Key,
+                                   Items = rtgp.ToList()
+                               }).ToList();
+
+            return Ok(groupedRota);
+        }
+
+
+
         List<RotaAdmin> GetRotaAdmins(DateTime startDate, DateTime endDate)
         {
             var rotas = (from sr in _staffRotaRepository.Table
@@ -252,7 +341,7 @@ namespace AwesomeCare.API.Controllers
                                              Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
                                              Telephone = stp.Telephone
                                          }).ToList()
-                         }).OrderBy(o => o.RotaDate).ToList();
+                         }).OrderByDescending(o => o.RotaDate).Distinct().ToList();
 
             return rotas;
         }

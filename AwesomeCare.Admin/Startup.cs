@@ -192,7 +192,7 @@ namespace AwesomeCare.Admin
                 })
                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                {
-                   options.RequireHttpsMetadata = false;
+                 
                    var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
                    options.SignInScheme = "Identity.Application";//  CookieAuthenticationDefaults.AuthenticationScheme;
                    options.Authority = Configuration["idp_url"].ToString();
@@ -352,7 +352,7 @@ namespace AwesomeCare.Admin
             else
             {
                 app.UseDeveloperExceptionPage();
-                app.UseExceptionHandler("/Home/Error");
+                //app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 

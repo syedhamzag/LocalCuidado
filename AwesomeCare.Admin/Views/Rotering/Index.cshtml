@@ -27,42 +27,7 @@
 
                     @Html.HiddenFor(m => m.ClientId)
                     @Html.HiddenFor(m => m.ActionName)
-                    @*<table class="table table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>
-                                        <ul class="nav nav-tabs-new2">
-                                            @foreach (var weekDay in Model.WeekDays)
-                                            {
-                                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#@weekDay.ToLower()">@weekDay</a></li>
-                                            }
-                                        </ul>
-
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var rotaType in Model.RotaTypes)
-                                {
-                                    <tr>
-                                        <td>@rotaType.RotaType</td>
-                                        <td>
-                                            <div class="tab-content">
-                                                @foreach (var weekDay in Model.WeekDays)
-                                                {
-                                                    <div class="tab-pane" id="@weekDay.ToLower()">
-                                                        <h6>@weekDay</h6>
-                                                    </div>
-                                                }
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>*@
-
+                   
 
                     <table class="table table-hover table-bordered" id="tblRotering">
                         <thead>
@@ -73,7 +38,7 @@
                                     <th>
                                         @weekDay.DayofWeek
                                         <br />
-                                        <label><input type="checkbox" class="selectAll" name="@weekDay.DayofWeek"><span><small>Repeat</small></span></label>
+                                       
                                     </th>
                                 }
                             </tr>
@@ -104,7 +69,11 @@
                                             }
 
                                         </div>
+                                        <div  class="fancy-checkbox">
+                                            
+                                            <label><input type="checkbox" class="selectAll" name="@rotaType.RotaType"><span><small>Repeat</small></span></label>
 
+                                        </div>    
                                     </td>
                                     @foreach (var weekDay in Model.WeekDays)
                                     {
@@ -209,13 +178,15 @@
             });
 
             $(':checkbox[class=selectAll]').change(function () {
-                var dayOfWeek = $(this).attr('name')
-
+                var rotaType = $(this).attr('name')
+              //  alert(rotaType)
                 if ($(this).is(":checked")) {
-                    RepeatRota(dayOfWeek);
-                    RepeatStartTime(dayOfWeek);
-                    RepeatStopTime(dayOfWeek);
-                    SetCheckBox(true);
+
+                    RepeatRotaDays(rotaType);
+                    //RepeatRota(dayOfWeek);
+                    RepeatStartTime(rotaType);
+                    RepeatStopTime(rotaType);
+                    //SetCheckBox(true);
 
                 } else {
                     // alert("unckecked");
@@ -223,38 +194,60 @@
                 }
             })
 
+            function RepeatSelection(rotaType){
+                //AM-Monday-rota AM-Monday-rota
+                //AM-Tuesday-rota
+                var dayofWeek = 'Tuesday';
+                var selectedRota = $('#' + rotaType + '-Monday' + '-rota').find(":selected").val();
+                $('#' + rotaType + '-' + dayofWeek + '-rota').val(selectedRota);
+              //  console.log(selectedRota)
+            }
+            function RepeatRotaDays(rotaType) {
+                var selectedRota = $('#' + rotaType + '-Monday' + '-rota').find(":selected").val();
 
-            function RepeatRota(dayofWeek) {
-                var amrota = $('#AM-' + dayofWeek + '-rota').find(":selected").val();
-
-                $('#tblRotering > tbody  > tr').each(function () {
-
-                    var rotaPeriod = $(this).children('td:first').text().trim();
-
-                    $('#' + rotaPeriod + '-' + dayofWeek + '-rota').val(amrota);
-                });
+                $('#' + rotaType + '-Tuesday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Wednesday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Thursday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Friday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Saturday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Sunday' + '-rota').val(selectedRota);
             }
 
-            function RepeatStartTime(dayofWeek) {
-                var amStartTime = $('#AM-' + dayofWeek + '-StartTime').val();
+            //function RepeatRota(dayofWeek) {
+            //    var amrota = $('#AM-' + dayofWeek + '-rota').find(":selected").val();
 
-                $('#tblRotering > tbody  > tr').each(function () {
+            //    $('#tblRotering > tbody  > tr').each(function () {
 
-                    var rotaPeriod = $(this).children('td:first').text().trim();
+            //        var rotaPeriod = $(this).children('td:first').text().trim();
 
-                    $('#' + rotaPeriod + '-' + dayofWeek + '-StartTime').val(amStartTime);
-                });
+            //        $('#' + rotaPeriod + '-' + dayofWeek + '-rota').val(amrota);
+            //    });
+            //}
+
+            function RepeatStartTime(rotaPeriod) {
+                //AM-Monday-StartTime
+                var startTime = $('#' + rotaPeriod + '-Monday' + '-StartTime').val();
+
+                $('#' + rotaPeriod + '-Tuesday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Wednesday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Thursday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Friday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Saturday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Sunday' + '-StartTime').val(startTime);
+
+               
             }
 
-            function RepeatStopTime(dayofWeek) {
-                var amStopTime = $('#AM-' + dayofWeek + '-StopTime').val();
+            function RepeatStopTime(rotaPeriod) {
+                //AM-Monday-StopTime
+                var stopTime = $('#' + rotaPeriod + '-Monday' + '-StopTime').val();
 
-                $('#tblRotering > tbody  > tr').each(function () {
-
-                    var rotaPeriod = $(this).children('td:first').text().trim();
-
-                    $('#' + rotaPeriod + '-' + dayofWeek + '-StopTime').val(amStopTime);
-                });
+                $('#' + rotaPeriod + '-Tuesday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Wednesday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Thursday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Friday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Saturday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Sunday' + '-StopTime').val(stopTime);
             }
 
             function SetCheckBox(isChecked) {

@@ -142,11 +142,13 @@ namespace AwesomeCare.Admin.Controllers
 
             }
 
+            var kk = JsonConvert.SerializeObject(clientRotas);
+
             if (clientRotas.Count > 0)
             {
                 if (model.ActionName == "Update")
                 {
-                    var kk = JsonConvert.SerializeObject(clientRotas);
+                   
                     var result = await _clientRotaService.EditRota(clientRotas, model.ClientId);
                     SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully Updated" : "An Error Occurred" });
                     var content = await result.Content.ReadAsStringAsync();
