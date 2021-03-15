@@ -105,8 +105,8 @@
                                         <td>@item.ClockOutTime</td>
                                         <td>
                                             @{
-                                                bool isClockInTimeValid = TimeSpan.TryParseExact(item.ClockInTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
-                                                bool isClockOutTimeValid = TimeSpan.TryParseExact(item.ClockOutTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
+                                                bool isClockInTimeValid = TimeSpan.TryParseExact(item.ClockInTime.ToString(), "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
+                                                bool isClockOutTimeValid = TimeSpan.TryParseExact(item.ClockOutTime.ToString(), "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
                                                 if (isClockInTimeValid && isClockOutTimeValid)
                                                 {
                                                     var clockDiff = clockOut.Subtract(clockIn);

@@ -28,8 +28,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string DayofWeek { get; set; }
         public string StartTime { get; set; }
         public string StopTime { get; set; }
-        public string ClockInTime { get; set; }
-        public string ClockOutTime { get; set; }
+        public DateTimeOffset? ClockInTime { get; set; }
+        public DateTimeOffset? ClockOutTime { get; set; }
         public string ClockInMethod { get; set; }
         public string ClockOutMethod { get; set; }
         public string Feedback { get; set; }

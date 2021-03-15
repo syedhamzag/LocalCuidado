@@ -56,7 +56,7 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.10.0" />
     <PackageReference Include="Twilio" Version="5.55.0" />
-    <PackageReference Include="Twilio.AspNet.Mvc" Version="5.37.2" />
+    <PackageReference Include="Twilio.AspNet.Core" Version="5.37.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -232,8 +232,8 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("StaffRota/{staffId}/{searchDate}")]
-        [ProducesResponseType( StatusCodes.Status200OK)]
-        public IActionResult StaffRota(int staffId,string searchDate)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IActionResult StaffRota(int staffId, string searchDate)
         {
             string format = "yyyy-MM-dd";
             bool isSearchDateValid = DateTime.TryParseExact(searchDate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime sDate);
@@ -243,54 +243,64 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest($"Invalid Date format, Format is {format}");
             }
 
-           // int staffId = 2;
+            // int staffId = 2;
 
             var staffRotas = (from crtd in _clientRotaDaysRepository.Table
-                             join crt in _clientRotaRepository.Table on crtd.ClientRotaId equals crt.ClientRotaId
-                         join crtt in _clientRotaTypeRepository.Table on crt.ClientRotaTypeId equals crtt.ClientRotaTypeId
-                         join cl in _clientRepository.Table on crt.ClientId equals cl.ClientId
-                         join strt in _staffRotaRepository.Table on crtd.RotaId equals strt.RotaId
-                         join strtp in _staffRotaPeriodRepository.Table on strt.StaffRotaId equals strtp.StaffRotaId
-                         join cltk in clientRotaTaskRepository.Table on crtd.ClientRotaDaysId equals cltk.ClientRotaDaysId
-                         join tk in rotaTaskRepository.Table on cltk.RotaTaskId equals tk.RotaTaskId
-                         where strt.RotaDate == sDate && strt.Staff == staffId
-                         select new
-                         {
-                             StaffRotaId = strt.StaffRotaId,
-                             //ClientRotaId= crtd.ClientRotaId,
-                             //RotaDayofWeekId = crtd.RotaDayofWeekId,
-                             StartTime = crtd.StartTime,
-                             StopTime = crtd.StopTime,
-                             ClockInTime = strtp.ClockInTime,
-                             ClockOutTime = strtp.ClockOutTime,
-                             Comment = strtp.Comment,
-                             Feedback = strtp.Feedback,
-                             RotaId = crtd.RotaId,
-                             //ClientRotaDaysId = crtd.ClientRotaDaysId,
-                             RotaType = crtt.RotaType,
-                             ClientId = cl.ClientId,
-                             ClientFirstName = cl.Firstname,
-                             ClientMiddleName = cl.Middlename,
-                             ClientSurName = cl.Surname,
-                             ClientAddress = "",
-                             ClientKeySafeNumber = cl.KeySafe,
-                             ClientPostCode = cl.PostCode,
-                             ClientTelephone = cl.Telephone,
-                             Client = $"{cl.Firstname} {cl.Middlename} {cl.Surname}",
-                             RotaDate = strt.RotaDate,
-                             StaffId = strt.Staff,
-                             ReferenceNumber = strt.ReferenceNumber,
-                             TaskName = tk.TaskName,
-                             GivenAcronym = tk.GivenAcronym,
-                             NotGivenAcronym = tk.NotGivenAcronym,
-                             Partners = (from str in strt.StaffRotaPartners
-                                         join stp in _staffPersonalInfoRepository.Table on str.StaffId equals stp.StaffPersonalInfoId
-                                         select new
-                                         {
-                                             Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
-                                             Telephone = stp.Telephone
-                                         }).ToList()
-                         }).ToList();
+                              join crt in _clientRotaRepository.Table on crtd.ClientRotaId equals crt.ClientRotaId
+                              join crtt in _clientRotaTypeRepository.Table on crt.ClientRotaTypeId equals crtt.ClientRotaTypeId
+                              join cl in _clientRepository.Table on crt.ClientId equals cl.ClientId
+                              join strt in _staffRotaRepository.Table on crtd.RotaId equals strt.RotaId
+                              join strtp in _staffRotaPeriodRepository.Table on strt.StaffRotaId equals strtp.StaffRotaId
+                              join cltk in clientRotaTaskRepository.Table on crtd.ClientRotaDaysId equals cltk.ClientRotaDaysId
+                              // join tk in rotaTaskRepository.Table on cltk.RotaTaskId equals tk.RotaTaskId
+                              where strt.RotaDate == sDate && strt.Staff == staffId
+                              select new
+                              {
+                                  StaffRotaId = strt.StaffRotaId,
+                                  StaffRotaPeriodId = strtp.StaffRotaPeriodId,
+                                  //ClientRotaId= crtd.ClientRotaId,
+                                  //RotaDayofWeekId = crtd.RotaDayofWeekId,
+                                  StartTime = crtd.StartTime,
+                                  StopTime = crtd.StopTime,
+                                  ClockInTime = strtp.ClockInTime,
+                                  ClockOutTime = strtp.ClockOutTime,
+                                  Comment = strtp.Comment,
+                                  Feedback = strtp.Feedback,
+                                  RotaId = crtd.RotaId,
+                                  //ClientRotaDaysId = crtd.ClientRotaDaysId,
+                                  RotaType = crtt.RotaType,
+                                  ClientId = cl.ClientId,
+                                  ClientFirstName = cl.Firstname,
+                                  ClientMiddleName = cl.Middlename,
+                                  ClientSurName = cl.Surname,
+                                  ClientAddress = "",
+                                  ClientKeySafeNumber = cl.KeySafe,
+                                  ClientPostCode = cl.PostCode,
+                                  ClientTelephone = cl.Telephone,
+                                  Client = $"{cl.Firstname} {cl.Middlename} {cl.Surname}",
+                                  RotaDate = strt.RotaDate,
+                                  StaffId = strt.Staff,
+                                  ReferenceNumber = strt.ReferenceNumber,
+                                  //TaskName = tk.TaskName,
+                                  //GivenAcronym = tk.GivenAcronym,
+                                  //NotGivenAcronym = tk.NotGivenAcronym,
+                                  Tasks = (from tsk in crtd.ClientRotaTask
+                                           join tk in rotaTaskRepository.Table on tsk.RotaTaskId equals tk.RotaTaskId
+                                           select new
+                                           {
+                                               RotaTaskId = tk.RotaTaskId,
+                                               TaskName = tk.TaskName,
+                                               GivenAcronym = tk.GivenAcronym,
+                                               NotGivenAcronym = tk.NotGivenAcronym
+                                           }).ToList(),
+                                  Partners = (from str in strt.StaffRotaPartners
+                                              join stp in _staffPersonalInfoRepository.Table on str.StaffId equals stp.StaffPersonalInfoId
+                                              select new
+                                              {
+                                                  Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
+                                                  Telephone = stp.Telephone
+                                              }).ToList()
+                              }).ToList();
 
             var groupedRota = (from rt in staffRotas
                                group rt by rt.RotaType into rtgp

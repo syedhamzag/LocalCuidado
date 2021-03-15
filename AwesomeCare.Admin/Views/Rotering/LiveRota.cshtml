@@ -78,8 +78,8 @@
                                     <td></td>
                                     <td>
                                         @{
-                                            bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
-                                            bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
+                                            bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.ToString(), "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
+                                            bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.ToString(), "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
                                             if (isClockInTimeValid && isClockOutTimeValid)
                                             {
                                                 var clockDiff = clockOut.Subtract(clockIn).TotalMinutes;
