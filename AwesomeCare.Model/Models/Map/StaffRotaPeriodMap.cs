@@ -28,22 +28,22 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.ClockInTime)
              .HasColumnName("ClockInTime")
-             .HasMaxLength(15)
+             .HasColumnType("datetimeoffset")
              .IsRequired(false);
 
             builder.Property(p => p.ClockOutTime)
             .HasColumnName("ClockOutTime")
-            .HasMaxLength(15)
+             .HasColumnType("datetimeoffset")
             .IsRequired(false);
 
             builder.Property(p => p.ClockInAddress)
            .HasColumnName("ClockInAddress")
-           .HasMaxLength(100)
+           .HasMaxLength(300)
            .IsRequired(false);
 
             builder.Property(p => p.ClockOutAddress)
          .HasColumnName("ClockOutAddress")
-         .HasMaxLength(100)
+         .HasMaxLength(300)
          .IsRequired(false);
 
 
@@ -62,6 +62,16 @@ namespace AwesomeCare.Model.Models.Map
         .HasColumnName("HandOver")
         .HasMaxLength(225)
         .IsRequired(false);
+
+            builder.Property(p => p.ClockInMode)
+       .HasColumnName("ClockInMode")
+       .HasMaxLength(225)
+       .IsRequired(false);
+
+            builder.Property(p => p.ClockOutMode)
+       .HasColumnName("ClockOutMode")
+       .HasMaxLength(225)
+       .IsRequired(false);
 
             #endregion
 
