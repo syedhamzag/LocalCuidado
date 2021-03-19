@@ -12,6 +12,7 @@ using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.API.Controllers
@@ -313,7 +314,32 @@ namespace AwesomeCare.API.Controllers
             return Ok(groupedRota);
         }
 
+        [HttpPost("ClockInClockOut")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> ClockInClockOut([FromBody] StaffClockInClockOut model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var rota = await _staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == model.StaffRotaPeriodId);
+
+            rota.Feedback = model.Feedback;
+            foreach (var item in model.StaffRotaTasks)
+            {
+                rota.StaffRotaTasks.Add(new StaffRotaTask
+                {
+                    StaffRotaPeriodId = model.StaffRotaPeriodId,
+                    RotaTaskId = item.RotaTaskId,
+                    IsGiven = item.IsGiven
+                });
+            }
+
+            var id = _staffRotaPeriodRepository.UpdateEntity(rota);
+
+            return Ok();
+        }
 
         List<RotaAdmin> GetRotaAdmins(DateTime startDate, DateTime endDate)
         {

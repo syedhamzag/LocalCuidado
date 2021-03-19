@@ -34,6 +34,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaTask;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.StaffWorkTeam;
 using AwesomeCare.DataTransferObject.DTOs.Untowards;
@@ -658,6 +659,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.Feedback, mem => mem.Ignore())
                 .ForMember(dto => dto.Comment, mem => mem.Ignore())
                 .ForMember(dto => dto.HandOver, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutMode, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInMode, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffRotaTasks, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
 
             CreateMap<StaffRotaPeriod, GetStaffRotaPeriodForEdit>();
@@ -666,6 +670,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaTypeId, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRota, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutMode, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInMode, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffRotaTasks, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
             //  CreateMap<StaffRotaPeriod, GetStaffRotaPeriod>();
             #endregion
@@ -757,6 +764,13 @@ namespace MapperConfig
                 .ForMember(dto => dto.Investigation, mem => mem.Ignore());
             #endregion
 
+            #region StaffRotaTask
+            CreateMap<PostStaffRotaTask, StaffRotaTask>()
+                .ForMember(dto => dto.StaffRotaTaskId, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffRotaPeriod, mem => mem.Ignore());
+
+            CreateMap<StaffRotaTask, GetStaffRotaTask>();
+            #endregion
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AwesomeCare.DataAccess.Repositories;
+using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -149,8 +150,9 @@ namespace AwesomeCare.API.Controllers
 
                 int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
                 var rota = await staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == staffRotaId);
-                rota.ClockInAddress = "Twilio";
+                rota.Comment = "Twilio";
                 rota.ClockInTime = DateTimeOffset.Now;
+                rota.ClockInMode = ClockModeEnum.Twilio.ToString();
 
                 var id = await staffRotaPeriodRepository.UpdateEntity(rota);
                 return true;
@@ -169,8 +171,9 @@ namespace AwesomeCare.API.Controllers
 
                 int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
                 var rota = await staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == staffRotaId);
-                rota.ClockOutAddress = "Twilio";
+                rota.Comment = "Twilio";
                 rota.ClockOutTime = DateTimeOffset.Now;
+                rota.ClockOutMode = ClockModeEnum.Twilio.ToString();
 
                 var id = await staffRotaPeriodRepository.UpdateEntity(rota);
                 return true;

@@ -63,6 +63,16 @@ namespace AwesomeCare.Model.Models.Map
         .HasMaxLength(225)
         .IsRequired(false);
 
+            builder.Property(p => p.ClockInMode)
+       .HasColumnName("ClockInMode")
+       .HasMaxLength(225)
+       .IsRequired(false);
+
+            builder.Property(p => p.ClockOutMode)
+       .HasColumnName("ClockOutMode")
+       .HasMaxLength(225)
+       .IsRequired(false);
+
             #endregion
 
             #region Relationship

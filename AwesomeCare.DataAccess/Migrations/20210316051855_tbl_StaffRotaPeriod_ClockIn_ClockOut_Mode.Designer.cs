@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210316051855_tbl_StaffRotaPeriod_ClockIn_ClockOut_Mode")]
+    partial class tbl_StaffRotaPeriod_ClockIn_ClockOut_Mode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2247,33 +2249,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_StaffRotaPeriod");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaTask", b =>
-                {
-                    b.Property<int>("StaffRotaTaskId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRotaTaskId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsGiven")
-                        .HasColumnName("IsGiven")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RotaTaskId")
-                        .HasColumnName("RotaTaskId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StaffRotaPeriodId")
-                        .HasColumnName("StaffRotaPeriodId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StaffRotaTaskId");
-
-                    b.HasIndex("StaffRotaPeriodId");
-
-                    b.ToTable("tbl_StaffRotaTask");
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBooking", b =>
                 {
                     b.Property<int>("StaffShiftBookingId")
@@ -3076,15 +3051,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffRota", "StaffRota")
                         .WithMany("StaffRotaPeriods")
                         .HasForeignKey("StaffRotaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaTask", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.StaffRotaPeriod", "StaffRotaPeriod")
-                        .WithMany("StaffRotaTasks")
-                        .HasForeignKey("StaffRotaPeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

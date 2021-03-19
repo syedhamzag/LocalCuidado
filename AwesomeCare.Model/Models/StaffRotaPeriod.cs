@@ -6,6 +6,10 @@ namespace AwesomeCare.Model.Models
 {
    public class StaffRotaPeriod
     {
+        public StaffRotaPeriod()
+        {
+            StaffRotaTasks = new HashSet<StaffRotaTask>();
+        }
         public int StaffRotaPeriodId { get; set; }
         public int StaffRotaId { get; set; }
         public int ClientRotaTypeId { get; set; }
@@ -16,8 +20,11 @@ namespace AwesomeCare.Model.Models
         public string Feedback { get; set; }
         public string Comment { get; set; }
         public string HandOver { get; set; }
+        public string ClockInMode { get; set; }
+        public string ClockOutMode { get; set; }
 
         public virtual StaffRota StaffRota { get; set; }
         public virtual ClientRotaType ClientRotaType { get; set; }
+        public virtual ICollection<StaffRotaTask> StaffRotaTasks { get; set; }
     }
 }
