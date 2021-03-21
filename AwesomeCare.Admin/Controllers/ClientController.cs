@@ -393,7 +393,7 @@ namespace AwesomeCare.Admin.Controllers
                 // model.DeleteFileFromDisk(_env);
                 return View("EditRegistration", model);
             }
-            return RedirectToAction("EditRegistration", new { clientId = model.ClientId });
+            return RedirectToAction("HomeCareDetails", new { clientId = model.ClientId });
         }
         #endregion
 

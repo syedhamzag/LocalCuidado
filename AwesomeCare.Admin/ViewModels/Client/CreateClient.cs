@@ -59,6 +59,11 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [Required]
         [MaxLength(255)]
         public string About { get; set; }
+
+        [Required]
+        [MaxLength(255)]
+        public string Address { get; set; }
+
         [Required]
         [MaxLength(255)]
         public string Hobbies { get; set; }

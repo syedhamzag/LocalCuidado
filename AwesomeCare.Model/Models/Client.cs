@@ -45,6 +45,9 @@ namespace AwesomeCare.Model.Models
         public int NumberOfStaff { get; set; }
         public string UniqueId  { get; set; }
         public string PassportFilePath { get; set; }
+        public string Address { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
         public virtual ICollection<ClientInvolvingParty> InvolvingParties { get; set; }
         public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<ClientRota> ClientRota { get; set; }

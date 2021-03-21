@@ -140,6 +140,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientRota, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedication, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
+                .ForMember(dto => dto.Latitude, mem => mem.Ignore())
+                .ForMember(dto => dto.Longitude, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()

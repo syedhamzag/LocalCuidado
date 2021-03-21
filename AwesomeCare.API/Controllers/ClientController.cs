@@ -145,6 +145,9 @@ namespace AwesomeCare.API.Controllers
                                        NumberOfStaff = client.NumberOfStaff,
                                        UniqueId = client.UniqueId,
                                        PassportFilePath = client.PassportFilePath,
+                                       Latitude= client.Latitude,
+                                       Longitude = client.Longitude,
+                                       Address = client.Address,
                                        InvolvingParties = (from inv in client.InvolvingParties
                                                            select new GetClientInvolvingPartyForEdit
                                                            {

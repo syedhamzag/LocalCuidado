@@ -30,6 +30,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [MaxLength(50)]
         [EmailAddress]
         public string Email { get; set; }
+
+        [Required]
+        [MaxLength(250)]
+        public string Address { get; set; }
+
         [Required]
         [MaxLength(255)]
         public string About { get; set; }
