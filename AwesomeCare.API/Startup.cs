@@ -248,7 +248,7 @@ namespace AwesomeCare.API
             else
             {
                 app.UseDeveloperExceptionPage();
-                //  app.UseHsts();
+                app.UseHsts();
             }
 
             //  app.UseMiddleware<RemoveResponseHeaderMiddleware>();
@@ -279,7 +279,7 @@ namespace AwesomeCare.API
 
             });
 
-           // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
             //  app.UseCors(MyAllowSpecificOrigins);
