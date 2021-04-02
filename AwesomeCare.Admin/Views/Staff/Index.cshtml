@@ -90,6 +90,7 @@
                                             @if (!string.IsNullOrEmpty(staff.data.ApplicationUserId))
                                             {
                                                 <a asp-controller="Staff" asp-action="ChangeEmail" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Email</a>
+                                                <a asp-controller="Staff" asp-action="ChangePassword" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Password</a>
 
                                             }
 
