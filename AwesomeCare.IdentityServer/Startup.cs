@@ -31,6 +31,8 @@ using System;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using IdentityExpress.Manager.BusinessLogic.Interfaces.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography.X509Certificates;
 
 namespace AwesomeCare.IdentityServer
 {
@@ -144,7 +146,7 @@ category == DbLoggerCategory.Database.Command.Name
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
-
+           // builder.AddSigningCredential(GetSigningCertificate());
             //builder.Services.Configure<IdentityOptions>(c =>
             //{
             //    c.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
@@ -239,6 +241,22 @@ category == DbLoggerCategory.Database.Command.Name
                 c.AddDebug();
                 c.AddAzureWebAppDiagnostics();
             });
+        }
+
+        private X509Certificate2 GetSigningCertificate()
+        {
+            X509Certificate2 cert = null;
+            string certThumbPrint = Configuration["CertThumbPrint"];
+            using (X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
+            {
+                certStore.Open(OpenFlags.ReadOnly);
+                X509Certificate2Collection certificateCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint,
+                    certThumbPrint, true);
+
+                if (certificateCollection.Count > 0) 
+                    cert = certificateCollection[0];
+            }
+            return cert;
         }
 
         public void Configure(IApplicationBuilder app, ILogger<Startup> logger)

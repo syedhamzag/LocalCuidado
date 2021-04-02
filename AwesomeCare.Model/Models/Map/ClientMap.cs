@@ -154,6 +154,22 @@ namespace AwesomeCare.Model.Models.Map
              .HasColumnName("PassportFilePath")
              .IsRequired(false);
 
+            builder.Property(p => p.Address)
+           .HasColumnName("Address")
+           .HasMaxLength(250)
+           .IsRequired(false);
+
+            builder.Property(p => p.Latitude)
+          .HasColumnName("Latitude")
+          .HasMaxLength(250)
+          .IsRequired(false);
+
+            builder.Property(p => p.Longitude)
+          .HasColumnName("Longitude")
+          .HasMaxLength(250)
+          .IsRequired(false);
+
+
             builder.HasMany(p => p.RegulatoryContact)
                 .WithOne(p => p.Client)
                 .HasForeignKey(p => p.ClientId)

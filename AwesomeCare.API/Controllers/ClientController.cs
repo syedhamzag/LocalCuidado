@@ -145,6 +145,9 @@ namespace AwesomeCare.API.Controllers
                                        NumberOfStaff = client.NumberOfStaff,
                                        UniqueId = client.UniqueId,
                                        PassportFilePath = client.PassportFilePath,
+                                       Latitude = client.Latitude,
+                                       Longitude = client.Longitude,
+                                       Address = client.Address,
                                        InvolvingParties = (from inv in client.InvolvingParties
                                                            select new GetClientInvolvingPartyForEdit
                                                            {
@@ -219,7 +222,10 @@ namespace AwesomeCare.API.Controllers
                                        ProviderReference = client.ProviderReference,
                                        NumberOfStaff = client.NumberOfStaff,
                                        UniqueId = client.UniqueId,
-                                       PassportFilePath = client.PassportFilePath
+                                       PassportFilePath = client.PassportFilePath,
+                                       Longitude = client.Longitude,
+                                       Address = client.Address,
+                                       Latitude = client.Latitude
                                    }
                       ).ToListAsync();
 
@@ -430,6 +436,25 @@ namespace AwesomeCare.API.Controllers
                                 }).ToListAsync();
 
             return Ok(entity);
+        }
+
+        [HttpPost("GeoLocation/{clientId}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> PutGeolocation(int clientId, [FromBody] PutGeolocation putGeolocation)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var client = await _clientRepository.Table.FirstOrDefaultAsync(c => c.ClientId == clientId);
+
+            if (client == null) return BadRequest();
+
+            client.Latitude = putGeolocation.Latitude;
+            client.Longitude = putGeolocation.Longitude;
+
+            await _clientRepository.UpdateEntity(client);
+
+            return Ok();
         }
 
         #endregion

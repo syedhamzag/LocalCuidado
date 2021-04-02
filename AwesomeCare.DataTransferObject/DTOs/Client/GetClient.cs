@@ -44,6 +44,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [Display(Name = "Provision Venue")]
         public string ProvisionVenue { get; set; }
 
+        public string Address { get; set; }
+
+        public string Latitude { get; set; }
+
+        public string Longitude { get; set; }
+
         public string PostCode { get; set; }
 
         public decimal Rate { get; set; }
