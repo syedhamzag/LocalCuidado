@@ -61,6 +61,9 @@ namespace AwesomeCare.Admin.Services.Staff
 
         [Post("/User/ChangeEmail")]
         Task<HttpResponseMessage> PostChangeEmail(PostChangeEmail model);
+
+        [Post("/User/Admin/ResetPassord")]
+        Task<HttpResponseMessage> ResetUserPassword(PostResetPassord model);
         #endregion
     }
 }

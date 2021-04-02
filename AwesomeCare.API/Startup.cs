@@ -159,9 +159,22 @@ namespace AwesomeCare.API
             #endregion
             #region AspNetIdentity
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.User.RequireUniqueEmail = true;
+                    options.SignIn.RequireConfirmedAccount = true;
+                    //  options.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
+
+                })
                 .AddEntityFrameworkStores<AwesomeCareDbContext>()
-                .AddRoles<IdentityRole>();
+                .AddRoles<IdentityRole>()
+                .AddDefaultTokenProviders();
             #endregion
 
             #region Swagger
