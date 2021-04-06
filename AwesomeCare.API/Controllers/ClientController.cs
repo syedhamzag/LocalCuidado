@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase

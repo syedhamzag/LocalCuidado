@@ -93,7 +93,7 @@ namespace AwesomeCare.API.Controllers
             var gather = new Gather(action: uri, finishOnKey: "#");
 
             if (isValid)
-                gather.Say("Thank you for contacting Cuidado. Kindly enter the Rota Id on your mobile App and press the pound key, i.e. #");
+                gather.Say("Thank you for contacting Cuidado. Kindly enter the Rota Id on your mobile App and press the pound key.");
             // gather.Say("Thank you for contacting Cuidado. For AM Press 1, For LUNCH Press 2, For TEA Press 3, For BED Press 4, For OTHERS 1 press 5, For OTHERS 2 press 6, For OTHERS 3 press 7, For OTHERS 4 press 8");
             else
                 gather.Say("You provided an invalid response. Thank you");
@@ -150,8 +150,11 @@ namespace AwesomeCare.API.Controllers
 
                 int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
                 var rota = await staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == staffRotaId);
-                rota.Comment = "Twilio";
-                rota.ClockInTime = DateTimeOffset.Now;
+                if (rota == null)
+                    return false;
+
+               
+                rota.ClockInTime = DateTimeOffset.UtcNow;
                 rota.ClockInMode = ClockModeEnum.Twilio.ToString();
 
                 var id = await staffRotaPeriodRepository.UpdateEntity(rota);
@@ -171,8 +174,11 @@ namespace AwesomeCare.API.Controllers
 
                 int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
                 var rota = await staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == staffRotaId);
-                rota.Comment = "Twilio";
-                rota.ClockOutTime = DateTimeOffset.Now;
+                if (rota == null)
+                    return false;
+
+               
+                rota.ClockOutTime = DateTimeOffset.UtcNow;
                 rota.ClockOutMode = ClockModeEnum.Twilio.ToString();
 
                 var id = await staffRotaPeriodRepository.UpdateEntity(rota);

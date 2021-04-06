@@ -141,7 +141,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public bool? HasUniform { get; set; }
 
         [Display(Name ="Has Id Card?")]
-        [Required]
+       // [Required]
         public bool? HasIdCard { get; set; }
        
         [Display(Name ="Employment Date")]

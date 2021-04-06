@@ -149,7 +149,7 @@ namespace AwesomeCare.Admin.Controllers
                 if (model == null || !ModelState.IsValid)
                 {
                     //model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
-
+                   
                     return View(model);
                 }
 

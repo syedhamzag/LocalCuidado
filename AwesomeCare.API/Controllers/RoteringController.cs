@@ -8,6 +8,7 @@ using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
+using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -172,8 +173,8 @@ namespace AwesomeCare.API.Controllers
                              ClientKeySafe = c.KeySafe,
                              ClientRate = c.Rate,
                              ClientTelephone = c.Telephone,
-                             ClockInMethod = "",
-                             ClockOutMethod = "",
+                             ClockInMethod = srp.ClockInMode,
+                             ClockOutMethod = srp.ClockOutMode,
                              Feedback = srp.Feedback,
                              HandOver = srp.HandOver,
                              Comment = srp.Comment,
@@ -259,8 +260,6 @@ namespace AwesomeCare.API.Controllers
                               {
                                   StaffRotaId = strt.StaffRotaId,
                                   StaffRotaPeriodId = strtp.StaffRotaPeriodId,
-                                  //ClientRotaId= crtd.ClientRotaId,
-                                  //RotaDayofWeekId = crtd.RotaDayofWeekId,
                                   StartTime = crtd.StartTime,
                                   StopTime = crtd.StopTime,
                                   ClockInTime = strtp.ClockInTime,
@@ -268,7 +267,6 @@ namespace AwesomeCare.API.Controllers
                                   Comment = strtp.Comment,
                                   Feedback = strtp.Feedback,
                                   RotaId = crtd.RotaId,
-                                  //ClientRotaDaysId = crtd.ClientRotaDaysId,
                                   RotaType = crtt.RotaType,
                                   ClientId = cl.ClientId,
                                   ClientFirstName = cl.Firstname,
@@ -279,12 +277,12 @@ namespace AwesomeCare.API.Controllers
                                   ClientPostCode = cl.PostCode,
                                   ClientTelephone = cl.Telephone,
                                   Client = $"{cl.Firstname} {cl.Middlename} {cl.Surname}",
+                                  ClientUniqueId = cl.UniqueId,
+                                  ClientLatitude = cl.Latitude,
+                                  ClientLongitude = cl.Longitude,
                                   RotaDate = strt.RotaDate,
                                   StaffId = strt.Staff,
                                   ReferenceNumber = strt.ReferenceNumber,
-                                  //TaskName = tk.TaskName,
-                                  //GivenAcronym = tk.GivenAcronym,
-                                  //NotGivenAcronym = tk.NotGivenAcronym,
                                   Tasks = (from tsk in crtd.ClientRotaTask
                                            join tk in rotaTaskRepository.Table on tsk.RotaTaskId equals tk.RotaTaskId
                                            select new
@@ -314,32 +312,87 @@ namespace AwesomeCare.API.Controllers
             return Ok(groupedRota);
         }
 
+        [AllowAnonymous]
         [HttpPost("ClockInClockOut")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ClockInClockOut([FromBody] StaffClockInClockOut model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var rota = await _staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == model.StaffRotaPeriodId);
-
-            rota.Feedback = model.Feedback;
-            foreach (var item in model.StaffRotaTasks)
-            {
-                rota.StaffRotaTasks.Add(new StaffRotaTask
+            //try
+            //{
+                if (!ModelState.IsValid)
                 {
-                    StaffRotaPeriodId = model.StaffRotaPeriodId,
-                    RotaTaskId = item.RotaTaskId,
-                    IsGiven = item.IsGiven
-                });
-            }
+                    return BadRequest(ModelState);
+                }
 
-            var id = _staffRotaPeriodRepository.UpdateEntity(rota);
+                var rota = await _staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == model.StaffRotaPeriodId);
 
-            return Ok();
+                rota.Feedback = model.Feedback;
+                foreach (var item in model.StaffRotaTasks)
+                {
+                    rota.StaffRotaTasks.Add(new StaffRotaTask
+                    {
+                        StaffRotaPeriodId = model.StaffRotaPeriodId,
+                        RotaTaskId = item.RotaTaskId,
+                        IsGiven = item.IsGiven
+                    });
+                }
+
+                var id =await _staffRotaPeriodRepository.UpdateEntity(rota);
+
+                return Ok();
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex, "", null);
+            //    return BadRequest(ex.Message);
+            //}
         }
+
+        [HttpPost("ScanQr/ClockIn")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> ScanQrCodeClockIn(string rotaId,string distance,string geolocation)
+        {
+
+            int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
+            var rota = await _staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == staffRotaId);
+            if (rota == null)
+                return NotFound();
+
+          
+            rota.ClockInTime = DateTimeOffset.UtcNow;
+            rota.ClockInMode = ClockModeEnum.ScanCode.ToString();
+            rota.ClockInAddress = geolocation;
+
+            var result = await _staffRotaPeriodRepository.UpdateEntity(rota);
+
+            if (result != null)
+                return Ok();
+            else
+                return BadRequest();
+        }
+
+        [HttpPost("ScanQr/ClockOut")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> ScanQrCodeClockOut(string rotaId, string distance, string geolocation)
+        {
+
+            int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
+            var rota = await _staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == staffRotaId);
+            if (rota == null)
+                return NotFound();
+           
+            rota.ClockOutTime = DateTimeOffset.UtcNow;
+            rota.ClockOutMode = ClockModeEnum.ScanCode.ToString();
+            rota.ClockOutAddress = geolocation;
+
+            var result = await _staffRotaPeriodRepository.UpdateEntity(rota);
+
+            if (result != null)
+                return Ok();
+            else
+                return BadRequest();
+        }
+
 
         List<RotaAdmin> GetRotaAdmins(DateTime startDate, DateTime endDate)
         {

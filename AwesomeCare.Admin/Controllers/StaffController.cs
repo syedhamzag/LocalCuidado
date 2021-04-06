@@ -314,8 +314,10 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> EditProfile(UpdateStaffPersonalInfo model)
         {
 
+            var workTeams = await staffWorkTeamService.Get();
             if (!ModelState.IsValid)
-            {
+            {               
+                model.WorkTeams = workTeams.Select(w => new SelectListItem(w.WorkTeam, w.StaffWorkTeamId.ToString())).ToList();
                 return View(model);
             }
 
@@ -386,9 +388,11 @@ namespace AwesomeCare.Admin.Controllers
 
 
 
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Operation successful" : "An Error Occurred" });
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Operation successful" :"An error occurred" });
             if (!result.IsSuccessStatusCode)
             {
+                model.WorkTeams = workTeams.Select(w => new SelectListItem(w.WorkTeam, w.StaffWorkTeamId.ToString())).ToList();
+
                 _logger.LogError(content);
                 return View(model);
             }
