@@ -1,0 +1,83 @@
+﻿@using  AwesomeCare.DataTransferObject.DTOs.User;
+@model PutUser
+@{
+    ViewData["Title"] = "Edit Application Users";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Edit User</h2>
+
+            </div>
+            <div class="body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <form asp-action="EditUser">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <input type="hidden" asp-for="UserId" />
+
+                            <div class="form-group">
+                                <label asp-for="UserName" class="control-label"></label>
+                                <input asp-for="UserName" class="form-control" readonly />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input asp-for="Email" class="form-control" readonly />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="ConfirmEmail" class="control-label"></label>
+
+                                <br />
+                                <label class="fancy-radio custom-color-green"><input name="ConfirmEmail" asp-for="ConfirmEmail" value="No" type="radio" checked="@{ var isEmailConfirmed = !Model.EmailConfirmed;@isEmailConfirmed}"><span><i></i>No</span></label>
+                                <label class="fancy-radio custom-color-green"><input name="ConfirmEmail" asp-for="ConfirmEmail" value="Yes" type="radio" checked="@Model.EmailConfirmed"><span><i></i>Yes</span></label>
+
+                                <span asp-validation-for="ConfirmEmail" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="CanLockOut" class="control-label"></label>
+
+                                <br />
+                                <label class="fancy-radio custom-color-green"><input name="canlockout" asp-for="CanLockOut" value="No" type="radio" checked="@{ var lockedOut = !Model.LockedOutEnabled;@lockedOut}"><span><i></i>No</span></label>
+                                <label class="fancy-radio custom-color-green"><input name="canlockout" asp-for="CanLockOut" value="Yes" type="radio" checked="@Model.LockedOutEnabled"><span><i></i>Yes</span></label>
+
+                                <span asp-validation-for="CanLockOut" class="text-danger"></span>
+                            </div>
+
+                            <fieldset>
+                                <span>Change Password</span>
+                                <div class="form-group">
+                                    <label asp-for="Password" class="control-label"></label>
+                                    <input asp-for="Password" class="form-control" />
+                                  
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="ConfirmPassword" class="control-label"></label>
+                                    <input asp-for="ConfirmPassword" class="form-control" />
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                <input type="submit" value="Update" class="btn btn-default" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
