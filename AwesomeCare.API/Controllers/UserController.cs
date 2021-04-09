@@ -85,7 +85,7 @@ namespace AwesomeCare.API.Controllers
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user == null)
                 return NotFound();
-
+            
             var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
             var result = await userManager.ResetPasswordAsync(user, resetToken, model.Password);
             if (result.Succeeded)

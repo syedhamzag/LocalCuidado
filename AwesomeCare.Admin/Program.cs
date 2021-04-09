@@ -16,7 +16,11 @@ namespace AwesomeCare.Admin
     {
         public static void Main(string[] args)
         {
-            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            //NLog.LogManager.ThrowExceptions = true; // TODO Remove this when done trouble-shooting
+            //NLog.Common.InternalLogger.LogLevel = NLog.LogLevel.Debug;
+            //NLog.Common.InternalLogger.LogToConsole = true;
+            //NLog.Common.InternalLogger.LogFile = "c:\temp\nlog-internal.txt";
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("NLog.config").GetCurrentClassLogger();
 
             try
             {
