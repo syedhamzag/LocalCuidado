@@ -10,16 +10,7 @@
         <div class="card planned_task  table-responsive">
             <div class="header">
                 <h2>Create Client Rota</h2>
-                @*<ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="javascript:void(0);">Action</a></li>
-                                <li><a href="javascript:void(0);">Another Action</a></li>
-                                <li><a href="javascript:void(0);">Something else</a></li>
-                            </ul>
-                        </li>
-                    </ul>*@
+               
             </div>
             <div class="body">
 
@@ -172,7 +163,7 @@
         $(function () {
             // validation needs name of the element
             $('.taskMultiselect').multiselect({
-                enableFiltering: false,
+                enableFiltering: true,
                 nonSelectedText: "Select Task",
                 numberDisplayed: 0
             });
@@ -183,7 +174,7 @@
                 if ($(this).is(":checked")) {
 
                     RepeatRotaDays(rotaType);
-                    //RepeatRota(dayOfWeek);
+                    RepeatTasks(rotaType);
                     RepeatStartTime(rotaType);
                     RepeatStopTime(rotaType);
                     //SetCheckBox(true);
@@ -193,6 +184,34 @@
                     SetCheckBox(false);
                 }
             })
+
+            function RepeatTasks(rotaType) {
+                var selectedRotaTask = $('#' + rotaType + '-Monday' + '-rotaTask' + ' option:selected' ).map(function (a, item) { return item.value; });
+
+                var tuesdayRota = $('#' + rotaType + '-Tuesday' + '-rotaTask');
+                var wednesdayRota = $('#' + rotaType + '-Wednesday' + '-rotaTask');
+                var thursdayRota = $('#' + rotaType + '-Thursday' + '-rotaTask');
+                var fridayRota = $('#' + rotaType + '-Friday' + '-rotaTask');
+                var saturdayRota = $('#' + rotaType + '-Saturday' + '-rotaTask');
+                var sundayRota = $('#' + rotaType + '-Sunday' + '-rotaTask');
+                
+                tuesdayRota.multiselect('deselectAll', false)
+                wednesdayRota.multiselect('deselectAll', false)
+                thursdayRota.multiselect('deselectAll', false)
+                fridayRota.multiselect('deselectAll', false)
+                saturdayRota.multiselect('deselectAll', false)
+                sundayRota.multiselect('deselectAll', false)
+
+                $(selectedRotaTask).each(function (index, element) {
+                   // console.log(index + ": " + element);
+                    tuesdayRota.multiselect('select', element);
+                    wednesdayRota.multiselect('select', element);
+                    thursdayRota.multiselect('select', element);
+                    fridayRota.multiselect('select', element);
+                    saturdayRota.multiselect('select', element);
+                    sundayRota.multiselect('select', element);
+                })
+            }
 
             function RepeatSelection(rotaType){
                 //AM-Monday-rota AM-Monday-rota
