@@ -38,6 +38,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffRotaTask;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.StaffWorkTeam;
 using AwesomeCare.DataTransferObject.DTOs.Untowards;
+using AwesomeCare.DataTransferObject.DTOs.User;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using System;
@@ -773,6 +774,18 @@ namespace MapperConfig
 
             CreateMap<StaffRotaTask, GetStaffRotaTask>();
             #endregion
+
+
+            #region ApplicationUser
+            CreateMap<ApplicationUser, GetUser>()
+                .ForMember(dto => dto.UserId, mem => mem.MapFrom(src => src.Id))
+                .ForMember(dto => dto.UserName, mem => mem.MapFrom(src => src.UserName))
+                .ForMember(dto => dto.Email, mem => mem.MapFrom(src => src.Email))
+                .ForMember(dto => dto.EmailConfirmed, mem => mem.MapFrom(src => src.EmailConfirmed))
+                .ForMember(dto => dto.LockedOutEnabled, mem => mem.MapFrom(src => src.LockoutEnabled));
+
+            #endregion
+
         }
     }
 }

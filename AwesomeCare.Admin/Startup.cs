@@ -43,6 +43,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using AwesomeCare.Admin.Services.IncidentReport;
 using AwesomeCare.Admin.Services.Investigation;
+using AwesomeCare.Admin.Services.User;
 
 namespace AwesomeCare.Admin
 {
@@ -524,6 +525,12 @@ namespace AwesomeCare.Admin
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IInvestigationService>(r))
           .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("userservice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IUserService>(r))
+         .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
             
         }
     }
