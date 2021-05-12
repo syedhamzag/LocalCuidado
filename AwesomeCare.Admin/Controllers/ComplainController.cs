@@ -60,6 +60,7 @@ namespace AwesomeCare.Admin.Controllers
             var model = new CreateComplainRegister();
             var client = await _clientService.GetClient(clientId.Value);
             var staffNames = await _staffService.GetStaffs();
+            ViewBag.GetStaffs = staffNames;
             model.ClientId = clientId.Value;
             model.ClientName = client.Firstname +" "+client.Middlename+" "+client.Surname ;
             //model.STAFFINVOLVED = (IEnumerable<GetStaffs>)staffNames.Select(s => new SelectListItem(s.Fullname.ToString(), s.ApplicationUserId)).ToList();
@@ -106,10 +107,11 @@ namespace AwesomeCare.Admin.Controllers
                 return View("CreateComplainRegister", model);
             }
         }
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int complainId)
         {
-            var complain = await _complainService.Get(id);
+            var complain = await _complainService.Get(complainId);
             var staffNames = await _staffService.GetStaffs();
+            ViewBag.GetStaffs = staffNames;
             var client = await _clientService.GetClient(complain.ClientId);
             if (complain == null) return NotFound();
 

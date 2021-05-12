@@ -28,9 +28,9 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Evidence { get; set; }
         #region DropDowns
-        public IEnumerable<GetStaffs> OFFICERTOACT { get; set; }
-        public IEnumerable<GetStaffs> STAFFINVOLVED { get; set; }
-        public IEnumerable<SelectListItem> Status { get; set; }
+        public ICollection<GetStaffs> OFFICERTOACT { get; set; }
+        public ICollection<GetStaffs> STAFFINVOLVED { get; set; }
+        public ICollection<SelectListItem> Status { get; set; }
         #endregion
 
         #region Tabs

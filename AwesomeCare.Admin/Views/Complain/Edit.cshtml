@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
     <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
 }
-<h4>Client: @Model.ClientName</h4>
+<h4></h4>
 <hr />
 <div class="row">
     <form asp-route="Edit" method="post" enctype="multipart/form-data">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label class="control-label">OFFICER TO ACT</label>
-                        <baserecord asp-key="Staff_Communication_Status" asp-for="OFFICERTOACTId" asp-items="null" />
+                        <baserecord asp-key="GetStaffs" asp-for="OFFICERTOACTId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
                         <span asp-validation-for="OFFICERTOACTId" class="text-danger"></span>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label class="control-label">STAFF</label>
-                        <baserecord asp-key="Staff_Communication_Status" asp-for="STAFFId" asp-items="null" />
+                        <baserecord asp-key="GetStaffs" asp-for="STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />                       
                         <span asp-validation-for="STAFFId" class="text-danger"></span>
                     </div>
                 </div>
