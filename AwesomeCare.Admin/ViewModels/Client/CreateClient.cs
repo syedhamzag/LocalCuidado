@@ -25,6 +25,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
             InvolvingParties = new List<ClientInvolvingParty>();
             RegulatoryContacts = new List<ClientRegulatoryContact>();
             CareDetails = new List<ClientCareDetailsHeading>();
+            ComplainRegisters = new List<CreateComplainRegister>();
         }
         public int ClientId { get; set; }
         [DataType(DataType.Upload)]
@@ -139,6 +140,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public List<ClientInvolvingParty> InvolvingParties { get; set; }
         public List<ClientRegulatoryContact> RegulatoryContacts { get; set; }
         public List<ClientCareDetailsHeading> CareDetails { get; set; }
+        public List<CreateComplainRegister> ComplainRegisters { get; set; }
         #region Methods
         public async Task SaveFileToDisk(IWebHostEnvironment env)
         {

@@ -18,6 +18,7 @@ using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.ClientRota;
+using AwesomeCare.Admin.Services.ComplainRegister;
 using QRCoder;
 using Dropbox.Api;
 using AwesomeCare.Admin.Services.ClientCareDetails;
@@ -500,6 +501,12 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IMedicationService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("complainservie", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IComplainService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
             services.AddHttpClient("staffblacklistservice", c =>

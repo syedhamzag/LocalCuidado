@@ -8,6 +8,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
@@ -27,6 +28,7 @@ namespace AwesomeCare.API.Controllers
     public class ClientController : ControllerBase
     {
         private IGenericRepository<Client> _clientRepository;
+        private IGenericRepository<ClientComplainRegister> _complainRepository;
         private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
         private IGenericRepository<BaseRecordModel> _baseRecordRepository;
         private IGenericRepository<ClientMedication> _clientMedicationRepository;
@@ -39,11 +41,12 @@ namespace AwesomeCare.API.Controllers
         private AwesomeCareDbContext _dbContext;
         public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<ClientMedicationPeriod> clientMedicationPeriodRepository,
             IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<ClientMedicationDay> clientMedicationDayRepository,
-            IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<ClientMedication> clientMedicationRepository,
+            IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<ClientComplainRegister> complainRepository,
             IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
             IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository)
         {
             _clientRepository = clientRepository;
+            _complainRepository = complainRepository;
             _baseRecordItemRepository = baseRecordItemRepository;
             _baseRecordRepository = baseRecordRepository;
             _dbContext = dbContext;
@@ -160,6 +163,13 @@ namespace AwesomeCare.API.Controllers
                                                                Name = inv.Name,
                                                                Relationship = inv.Relationship,
                                                                Telephone = inv.Telephone
+                                                           }).ToList(),
+                                       GetClientComplain = (from com in _complainRepository.Table
+                                                            where com.ClientId == id.Value
+                                                            select new GetClientComplainRegister
+                                                           {
+                                                                COMPLAINANTCONTACT = com.COMPLAINANTCONTACT,
+                                                                EvidenceFilePath = com.EvidenceFilePath
                                                            }).ToList(),
                                        RegulatoryContact = (from reg in client.RegulatoryContact
                                                             join baseRecordItem in _baseRecordItemRepository.Table on reg.BaseRecordItemId equals baseRecordItem.BaseRecordItemId

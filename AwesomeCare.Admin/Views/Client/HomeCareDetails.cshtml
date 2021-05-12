@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "HomeCare Details";
 }
-
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
@@ -15,6 +14,7 @@
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li><a asp-action="EditRegistration" asp-route-clientId="@Model.ClientId" asp-controller="Client">Edit Client</a></li>
 
+
                         </ul>
                     </li>
                 </ul>
@@ -25,6 +25,7 @@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#involvingparties">Involving Parties</a></li>
                     @*<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#caredetails">Care Details</a></li>*@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
@@ -331,12 +332,12 @@
                                             @item.RegulatoryContact
                                         </td>
                                         <td>
-                                            @if(item.DatePerformed.HasValue)
+                                            @if (item.DatePerformed.HasValue)
                                             {
                                                 var datePerformed = item.DatePerformed.Value.ToString("MMM. dd, yyyy");
                                                 @datePerformed;
                                             }
-                                           
+
                                         </td>
                                         <td>
                                             @if (item.DueDate.HasValue)
@@ -344,26 +345,80 @@
                                                 var dueDate = item.DueDate.Value.ToString("MMM. dd, yyyy");
                                                 @dueDate;
                                             }
-                                            
+
                                         </td>
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.Evidence))
                                             {
                                                 <a asp-action="DownloadFile" asp-route-file="@item.Evidence">Download</a>
                                             }
-                                           
+
                                         </td>
-                                       
+
                                     </tr>
                                 }
 
                             </tbody>
                         </table>
                     </div>
-                </div>
+                    <div class="tab-pane" id="complaintregister">
+                        <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a asp-action="CreateComplainRegister" asp-route-clientId="@Model.ClientId" asp-controller="Complain">Create Complain</a></li>
+
+
+                                    </ul>
+                                </li>
+                            </ul>
+                            </div>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Complain Contact</th>
+                                        <th>Evidence</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetClientComplain)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.COMPLAINANTCONTACT
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.EvidenceFilePath))
+                                                {
+                                                    <a asp-action="DownloadFile" asp-route-file="@item.EvidenceFilePath">Download</a>
+                                                }
+
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
             </div>
         </div>
     </div>
 </div>
+<script src="../../../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+<script>
+    
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var ActiveTab = url.searchParams.get("ActiveTab");
+    if (ActiveTab != null)
+    {
+        $(document).ready(function () {
+            $('a[href="#' + ActiveTab + '"]').tab('show');
 
+        });
+    }
+</script>

@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210320074660_tbl_ClientComplainRegister")]
+    partial class tbl_ClientComplainRegister
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,107 +333,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.ToTable("tbl_Client");
                 });
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientComplainRegister", b =>
-            {
-                b.Property<int>("ComplainId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ComplainId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                b.Property<string>("LINK")
-                    .HasColumnName("LINK")
-                    .HasColumnType("nvarchar(255)");
-
-                b.Property<string>("IRFNUMBER")
-                       .HasColumnName("IRFNUMBER ")
-                       .HasMaxLength(50);
-
-                b.Property<DateTime>("INCIDENTDATE")
-                   .HasColumnName("INCIDENTDATE");
-
-                b.Property<DateTime>("DATERECIEVED")
-                   .HasColumnName("DATERECIEVED");
-
-                b.Property<DateTime?>("DATEOFACKNOWLEDGEMENT")
-                   .HasColumnName("DATEOFACKNOWLEDGEMENT");
-
-                b.Property<int>("OFFICERTOACTId")
-                   .HasColumnName("OFFICERTOACTId")
-                   .HasColumnType("int");
-
-                b.Property<string>("SOURCEOFCOMPLAINTS")
-                   .HasColumnName("SOURCEOFCOMPLAINTS")
-                   .HasColumnType("nvarchar(255)")
-                   .HasMaxLength(255);
-
-                b.Property<string>("COMPLAINANTCONTACT")
-                   .HasColumnName("COMPLAINANTCONTACT")
-                   .HasColumnType("nvarchar(50)")
-                   .HasMaxLength(50);
-
-                b.Property<int>("STAFFId")
-                   .HasColumnName("STAFFId")
-                   .HasColumnType("int");
-
-                b.Property<string>("CONCERNSRAISED")
-                   .HasColumnName("CONCERNSRAISED")
-                   .HasColumnType("nvarchar(255)")
-                   .HasMaxLength(255);
-
-                b.Property<DateTime>("DUEDATE")
-                   .HasColumnName("DUEDATE")
-                   .HasColumnType("datetime2");
-
-                b.Property<string>("LETTERTOSTAFF")
-                   .HasColumnName("LETTERTOSTAFF")
-                   .HasColumnType("nvarchar(255)")
-                   .HasMaxLength(255);
-
-                b.Property<string>("INVESTIGATIONOUTCOME")
-                   .HasColumnName("INVESTIGATIONOUTCOME")
-                   .HasColumnType("nvarchar(255)")
-                   .HasMaxLength(255);
-
-                b.Property<string>("ACTIONTAKEN")
-                   .HasColumnName("ACTIONTAKEN")
-                   .HasColumnType("nvarchar(50)")
-                   .HasMaxLength(50);
-
-                b.Property<string>("FINALRESPONSETOFAMILY")
-                   .HasColumnName("FINALRESPONSETOFAMILY")
-                   .HasColumnType("nvarchar(255)")
-                   .HasMaxLength(255);
-
-                b.Property<string>("ROOTCAUSE")
-                 .HasColumnName("ROOTCAUSE")
-                 .HasColumnType("nvarchar(50)")
-                 .HasMaxLength(50);
-
-                b.Property<string>("REMARK")
-                   .HasColumnName("REMARK")
-                   .HasColumnType("nvarchar(255)")
-                   .HasMaxLength(255);
-
-                b.Property<int>("StatusId")
-                   .HasColumnName("StatusId")
-                   .HasColumnType("int");
-
-                b.Property<string>("EvidenceFilePath")
-                 .HasColumnName("EvidenceFilePath");
-
-                b.HasKey("ComplainId");
-
-                b.HasIndex("ClientId");
-
-                b.HasIndex("ComplainId");
-
-                b.ToTable("tbl_ClientComplainRegister");
-            });
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetails", b =>
                 {
                     b.Property<int>("ClientCareDetailsId")
@@ -2921,14 +2823,7 @@ namespace AwesomeCare.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientComplainRegister", b =>
-            {
-                b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                    .WithMany("ClientComplainRegister")
-                    .HasForeignKey("ClientId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-            });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationDay", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.ClientMedication", null)

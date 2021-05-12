@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AwesomeCare.DataTransferObject.DTOs;
+using AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecordItem;
 using AwesomeCare.DataTransferObject.DTOs.Client;
@@ -39,6 +40,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.StaffWorkTeam;
 using AwesomeCare.DataTransferObject.DTOs.Untowards;
 using AwesomeCare.DataTransferObject.DTOs.User;
+using AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using System;
@@ -143,12 +145,14 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                 .ForMember(dto => dto.Latitude, mem => mem.Ignore())
                 .ForMember(dto => dto.Longitude, mem => mem.Ignore())
+                .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
                 .ForMember(dto => dto.Gender, mem => mem.Ignore())
-                .ForMember(dto => dto.Status, mem => mem.Ignore());
+                .ForMember(dto => dto.Status, mem => mem.Ignore())
+                .ForMember(dto => dto.GetClientComplain, mem => mem.Ignore());
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));
@@ -172,7 +176,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientMedication, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
-                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
+                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore())
+                .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
@@ -583,6 +588,13 @@ namespace MapperConfig
             CreateMap<Medication, GetMedication>();
 
             CreateMap<PutMedication, Medication>();
+            #endregion
+
+            #region Complain Register
+            CreateMap<PutComplainRegister, ClientComplainRegister>();
+            CreateMap<PostComplainRegister, ClientComplainRegister>();
+
+            CreateMap<ClientComplainRegister, GetClientComplainRegister>();
             #endregion
 
             #region MedicationManufacturer
