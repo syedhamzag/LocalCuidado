@@ -73,12 +73,13 @@ namespace AwesomeCare.Admin.Controllers
         {
             try
             {
-                //model.StatusId = 14;
-
                 if (model == null || !ModelState.IsValid)
                 {
-                    //model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
-
+                    var staffNames = await _staffService.GetStaffs();
+                    ViewBag.Officer = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.OFFICERTOACTId);
+                    ViewBag.Staff = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.STAFFId);
+                    var client = await _clientService.GetClient(model.ClientId);
+                    model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
                     return View(model);
                 }
 
