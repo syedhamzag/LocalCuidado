@@ -33,6 +33,7 @@
                                 <th>Staff Tel.</th>
                                 <th>Allocated Date</th>
                                 <th>StartTime</th>
+                                <th>StopTime</th>
                                 <th>Clock In</th>
                                 <th>Clock Out</th>
                                 <th>ClockIn Method</th>
@@ -76,11 +77,12 @@
                                     <td>@rota.StaffTelephone</td>
                                     <td>@rota.RotaDate.ToString("MM/dd/yyyy")</td>
                                     <td>@rota.StartTime</td>
+                                    <td>@rota.StopTime</td>
                                     <td>
                                         @{
                                             if (rota.ClockInTime.HasValue)
                                             {
-                                                var clockInTime = rota.ClockInTime.Value.ToString("HH:mm");
+                                                var clockInTime = rota.ClockInTime.Value.ToString("HH:mm tt");
                                                 @clockInTime;
                                             }
                                         }
@@ -89,7 +91,7 @@
                                         @{
                                             if (rota.ClockOutTime.HasValue)
                                             {
-                                                var clockOutTime = rota.ClockOutTime.Value.ToString("HH:mm");
+                                                var clockOutTime = rota.ClockOutTime.Value.ToString("HH:mm tt");
                                                 @clockOutTime;
                                             }
                                         }
@@ -143,9 +145,46 @@
                                             }
 
 
+
+
                                         }
                                     </td>
-                                    <td>call status</td>
+                                    <td>
+                                        @{
+                                            string color = "black";
+                                            string callStatus = "";
+                                            if (rota.ClockInTime.HasValue)
+                                            {
+                                                var st = DateTime.TryParseExact(rota.StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
+                                                var df = st.Subtract(rota.ClockInTime.Value.DateTime).TotalMinutes;
+                                              
+                                                if (df <= 15 && df >= -15)
+                                                {
+                                                    color = "green";
+                                                    callStatus = "ONTIME";
+                                                }
+                                                else if (df > 15 && df <= 30)
+                                                {
+                                                    color = "blue";
+                                                    callStatus = "EARLY";
+                                                }
+                                                else if (df >= -30)
+                                                {
+                                                    color = "yellow";
+                                                    callStatus = "MILD";
+                                                }
+                                                else
+                                                {
+                                                    color = "red";
+                                                    callStatus = "LATE";
+                                                }
+
+                                                <p style="background-color:@color;color:white">@callStatus</p>
+                                            }
+
+
+                                        }
+                                    </td>
                                     <td>@rota.Comment</td>
                                     <td>@rota.HandOver</td>
                                     <td>@rota.AreaCode</td>
