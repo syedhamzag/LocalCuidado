@@ -23,7 +23,7 @@ using Newtonsoft.Json;
 
 namespace AwesomeCare.Web.Controllers
 {
-   
+
     public class ShiftBookingController : BaseController
     {
         private IShiftBookingService _shiftBookingService;
@@ -44,7 +44,7 @@ namespace AwesomeCare.Web.Controllers
         [HttpGet("[controller]/[action]")]
         public async Task<IActionResult> Create(string month, int shiftId)
         {
-          
+
             var selectedMonthId = (Array.IndexOf<string>(DateTimeFormatInfo.CurrentInfo.MonthNames, month) + 1).ToString("D2");
             //if (int.TryParse(selectedMonth, out int mth) && mth < DateTime.Now.Month)
             //   return RedirectToActionPermanent("Shifts");
@@ -52,22 +52,23 @@ namespace AwesomeCare.Web.Controllers
             var model = new CreateBookingViewModel();
             model.CanUserDrive = User.CanDrive();
 
-           
-            var shiftBooked = await _shiftBookingService.GetShiftByMonthAndYear(shiftId,selectedMonthId, DateTime.Now.Year.ToString());
+
+            var shiftBooked = await _shiftBookingService.GetShiftByMonthAndYear(shiftId, selectedMonthId, DateTime.Now.Year.ToString());
             model.ShiftBooked = shiftBooked;
 
             HttpContext.Session.Set("shiftBooked", shiftBooked);
 
             model.ShiftBookingId = shiftId;
 
-            var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            var monthId = int.TryParse(selectedMonthId, out int id) ? id : 0;
+            var daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, monthId);
             model.DaysInMonth = daysInMonth;
             if (!string.IsNullOrEmpty(month))
                 model.SelectedMonth = month;
             else
-                model.SelectedMonth = model.Months[DateTime.Now.Month - 1].Text;
+                model.SelectedMonth = model.Months[monthId].Text;
 
-            model.SelectedMonthId = int.Parse(selectedMonthId);
+            model.SelectedMonthId = monthId;// int.Parse(selectedMonthId);
 
             return View(model);
         }
@@ -103,7 +104,7 @@ namespace AwesomeCare.Web.Controllers
                 }
             }
 
-            if(staffShiftBooking.Days.Count == 0)
+            if (staffShiftBooking.Days.Count == 0)
                 return RedirectToAction("Shifts");
 
 
