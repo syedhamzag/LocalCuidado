@@ -686,6 +686,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientRotaTypeId, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRota, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockOutMode, mem => mem.Ignore())
+                .ForMember(dto => dto.StartTime, mem => mem.Ignore())
+                .ForMember(dto => dto.StopTime, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockInMode, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRotaTasks, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());

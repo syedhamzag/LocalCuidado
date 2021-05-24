@@ -8,5 +8,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffRota
     {
         public int StaffRotaId { get; set; }
         public int ClientRotaTypeId { get; set; }
+        public string StartTime { get; set; }
+        public string StopTime { get; set; }
+
     }
 }

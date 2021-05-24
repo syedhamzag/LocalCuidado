@@ -189,7 +189,7 @@ namespace AwesomeCare.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> LiveRota()
         {
-            var date = DateTime.Now.ToString("yyyy-MM-dd");
+            var date =  DateTime.Now.ToString("yyyy-MM-dd");
             var rotaAdmin = await _rotaTaskService.LiveRota(date);
 
             return View(rotaAdmin);
