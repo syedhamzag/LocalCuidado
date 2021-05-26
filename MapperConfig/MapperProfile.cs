@@ -40,11 +40,15 @@ using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;
 using AwesomeCare.DataTransferObject.DTOs.StaffWorkTeam;
 using AwesomeCare.DataTransferObject.DTOs.Untowards;
 using AwesomeCare.DataTransferObject.DTOs.User;
-using AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister;
+using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using System;
 using System.Linq;
+using AwesomeCare.DataTransferObject.DTOs.ClientMeal;
+using AwesomeCare.DataTransferObject.DTOs.ClientMealType;
+using AwesomeCare.DataTransferObject.DTOs.ClientShopping;
+using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
 
 namespace MapperConfig
 {
@@ -146,6 +150,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.Latitude, mem => mem.Ignore())
                 .ForMember(dto => dto.Longitude, mem => mem.Ignore())
                 .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -177,6 +182,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientCareDetails, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
                 .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore());
             #endregion
 
@@ -249,6 +255,17 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientRotaTypeId, mem => mem.Ignore());
             #endregion
 
+            #region ClientMealType
+            CreateMap<ClientMealType, GetClientMealType>();
+            CreateMap<PutClientMealType, ClientMealType>()
+                .ForMember(dto => dto.ClientMeal, mem => mem.Ignore());
+
+            CreateMap<PostClientMealType, ClientMealType>()
+                .ForMember(dto => dto.MealType, mem => mem.MapFrom(src => src.MealType.ToUpper()))
+                .ForMember(dto => dto.ClientMeal, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMealTypeId, mem => mem.Ignore());
+            #endregion
+
             #region RotaTask
             CreateMap<RotaTask, AwesomeCare.DataTransferObject.DTOs.RotaTask.GetRotaTask>();
             CreateMap<PostRotaTask, RotaTask>()
@@ -263,10 +280,12 @@ namespace MapperConfig
             CreateMap<PostRotaDayofWeek, RotaDayofWeek>()
                 .ForMember(dto => dto.Deleted, mem => mem.MapFrom(src => false))
                 .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMealDays, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedicationDay, mem => mem.Ignore())
                 .ForMember(dto => dto.RotaDayofWeekId, mem => mem.Ignore());
             CreateMap<PutRotaDayofWeek, RotaDayofWeek>()
                 .ForMember(dto => dto.ClientMedicationDay, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMealDays, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaDays, mem => mem.Ignore());
             #endregion
 
@@ -287,6 +306,25 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore())
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaDays, mem => mem.MapFrom(src => src.ClientRotaDays));
+
+            #endregion
+            #region ClientNutrition
+            CreateMap<ClientNutrition, GetClientNutrition>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientNutrition, ClientNutrition>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.Staff, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMealDays, mem => mem.Ignore());
+            CreateMap<PutClientNutrition, ClientNutrition>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.Staff, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientMealDays, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientShopping, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCleaning, mem => mem.Ignore());
+
+            CreateMap<CreateNutrition, ClientNutrition>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.Staff, mem => mem.Ignore());
 
             #endregion
 
@@ -311,7 +349,37 @@ namespace MapperConfig
                 .ForMember(dto => dto.RotaDayofWeek, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaTask, mem => mem.MapFrom(src => src.RotaTasks));
             #endregion
+            #region ClientMealDays
+            CreateMap<ClientMealDays, GetClientMealDays>();
+            CreateMap<PostClientMealDays, ClientMealDays>()
+                .ForMember(dto => dto.ClientMealType, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
+                .ForMember(dto => dto.MealDayofWeek, mem => mem.Ignore());
+            CreateMap<PutClientMealDays, ClientMealDays>()
+              .ForMember(dto => dto.ClientMealType, mem => mem.Ignore())
+              .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
+              .ForMember(dto => dto.MealDayofWeek, mem => mem.Ignore());
 
+            CreateMap<CreateClientMealDays, ClientMealDays>()
+                 .ForMember(dto => dto.ClientMealType, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
+                .ForMember(dto => dto.MealDayofWeek, mem => mem.Ignore());
+            #endregion
+            #region Shopping
+            CreateMap<CreateClientShopping, ClientShopping>()
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore());
+            CreateMap<ClientShopping, GetClientShopping>()
+                .ForMember(dto => dto.ShoppingId, mem => mem.Ignore());
+            CreateMap<PostClientShopping, ClientShopping>()
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore());
+            #endregion
+            #region Cleaning
+            CreateMap<CreateClientCleaning, ClientCleaning>()
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore());
+            CreateMap<ClientCleaning, GetClientCleaning>();
+            CreateMap<PostClientCleaning, ClientCleaning>()
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore());
+            #endregion
             #region ClientRotaTask
             CreateMap<ClientRotaTask, GetClientRotaTask>();
             CreateMap<PostClientRotaTask, ClientRotaTask>()
@@ -403,6 +471,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.IsTeamLeader, mem => mem.Ignore())
                 .ForMember(dto => dto.HasUniform, mem => mem.Ignore())
                 .ForMember(dto => dto.HasIdCard, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
                 .ForMember(dto => dto.EmploymentDate, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
@@ -419,6 +488,7 @@ namespace MapperConfig
                .ForMember(dto => dto.EmergencyContacts, mem => mem.MapFrom(src=>src.EmergencyContacts))
                .ForMember(dto => dto.ShiftBookings, mem => mem.Ignore())
                .ForMember(dto => dto.ApplicationUser, mem => mem.Ignore())
+               .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRating, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                .ForMember(dto => dto.StaffPersonalInfoId, mem => mem.MapFrom(src => src.StaffPersonalInfoId))
@@ -444,6 +514,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.Ignore())
                 .ForMember(dto => dto.ShiftBookings, mem => mem.Ignore())
                 .ForMember(dto => dto.IsTeamLeader, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
                 .ForMember(dto => dto.HasUniform, mem => mem.Ignore())
                 .ForMember(dto => dto.HasIdCard, mem => mem.Ignore())
                 .ForMember(dto => dto.EmploymentDate, mem => mem.Ignore())

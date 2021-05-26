@@ -45,6 +45,7 @@ using Microsoft.Extensions.Logging;
 using AwesomeCare.Admin.Services.IncidentReport;
 using AwesomeCare.Admin.Services.Investigation;
 using AwesomeCare.Admin.Services.User;
+using AwesomeCare.Admin.Services.Nutrition;
 
 namespace AwesomeCare.Admin
 {
@@ -507,6 +508,12 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IComplainService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("nutritionservie", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<INutritionService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
             services.AddHttpClient("staffblacklistservice", c =>

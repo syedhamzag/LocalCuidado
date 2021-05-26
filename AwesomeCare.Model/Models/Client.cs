@@ -14,6 +14,7 @@ namespace AwesomeCare.Model.Models
             ClientRota = new HashSet<ClientRota>();
             StaffBlackList = new HashSet<StaffBlackList>();
             ComplainRegister = new HashSet<ClientComplainRegister>();
+            ClientNutrition = new HashSet<ClientNutrition>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -56,6 +57,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientMedication> ClientMedication { get; set; }
         public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }
+        public virtual ICollection<ClientNutrition> ClientNutrition { get; set; }
 
     }
 }

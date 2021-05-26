@@ -4,6 +4,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister;
 using AwesomeCare.Admin.ViewModels.Client;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.Admin.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -76,6 +77,7 @@ namespace AwesomeCare.Admin.Controllers
                 if (model == null || !ModelState.IsValid)
                 {
                     var staffNames = await _staffService.GetStaffs();
+                    ViewBag.GetStaffs = staffNames;
                     ViewBag.Officer = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.OFFICERTOACTId);
                     ViewBag.Staff = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.STAFFId);
                     var client = await _clientService.GetClient(model.ClientId);
@@ -85,6 +87,7 @@ namespace AwesomeCare.Admin.Controllers
 
 
                 #region Evidence
+
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "_", model.IRFNUMBER);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
