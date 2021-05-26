@@ -35,6 +35,8 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffRotaPeriod> _staffRotaPeriodRepository;
         private readonly IGenericRepository<ClientRotaTask> clientRotaTaskRepository;
         private readonly IGenericRepository<RotaTask> rotaTaskRepository;
+        private readonly IGenericRepository<ShiftBooking> shiftBookingRepository;
+        private readonly IGenericRepository<StaffShiftBooking> staffShiftBookingRepository;
         private AwesomeCareDbContext _dbContext;
 
         public RoteringController(ILogger<RoteringController> logger, IGenericRepository<ClientRota> clientRotaRepository,
@@ -45,6 +47,8 @@ namespace AwesomeCare.API.Controllers
              IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository,
              IGenericRepository<ClientRotaTask> clientRotaTaskRepository,
              IGenericRepository<RotaTask> rotaTaskRepository,
+             IGenericRepository<ShiftBooking> shiftBookingRepository,
+             IGenericRepository<StaffShiftBooking> staffShiftBookingRepository,
              AwesomeCareDbContext dbContext)
         {
             _logger = logger;
@@ -59,6 +63,8 @@ namespace AwesomeCare.API.Controllers
             _staffRotaPeriodRepository = staffRotaPeriodRepository;
             this.clientRotaTaskRepository = clientRotaTaskRepository;
             this.rotaTaskRepository = rotaTaskRepository;
+            this.shiftBookingRepository = shiftBookingRepository;
+            this.staffShiftBookingRepository = staffShiftBookingRepository;
             _dbContext = dbContext;
         }
         /// <summary>
@@ -142,6 +148,8 @@ namespace AwesomeCare.API.Controllers
             }
 
             var rotas = (from sr in _staffRotaRepository.Table
+                         join shiftBooking in shiftBookingRepository.Table on sr.RotaId equals shiftBooking.Rota
+                         join stafShiftBooking in staffShiftBookingRepository.Table on shiftBooking.ShiftBookingId equals stafShiftBooking.ShiftBookingId
                          join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
                          join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
                          join crd in _clientRotaDaysRepository.Table on new { key1 = sr.RotaId, key2 = sr.RotaDayofWeekId.Value } equals new { key1 = crd.RotaId, key2 = crd.RotaDayofWeekId }
@@ -162,8 +170,8 @@ namespace AwesomeCare.API.Controllers
                              ClientPostCode = c.PostCode,
                              RotaDate = sr.RotaDate,
                              DayofWeek = rd.DayofWeek,
-                             StartTime = crd.StartTime,
-                             StopTime = crd.StopTime,
+                             StartTime = shiftBooking.StartTime,// crd.StartTime,
+                             StopTime =shiftBooking.StopTime,// crd.StopTime,
                              ClockInTime = srp.ClockInTime,
                              ClockOutTime = srp.ClockOutTime,
                              Rota = r.RotaName,
