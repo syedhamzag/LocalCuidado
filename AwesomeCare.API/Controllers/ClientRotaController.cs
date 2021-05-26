@@ -8,6 +8,7 @@ using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.ClientRota;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -247,6 +248,57 @@ namespace AwesomeCare.API.Controllers
             var postEntity = Mapper.Map<List<ClientRota>>(model);
             await _clientRotaRepository.InsertEntities(postEntity);
             return Ok();
+        }
+    
+    
+    [HttpGet("RotaPeriod/{clientId}/{clientRotaTypeId}/{rotaDayOfWeekId}/{rotaId}")]
+    public async Task<IActionResult> GetClientRotaPeriod(int clientId,int clientRotaTypeId,int rotaDayOfWeekId,int rotaId)
+        {
+            var periods =await (from clientRota in _clientRotaRepository.Table
+                           join clientRotaDay in _clientRotaDaysRepository.Table on clientRota.ClientRotaId equals clientRotaDay.ClientRotaId
+                           where clientRota.ClientId == clientId &&
+                           clientRota.ClientRotaTypeId == clientRotaTypeId &&
+                           clientRotaDay.RotaDayofWeekId == rotaDayOfWeekId &&
+                           clientRotaDay.RotaId == rotaId
+                           select new
+                           {
+                               ClientRotaId = clientRota.ClientRotaId,
+                               ClientId = clientRota.ClientId,
+                               ClientRotaTypeId = clientRota.ClientRotaTypeId,
+                               RotaDayofWeekId = clientRotaDay.RotaDayofWeekId,
+                               StartTime = clientRotaDay.StartTime,
+                               StopTime = clientRotaDay.StopTime,
+                               RotaId = clientRotaDay.RotaId,
+                               ClientRotaDaysId = clientRotaDay.ClientRotaDaysId
+                           }).FirstOrDefaultAsync();
+
+            return Ok(periods);
+        }
+
+
+
+       
+        [HttpGet("RotaPeriod/{rotaDayOfWeekId}/{rotaId}")]
+        public async Task<IActionResult> GetClientRotaPeriod(int rotaDayOfWeekId, int rotaId)
+        {
+            var periods = await (from clientRota in _clientRotaRepository.Table
+                                 join clientRotaDay in _clientRotaDaysRepository.Table on clientRota.ClientRotaId equals clientRotaDay.ClientRotaId
+                                 where
+                                 clientRotaDay.RotaDayofWeekId == rotaDayOfWeekId &&
+                                 clientRotaDay.RotaId == rotaId
+                                 select new
+                                 {
+                                     ClientRotaId = clientRota.ClientRotaId,
+                                     ClientId = clientRota.ClientId,
+                                     ClientRotaTypeId = clientRota.ClientRotaTypeId,
+                                     RotaDayofWeekId = clientRotaDay.RotaDayofWeekId,
+                                     StartTime = clientRotaDay.StartTime,
+                                     StopTime = clientRotaDay.StopTime,
+                                     RotaId = clientRotaDay.RotaId,
+                                     ClientRotaDaysId = clientRotaDay.ClientRotaDaysId
+                                 }).FirstOrDefaultAsync();
+
+            return Ok(periods);
         }
     }
 }

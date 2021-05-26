@@ -15,12 +15,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using AwesomeCare.DataTransferObject.EqualityComparers;
 
 namespace AwesomeCare.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [AllowAnonymous]
+   // [AllowAnonymous]
     public class RoteringController : ControllerBase
     {
         private ILogger<RoteringController> _logger;
@@ -442,6 +443,78 @@ namespace AwesomeCare.API.Controllers
 
             return rotas;
         }
+
+        [HttpGet]
+        [Route("LiveRota2/{date}")]
+        [ProducesResponseType(typeof(List<LiveTracker>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult SampleLiveRota(string date)
+        {
+            string format = "yyyy-MM-dd";
+            bool isStartDateValid = DateTime.TryParseExact(date, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime startDate);
+            if (!isStartDateValid)
+            {
+                return BadRequest($"Invalid Date format, Format is {format}");
+            }
+
+            var rotas = (from sr in _staffRotaRepository.Table
+                         //join shiftBooking in shiftBookingRepository.Table on sr.RotaId equals shiftBooking.Rota
+                        // join stafShiftBooking in staffShiftBookingRepository.Table on shiftBooking.ShiftBookingId equals stafShiftBooking.ShiftBookingId
+                         join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
+                         join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
+                         join crt in _clientRotaTypeRepository.Table on srp.ClientRotaTypeId equals crt.ClientRotaTypeId
+                         join cr in _clientRotaRepository.Table on crt.ClientRotaTypeId equals cr.ClientRotaTypeId
+                         join crd in _clientRotaDaysRepository.Table on cr.ClientRotaId equals crd.ClientRotaId
+                         //join crd in _clientRotaDaysRepository.Table on new { key1 = sr.RotaId, key2 = sr.RotaDayofWeekId.Value } equals new { key1 = crd.RotaId, key2 = crd.RotaDayofWeekId }
+                         // join rd in _rotaDayofWeekRepository.Table on crd.RotaDayofWeekId equals rd.RotaDayofWeekId
+                          join r in _rotaRepository.Table on crd.RotaId equals r.RotaId
+                         // 
+                         //  
+                          join c in _clientRepository.Table on cr.ClientId equals c.ClientId
+                         where sr.RotaDate >= startDate && sr.RotaDate <= startDate
+                         select new LiveTracker
+                         {
+                             AreaCode = c.AreaCodeId,
+                             ClientRotaId = cr.ClientRotaId,
+                             ClientId = cr.ClientId,
+                             ClientProviderReference = c.ProviderReference,
+                             Period = crt.RotaType,
+                             ClientName = c.Firstname + " " + c.Middlename + " " + c.Surname,
+                             ClientPostCode = c.PostCode,
+                             RotaDate = sr.RotaDate,
+                           //  DayofWeek = rd.DayofWeek,
+                             StartTime = crd.StartTime,
+                             StopTime =  crd.StopTime,
+                             ClockInTime = srp.ClockInTime,
+                             ClockOutTime = srp.ClockOutTime,
+                             Rota = r.RotaName,
+                             Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
+                             Remark = sr.Remark,
+                             ReferenceNumber = sr.ReferenceNumber,
+                             ClientKeySafe = c.KeySafe,
+                             ClientRate = c.Rate,
+                             ClientTelephone = c.Telephone,
+                             ClockInMethod = srp.ClockInMode,
+                             ClockOutMethod = srp.ClockOutMode,
+                             Feedback = srp.Feedback,
+                             HandOver = srp.HandOver,
+                             Comment = srp.Comment,
+                             ClockInAddress = srp.ClockInAddress,
+                             ClockOutAddress = srp.ClockOutAddress,
+                             NumberOfStaff = c.NumberOfStaff,
+                             StaffTelephone = st.Telephone,
+                             StaffRate = st.Rate,
+                             ClientRotaDaysId = crd.ClientRotaDaysId,
+                             StaffRotaId = sr.StaffRotaId,
+                             StaffRotaPeriodId = srp.StaffRotaPeriodId
+                         }).OrderBy(o => o.RotaDate).ToList();
+
+            var distinctRotas = rotas.Distinct(new LiveTrackerEqualityComparer()).ToList();
+
+            return Ok(distinctRotas);
+        }
+
 
     }
 }

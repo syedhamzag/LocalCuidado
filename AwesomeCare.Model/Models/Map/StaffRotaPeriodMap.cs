@@ -69,9 +69,19 @@ namespace AwesomeCare.Model.Models.Map
        .IsRequired(false);
 
             builder.Property(p => p.ClockOutMode)
-       .HasColumnName("ClockOutMode")
-       .HasMaxLength(225)
-       .IsRequired(false);
+               .HasColumnName("ClockOutMode")
+               .HasMaxLength(225)
+               .IsRequired(false);
+
+            builder.Property(p => p.StartTime)
+              .HasColumnName("StartTime")
+              .HasMaxLength(50)
+              .IsRequired(false);
+
+            builder.Property(p => p.StopTime)
+              .HasColumnName("StopTime")
+              .HasMaxLength(50)
+              .IsRequired(false);
 
             #endregion
 

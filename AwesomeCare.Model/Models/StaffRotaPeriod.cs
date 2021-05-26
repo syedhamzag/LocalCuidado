@@ -22,7 +22,8 @@ namespace AwesomeCare.Model.Models
         public string HandOver { get; set; }
         public string ClockInMode { get; set; }
         public string ClockOutMode { get; set; }
-
+        public string StartTime { get; set; }
+        public string StopTime { get; set; }
         public virtual StaffRota StaffRota { get; set; }
         public virtual ClientRotaType ClientRotaType { get; set; }
         public virtual ICollection<StaffRotaTask> StaffRotaTasks { get; set; }
