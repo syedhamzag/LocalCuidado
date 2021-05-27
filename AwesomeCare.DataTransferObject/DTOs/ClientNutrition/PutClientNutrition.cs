@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.ClientMeal
+namespace AwesomeCare.DataTransferObject.DTOs.ClientNutrition
 {
    public class PutClientNutrition
     {

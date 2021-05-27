@@ -8,7 +8,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
-using AwesomeCare.DataTransferObject.DTOs.ClientMeal;
+using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealType;
 using AwesomeCare.DataTransferObject.DTOs.ClientShopping;
@@ -74,7 +74,16 @@ namespace AwesomeCare.API.Controllers
             var clientMealEntity = _dbContext.Set<ClientNutrition>();
             var Nutrition = clientMealEntity.Where(c => c.ClientId == id).Include(d => d.ClientMealDays)
                 .Include(s => s.ClientShopping).Include(s => s.ClientCleaning).Include(s=>s.ClientMealDays).ToList(); //    GetClientMeal(id);//from database
-
+            
+            Nutrition.FirstOrDefault().ShoppingSpecialNote = model.ShoppingSpecialNote;
+            Nutrition.FirstOrDefault().CleaningSpecialNote = model.CleaningSpecialNote;
+            Nutrition.FirstOrDefault().DATEFROM = model.DATEFROM;
+            Nutrition.FirstOrDefault().DATETO = model.DATETO;
+            Nutrition.FirstOrDefault().MealSpecialNote = model.MealSpecialNote;
+            Nutrition.FirstOrDefault().StaffId = model.StaffId;
+            
+            _dbContext.Entry(Nutrition.FirstOrDefault()).State = EntityState.Modified;
+            
             foreach (var Meal in Nutrition.FirstOrDefault().ClientMealDays.ToList())
             {
 

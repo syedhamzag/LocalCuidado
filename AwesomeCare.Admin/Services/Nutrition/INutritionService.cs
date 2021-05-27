@@ -1,5 +1,5 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
-using AwesomeCare.DataTransferObject.DTOs.ClientMeal;
+using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealType;
 using AwesomeCare.DataTransferObject.DTOs.ClientShopping;

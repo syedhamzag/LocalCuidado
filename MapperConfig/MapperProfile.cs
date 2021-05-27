@@ -45,7 +45,7 @@ using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using System;
 using System.Linq;
-using AwesomeCare.DataTransferObject.DTOs.ClientMeal;
+using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealType;
 using AwesomeCare.DataTransferObject.DTOs.ClientShopping;
 using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
