@@ -1,6 +1,8 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
 using AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister;
+using AwesomeCare.DataTransferObject.DTOs.ClientLogAudit;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedicationAudit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +17,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             InvolvingParties = new List<GetClientInvolvingPartyForEdit>();
             RegulatoryContact = new List<GetClientRegulatoryContactForEdit>();
             GetClientComplain = new List<GetClientComplainRegister>();
+            GetClientLogAudit = new List<GetClientLogAudit>();
+            GetClientMedAudit = new List<GetClientMedAudit>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -88,5 +92,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetClientComplainRegister> GetClientComplain { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
         public virtual ICollection<GetClientRegulatoryContactForEdit> RegulatoryContact { get; set; }
+        public virtual ICollection<GetClientLogAudit> GetClientLogAudit { get; set; }
+        public virtual ICollection<GetClientMedAudit> GetClientMedAudit { get; set; }
     }
 }
