@@ -273,3 +273,7 @@ AwesomeCare.API/appsettings.json
 AwesomeCare.API/Properties/launchSettings.json
 AwesomeCare.IdentityServer/appsettings.Development.json
 AwesomeCare.IdentityServer/appsettings.json
+*.config
+AwesomeCare.API/web.config
+AwesomeCare.Admin/appsettings.json
+AwesomeCare.API/appsettings.json

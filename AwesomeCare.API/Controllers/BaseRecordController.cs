@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -32,6 +33,7 @@ namespace AwesomeCare.API.Controllers
             _dbContext = dbContext;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ProducesResponseType(type: typeof(PostBaseRecord), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
