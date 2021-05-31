@@ -42,7 +42,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_ClientComplainRegister", x => x.LogAuditId);
+                    table.PrimaryKey("PK_tbl_ClientLogAudit", x => x.LogAuditId);
                     table.ForeignKey(
                         name: "FK_tbl_ClientLogAudit_tbl_Client_ClientId",
                         column: x => x.ClientId,

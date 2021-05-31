@@ -998,6 +998,272 @@ namespace AwesomeCare.DataAccess.Migrations
                 b.ToTable("tbl_ClientVoice");
             });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealType", b => {
+
+                b.Property<bool>("Deleted")
+                    .HasColumnName("Deleted")
+                    .HasColumnType("bit");
+
+                b.Property<int>("ClientMealTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<string>("MealType")
+                    .HasColumnName("MealType")
+                    .HasColumnType("nvarchar(15)")
+                    .HasMaxLength(15);
+            });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientNutrition", b => 
+            {
+                b.Property<int>("NutritionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<int>("ClientId")
+                    .HasColumnName("ClientId")
+                    .HasColumnType("int");
+
+                b.Property<int>("STAFFId")
+                    .HasColumnName("STAFFId")
+                    .HasColumnType("int");
+
+                b.Property<DateTime>("DATEFROM")
+                    .HasColumnName("DATEFROM")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime>("DATETO")
+                    .HasColumnName("DATETO")
+                    .HasColumnType("datetime2");
+
+                b.Property<string>("MealSpecialNote")
+                    .IsRequired()
+                    .HasColumnName("MealSpecialNote")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<string>("ShoppingSpecialNote")
+                    .IsRequired()
+                    .HasColumnName("ShoppingSpecialNote")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<string>("CleaningSpecialNote")
+                    .IsRequired()
+                    .HasColumnName("CleaningSpecialNote")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+            });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealDays", b => 
+            {
+                b.Property<int>("NutritionId")
+                        .HasColumnName("NutritionId")
+                        .HasColumnType("int");
+                        
+
+                b.Property<int>("MealId")
+                    .HasColumnName("MealId")
+                    .HasColumnType("int");
+
+                b.Property<int>("MealDayofWeekId")
+                    .HasColumnName("MealDayofWeekId")
+                    .HasColumnType("int");
+
+                b.Property<int>("TYPEId")
+                    .HasColumnName("TYPEId")
+                    .HasColumnType("int");
+
+                b.Property<string>("MEALDETAILS")
+                    .IsRequired()
+                    .HasColumnName("MEALDETAILS")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<string>("HOWTOPREPARE")
+                    .IsRequired()
+                    .HasColumnName("HOWTOPREPARE")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<string>("SEEVIDEO")
+                    .IsRequired()
+                    .HasColumnName("SEEVIDEO")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<string>("PICTURE")
+                    .IsRequired()
+                    .HasColumnName("PICTURE")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<int>("ClientMealId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+
+            });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientShopping", b => 
+            {
+                b.Property<int>("ShoppingId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<int>("NutritionId")
+                        .HasColumnName("NutritionId")
+                        .HasColumnType("int");
+
+                b.Property<string>("MeansOfPurchase")
+                    .IsRequired()
+                    .HasColumnName("MeansOfPurchase")
+                    .HasColumnType("nvarchar(100)")
+                    .HasMaxLength(100);
+
+                b.Property<string>("LocationOfPurchase")
+                    .IsRequired()
+                    .HasColumnName("LocationOfPurchase")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<string>("Item")
+                    .IsRequired()
+                    .HasColumnName("Item")
+                    .HasColumnType("nvarchar(100)")
+                    .HasMaxLength(100);
+
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnName("Description")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<int>("Quantity")
+                        .HasColumnName("Quantity")
+                        .HasColumnType("int");
+
+                b.Property<decimal>("Amount")
+                       .HasColumnName("Amount")
+                       .HasColumnType("decimal(18,2)");
+
+                b.Property<string>("Image")
+                    .IsRequired()
+                    .HasColumnName("Image")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("DAYOFSHOPPING")
+                    .IsRequired()
+                    .HasColumnName("DAYOFSHOPPING")
+                    .HasColumnType("nvarchar(50)")
+                    .HasMaxLength(50);
+
+                b.Property<DateTime>("DATEFROM")
+                    .HasColumnName("DATEFROM")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime>("DATETO")
+                    .HasColumnName("DATETO")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("STAFFId")
+                        .HasColumnName("STAFFId")
+                        .HasColumnType("int");
+
+
+
+            });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCleaning", b => 
+            {
+                b.Property<int>("CleaningId")
+                   .ValueGeneratedOnAdd()
+                   .HasColumnType("int")
+                   .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<int>("NutritionId")
+                        .HasColumnName("NutritionId")
+                        .HasColumnType("int");
+
+                b.Property<int>("AreasAndItems")
+                        .HasColumnName("AreasAndItems")
+                        .HasColumnType("int");
+
+                b.Property<string>("Details")
+                    .IsRequired()
+                    .HasColumnName("Details")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<string>("SafetyHazard")
+                    .IsRequired()
+                    .HasColumnName("SafetyHazard")
+                    .HasColumnType("nvarchar(50)")
+                    .HasMaxLength(50);
+
+                b.Property<string>("LocationOfItem")
+                    .IsRequired()
+                    .HasColumnName("LocationOfItem")
+                    .HasColumnType("nvarchar(50)")
+                    .HasMaxLength(50);
+
+                b.Property<string>("DescOfItem")
+                    .IsRequired()
+                    .HasColumnName("DescOfItem")
+                    .HasColumnType("nvarchar(50)")
+                    .HasMaxLength(50);
+
+                b.Property<DateTime>("MinuteAlloted")
+                        .HasColumnName("MinuteAlloted")
+                        .HasColumnType("datetime2");
+
+                b.Property<string>("Disposal")
+                       .HasColumnName("Disposal")
+                       .HasColumnType("nvarchar(50)");
+
+                b.Property<int>("WhereToGet")
+                       .HasColumnName("WhereToGet")
+                       .HasColumnType("int");
+
+                b.Property<string>("WhereToKeep")
+                    .IsRequired()
+                    .HasColumnName("WhereToKeep")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("SEEVIDEO")
+                    .IsRequired()
+                    .HasColumnName("SEEVIDEO")
+                    .HasColumnType("nvarchar(255)")
+                    .HasMaxLength(255);
+
+                b.Property<string>("Image")
+                    .IsRequired()
+                    .HasColumnName("Image")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("DAYOFCLEANING")
+                    .IsRequired()
+                    .HasColumnName("DAYOFCLEANING")
+                    .HasColumnType("nvarchar(50)")
+                    .HasMaxLength(50);
+
+                b.Property<DateTime>("DATEFROM")
+                    .HasColumnName("DATEFROM")
+                    .HasColumnType("datetime2");
+
+                b.Property<DateTime>("DATETO")
+                    .HasColumnName("DATETO")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("STAFFId")
+                        .HasColumnName("STAFFId")
+                        .HasColumnType("int");
+            });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientInvolvingParty", b =>
                 {
                     b.Property<int>("ClientInvolvingPartyId")
@@ -3362,6 +3628,92 @@ namespace AwesomeCare.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientShopping", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.ClientNutrition", null)
+                    .WithMany("ClientShopping")
+                    .HasForeignKey("NutritionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                   .WithMany("ClientShopping")
+                   .HasForeignKey("STAFFId")
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .IsRequired();
+            });
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCleaning", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.ClientNutrition", null)
+                    .WithMany("ClientCleaning")
+                    .HasForeignKey("NutritionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                   .WithMany("ClientCleaning")
+                   .HasForeignKey("STAFFId")
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .IsRequired();
+            });
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealDays", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.ClientNutrition", null)
+                    .WithMany("ClientMealDays")
+                    .HasForeignKey("NutritionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("AwesomeCare.Model.Models.ClientMealType", null)
+                    .WithMany("ClientMealDays")
+                    .HasForeignKey("MealId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("AwesomeCare.Model.Models.RotaDayofWeek", null)
+                    .WithMany("ClientMealDays")
+                    .HasForeignKey("MealDayofWeekId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientNutrition", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.Client", null)
+                    .WithMany("ClientNutrition")
+                    .HasForeignKey("ClientId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                   .WithMany("ClientNutrition")
+                   .HasForeignKey("STAFFId")
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .IsRequired();
+            });
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientVoice", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.Client", null)
+                    .WithMany("ClientVoice")
+                    .HasForeignKey("ClientId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientLogAudit", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.Client", null)
+                    .WithMany("ClientLogAudit")
+                    .HasForeignKey("ClientId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedAudit", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.Client", null)
+                    .WithMany("ClientMedAudit")
+                    .HasForeignKey("ClientId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientInvolvingParty", b =>
                 {
