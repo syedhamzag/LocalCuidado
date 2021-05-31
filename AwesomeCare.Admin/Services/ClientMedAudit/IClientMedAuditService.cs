@@ -19,7 +19,7 @@ namespace AwesomeCare.Admin.Services.ClientMedAudit
         [Post("/ClientMedAudit/Create")]
         Task<HttpResponseMessage> Create([Body] PostClientMedAudit model);
 
-        [Put("/ClientMedAudit/Edit")]
-        Task<GetClientMedAudit> Edit([Body] PutClientMedAudit model);
+        [Put("/ClientMedAudit")]
+        Task<GetClientMedAudit> Put([Body] PutClientMedAudit model);
     }
 }

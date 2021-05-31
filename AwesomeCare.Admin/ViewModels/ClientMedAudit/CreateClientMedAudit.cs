@@ -28,7 +28,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientMedAudit
         public ICollection<GetStaffs> OFFICERTOACT { get; set; }
         public ICollection<SelectListItem> Status_ { get; set; }
         #endregion
-        public string ActionName = "Save";
+        public string ActiveTab { get; set; } = "medaudit";
         public int MedAuditId { get; set; }
         [Required]
         public int ClientId { get; set; }
@@ -79,7 +79,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientMedAudit
         [MaxLength(255)]
         public string Remarks { get; set; }
         [Required]
-        public bool RepeatOfIncident { get; set; }
+        public int RepeatOfIncident { get; set; }
         [Required]
         [MaxLength(50)]
         public string RotCause { get; set; }

@@ -43,8 +43,7 @@ namespace AwesomeCare.Admin.Controllers
             _logger = logger;
             _cache = cache;
         }
-
-        public async Task<IActionResult> Report()
+        public async Task<IActionResult> Reports()
         {
             var entities = await _clientMedAuditService.Get();
             return View(entities);
@@ -56,38 +55,43 @@ namespace AwesomeCare.Admin.Controllers
             List<GetStaffs> staffNames = await _staffService.GetStaffs();
             ViewBag.GetStaffs = staffNames;
             model.ClientId = clientId.Value;
-            var MedAudit = _clientMedAuditService.Get(clientId.Value);
-            if (MedAudit.Result != null)
-            {
-                model.MedAuditId = MedAudit.Result.MedAuditId;
-                model.ActionRecommended = MedAudit.Result.ActionRecommended;
-                model.ActionTaken = MedAudit.Result.ActionTaken;
-                model.Attachment = MedAudit.Result.Attachment;
-                model.Date = MedAudit.Result.Date;
-                model.NextDueDate = MedAudit.Result.NextDueDate;
-                model.Deadline = MedAudit.Result.Deadline;
-                model.EvidenceOfActionTaken = MedAudit.Result.EvidenceOfActionTaken;
-                model.LessonLearntAndShared = MedAudit.Result.LessonLearntAndShared;
-                model.LogURL = MedAudit.Result.LogURL;
-                model.NameOfAuditor = MedAudit.Result.NameOfAuditor;
-                model.Observations = MedAudit.Result.Observations;
-                model.OfficerToTakeAction = MedAudit.Result.OfficerToTakeAction;
-                model.Remarks = MedAudit.Result.Remarks;
-                model.RepeatOfIncident = MedAudit.Result.RepeatOfIncident;
-                model.RotCause = MedAudit.Result.RotCause;
-                model.Status = MedAudit.Result.Status;
-                model.ThinkingServiceUsers = MedAudit.Result.ThinkingServiceUsers;
-                model.GapsInAdmistration = MedAudit.Result.GapsInAdmistration;
-                model.RightsOfMedication = MedAudit.Result.RightsOfMedication;
-                model.MarChartReview = MedAudit.Result.MarChartReview;
-                model.MedicationConcern = MedAudit.Result.MedicationConcern;
-                model.HardCopyReview = MedAudit.Result.HardCopyReview;
-                model.MedicationSupplyEfficiency = MedAudit.Result.MedicationSupplyEfficiency;
-                model.MedicationInfoUploadEefficiency = MedAudit.Result.MedicationInfoUploadEefficiency;
-                model.ActionName = "Update";  
-            }
             return View(model);
 
+        }
+        public async Task<IActionResult> Edit(int MedAuditId)
+        {
+            var MedAudit = _clientMedAuditService.Get(MedAuditId);
+            List<GetStaffs> staffNames = await _staffService.GetStaffs();
+            ViewBag.GetStaffs = staffNames;
+            var putEntity = new CreateClientMedAudit
+            {
+                ClientId = MedAudit.Result.ClientId,
+                ActionRecommended = MedAudit.Result.ActionRecommended,
+                ActionTaken = MedAudit.Result.ActionTaken,
+                Attachment = MedAudit.Result.Attachment,
+                Date = MedAudit.Result.Date,
+                NextDueDate = MedAudit.Result.NextDueDate,
+                Deadline = MedAudit.Result.Deadline,
+                EvidenceOfActionTaken = MedAudit.Result.EvidenceOfActionTaken,
+                LessonLearntAndShared = MedAudit.Result.LessonLearntAndShared,
+                LogURL = MedAudit.Result.LogURL,
+                NameOfAuditor = MedAudit.Result.NameOfAuditor,
+                Observations = MedAudit.Result.Observations,
+                OfficerToTakeAction = MedAudit.Result.OfficerToTakeAction,
+                Remarks = MedAudit.Result.Remarks,
+                RepeatOfIncident = MedAudit.Result.RepeatOfIncident,
+                RotCause = MedAudit.Result.RotCause,
+                Status = MedAudit.Result.Status,
+                ThinkingServiceUsers = MedAudit.Result.ThinkingServiceUsers,
+                GapsInAdmistration = MedAudit.Result.GapsInAdmistration,
+                RightsOfMedication = MedAudit.Result.RightsOfMedication,
+                MarChartReview = MedAudit.Result.MarChartReview,
+                MedicationConcern = MedAudit.Result.MedicationConcern,
+                HardCopyReview = MedAudit.Result.HardCopyReview,
+                MedicationSupplyEfficiency = MedAudit.Result.MedicationSupplyEfficiency,
+                MedicationInfoUploadEefficiency = MedAudit.Result.MedicationInfoUploadEefficiency,
+            };
+            return View(putEntity);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,28 +104,18 @@ namespace AwesomeCare.Admin.Controllers
                 ViewBag.Staff = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.OfficerToTakeAction);
                 return View(model);
             }
-            var MedAudit_ = await _clientMedAuditService.Get(model.ClientId);
-            if (MedAudit_ == null)
-            {
-                #region Evidence
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_Evidence_", model.ClientId);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
-                model.EvidenceOfActionTaken = path;
-                #endregion
-                #region Attachment
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
-                #endregion
-
-            }
-            else
-            {
-                model.EvidenceOfActionTaken = MedAudit_.EvidenceOfActionTaken;
-                model.Attachment = MedAudit_.Attachment;
-            }
+            #region Evidence
+            string folder = "clientcomplain";
+            string filename = string.Concat(folder, "_Evidence_", model.ClientId);
+            string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+            model.EvidenceOfActionTaken = path;
+            #endregion
+            #region Attachment
+            string folderA = "clientcomplain";
+            string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
+            string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
+            model.Attachment = pathA;
+            #endregion
 
             var postMedAudit = Mapper.Map<PostClientMedAudit>(model);
 
@@ -129,8 +123,57 @@ namespace AwesomeCare.Admin.Controllers
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Log Audit successfully registered" : "An Error Occurred" });
-            return RedirectToAction("Index", new { clientId = model.ClientId });
-            
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(CreateClientMedAudit model)
+        {
+            if (!ModelState.IsValid)
+            {
+                List<GetStaffs> staffNames = await _staffService.GetStaffs();
+                ViewBag.GetStaffs = staffNames;
+                return View(model);
+            }
+            #region Evidence
+            if (model.Evidence != null)
+            {
+                string folder = "clientcomplain";
+                string filename = string.Concat(folder, "_Evidence_", model.ClientId);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                model.EvidenceOfActionTaken = path;
+            }
+            else
+            {
+                model.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+            }
+            if (model.Attach != null)
+            {
+                string folderA = "clientcomplain";
+                string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
+                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
+                model.Attachment = pathA;
+
+            }
+            else
+            {
+                model.Attachment = model.Attachment;
+            }
+            #endregion
+            var putComplain = Mapper.Map<PutClientMedAudit>(model);
+            var entity = await _clientMedAuditService.Put(putComplain);
+            SetOperationStatus(new Models.OperationStatus
+            {
+                IsSuccessful = entity != null,
+                Message = entity != null ? "Successful" : "Operation failed"
+            });
+            if (entity != null)
+            {
+                return RedirectToAction("Reports");
+            }
+            return View(model);
+
         }
     }
 }

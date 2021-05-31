@@ -27,7 +27,7 @@ namespace AwesomeCare.Model.Models
         public int Status { get; set; }
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
-        public bool RepeatOfIncident { get; set; }
+        public int RepeatOfIncident { get; set; }
         public string RotCause { get; set; }
         public string LessonLearntAndShared { get; set; }
         public string LogURL { get; set; }

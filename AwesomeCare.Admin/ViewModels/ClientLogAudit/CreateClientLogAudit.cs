@@ -85,7 +85,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         [MaxLength(255)]
         public string Remarks { get; set; }
         [Required]
-        public bool RepeatOfIncident { get; set; }
+        public int RepeatOfIncident { get; set; }
         [Required]
         [MaxLength(50)]
         public string RotCause { get; set; }

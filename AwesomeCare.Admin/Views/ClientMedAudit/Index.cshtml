@@ -1,7 +1,7 @@
-﻿@using AwesomeCare.Admin.ViewModels.ClientLogAudit;
-@model CreateClientLogAudit
+﻿@using AwesomeCare.Admin.ViewModels.ClientMedAudit;
+@model CreateClientMedAudit
 @{
-    ViewData["Title"] = "Create Client Log Audit";
+    ViewData["Title"] = "Create Client Med Audit";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -19,7 +19,7 @@
                 <form asp-route="ClientLogAudit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <input type="hidden" asp-for="LogAuditId" />
+                            <input type="hidden" asp-for="MedAuditId" />
                             <input type="hidden" asp-for="ClientId" />
                             <div class="row">
 
@@ -90,63 +90,52 @@
                                     <span asp-validation-for="LogURL" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                             <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Is care given is inline with care plan expectations</label>
-                                    <textarea type="text" asp-for="IsCareExpected" class="form-control"></textarea>
-                                    <span asp-validation-for="IsCareExpected" class="text-danger"></span>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Gaps In Admistration</label>
+                                    <baserecord asp-key="Gaps_In_Admistration" asp-for="GapsInAdmistration" asp-items="null" />
+                                    <span asp-validation-for="GapsInAdmistration" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Mar Chart Review</label>
+                                    <baserecord asp-key="Mar_Chart_Review" asp-for="MarChartReview" asp-items="null" />
+                                    <span asp-validation-for="MarChartReview" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Medication Concern</label>
+                                    <baserecord asp-key="Medication_Concern" asp-for="MedicationConcern" asp-items="null" />
+                                    <span asp-validation-for="MedicationConcern" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Hard Copy Review</label>
+                                    <baserecord asp-key="Hard_Copy_Review" asp-for="HardCopyReview" asp-items="null" />
+                                    <span asp-validation-for="HardCopyReview" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Medication Supply Efficiency</label>
+                                    <baserecord asp-key="Medication_Supply_Efficiency" asp-for="MedicationSupplyEfficiency" asp-items="null" />
+                                    <span asp-validation-for="MedicationSupplyEfficiency" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Medication Info Upload Eefficiency</label>
+                                    <baserecord asp-key="Medication_Info_Upload_Eefficiency" asp-for="MedicationInfoUploadEefficiency" asp-items="null" />
+                                    <span asp-validation-for="MedicationInfoUploadEefficiency" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">If care given is difference from expected, please give staff name and date of incident</label>
-                                    <textarea type="text" asp-for="IsCareDifference" class="form-control"></textarea>
-                                    <span asp-validation-for="IsCareDifference" class="text-danger"></span>
+                                    <label class="control-label">Rights Of Medication</label>
+                                    <textarea type="text" asp-for="RightsOfMedication" class="form-control"></textarea>
+                                    <span asp-validation-for="RightsOfMedication" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Are documentation properly done including use of appropriate pen and clarity</label>
-                                    <textarea type="text" asp-for="ProperDocumentation" class="form-control"></textarea>
-                                    <span asp-validation-for="ProperDocumentation" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">If no to proper documentation and use of pen, please give name of staff and date of incidents</label>
-                                    <textarea type="text" asp-for="ImproperDocumentation" class="form-control"></textarea>
-                                    <span asp-validation-for="ImproperDocumentation" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">How well are communication from outgoing staff to incoming staff picked from the note</label>
-                                    <textarea type="text" asp-for="Communication" class="form-control"></textarea>
-                                    <span asp-validation-for="Communication" class="text-danger"></span>
-                                </div>
-                            </div>
-
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Do you think service users needs are being met?</label>
                                     <textarea type="text" asp-for="ThinkingServiceUsers" class="form-control"></textarea>
                                     <span asp-validation-for="ThinkingServiceUsers" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Do you think staff understand Safety, Caring, Responsiveness, Dignity and Respect?</label>
-                                    <textarea type="text" asp-for="ThinkingStaff" class="form-control"></textarea>
-                                    <span asp-validation-for="ThinkingStaff" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Do you think this staff should be stopped immidiately</label>
-                                    <textarea type="text" asp-for="ThinkingStaffStop" class="form-control"></textarea>
-                                    <span asp-validation-for="ThinkingStaffStop" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -163,28 +152,26 @@
                                     <span asp-validation-for="LessonLearntAndShared" class="text-danger"></span>
                                 </div>
                             </div>
-
-
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>Evidence of Action Taken<small></small></h2>
-                                    </div>
-                                    <div class="body">
-                                        <input type="file" asp-for="Evidence" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                        <span asp-validation-for="Evidence" class="text-danger"></span>
-                                    </div>
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Evidence of Action Taken<small></small></h2>
                                 </div>
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>Attachment Image<small></small></h2>
-                                    </div>
-                                    <div class="body">
-                                        <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                        <span asp-validation-for="Attach" class="text-danger"></span>
-                                    </div>
+                                <div class="body">
+                                    <input type="file" asp-for="Evidence" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Evidence" class="text-danger"></span>
                                 </div>
+                            </div>
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Attachment Image<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Attach" class="text-danger"></span>
+                                </div>
+                            </div>
 
 
                             <div class="row">

@@ -69,16 +69,13 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Is there a Repeat of Incident</label>
-                                    <select asp-for="RepeatOfIncident" class="form-control">
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
+                                    <baserecord asp-key="Repeat_Of_Incident" asp-for="RepeatOfIncident" asp-items="null" />
                                     <span asp-validation-for="RepeatOfIncident" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Remark/Closing Comment if Any</label>
+                                    <label class="control-label">Remark/Closing Comment</label>
                                     <input type="text" asp-for="Remarks" class="form-control" />
                                     <span asp-validation-for="Remarks" class="text-danger"></span>
                                 </div>

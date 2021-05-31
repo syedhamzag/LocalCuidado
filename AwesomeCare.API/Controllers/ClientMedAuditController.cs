@@ -51,30 +51,18 @@ namespace AwesomeCare.API.Controllers
         /// </summary>
         /// <param name="postClientMedAudit"></param>
         /// <returns></returns>
-        [HttpPost("ClientMedAudit")]
-        [ProducesResponseType(type: typeof(GetClientMedAudit), statusCode: StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> PostClientMedAuditRegister([FromBody] PostClientMedAudit postClientMedAudit)
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Create([FromBody] PostClientMedAudit postClientMedAudit)
         {
             if (postClientMedAudit == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             var ClientMedAudit = Mapper.Map<ClientMedAudit>(postClientMedAudit);
-            var newClientMedAudit = new ClientMedAudit();
-            if (ClientMedAudit.MedAuditId > 0)
-            {
-                newClientMedAudit = await _clientMedAuditRepository.UpdateEntity(ClientMedAudit);
-            }
-            else
-            {
-                newClientMedAudit = await _clientMedAuditRepository.InsertEntity(ClientMedAudit);
-            }
-
+            var newClientMedAudit = await _clientMedAuditRepository.InsertEntity(ClientMedAudit);
             var getClientMedAudit = Mapper.Map<GetClientMedAudit>(newClientMedAudit);
-            return CreatedAtAction("Get", new { ClientMedAuditId = getClientMedAudit.MedAuditId });
+            return Ok(getClientMedAudit);
 
 
         }
@@ -96,58 +84,56 @@ namespace AwesomeCare.API.Controllers
             var putEntity = Mapper.Map(model, entity);
             var updateEntity = await _clientMedAuditRepository.UpdateEntity(putEntity);
             var getEntity = Mapper.Map<GetClientMedAudit>(updateEntity);
-
             return Ok(getEntity);
 
         }
         /// <summary>
         /// Get ClientMedAudit by MedAuditId
         /// </summary>
-        /// <param name="MedAuditId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("/GetClientMedAudit/{id}")]
+        [HttpGet("Get/{id}")]
         [ProducesResponseType(type: typeof(GetClientMedAudit), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int? MedAuditId)
+        public async Task<IActionResult> Get(int? id)
         {
-            if (!MedAuditId.HasValue)
+            if (!id.HasValue)
                 return BadRequest("id Parameter is required");
 
             var getClientMedAudit = await (from c in _clientMedAuditRepository.Table
-                                     where c.MedAuditId == MedAuditId
-                                    select new GetClientMedAudit
-                                    {
-                                        ClientId = c.ClientId,
-                                        ActionRecommended = c.ActionRecommended,
-                                        ActionTaken = c.ActionTaken,
-                                        Attachment = c.Attachment,
-                                        Date = c.Date,
-                                        NextDueDate = c.NextDueDate,
-                                        Deadline = c.Deadline,
-                                        EvidenceOfActionTaken = c.EvidenceOfActionTaken,
-                                        GapsInAdmistration = c.GapsInAdmistration,
-                                        HardCopyReview = c.HardCopyReview,
-                                        LessonLearntAndShared = c.LessonLearntAndShared,
-                                        LogURL = c.LogURL,
-                                        MarChartReview = c.MarChartReview,
-                                        MedicationConcern = c.MedicationConcern,
-                                        MedicationInfoUploadEefficiency = c.MedicationInfoUploadEefficiency,
-                                        MedicationSupplyEfficiency = c.MedicationSupplyEfficiency,
-                                        NameOfAuditor = c.NameOfAuditor,
-                                        Observations = c.Observations,
-                                        OfficerToTakeAction = c.OfficerToTakeAction,
-                                        Remarks = c.Remarks,
-                                        RepeatOfIncident = c.RepeatOfIncident,
-                                        RightsOfMedication = c.RightsOfMedication,
-                                        RotCause = c.RotCause,
-                                        Status = c.Status,
-                                        ThinkingServiceUsers = c.ThinkingServiceUsers,
-                                    }
+                                           where c.MedAuditId == id
+                                           select new GetClientMedAudit
+                                           {
+                                               ClientId = c.ClientId,
+                                               ActionRecommended = c.ActionRecommended,
+                                               ActionTaken = c.ActionTaken,
+                                               Attachment = c.Attachment,
+                                               Date = c.Date,
+                                               NextDueDate = c.NextDueDate,
+                                               Deadline = c.Deadline,
+                                               EvidenceOfActionTaken = c.EvidenceOfActionTaken,
+                                               GapsInAdmistration = c.GapsInAdmistration,
+                                               HardCopyReview = c.HardCopyReview,
+                                               LessonLearntAndShared = c.LessonLearntAndShared,
+                                               LogURL = c.LogURL,
+                                               MarChartReview = c.MarChartReview,
+                                               MedicationConcern = c.MedicationConcern,
+                                               MedicationInfoUploadEefficiency = c.MedicationInfoUploadEefficiency,
+                                               MedicationSupplyEfficiency = c.MedicationSupplyEfficiency,
+                                               NameOfAuditor = c.NameOfAuditor,
+                                               Observations = c.Observations,
+                                               OfficerToTakeAction = c.OfficerToTakeAction,
+                                               Remarks = c.Remarks,
+                                               RepeatOfIncident = c.RepeatOfIncident,
+                                               RightsOfMedication = c.RightsOfMedication,
+                                               RotCause = c.RotCause,
+                                               Status = c.Status,
+                                               ThinkingServiceUsers = c.ThinkingServiceUsers,
+                                           }
                       ).FirstOrDefaultAsync();
             return Ok(getClientMedAudit);
         }
         #endregion
-
     }
 }
