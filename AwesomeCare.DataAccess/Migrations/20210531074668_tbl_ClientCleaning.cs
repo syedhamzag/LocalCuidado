@@ -45,7 +45,7 @@ namespace AwesomeCare.DataAccess.Migrations
                         column: x => x.STAFFId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
                 migrationBuilder.CreateIndex(
                     name: "IX_tbl_ClientCleaning_CleaningId",

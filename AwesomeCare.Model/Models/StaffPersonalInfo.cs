@@ -22,6 +22,8 @@ namespace AwesomeCare.Model.Models
             ClientLogAudit = new HashSet<ClientLogAudit>();
             ClientMedAudit = new HashSet<ClientMedAudit>();
             ClientVoice = new HashSet<ClientVoice>();
+            ClientShopping = new HashSet<ClientShopping>();
+            ClientCleaning = new HashSet<ClientCleaning>();
         }
        
         public int StaffPersonalInfoId { get; set; }
@@ -91,6 +93,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientLogAudit> ClientLogAudit { get; set; }
         public virtual ICollection<ClientMedAudit> ClientMedAudit { get; set; }
         public virtual ICollection<ClientVoice> ClientVoice { get; set; }
+        public virtual ICollection<ClientShopping> ClientShopping { get; set; }
+        public virtual ICollection<ClientCleaning> ClientCleaning { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
