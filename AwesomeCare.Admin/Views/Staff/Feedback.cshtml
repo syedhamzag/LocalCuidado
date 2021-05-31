@@ -1,0 +1,101 @@
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+@model StaffFeedback
+@{
+    ViewData["Title"] = "Client Feedback/Staff Ratings";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Client Feedback/Rating</h2>
+
+            </div>
+            <div class="body">
+
+                <form asp-action="Feedback" method="post">
+                    <input asp-for="StaffPersonalInfoId" type="hidden" />
+                    <div class="row">
+
+
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="ClientId" class="control-label"></label>
+                                <select asp-for="ClientId" class="form-control chosen-select" data-placeholder="Choose a Client..." asp-items="Model.ClientSelectLists">
+                                </select>
+                                <span asp-validation-for="ClientId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Rating" class="control-label"></label>
+                                <baserecord asp-for="Rating" asp-items="Model.RatingSelectList"></baserecord>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="CommentDate" class="control-label"></label>
+                                <input data-provide="datepicker" type="text" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy" asp-for="CommentDate">
+                                <span asp-validation-for="CommentDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Comment" class="control-label"></label>
+                                <textarea class="form-control" asp-for="Comment"></textarea>
+                                <span asp-validation-for="Comment" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <a asp-controller="Staff" asp-action="Index" class="btn btn-default pull-left">Cancel</a>
+                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+
+
+
+                    <div class="table-responsive">
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Staff</th>
+                                    <th>Client</th>
+                                    <th>Feedback/Comment</th>
+                                    <th>Date</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var rating in Model.StaffRatings)
+                                {
+                                    <tr>
+                                        <td>@rating.Staff</td>
+                                        <td>@rating.Client</td>
+                                        <td>@rating.Comment</td>
+                                        <td>@rating.CommentDate.Value.ToString("dd-MMM-yyyy")</td>
+                                        <td>@rating.Rating</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

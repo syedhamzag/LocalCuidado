@@ -1,0 +1,289 @@
+﻿@using AwesomeCare.Admin.ViewModels.Rotering;
+
+@model RoteringViewModel
+@{
+    ViewData["Title"] = "Rotering";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task  table-responsive">
+            <div class="header">
+                <h2>Create Client Rota</h2>
+               
+            </div>
+            <div class="body">
+
+                <form id="roteringForm" asp-action="Index" asp-controller="Rotering" method="post">
+
+                    @Html.HiddenFor(m => m.ClientId)
+                    @Html.HiddenFor(m => m.ActionName)
+                   
+
+                    <table class="table table-hover table-bordered" id="tblRotering">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                @foreach (var weekDay in Model.WeekDays)
+                                {
+                                    <th>
+                                        @weekDay.DayofWeek
+                                        <br />
+                                       
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var rotaType in Model.RotaTypes)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fancy-checkbox">
+                                            @{
+
+                                                <input type="hidden" asp-for="@rotaType.ClientRotaTypeId" />
+                                                var clientRotaType = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId);
+                                                if (clientRotaType != null)
+                                                {
+                                                    //display and for edit
+                                                    <label><input type="checkbox" name="@rotaType.RotaType" checked><span>@rotaType.RotaType</span></label>
+                                                    @Html.Hidden($"{rotaType.RotaType}-ClientRotaId", @clientRotaType.ClientRotaId)
+                                                }
+                                                else
+                                                {
+                                                    //new
+                                                    <label><input type="checkbox" name="@rotaType.RotaType"><span>@rotaType.RotaType</span></label>
+                                                    @Html.Hidden($"{rotaType.RotaType}-ClientRotaId", 0)
+                                                }
+                                            }
+
+                                        </div>
+                                        <div  class="fancy-checkbox">
+                                            
+                                            <label><input type="checkbox" class="selectAll" name="@rotaType.RotaType"><span><small>Repeat</small></span></label>
+
+                                        </div>    
+                                    </td>
+                                    @foreach (var weekDay in Model.WeekDays)
+                                    {
+                                        <td>
+
+                                            @Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
+                                            @{
+                                                var rotaDywk = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == weekDay.RotaDayofWeekId);
+                                                if (rotaDywk != null)
+                                                {
+
+                                                    @Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-DayId", rotaDywk.ClientRotaDaysId)
+                                                    var rotasList = new List<SelectListItem>();
+                                                    foreach (var m in Model.Rotas)
+                                                    {
+                                                        var sl = new SelectListItem(m.Text, m.Value);
+                                                        sl.Selected = sl.Value == rotaDywk.RotaId.ToString();
+                                                        rotasList.Add(sl);
+                                                    }
+
+                                                    var rotaTaskList = new List<SelectListItem>();
+                                                    var rotaDays = rotaDywk.RotaTasks.Where(rd => rd.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
+                                                    foreach (var tk in Model.RotaTasks)
+                                                    {
+                                                        var sl = new SelectListItem(tk.Text, tk.Value);
+                                                        sl.Selected = rotaDays.FirstOrDefault(c => c.RotaTaskId.ToString() == tk.Value) != null;
+                                                        rotaTaskList.Add(sl);
+                                                    }
+
+                                                    <div class="form-group">
+                                                        <label>Rota</label>
+                                                        @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rota", rotasList, "select rota", new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Tasks</label>
+                                                        <br />
+                                                        @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rotaTask", rotaTaskList, new { @multiple = "multiple", @class = "multiselect multiselect-custom taskMultiselect" })
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Start Time</label>
+                                                        <input type="text" value="@rotaDywk.StartTime" name="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Stop Time</label>
+                                                        <input type="text" value="@rotaDywk.StopTime" name="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+
+                                                    @Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-DayId", 0)
+                                                    <div class="form-group">
+                                                        <label>Rota</label>
+                                                        @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rota", Model.Rotas, "select rota", new { @class = "form-control" })
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Tasks</label>
+                                                        <br />
+                                                        @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rotaTask", Model.RotaTasks, new { @multiple = "multiple", @class = "multiselect multiselect-custom taskMultiselect" })
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Start Time</label>
+                                                        <input type="text" name="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Stop Time</label>
+                                                        <input type="text" name="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+
+                                                    </div>
+                                                }
+
+                                            }
+
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(function () {
+            // validation needs name of the element
+            $('.taskMultiselect').multiselect({
+                enableFiltering: true,
+                nonSelectedText: "Select Task",
+                numberDisplayed: 0
+            });
+
+            $(':checkbox[class=selectAll]').change(function () {
+                var rotaType = $(this).attr('name')
+              //  alert(rotaType)
+                if ($(this).is(":checked")) {
+
+                    RepeatRotaDays(rotaType);
+                    RepeatTasks(rotaType);
+                    RepeatStartTime(rotaType);
+                    RepeatStopTime(rotaType);
+                    //SetCheckBox(true);
+
+                } else {
+                    // alert("unckecked");
+                    SetCheckBox(false);
+                }
+            })
+
+            function RepeatTasks(rotaType) {
+                var selectedRotaTask = $('#' + rotaType + '-Monday' + '-rotaTask' + ' option:selected' ).map(function (a, item) { return item.value; });
+
+                var tuesdayRota = $('#' + rotaType + '-Tuesday' + '-rotaTask');
+                var wednesdayRota = $('#' + rotaType + '-Wednesday' + '-rotaTask');
+                var thursdayRota = $('#' + rotaType + '-Thursday' + '-rotaTask');
+                var fridayRota = $('#' + rotaType + '-Friday' + '-rotaTask');
+                var saturdayRota = $('#' + rotaType + '-Saturday' + '-rotaTask');
+                var sundayRota = $('#' + rotaType + '-Sunday' + '-rotaTask');
+                
+                tuesdayRota.multiselect('deselectAll', false)
+                wednesdayRota.multiselect('deselectAll', false)
+                thursdayRota.multiselect('deselectAll', false)
+                fridayRota.multiselect('deselectAll', false)
+                saturdayRota.multiselect('deselectAll', false)
+                sundayRota.multiselect('deselectAll', false)
+
+                $(selectedRotaTask).each(function (index, element) {
+                   // console.log(index + ": " + element);
+                    tuesdayRota.multiselect('select', element);
+                    wednesdayRota.multiselect('select', element);
+                    thursdayRota.multiselect('select', element);
+                    fridayRota.multiselect('select', element);
+                    saturdayRota.multiselect('select', element);
+                    sundayRota.multiselect('select', element);
+                })
+            }
+
+            function RepeatSelection(rotaType){
+                //AM-Monday-rota AM-Monday-rota
+                //AM-Tuesday-rota
+                var dayofWeek = 'Tuesday';
+                var selectedRota = $('#' + rotaType + '-Monday' + '-rota').find(":selected").val();
+                $('#' + rotaType + '-' + dayofWeek + '-rota').val(selectedRota);
+              //  console.log(selectedRota)
+            }
+            function RepeatRotaDays(rotaType) {
+                var selectedRota = $('#' + rotaType + '-Monday' + '-rota').find(":selected").val();
+
+                $('#' + rotaType + '-Tuesday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Wednesday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Thursday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Friday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Saturday' + '-rota').val(selectedRota);
+                $('#' + rotaType + '-Sunday' + '-rota').val(selectedRota);
+            }
+
+            //function RepeatRota(dayofWeek) {
+            //    var amrota = $('#AM-' + dayofWeek + '-rota').find(":selected").val();
+
+            //    $('#tblRotering > tbody  > tr').each(function () {
+
+            //        var rotaPeriod = $(this).children('td:first').text().trim();
+
+            //        $('#' + rotaPeriod + '-' + dayofWeek + '-rota').val(amrota);
+            //    });
+            //}
+
+            function RepeatStartTime(rotaPeriod) {
+                //AM-Monday-StartTime
+                var startTime = $('#' + rotaPeriod + '-Monday' + '-StartTime').val();
+
+                $('#' + rotaPeriod + '-Tuesday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Wednesday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Thursday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Friday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Saturday' + '-StartTime').val(startTime);
+                $('#' + rotaPeriod + '-Sunday' + '-StartTime').val(startTime);
+
+               
+            }
+
+            function RepeatStopTime(rotaPeriod) {
+                //AM-Monday-StopTime
+                var stopTime = $('#' + rotaPeriod + '-Monday' + '-StopTime').val();
+
+                $('#' + rotaPeriod + '-Tuesday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Wednesday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Thursday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Friday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Saturday' + '-StopTime').val(stopTime);
+                $('#' + rotaPeriod + '-Sunday' + '-StopTime').val(stopTime);
+            }
+
+            function SetCheckBox(isChecked) {
+                //
+                $('#tblRotering > tbody  > tr').each(function () {
+
+                    var rotaPeriod = $(this).children('td:first').text().trim();
+                    if (isChecked) {
+                        $('#' + rotaPeriod + '-ClientRotaId').val("1");
+                        $(':checkbox[name=' + rotaPeriod + ']').prop("checked", true);
+                    } else {
+                        $('#' + rotaPeriod + '-ClientRotaId').val("0");
+                        $(':checkbox[name=' + rotaPeriod + ']').prop("checked", false);
+                    }
+
+                });
+            }
+        });
+    </script>
+}

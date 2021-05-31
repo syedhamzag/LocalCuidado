@@ -1,0 +1,184 @@
+﻿@using IdentityServer4.Extensions;;
+@model AwesomeCare.IdentityServer.ViewModels.IdentityServer4ClientViewModel
+
+@{
+    ViewData["Title"] = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (User.IsAuthenticated() && User.IsInRole("SuperAdmin"))
+{
+    <h2>Registration</h2>
+
+    <h4>IdentityServer Client</h4>
+
+    <hr />
+
+    <form asp-action="Registration">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label asp-for="GrantType" class="control-label"></label>
+                @*<input asp-for="ClientType" class="form-control" readonly />*@
+                <select asp-for="GrantType" class="form-control">
+                    @foreach (var item in Model.GrantTypes)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="GrantType" class="text-danger"></span>
+            </div>
+            <div class="form-group  col-sm-6">
+                <label asp-for="DisplayName" class="control-label"></label>
+                <input asp-for="DisplayName" class="form-control" />
+                <span asp-validation-for="DisplayName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label asp-for="ClientId" class="control-label"></label>
+                <input asp-for="ClientId" class="form-control" readonly />
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+            <div class="form-group  col-sm-6">
+                <label asp-for="SharedSecret" class="control-label"></label>
+                <input asp-for="SharedSecret" class="form-control" readonly />
+                <span asp-validation-for="SharedSecret" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label asp-for="Url" class="control-label"></label>
+                <input asp-for="Url" class="form-control" />
+                <span asp-validation-for="Url" class="text-danger"></span>
+            </div>
+            <div class="form-group  col-sm-6">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label asp-for="CallbackPath" class="control-label"></label>
+                <input asp-for="CallbackPath" class="form-control" />
+                <span asp-validation-for="CallbackPath" class="text-danger"></span>
+            </div>
+            <div class="form-group col-sm-6">
+                <label asp-for="PostlogoutUrl" class="control-label"></label>
+                <input asp-for="PostlogoutUrl" class="form-control" />
+                <span asp-validation-for="PostlogoutUrl" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label class="control-label">Identity Resources</label>
+                <select asp-for="AllowedScopes" class="form-control multiselect">
+                    @foreach (var item in Model.IdentityResourceListItems)
+                    {
+                        <option value="@item.Value">@item.Value (@item.Text)</option>
+                    }
+                </select>
+                <span asp-validation-for="AllowedScopes" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label class="control-label">Protected Resources</label>
+                <select asp-for="AllowedScopes" class="form-control multiselect">
+                    @foreach (var item in Model.ProtectedResourcesListItems)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <span asp-validation-for="AllowedScopes" class="text-danger"></span>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label class="control-label" asp-for="CorsOrigins"></label>
+                <input asp-for="CorsOrigins" class="form-control" />
+
+            </div>
+
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsPublicClient" /> @Html.DisplayNameFor(model => model.IsPublicClient)
+                    </label>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="RequirePkce" /> @Html.DisplayNameFor(model => model.RequirePkce)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="AllowOfflineAccess" /> @Html.DisplayNameFor(model => model.AllowOfflineAccess)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="RequireConsent" /> @Html.DisplayNameFor(model => model.RequireConsent)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="AllowAccessTokensViaBrowser" /> @Html.DisplayNameFor(model => model.AllowAccessTokensViaBrowser)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+
+        </div>
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </form>
+
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+@section scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.multiselect').multiselect();
+
+        });
+    </script>
+
+
+}

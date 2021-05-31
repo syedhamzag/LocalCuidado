@@ -1,0 +1,98 @@
+﻿@using   AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
+@model GetStaffCommunication
+
+@{
+    ViewData["Title"] = "Details Communication";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Communication Details</h2>
+                
+            </div>
+            <div class="body">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="ValueDate" class="control-label"></label>
+                            <input type="text"  asp-for="ValueDate" class="form-control" readonly>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PersonInvolved" class="control-label"></label>
+                            <input type="text" asp-for="PersonInvolved" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Concern" class="control-label"></label>
+                            <textarea class="form-control" asp-for="Concern" readonly></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="PersonResponsibleForAction" class="control-label"></label>
+                            <input type="text" asp-for="PersonResponsibleForAction" class="form-control" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="ExpectedAction" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="ExpectedAction" readonly>
+                           
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Telephone" class="control-label"></label>
+                            <input class="form-control" asp-for="Telephone" readonly/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="ActionTaken" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="ActionTaken" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Attachment" class="control-label"></label>
+                            <br />
+                            @if (!string.IsNullOrEmpty(Model.Attachment))
+                            {
+                                <a asp-action="DownloadFile" asp-route-file="@Model.Attachment">Download</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="CommunicationClass" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="CommunicationClass" readonly />
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Status" class="control-label"></label>
+                            <input type="text" class="form-control" asp-for="Status" readonly />
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <br>
+
+
+                <a href="/Staff/Communication" class="btn btn-default float-left">Cancel</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+

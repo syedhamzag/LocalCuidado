@@ -1,0 +1,43 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
+
+@model List<GetClientInvolvingPartyForEdit>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h5>Involving Parties</h5>
+@*<input type="hidden" asp-for="@Model.ClientId" />
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>NAME</th>
+            <th>ADDRESS</th>
+            <th>EMAIL</th>
+            <th>TELEPHONE</th>
+            <th>RELATIONSHIP</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int r = 0; r < Model.InvolvingParties.Count; r++)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" asp-for="@Model.InvolvingParties[r].IsSelected" />
+                </td>
+                <td>
+                    @Model.InvolvingParties[r].ItemName
+                    <input type="hidden" asp-for="@Model.InvolvingParties[r].ClientInvolvingPartyItemId" />
+                    <input type="hidden" asp-for="@Model.InvolvingParties[r].ItemName" />
+
+                </td>
+                <td><input asp-for="@Model.InvolvingParties[r].Name" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model.InvolvingParties[r].Address" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model.InvolvingParties[r].Email" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model.InvolvingParties[r].Telephone" type="text" class="form-control" /></td>
+                <td><input asp-for="@Model.InvolvingParties[r].Relationship" type="text" class="form-control" /></td>
+            </tr>
+        }
+       
+    </tbody>
+</table>*@

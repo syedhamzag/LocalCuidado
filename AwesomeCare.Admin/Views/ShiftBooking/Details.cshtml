@@ -1,0 +1,84 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.ShiftBooking;
+@model GetShiftBookingDetails
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Shift Booking Details</h2>
+
+            </div>
+            <div class="body">
+
+                <div class="row">
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="ShiftDate"></label>
+                        <input type="text" asp-for="ShiftDate" class="form-control" readonly>
+
+                    </div>
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="Rota"></label>
+                        <input type="text" class="form-control" asp-for="RotaName" readonly>
+
+                    </div>
+
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="NumberOfStaff"></label>
+                        <input type="text" class="form-control" asp-for="NumberOfStaff" readonly>
+
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="StartTime"></label>
+                        <input type="text" class="form-control" asp-for="StartTime" readonly>
+
+                    </div>
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="StopTime"></label>
+                        <input type="text" class="form-control" asp-for="StopTime" readonly>
+
+                    </div>
+
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="Team"></label>
+                        <input type="text" class="form-control" asp-for="TeamStaff" readonly>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="DriverRequired"></label>
+                        <input type="text" class="form-control" asp-for="DriverRequired" readonly>
+                    </div>
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="PublishTo"></label>
+                        <input type="text" class="form-control" asp-for="PublishToWorkTeam" readonly>
+
+                    </div>
+
+                    <div class="form-group  col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="Remark"></label>
+                        <textarea type="text" class="form-control" asp-for="Remark" readonly></textarea>
+
+                    </div>
+                </div>
+
+
+                <a asp-action="Index" asp-controller="ShiftBooking" class="btn btn-primary">Cancel</a>
+                @if (int.Parse(Model.ShiftDate.Split('/')[0]) >= DateTime.Now.Month)
+                {
+                    <a asp-action="DeleteShift" asp-controller="ShiftBooking" asp-route-shiftId="@Model.ShiftBookingId" class="btn btn-danger float-right">Delete</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

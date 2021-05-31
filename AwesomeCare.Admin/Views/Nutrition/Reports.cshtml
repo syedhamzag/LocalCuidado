@@ -1,0 +1,97 @@
+﻿@using AwesomeCare.Admin.ViewModels.Nutrition;
+
+@model NutritionViewModel
+@{
+    ViewData["Title"] = "Nutrition";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Live Rota</h2>
+
+            </div>
+            <div class="body">
+                @if (Model.NutritionId > 0)
+                {
+                    <table class="table table-condensed table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>
+                                    PLANNER	CONTACT	Start Date	EXPIRE DATE
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var meal in Model.ClientMealDays)
+                            {
+                            <tr>
+                                <td>@meal.HOWTOPREPARE</td>
+                                <td>@meal.MEALDETAILS</td>
+                                <td>@meal.SEEVIDEO</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <table class="table table-condensed table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SHOPPING STAFF</th>                             				
+                                <th>DAY OF SHOPPING</th>
+                                <th>LOCATION OF SHOPPING</th>
+                                <th>Means of Purchase</th>
+                                <th>EXPIRE DATE</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var meal in Model.ClientShopping)
+                            {
+                            <tr>
+                                <td>@meal.STAFFId</td>
+                                <td>@meal.DAYOFSHOPPING</td>
+                                <td>@meal.LocationOfPurchase</td>
+                                <td>@meal.MeansOfPurchase</td>
+                                <td>@meal.DATETO</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <table class="table table-condensed table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>CLEANING STAFF</th>
+                                <th>DAY OF CLEANING</th>
+                                <th>LOCATION OF ITEM</th>
+                                <th>DESCRIPTION OF ITEM</th>
+                                <th>EXPIRE DATE</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var clean in Model.ClientCleaning)
+                            {
+                            <tr>
+                                <td>@clean.STAFFId</td>
+                                <td>@clean.DAYOFCLEANING</td>
+                                <td>@clean.LocationOfItem</td>
+                                <td>@clean.DescOfItem</td>
+                                <td>@clean.DATETO</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                }
+                else
+                {
+                    <p class="text-center">No Nutrition found</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

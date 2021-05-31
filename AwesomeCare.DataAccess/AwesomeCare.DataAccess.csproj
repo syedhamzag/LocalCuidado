@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Database\ApplicationDbContext.cs" />
+    <Compile Remove="Database\IDbContext.cs" />
+    <Compile Remove="Migrations\20190420031348_Initials.cs" />
+    <Compile Remove="Migrations\20190420033217_Initials.cs" />
+    <Compile Remove="Migrations\20190420033724_Initials.cs" />
+    <Compile Remove="Migrations\20190420035754_CompanyContactTable.cs" />
+    <Compile Remove="Migrations\20190607115506_CompanyContactRelationship.cs" />
+    <Compile Remove="Migrations\20190607115506_CompanyContactRelationship.Designer.cs" />
+    <Compile Remove="Migrations\20190814080418_BaseRecordTable.cs" />
+    <Compile Remove="Migrations\20190814080418_BaseRecordTable.Designer.cs" />
+    <Compile Remove="Migrations\20191013142935_tbl_ClientInvolvingPartyItem.cs" />
+    <Compile Remove="Migrations\20191013142935_tbl_ClientInvolvingPartyItem.Designer.cs" />
+    <Compile Remove="Migrations\20191124191441_tbl_RotaTask.cs" />
+    <Compile Remove="Migrations\20191124191441_tbl_RotaTask.Designer.cs" />
+    <Compile Remove="Migrations\20200314114347_tbl_StaffWorkTeam.cs" />
+    <Compile Remove="Migrations\20200314114347_tbl_StaffWorkTeam.Designer.cs" />
+    <Compile Remove="Migrations\20200409203145_tbl_ClientMedication_Days_Periods.cs" />
+    <Compile Remove="Migrations\20200409203145_tbl_ClientMedication_Days_Periods.Designer.cs" />
+    <Compile Remove="Migrations\20200420132526_tbl_StaffRota_tbl_StaffRotaPeriod.cs" />
+    <Compile Remove="Migrations\20200420132526_tbl_StaffRota_tbl_StaffRotaPeriod.Designer.cs" />
+    <Compile Remove="Migrations\20200424111749_tbl_StaffRotaPartner.cs" />
+    <Compile Remove="Migrations\20200424111749_tbl_StaffRotaPartner.Designer.cs" />
+    <Compile Remove="Migrations\20200424154356_tbl_StaffRota_ReferenceNumber.cs" />
+    <Compile Remove="Migrations\20200424154356_tbl_StaffRota_ReferenceNumber.Designer.cs" />
+    <Compile Remove="Migrations\20200424225557_tbl_StaffRotaPeriod_StaffRotaId_Fk.cs" />
+    <Compile Remove="Migrations\20200424225557_tbl_StaffRotaPeriod_StaffRotaId_Fk.Designer.cs" />
+    <Compile Remove="Migrations\20200513114202_tbl_StaffRotaPeriod_Edit.cs" />
+    <Compile Remove="Migrations\20200513114202_tbl_StaffRotaPeriod_Edit.Designer.cs" />
+    <Compile Remove="Migrations\20200704224420_tbl_StaffIncidentReporting_LoggedById_LoggedDate.cs" />
+    <Compile Remove="Migrations\20200704224420_tbl_StaffIncidentReporting_LoggedById_LoggedDate.Designer.cs" />
+    <Compile Remove="Migrations\20200707003111_tbl_ClientServiceDetail_DecimalColumnUpdate.cs" />
+    <Compile Remove="Migrations\20200707003111_tbl_ClientServiceDetail_DecimalColumnUpdate.Designer.cs" />
+    <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
+    <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AwesomeCare.Model\AwesomeCare.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\ApplicationDb\" />
+  </ItemGroup>
+
+</Project>

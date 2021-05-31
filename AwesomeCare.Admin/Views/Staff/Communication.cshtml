@@ -1,0 +1,74 @@
+﻿@using  AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
+@model List<GetStaffCommunication>
+@{
+    ViewData["Title"] = "Staff Communication";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Communication</h2>
+                <ul class="header-dropdown">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a asp-action="NewCommunication">New</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="body">
+                <h4>Communication</h4>
+
+                <table class="table m-b-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Concerns</th>
+                            <th>Class</th>
+                            <th>Person Involved</th>
+                            <th>Person Responsible for Action</th>
+                            <th>Expected Action</th>
+                            <th>Action Taken</th>
+                            <th>Status</th>
+                            <th>Telephone</th>
+                            <th>Attachment</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stc in Model.Select((d, i) => new { Data = d, Index = i +1 }))
+                        {
+                        <tr>
+                            <td>@stc.Index</td>
+                            <td>@stc.Data.ValueDate.ToString("MMM dd yyyy")</td>
+                            <td>@stc.Data.Concern</td>
+                            <td>@stc.Data.CommunicationClass</td>
+                            <td>@stc.Data.PersonInvolved</td>
+                            <td>@stc.Data.PersonResponsibleForAction</td>
+                            <td>@stc.Data.ExpectedAction</td>
+                            <td>@stc.Data.ActionTaken</td>
+                            <td>@stc.Data.Status</td>
+                            <td>@stc.Data.Telephone</td>
+                            <td>@stc.Data.Attachment</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a asp-route="CommunicationDetails" asp-route-id="@stc.Data.StaffCommunicationId">Details</a>
+                                    </div>
+                                </div>
+                              
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,59 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+@model List<GetBaseRecordWithItems>
+
+@{
+    ViewData["Title"] = "Base Record";
+}
+
+<h2>Base Record</h2>
+
+
+<div class="row clearfix">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="header">
+                <h2>Base Record Items</h2>
+            </div>
+            <div class="body">
+                <div class="accordion" id="accordion">
+
+                    @foreach (var baseRecord in Model)
+                    {
+                        <div>
+
+                            <div class="card-header" id="@baseRecord.KeyName">
+                                <h5 class="mb-0 row">
+                                    <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#@baseRecord.BaseRecordId" aria-expanded="false" aria-controls="@baseRecord.BaseRecordId">
+                                        @baseRecord.Description <small>(Key: @baseRecord.KeyName)</small>
+                                    </button>
+                                    <a asp-action="AddBaseRecordItem" asp-controller="Admin" asp-route-baseRecord="@baseRecord.KeyName" asp-route-baseRecordId="@baseRecord.BaseRecordId" class="col-sm-offset-1 col-sm-1" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+
+                                </h5>
+                            </div>
+                            <div id="@baseRecord.BaseRecordId" class="collapse" aria-labelledby="@baseRecord.KeyName" data-parent="#accordion">
+                                <div class="card-body">
+                                    <table class="table table-condensed table-borderless table-hover">
+                                        @foreach (var item in baseRecord.BaseRecordItems)
+                                        {
+                                            //BaseRecord Content
+                                            <tr>
+                                                <td> @item.ValueName</td>
+                                                <td>   <a asp-controller="Admin" asp-action="EditBaseRecordItem" asp-route-baseRecordItemId="@item.BaseRecordItemId"> <i class="icon-pencil js-sweetalert" /></a></td>
+                                            </tr>
+
+                                        }
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,57 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+@model GetBaseRecordItem
+@{
+    ViewData["Title"] = "Edit Base Record Item";
+}
+
+<h2>Edit Base Record Item</h2>
+<form asp-action="EditBaseRecordItem" method="post">
+    <div class="row clearfix">
+        <div class="col-sm-12 col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h2>BaseRecord Item</h2>
+                </div>
+                <div class="body">
+
+                    <div class="col-sm-12 input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">@Model.KeyName</span>
+                        </div>
+                        <input type="text" asp-for="ValueName" value="@Model.ValueName" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                        <input type="hidden" asp-for="BaseRecordItemId" value="@Model.BaseRecordItemId">
+                        <input type="hidden" asp-for="BaseRecordId" value="@Model.BaseRecordId">
+                        <input type="hidden" asp-for="Deleted" value="@Model.Deleted">
+                        <input type="hidden" asp-for="KeyName" value="@Model.KeyName">
+
+
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        <label class="control-inline fancy-checkbox">
+                            <input type="checkbox" asp-for="HasGoogleForm">
+                            <span>Has Google Form?</span>
+                        </label>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="text-input1">Add Form Link</label>
+                        <input type="text"  class="form-control" asp-for="AddLink">
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        <label for="text-input1">View Response Link</label>
+                        <input type="text"  class="form-control" asp-for="ViewLink">
+                    </div>
+
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary ">Submit</button>
+                        <a class="btn btn-outline-secondary" asp-controller="Admin" asp-action="BaseRecord">Cancel</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+

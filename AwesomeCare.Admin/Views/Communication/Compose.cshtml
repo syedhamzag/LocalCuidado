@@ -1,0 +1,104 @@
+﻿@using AwesomeCare.Admin.ViewModels.Communication;
+@model ComposeMessage
+@{
+    ViewData["Title"] = "Communication - Compose Message";
+}
+
+@section VendorStyleSheets{
+
+    <link href="/assets/vendor/summernote/dist/summernote.css" rel="stylesheet" />
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Compose Message</h2>
+
+            </div>
+            <div class="body">
+                @*<form>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="To" class="control-label"></label>
+                                <select asp-for="To" class="form-control chosen-select" data-placeholder="Choose a Staff..." asp-items="Model.Staffs">
+                                </select>
+                                <span asp-validation-for="To" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Subject" class="control-label"></label>
+                                <input class="form-control" asp-for="Subject" />
+                                <span asp-validation-for="Subject" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Message" class="control-label"></label>
+                                <textarea class="form-control" asp-for="Message"></textarea>
+                                <span asp-validation-for="Message" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <a asp-controller="Communication" asp-action="Index" class="btn btn-default pull-left">Cancel</a>
+                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                        </div>
+                    </div>
+
+
+                </form>*@
+
+
+                <form asp-action="Compose" method="post">
+                    <div class="form-group">
+                        <label asp-for="To" class="control-label"></label>
+                        <select asp-for="To" class="form-control chosen-select" data-placeholder="Choose a Staff..." asp-items="Model.Staffs">
+                        </select>
+                        <span asp-validation-for="To" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Subject" class="control-label"></label>
+                        <input class="form-control" asp-for="Subject" />
+                        <span asp-validation-for="Subject" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                            <input type="text" class="form-control" placeholder="CC">
+                        </div>*@
+
+                    <hr>
+                    <div class="form-group">
+                        <label asp-for="Message" class="control-label"></label>
+                        <textarea class="form-control summernote" asp-for="Message"></textarea>
+                        <span asp-validation-for="Message" class="text-danger"></span>
+                    </div>
+                    @*<div class="summernote">
+                            Hello there,
+                            <br />
+                            <p>The toolbar can be customized and it also supports various callbacks such as <code>oninit</code>, <code>onfocus</code>, <code>onpaste</code> and many more.</p>
+                            <p>Please try <b>paste some texts</b> here</p>
+                        </div>*@
+                    <div class="m-t-30">
+                        <button type="submit" class="btn btn-success">Send Message</button>
+
+                        <a asp-controller="Communication" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section VendorScripts{
+
+    <script src="/assets/vendor/summernote/dist/summernote.js"></script>
+}

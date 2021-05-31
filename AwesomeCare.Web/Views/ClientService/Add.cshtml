@@ -1,0 +1,142 @@
+﻿@using AwesomeCare.Web.ViewModels.ClientService;
+@model PostClientServiceViewModel
+@{
+    ViewData["Title"] = "Add Client Service";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Add Client Service</h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="Add" method="post" enctype="multipart/form-data">
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label>Client <span class="text-danger">*</span></label>
+                            <select asp-for="ClientId" class="form-control chosen-select" data-placeholder="Choose a Client..." asp-items="@Model.Clients"></select>
+                            <span asp-validation-for="ClientId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Receipts">Receipts<span><small>(multiple, formats are png, jpg, jpeg)</small></span></label>
+                            <input type="file" asp-for="Receipts" class="form-control" multiple>
+                            <span asp-validation-for="Receipts" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="AmountGiven">Amount Given <span class="text-danger">*</span></label>
+                            <input type="number" step="1" asp-for="AmountGiven" class="form-control">
+                            <span asp-validation-for="AmountGiven" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="AmountReturned">Amount Returned <span class="text-danger">*</span></label>
+                            <input type="number" step="1" asp-for="AmountReturned" class="form-control">
+                            <span asp-validation-for="AmountReturned" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12 table-responsive">
+                            <h5>Items</h5>
+
+                            <table class="table tblItems">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Rate</th>
+                                        <th>Quantity</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @for (int i = 0; i < Model.ClientServiceDetailItems.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="text" class="form-control" asp-for="@Model.ClientServiceDetailItems[i].ItemName" />
+                                                <span asp-validation-for="@Model.ClientServiceDetailItems[i].ItemName" class="text-danger"></span>
+                                            </td>
+                                            <td>
+                                                <input type="number" step="1" class="form-control rate" asp-for="@Model.ClientServiceDetailItems[i].Rate" />
+                                                <span asp-validation-for="@Model.ClientServiceDetailItems[i].Rate" class="text-danger"></span>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control qty" asp-for="@Model.ClientServiceDetailItems[i].Quantity" />
+                                                <span asp-validation-for="@Model.ClientServiceDetailItems[i].Quantity" class="text-danger"></span>
+                                            </td>
+                                            <td>
+                                                <input type="number" step="1" class="form-control" asp-for="@Model.ClientServiceDetailItems[i].Amount" />
+                                                <span asp-validation-for="@Model.ClientServiceDetailItems[i].Amount" class="text-danger"></span>
+                                            </td>
+
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                            <a class="col-sm-offset-1 col-sm-1 text-success addItem pull-right" title="Add"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a>
+                            <br />
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <a asp-controller="ClientService" class="btn btn-default pull-left" asp-action="Index">Cancel</a>
+                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+   
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.addItem').click(function () {
+                var itemTable = $('table.tblItems tbody');
+                var rowKount = itemTable.find('tr').length;
+                var itemname = '<input name="ClientServiceDetailItems[' + rowKount + '].ItemName" class="form-control" type="text"/>';
+                var rate = '<input name="ClientServiceDetailItems[' + rowKount + '].Rate" class="form-control" type="number" step="1"/>';
+                var qty = '<input name="ClientServiceDetailItems[' + rowKount + '].Quantity" class="form-control" type="number"/>';
+                var amt = '<input name="ClientServiceDetailItems[' + rowKount + '].Amount" class="form-control" type="number" step="1"/>';
+                
+                itemTable.append(' <tr><td>' + itemname + '</td><td>' + rate + '</td><td>' + qty + '</td><td>' + amt + '</td></tr>')
+
+
+            })
+
+            $('td:input.rate').on("keyup", function () {
+              //  alert($(this).val())
+            })
+            $('td:input.qty').on("keyup", function () {
+              //  alert($(this).val())
+            })
+
+            $('a.removeEducation').on('click', function () {
+                console.log(this)
+                $(this).parent('td').parent('tr').remove();
+            })
+
+        })
+    </script>
+}

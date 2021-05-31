@@ -1,0 +1,37 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
+@model PostMedicationManufacturer
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+            <div class="card planned_task">
+                <div class="header">
+                    <h2>Create Medication Manufacturer</h2>
+
+                </div>
+                <div class="body">
+
+                    <form asp-action="Create" method="post">
+                        <div class="row">
+
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label asp-for="Manufacturer"></label>
+                                <input type="text" asp-for="Manufacturer" class="form-control">
+                                <span asp-validation-for="Manufacturer" class="text-danger"></span>
+                            </div>
+
+                        </div>
+
+                        
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a asp-action="Index" asp-controller="MedicationManufacturer" class="btn btn-primary pull-right">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+

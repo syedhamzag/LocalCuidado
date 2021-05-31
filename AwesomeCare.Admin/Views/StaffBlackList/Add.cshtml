@@ -1,0 +1,61 @@
+﻿@model AwesomeCare.Admin.ViewModels.BlackList.CreateStaffBlackList
+
+@{
+    ViewData["Title"] = "BlackList Staff";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>BlackList Staff</h2>
+
+            </div>
+            <div class="body">
+                <form asp-action="Add" method="post">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="StaffPersonalInfoId" class="control-label"></label>
+                                <select asp-for="StaffPersonalInfoId" class="form-control chosen-select" data-placeholder="Choose a Client..." asp-items="Model.Staffs">
+                                </select>
+                                <span asp-validation-for="StaffPersonalInfoId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="ClientId" class="control-label"></label>
+                                <select asp-for="ClientId" class="form-control chosen-select" data-placeholder="Choose a Client..." asp-items="Model.Clients">
+                                </select>
+                                <span asp-validation-for="ClientId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <label asp-for="Comment" class="control-label"></label>
+                                <textarea class="form-control" asp-for="Comment"></textarea>
+                                <span asp-validation-for="Comment" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                            <a asp-controller="StaffBlackList" asp-action="Index" class="btn btn-default pull-left">Cancel</a>
+                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

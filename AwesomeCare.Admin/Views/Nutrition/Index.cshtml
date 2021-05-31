@@ -1,0 +1,911 @@
+﻿@using AwesomeCare.Admin.ViewModels.Nutrition;
+
+@model NutritionViewModel
+@{
+    ViewData["Title"] = "Nutrition";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+<style>
+    .dropify {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    .dropify-wrapper {
+        width: 100px !important;
+        height: 100px !important;
+    }
+</style>
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task  table-responsive">
+            <div class="header">
+                <h2>Meal Plan</h2>
+
+            </div>
+            <div class="body">
+                <div class="row">
+                    <div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+                        <label>Client Image</label>
+                        <image alt="ClientImage" class="img-box" src="@Model.ClientImage" style="width:120px !important; height: 120px !important;" />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        @if (Model.NutritionId > 0)
+                        {
+                            <label class="control-label">Staff</label>
+                            <baserecord asp-key="GetStaffs" asp-for="STAFF" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.StaffId))" />
+                            <span asp-validation-for="StaffId" class="text-danger"></span>
+
+                        }
+                        else
+                        {
+                            <label class="control-label">Staff</label>
+                            <baserecord asp-key="GetStaffs" asp-for="STAFF" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                            <span asp-validation-for="StaffId" class="text-danger"></span>
+
+                        }
+
+                    </div>
+                    <div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+                        <label>Contact</label>
+                        <input type="text" class="form-control" asp-for="@Model.PlannerContact" value="@Model.PlannerContact" />
+                    </div>
+                    <div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+                        <label>Staff Image</label>
+                        <image alt="StaffImage" class="img-box" src="@Model.PlannerImage" style="width:120px !important; height: 120px !important;" />
+                    </div>
+                    <div class="btn-group form-group col-sm-2 col-xs-12 col-md-2 col-lg-2" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Add
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <a class="dropdown-item" id="Lunch">Lunch</a>
+                            <a class="dropdown-item" id="Tea">Tea</a>
+                            <a class="dropdown-item" id="Bed">Bed</a>
+                            <a class="dropdown-item" id="Others1">OTHERS1</a>
+                            <a class="dropdown-item" id="Others2">OTHERS2</a>
+                        </div>
+                    </div>
+                </div>
+                <form id="NutritionForm" asp-action="Index" enctype="multipart/form-data" asp-controller="Nutrition" method="post">
+
+                    @Html.HiddenFor(m => m.ClientId)
+                    @Html.HiddenFor(m => m.ActionName)
+                    @Html.HiddenFor(m => m.StaffId)
+                    @Html.HiddenFor(m => m.NutritionId)
+
+                    <table class="table table-hover table-bordered" id="tblMeal" style="width: 802px !important;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                @foreach (var weekDay in Model.WeekDays)
+                                {
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">@weekDay.DayofWeek</label>
+                                        <br />
+
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var MealType in Model.MealTypes)
+                            {
+                                <tr id="@MealType.MealType" style="display:none">
+                                    <td>
+                                        <div class="fancy-checkbox">
+                                            @{
+
+                                                <input type="hidden" asp-for="@MealType.ClientMealTypeId" />
+                                                var MealTypeId = Model.ClientMealDays.FirstOrDefault(c => c.MealId == MealType.ClientMealTypeId);
+                                                if (MealTypeId != null)
+                                                {
+                                                    //display and for edit
+                                                    <label><input type="checkbox" class="MealType" name="@MealType.MealType" checked><span>@MealType.MealType</span></label>
+                                                    @Html.Hidden($"{MealType.MealType}-NutritionId-{Model.NutritionId}", @Model.NutritionId)
+                                                }
+                                                else
+                                                {
+
+                                                    //new
+                                                    <label><input type="checkbox" class="MealType" name="@MealType.MealType"><span>@MealType.MealType</span></label>
+                                                    @Html.Hidden($"{MealType.MealType}-NutritionId", 0)
+
+
+                                                }
+                                            }
+
+                                        </div>
+                                        <div class="fancy-checkbox">
+
+                                            <label><input type="checkbox" class="selectAll" name="@MealType.MealType"><span><small>Repeat</small></span></label>
+
+                                        </div>
+                                    </td>
+                                    @foreach (var weekDay in Model.WeekDays)
+                                    {
+                                        int i = 1;
+                                        var mealDywk = Model.ClientMealDays.FirstOrDefault(d => d.MealId == MealType.ClientMealTypeId && d.MealDayofWeekId == weekDay.RotaDayofWeekId);
+                                        <td>
+                                            @if (mealDywk != null)
+                                            {
+
+                                                <input type="checkbox" class="selectDay" name="@MealType.MealType-isChecked-@weekDay.DayofWeek" id="@MealType.MealType-isChecked-@weekDay.DayofWeek" checked />
+                                                @Html.Hidden($"{MealType.MealType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
+
+                                                <div class="form-group">
+                                                    <label>Meal Details</label>
+                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-MealDetails" id="@MealType.MealType-@weekDay.DayofWeek-MealDetails" class="form-control" style="width: 100px !important;" value="@mealDywk.MEALDETAILS" />
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>How to Prepare</label>
+                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.MealType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" style="width: 100px !important;" value="@mealDywk.HOWTOPREPARE" />
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-control" style="padding-left: 25px; border: none;">Type</label>
+                                                    <select class="form-control" name="@MealType.MealType-@weekDay.DayofWeek-TypeId" id="@MealType.MealType-@weekDay.DayofWeek-TypeId">
+                                                        <option value="">-Select-</option>
+                                                        <option selected="@mealDywk.TypeId" value="1042">Yes</option>
+                                                        <option selected="@mealDywk.TypeId" value="1043">No</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Video URL</label>
+                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-SeeVideo" id="@MealType.MealType-@weekDay.DayofWeek-SeeVideo" class="form-control" style="width: 100px !important;" value="@mealDywk.SEEVIDEO" />
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Picture</label>
+                                                    <br />
+                                                    <image alt="file" class="" src="@mealDywk.PICTURE" name="@MealType.MealType-@weekDay.DayofWeek-Picture" id="@MealType.MealType-@weekDay.DayofWeek-Picture" style="width: 100px !important; height: 100px !important;">
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" class="selectDay" name="@MealType.MealType-isChecked-@weekDay.DayofWeek" id="@MealType.MealType-isChecked-@weekDay.DayofWeek" disabled="disabled" />
+                                                @Html.Hidden($"{MealType.MealType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
+
+                                                <div class="form-group">
+                                                    <label>Meal Details</label>
+                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-MealDetails" id="@MealType.MealType-@weekDay.DayofWeek-MealDetails" class="form-control" disabled="disabled" style="width: 100px !important;" />
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>How to Prepare</label>
+                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.MealType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" disabled="disabled" style="width: 100px !important;" />
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-control" style="padding-left: 25px; border: none;">Type</label>
+                                                    <select class="form-control" name="@MealType.MealType-@weekDay.DayofWeek-TypeId" id="@MealType.MealType-@weekDay.DayofWeek-TypeId" selected="">
+                                                        <option value="">-Select-</option>
+                                                        <option value="1042">Yes</option>
+                                                        <option value="1043">No</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Video URL</label>
+                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-SeeVideo" id="@MealType.MealType-@weekDay.DayofWeek-SeeVideo" class="form-control" disabled="disabled" style="width: 100px !important;" />
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Picture</label>
+                                                    <br />
+                                                    <input type="file" class="dropify" name="@MealType.MealType-@weekDay.DayofWeek-Picture" id="@MealType.MealType-@weekDay.DayofWeek-Picture" disabled="disabled" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;">
+
+                                                </div>
+
+                                            }
+                                        </td>
+
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    @if (Model.NutritionId > 0)
+                    {
+                        <div class="form-group">
+                            <label>Special Note:</label>
+                            <textarea asp-for="@Model.MealSpecialNote" class="form-control">@Model.MealSpecialNote</textarea>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                <label>Date From:</label>
+                                <input type="text" class="form-control" asp-for="@Model.DATEFROM" value="@Model.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="@Model.DATEFROM" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                <label>Date To:</label>
+                                <input type="text" class="form-control" asp-for="@Model.DATETO" value="@Model.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="@Model.DATETO" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        
+
+                    }
+                    else
+                    {
+                        <div class="form-group">
+                            <label>Special Note:</label>
+                            <textarea asp-for="@Model.MealSpecialNote" class="form-control"></textarea>
+                            <span asp-validation-for="@Model.MealSpecialNote" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                <label>Date From:</label>
+                                <input type="text" class="form-control" asp-for="@Model.DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="@Model.DATEFROM" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                <label>Date To:</label>
+                                <input type="text" class="form-control" asp-for="@Model.DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="@Model.DATETO" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                    }
+
+                    <h2>Shopping</h2>
+                    @if (Model.NutritionId > 0)
+                    {
+                        var Note = Model.ShoppingSpecialNote;
+                <div class="form-group">
+                    <label>Special Note:</label>
+                    <textarea asp-for="@Model.ShoppingSpecialNote" class="form-control">@Note</textarea>
+                    <span asp-validation-for="@Model.ShoppingSpecialNote" class="text-danger"></span>
+                </div>
+
+                    }
+                    else
+                    {
+                <div class="form-group">
+                    <label>Special Note:</label>
+                    <textarea asp-for="@Model.ShoppingSpecialNote" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.ShoppingSpecialNote" class="text-danger"></span>
+                </div>
+
+                    }
+
+                    <div class="form-group">
+                        <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
+                        <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
+                    </div>
+                    <input type="hidden" asp-for="@Model.ShoppingRowCount" value="1" />
+
+                    <table class="table table-hover table-bordered table-responsive" name="@Model.ClientShopping" id="tblShopping">
+                        <thead>
+                            <tr>
+                                <th><label class="form-control" style="padding-left: 25px; border: none;">Shopping Staff</label></th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Means Of Purchase</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Location Of Purchase</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Item</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Description</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Quantity</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Amount</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Day Of Shopping</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Date From</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Date To</label>
+                                    <br />
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Image</label>
+                                    <br />
+
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model.ClientShopping.Count > 0)
+                            {
+                                @foreach (var Shopping in Model.ClientShopping)
+                                {
+                                    <tr id="@Shopping.ShoppingId">
+                                        <td>
+                                            <select class="form-control" name="ShoppingStaffId" id="StaffId">
+                                                <option value="">-Select-</option>
+                                                @foreach (var item in ViewBag.GetStaffs)
+                                                {
+                                                    <option selected="@Shopping.STAFFId" value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="MeansOfPurchase" id="MeansOfPurchase" value="@Shopping.MeansOfPurchase" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="LocationOfPurchase" id="LocationOfPurchase" value="@Shopping.LocationOfPurchase" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="Item" id="Item" value="@Shopping.Item" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="Description" id="Description" value="@Shopping.Description" />
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" name="Quantity" id="Quantity" value="@Shopping.Quantity" />
+                                        </td>
+                                        <td>
+                                            <input type="number" step="0.5" min="0" max="99999" class="form-control" name="Amount" id="Amount" value="@Shopping.Amount" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="DAYOFSHOPPING" id="DAYOFSHOPPING" value="@Shopping.DAYOFSHOPPING" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="Shopping.DATEFROM" id="DATEFROM" value="@Shopping.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="Shopping.DATETO" id="DATETO" value="@Shopping.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        </td>
+                                        <td>
+                                            <image alt="Image" class="ImagePreviewBox" name="Image" id="Image" src="@Shopping.Image" style="width: 100px !important; height: 100px !important;" />
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr id="1">
+                                    <td>
+                                        <select class="form-control" name="Shopping.StaffId" id="StaffId">
+                                            <option value="">-Select-</option>
+                                            @foreach (var item in ViewBag.GetStaffs)
+                                            {
+                                                <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="MeansOfPurchase" id="MeansOfPurchase" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="LocationOfPurchase" id="LocationOfPurchase" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="Item" id="Item" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="Description" id="Description" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" name="Quantity" id="Quantity" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.5" min="0" max="99999" class="form-control" name="Amount" id="Amount" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="DAYOFSHOPPING" id="DAYOFSHOPPING" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="Shopping.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="Shopping.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <input type="file" class="dropify" name="Image" id="Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <h2>Cleaning</h2>
+                    @if (Model != null)
+                    {
+                        var Note = Model.CleaningSpecialNote;
+                <div class="form-group">
+                    <label>Special Note:</label>
+                    <textarea asp-for="@Model.CleaningSpecialNote" class="form-control">@Note</textarea>
+                    <span asp-validation-for="@Model.CleaningSpecialNote" class="text-danger"></span>
+                </div>
+
+                    }
+                    else
+                    {
+                <div class="form-group">
+                    <label>Special Note:</label>
+                    <textarea asp-for="@Model.CleaningSpecialNote" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.CleaningSpecialNote" class="text-danger"></span>
+                </div>
+                    }
+
+                    <div class="form-group">
+                        <button type="button" id="Addrow2" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
+                        <button type="button" id="Delrow2" class="btn btn-primary pull-right">Delete</button>
+                    </div>
+                    <input type="hidden" asp-for="@Model.CleaningRowCount" value="1" />
+
+                    <table class="table table-hover table-bordered table-responsive" id="tblCleaning">
+                        <thead>
+                            <tr>
+                                <th><label class="form-control" style="padding-left: 25px; border: none;">Cleaning Staff</label></th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Areas And Items</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Details</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Safety Hazard</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Location Of Item</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">DescOfItem</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">MinuteAlloted</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Disposal</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Where to Get</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">See Video</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Day Of Cleaning</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Date From</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Date To</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">WhereToKeep</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Image</label>
+
+
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model.ClientCleaning.Count > 0)
+                            {
+                                @foreach (var Cleaning in Model.ClientCleaning)
+                                {
+                                    <tr id="@Cleaning.CleaningId">
+                                        <td>
+                                            <select class="form-control" name="ClientCleaning.StaffId" id="ClientCleaning.StaffId">
+                                                <option value="">-Select-</option>
+                                                @foreach (var item in ViewBag.GetStaffs)
+                                                {
+                                                    <option selected="@Cleaning.STAFFId" value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                                }
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems">
+                                                <option value="0">-Select-</option>
+                                                <option selected="@Cleaning.AreasAndItems" value="1">Floor</option>
+                                                <option selected="@Cleaning.AreasAndItems" value="2">Bed</option>
+
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="@Cleaning.Details" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.SafetyHazard" id="SafetyHazard" value="@Cleaning.SafetyHazard" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.LocationOfItem" id="LocationOfItem" value="@Cleaning.LocationOfItem" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.DescOfItem" id="DescOfItem" value="@Cleaning.DescOfItem" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.MinuteAlloted" id="MinuteAlloted" value="@Cleaning.MinuteAlloted" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.Disposal" id="Disposal" value="@Cleaning.Disposal" />
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control" name="ClientCleaning.WhereToGet" id="WhereToGet" value="@Cleaning.WhereToGet" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.SEEVIDEO" id="SEEVIDEO" value="@Cleaning.SEEVIDEO" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.DAYOFCLEANING" id="DAYOFCLEANING" value="@Cleaning.DAYOFCLEANING" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.DATEFROM" id="DATEFROM" value="@Cleaning.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" name="ClientCleaning.DATETO" id="DATETO" value="@Cleaning.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        </td>
+                                        <td>
+                                            <image alt="Image" name="WhereToKeep" id="ClientCleaning.WhereToKeep" src="@Cleaning.WhereToKeep" style="width: 100px !important; height: 100px !important;" />
+                                        </td>
+                                        <td>
+                                            <image alt="Image" name="ClientCleaning.Image" id="ClientCleaning.Image" src="@Cleaning.Image" style="width: 100px !important; height: 100px !important;" />
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr id="1">
+                                    <td>
+                                        <select class="form-control" name="ClientCleaning.StaffId" id="ClientCleaning.StaffId">
+                                            <option value="">-Select-</option>
+                                            @foreach (var item in ViewBag.GetStaffs)
+                                            {
+                                                <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems">
+                                            <option value="0">-Select-</option>
+                                            <option value="1">Floor</option>
+                                            <option value="2">Bed</option>
+
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.SafetyHazard" id="SafetyHazard" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.LocationOfItem" id="LocationOfItem" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.DescOfItem" id="DescOfItem" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.MinuteAlloted" id="MinuteAlloted" value="" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.Disposal" id="Disposal" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" name="ClientCleaning.WhereToGet" id="WhereToGet" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.SEEVIDEO" id="SEEVIDEO" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.DAYOFCLEANING" id="DAYOFCLEANING" value="" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="ClientCleaning.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <input type="file" class="dropify" name="ClientCleaning.WhereToKeep" id="ClientCleaning.WhereToKeep" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                    </td>
+                                    <td>
+                                        <input type="file" class="dropify" name="ClientCleaning.Image" id="ClientCleaning.Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                    </td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+@section scripts{
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script>
+        $(function () {
+
+            $('#tblMeal > tbody  > tr').each(function () {
+                $('#AM').show(1500);
+            });
+
+            $('input:checkbox[class=MealType]').change(function () {
+                var Period = $(this).attr('name');
+                var isChecked = $('input:checkbox[name=' + Period + ']').is(":checked");
+                if (isChecked) {
+                    $(':checkbox[name*=' + Period + '-isChecked]').prop("disabled", false);
+                }
+                else {
+                    $(':checkbox[name*=' + Period + '-isChecked]').prop("disabled", true);
+
+                    $(':checkbox[name*=' + Period + '-isChecked]').prop("checked", false);
+
+                    $('input:checkbox[name*=' + Period + '-isChecked]').change();
+                }
+
+            });
+            $('input:checkbox[class=selectDay]').change(function () {
+                var mealType = $(this).attr('name')
+                var type = mealType.split('-isChecked-')[0];
+                var day = mealType.split('-isChecked-')[1];
+                var mealDay = type + '-' + day;
+                if ($(this).is(":checked")) {
+
+                    $('#' + mealDay + '-MealDetails').prop("disabled", false);
+                    $('#' + mealDay + '-HowtoPrepare').prop("disabled", false);
+                    $('#' + mealDay + '-TypeId').prop("disabled", false);
+                    $('#' + mealDay + '-SeeVideo').prop("disabled", false);
+                    $('#' + mealDay + '-Picture').prop("disabled", false);
+                }
+                else {
+                    $('#' + mealDay + '-MealDetails').prop("disabled", true);
+                    $('#' + mealDay + '-HowtoPrepare').prop("disabled", true);
+                    $('#' + mealDay + '-TypeId').prop("disabled", true);
+                    $('#' + mealDay + '-SeeVideo').prop("disabled", true);
+                    $('#' + mealDay + '-Picture').prop("disabled", true);
+                }
+            });
+            $('input:checkbox[class=selectAll]').change(function () {
+                var Meal = $(this).attr('name');
+                if ($(this).is(":checked")) {
+                    Repeat(Meal);
+                }
+                else {
+                    // alert("unckecked");
+                }
+            });
+
+            $('#TypeId').on('change', function () {
+                var value = $('#TypeId').val();
+                console.log(value);
+                var hiddenInput = $(this).siblings('input');
+                hiddenInput.val(value);
+            });
+
+            $('#Lunch').on('click', function ()
+            {
+                $('#tblMeal > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "LUNCH")
+                    {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            $('#Tea').on('click', function () {
+                $('#tblMeal > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "TEA") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            $('#Bed').on('click', function () {
+                $('#tblMeal > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "BED") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            $('#Others1').on('click', function () {
+                $('#tblMeal > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "OTHERS1") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            $('#Others2').on('click', function () {
+                $('#tblMeal > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "OTHERS2") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            function Repeat(Period) {
+                //AM-Monday-MealDetails
+                var MealDetails = $('#' + Period + '-Monday' + '-MealDetails').val();
+                var HowtoPrepare = $('#' + Period + '-Monday' + '-HowtoPrepare').val();
+                var TypeId = $('#' + Period + '-Monday' + '-TypeId').val();
+                var SeeVideo = $('#' + Period + '-Monday' + '-SeeVideo').val();
+
+                if ($('#' + Period + '-isChecked-Tuesday').is(":checked"))
+                {
+                    $('#' + Period + '-Tuesday' + '-MealDetails').val(MealDetails);
+                    $('#' + Period + '-Tuesday' + '-HowtoPrepare').val(HowtoPrepare);
+                    $('#' + Period + '-Tuesday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Tuesday' + '-SeeVideo').val(SeeVideo);
+
+                }
+                if ($('#' + Period + '-isChecked-Wednesday').is(":checked"))
+                {
+                    $('#' + Period + '-Wednesday' + '-MealDetails').val(MealDetails);
+                    $('#' + Period + '-Wednesday' + '-HowtoPrepare').val(HowtoPrepare);
+                    $('#' + Period + '-Wednesday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Wednesday' + '-SeeVideo').val(SeeVideo);
+                }
+                if ($('#' + Period + '-isChecked-Thursday').is(":checked"))
+                {
+                    $('#' + Period + '-Thursday' + '-MealDetails').val(MealDetails);
+                    $('#' + Period + '-Thursday' + '-HowtoPrepare').val(HowtoPrepare);
+                    $('#' + Period + '-Thursday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Thursday' + '-SeeVideo').val(SeeVideo);
+                }
+                if ($('#' + Period + '-isChecked-Friday').is(":checked"))
+                {
+                    $('#' + Period + '-Friday' + '-MealDetails').val(MealDetails);
+                    $('#' + Period + '-Friday' + '-HowtoPrepare').val(HowtoPrepare);
+                    $('#' + Period + '-Friday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Friday' + '-SeeVideo').val(SeeVideo);
+                }
+                if ($('#' + Period + '-isChecked-Saturday').is(":checked"))
+                {
+                    $('#' + Period + '-Saturday' + '-MealDetails').val(MealDetails);
+                    $('#' + Period + '-Saturday' + '-HowtoPrepare').val(HowtoPrepare);
+                    $('#' + Period + '-Saturday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Saturday' + '-SeeVideo').val(SeeVideo);
+                }
+                if ($('#' + Period + '-isChecked-Sunday').is(":checked"))
+                {
+                    $('#' + Period + '-Sunday' + '-MealDetails').val(MealDetails);
+                    $('#' + Period + '-Sunday' + '-HowtoPrepare').val(HowtoPrepare);
+                    $('#' + Period + '-Sunday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Sunday' + '-SeeVideo').val(SeeVideo);
+                }
+            }
+            
+            $('#STAFF').on('change', function () {
+                var value = $('#STAFF').val();
+                $('#StaffId').val(value);
+            });
+            
+
+            var table = $('#tblShopping').DataTable({
+                scrollCollapse: true,
+                select: {
+                    style: 'single'
+                },
+                searching: false, paging: false, info: false
+            });
+
+            var cleaning = $('#tblCleaning').DataTable({
+                scrollCollapse: true,
+                select: {
+                    style: 'single'
+                },
+                searching: false, paging: false, info: false
+            });
+
+            var counter = (table.rows.length+1);
+            var counter1 = (cleaning.rows.length+1);
+
+            $('#Addrow').on('click', function () {
+                counter++;
+                var clone = $("#tblShopping tr:last").clone().insertAfter("#tblShopping tr:last").find('input').val('');
+                $('#ShoppingRowCount').val(counter);
+
+            });
+            $('#Addrow2').on('click', function () {
+                counter1++;
+                var clone = $("#tblCleaning tr:last").clone().insertAfter("#tblCleaning tr:last").find('input:text').val('');
+                $('#CleaningRowCount').val(counter1);
+
+
+            });
+
+            $('#tblShopping tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+            $('#tblCleaning tbody').on('click', 'tr', function () {
+                $(this).toggleClass('selected');
+            });
+            $('#Delrow').click(function () {
+                const id = table.row('.selected').id();
+                if (table.row('.selected').length > 0) {
+                    const row = table.rows('.selected').remove().draw();
+                    counter--;
+                    $('#ShoppingRowCount').val(counter);
+                }
+                else {
+                    alert("Please select row for delete !");
+                }
+            });
+            $('#Delrow2').click(function () {
+                const id = cleaning.row('.selected').id();
+                if (cleaning.row('.selected').length > 0) {
+                    const row = cleaning.rows('.selected').remove().draw();
+                    counter1--;
+                    $('#CleaningRowCount').val(counter1);
+                }
+                else {
+                    alert("Please select row for delete !");
+                }
+            });
+        });
+        
+        
+    </script>
+}

@@ -1,0 +1,88 @@
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+@model CreateStaffRota
+
+        @{
+        ViewData["Title"] = "Staff-Rota";
+        }
+               
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12">
+                <div class="card planned_task">
+                    <div class="header">
+                        <h2>Create Rota</h2>
+                        @*<ul class="header-dropdown">
+                            <li class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another Action</a></li>
+                                    <li><a href="javascript:void(0);">Something else</a></li>
+                                </ul>
+                            </li>
+                        </ul>*@
+                    </div>
+                    <div class="body">
+                        <form asp-route="CreateRota" method="post">
+
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label asp-for="StartDate"></label>
+                                    <input type="text" asp-for="StartDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy">
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label asp-for="StopDate"></label>
+                                    <input type="text" asp-for="StopDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy">
+                                    <span asp-validation-for="StopDate" class="text-danger"></span>
+                                </div>
+
+
+                            </div>
+
+                            @*<div class="row">
+
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label asp-for="Staff"></label>
+                                    <br />
+                                    <select asp-for="Staff" asp-items="Model.Staffs" class="form-control multiselect multiselect-custom multiselectfilter" multiple="multiple"></select>
+                                    <span asp-validation-for="Staff" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label>Rota Types</label>
+                                    <br />
+                                    @for (int i = 0; i < Model.RotaTypes.Count; i++)
+                                    {
+                                        <label class="fancy-checkbox">
+                                            <input type="checkbox" asp-for="@Model.RotaTypes[i].IsSelected">
+                                            <span>@Model.RotaTypes[i].RotaType</span>
+                                        </label>
+                                    }
+                                </div>
+
+
+                            </div>
+
+                            <div class="row"> 
+                               
+                                <div class="form-group col-sm-8 col-xs-12 col-md-8 col-lg-8">
+                                    <label asp-for="Remark"></label>
+                                    <textarea  asp-for="Remark" class="form-control" ></textarea>
+                                    <span asp-validation-for="Remark" class="text-danger"></span>
+                                </div>
+                            </div>*@
+
+                            <div class="row">
+                                <div class="form-group col-sm-8 col-xs-12 col-md-8 col-lg-8">
+                                    <button type="submit" class="btn btn-primary pull-right">Preview</button>
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
