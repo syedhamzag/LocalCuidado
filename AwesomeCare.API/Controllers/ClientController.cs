@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AwesomeCare.DataTransferObject.DTOs.ClientVoice;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -40,6 +41,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
         private IGenericRepository<ClientLogAudit> _clientLogAuditRepository;
         private IGenericRepository<ClientMedAudit> _clientMedAuditRepository;
+        private IGenericRepository<ClientVoice> _clientVoiceRepository;
         private IGenericRepository<Medication> _medicationRepository;
         private IGenericRepository<MedicationManufacturer> _medicationManufacturerRepository;
         private AwesomeCareDbContext _dbContext;
@@ -48,7 +50,7 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<ClientComplainRegister> complainRepository,
             IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
             IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository,
-            IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository)
+            IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<ClientVoice> clientVoiceRepository)
         {
             _clientRepository = clientRepository;
             _complainRepository = complainRepository;
@@ -64,6 +66,7 @@ namespace AwesomeCare.API.Controllers
             _medicationManufacturerRepository = medicationManufacturerRepository;
             _clientLogAuditRepository = clientLogAuditRepository;
             _clientMedAuditRepository = clientMedAuditRepository;
+            _clientVoiceRepository = clientVoiceRepository;
         }
         /// <summary>
         /// Create Client
@@ -191,6 +194,13 @@ namespace AwesomeCare.API.Controllers
                                                             {
                                                                 ActionRecommended = med.ActionRecommended,
                                                                 EvidenceOfActionTaken = med.EvidenceOfActionTaken
+                                                            }).ToList(),
+                                       GetClientVoice =     (from v in _clientVoiceRepository.Table
+                                                            where v.ClientId == id.Value
+                                                            select new GetClientVoice
+                                                            {
+                                                                ActionRequired = v.ActionRequired,
+                                                                Attachment = v.Attachment
                                                             }).ToList(),
                                        RegulatoryContact = (from reg in client.RegulatoryContact
                                                             join baseRecordItem in _baseRecordItemRepository.Table on reg.BaseRecordItemId equals baseRecordItem.BaseRecordItemId

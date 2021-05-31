@@ -51,6 +51,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealType;
 using AwesomeCare.DataTransferObject.DTOs.ClientShopping;
 using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
+using AwesomeCare.DataTransferObject.DTOs.ClientVoice;
 
 namespace MapperConfig
 {
@@ -155,7 +156,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
                 .ForMember(dto => dto.UniqueId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedAudit, mem => mem.Ignore())
-                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore());
+                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
@@ -163,7 +165,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.Status, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientMedAudit, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientLogAudit, mem => mem.Ignore())
-                .ForMember(dto => dto.GetClientComplain, mem => mem.Ignore());
+                .ForMember(dto => dto.GetClientComplain, mem => mem.Ignore())
+                .ForMember(dto => dto.GetClientVoice, mem => mem.Ignore());
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));
@@ -191,7 +194,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
                 .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedAudit, mem => mem.Ignore())
-                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore());
+                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
@@ -488,7 +492,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedAudit, mem => mem.Ignore())
-                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore());
+                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
                .ForMember(dto => dto.StaffWorkTeam, mem => mem.Ignore())
@@ -508,7 +513,8 @@ namespace MapperConfig
                .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)src.Status))
                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.Ignore())
                .ForMember(dto => dto.ClientMedAudit, mem => mem.Ignore())
-               .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore());
+               .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore())
+               .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());
 
             CreateMap<PutStaffEducation, StaffEducation>()
                   .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -536,7 +542,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedAudit, mem => mem.Ignore())
-                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore());
+                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffProfile>()
                 .ForMember(dto => dto.RegulatoryContacts, mem => mem.MapFrom(src => src.RegulatoryContact))
@@ -906,6 +913,17 @@ namespace MapperConfig
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
 
             CreateMap<ClientMedAudit, GetClientMedAudit>();
+            #endregion
+
+            #region Voice
+            CreateMap<PutClientVoice, ClientVoice>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.Staff, mem => mem.Ignore());
+            CreateMap<PostClientVoice, ClientVoice>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.Staff, mem => mem.Ignore());
+
+            CreateMap<ClientVoice, GetClientVoice>();
             #endregion
         }
     }

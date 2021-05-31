@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using AwesomeCare.DataTransferObject.DTOs.ClientVoice;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -19,6 +20,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             GetClientComplain = new List<GetClientComplainRegister>();
             GetClientLogAudit = new List<GetClientLogAudit>();
             GetClientMedAudit = new List<GetClientMedAudit>();
+            GetClientVoice = new HashSet<GetClientVoice>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -94,5 +96,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetClientRegulatoryContactForEdit> RegulatoryContact { get; set; }
         public virtual ICollection<GetClientLogAudit> GetClientLogAudit { get; set; }
         public virtual ICollection<GetClientMedAudit> GetClientMedAudit { get; set; }
+        public virtual ICollection<GetClientVoice> GetClientVoice { get; set; }
     }
 }

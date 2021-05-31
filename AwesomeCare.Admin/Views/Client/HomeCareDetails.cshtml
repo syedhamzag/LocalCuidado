@@ -28,7 +28,7 @@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#logaudit">Log Audit</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#medaudit">Med Audit</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#voice">Voice</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
@@ -481,6 +481,46 @@
                                             @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
                                             {
                                                 <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane" id="voice">
+                        <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientVoice">Create Voice</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Action Required</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.GetClientVoice)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.ActionRequired
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
                                             }
 
                                         </td>

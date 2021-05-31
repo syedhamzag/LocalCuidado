@@ -48,6 +48,7 @@ using AwesomeCare.Admin.Services.User;
 using AwesomeCare.Admin.Services.Nutrition;
 using AwesomeCare.Admin.Services.ClientLogAudit;
 using AwesomeCare.Admin.Services.ClientMedAudit;
+using AwesomeCare.Admin.Services.ClientVoice;
 
 namespace AwesomeCare.Admin
 {
@@ -558,6 +559,12 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientMedAuditService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientvoice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientVoiceService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
         }
