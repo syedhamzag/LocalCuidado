@@ -17,11 +17,12 @@ using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Extensions;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
 using Newtonsoft.Json;
-using AwesomeCare.DataTransferObject.DTOs.ClientMeal;
+using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Hosting;
 using AwesomeCare.Admin.Services.Client;
+using AwesomeCare.DataTransferObject.DTOs.Staff;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -43,6 +44,42 @@ namespace AwesomeCare.Admin.Controllers
             _cache = cache;
             _clientService = clientService;
             _env = env;
+        }
+        public async Task<IActionResult> Reports()
+        {
+            var Clients = await _clientService.GetClients();
+            ViewBag.AllClients = Clients;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reports(int clientId)
+        {
+            NutritionViewModel model = new NutritionViewModel();
+
+            var Client = await _clientService.GetClient(clientId);
+            var nutrition = await _nutritionService.GetForEdit(clientId);
+            List<GetStaffs> AllStaffs = await _staffService.GetStaffs();
+            var Clients = await _clientService.GetClients();
+            ViewBag.AllClients = Clients;
+
+            if (nutrition.Count > 0)
+            {
+                model.ClientId = clientId;
+                model.ClientName = Client.Firstname + "" + Client.Middlename + " " + Client.Surname;
+                model.NutritionId = nutrition.FirstOrDefault().NutritionId;
+                model.ClientCleaning = nutrition.FirstOrDefault().ClientCleaning;
+                model.ClientShopping = nutrition.FirstOrDefault().ClientShopping;
+                model.StaffId = nutrition.FirstOrDefault().StaffId;
+                model.STAFF = AllStaffs;
+                model.PlannerName = model.STAFF.FirstOrDefault(s => s.StaffPersonalInfoId == model.StaffId).Fullname.ToString();
+                model.PlannerContact = model.STAFF.FirstOrDefault(s => s.StaffPersonalInfoId == model.StaffId).Telephone.ToString();
+                model.DATEFROM = nutrition.FirstOrDefault().DATEFROM;
+                model.DATETO = nutrition.FirstOrDefault().DATETO;
+                ViewBag.Staff = AllStaffs;
+
+            }
+            return View(model);
         }
         public async Task<IActionResult> Index(int clientId)
         {
@@ -189,7 +226,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var Shopping = new CreateClientShopping();
 
-                string StaffId = "Shopping.StaffId";
+                string StaffId = "ShoppingStaffId";
                 string MeasureId = "MeansOfPurchase";
                 string LocationId = "LocationOfPurchase";
                 string ItemId = "Item";

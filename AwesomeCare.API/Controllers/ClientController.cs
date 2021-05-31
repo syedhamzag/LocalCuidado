@@ -14,6 +14,8 @@ using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
 using AwesomeCare.DataTransferObject.DTOs.RegulatoryContact;
+using AwesomeCare.DataTransferObject.DTOs.ClientLogAudit;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedicationAudit;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +38,8 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientMedicationPeriod> _clientMedicationPeriodRepository;
         private IGenericRepository<RotaDayofWeek> _rotaDayOfWeekRepository;
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
+        private IGenericRepository<ClientLogAudit> _clientLogAuditRepository;
+        private IGenericRepository<ClientMedAudit> _clientMedAuditRepository;
         private IGenericRepository<Medication> _medicationRepository;
         private IGenericRepository<MedicationManufacturer> _medicationManufacturerRepository;
         private AwesomeCareDbContext _dbContext;
@@ -43,7 +47,8 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<ClientMedicationDay> clientMedicationDayRepository,
             IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<ClientComplainRegister> complainRepository,
             IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
-            IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository)
+            IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository,
+            IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository)
         {
             _clientRepository = clientRepository;
             _complainRepository = complainRepository;
@@ -57,6 +62,8 @@ namespace AwesomeCare.API.Controllers
             _clientRotaTypeRepository = clientRotaTypeRepository;
             _medicationRepository = medicationRepository;
             _medicationManufacturerRepository = medicationManufacturerRepository;
+            _clientLogAuditRepository = clientLogAuditRepository;
+            _clientMedAuditRepository = clientMedAuditRepository;
         }
         /// <summary>
         /// Create Client
@@ -171,6 +178,20 @@ namespace AwesomeCare.API.Controllers
                                                                 COMPLAINANTCONTACT = com.COMPLAINANTCONTACT,
                                                                 EvidenceFilePath = com.EvidenceFilePath
                                                            }).ToList(),
+                                       GetClientLogAudit = (from log in _clientLogAuditRepository.Table
+                                                            where log.ClientId == id.Value
+                                                            select new GetClientLogAudit
+                                                            {
+                                                                ActionRecommended = log.ActionRecommended,
+                                                                EvidenceOfActionTaken = log.EvidenceOfActionTaken
+                                                            }).ToList(),
+                                       GetClientMedAudit = (from med in _clientMedAuditRepository.Table
+                                                            where med.ClientId == id.Value
+                                                            select new GetClientMedAudit
+                                                            {
+                                                                ActionRecommended = med.ActionRecommended,
+                                                                EvidenceOfActionTaken = med.EvidenceOfActionTaken
+                                                            }).ToList(),
                                        RegulatoryContact = (from reg in client.RegulatoryContact
                                                             join baseRecordItem in _baseRecordItemRepository.Table on reg.BaseRecordItemId equals baseRecordItem.BaseRecordItemId
                                                             join baseRecord in _baseRecordRepository.Table on baseRecordItem.BaseRecordId equals baseRecord.BaseRecordId

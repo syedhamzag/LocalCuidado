@@ -46,6 +46,8 @@ using AwesomeCare.Admin.Services.IncidentReport;
 using AwesomeCare.Admin.Services.Investigation;
 using AwesomeCare.Admin.Services.User;
 using AwesomeCare.Admin.Services.Nutrition;
+using AwesomeCare.Admin.Services.ClientLogAudit;
+using AwesomeCare.Admin.Services.ClientMedAudit;
 
 namespace AwesomeCare.Admin
 {
@@ -545,7 +547,19 @@ namespace AwesomeCare.Admin
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IUserService>(r))
          .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
-            
+
+            services.AddHttpClient("clientlogservie", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientLogAuditService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientmedservie", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientMedAuditService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
         }
     }
 }

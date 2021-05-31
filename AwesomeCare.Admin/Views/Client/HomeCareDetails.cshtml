@@ -26,6 +26,12 @@
                     @*<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#caredetails">Care Details</a></li>*@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#logaudit">Log Audit</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#medaudit">Med Audit</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
@@ -361,6 +367,7 @@
                             </tbody>
                         </table>
                     </div>
+
                     <div class="tab-pane" id="complaintregister">
                         <div class="header">
                             <ul class="header-dropdown">
@@ -373,36 +380,118 @@
                                     </ul>
                                 </li>
                             </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Complain Contact</th>
-                                        <th>Evidence</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientComplain)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.COMPLAINANTCONTACT
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(item.EvidenceFilePath))
-                                                {
-                                                    <a asp-action="DownloadFile" asp-route-file="@item.EvidenceFilePath">Download</a>
-                                                }
-
-                                            </td>
-
-                                        </tr>
-                                    }
-
-                                </tbody>
-                            </table>
                         </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Complain Contact</th>
+                                    <th>Evidence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.GetClientComplain)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.COMPLAINANTCONTACT
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.EvidenceFilePath))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceFilePath">Download</a>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
                     </div>
+
+                    <div class="tab-pane" id="logaudit">
+                        <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientLogAudit">Create Log Audit</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Action Recommended</th>
+                                    <th>Evidence of Action Taken</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.GetClientLogAudit)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.ActionRecommended
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane" id="medaudit">
+                        <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientMedAudit">Create Med Audit</a></li>
+
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Action Recommended</th>
+                                    <th>Evidence of Action Taken</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.GetClientMedAudit)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.ActionRecommended
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
             </div>
         </div>

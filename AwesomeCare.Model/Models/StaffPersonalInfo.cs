@@ -19,6 +19,8 @@ namespace AwesomeCare.Model.Models
             StaffRating = new HashSet<StaffRating>();
             StaffBlackList = new HashSet<StaffBlackList>();
             ClientNutrition = new HashSet<ClientNutrition>();
+            ClientLogAudit = new HashSet<ClientLogAudit>();
+            ClientMedAudit = new HashSet<ClientMedAudit>();
         }
        
         public int StaffPersonalInfoId { get; set; }
@@ -85,6 +87,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffRating> StaffRating { get; set; }
         public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
         public virtual ICollection<ClientNutrition> ClientNutrition { get; set; }
+        public virtual ICollection<ClientLogAudit> ClientLogAudit { get; set; }
+        public virtual ICollection<ClientMedAudit> ClientMedAudit { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }

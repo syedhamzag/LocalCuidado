@@ -348,7 +348,17 @@
                                                 <option value="">-Select-</option>
                                                 @foreach (var item in ViewBag.GetStaffs)
                                                 {
-                                                    <option selected="@Shopping.STAFFId" value="@item.StaffPersonalInfoId">@item.Fullname</option>
+                                                    if (item.StaffPersonalInfoId == Shopping.STAFFId)
+                                                    {
+                                                        <option selected="@Shopping.STAFFId" value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                                    }
+
 
                                                 }
                                             </select>
@@ -549,16 +559,26 @@
                                                 <option value="">-Select-</option>
                                                 @foreach (var item in ViewBag.GetStaffs)
                                                 {
-                                                    <option selected="@Cleaning.STAFFId" value="@item.StaffPersonalInfoId">@item.Fullname</option>
+                                                    if (item.StaffPersonalInfoId == Cleaning.STAFFId)
+                                                    {
+                                                        <option selected="@Cleaning.STAFFId" value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                                    }
+
 
                                                 }
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems">
+                                            <select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems" selected="@Cleaning.AreasAndItems">
                                                 <option value="0">-Select-</option>
-                                                <option selected="@Cleaning.AreasAndItems" value="1">Floor</option>
-                                                <option selected="@Cleaning.AreasAndItems" value="2">Bed</option>
+                                                <option value="1">Floor</option>
+                                                <option value="2">Bed</option>
 
                                             </select>
                                         </td>
