@@ -379,10 +379,12 @@ namespace MapperConfig
             #endregion
             #region Shopping
             CreateMap<CreateClientShopping, ClientShopping>()
-                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore());
+                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
             CreateMap<ClientShopping, GetClientShopping>()
                 .ForMember(dto => dto.ShoppingId, mem => mem.Ignore());
             CreateMap<PostClientShopping, ClientShopping>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore());
             #endregion
             #region Cleaning
@@ -493,6 +495,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedAudit, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientShopping, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCleaning, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
@@ -512,6 +516,8 @@ namespace MapperConfig
                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.MapFrom(src => (int)src.Status))
                .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)src.Status))
                .ForMember(dto => dto.StaffPersonalInfoComments, mem => mem.Ignore())
+               .ForMember(dto => dto.ClientShopping, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCleaning, mem => mem.Ignore())
                .ForMember(dto => dto.ClientMedAudit, mem => mem.Ignore())
                .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore())
                .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());
@@ -541,6 +547,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffBlackList, mem => mem.Ignore())
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => (int)StaffRegistrationEnum.Pending))
                 .ForMember(dto => dto.RegistrationId, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientShopping, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientCleaning, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientMedAudit, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientLogAudit, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());

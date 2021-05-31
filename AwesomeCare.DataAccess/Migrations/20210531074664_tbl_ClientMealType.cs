@@ -18,7 +18,7 @@ namespace AwesomeCare.DataAccess.Migrations
                     MealType = table.Column<string>(maxLength: 15, nullable: false)                },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_ClientVoice", x => x.ClientMealTypeId);
+                    table.PrimaryKey("PK_tbl_ClientMealType", x => x.ClientMealTypeId);
                 });
                 migrationBuilder.CreateIndex(
                     name: "IX_tbl_ClientMealType_ClientMealTypeId",
