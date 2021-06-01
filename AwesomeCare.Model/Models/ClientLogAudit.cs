@@ -31,7 +31,7 @@ namespace AwesomeCare.Model.Models
         public string RotCause { get; set; }
         public string LessonLearntAndShared { get; set; }
         public string LogURL { get; set; }
-        public string Attachment { get; set; }
+        public string EvidenceFilePath { get; set; }
 
         public virtual Client Client { get; set; }
         public virtual StaffPersonalInfo Staff { get; set; }

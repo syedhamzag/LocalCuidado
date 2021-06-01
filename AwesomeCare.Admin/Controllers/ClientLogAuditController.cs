@@ -69,7 +69,7 @@ namespace AwesomeCare.Admin.Controllers
                 ClientId = logAudit.Result.ClientId,
                 ActionRecommended = logAudit.Result.ActionRecommended,
                 ActionTaken = logAudit.Result.ActionTaken,
-                Attachment = logAudit.Result.Attachment,
+                EvidenceFilePath = logAudit.Result.EvidenceFilePath,
                 Date = logAudit.Result.Date,
                 NextDueDate = logAudit.Result.NextDueDate,
                 Deadline = logAudit.Result.Deadline,
@@ -115,7 +115,7 @@ namespace AwesomeCare.Admin.Controllers
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
+                model.EvidenceFilePath = pathA;
                 #endregion
 
             var postLogAudit = Mapper.Map<PostClientLogAudit>(model);
@@ -154,12 +154,12 @@ namespace AwesomeCare.Admin.Controllers
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
+                model.EvidenceFilePath = pathA;
 
             }
             else
             {
-                model.Attachment = model.Attachment;
+                model.EvidenceFilePath = model.EvidenceFilePath;
             }
             #endregion
             var putComplain = Mapper.Map<PutClientLogAudit>(model);

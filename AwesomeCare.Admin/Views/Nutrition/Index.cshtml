@@ -278,7 +278,7 @@
                         <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
                         <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
                     </div>
-                    <input type="hidden" asp-for="@Model.ShoppingRowCount" value="1" />
+                    <input type="hidden" asp-for="@Model.ShoppingRowCount" value="0" />
 
                     <table class="table table-hover table-bordered table-responsive" name="@Model.ClientShopping" id="tblShopping">
                         <thead>
@@ -336,7 +336,6 @@
                                 </th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @if (Model.ClientShopping.Count > 0)
                             {
@@ -344,24 +343,7 @@
                                 {
                                     <tr id="@Shopping.ShoppingId">
                                         <td>
-                                            <select class="form-control" name="ShoppingStaffId" id="StaffId">
-                                                <option value="">-Select-</option>
-                                                @foreach (var item in ViewBag.GetStaffs)
-                                                {
-                                                    if (item.StaffPersonalInfoId == Shopping.STAFFId)
-                                                    {
-                                                        <option selected="@Shopping.STAFFId" value="@item.StaffPersonalInfoId">@item.Fullname</option>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
-
-                                                    }
-
-
-                                                }
-                                            </select>
+                                            <baserecord asp-key="GetStaffs" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Shopping.STAFFId))" />
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" name="MeansOfPurchase" id="MeansOfPurchase" value="@Shopping.MeansOfPurchase" />
@@ -396,52 +378,6 @@
                                     </tr>
                                 }
                             }
-                            else
-                            {
-                                <tr id="1">
-                                    <td>
-                                        <select class="form-control" name="Shopping.StaffId" id="StaffId">
-                                            <option value="">-Select-</option>
-                                            @foreach (var item in ViewBag.GetStaffs)
-                                            {
-                                                <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
-
-                                            }
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="MeansOfPurchase" id="MeansOfPurchase" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="LocationOfPurchase" id="LocationOfPurchase" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="Item" id="Item" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="Description" id="Description" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control" name="Quantity" id="Quantity" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="number" step="0.5" min="0" max="99999" class="form-control" name="Amount" id="Amount" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="DAYOFSHOPPING" id="DAYOFSHOPPING" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="Shopping.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="Shopping.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    </td>
-                                    <td>
-                                        <input type="file" class="dropify" name="Image" id="Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
-                                    </td>
-                                </tr>
-
-                            }
                         </tbody>
                     </table>
                     <br />
@@ -469,7 +405,7 @@
                         <button type="button" id="Addrow2" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
                         <button type="button" id="Delrow2" class="btn btn-primary pull-right">Delete</button>
                     </div>
-                    <input type="hidden" asp-for="@Model.CleaningRowCount" value="1" />
+                    <input type="hidden" asp-for="@Model.CleaningRowCount" value="0" />
 
                     <table class="table table-hover table-bordered table-responsive" id="tblCleaning">
                         <thead>
@@ -555,33 +491,10 @@
                                 {
                                     <tr id="@Cleaning.CleaningId">
                                         <td>
-                                            <select class="form-control" name="ClientCleaning.StaffId" id="ClientCleaning.StaffId">
-                                                <option value="">-Select-</option>
-                                                @foreach (var item in ViewBag.GetStaffs)
-                                                {
-                                                    if (item.StaffPersonalInfoId == Cleaning.STAFFId)
-                                                    {
-                                                        <option selected="@Cleaning.STAFFId" value="@item.StaffPersonalInfoId">@item.Fullname</option>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
-
-                                                    }
-
-
-                                                }
-                                            </select>
+                                            <baserecord asp-key="GetStaffs" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",@Cleaning.STAFFId))" />
                                         </td>
                                         <td>
                                             <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
-                                            @*<select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems" selected="@Cleaning.AreasAndItems">
-                                                <option value="0">-Select-</option>
-                                                <option value="1">Floor</option>
-                                                <option value="2">Bed</option>
-
-                                            </select>*@
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="@Cleaning.Details" />
@@ -628,150 +541,231 @@
                         </tbody>
 
                     </table>
-                    <table class="table table-hover table-bordered table-responsive" id="Cleaning" style="display:none;">
-                        <thead>
-                            <tr>
-                                <th><label class="form-control" style="padding-left: 25px; border: none;">Cleaning Staff</label></th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Areas And Items</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Details</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Safety Hazard</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Location Of Item</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">DescOfItem</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">MinuteAlloted</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Disposal</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Where to Get</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">See Video</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Day Of Cleaning</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Date From</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Date To</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">WhereToKeep</label>
-
-
-                                </th>
-                                <th>
-                                    <label class="form-control" style="padding-left: 25px; border: none;">Image</label>
-
-
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr id="1">
-                                <td>
-                                    <select class="form-control" name="ClientCleaning.StaffId" id="ClientCleaning.StaffId">
-                                        <option value="">-Select-</option>
-                                        @foreach (var item in ViewBag.GetStaffs)
-                                        {
-                                            <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
-
-                                        }
-                                    </select>
-                                </td>
-                                <td>
-                                    <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
-                                    @*<select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems">
-                                        <option value="0">-Select-</option>
-                                        <option value="1">Floor</option>
-                                        <option value="2">Bed</option>
-
-                                    </select>*@
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.SafetyHazard" id="SafetyHazard" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.LocationOfItem" id="LocationOfItem" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.DescOfItem" id="DescOfItem" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.MinuteAlloted" id="MinuteAlloted" value="" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.Disposal" id="Disposal" value="" />
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" name="ClientCleaning.WhereToGet" id="WhereToGet" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.SEEVIDEO" id="SEEVIDEO" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.DAYOFCLEANING" id="DAYOFCLEANING" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="ClientCleaning.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                </td>
-                                <td>
-                                    <input type="file" class="dropify" name="ClientCleaning.WhereToKeep" id="ClientCleaning.WhereToKeep" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
-                                </td>
-                                <td>
-                                    <input type="file" class="dropify" name="ClientCleaning.Image" id="ClientCleaning.Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
-                                </td>
-                            </tr>
-                            </tbody>
-                    </table>
-                        <br />
-                        <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
+                    <br />
+                    <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
                 </form>
+                <table class="table table-hover table-bordered table-responsive" id="Shopping">
+                    <thead>
+                        <tr>
+                            <th><label class="form-control" style="padding-left: 25px; border: none;">Shopping Staff</label></th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Means Of Purchase</label>
+                                <br />
 
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Location Of Purchase</label>
+                                <br />
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Item</label>
+                                <br />
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Description</label>
+                                <br />
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Quantity</label>
+                                <br />
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Amount</label>
+                                <br />
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Day Of Shopping</label>
+                                <br />
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Date From</label>
+                                <br />
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Date To</label>
+                                <br />
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Image</label>
+                                <br />
+
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td>
+                                    <baserecord asp-key="GetStaffs" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="MeansOfPurchase" id="MeansOfPurchase" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="LocationOfPurchase" id="LocationOfPurchase" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="Item" id="Item" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="Description" id="Description" value="" />
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="Quantity" id="Quantity" value="" />
+                                </td>
+                                <td>
+                                    <input type="number" step="0.5" min="0" max="99999" class="form-control" name="Amount" id="Amount" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="DAYOFSHOPPING" id="DAYOFSHOPPING" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="Shopping.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="Shopping.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                </td>
+                                <td>
+                                    <input type="file" class="dropify" name="Image" id="Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+                <table class="table table-hover table-bordered table-responsive" id="Cleaning" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th><label class="form-control" style="padding-left: 25px; border: none;">Cleaning Staff</label></th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Areas And Items</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Details</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Safety Hazard</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Location Of Item</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">DescOfItem</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">MinuteAlloted</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Disposal</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Where to Get</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">See Video</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Day Of Cleaning</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Date From</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Date To</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">WhereToKeep</label>
+
+
+                            </th>
+                            <th>
+                                <label class="form-control" style="padding-left: 25px; border: none;">Image</label>
+
+
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <baserecord asp-key="GetStaffs" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                            </td>
+                            <td>
+                                <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.SafetyHazard" id="SafetyHazard" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.LocationOfItem" id="LocationOfItem" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.DescOfItem" id="DescOfItem" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.MinuteAlloted" id="MinuteAlloted" value="" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.Disposal" id="Disposal" value="" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="ClientCleaning.WhereToGet" id="WhereToGet" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.SEEVIDEO" id="SEEVIDEO" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.DAYOFCLEANING" id="DAYOFCLEANING" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="ClientCleaning.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                            </td>
+                            <td>
+                                <input type="file" class="dropify" name="ClientCleaning.WhereToKeep" id="ClientCleaning.WhereToKeep" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                            </td>
+                            <td>
+                                <input type="file" class="dropify" name="ClientCleaning.Image" id="ClientCleaning.Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -786,7 +780,7 @@
         $(function () {
 
             $('#tblMeal > tbody  > tr').each(function () {
-                $('#AM').show(1500);
+                $('#AM').show(1000);
             });
 
             $('input:checkbox[class=MealType]').change(function () {
@@ -969,7 +963,7 @@
             });
             $('#Addrow2').on('click', function () {
                 counter1++;
-                var clone = $("#Cleaning tr:last").clone().insertAfter("#tblCleaning tr:last").find('input:text').val('');
+                var clone = $("#Cleaning tr:last").clone().insertAfter("#tblCleaning tr:last").find('input').val('');
                 $('#CleaningRowCount').val(counter1);
 
 
