@@ -228,7 +228,7 @@
                             </div>
 
                         </div>
-                        
+
 
                     }
                     else
@@ -250,27 +250,27 @@
                                 <span asp-validation-for="@Model.DATETO" class="text-danger"></span>
                             </div>
                         </div>
-                        
+
                     }
 
                     <h2>Shopping</h2>
                     @if (Model.NutritionId > 0)
                     {
                         var Note = Model.ShoppingSpecialNote;
-                <div class="form-group">
-                    <label>Special Note:</label>
-                    <textarea asp-for="@Model.ShoppingSpecialNote" class="form-control">@Note</textarea>
-                    <span asp-validation-for="@Model.ShoppingSpecialNote" class="text-danger"></span>
-                </div>
+                        <div class="form-group">
+                            <label>Special Note:</label>
+                            <textarea asp-for="@Model.ShoppingSpecialNote" class="form-control">@Note</textarea>
+                            <span asp-validation-for="@Model.ShoppingSpecialNote" class="text-danger"></span>
+                        </div>
 
                     }
                     else
                     {
-                <div class="form-group">
-                    <label>Special Note:</label>
-                    <textarea asp-for="@Model.ShoppingSpecialNote" class="form-control"></textarea>
-                    <span asp-validation-for="@Model.ShoppingSpecialNote" class="text-danger"></span>
-                </div>
+                        <div class="form-group">
+                            <label>Special Note:</label>
+                            <textarea asp-for="@Model.ShoppingSpecialNote" class="form-control"></textarea>
+                            <span asp-validation-for="@Model.ShoppingSpecialNote" class="text-danger"></span>
+                        </div>
 
                     }
 
@@ -449,20 +449,20 @@
                     @if (Model != null)
                     {
                         var Note = Model.CleaningSpecialNote;
-                <div class="form-group">
-                    <label>Special Note:</label>
-                    <textarea asp-for="@Model.CleaningSpecialNote" class="form-control">@Note</textarea>
-                    <span asp-validation-for="@Model.CleaningSpecialNote" class="text-danger"></span>
-                </div>
+                        <div class="form-group">
+                            <label>Special Note:</label>
+                            <textarea asp-for="@Model.CleaningSpecialNote" class="form-control">@Note</textarea>
+                            <span asp-validation-for="@Model.CleaningSpecialNote" class="text-danger"></span>
+                        </div>
 
                     }
                     else
                     {
-                <div class="form-group">
-                    <label>Special Note:</label>
-                    <textarea asp-for="@Model.CleaningSpecialNote" class="form-control"></textarea>
-                    <span asp-validation-for="@Model.CleaningSpecialNote" class="text-danger"></span>
-                </div>
+                        <div class="form-group">
+                            <label>Special Note:</label>
+                            <textarea asp-for="@Model.CleaningSpecialNote" class="form-control"></textarea>
+                            <span asp-validation-for="@Model.CleaningSpecialNote" class="text-danger"></span>
+                        </div>
                     }
 
                     <div class="form-group">
@@ -575,12 +575,13 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems" selected="@Cleaning.AreasAndItems">
+                                            <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
+                                            @*<select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems" selected="@Cleaning.AreasAndItems">
                                                 <option value="0">-Select-</option>
                                                 <option value="1">Floor</option>
                                                 <option value="2">Bed</option>
 
-                                            </select>
+                                            </select>*@
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="@Cleaning.Details" />
@@ -624,73 +625,151 @@
                                     </tr>
                                 }
                             }
-                            else
-                            {
-                                <tr id="1">
-                                    <td>
-                                        <select class="form-control" name="ClientCleaning.StaffId" id="ClientCleaning.StaffId">
-                                            <option value="">-Select-</option>
-                                            @foreach (var item in ViewBag.GetStaffs)
-                                            {
-                                                <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
-
-                                            }
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems">
-                                            <option value="0">-Select-</option>
-                                            <option value="1">Floor</option>
-                                            <option value="2">Bed</option>
-
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.SafetyHazard" id="SafetyHazard" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.LocationOfItem" id="LocationOfItem" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.DescOfItem" id="DescOfItem" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.MinuteAlloted" id="MinuteAlloted" value="" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.Disposal" id="Disposal" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="number" class="form-control" name="ClientCleaning.WhereToGet" id="WhereToGet" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.SEEVIDEO" id="SEEVIDEO" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.DAYOFCLEANING" id="DAYOFCLEANING" value="" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="ClientCleaning.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    </td>
-                                    <td>
-                                        <input type="file" class="dropify" name="ClientCleaning.WhereToKeep" id="ClientCleaning.WhereToKeep" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
-                                    </td>
-                                    <td>
-                                        <input type="file" class="dropify" name="ClientCleaning.Image" id="ClientCleaning.Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
-                                    </td>
-                                </tr>
-
-                            }
                         </tbody>
+
                     </table>
-                    <br />
-                    <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
+                    <table class="table table-hover table-bordered table-responsive" id="Cleaning" style="display:none;">
+                        <thead>
+                            <tr>
+                                <th><label class="form-control" style="padding-left: 25px; border: none;">Cleaning Staff</label></th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Areas And Items</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Details</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Safety Hazard</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Location Of Item</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">DescOfItem</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">MinuteAlloted</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Disposal</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Where to Get</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">See Video</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Day Of Cleaning</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Date From</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Date To</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">WhereToKeep</label>
+
+
+                                </th>
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">Image</label>
+
+
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr id="1">
+                                <td>
+                                    <select class="form-control" name="ClientCleaning.StaffId" id="ClientCleaning.StaffId">
+                                        <option value="">-Select-</option>
+                                        @foreach (var item in ViewBag.GetStaffs)
+                                        {
+                                            <option value="@item.StaffPersonalInfoId">@item.Fullname</option>
+
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
+                                    @*<select class="form-control" name="ClientCleaning.AreasAndItems" id="ClientCleaning.AreasAndItems">
+                                        <option value="0">-Select-</option>
+                                        <option value="1">Floor</option>
+                                        <option value="2">Bed</option>
+
+                                    </select>*@
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.SafetyHazard" id="SafetyHazard" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.LocationOfItem" id="LocationOfItem" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.DescOfItem" id="DescOfItem" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.MinuteAlloted" id="MinuteAlloted" value="" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.Disposal" id="Disposal" value="" />
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="ClientCleaning.WhereToGet" id="WhereToGet" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.SEEVIDEO" id="SEEVIDEO" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.DAYOFCLEANING" id="DAYOFCLEANING" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="ClientCleaning.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                </td>
+                                <td>
+                                    <input type="file" class="dropify" name="ClientCleaning.WhereToKeep" id="ClientCleaning.WhereToKeep" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                </td>
+                                <td>
+                                    <input type="file" class="dropify" name="ClientCleaning.Image" id="ClientCleaning.Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                </td>
+                            </tr>
+                            </tbody>
+                    </table>
+                        <br />
+                        <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
                 </form>
 
             </div>
@@ -879,18 +958,18 @@
                 searching: false, paging: false, info: false
             });
 
-            var counter = (table.rows.length+1);
-            var counter1 = (cleaning.rows.length+1);
+            var counter = (table.rows.length);
+            var counter1 = (cleaning.rows.length);
 
             $('#Addrow').on('click', function () {
                 counter++;
-                var clone = $("#tblShopping tr:last").clone().insertAfter("#tblShopping tr:last").find('input').val('');
+                var clone = $("#Shopping tr:last").clone().insertAfter("#tblShopping tr:last").find('input').val('');
                 $('#ShoppingRowCount').val(counter);
 
             });
             $('#Addrow2').on('click', function () {
                 counter1++;
-                var clone = $("#tblCleaning tr:last").clone().insertAfter("#tblCleaning tr:last").find('input:text').val('');
+                var clone = $("#Cleaning tr:last").clone().insertAfter("#tblCleaning tr:last").find('input:text').val('');
                 $('#CleaningRowCount').val(counter1);
 
 

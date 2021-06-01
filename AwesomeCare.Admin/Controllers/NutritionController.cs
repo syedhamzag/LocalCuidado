@@ -226,7 +226,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var Shopping = new CreateClientShopping();
 
-                string StaffId = "ShoppingStaffId";
+                string StaffId = "Shopping.StaffId";
                 string MeasureId = "MeansOfPurchase";
                 string LocationId = "LocationOfPurchase";
                 string ItemId = "Item";

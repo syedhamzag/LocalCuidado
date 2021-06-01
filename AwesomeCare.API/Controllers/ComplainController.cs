@@ -64,10 +64,8 @@ namespace AwesomeCare.API.Controllers
         /// </summary>
         /// <param name="postComplain"></param>
         /// <returns></returns>
-        [HttpPost("Complain")]
-        [ProducesResponseType(type: typeof(GetClientComplainRegister), statusCode: StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> PostComplainRegister([FromBody] PostComplainRegister postComplain)
         {
 
@@ -77,20 +75,9 @@ namespace AwesomeCare.API.Controllers
             }
 
             var complain = Mapper.Map<ClientComplainRegister>(postComplain);
-            var newComplain = new ClientComplainRegister();
-            if (complain.ComplainId > 0)
-            {
-                newComplain = await _complainRepository.UpdateEntity(complain);
-            }
-            else
-            {
-                newComplain = await _complainRepository.InsertEntity(complain);
-            }
-
+            var newComplain = await _complainRepository.InsertEntity(complain);
             var getComplain = Mapper.Map<GetClientComplainRegister>(newComplain);
-            return CreatedAtAction("Get", new { complainId = getComplain.ComplainId }, getComplain);
-
-
+            return Ok(getComplain);
         }
         /// <summary>
         /// Update Medication
