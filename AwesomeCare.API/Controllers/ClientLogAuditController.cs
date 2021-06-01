@@ -61,16 +61,7 @@ namespace AwesomeCare.API.Controllers
             }
 
             var ClientLogAudit = Mapper.Map<ClientLogAudit>(postClientLogAudit);
-            var newClientLogAudit = new ClientLogAudit();
-            if (ClientLogAudit.LogAuditId > 0)
-            {
-                newClientLogAudit = await _clientLogAuditRepository.UpdateEntity(ClientLogAudit);
-            }
-            else
-            {
-                newClientLogAudit = await _clientLogAuditRepository.InsertEntity(ClientLogAudit);
-            }
-
+            var newClientLogAudit = await _clientLogAuditRepository.InsertEntity(ClientLogAudit);
             var getClientLogAudit = Mapper.Map<GetClientLogAudit>(newClientLogAudit);
             return Ok(getClientLogAudit);
 

@@ -55,7 +55,6 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         #region Complain
-        [Route("[Controller]/Complain/Create/{clientId}", Name = "CreateComplainRegister")]
         public async Task<IActionResult> CreateComplainRegister(int? clientId)
         {
             var model = new CreateComplainRegister();
@@ -68,7 +67,7 @@ namespace AwesomeCare.Admin.Controllers
             //model.OFFICERTOACT = (IEnumerable<GetStaffs>)staffNames.Select(s => new SelectListItem(s.Fullname.ToString(), s.ApplicationUserId)).ToList();
             return View(model);
         }
-        [HttpPost("[Controller]/Complain/Create/{clientId}", Name = "CreateComplainRegister")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateComplainRegister(CreateComplainRegister model)
         {
@@ -78,8 +77,6 @@ namespace AwesomeCare.Admin.Controllers
                 {
                     var staffNames = await _staffService.GetStaffs();
                     ViewBag.GetStaffs = staffNames;
-                    ViewBag.Officer = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.OFFICERTOACTId);
-                    ViewBag.Staff = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.STAFFId);
                     var client = await _clientService.GetClient(model.ClientId);
                     model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
                     return View(model);
@@ -87,12 +84,16 @@ namespace AwesomeCare.Admin.Controllers
 
 
                 #region Evidence
+                if (model.Evidence != null)
+                {
+                    string folder = "clientcomplain";
+                    string filename = string.Concat(folder, "_", model.IRFNUMBER);
+                    string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
 
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_", model.IRFNUMBER);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                    model.EvidenceFilePath = path;
 
-                model.EvidenceFilePath = path;
+                }
+                
                 #endregion
 
                 var postComplain = Mapper.Map<PostComplainRegister>(model);
@@ -101,7 +102,7 @@ namespace AwesomeCare.Admin.Controllers
                 var result = await _complainService.PostComplainRegister(postComplain);
                 var content = await result.Content.ReadAsStringAsync();
 
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Complain successfully registered" : "An Error Occurred" });
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode , Message = result.Content.ReadAsStringAsync().Result != null ? "New Complain successfully registered" : "An Error Occurred" });
                 return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
             }
             catch (Exception ex)
@@ -143,8 +144,6 @@ namespace AwesomeCare.Admin.Controllers
                 SOURCEOFCOMPLAINTS = complain.SOURCEOFCOMPLAINTS,
                 STAFFId = complain.STAFFId,
                 StatusId = complain.StatusId,
-                //STAFFINVOLVED = (IEnumerable<GetStaffs>)staffNames.Select(s => new SelectListItem(s.Fullname.ToString(), s.ApplicationUserId)).ToList(),
-                //OFFICERTOACT = (IEnumerable<GetStaffs>)staffNames.Select(s => new SelectListItem(s.Fullname.ToString(), s.ApplicationUserId)).ToList()
             };
             return View(putEntity);
         }

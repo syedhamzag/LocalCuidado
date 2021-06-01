@@ -84,6 +84,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [Required]
         [MaxLength(50)]
         public string ROOTCAUSE { get; set; }
+        [Required]
         [MaxLength(255)]
         public string REMARK { get; set; }
         [Required]
