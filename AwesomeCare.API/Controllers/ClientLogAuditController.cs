@@ -110,7 +110,7 @@ namespace AwesomeCare.API.Controllers
                                                ClientId = c.ClientId,
                                                ActionRecommended = c.ActionRecommended,
                                                ActionTaken = c.ActionTaken,
-                                               Attachment = c.Attachment,
+                                               EvidenceFilePath = c.EvidenceFilePath,
                                                Date = c.Date,
                                                NextDueDate = c.NextDueDate,
                                                Deadline = c.Deadline,

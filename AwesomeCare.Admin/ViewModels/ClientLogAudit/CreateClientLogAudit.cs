@@ -95,6 +95,6 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         [Required]
         [MaxLength(255)]
         public string LogURL { get; set; }
-        public string Attachment { get; set; }
+        public string EvidenceFilePath { get; set; }
     }
 }

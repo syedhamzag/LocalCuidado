@@ -126,8 +126,8 @@ namespace AwesomeCare.Model.Models.Map
              .HasMaxLength(255)
              .IsRequired();
 
-            builder.Property(p => p.Attachment)
-             .HasColumnName("Attachment")
+            builder.Property(p => p.EvidenceFilePath)
+             .HasColumnName("EvidenceFilePath")
              .IsRequired();
 
 

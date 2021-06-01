@@ -35,6 +35,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientLogAudit
         public string RotCause { get; set; }
         public string LessonLearntAndShared { get; set; }
         public string LogURL { get; set; }
-        public string Attachment { get; set; }
+        public string EvidenceFilePath { get; set; }
     }
 }
