@@ -147,11 +147,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-control" style="padding-left: 25px; border: none;">Type</label>
-                                                    <select class="form-control" name="@MealType.MealType-@weekDay.DayofWeek-TypeId" id="@MealType.MealType-@weekDay.DayofWeek-TypeId">
-                                                        <option value="">-Select-</option>
-                                                        <option selected="@mealDywk.TypeId" value="1042">Yes</option>
-                                                        <option selected="@mealDywk.TypeId" value="1043">No</option>
-                                                    </select>
+                                                    <baserecord asp-key="Client_Meal_Type" asp-for="ClientMealDays.FirstOrDefault().TypeId" asp-items="null" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Video URL</label>
@@ -181,12 +177,8 @@
 
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-control" style="padding-left: 25px; border: none;">Type</label>
-                                                    <select class="form-control" name="@MealType.MealType-@weekDay.DayofWeek-TypeId" id="@MealType.MealType-@weekDay.DayofWeek-TypeId" selected="">
-                                                        <option value="">-Select-</option>
-                                                        <option value="1042">Yes</option>
-                                                        <option value="1043">No</option>
-                                                    </select>
+                                                    <label class="form-control" id="@MealType.MealType-@weekDay.DayofWeek-TypeId" style="padding-left: 25px; border: none;">Type</label>
+                                                    <baserecord asp-key="Client_Meal_Type" asp-for="ClientMealDays.FirstOrDefault().TypeId" asp-items="null" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Video URL</label>
@@ -234,7 +226,7 @@
                     else
                     {
                         <div class="form-group">
-                            <label>Special Note:</label>
+                            <label>Meal Special Note:</label>
                             <textarea asp-for="@Model.MealSpecialNote" class="form-control"></textarea>
                             <span asp-validation-for="@Model.MealSpecialNote" class="text-danger"></span>
                         </div>
@@ -278,7 +270,7 @@
                         <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
                         <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
                     </div>
-                    <input type="hidden" asp-for="@Model.ShoppingRowCount" value="0" />
+                    <input type="hidden" asp-for="@Model.ShoppingRowCount" value="@Model.ShoppingRowCount" />
 
                     <table class="table table-hover table-bordered table-responsive" name="@Model.ClientShopping" id="tblShopping">
                         <thead>
@@ -343,40 +335,44 @@
                                 {
                                     <tr id="@Shopping.ShoppingId">
                                         <td>
-                                            <baserecord asp-key="GetStaffs" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Shopping.STAFFId))" />
+                                            <baserecord asp-key="GetStaffs" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs, "StaffPersonalInfoId", "Fullname", Shopping.STAFFId))" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="MeansOfPurchase" id="MeansOfPurchase" value="@Shopping.MeansOfPurchase" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().MeansOfPurchase" id="MeansOfPurchase" value="@Shopping.MeansOfPurchase" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="LocationOfPurchase" id="LocationOfPurchase" value="@Shopping.LocationOfPurchase" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().LocationOfPurchase" id="LocationOfPurchase" value="@Shopping.LocationOfPurchase" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="Item" id="Item" value="@Shopping.Item" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Item" id="Item" value="@Shopping.Item" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="Description" id="Description" value="@Shopping.Description" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Description" id="Description" value="@Shopping.Description" />
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control" name="Quantity" id="Quantity" value="@Shopping.Quantity" />
+                                            <input type="number" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Quantity" id="Quantity" value="@Shopping.Quantity" />
                                         </td>
                                         <td>
-                                            <input type="number" step="0.5" min="0" max="99999" class="form-control" name="Amount" id="Amount" value="@Shopping.Amount" />
+                                            <input type="number" step="0.5" min="0" max="99999" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Amount" id="Amount" value="@Shopping.Amount" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="DAYOFSHOPPING" id="DAYOFSHOPPING" value="@Shopping.DAYOFSHOPPING" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DAYOFSHOPPING" id="DAYOFSHOPPING" value="@Shopping.DAYOFSHOPPING" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="Shopping.DATEFROM" id="DATEFROM" value="@Shopping.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DATEFROM" id="DATEFROM" value="@Shopping.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="Shopping.DATETO" id="DATETO" value="@Shopping.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DATETO" id="DATETO" value="@Shopping.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                                         </td>
                                         <td>
-                                            <image alt="Image" class="ImagePreviewBox" name="Image" id="Image" src="@Shopping.Image" style="width: 100px !important; height: 100px !important;" />
+                                            <image alt="Image" class="ImagePreviewBox" name="@Model.ClientShopping.FirstOrDefault().Image" id="Image" src="@Shopping.Image" style="width: 100px !important; height: 100px !important;" />
                                         </td>
                                     </tr>
                                 }
+                            }
+                            else
+                            {
+                            
                             }
                         </tbody>
                     </table>
@@ -405,7 +401,7 @@
                         <button type="button" id="Addrow2" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
                         <button type="button" id="Delrow2" class="btn btn-primary pull-right">Delete</button>
                     </div>
-                    <input type="hidden" asp-for="@Model.CleaningRowCount" value="0" />
+                    <input type="hidden" asp-for="@Model.CleaningRowCount" value="@Model.CleaningRowCount" />
 
                     <table class="table table-hover table-bordered table-responsive" id="tblCleaning">
                         <thead>
@@ -491,52 +487,56 @@
                                 {
                                     <tr id="@Cleaning.CleaningId">
                                         <td>
-                                            <baserecord asp-key="GetStaffs" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",@Cleaning.STAFFId))" />
+                                            <baserecord asp-key="GetStaffs" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs, "StaffPersonalInfoId", "Fullname", @Cleaning.STAFFId))" />
                                         </td>
                                         <td>
                                             <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="@Cleaning.Details" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().Details" id="Details" value="@Cleaning.Details" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.SafetyHazard" id="SafetyHazard" value="@Cleaning.SafetyHazard" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().SafetyHazard" id="SafetyHazard" value="@Cleaning.SafetyHazard" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.LocationOfItem" id="LocationOfItem" value="@Cleaning.LocationOfItem" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().LocationOfItem" id="LocationOfItem" value="@Cleaning.LocationOfItem" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.DescOfItem" id="DescOfItem" value="@Cleaning.DescOfItem" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DescOfItem" id="DescOfItem" value="@Cleaning.DescOfItem" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.MinuteAlloted" id="MinuteAlloted" value="@Cleaning.MinuteAlloted" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().MinuteAlloted" id="MinuteAlloted" value="@Cleaning.MinuteAlloted" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.Disposal" id="Disposal" value="@Cleaning.Disposal" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().Disposal" id="Disposal" value="@Cleaning.Disposal" />
                                         </td>
                                         <td>
-                                            <input type="number" class="form-control" name="ClientCleaning.WhereToGet" id="WhereToGet" value="@Cleaning.WhereToGet" />
+                                            <input type="number" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().WhereToGet" id="WhereToGet" value="@Cleaning.WhereToGet" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.SEEVIDEO" id="SEEVIDEO" value="@Cleaning.SEEVIDEO" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().SEEVIDEO" id="SEEVIDEO" value="@Cleaning.SEEVIDEO" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.DAYOFCLEANING" id="DAYOFCLEANING" value="@Cleaning.DAYOFCLEANING" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DAYOFCLEANING" id="DAYOFCLEANING" value="@Cleaning.DAYOFCLEANING" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.DATEFROM" id="DATEFROM" value="@Cleaning.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DATEFROM" id="DATEFROM" value="@Cleaning.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name="ClientCleaning.DATETO" id="DATETO" value="@Cleaning.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                            <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DATETO" id="DATETO" value="@Cleaning.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                                         </td>
                                         <td>
-                                            <image alt="Image" name="WhereToKeep" id="ClientCleaning.WhereToKeep" src="@Cleaning.WhereToKeep" style="width: 100px !important; height: 100px !important;" />
+                                            <image alt="Image" name="@Model.ClientCleaning.FirstOrDefault().WhereToKeep" id="ClientCleaning.WhereToKeep" src="@Cleaning.WhereToKeep" style="width: 100px !important; height: 100px !important;" />
                                         </td>
                                         <td>
-                                            <image alt="Image" name="ClientCleaning.Image" id="ClientCleaning.Image" src="@Cleaning.Image" style="width: 100px !important; height: 100px !important;" />
+                                            <image alt="Image" name="@Model.ClientCleaning.FirstOrDefault().Image" id="ClientCleaning.Image" src="@Cleaning.Image" style="width: 100px !important; height: 100px !important;" />
                                         </td>
                                     </tr>
                                 }
+                            }
+                            else 
+                            {
+                            
                             }
                         </tbody>
 
@@ -544,7 +544,7 @@
                     <br />
                     <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
                 </form>
-                <table class="table table-hover table-bordered table-responsive" id="Shopping">
+                <table class="table table-hover table-bordered table-responsive" id="Shopping" style="display:none;">
                     <thead>
                         <tr>
                             <th><label class="form-control" style="padding-left: 25px; border: none;">Shopping Staff</label></th>
@@ -601,42 +601,43 @@
                         </tr>
                     </thead>
                     <tbody>
-                            <tr>
-                                <td>
-                                    <baserecord asp-key="GetStaffs" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                        <tr>
+                            <td>
+                                <baserecord asp-key="GetStaffs" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
 
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="MeansOfPurchase" id="MeansOfPurchase" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="LocationOfPurchase" id="LocationOfPurchase" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="Item" id="Item" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="Description" id="Description" value="" />
-                                </td>
-                                <td>
-                                    <input type="number" class="form-control" name="Quantity" id="Quantity" value="" />
-                                </td>
-                                <td>
-                                    <input type="number" step="0.5" min="0" max="99999" class="form-control" name="Amount" id="Amount" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="DAYOFSHOPPING" id="DAYOFSHOPPING" value="" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="Shopping.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                </td>
-                                <td>
-                                    <input type="text" class="form-control" name="Shopping.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                </td>
-                                <td>
-                                    <input type="file" class="dropify" name="Image" id="Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
-                                </td>
-                            </tr>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().MeansOfPurchase" id="MeansOfPurchase" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().LocationOfPurchase" id="LocationOfPurchase" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Item" id="Item" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Description" id="Description" value="" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Quantity" id="Quantity" value="" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Amount" id="Amount" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DAYOFSHOPPING" id="DAYOFSHOPPING" value="" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                            </td>
+                            <td>
+                                <input type="file" class="dropify" asp-for="@Model.ClientShopping.FirstOrDefault().Image" id="Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                            </td>
+
+                        </tr>
                     </tbody>
                 </table>
                 <table class="table table-hover table-bordered table-responsive" id="Cleaning" style="display:none;">
@@ -725,43 +726,43 @@
                                 <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.Details" id="Details" value="" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().Details" id="Details" value="" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.SafetyHazard" id="SafetyHazard" value="" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().SafetyHazard" id="SafetyHazard" value="" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.LocationOfItem" id="LocationOfItem" value="" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().LocationOfItem" id="LocationOfItem" value="" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.DescOfItem" id="DescOfItem" value="" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DescOfItem" id="DescOfItem" value="" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.MinuteAlloted" id="MinuteAlloted" value="" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().MinuteAlloted" id="MinuteAlloted" value="" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.Disposal" id="Disposal" value="" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().Disposal" id="Disposal" value="" />
                             </td>
                             <td>
-                                <input type="number" class="form-control" name="ClientCleaning.WhereToGet" id="WhereToGet" value="" />
+                                <input type="number" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().WhereToGet" id="WhereToGet" value="" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.SEEVIDEO" id="SEEVIDEO" value="" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().SEEVIDEO" id="SEEVIDEO" value="" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.DAYOFCLEANING" id="DAYOFCLEANING" value="" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DAYOFCLEANING" id="DAYOFCLEANING" value="" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DATEFROM" id="DATEFROM" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="ClientCleaning.DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                             </td>
                             <td>
-                                <input type="file" class="dropify" name="ClientCleaning.WhereToKeep" id="ClientCleaning.WhereToKeep" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                <input type="file" class="dropify" asp-for="@Model.ClientCleaning.FirstOrDefault().WhereToKeep" id="ClientCleaning.WhereToKeep" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
                             </td>
                             <td>
-                                <input type="file" class="dropify" name="ClientCleaning.Image" id="ClientCleaning.Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                <input type="file" class="dropify" asp-for="@Model.ClientCleaning.FirstOrDefault().Image" id="ClientCleaning.Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
                             </td>
                         </tr>
                     </tbody>
@@ -807,14 +808,14 @@
 
                     $('#' + mealDay + '-MealDetails').prop("disabled", false);
                     $('#' + mealDay + '-HowtoPrepare').prop("disabled", false);
-                    $('#' + mealDay + '-TypeId').prop("disabled", false);
+                    $('#' + mealDay + '-TypeId').siblings().prop("disabled", false);
                     $('#' + mealDay + '-SeeVideo').prop("disabled", false);
                     $('#' + mealDay + '-Picture').prop("disabled", false);
                 }
                 else {
                     $('#' + mealDay + '-MealDetails').prop("disabled", true);
                     $('#' + mealDay + '-HowtoPrepare').prop("disabled", true);
-                    $('#' + mealDay + '-TypeId').prop("disabled", true);
+                    $('#' + mealDay + '-TypeId').siblings().prop("disabled", true);
                     $('#' + mealDay + '-SeeVideo').prop("disabled", true);
                     $('#' + mealDay + '-Picture').prop("disabled", true);
                 }
@@ -882,14 +883,14 @@
                 //AM-Monday-MealDetails
                 var MealDetails = $('#' + Period + '-Monday' + '-MealDetails').val();
                 var HowtoPrepare = $('#' + Period + '-Monday' + '-HowtoPrepare').val();
-                var TypeId = $('#' + Period + '-Monday' + '-TypeId').val();
+                var TypeId = $('#' + Period + '-Monday' + '-TypeId').siblings().val();
                 var SeeVideo = $('#' + Period + '-Monday' + '-SeeVideo').val();
-
+                alert(TypeId)
                 if ($('#' + Period + '-isChecked-Tuesday').is(":checked"))
                 {
                     $('#' + Period + '-Tuesday' + '-MealDetails').val(MealDetails);
                     $('#' + Period + '-Tuesday' + '-HowtoPrepare').val(HowtoPrepare);
-                    $('#' + Period + '-Tuesday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Tuesday' + '-TypeId').siblings().val(TypeId).change();
                     $('#' + Period + '-Tuesday' + '-SeeVideo').val(SeeVideo);
 
                 }
@@ -897,35 +898,35 @@
                 {
                     $('#' + Period + '-Wednesday' + '-MealDetails').val(MealDetails);
                     $('#' + Period + '-Wednesday' + '-HowtoPrepare').val(HowtoPrepare);
-                    $('#' + Period + '-Wednesday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Wednesday' + '-TypeId').siblings().val(TypeId).change();
                     $('#' + Period + '-Wednesday' + '-SeeVideo').val(SeeVideo);
                 }
                 if ($('#' + Period + '-isChecked-Thursday').is(":checked"))
                 {
                     $('#' + Period + '-Thursday' + '-MealDetails').val(MealDetails);
                     $('#' + Period + '-Thursday' + '-HowtoPrepare').val(HowtoPrepare);
-                    $('#' + Period + '-Thursday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Thursday' + '-TypeId').siblings().val(TypeId).change();
                     $('#' + Period + '-Thursday' + '-SeeVideo').val(SeeVideo);
                 }
                 if ($('#' + Period + '-isChecked-Friday').is(":checked"))
                 {
                     $('#' + Period + '-Friday' + '-MealDetails').val(MealDetails);
                     $('#' + Period + '-Friday' + '-HowtoPrepare').val(HowtoPrepare);
-                    $('#' + Period + '-Friday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Friday' + '-TypeId').siblings().val(TypeId).change();
                     $('#' + Period + '-Friday' + '-SeeVideo').val(SeeVideo);
                 }
                 if ($('#' + Period + '-isChecked-Saturday').is(":checked"))
                 {
                     $('#' + Period + '-Saturday' + '-MealDetails').val(MealDetails);
                     $('#' + Period + '-Saturday' + '-HowtoPrepare').val(HowtoPrepare);
-                    $('#' + Period + '-Saturday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Saturday' + '-TypeId').siblings().val(TypeId).change();
                     $('#' + Period + '-Saturday' + '-SeeVideo').val(SeeVideo);
                 }
                 if ($('#' + Period + '-isChecked-Sunday').is(":checked"))
                 {
                     $('#' + Period + '-Sunday' + '-MealDetails').val(MealDetails);
                     $('#' + Period + '-Sunday' + '-HowtoPrepare').val(HowtoPrepare);
-                    $('#' + Period + '-Sunday' + '-TypeId').val(TypeId).change();
+                    $('#' + Period + '-Sunday' + '-TypeId').siblings().val(TypeId).change();
                     $('#' + Period + '-Sunday' + '-SeeVideo').val(SeeVideo);
                 }
             }
@@ -952,28 +953,44 @@
                 searching: false, paging: false, info: false
             });
 
-            var counter = (table.rows.length);
-            var counter1 = (cleaning.rows.length);
+            var counter = $("#ShoppingRowCount").val();
+            var counter1 = $("#CleaningRowCount").val();
 
             $('#Addrow').on('click', function () {
-                counter++;
-                var clone = $("#Shopping tr:last").clone().insertAfter("#tblShopping tr:last").find('input').val('');
+                counter++;              
+                var clone = $("#Shopping tr:last").clone();
+                clone.attr('id', 'row-' + counter);
+                table.rows.add(clone).draw();
                 $('#ShoppingRowCount').val(counter);
 
             });
             $('#Addrow2').on('click', function () {
                 counter1++;
-                var clone = $("#Cleaning tr:last").clone().insertAfter("#tblCleaning tr:last").find('input').val('');
+                var clone = $("#Cleaning tr:last").clone();
+                clone.attr('id', 'row-' + counter1);
+                cleaning.rows.add(clone).draw();
                 $('#CleaningRowCount').val(counter1);
 
 
             });
 
             $('#tblShopping tbody').on('click', 'tr', function () {
-                $(this).toggleClass('selected');
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
             });
             $('#tblCleaning tbody').on('click', 'tr', function () {
-                $(this).toggleClass('selected');
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    cleaning.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
             });
             $('#Delrow').click(function () {
                 const id = table.row('.selected').id();

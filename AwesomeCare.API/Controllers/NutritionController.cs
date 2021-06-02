@@ -24,7 +24,6 @@ namespace AwesomeCare.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class NutritionController : ControllerBase
     {
         private ILogger<NutritionController> _logger;

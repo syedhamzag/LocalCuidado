@@ -1,0 +1,53 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.ClientLogAudit;
+@model List<GetClientLogAudit>
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>All Log Audit</h2>
+            </div>
+            <div class="body">
+                <table class="table m-b-0 datatables">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Log URL</th>
+                            <th>Due Date</th>
+                            <th>Remarks</th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                            <tr>
+                                <td>@item.index </td>
+                                <td>@item.data.LogURL</td>
+                                <td>@item.data.NextDueDate</td>
+                                <td>@item.data.Remarks</td>
+
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Edit", "Edit", "ClientLogAudit", new { logAuditId = item.data.LogAuditId }, new { @class = "dropdown-item" })
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
