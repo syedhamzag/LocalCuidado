@@ -54,9 +54,9 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-        public async Task<IActionResult> Edit(int ServiceWatchId)
+        public async Task<IActionResult> Edit(int WatchId)
         {
-            var ServiceWatch = _clientServiceWatchService.Get(ServiceWatchId);
+            var ServiceWatch = _clientServiceWatchService.Get(WatchId);
             List<GetStaffs> staffNames = await _staffService.GetStaffs();
             ViewBag.GetStaffs = staffNames;
             var putEntity = new CreateClientServiceWatch

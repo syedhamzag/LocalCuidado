@@ -1,5 +1,5 @@
-﻿@using AwesomeCare.DataTransferObject.DTOs.ClientLogAudit;
-@model List<GetClientLogAudit>
+﻿@using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
+@model List<GetClientServiceWatch>
 @{
     ViewData["Title"] = "Reports";
 }
@@ -15,7 +15,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Log URL</th>
+                            <th>URL</th>
                             <th>Due Date</th>
                             <th>Remarks</th>
 
@@ -27,8 +27,8 @@
                         {
                             <tr>
                                 <td>@item.index </td>
-                                <td>@item.data.LogURL</td>
-                                <td>@item.data.NextDueDate</td>
+                                <td>@item.data.URL</td>
+                                <td>@item.data.NextCheckDate</td>
                                 <td>@item.data.Remarks</td>
 
                                 <td>
@@ -36,7 +36,7 @@
                                         <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "ClientLogAudit", new { logAuditId = item.data.LogAuditId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("Edit", "Edit", "ClientServiceWatch", new { WatchId = item.data.WatchId }, new { @class = "dropdown-item" })
                                         </div>
                                     </div>
                                 </td>
