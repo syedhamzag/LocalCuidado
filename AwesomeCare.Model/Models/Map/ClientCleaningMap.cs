@@ -96,6 +96,11 @@ namespace AwesomeCare.Model.Models.Map
                 .WithMany(p => p.ClientCleaning)
                 .HasForeignKey(p => p.NutritionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(p => p.StaffPersonalInfo)
+                .WithMany(p => p.ClientCleaning)
+                .HasForeignKey(p => p.STAFFId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

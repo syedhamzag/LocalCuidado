@@ -22,6 +22,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AwesomeCare.DataTransferObject.DTOs.ClientVoice;
+using AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit;
+using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
+using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -42,6 +45,9 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientLogAudit> _clientLogAuditRepository;
         private IGenericRepository<ClientMedAudit> _clientMedAuditRepository;
         private IGenericRepository<ClientVoice> _clientVoiceRepository;
+        private IGenericRepository<ClientMgtVisit> _clientMgtVisitRepository;
+        private IGenericRepository<ClientProgram> _clientProgramRepository;
+        private IGenericRepository<ClientServiceWatch> _clientServiceWatchRepository;
         private IGenericRepository<Medication> _medicationRepository;
         private IGenericRepository<MedicationManufacturer> _medicationManufacturerRepository;
         private AwesomeCareDbContext _dbContext;
@@ -50,7 +56,8 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<ClientComplainRegister> complainRepository,
             IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
             IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository,
-            IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<ClientVoice> clientVoiceRepository)
+            IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<ClientVoice> clientVoiceRepository,
+            IGenericRepository<ClientMgtVisit> clientMgtVisitRepository, IGenericRepository<ClientProgram> clientProgramRepository,IGenericRepository<ClientServiceWatch> clientServiceWatchRepository)
         {
             _clientRepository = clientRepository;
             _complainRepository = complainRepository;
@@ -67,6 +74,9 @@ namespace AwesomeCare.API.Controllers
             _clientLogAuditRepository = clientLogAuditRepository;
             _clientMedAuditRepository = clientMedAuditRepository;
             _clientVoiceRepository = clientVoiceRepository;
+            _clientMgtVisitRepository = clientMgtVisitRepository;
+            _clientProgramRepository = clientProgramRepository;
+            _clientServiceWatchRepository = clientServiceWatchRepository;
         }
         /// <summary>
         /// Create Client
@@ -202,6 +212,27 @@ namespace AwesomeCare.API.Controllers
                                                                 ActionRequired = v.ActionRequired,
                                                                 Attachment = v.Attachment
                                                             }).ToList(),
+                                       GetClientMgtVisit = (from mg in _clientMgtVisitRepository.Table
+                                                         where mg.ClientId == id.Value
+                                                         select new GetClientMgtVisit
+                                                         {
+                                                             ActionRequired = mg.ActionRequired,
+                                                             Attachment = mg.Attachment
+                                                         }).ToList(),
+                                       GetClientProgram = (from cp in _clientProgramRepository.Table
+                                                         where cp.ClientId == id.Value
+                                                         select new GetClientProgram
+                                                         {
+                                                             ActionRequired = cp.ActionRequired,
+                                                             Attachment = cp.Attachment
+                                                         }).ToList(),
+                                       GetClientServiceWatch = (from sw in _clientServiceWatchRepository.Table
+                                                         where sw.ClientId == id.Value
+                                                         select new GetClientServiceWatch
+                                                         {
+                                                             ActionRequired = sw.ActionRequired,
+                                                             Attachment = sw.Attachment
+                                                         }).ToList(),
                                        RegulatoryContact = (from reg in client.RegulatoryContact
                                                             join baseRecordItem in _baseRecordItemRepository.Table on reg.BaseRecordItemId equals baseRecordItem.BaseRecordItemId
                                                             join baseRecord in _baseRecordRepository.Table on baseRecordItem.BaseRecordId equals baseRecord.BaseRecordId

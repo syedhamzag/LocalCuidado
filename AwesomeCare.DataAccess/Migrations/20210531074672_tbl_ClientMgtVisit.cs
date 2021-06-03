@@ -27,7 +27,7 @@ namespace AwesomeCare.DataAccess.Migrations
                     ActionRequired = table.Column<string>(maxLength: 255, nullable: false),
                     OfficerToAct = table.Column<int>(nullable: false),
                     ActionsTakenByMPCC = table.Column<string>(maxLength: 255, nullable: false),
-                    EvidenceOfActionTaken = table.Column<string>(maxLength: 255, nullable: false),
+                    EvidenceOfActionTaken = table.Column<string>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     RotCause = table.Column<string>(maxLength: 50, nullable: false),
                     LessonLearntAndShared = table.Column<string>(maxLength: 255, nullable: false),

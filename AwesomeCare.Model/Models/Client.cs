@@ -18,6 +18,9 @@ namespace AwesomeCare.Model.Models
             ClientLogAudit = new HashSet<ClientLogAudit>();
             ClientMedAudit = new HashSet<ClientMedAudit>();
             ClientVoice = new HashSet<ClientVoice>();
+            ClientMgtVisit = new HashSet<ClientMgtVisit>();
+            ClientProgram = new HashSet<ClientProgram>();
+            ClientServiceWatch = new HashSet<ClientServiceWatch>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -64,6 +67,9 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientLogAudit> ClientLogAudit { get; set; }
         public virtual ICollection<ClientMedAudit> ClientMedAudit { get; set; }
         public virtual ICollection<ClientVoice> ClientVoice { get; set; }
+        public virtual ICollection<ClientMgtVisit> ClientMgtVisit { get; set; }
+        public virtual ICollection<ClientProgram> ClientProgram { get; set; }
+        public virtual ICollection<ClientServiceWatch> ClientServiceWatch { get; set; }
 
     }
 }

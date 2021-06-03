@@ -165,6 +165,7 @@ namespace AwesomeCare.Admin.Controllers
 
                     if (Mealtype.Count > 0 && Mealtype[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
                     {
+                        int i = 0;
                         foreach (var weekDay in weekDays)
                         {
                             string weekdayid = $"{MealType.MealType}-isChecked-{weekDay.DayofWeek}";
@@ -175,7 +176,7 @@ namespace AwesomeCare.Admin.Controllers
 
                                 string mealdetailId = $"{MealType.MealType}-{weekDay.DayofWeek}-MealDetails";
                                 string howtoprepareId = $"{MealType.MealType}-{weekDay.DayofWeek}-HowtoPrepare";
-                                string typeId = $"{MealType.MealType}-{weekDay.DayofWeek}-TypeId";
+                                string typeId = $"TypeId";
                                 string seeVideoId = $"{MealType.MealType}-{weekDay.DayofWeek}-SeeVideo";
                                 var pictureId = $"{MealType.MealType}-{weekDay.DayofWeek}-Picture";
                                 string weekDayId = $"{MealType.MealType}-{weekDay.DayofWeek}-Day";
@@ -200,7 +201,7 @@ namespace AwesomeCare.Admin.Controllers
 
                                 MealDay.MEALDETAILS = mealDetail[0].ToString();
                                 MealDay.HOWTOPREPARE = howtoPrepare[0].ToString();
-                                MealDay.TypeId = int.Parse(TypeId);
+                                MealDay.TypeId = int.Parse(TypeId[i].ToString());
                                 MealDay.SEEVIDEO = seeVideo[0].ToString();
                                 MealDay.PICTURE = path;
                                 MealDay.MealDayofWeekId = int.Parse(weekday);
@@ -209,6 +210,7 @@ namespace AwesomeCare.Admin.Controllers
                                 MealDay.MealId = MealTypes.FirstOrDefault(r => r.MealType.Equals(MealType.MealType)).ClientMealTypeId;
 
                                 MealDays.Add(MealDay);
+                                i++;
                             }
 
                         }
@@ -226,7 +228,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var Shopping = new CreateClientShopping();
 
-                string StaffId = "Shopping.StaffId";
+                string StaffId = "STAFFId";
                 string MeasureId = "MeansOfPurchase";
                 string LocationId = "LocationOfPurchase";
                 string ItemId = "Item";
@@ -234,11 +236,11 @@ namespace AwesomeCare.Admin.Controllers
                 string QuantityId = "Quantity";
                 string AmountId = "Amount";
                 string DAYOFSHOPPINGId = "DAYOFSHOPPING";
-                string DATEFROMId = "Shopping.DATEFROM";
-                string DATETOId = "Shopping.DATETO";
+                string DATEFROMId = "DATEFROM";
+                string DATETOId = "DATETO";
                 string ImageId = "Image";
 
-                var Staff = int.Parse(formsCollection[StaffId][i].ToString()); ;
+                var Staff = int.Parse(formsCollection[StaffId][i].ToString());
                 var Measure = formsCollection[MeasureId][i].ToString();
                 var Location = formsCollection[LocationId][i].ToString();
                 var Item = formsCollection[ItemId][i].ToString();
@@ -280,21 +282,21 @@ namespace AwesomeCare.Admin.Controllers
             for (int i = 0; i < model.CleaningRowCount; i++)
             {
                 var Cleaning = new CreateClientCleaning();
-                string StaffId = "ClientCleaning.StaffId";
-                string AreasAndItemsId = "ClientCleaning.AreasAndItems";
-                string DetailsId = "ClientCleaning.Details";
-                string SafetyHazardId = "ClientCleaning.SafetyHazard";
-                string LocationOfItemId = "ClientCleaning.LocationOfItem";
-                string DescOfItemId = "ClientCleaning.DescOfItem";
-                string MinuteAllotedId = "ClientCleaning.MinuteAlloted";
-                string DisposalId = "ClientCleaning.Disposal";
-                string WhereToGetId = "ClientCleaning.WhereToGet";
-                string SEEVIDEOId = "ClientCleaning.SEEVIDEO";
-                string DAYOFCLEANINGId = "ClientCleaning.DAYOFCLEANING";
-                string DATEFROMId = "ClientCleaning.DATEFROM";
-                string DATETOId = "ClientCleaning.DATETO";
-                string WhereToKeepId = "ClientCleaning.WhereToKeep";
-                string ImageId = "ClientCleaning.Image";
+                string StaffId = "STAFFId";
+                string AreasAndItemsId = "AreasAndItems";
+                string DetailsId = "Details";
+                string SafetyHazardId = "SafetyHazard";
+                string LocationOfItemId = "LocationOfItem";
+                string DescOfItemId = "DescOfItem";
+                string MinuteAllotedId = "MinuteAlloted";
+                string DisposalId = "Disposal";
+                string WhereToGetId = "WhereToGet";
+                string SEEVIDEOId = "SEEVIDEO";
+                string DAYOFCLEANINGId = "DAYOFCLEANING";
+                string DATEFROMId = "DATEFROM";
+                string DATETOId = "DATETO";
+                string WhereToKeepId = "WhereToKeep";
+                string ImageId = "Image";
 
                 var Staff = int.Parse(formsCollection[StaffId][i].ToString());
                 var AreasAndItems = int.Parse(formsCollection[AreasAndItemsId][i].ToString());
@@ -307,7 +309,7 @@ namespace AwesomeCare.Admin.Controllers
                 var WhereToGet = int.Parse(formsCollection[WhereToGetId][i].ToString());
                 var SEEVIDEO = formsCollection[SEEVIDEOId][i].ToString();
                 var DAYOFCLEANING = formsCollection[DAYOFCLEANINGId][i].ToString();
-                var WhereToKeep = formsCollection.Files.GetFile(WhereToKeepId[i].ToString());
+                var WhereToKeep = formsCollection.Files.GetFile(WhereToKeepId);
                 var DATEFROM = DateTime.Parse(formsCollection[DATEFROMId][i].ToString());
                 var DATETO = DateTime.Parse(formsCollection[DATETOId][i].ToString());
                 var Image = formsCollection.Files.GetFile(ImageId);
@@ -347,7 +349,6 @@ namespace AwesomeCare.Admin.Controllers
             }
             Nutrition.ClientCleaning = Cleanings;
             #endregion
-
             if (Nutrition != null)
             {
                 if (model.ActionName == "Update")
