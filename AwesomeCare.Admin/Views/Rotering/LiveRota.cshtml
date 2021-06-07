@@ -16,6 +16,23 @@
 
             </div>
             <div class="body">
+
+                <form asp-route="LiveRota" method="post">
+                    <div class="row">
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label> Search Date</label>
+                            <input type="text" id="searchDate" name="searchDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
+
+                        </div>
+
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+
                 @if (Model?.Count > 0)
                 {
                     <table class="table table-condensed table-hover table-bordered">
@@ -38,7 +55,7 @@
                                 <th>Clock Out</th>
                                 <th>ClockIn Method</th>
                                 <th>ClockOut Method</th>
-                                <th>Clock Diff.</th>
+                                <th>Clock Diff.(Mins)</th>
                                 <th>Feedback</th>
                                 <th>No. of Staffs</th>
                                 <th>Rate</th>
@@ -82,7 +99,7 @@
                                         @{
                                             if (rota.ClockInTime.HasValue)
                                             {
-                                                var clockInTime = rota.ClockInTime.Value.ToString("HH:mm tt");
+                                                var clockInTime = rota.ClockInTime.Value.ToString("HH:mm:ss tt");
                                                 @clockInTime;
                                             }
                                         }
@@ -91,7 +108,7 @@
                                         @{
                                             if (rota.ClockOutTime.HasValue)
                                             {
-                                                var clockOutTime = rota.ClockOutTime.Value.ToString("HH:mm tt");
+                                                var clockOutTime = rota.ClockOutTime.Value.ToString("HH:mm:ss tt");
                                                 @clockOutTime;
                                             }
                                         }
@@ -100,13 +117,22 @@
                                     <td>@rota.ClockOutMethod</td>
                                     <td>
                                         @{
-                                            bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.ToString(), "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
-                                            bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.ToString(), "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
-                                            if (isClockInTimeValid && isClockOutTimeValid)
+
+                                            bool isClockInTimeValid = false;
+                                            bool isClockOutTimeValid = false;
+                                            TimeSpan clockIn = default;
+                                            TimeSpan clockOut = default;
+                                            if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
                                             {
-                                                var clockDiff = clockOut.Subtract(clockIn).TotalMinutes;
-                                                @clockDiff
+                                                isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out  clockIn);
+                                                isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out  clockOut);
+                                                if (isClockInTimeValid && isClockOutTimeValid)
+                                                {
+                                                    var clockDiff = clockOut.Subtract(clockIn).TotalMinutes;
+                                                    @clockDiff
+                                                }
                                             }
+
                                         }
                                     </td>
                                     <td>@rota.Feedback</td>
@@ -157,7 +183,7 @@
                                             {
                                                 var st = DateTime.TryParseExact(rota.StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
                                                 var df = st.Subtract(rota.ClockInTime.Value.DateTime).TotalMinutes;
-                                              
+
                                                 if (df <= 15 && df >= -15)
                                                 {
                                                     color = "green";
