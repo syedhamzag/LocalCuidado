@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 using AwesomeCare.Model.Models;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using AutoMapper;
+using System.Globalization;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -187,12 +188,26 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LiveRota()
+        public async Task<IActionResult> LiveRota(string searchDate)
         {
-            var date =  DateTime.Now.ToString("yyyy-MM-dd");
+           // var date =DateTime.Now.ToString("yyyy-MM-dd");
+            var date = string.IsNullOrWhiteSpace(searchDate) ? DateTime.Now.ToString("yyyy-MM-dd") : searchDate;
             var rotaAdmin = await _rotaTaskService.LiveRota(date);
 
             return View(rotaAdmin);
+        }
+
+
+        [HttpPost]
+        public IActionResult LiveRota(IFormCollection formCollection)
+        {
+            string searchDate = formCollection["searchDate"];
+            var date = string.IsNullOrWhiteSpace(searchDate) ? DateTime.Now.ToString("yyyy-MM-dd") : searchDate;
+            // var date = DateTime.Now.ToString("yyyy-MM-dd");
+            //var rotaAdmin = await _rotaTaskService.LiveRota(date);
+
+            return RedirectToActionPermanent("LiveRota", new { searchDate = date });
+           // return View(rotaAdmin);
         }
 
 
