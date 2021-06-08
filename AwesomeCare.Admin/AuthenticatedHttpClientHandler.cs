@@ -36,7 +36,7 @@ namespace AwesomeCare.Admin
         }
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-          
+            _logger.LogInformation($"AuthenticatedHttpClientHandler");
             var accessToken = await GetAccessToken();// await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
             request.SetBearerToken(accessToken);
             return await base.SendAsync(request, cancellationToken);
@@ -60,6 +60,7 @@ namespace AwesomeCare.Admin
             var refreshToken = await _context.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
             _logger.LogInformation($"RefreshToken: {refreshToken}");
             var clientSettings = _configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
+            _logger.LogInformation(discoveryResponse.TokenEndpoint);
             var refreshResponse = await idpClient.RequestRefreshTokenAsync(new RefreshTokenRequest
             {
                 Address = discoveryResponse.TokenEndpoint,
