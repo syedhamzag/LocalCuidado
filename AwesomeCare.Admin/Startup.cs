@@ -52,6 +52,14 @@ using AwesomeCare.Admin.Services.ClientVoice;
 using AwesomeCare.Admin.Services.ClientMgtVisit;
 using AwesomeCare.Admin.Services.ClientProgram;
 using AwesomeCare.Admin.Services.ClientServiceWatch;
+using AwesomeCare.Admin.Services.StaffSpotCheck;
+using AwesomeCare.Admin.Services.StaffAdlObs;
+using AwesomeCare.Admin.Services.StaffMedComp;
+using AwesomeCare.Admin.Services.StaffKeyWorkerVoice;
+using AwesomeCare.Admin.Services.StaffSurvey;
+using AwesomeCare.Admin.Services.StaffOneToOne;
+using AwesomeCare.Admin.Services.StaffSupervisionAppraisal;
+using AwesomeCare.Admin.Services.StaffReference;
 
 namespace AwesomeCare.Admin
 {
@@ -588,6 +596,53 @@ namespace AwesomeCare.Admin
             }).AddTypedClient(r => RestService.For<IClientServiceWatchService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
+            services.AddHttpClient("staffspotcheck", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffSpotCheckService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffadlobs", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffAdlObsService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffmedcomp", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffMedCompService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffkeyworkervoice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffKeyWorkerVoiceService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffsurvey", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffSurveyService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffonetoone", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffOneToOneService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffsupervisionappraisal", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffSupervisionAppraisalService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffreference", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffReferenceService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
 }

@@ -1,8 +1,20 @@
-﻿using AwesomeCare.DataTransferObject.Enums;
+﻿using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
+using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
+using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
+using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
+using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
+using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
+using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
+using AwesomeCare.DataTransferObject.DTOs.StaffReference;
+using AwesomeCare.DataTransferObject.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice;
+using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
+using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
@@ -15,12 +27,29 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             References = new List<GetStaffReferee>();
             RegulatoryContacts = new List<GetStaffRegulatoryContact>();
             EmergencyContacts = new List<GetStaffEmergencyContact>();
+            GetStaffSpotCheck = new List<GetStaffSpotCheck>();
+            GetStaffAdlObs = new List<GetStaffAdlObs>();
+            GetStaffMedComp = new List<GetStaffMedComp>();
+            GetStaffKeyWorkerVoice = new List<GetStaffKeyWorkerVoice>();
+            GetStaffSurvey = new List<GetStaffSurvey>();
+            GetStaffSupervisionAppraisal = new List<GetStaffSupervisionAppraisal>();
+            GetStaffOneToOne = new List<GetStaffOneToOne>();
+            GetStaffReference = new List<GetStaffReference>();
+
         }
         public List<GetStaffEducation> Education { get; set; }
         public List<GetStaffTraining> Trainings { get; set; }
         public List<GetStaffReferee> References { get; set; }
         public List<GetStaffRegulatoryContact> RegulatoryContacts { get; set; }
         public List<GetStaffEmergencyContact> EmergencyContacts { get; set; }
+        public List<GetStaffSpotCheck> GetStaffSpotCheck { get; set; }
+        public List<GetStaffAdlObs> GetStaffAdlObs { get; set; }
+        public List<GetStaffMedComp> GetStaffMedComp { get; set; }
+        public List<GetStaffKeyWorkerVoice> GetStaffKeyWorkerVoice { get; set; }
+        public List<GetStaffSurvey> GetStaffSurvey { get; set; }
+        public List<GetStaffSupervisionAppraisal> GetStaffSupervisionAppraisal { get; set; }
+        public List<GetStaffOneToOne> GetStaffOneToOne { get; set; }
+        public List<GetStaffReference> GetStaffReference { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]

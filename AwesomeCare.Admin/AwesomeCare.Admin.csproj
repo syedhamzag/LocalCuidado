@@ -57,6 +57,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\StaffAdlObs\Edit.cshtml" />
+    <None Include="Views\StaffAdlObs\Index.cshtml" />
+    <None Include="Views\StaffAdlObs\Reports.cshtml" />
+    <None Include="Views\StaffOneToOne\Edit.cshtml" />
+    <None Include="Views\StaffOneToOne\Index.cshtml" />
+    <None Include="Views\StaffOneToOne\Reports.cshtml" />
+    <None Include="Views\StaffReference\Edit.cshtml" />
+    <None Include="Views\StaffReference\Index.cshtml" />
+    <None Include="Views\StaffReference\Reports.cshtml" />
+    <None Include="Views\StaffSpotCheck\Edit.cshtml" />
+    <None Include="Views\StaffSpotCheck\Index.cshtml" />
+    <None Include="Views\StaffSpotCheck\Reports.cshtml" />
+    <None Include="Views\StaffSupervisionAppraisal\Edit.cshtml" />
+    <None Include="Views\StaffSupervisionAppraisal\Index.cshtml" />
+    <None Include="Views\StaffSupervisionAppraisal\Reports.cshtml" />
+    <None Include="Views\StaffSurvey\Edit.cshtml" />
+    <None Include="Views\StaffSurvey\Index.cshtml" />
+    <None Include="Views\StaffSurvey\Reports.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Views\MedicationManufacturer\Index.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
