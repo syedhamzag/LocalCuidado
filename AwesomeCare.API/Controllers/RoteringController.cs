@@ -543,17 +543,23 @@ namespace AwesomeCare.API.Controllers
         }
 
         [HttpGet]
-        [Route("LiveRota2/{date}")]
+        [Route("LiveRota2/{sdate}/{edate}")]
         [ProducesResponseType(typeof(List<LiveTracker>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult SampleLiveRota(string date)
+        public IActionResult SampleLiveRota(string sdate,string edate)
         {
             string format = "yyyy-MM-dd";
-            bool isStartDateValid = DateTime.TryParseExact(date, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime startDate);
+            bool isStartDateValid = DateTime.TryParseExact(sdate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime startDate);
             if (!isStartDateValid)
             {
-                return BadRequest($"Invalid Date format, Format is {format}");
+                return BadRequest($"Invalid StartDate format, Format is {format}");
+            }
+
+            bool isStopDateValid = DateTime.TryParseExact(edate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
+            if (!isStopDateValid)
+            {
+                return BadRequest($"Invalid StopDate format, Format is {format}");
             }
 
             var rotas = (from sr in _staffRotaRepository.Table
@@ -570,7 +576,7 @@ namespace AwesomeCare.API.Controllers
                          // 
                          //  
                           join c in _clientRepository.Table on cr.ClientId equals c.ClientId
-                         where sr.RotaDate >= startDate && sr.RotaDate <= startDate
+                         where sr.RotaDate >= startDate && sr.RotaDate <= stopDate
                          select new LiveTracker
                          {
                              AreaCode = c.AreaCodeId,
@@ -613,6 +619,20 @@ namespace AwesomeCare.API.Controllers
             return Ok(distinctRotas);
         }
 
+       /// <summary>
+       /// Delete StaffRota Period by Id
+       /// </summary>
+       /// <param name="staffRotaPeriodId"></param>
+       /// <returns></returns>
+        [HttpDelete("DeleteStaffRotaPeriod")]
+        public async Task<IActionResult> DeleteStaffRotaPeriod(int staffRotaPeriodId)
+        {
+            var staffRotaPeriod = await _staffRotaPeriodRepository.GetEntity(staffRotaPeriodId);
+            if (staffRotaPeriod == null) return NotFound();
 
+            await _staffRotaPeriodRepository.DeleteEntity(staffRotaPeriod);
+
+            return Ok();
+        }
     }
 }

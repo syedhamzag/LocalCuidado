@@ -149,7 +149,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 if (model.ActionName == "Update")
                 {
-                   
+
                     var result = await _clientRotaService.EditRota(clientRotas, model.ClientId);
                     SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully Updated" : "An Error Occurred" });
                     var content = await result.Content.ReadAsStringAsync();
@@ -188,30 +188,55 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LiveRota(string searchDate)
+        public async Task<IActionResult> LiveRota(string startDate, string stopDate)
         {
-           // var date =DateTime.Now.ToString("yyyy-MM-dd");
-            var date = string.IsNullOrWhiteSpace(searchDate) ? DateTime.Now.ToString("yyyy-MM-dd") : searchDate;
-            var rotaAdmin = await _rotaTaskService.LiveRota(date);
+            // var date =DateTime.Now.ToString("yyyy-MM-dd");
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            var rotaAdmin = await _rotaTaskService.LiveRota(sdate, edate);
 
-            return View(rotaAdmin);
+            var groupedRota = (from rt in rotaAdmin
+                               group rt by rt.Staff into rtGrp
+                               select new GroupLiveRota
+                               {
+                                   StaffName = rtGrp.Key,
+                                   Trackers = rtGrp.ToList()
+
+                               }).ToList();
+
+            return View(groupedRota);
         }
 
 
         [HttpPost]
         public IActionResult LiveRota(IFormCollection formCollection)
         {
-            string searchDate = formCollection["searchDate"];
-            var date = string.IsNullOrWhiteSpace(searchDate) ? DateTime.Now.ToString("yyyy-MM-dd") : searchDate;
+            string startDate = formCollection["startDate"];
+            string stopDate = formCollection["stopDate"];
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
             // var date = DateTime.Now.ToString("yyyy-MM-dd");
             //var rotaAdmin = await _rotaTaskService.LiveRota(date);
 
-            return RedirectToActionPermanent("LiveRota", new { searchDate = date });
-           // return View(rotaAdmin);
+            return RedirectToActionPermanent("LiveRota", new { startDate = sdate, stopDate = edate });
+            // return View(rotaAdmin);
         }
 
 
-        [HttpGet("LiveRota/Edit",Name ="LiveRotaEdit")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteRota(IFormCollection formCollection, string deleteId)
+        {
+            //string id = formCollection["deleteId"];
+            int staffRotaId = int.TryParse(deleteId, out int rtId) ? rtId : 0;
+
+            var result = await _rotaTaskService.DeleteStaffRotaPeriod(staffRotaId);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully deleted" : "An Error Occurred" });
+            return RedirectToActionPermanent("LiveRota");
+        }
+
+        [HttpGet("LiveRota/Edit", Name = "LiveRotaEdit")]
         public async Task<IActionResult> EditLiveRota(int staffRotaPeriodId)
         {
             var staffRotaPeriod = await _rotaTaskService.GetStaffRotaPeriod(staffRotaPeriodId);
