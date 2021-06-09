@@ -28,9 +28,11 @@ namespace AwesomeCare.Admin.Services.RotaTask
         [Get("/Rotering/RotaAdmin/{sDate}/{eDate}")]
         Task<List<RotaAdmin>> RotaAdmin(string sDate, string eDate);
 
-        [Get("/Rotering/LiveRota2/{sDate}")]
-        Task<List<LiveTracker>> LiveRota(string sDate);
+        [Get("/Rotering/LiveRota2/{startDate}/{stopDate}")]
+        Task<List<LiveTracker>> LiveRota(string startDate,string stopDate);
 
+        [Delete("/Rotering/DeleteStaffRotaPeriod/{staffRotaPeriodId}")]
+        Task<HttpResponseMessage> DeleteStaffRotaPeriod(int staffRotaPeriodId);
 
         [Get("/Rotering/GetStaffRotaPeriodById/{staffRotaPeriodId}")]
         Task<GetStaffRotaPeriodForEdit> GetStaffRotaPeriod(int staffRotaPeriodId);
