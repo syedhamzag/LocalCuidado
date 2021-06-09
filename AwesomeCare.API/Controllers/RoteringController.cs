@@ -349,7 +349,7 @@ namespace AwesomeCare.API.Controllers
                               join cr in _clientRotaRepository.Table on crd.ClientRotaId equals cr.ClientRotaId
                               join crt in _clientRotaTypeRepository.Table on cr.ClientRotaTypeId equals crt.ClientRotaTypeId
                              join c in _clientRepository.Table on cr.ClientId equals c.ClientId
-                              where sr.RotaDate == sDate && sr.Staff == staffId
+                              where sr.RotaDate >= sDate && sr.RotaDate <= sDate && sr.Staff == staffId
                               select new
                               {
                                   AreaCode = c.AreaCodeId,
@@ -401,7 +401,7 @@ namespace AwesomeCare.API.Controllers
                                                  Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
                                                   Telephone = stp.Telephone
                                               }).ToList()
-                              }).ToList();
+                              }).OrderBy(o => o.RotaDate).Distinct().ToList();
 
 
 
