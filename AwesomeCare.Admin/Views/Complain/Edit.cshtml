@@ -15,6 +15,7 @@
             <div class="col-xs-8 col-sm-8 col-md-8">
                 <input type="hidden" asp-for="ComplainId" />
                 <input type="hidden" asp-for="ClientId" />
+                <input type="hidden" asp-for="EvidenceFilePath" />
                 <div class="row">
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label asp-for="LINK" class="control-label"></label>
@@ -45,7 +46,7 @@
                     </div>
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label class="control-label">OFFICER TO ACT</label>
-                        <baserecord asp-key="GetStaffs" asp-for="OFFICERTOACTId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                        <baserecord asp-key="GetStaffs" asp-for="OFFICERTOACTId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OFFICERTOACTId))" />
                         <span asp-validation-for="OFFICERTOACTId" class="text-danger"></span>
                     </div>
                 </div>
@@ -62,7 +63,7 @@
                     </div>
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label class="control-label">STAFF</label>
-                        <baserecord asp-key="GetStaffs" asp-for="STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />                       
+                        <baserecord asp-key="GetStaffs" asp-for="STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.STAFFId))" />                       
                         <span asp-validation-for="STAFFId" class="text-danger"></span>
                     </div>
                 </div>

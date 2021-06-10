@@ -21,5 +21,6 @@ namespace AwesomeCare.Model.Models
         public int STAFFId { get; set; }
 
         public virtual ClientNutrition ClientNutrition { get; set; }
+        public virtual StaffPersonalInfo StaffPersonalInfo { get; set; }
     }
 }

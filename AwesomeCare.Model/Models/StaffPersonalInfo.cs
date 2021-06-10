@@ -19,8 +19,24 @@ namespace AwesomeCare.Model.Models
             StaffRating = new HashSet<StaffRating>();
             StaffBlackList = new HashSet<StaffBlackList>();
             ClientNutrition = new HashSet<ClientNutrition>();
+            ClientLogAudit = new HashSet<ClientLogAudit>();
+            ClientMedAudit = new HashSet<ClientMedAudit>();
+            ClientVoice = new HashSet<ClientVoice>();
+            ClientShopping = new HashSet<ClientShopping>();
+            ClientCleaning = new HashSet<ClientCleaning>();
+            ClientMgtVisit = new HashSet<ClientMgtVisit>();
+            ClientProgram = new HashSet<ClientProgram>();
+            ClientServiceWatch = new HashSet<ClientServiceWatch>();
+            StaffSpotCheck = new HashSet<StaffSpotCheck>();
+            StaffAdlObs = new HashSet<StaffAdlObs>();
+            StaffMedCompObs = new HashSet<StaffMedComp>();
+            StaffKeyWorkerVoice = new HashSet<StaffKeyWorkerVoice>();
+            StaffSurvey = new HashSet<StaffSurvey>();
+            StaffOneToOne = new HashSet<StaffOneToOne>();
+            StaffSupervisionAppraisal = new HashSet<StaffSupervisionAppraisal>();
+            StaffReference = new HashSet<StaffReference>();
         }
-       
+
         public int StaffPersonalInfoId { get; set; }
         /// <summary>
         ///  ApplicationUser Id
@@ -85,6 +101,22 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffRating> StaffRating { get; set; }
         public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
         public virtual ICollection<ClientNutrition> ClientNutrition { get; set; }
+        public virtual ICollection<ClientLogAudit> ClientLogAudit { get; set; }
+        public virtual ICollection<ClientMedAudit> ClientMedAudit { get; set; }
+        public virtual ICollection<ClientVoice> ClientVoice { get; set; }
+        public virtual ICollection<ClientShopping> ClientShopping { get; set; }
+        public virtual ICollection<ClientCleaning> ClientCleaning { get; set; }
+        public virtual ICollection<ClientMgtVisit> ClientMgtVisit { get; set; }
+        public virtual ICollection<ClientProgram> ClientProgram { get; set; }
+        public virtual ICollection<ClientServiceWatch> ClientServiceWatch { get; set; }
+        public virtual ICollection<StaffSpotCheck> StaffSpotCheck { get; set; }
+        public virtual ICollection<StaffAdlObs> StaffAdlObs { get; set; }
+        public virtual ICollection<StaffMedComp> StaffMedCompObs { get; set; }
+        public virtual ICollection<StaffKeyWorkerVoice> StaffKeyWorkerVoice { get; set; }
+        public virtual ICollection<StaffSurvey> StaffSurvey { get; set; }
+        public virtual ICollection<StaffOneToOne> StaffOneToOne { get; set; }
+        public virtual ICollection<StaffSupervisionAppraisal> StaffSupervisionAppraisal { get; set; }
+        public virtual ICollection<StaffReference> StaffReference { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }

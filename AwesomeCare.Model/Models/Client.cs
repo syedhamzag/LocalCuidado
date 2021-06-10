@@ -15,7 +15,19 @@ namespace AwesomeCare.Model.Models
             StaffBlackList = new HashSet<StaffBlackList>();
             ComplainRegister = new HashSet<ClientComplainRegister>();
             ClientNutrition = new HashSet<ClientNutrition>();
+            ClientLogAudit = new HashSet<ClientLogAudit>();
+            ClientMedAudit = new HashSet<ClientMedAudit>();
+            ClientVoice = new HashSet<ClientVoice>();
+            ClientMgtVisit = new HashSet<ClientMgtVisit>();
+            ClientProgram = new HashSet<ClientProgram>();
+            ClientServiceWatch = new HashSet<ClientServiceWatch>();
+            StaffSpotCheck = new HashSet<StaffSpotCheck>();
+            StaffAdlObs = new HashSet<StaffAdlObs>();
+            StaffMedCompObs = new HashSet<StaffMedComp>();
+            StaffKeyWorkerVoice = new HashSet<StaffKeyWorkerVoice>();
+            StaffReference = new HashSet<StaffReference>();
         }
+
         public int ClientId { get; set; }
         public string Firstname { get; set; }
         public string Middlename { get; set; }
@@ -58,6 +70,17 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }
         public virtual ICollection<ClientNutrition> ClientNutrition { get; set; }
+        public virtual ICollection<ClientLogAudit> ClientLogAudit { get; set; }
+        public virtual ICollection<ClientMedAudit> ClientMedAudit { get; set; }
+        public virtual ICollection<ClientVoice> ClientVoice { get; set; }
+        public virtual ICollection<ClientMgtVisit> ClientMgtVisit { get; set; }
+        public virtual ICollection<ClientProgram> ClientProgram { get; set; }
+        public virtual ICollection<ClientServiceWatch> ClientServiceWatch { get; set; }
+        public virtual ICollection<StaffSpotCheck> StaffSpotCheck { get; set; }
+        public virtual ICollection<StaffAdlObs> StaffAdlObs { get; set; }
+        public virtual ICollection<StaffMedComp> StaffMedCompObs { get; set; }
+        public virtual ICollection<StaffKeyWorkerVoice> StaffKeyWorkerVoice { get; set; }
+        public virtual ICollection<StaffReference> StaffReference { get; set; }
 
     }
 }
