@@ -392,6 +392,7 @@ namespace AwesomeCare.API.Controllers
                                   StaffRate = st.Rate,
                                   ClientRotaDaysId = crd.ClientRotaDaysId,
                                   StaffRotaId = sr.StaffRotaId,
+                                  StaffId = sr.Staff,
                                   StaffRotaPeriodId = srp.StaffRotaPeriodId,
                                   Tasks = (from tsk in crd.ClientRotaTask
                                            join tk in rotaTaskRepository.Table on tsk.RotaTaskId equals tk.RotaTaskId
@@ -427,7 +428,7 @@ namespace AwesomeCare.API.Controllers
                                                 AreaCode = cl.AreaCode,
                                                 ClientId = cl.ClientId,
                                                 ClientKeySafe = cl.ClientKeySafe,
-                                                ClientName = cl.ClientName,
+                                                Client = cl.ClientName,
                                                 ClientPostCode = cl.ClientPostCode,
                                                 ClientProviderReference = cl.ClientProviderReference,
                                                 ClientRate = cl.ClientRate,

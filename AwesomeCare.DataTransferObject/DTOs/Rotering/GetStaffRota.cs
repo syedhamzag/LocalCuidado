@@ -56,7 +56,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string Period { get; set; }
 
         [JsonProperty("client")]
-        public string ClientName { get; set; }
+        public string Client { get; set; }
 
         [JsonProperty("clientPostCode")]
         public string ClientPostCode { get; set; }
@@ -85,6 +85,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         [JsonProperty("staff")]
         public string Staff { get; set; }
 
+        [JsonProperty("staffId")]
+        public int StaffId { get; set; }
+        
         [JsonProperty("remark")]
         public object Remark { get; set; }
 
