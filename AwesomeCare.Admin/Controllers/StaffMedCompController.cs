@@ -60,7 +60,9 @@ namespace AwesomeCare.Admin.Controllers
         {
             var MedComp = _StaffMedCompService.Get(MedCompId);
             List<GetStaffs> staffNames = await _staffService.GetStaffs();
+            List<GetClient> clientNames = await _clientService.GetClients();
             ViewBag.GetStaffs = staffNames;
+            ViewBag.GetClients = clientNames;
             var putEntity = new CreateStaffMedComp
             {
                 ClientId = MedComp.Result.ClientId,
@@ -74,7 +76,7 @@ namespace AwesomeCare.Admin.Controllers
                 ActionRequired = MedComp.Result.ActionRequired,
                 NextCheckDate = MedComp.Result.NextCheckDate,
                 StaffId = MedComp.Result.StaffId,
-                RateStaff = MedComp.Result.StaffId,
+                RateStaff = MedComp.Result.RateStaff,
                 UnderstandingofMedication = MedComp.Result.UnderstandingofMedication,
                 UnderstandingofRights = MedComp.Result.UnderstandingofRights,
                 ReadingMedicalPrescriptions = MedComp.Result.ReadingMedicalPrescriptions,
@@ -91,8 +93,9 @@ namespace AwesomeCare.Admin.Controllers
             if (model == null || !ModelState.IsValid)
             {
                 List<GetStaffs> staffNames = await _staffService.GetStaffs();
+                List<GetClient> clientNames = await _clientService.GetClients();
                 ViewBag.GetStaffs = staffNames;
-                ViewBag.Staff = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.OfficerToAct);
+                ViewBag.GetClients = clientNames;
                 return View(model);
             }
             #region Attachment

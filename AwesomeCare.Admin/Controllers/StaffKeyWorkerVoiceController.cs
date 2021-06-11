@@ -60,7 +60,9 @@ namespace AwesomeCare.Admin.Controllers
         {
             var KeyWorker = _StaffKeyWorkerVoiceService.Get(KeyWorkerId);
             List<GetStaffs> staffNames = await _staffService.GetStaffs();
+            List<GetClient> clientNames = await _clientService.GetClients();
             ViewBag.GetStaffs = staffNames;
+            ViewBag.GetClients = clientNames;
             var putEntity = new CreateStaffKeyWorkerVoice
             {
                 Attachment = KeyWorker.Result.Attachment,

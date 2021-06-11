@@ -57,7 +57,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Does Staff Understand Five Rights</label>
+                                    <label class="control-label">Understand Five Rights</label>
                                     <baserecord asp-key="Understanding_of_Rights" asp-for="UnderstandingofRights" asp-items="null" />
                                     <span asp-validation-for="UnderstandingofRights" class="text-danger"></span>
                                 </div>
@@ -67,14 +67,14 @@
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Did Staff Read Medication Prescription</label>
+                                    <label class="control-label">Read Medication Prescription</label>
                                     <baserecord asp-key="Reading_Medical_Prescriptions" asp-for="ReadingMedicalPrescriptions" asp-items="null" />
                                     <span asp-validation-for="ReadingMedicalPrescriptions" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Did Staff Follow Care Plan</label>
+                                    <label class="control-label">Follow Care Plan</label>
                                     <baserecord asp-key="Care_Plan" asp-for="CarePlan" asp-items="null" />
                                     <span asp-validation-for="CarePlan" class="text-danger"></span>
                                 </div>
@@ -90,6 +90,13 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">URL</label>
+                                    <input type="text" asp-for="URL" class="form-control" />
+                                    <span asp-validation-for="URL" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Remrks</label>
                                     <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
@@ -99,11 +106,6 @@
                                     <label class="control-label">Action Required</label>
                                     <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
                                     <span asp-validation-for="ActionRequired" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">URL</label>
-                                    <input type="text" asp-for="URL" class="form-control" />
-                                    <span asp-validation-for="URL" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

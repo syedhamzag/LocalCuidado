@@ -61,7 +61,9 @@ namespace AwesomeCare.Admin.Controllers
         {
             var SpotCheck = _StaffSpotCheckService.Get(SpotCheckId);
             List<GetStaffs> staffNames = await _staffService.GetStaffs();
+            List<GetClient> clientNames = await _clientService.GetClients();
             ViewBag.GetStaffs = staffNames;
+            ViewBag.GetClients = clientNames;
             var putEntity = new CreateStaffSpotCheck
             {
                 ClientId = SpotCheck.Result.ClientId,
@@ -117,7 +119,9 @@ namespace AwesomeCare.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 List<GetStaffs> staffNames = await _staffService.GetStaffs();
+                List<GetClient> clientNames = await _clientService.GetClients();
                 ViewBag.GetStaffs = staffNames;
+                ViewBag.GetClients = clientNames;
                 return View(model);
             }
             #region Evidence

@@ -52,7 +52,13 @@
                                             <li><a asp-controller="Communication" asp-action="Index">Communication</a></li>
                                             <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
                                             <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
-                                            <li><a asp-controller="ShiftBooking" asp-action="CreateStaffShift">Create Shift</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-lg-auto col-md-4 col-sm-4">
+                                    <div class="mega-list">
+                                        <ul class="list-unstyled">
+                                            
                                         </ul>
                                     </div>
                                 </div>
@@ -95,10 +101,6 @@
                                             <li><a asp-controller="StaffRotaSelection" asp-action="Index">Staff Rota Item</a></li>
                                             <li><a asp-controller="Rotering" asp-action="RotaAdmin">Rota Admin</a></li>
                                             <li><a asp-controller="Rotering" asp-action="LiveRota">Live Tracker</a></li>
-                                            @*<li><a asp-controller="StaffSpotCheck" asp-action="Reports">Staff Spot Check</a></li>
-                                            <li><a asp-controller="StaffSpotCheck" asp-action="Reports">Staff Spot Check</a></li>
-                                            <li><a asp-controller="StaffSpotCheck" asp-action="Reports">Staff Spot Check</a></li>
-                                            <li><a asp-controller="StaffSpotCheck" asp-action="Reports">Staff Spot Check</a></li>*@
                                         </ul>
                                     </div>
                                 </div>
@@ -108,6 +110,21 @@
                                         <ul class="list-unstyled">
                                             <li><a asp-controller="Medication" asp-action="Index">Medications</a></li>
                                             <li><a asp-controller="MedicationManufacturer" asp-action="Index">Manufacturers</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown mega-menu">
+                        <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="icon-user-follow"></i> <span> Reports</span></a>
+                        <div class="dropdown-menu mega-main padding-0 animated fadeIn">
+                            <div class="row">
+                                <div class="col-lg-2 col-lg-auto col-md-4 col-sm-4">
+                                    <div class="mega-list">
+                                        <ul class="list-unstyled">
+                                            <li><label>Client</label></li>
                                             <li><a asp-controller="Complain" asp-action="Index">Complain Register</a></li>
                                             <li><a asp-controller="Nutrition" asp-action="Reports">Nutrition</a></li>
                                             <li><a asp-controller="ClientLogAudit" asp-action="Reports">Log Audit</a></li>
@@ -116,6 +133,31 @@
                                             <li><a asp-controller="ClientMgtVisit" asp-action="Reports">MGT Visit</a></li>
                                             <li><a asp-controller="ClientProgram" asp-action="Reports">Program</a></li>
                                             <li><a asp-controller="ClientServiceWatch" asp-action="Reports">Ongoing/Service Watch</a></li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-lg-auto col-md-4 col-sm-4">
+                                    <div class="mega-list">
+                                        <ul class="list-unstyled">
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-lg-auto col-md-4 col-sm-4">
+                                    <div class="mega-list">
+                                        <ul class="list-unstyled">
+                                            <li><label>Staff</label></li>
+                                            <li><a asp-controller="StaffSpotCheck" asp-action="Reports">Spot Check</a></li>
+                                            <li><a asp-controller="StaffAdlObs" asp-action="Reports">Adl Observation</a></li>
+                                            <li><a asp-controller="StaffMedComp" asp-action="Reports">Med Comp. Observation</a></li>
+                                            <li><a asp-controller="StaffKeyWorkerVoice" asp-action="Reports">Key Worker Voice</a></li>
+                                            <li><a asp-controller="StaffSurvey" asp-action="Reports">Survey</a></li>
+                                            <li><a asp-controller="StaffOneToOne" asp-action="Reports">One To One</a></li>
+                                            <li><a asp-controller="StaffSupervisionAppraisal" asp-action="Reports">Supervision Appraisal</a></li>
+                                            <li><a asp-controller="StaffReference" asp-action="Reports">Reference</a></li>
                                         </ul>
                                     </div>
                                 </div>

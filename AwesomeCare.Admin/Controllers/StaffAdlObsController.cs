@@ -61,9 +61,12 @@ namespace AwesomeCare.Admin.Controllers
         {
             var Observer = _StaffAdlObsService.Get(ObserverId);
             List<GetStaffs> staffNames = await _staffService.GetStaffs();
+            List<GetClient> clientNames = await _clientService.GetClients();
             ViewBag.GetStaffs = staffNames;
+            ViewBag.GetClients = clientNames;
             var putEntity = new CreateStaffAdlObs
             {
+                ObservationID = ObserverId,
                 ClientId = Observer.Result.ClientId,
                 Attachment = Observer.Result.Attachment,
                 Date = Observer.Result.Date,
@@ -119,7 +122,9 @@ namespace AwesomeCare.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 List<GetStaffs> staffNames = await _staffService.GetStaffs();
+                List<GetClient> clientNames = await _clientService.GetClients();
                 ViewBag.GetStaffs = staffNames;
+                ViewBag.GetClients = clientNames;
                 return View(model);
             }
             #region Evidence

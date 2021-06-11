@@ -93,25 +93,25 @@
                         <tbody>
                             @foreach (var MealType in Model.MealTypes)
                             {
-                                <tr id="@MealType.MealType" style="display:none">
+                                <tr id="@MealType.RotaType" style="display:none">
                                     <td>
                                         <div class="fancy-checkbox">
                                             @{
 
-                                                <input type="hidden" asp-for="@MealType.ClientMealTypeId" />
-                                                var MealTypeId = Model.ClientMealDays.FirstOrDefault(c => c.MealId == MealType.ClientMealTypeId);
+                                                <input type="hidden" asp-for="@MealType.ClientRotaTypeId" />
+                                                var MealTypeId = Model.ClientMealDays.FirstOrDefault(c => c.MealId == MealType.ClientRotaTypeId);
                                                 if (MealTypeId != null)
                                                 {
                                                     //display and for edit
-                                                    <label><input type="checkbox" class="MealType" name="@MealType.MealType" checked><span>@MealType.MealType</span></label>
-                                                    @Html.Hidden($"{MealType.MealType}-NutritionId-{Model.NutritionId}", @Model.NutritionId)
+                                                    <label><input type="checkbox" class="MealType" name="@MealType.RotaType" checked><span>@MealType.RotaType</span></label>
+                                                    @Html.Hidden($"{MealType.RotaType}-NutritionId-{Model.NutritionId}", @Model.NutritionId)
                                                 }
                                                 else
                                                 {
 
                                                     //new
-                                                    <label><input type="checkbox" class="MealType" name="@MealType.MealType"><span>@MealType.MealType</span></label>
-                                                    @Html.Hidden($"{MealType.MealType}-NutritionId", 0)
+                                                    <label><input type="checkbox" class="MealType" name="@MealType.RotaType"><span>@MealType.RotaType</span></label>
+                                                    @Html.Hidden($"{MealType.RotaType}-NutritionId", 0)
 
 
                                                 }
@@ -120,29 +120,29 @@
                                         </div>
                                         <div class="fancy-checkbox">
 
-                                            <label><input type="checkbox" class="selectAll" name="@MealType.MealType"><span><small>Repeat</small></span></label>
+                                            <label><input type="checkbox" class="selectAll" name="@MealType.RotaType"><span><small>Repeat</small></span></label>
 
                                         </div>
                                     </td>
                                     @foreach (var weekDay in Model.WeekDays)
                                     {
                                         int i = 1;
-                                        var mealDywk = Model.ClientMealDays.FirstOrDefault(d => d.MealId == MealType.ClientMealTypeId && d.MealDayofWeekId == weekDay.RotaDayofWeekId);
+                                        var mealDywk = Model.ClientMealDays.FirstOrDefault(d => d.MealId == MealType.ClientRotaTypeId && d.MealDayofWeekId == weekDay.RotaDayofWeekId);
                                         <td>
                                             @if (mealDywk != null)
                                             {
 
-                                                <input type="checkbox" class="selectDay" name="@MealType.MealType-isChecked-@weekDay.DayofWeek" id="@MealType.MealType-isChecked-@weekDay.DayofWeek" checked />
-                                                @Html.Hidden($"{MealType.MealType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
+                                                <input type="checkbox" class="selectDay" name="@MealType.RotaType-isChecked-@weekDay.DayofWeek" id="@MealType.RotaType-isChecked-@weekDay.DayofWeek" checked />
+                                                @Html.Hidden($"{MealType.RotaType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
 
                                                 <div class="form-group">
                                                     <label>Meal Details</label>
-                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-MealDetails" id="@MealType.MealType-@weekDay.DayofWeek-MealDetails" class="form-control" style="width: 100px !important;" value="@mealDywk.MEALDETAILS" />
+                                                    <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-MealDetails" id="@MealType.RotaType-@weekDay.DayofWeek-MealDetails" class="form-control" style="width: 100px !important;" value="@mealDywk.MEALDETAILS" />
 
                                                 </div>
                                                 <div class="form-group">
                                                     <label>How to Prepare</label>
-                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.MealType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" style="width: 100px !important;" value="@mealDywk.HOWTOPREPARE" />
+                                                    <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" style="width: 100px !important;" value="@mealDywk.HOWTOPREPARE" />
 
                                                 </div>
                                                 <div class="form-group">
@@ -151,44 +151,44 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Video URL</label>
-                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-SeeVideo" id="@MealType.MealType-@weekDay.DayofWeek-SeeVideo" class="form-control" style="width: 100px !important;" value="@mealDywk.SEEVIDEO" />
+                                                    <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-SeeVideo" id="@MealType.RotaType-@weekDay.DayofWeek-SeeVideo" class="form-control" style="width: 100px !important;" value="@mealDywk.SEEVIDEO" />
 
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Picture</label>
                                                     <br />
-                                                    <image alt="file" class="" src="@mealDywk.PICTURE" name="@MealType.MealType-@weekDay.DayofWeek-Picture" id="@MealType.MealType-@weekDay.DayofWeek-Picture" style="width: 100px !important; height: 100px !important;">
+                                                    <image alt="file" class="" src="@mealDywk.PICTURE" name="@MealType.RotaType-@weekDay.DayofWeek-Picture" id="@MealType.RotaType-@weekDay.DayofWeek-Picture" style="width: 100px !important; height: 100px !important;">
 
                                                 </div>
                                             }
                                             else
                                             {
-                                                <input type="checkbox" class="selectDay" name="@MealType.MealType-isChecked-@weekDay.DayofWeek" id="@MealType.MealType-isChecked-@weekDay.DayofWeek" disabled="disabled" />
-                                                @Html.Hidden($"{MealType.MealType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
+                                                <input type="checkbox" class="selectDay" name="@MealType.RotaType-isChecked-@weekDay.DayofWeek" id="@MealType.RotaType-isChecked-@weekDay.DayofWeek" disabled="disabled" />
+                                                @Html.Hidden($"{MealType.RotaType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
 
                                                 <div class="form-group">
                                                     <label>Meal Details</label>
-                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-MealDetails" id="@MealType.MealType-@weekDay.DayofWeek-MealDetails" class="form-control" disabled="disabled" style="width: 100px !important;" />
+                                                    <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-MealDetails" id="@MealType.RotaType-@weekDay.DayofWeek-MealDetails" class="form-control" disabled="disabled" style="width: 100px !important;" />
 
                                                 </div>
                                                 <div class="form-group">
                                                     <label>How to Prepare</label>
-                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.MealType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" disabled="disabled" style="width: 100px !important;" />
+                                                    <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" disabled="disabled" style="width: 100px !important;" />
 
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-control" id="@MealType.MealType-@weekDay.DayofWeek-TypeId" style="padding-left: 25px; border: none;">Type</label>
+                                                    <label class="form-control" id="@MealType.RotaType-@weekDay.DayofWeek-TypeId" style="padding-left: 25px; border: none;">Type</label>
                                                     <baserecord asp-key="Client_Meal_Type" asp-for="ClientMealDays.FirstOrDefault().TypeId" asp-items="null" />
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Video URL</label>
-                                                    <input type="text" name="@MealType.MealType-@weekDay.DayofWeek-SeeVideo" id="@MealType.MealType-@weekDay.DayofWeek-SeeVideo" class="form-control" disabled="disabled" style="width: 100px !important;" />
+                                                    <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-SeeVideo" id="@MealType.RotaType-@weekDay.DayofWeek-SeeVideo" class="form-control" disabled="disabled" style="width: 100px !important;" />
 
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Picture</label>
                                                     <br />
-                                                    <input type="file" class="dropify" name="@MealType.MealType-@weekDay.DayofWeek-Picture" id="@MealType.MealType-@weekDay.DayofWeek-Picture" disabled="disabled" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;">
+                                                    <input type="file" class="dropify" name="@MealType.RotaType-@weekDay.DayofWeek-Picture" id="@MealType.RotaType-@weekDay.DayofWeek-Picture" disabled="disabled" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;">
 
                                                 </div>
 

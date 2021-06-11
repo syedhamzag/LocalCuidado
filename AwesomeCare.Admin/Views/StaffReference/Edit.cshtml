@@ -21,6 +21,7 @@
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="StaffReferenceId" />
                             <input type="hidden" asp-for="StaffId" />
+                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
@@ -29,7 +30,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Applicant Role</label>
-                                    <baserecord asp-key="Applicant_Role" asp-for="ApplicantRole" asp-items="@(new SelectList(@ViewBag.GetClients,"StaffPersonalInfoId","Fullname",Model.ApplicantRole))" />
+                                    <baserecord asp-key="GetClients" asp-for="ApplicantRole" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname",Model.ApplicantRole))" />
                                     <span asp-validation-for="ApplicantRole" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -84,14 +85,14 @@
                                     <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Date Of Exit/Closing Comment</label>
+                                    <label class="control-label">Date Of Exit</label>
                                     <input type="text" asp-for="DateofExit" class="form-control" />
                                     <span asp-validation-for="DateofExit" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Rehire Staff/Closing Comment</label>
+                                    <label class="control-label">Rehire Staff</label>
                                     <input type="text" asp-for="RehireStaff" class="form-control" />
                                     <span asp-validation-for="RehireStaff" class="text-danger"></span>
                                 </div>

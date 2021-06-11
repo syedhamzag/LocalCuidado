@@ -21,6 +21,7 @@
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="KeyWorkerId" />
                             <input type="hidden" asp-for="StaffId" />
+                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
@@ -41,23 +42,23 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Team You Work For</label>
-                                    <baserecord asp-key="Team_You_Work_For" asp-for="TeamYouWorkFor" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficerToAct))" />
+                                    <baserecord asp-key="Team_You_Work_For" asp-for="TeamYouWorkFor" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.TeamYouWorkFor))" />
                                     <span asp-validation-for="TeamYouWorkFor" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Services Users Are Not Comfortable With</label>
+                                    <label class="control-label">Uncomfortable Users Services</label>
                                     <baserecord asp-key="Not_Comfortable_Services" asp-for="NotComfortableServices" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname",Model.NotComfortableServices))" />
                                     <span asp-validation-for="NotComfortableServices" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Service Users Requiring More Time</label>
+                                    <label class="control-label">Requiring More Time</label>
                                     <baserecord asp-key="Services_Requires_Time" asp-for="ServicesRequiresTime" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname",Model.ServicesRequiresTime))" />
                                     <span asp-validation-for="ServicesRequiresTime" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Service Users Requiring More Services</label>
+                                    <label class="control-label">Requiring More Services</label>
                                     <baserecord asp-key="Services_Requires_Services" asp-for="ServicesRequiresServices" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname",Model.ServicesRequiresServices))" />
                                     <span asp-validation-for="ServicesRequiresServices" class="text-danger"></span>
                                 </div>
@@ -74,7 +75,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Are Your Service Users Well Supported</label>
+                                    <label class="control-label">Well Supported Services</label>
                                     <baserecord asp-key="Well_Supported_Services" asp-for="WellSupportedServices" asp-items="null" />
                                     <span asp-validation-for="WellSupportedServices" class="text-danger"></span>
                                 </div>
@@ -83,13 +84,18 @@
                                     <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
                                     <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">URL</label>
+                                    <input type="text" asp-for="URL" class="form-control" />
+                                    <span asp-validation-for="URL" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Changes We Need To Make Client Happy</label>
                                     <textarea type="text" asp-for="ChangesWeNeed" class="form-control"></textarea>
                                     <span asp-validation-for="ChangesWeNeed" class="text-danger"></span>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Nutritional Changes</label>
                                     <textarea type="text" asp-for="NutritionalChanges" class="form-control"></textarea>
@@ -118,7 +124,7 @@
                                     <span asp-validation-for="RiskAssessment" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Remarks</label>
+                                    <label class="control-label">Remrks</label>
                                     <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
                                     <span asp-validation-for="Remarks" class="text-danger"></span>
                                 </div>
@@ -129,11 +135,7 @@
                                     <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
                                     <span asp-validation-for="ActionRequired" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">URL</label>
-                                    <input type="text" asp-for="URL" class="form-control" />
-                                    <span asp-validation-for="URL" class="text-danger"></span>
-                                </div>
+
                             </div>
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">

@@ -21,6 +21,7 @@
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="StaffSupervisionAppraisalId" />
                             <input type="hidden" asp-for="StaffId" />
+                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
@@ -62,7 +63,7 @@
                                     <span asp-validation-for="StaffRating" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Details/Closing Comment</label>
+                                    <label class="control-label">Details</label>
                                     <input type="text" asp-for="Details" class="form-control" />
                                     <span asp-validation-for="Details" class="text-danger"></span>
                                 </div>
@@ -74,7 +75,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Five Star Rating/Closing Comment</label>
+                                    <label class="control-label">Five Star Rating</label>
                                     <input type="text" asp-for="FiveStarRating" class="form-control" />
                                     <span asp-validation-for="FiveStarRating" class="text-danger"></span>
                                 </div>
@@ -84,29 +85,34 @@
                                     <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Development on Job/Closing Comment</label>
+                                    <label class="control-label">Development on Job</label>
                                     <input type="text" asp-for="StaffDevelopment" class="form-control" />
                                     <span asp-validation-for="StaffDevelopment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Remark/Closing Comment</label>
+                                    <label class="control-label">Remark</label>
                                     <input type="text" asp-for="Remarks" class="form-control" />
                                     <span asp-validation-for="Remarks" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">URL</label>
-                                    <input type="text" asp-for="URL" class="form-control" />
-                                    <span asp-validation-for="URL" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Emergency Assisting Ability</label>
                                     <input type="text" asp-for="StaffAbility" class="form-control" />
                                     <span asp-validation-for="StaffAbility" class="text-danger"></span>
                                 </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Staff Improvement Areas</label>
+                                    <baserecord asp-key="Staff_Supported_Area" asp-for="StaffSupportAreas" asp-items="null" />
+                                    <span asp-validation-for="StaffSupportAreas" class="text-danger"></span>
+                                </div>
                             </div>
                             <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">URL</label>
+                                    <input type="text" asp-for="URL" class="form-control" />
+                                    <span asp-validation-for="URL" class="text-danger"></span>
+                                </div>
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">No Ability To Support</label>
                                     <textarea type="text" asp-for="NoAbilityToSupport" class="form-control"></textarea>
@@ -117,24 +123,20 @@
                                     <textarea type="text" asp-for="CondourAndWhistleBlowing" class="form-control"></textarea>
                                     <span asp-validation-for="CondourAndWhistleBlowing" class="text-danger"></span>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Condour And Whistle Blowing Consequences</label>
                                     <textarea type="text" asp-for="NoCondourAndWhistleBlowing" class="form-control"></textarea>
                                     <span asp-validation-for="NoCondourAndWhistleBlowing" class="text-danger"></span>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                        <label class="control-label">Staff Improvement Areas</label>
-                                        <textarea type="text" asp-for="StaffSupportAreas" class="form-control"></textarea>
-                                        <span asp-validation-for="StaffSupportAreas" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                        <label class="control-label">Action Required</label>
-                                        <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
-                                        <span asp-validation-for="ActionRequired" class="text-danger"></span>
-                                    </div>
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Action Required</label>
+                                    <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
+                                    <span asp-validation-for="ActionRequired" class="text-danger"></span>
                                 </div>
                             </div>
+
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <div class="card">

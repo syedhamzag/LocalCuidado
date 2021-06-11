@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 
 namespace AwesomeCare.Admin.ViewModels.Nutrition
 {
@@ -22,7 +23,7 @@ namespace AwesomeCare.Admin.ViewModels.Nutrition
         {
             STAFF = new List<GetStaffs>();
             WeekDays = new List<GetRotaDayofWeek>();
-            MealTypes = new List<GetClientMealType>();
+            MealTypes = new List<GetClientRotaType>();
             ClientMealDays = new List<GetClientMealDays>();
             ClientShopping = new List<GetClientShopping>();
             ClientCleaning = new List<GetClientCleaning>();
@@ -54,7 +55,7 @@ namespace AwesomeCare.Admin.ViewModels.Nutrition
         public string CleaningStaffName { get; set; }
         public List<GetStaffs> STAFF { get; set; }
         public List<GetRotaDayofWeek> WeekDays { get; set; }
-        public List<GetClientMealType> MealTypes { get; set; }
+        public List<GetClientRotaType> MealTypes { get; set; }
 
 
         public List<GetClientMealDays> ClientMealDays { get; set; }

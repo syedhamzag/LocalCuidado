@@ -21,6 +21,7 @@
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="ObservationID" />
                             <input type="hidden" asp-for="StaffId" />
+                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
@@ -50,14 +51,14 @@
                                     <span asp-validation-for="Details" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Unerstading of Equipment Used In Delivery</label>
+                                    <label class="control-label">Unerstading of Equipment</label>
                                     <baserecord asp-key="Understanding_of_Equipment" asp-for="UnderstandingofEquipment" asp-items="null" />
                                     <span asp-validation-for="UnderstandingofEquipment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Understading of Service Expectations</label>
+                                    <label class="control-label">Service Expectations</label>
                                     <baserecord asp-key="Understanding_of_Service" asp-for="UnderstandingofService" asp-items="null" />
                                     <span asp-validation-for="UnderstandingofService" class="text-danger"></span>
                                 </div>
@@ -67,14 +68,14 @@
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Understading of Infection Control</label>
+                                    <label class="control-label">Infection Control</label>
                                     <baserecord asp-key="Understanding_of_Control" asp-for="UnderstandingofControl" asp-items="null" />
                                     <span asp-validation-for="UnderstandingofControl" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Does Staff Observed the Five Principles of Care</label>
+                                    <label class="control-label">Five Principles of Care</label>
                                     <baserecord asp-key="Five_Principles" asp-for="FivePrinciples" asp-items="null" />
                                     <span asp-validation-for="FivePrinciples" class="text-danger"></span>
                                 </div>
@@ -83,13 +84,19 @@
                                     <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
                                     <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">URL</label>
+                                    <input type="text" asp-for="URL" class="form-control" />
+                                    <span asp-validation-for="URL" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Remarks</label>
                                     <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
                                     <span asp-validation-for="Remarks" class="text-danger"></span>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Area Requiring Improvements or Comments</label>
                                     <textarea type="text" asp-for="Comments" class="form-control"></textarea>
@@ -100,11 +107,7 @@
                                     <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
                                     <span asp-validation-for="ActionRequired" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">URL</label>
-                                    <input type="text" asp-for="URL" class="form-control" />
-                                    <span asp-validation-for="URL" class="text-danger"></span>
-                                </div>
+
                             </div>
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">

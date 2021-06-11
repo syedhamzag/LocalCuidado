@@ -56,11 +56,13 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-        public async Task<IActionResult> Edit(int StaffReferenceId)
+        public async Task<IActionResult> Edit(int ReferenceId)
         {
-            var StaffReference = _StaffReferenceService.Get(StaffReferenceId);
+            var StaffReference = _StaffReferenceService.Get(ReferenceId);
             List<GetStaffs> staffNames = await _staffService.GetStaffs();
+            List<GetClient> clientNames = await _clientService.GetClients();
             ViewBag.GetStaffs = staffNames;
+            ViewBag.GetClients = clientNames;
             var putEntity = new CreateStaffReference
             {
                 Address = StaffReference.Result.Address,

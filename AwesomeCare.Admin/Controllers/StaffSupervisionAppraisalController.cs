@@ -94,7 +94,6 @@ namespace AwesomeCare.Admin.Controllers
             {
                 List<GetStaffs> staffNames = await _staffService.GetStaffs();
                 ViewBag.GetStaffs = staffNames;
-                ViewBag.Staff = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.OfficerToAct);
                 return View(model);
             }
             #region Attachment
