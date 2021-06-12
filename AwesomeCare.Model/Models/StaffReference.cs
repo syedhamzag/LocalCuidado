@@ -7,6 +7,7 @@ namespace AwesomeCare.Model.Models
     public class StaffReference
     {
         public int StaffReferenceId { get; set; }
+        public string Reference { get; set; }
         public int StaffId { get; set; }
         public DateTime Date { get; set; }
         public int ApplicantRole { get; set; }

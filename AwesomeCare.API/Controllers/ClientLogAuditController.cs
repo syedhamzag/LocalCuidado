@@ -52,19 +52,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostClientLogAudit postClientLogAudit)
+        public async Task<IActionResult> Create([FromBody] List<PostClientLogAudit> postClientLogAudit)
         {
             if (postClientLogAudit == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var ClientLogAudit = Mapper.Map<ClientLogAudit>(postClientLogAudit);
-            var newClientLogAudit = await _clientLogAuditRepository.InsertEntity(ClientLogAudit);
-            var getClientLogAudit = Mapper.Map<GetClientLogAudit>(newClientLogAudit);
-            return Ok(getClientLogAudit);
-
-
+            var ClientLogAudit = Mapper.Map<List<ClientLogAudit>>(postClientLogAudit);
+            await _clientLogAuditRepository.InsertEntities(ClientLogAudit);
+            return Ok();
         }
         /// <summary>
         /// Update ClientLogAudit

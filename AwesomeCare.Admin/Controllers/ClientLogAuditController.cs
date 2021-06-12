@@ -53,17 +53,18 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int? clientId)
         {
             var model = new CreateClientLogAudit();
-            List<GetStaffs> staffNames = await _staffService.GetStaffs();
-            ViewBag.GetStaffs = staffNames;
+            var staffs = await _staffService.GetStaffs();
             model.ClientId = clientId.Value;
+            model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             return View(model);
 
         }
         public async Task<IActionResult> Edit(int logAuditId)
         {
             var logAudit = _clientlogAuditService.Get(logAuditId);
-            List<GetStaffs> staffNames = await _staffService.GetStaffs();
-            ViewBag.GetStaffs = staffNames;
+            var staffs = await _staffService.GetStaffs();
+            List<int> officer = new List<int>();
+            officer.Add(logAudit.Result.OfficerToTakeAction);
             var putEntity = new CreateClientLogAudit
             {
                 ClientId = logAudit.Result.ClientId,
@@ -78,7 +79,7 @@ namespace AwesomeCare.Admin.Controllers
                 LogURL = logAudit.Result.LogURL,
                 NameOfAuditor = logAudit.Result.NameOfAuditor,
                 Observations = logAudit.Result.Observations,
-                OfficerToTakeAction = logAudit.Result.OfficerToTakeAction,
+                OfficerToTakeAction = officer,
                 Remarks = logAudit.Result.Remarks,
                 RepeatOfIncident = logAudit.Result.RepeatOfIncident,
                 RotCause = logAudit.Result.RotCause,
@@ -91,7 +92,8 @@ namespace AwesomeCare.Admin.Controllers
                 ProperDocumentation = logAudit.Result.ProperDocumentation,
                 ThinkingStaff = logAudit.Result.ThinkingStaff,
                 ThinkingStaffStop = logAudit.Result.ThinkingStaffStop,
-            };
+                OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
+        };
             return View(putEntity);
         }
         [HttpPost]
@@ -100,11 +102,11 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
-                List<GetStaffs> staffNames = await _staffService.GetStaffs();
-                ViewBag.GetStaffs = staffNames;
-                ViewBag.Staff = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.OfficerToTakeAction);
+                var staffs = await _staffService.GetStaffs();
+                model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+            List<PostClientLogAudit> postlogs = new List<PostClientLogAudit>();
                 #region Evidence
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "_Evidence_", model.ClientId);
@@ -116,11 +118,41 @@ namespace AwesomeCare.Admin.Controllers
                 string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.EvidenceFilePath = pathA;
-                #endregion
+            #endregion
+            foreach (var officer in model.OfficerToTakeAction)
+            {
+                var postlog = new PostClientLogAudit();
+                postlog.ActionRecommended = model.ActionRecommended;
+                postlog.ClientId = model.ClientId;
+                postlog.ActionRecommended = model.ActionRecommended;
+                postlog.ActionTaken = model.ActionTaken;
+                postlog.EvidenceFilePath = model.EvidenceFilePath;
+                postlog.Date = model.Date;
+                postlog.NextDueDate = model.NextDueDate;
+                postlog.Deadline = model.Deadline;
+                postlog.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+                postlog.LessonLearntAndShared = model.LessonLearntAndShared;
+                postlog.LogURL = model.LogURL;
+                postlog.NameOfAuditor = model.NameOfAuditor;
+                postlog.Observations = model.Observations;
+                postlog.OfficerToTakeAction = officer;
+                postlog.Remarks = model.Remarks;
+                postlog.RepeatOfIncident = model.RepeatOfIncident;
+                postlog.RotCause = model.RotCause;
+                postlog.Status = model.Status;
+                postlog.ThinkingServiceUsers = model.ThinkingServiceUsers;
+                postlog.Communication = model.Communication;
+                postlog.ImproperDocumentation = model.ImproperDocumentation;
+                postlog.IsCareDifference = model.IsCareDifference;
+                postlog.IsCareExpected = model.IsCareExpected;
+                postlog.ProperDocumentation = model.ProperDocumentation;
+                postlog.ThinkingStaff = model.ThinkingStaff;
+                postlog.ThinkingStaffStop = model.ThinkingStaffStop;
 
-            var postLogAudit = Mapper.Map<PostClientLogAudit>(model);
+                postlogs.Add(postlog);
 
-            var result = await _clientlogAuditService.Create(postLogAudit);
+            }
+            var result = await _clientlogAuditService.Create(postlogs);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Log Audit successfully registered" : "An Error Occurred" });
@@ -133,8 +165,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                List<GetStaffs> staffNames = await _staffService.GetStaffs();
-                ViewBag.GetStaffs = staffNames;
+                var staffs = await _staffService.GetStaffs();
+                model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
             #region Evidence

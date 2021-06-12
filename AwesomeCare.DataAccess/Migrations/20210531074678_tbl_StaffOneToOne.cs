@@ -14,23 +14,24 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     OneToOneId = table.Column<int>(nullable: false)
                             .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Reference = table.Column<string>(maxLength: 50, nullable: false),
                     StaffId = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     NextCheckDate = table.Column<DateTime>(nullable: false),
-                    Purpose = table.Column<string>(maxLength: 255, nullable: false),
+                    Purpose = table.Column<string>(nullable: false),
                     PreviousSupervision = table.Column<int>(nullable: false),
-                    StaffImprovedInAreas = table.Column<string>(maxLength: 255, nullable: false),
-                    CurrentEventArea = table.Column<string>(maxLength: 255, nullable: false),
-                    StaffConclusion = table.Column<string>(maxLength: 255, nullable: false),
-                    DecisionsReached = table.Column<string>(maxLength: 255, nullable: false),
+                    StaffImprovedInAreas = table.Column<string>(nullable: false),
+                    CurrentEventArea = table.Column<string>(nullable: false),
+                    StaffConclusion = table.Column<string>(nullable: false),
+                    DecisionsReached = table.Column<string>(nullable: false),
                     ImprovementRecorded = table.Column<string>(nullable: false),
-                    ActionRequired = table.Column<string>(maxLength: 255, nullable: false),
+                    ActionRequired = table.Column<string>(nullable: false),
                     OfficerToAct = table.Column<int>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Remarks = table.Column<string>(maxLength: 255, nullable: false),
-                    URL = table.Column<string>(maxLength: 255, nullable: false),
-                    Attachment = table.Column<string>(nullable: false)
+                    Remarks = table.Column<string>(nullable: false),
+                    URL = table.Column<string>(nullable: false),
+                    Attachment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

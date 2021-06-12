@@ -7,6 +7,7 @@ namespace AwesomeCare.Model.Models
     public class ClientVoice
     {
         public int VoiceId { get; set; }
+        public string Reference { get; set; }
         public int ClientId { get; set; }
         public DateTime Date { get; set; }
         public DateTime NextCheckDate { get; set; }

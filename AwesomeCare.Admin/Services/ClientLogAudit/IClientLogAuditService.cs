@@ -17,7 +17,7 @@ namespace AwesomeCare.Admin.Services.ClientLogAudit
         Task<GetClientLogAudit> Get(int id);
 
         [Post("/ClientLogAudit/Create")]
-        Task<HttpResponseMessage> Create([Body] PostClientLogAudit model);
+        Task<HttpResponseMessage> Create([Body] List<PostClientLogAudit> model);
 
         [Put("/ClientLogAudit")]
         Task<GetClientLogAudit> Put([Body] PutClientLogAudit model);

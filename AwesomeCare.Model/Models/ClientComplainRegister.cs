@@ -11,6 +11,7 @@ namespace AwesomeCare.Model.Models
 
         }
             public int ComplainId { get; set; }
+            public string Reference { get; set; }
             public int ClientId { get; set; }
             public string LINK { get; set; }
             public string IRFNUMBER { get; set; }

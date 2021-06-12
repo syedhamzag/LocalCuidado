@@ -14,10 +14,11 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     MedCompId = table.Column<int>(nullable: false)
                             .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Reference = table.Column<string>(maxLength: 50, nullable: false),
                     StaffId = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     NextCheckDate = table.Column<DateTime>(nullable: false),
-                    Details = table.Column<string>(maxLength: 255, nullable: false),
+                    Details = table.Column<string>(nullable: false),
                     ClientId = table.Column<int>(nullable: false),
                     UnderstandingofMedication = table.Column<int>(nullable: false),
                     UnderstandingofRights = table.Column<int>(nullable: false),
@@ -25,12 +26,12 @@ namespace AwesomeCare.DataAccess.Migrations
                     CarePlan = table.Column<int>(nullable: false),
                     RateStaff = table.Column<int>(nullable: false),
                     OfficerToAct = table.Column<int>(nullable: false),
-                    ActionRequired = table.Column<string>(maxLength: 255, nullable: false),
+                    ActionRequired = table.Column<string>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Remarks = table.Column<string>(maxLength: 255, nullable: false),
-                    URL = table.Column<string>(maxLength: 255, nullable: false),
-                    Attachment = table.Column<string>(nullable: false)
+                    Remarks = table.Column<string>(nullable: false),
+                    URL = table.Column<string>(nullable: false),
+                    Attachment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
