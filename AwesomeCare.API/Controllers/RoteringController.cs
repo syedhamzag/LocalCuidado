@@ -459,6 +459,7 @@ namespace AwesomeCare.API.Controllers
                                                 RotaDate = cl.RotaDate,
                                                 RotaId =cl.RotaId,
                                                 Staff = cl.Staff,
+                                                StaffId = cl.StaffId,
                                                 StaffRate = cl.StaffRate,
                                                 StaffRotaId = cl.StaffRotaId,
                                                 StaffRotaPeriodId = cl.StaffRotaPeriodId,
