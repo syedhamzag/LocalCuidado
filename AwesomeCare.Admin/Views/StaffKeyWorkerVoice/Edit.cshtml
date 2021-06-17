@@ -19,6 +19,9 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
+                            <select asp-for="KeyWorkerIds"
+                                    asp-items="@(new SelectList(Model.KeyWorkerIds))" style="display:none;">
+                            </select>
                             <input type="hidden" asp-for="KeyWorkerId" />
                             <input type="hidden" asp-for="StaffId" />
                             <input type="hidden" asp-for="Attachment" />
@@ -42,7 +45,8 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Team You Work For</label>
-                                    <baserecord asp-key="Team_You_Work_For" asp-for="TeamYouWorkFor" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.TeamYouWorkFor))" />
+                                    <select class="custom-select" asp-for="TeamYouWorkFor" asp-items="@Model.OfficerToActList">
+                                    </select>
                                     <span asp-validation-for="TeamYouWorkFor" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -69,7 +73,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficerToAct" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficerToAct))" />
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                             </div>
@@ -85,12 +89,17 @@
                                     <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" readonly />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">URL</label>
                                     <input type="text" asp-for="URL" class="form-control" />
                                     <span asp-validation-for="URL" class="text-danger"></span>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Changes We Need To Make Client Happy</label>
                                     <textarea type="text" asp-for="ChangesWeNeed" class="form-control"></textarea>

@@ -93,8 +93,8 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(255)
                .IsRequired();
 
-            builder.Property(p => p.Attach)
-               .HasColumnName("Attach")
+            builder.Property(p => p.Attachment)
+               .HasColumnName("Attachment")
                .HasMaxLength(255)
                .IsRequired();
 

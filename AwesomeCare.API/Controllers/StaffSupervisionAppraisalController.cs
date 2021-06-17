@@ -40,6 +40,19 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffSupervisionAppraisalRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+        /// <summary>
+        /// Get All Supervision Appraisal
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetStaffSupervisionAppraisal>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _StaffSupervisionAppraisalRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -49,16 +62,20 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostStaffSupervisionAppraisal postStaffSupervisionAppraisal)
+        public async Task<IActionResult> Create([FromBody] List<PostStaffSupervisionAppraisal> postStaffSupervisionAppraisal)
         {
             if (postStaffSupervisionAppraisal == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffSupervisionAppraisal = Mapper.Map<StaffSupervisionAppraisal>(postStaffSupervisionAppraisal);
-            var newStaffSupervisionAppraisal = await _StaffSupervisionAppraisalRepository.InsertEntity(StaffSupervisionAppraisal);
-            var getStaffSupervisionAppraisal = Mapper.Map<GetStaffSupervisionAppraisal>(newStaffSupervisionAppraisal);
-            return Ok(getStaffSupervisionAppraisal);
+            foreach (var item in postStaffSupervisionAppraisal)
+            {
+                if (item.Attachment == null)
+                    item.Attachment = "No Image";
+            }
+            var StaffSupervisionAppraisal = Mapper.Map<List<StaffSupervisionAppraisal>>(postStaffSupervisionAppraisal);
+            await _StaffSupervisionAppraisalRepository.InsertEntities(StaffSupervisionAppraisal);
+            return Ok();
 
 
         }
@@ -67,20 +84,42 @@ namespace AwesomeCare.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetStaffSupervisionAppraisal), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutStaffSupervisionAppraisal model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutStaffSupervisionAppraisal> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _StaffSupervisionAppraisalRepository.GetEntity(model.StaffSupervisionAppraisalId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _StaffSupervisionAppraisalRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetStaffSupervisionAppraisal>(updateEntity);
-            return Ok(getEntity);
+            var Entity = _dbContext.Set<StaffSupervisionAppraisal>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (StaffSupervisionAppraisal item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
+
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<StaffSupervisionAppraisal>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
         /// <summary>

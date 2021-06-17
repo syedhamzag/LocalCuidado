@@ -34,9 +34,9 @@
                                     <span asp-validation-for="ApplicantRole" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Confirmed By</label>
-                                    <baserecord asp-key="Confirmed_By" asp-for="ConfirmedBy" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.ConfirmedBy))" />
-                                    <span asp-validation-for="ConfirmedBy" class="text-danger"></span>
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" class="form-control" asp-for="Reference" readonly />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -108,6 +108,15 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Confirmed By</label>
+                                    <select class="custom-select" asp-for="ConfirmedBy" asp-items="@Model.OfficerToActList">
+
+                                    </select>
+                                    <span asp-validation-for="ConfirmedBy" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Address</label>
                                     <textarea type="text" asp-for="Address" class="form-control"></textarea>
@@ -124,6 +133,7 @@
                                     <span asp-validation-for="Contact" class="text-danger"></span>
                                 </div>
                             </div>
+
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <div class="card">

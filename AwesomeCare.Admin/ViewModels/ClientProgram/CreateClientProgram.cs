@@ -14,18 +14,20 @@ namespace AwesomeCare.Admin.ViewModels.ClientProgram
     {
         public CreateClientProgram()
         {
-        
+                OfficerToActList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
         #region DropDowns
-        public ICollection<GetStaffs> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         #endregion
         public string ActiveTab { get; set; } = "program";
         public int ProgramId { get; set; }
+        public List<int> ProgramIds { get; set; }
+        public string Reference { get; set; }
         [Required]
         public int ClientId { get; set; }
         [Required]
@@ -47,7 +49,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientProgram
         [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
-        public int OfficerToAct { get; set; }
+        [Display(Name = "OFFICERTOACT")]
+        public List<int> OfficerToTakeAction { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]

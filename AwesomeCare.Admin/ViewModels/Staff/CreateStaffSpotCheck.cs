@@ -15,7 +15,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
     {
         public CreateStaffSpotCheck()
         {
-            OfficerToActList = new List<GetStaffs>();
+            OfficerToActList = new List<SelectListItem>();
             ClientList = new List<GetClient>();
         }
 
@@ -24,10 +24,12 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
 
-        public ICollection<GetStaffs> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<GetClient> ClientList { get; set; }
         public string ActiveTab { get; set; } = "spotcheck";
         public int SpotCheckId { get; set; }
+        public List<int> SpotCheckIds { get; set; }
+        public string Reference { get; set; }
         [Required]
         public int StaffId { get; set; }
         [Required]
@@ -50,7 +52,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
-        public int OfficerToAct { get; set; }
+        public List<int> OfficerToAct { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]

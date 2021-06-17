@@ -41,6 +41,20 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffOneToOneRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+
+        /// <summary>
+        /// Get All StaffOneToOne
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetStaffOneToOne>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _StaffOneToOneRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -50,40 +64,67 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostStaffOneToOne postStaffOneToOne)
+        public async Task<IActionResult> Create([FromBody] List<PostStaffOneToOne> postStaffOneToOne)
         {
             if (postStaffOneToOne == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffOneToOne = Mapper.Map<StaffOneToOne>(postStaffOneToOne);
-            var newStaffOneToOne = await _StaffOneToOneRepository.InsertEntity(StaffOneToOne);
-            var getStaffOneToOne = Mapper.Map<GetStaffOneToOne>(newStaffOneToOne);
-            return Ok(getStaffOneToOne);
+            foreach (var item in postStaffOneToOne)
+            {
+                if (item.Attachment == null)
+                    item.Attachment = "No Image";
+            }
 
-
+            var StaffOneToOne = Mapper.Map<List<StaffOneToOne>>(postStaffOneToOne);
+            await _StaffOneToOneRepository.InsertEntities(StaffOneToOne);
+            return Ok();
         }
         /// <summary>
         /// Update StaffOneToOne
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetStaffOneToOne), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutStaffOneToOne model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutStaffOneToOne> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _StaffOneToOneRepository.GetEntity(model.OneToOneId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _StaffOneToOneRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetStaffOneToOne>(updateEntity);
-            return Ok(getEntity);
+            var Entity = _dbContext.Set<StaffOneToOne>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (StaffOneToOne item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
+
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<StaffOneToOne>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
+
+        
         /// <summary>
         /// Get StaffOneToOne by ProgramId
         /// </summary>

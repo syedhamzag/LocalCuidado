@@ -40,6 +40,21 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffKeyWorkerVoiceRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+
+
+        /// <summary>
+        /// Get All StaffKeyWorkerVoice
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetStaffKeyWorkerVoice>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _StaffKeyWorkerVoiceRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -49,40 +64,66 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostStaffKeyWorkerVoice postStaffKeyWorkerVoice)
+        public async Task<IActionResult> Create([FromBody] List<PostStaffKeyWorkerVoice> postStaffKeyWorkerVoice)
         {
             if (postStaffKeyWorkerVoice == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffKeyWorkerVoice = Mapper.Map<StaffKeyWorkerVoice>(postStaffKeyWorkerVoice);
-            var newStaffKeyWorkerVoice = await _StaffKeyWorkerVoiceRepository.InsertEntity(StaffKeyWorkerVoice);
-            var getStaffKeyWorkerVoice = Mapper.Map<GetStaffKeyWorkerVoice>(newStaffKeyWorkerVoice);
-            return Ok(getStaffKeyWorkerVoice);
+            foreach (var item in postStaffKeyWorkerVoice)
+            {
+                if (item.Attachment == null)
+                    item.Attachment = "No Image";
+            }
 
-
+            var StaffKeyWorkerVoice = Mapper.Map<List<StaffKeyWorkerVoice>>(postStaffKeyWorkerVoice);
+            await _StaffKeyWorkerVoiceRepository.InsertEntities(StaffKeyWorkerVoice);
+            return Ok();
         }
         /// <summary>
         /// Update StaffKeyWorkerVoice
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetStaffKeyWorkerVoice), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutStaffKeyWorkerVoice model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutStaffKeyWorkerVoice> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _StaffKeyWorkerVoiceRepository.GetEntity(model.KeyWorkerId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _StaffKeyWorkerVoiceRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetStaffKeyWorkerVoice>(updateEntity);
-            return Ok(getEntity);
+            var Entity = _dbContext.Set<StaffKeyWorkerVoice>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (StaffKeyWorkerVoice item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficertoAct == item.OfficerToAct).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
+
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficertoAct);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<StaffKeyWorkerVoice>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
+
         /// <summary>
         /// Get StaffKeyWorkerVoice by ProgramId
         /// </summary>

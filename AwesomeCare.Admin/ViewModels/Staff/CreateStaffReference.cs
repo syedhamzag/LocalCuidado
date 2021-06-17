@@ -15,7 +15,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
     {
         public CreateStaffReference()
         {
-            OfficerToActList = new List<GetStaffs>();
+            OfficerToActList = new List<SelectListItem>();
             ClientList = new List<GetClient>();
         }
 
@@ -24,11 +24,13 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
 
-        public ICollection<GetStaffs> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<GetClient> ClientList { get; set; }
         public string ActiveTab { get; set; } = "reference";
         [Required]
         public int StaffReferenceId { get; set; }
+        [Required]
+        public string Reference { get; set; }
         [Required]
         public int StaffId { get; set; }
         [Required]

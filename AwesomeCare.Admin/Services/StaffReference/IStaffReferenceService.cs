@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.StaffReference
         Task<HttpResponseMessage> Create([Body] PostStaffReference model);
 
         [Put("/StaffReference")]
-        Task<GetStaffReference> Put([Body] PutStaffReference model);
+        Task<HttpResponseMessage> Put([Body] PutStaffReference model);
     }
 }

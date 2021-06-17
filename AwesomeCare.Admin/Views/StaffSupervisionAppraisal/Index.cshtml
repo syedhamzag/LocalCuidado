@@ -41,7 +41,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">WorkTeam</label>
-                                    <baserecord asp-key="WorkTeam" asp-for="WorkTeam" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                                    <baserecord asp-key="WorkTeam" asp-for="WorkTeam" asp-items="@Model.OfficerToActList" />
                                     <span asp-validation-for="WorkTeam" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficerToAct" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                             </div>
@@ -96,10 +96,18 @@
                                     <span asp-validation-for="Remarks" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Emergency Assisting Ability</label>
                                     <input type="text" asp-for="StaffAbility" class="form-control" />
                                     <span asp-validation-for="StaffAbility" class="text-danger"></span>
                                 </div>
+                            </div>
+                            <div class="row">
+                                
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff Improvement Areas</label>
                                     <baserecord asp-key="Staff_Supported_Area" asp-for="StaffSupportAreas" asp-items="null" />

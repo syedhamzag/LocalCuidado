@@ -7,6 +7,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientProgram
     public class PutClientProgram
     {
         public int ProgramId { get; set; }
+        public string Reference { get; set; }
         public int ClientId { get; set; }
         public DateTime Date { get; set; }
         public DateTime NextCheckDate { get; set; }

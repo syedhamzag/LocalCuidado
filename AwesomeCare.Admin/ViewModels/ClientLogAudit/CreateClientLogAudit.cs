@@ -20,16 +20,21 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Evidence { get; set; }
+
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
+        
         #region DropDowns
         public ICollection<SelectListItem> OFFICERTOACT { get; set; }
         public ICollection<SelectListItem> Status_ { get; set; }
         #endregion
+
         public string ActiveTab { get; set; } = "logaudit";
         public int LogAuditId { get; set; }
+        public List<int> LogAuditIds { get; set; }
+        public string Reference { get; set; }
         [Required]
         public int ClientId { get; set; }
         [Required]

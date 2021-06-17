@@ -10,6 +10,9 @@ namespace AwesomeCare.Admin.Services.StaffAdlObs
 {
     public interface IStaffAdlObsService
     {
+        [Get("/StaffAdlObs/GetByRef/{Reference}")]
+        Task<List<GetStaffAdlObs>> GetByRef(string Reference);
+
         [Get("/StaffAdlObs")]
         Task<List<GetStaffAdlObs>> Get();
 
@@ -17,9 +20,9 @@ namespace AwesomeCare.Admin.Services.StaffAdlObs
         Task<GetStaffAdlObs> Get(int id);
 
         [Post("/StaffAdlObs/Create")]
-        Task<HttpResponseMessage> Create([Body] PostStaffAdlObs model);
+        Task<HttpResponseMessage> Create([Body] List<PostStaffAdlObs> model);
 
-        [Put("/StaffAdlObs")]
-        Task<GetStaffAdlObs> Put([Body] PutStaffAdlObs model);
+        [Put("/StaffAdlObs/Put")]
+        Task<HttpResponseMessage> Put([Body] List<PutStaffAdlObs> model);
     }
 }

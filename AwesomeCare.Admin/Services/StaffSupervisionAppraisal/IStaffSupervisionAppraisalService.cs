@@ -10,6 +10,9 @@ namespace AwesomeCare.Admin.Services.StaffSupervisionAppraisal
 {
     public interface IStaffSupervisionAppraisalService
     {
+        [Get("/StaffSupervisionAppraisal/GetByRef/{Reference}")]
+        Task<List<GetStaffSupervisionAppraisal>> GetByRef(string Reference);
+
         [Get("/StaffSupervisionAppraisal")]
         Task<List<GetStaffSupervisionAppraisal>> Get();
 
@@ -17,9 +20,9 @@ namespace AwesomeCare.Admin.Services.StaffSupervisionAppraisal
         Task<GetStaffSupervisionAppraisal> Get(int id);
 
         [Post("/StaffSupervisionAppraisal/Create")]
-        Task<HttpResponseMessage> Create([Body] PostStaffSupervisionAppraisal model);
+        Task<HttpResponseMessage> Create([Body] List<PostStaffSupervisionAppraisal> model);
 
-        [Put("/StaffSupervisionAppraisal")]
-        Task<GetStaffSupervisionAppraisal> Put([Body] PutStaffSupervisionAppraisal model);
+        [Put("/StaffSupervisionAppraisal/Put")]
+        Task<HttpResponseMessage> Put([Body] List<PutStaffSupervisionAppraisal> model);
     }
 }

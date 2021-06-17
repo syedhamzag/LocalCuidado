@@ -11,15 +11,24 @@ using Newtonsoft.Json;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Buffers;
-using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Hosting;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.ClientLogAudit;
+using System.IO;
+using OperationStatus = AwesomeCare.Admin.Models.OperationStatus;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using AwesomeCare.Model.Models;
+using iText.Kernel.Geom;
+using iText.Html2pdf;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -28,17 +37,19 @@ namespace AwesomeCare.Admin.Controllers
         private IClientLogAuditService _clientlogAuditService;
         private IClientService _clientService;
         private IStaffService _staffService;
+        private readonly IEmailService _emailService;
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
 
         public ClientLogAuditController(IClientLogAuditService clientlogAuditService, IFileUpload fileUpload, 
             IClientService clientService, IStaffService staffService, IWebHostEnvironment env, 
-            ILogger<ClientController> logger, IMemoryCache cache) : base(fileUpload)
+            ILogger<ClientController> logger, IMemoryCache cache,  IEmailService emailService) : base(fileUpload)
         {
             _clientlogAuditService = clientlogAuditService;
             _clientService = clientService;
             _staffService = staffService;
+            _emailService = emailService;
             _env = env;
             _logger = logger;
             _cache = cache;
@@ -59,39 +70,121 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-        public async Task<IActionResult> Edit(int logAuditId)
+        public async Task<IActionResult> View(string Reference)
         {
-            var logAudit = _clientlogAuditService.Get(logAuditId);
-            var staffs = await _staffService.GetStaffs();
+            string staffName = "\n OfficerToTakeAction:";
+            var logAudit = await _clientlogAuditService.GetByRef(Reference);
+            var staff = _staffService.GetStaffs();
+            foreach (var item in logAudit)
+            {
+                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToTakeAction).Select(s => s.Fullname).FirstOrDefault();
+
+            }
+            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
+            var newJson = json + staffName;
+            return View(logAudit.FirstOrDefault());
+        }
+        public async Task<IActionResult> Email(string Reference,string sender,string password, string recipient, string Smtp)
+        {
+            string staffName = "\n OfficerToTakeAction:";
+            var logAudit = await _clientlogAuditService.GetByRef(Reference);
+            var staff = _staffService.GetStaffs();
+            foreach (var item in logAudit)
+            {
+                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToTakeAction).Select(s => s.Fullname).FirstOrDefault();
+
+            }
+            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
+            var newJson = json + staffName;
+            byte[] byte1 = GeneratePdf(newJson);
+            System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientLogAudit.pdf");
+            string subject = "ClientLogAudit";
+            string body = "";
+            await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
+            return RedirectToAction("Reports");
+        }
+        public async Task<IActionResult> Download(string Reference)
+        {
+            string staffName = "\n OfficerToTakeAction:";
+            var logAudit = await _clientlogAuditService.GetByRef(Reference);
+            var staff = _staffService.GetStaffs();
+            foreach (var item in logAudit)
+            {
+                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToTakeAction).Select(s => s.Fullname).FirstOrDefault();
+
+            }
+            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
+            var newJson = json + staffName;
+            byte[] byte1 = GeneratePdf(newJson);
+    
+            return File(byte1, "application/pdf","ClientLogAudit.pdf");
+        }
+        public byte[] GeneratePdf(string paragraphs)
+        {
+            byte[] buffer;
+            PdfDocument pdfDoc = null;
+            using (MemoryStream memStream = new MemoryStream())
+            {
+                using (PdfWriter pdfWriter = new PdfWriter(memStream))
+                {
+                    pdfWriter.SetCloseStream(true);
+                    using (pdfDoc = new PdfDocument(pdfWriter))
+                    {
+
+                        pdfDoc.SetDefaultPageSize(PageSize.A4);
+                        pdfDoc.SetCloseWriter(true);
+                        Document document = new Document(pdfDoc);
+                        var para = new Paragraph(paragraphs.Replace("{","").Replace("}","").Replace("\"","").Replace(",","\n"));
+                        document.Add(para);
+                        buffer = memStream.ToArray();
+                        document.Close();
+                    }
+                }
+                buffer = memStream.ToArray();
+            }
+            return buffer;
+        }
+        public async Task<IActionResult> Edit(string Reference)
+        {
             List<int> officer = new List<int>();
-            officer.Add(logAudit.Result.OfficerToTakeAction);
+            List<int> Ids = new List<int>();
+            var logAudit = _clientlogAuditService.GetByRef(Reference);
+            foreach (var item in logAudit.Result)
+            {
+                officer.Add(item.OfficerToTakeAction);
+                Ids.Add(item.LogAuditId);
+            }
+            var staffs = await _staffService.GetStaffs();
+
             var putEntity = new CreateClientLogAudit
             {
-                ClientId = logAudit.Result.ClientId,
-                ActionRecommended = logAudit.Result.ActionRecommended,
-                ActionTaken = logAudit.Result.ActionTaken,
-                EvidenceFilePath = logAudit.Result.EvidenceFilePath,
-                Date = logAudit.Result.Date,
-                NextDueDate = logAudit.Result.NextDueDate,
-                Deadline = logAudit.Result.Deadline,
-                EvidenceOfActionTaken = logAudit.Result.EvidenceOfActionTaken,
-                LessonLearntAndShared = logAudit.Result.LessonLearntAndShared,
-                LogURL = logAudit.Result.LogURL,
-                NameOfAuditor = logAudit.Result.NameOfAuditor,
-                Observations = logAudit.Result.Observations,
+                LogAuditIds = Ids,
+                Reference = logAudit.Result.FirstOrDefault().Reference,
+                ClientId = logAudit.Result.FirstOrDefault().ClientId,
+                ActionRecommended = logAudit.Result.FirstOrDefault().ActionRecommended,
+                ActionTaken = logAudit.Result.FirstOrDefault().ActionTaken,
+                EvidenceFilePath = logAudit.Result.FirstOrDefault().EvidenceFilePath,
+                Date = logAudit.Result.FirstOrDefault().Date,
+                NextDueDate = logAudit.Result.FirstOrDefault().NextDueDate,
+                Deadline = logAudit.Result.FirstOrDefault().Deadline,
+                EvidenceOfActionTaken = logAudit.Result.FirstOrDefault().EvidenceOfActionTaken,
+                LessonLearntAndShared = logAudit.Result.FirstOrDefault().LessonLearntAndShared,
+                LogURL = logAudit.Result.FirstOrDefault().LogURL,
+                NameOfAuditor = logAudit.Result.FirstOrDefault().NameOfAuditor,
+                Observations = logAudit.Result.FirstOrDefault().Observations,
                 OfficerToTakeAction = officer,
-                Remarks = logAudit.Result.Remarks,
-                RepeatOfIncident = logAudit.Result.RepeatOfIncident,
-                RotCause = logAudit.Result.RotCause,
-                Status = logAudit.Result.Status,
-                ThinkingServiceUsers = logAudit.Result.ThinkingServiceUsers,
-                Communication = logAudit.Result.Communication,
-                ImproperDocumentation = logAudit.Result.ImproperDocumentation,
-                IsCareDifference = logAudit.Result.IsCareDifference,
-                IsCareExpected = logAudit.Result.IsCareExpected,
-                ProperDocumentation = logAudit.Result.ProperDocumentation,
-                ThinkingStaff = logAudit.Result.ThinkingStaff,
-                ThinkingStaffStop = logAudit.Result.ThinkingStaffStop,
+                Remarks = logAudit.Result.FirstOrDefault().Remarks,
+                RepeatOfIncident = logAudit.Result.FirstOrDefault().RepeatOfIncident,
+                RotCause = logAudit.Result.FirstOrDefault().RotCause,
+                Status = logAudit.Result.FirstOrDefault().Status,
+                ThinkingServiceUsers = logAudit.Result.FirstOrDefault().ThinkingServiceUsers,
+                Communication = logAudit.Result.FirstOrDefault().Communication,
+                ImproperDocumentation = logAudit.Result.FirstOrDefault().ImproperDocumentation,
+                IsCareDifference = logAudit.Result.FirstOrDefault().IsCareDifference,
+                IsCareExpected = logAudit.Result.FirstOrDefault().IsCareExpected,
+                ProperDocumentation = logAudit.Result.FirstOrDefault().ProperDocumentation,
+                ThinkingStaff = logAudit.Result.FirstOrDefault().ThinkingStaff,
+                ThinkingStaffStop = logAudit.Result.FirstOrDefault().ThinkingStaffStop,
                 OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -107,23 +200,28 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
             List<PostClientLogAudit> postlogs = new List<PostClientLogAudit>();
-                #region Evidence
+            #region Evidence
+            if (model.Evidence != null)
+            {
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "_Evidence_", model.ClientId);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
                 model.EvidenceOfActionTaken = path;
-                #endregion
-                #region Attachment
+            }
+            if (model.Attach != null)
+            {
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.EvidenceFilePath = pathA;
+            }               
             #endregion
             foreach (var officer in model.OfficerToTakeAction)
             {
                 var postlog = new PostClientLogAudit();
                 postlog.ActionRecommended = model.ActionRecommended;
                 postlog.ClientId = model.ClientId;
+                postlog.Reference = model.Reference;
                 postlog.ActionRecommended = model.ActionRecommended;
                 postlog.ActionTaken = model.ActionTaken;
                 postlog.EvidenceFilePath = model.EvidenceFilePath;
@@ -194,14 +292,51 @@ namespace AwesomeCare.Admin.Controllers
                 model.EvidenceFilePath = model.EvidenceFilePath;
             }
             #endregion
-            var putComplain = Mapper.Map<PutClientLogAudit>(model);
-            var entity = await _clientlogAuditService.Put(putComplain);
+            List<PutClientLogAudit> puts = new List<PutClientLogAudit>();
+            int count = model.LogAuditIds.Count;
+            int i = 0;
+            foreach (var item in model.OfficerToTakeAction)
+            {
+                var put = new PutClientLogAudit();
+                if(i < count)
+                    put.LogAuditId = model.LogAuditIds[i];
+                put.ClientId = model.ClientId;
+                put.Reference = model.Reference;
+                put.ActionRecommended = model.ActionRecommended;
+                put.ActionTaken = model.ActionTaken;
+                put.EvidenceFilePath = model.EvidenceFilePath;
+                put.Date = model.Date;
+                put.NextDueDate = model.NextDueDate;
+                put.Deadline = model.Deadline;
+                put.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+                put.LessonLearntAndShared = model.LessonLearntAndShared;
+                put.LogURL = model.LogURL;
+                put.NameOfAuditor = model.NameOfAuditor;
+                put.Observations = model.Observations;
+                put.OfficerToTakeAction = item;
+                put.Remarks = model.Remarks;
+                put.RepeatOfIncident = model.RepeatOfIncident;
+                put.RotCause = model.RotCause;
+                put.Status = model.Status;
+                put.ThinkingServiceUsers = model.ThinkingServiceUsers;
+                put.Communication = model.Communication;
+                put.ImproperDocumentation = model.ImproperDocumentation;
+                put.IsCareDifference = model.IsCareDifference;
+                put.IsCareExpected = model.IsCareExpected;
+                put.ProperDocumentation = model.ProperDocumentation;
+                put.ThinkingStaff = model.ThinkingStaff;
+                put.ThinkingStaffStop = model.ThinkingStaffStop;
+                i++;
+                puts.Add(put);
+
+            }
+            var entity = await _clientlogAuditService.Put(puts);
             SetOperationStatus(new Models.OperationStatus
             {
-                IsSuccessful = entity != null,
-                Message = entity != null ? "Successful" : "Operation failed"
+                IsSuccessful = entity.IsSuccessStatusCode,
+                Message = entity.IsSuccessStatusCode ? "Successful" : "Operation failed"
             });
-            if (entity != null)
+            if (entity.IsSuccessStatusCode)
             {
                 return RedirectToAction("Reports");
             }

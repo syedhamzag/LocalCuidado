@@ -10,6 +10,10 @@ namespace AwesomeCare.Admin.Services.ClientMgtVisit
 {
     public interface IClientMgtVisitService
     {
+
+        [Get("/ClientMgtVisit/GetByRef/{Reference}")]
+        Task<List<GetClientMgtVisit>> GetByRef(string Reference);
+
         [Get("/ClientMgtVisit")]
         Task<List<GetClientMgtVisit>> Get();
 
@@ -17,9 +21,9 @@ namespace AwesomeCare.Admin.Services.ClientMgtVisit
         Task<GetClientMgtVisit> Get(int id);
 
         [Post("/ClientMgtVisit/Create")]
-        Task<HttpResponseMessage> Create([Body] PostClientMgtVisit model);
+        Task<HttpResponseMessage> Create([Body] List<PostClientMgtVisit> model);
 
-        [Put("/ClientMgtVisit")]
-        Task<GetClientMgtVisit> Put([Body] PutClientMgtVisit model);
+        [Put("/ClientMgtVisit/Put")]
+        Task<HttpResponseMessage> Put([Body] List<PutClientMgtVisit> model);
     }
 }

@@ -7,6 +7,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck
     public class GetStaffSpotCheck
     {
         public int SpotCheckId { get; set; }
+        public string Reference { get; set; }
         public int StaffId { get; set; }
         public DateTime Date { get; set; }
         public DateTime NextCheckDate { get; set; }

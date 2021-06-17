@@ -14,18 +14,22 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
     {
         public CreateClientServiceWatch()
         {
-        
+            OfficerToActList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
+
         #region DropDowns
-        public ICollection<GetStaffs> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         #endregion
+
         public string ActiveTab { get; set; } = "servicewatch";
         public int WatchId { get; set; }
+        public List<int> WatchIds { get; set; }
+        public string Reference { get; set; }
         [Required]
         public int ClientId { get; set; }
         [Required]
@@ -47,7 +51,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
-        public int OfficerToAct { get; set; }
+        [Display(Name = "OFFICERTOACT")]
+        public List<int> OfficerToAct { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]

@@ -7,6 +7,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit
     public class PostClientMgtVisit
     {
         public int VisitId { get; set; }
+        public string Reference { get; set; }
         public int ClientId { get; set; }
         public DateTime Date { get; set; }
         public DateTime NextCheckDate { get; set; }

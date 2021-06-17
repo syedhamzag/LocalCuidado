@@ -6,7 +6,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffAdlObs
 {
     public class PutStaffAdlObs
     {
+
         public int ObservationID {get; set;}
+        public string Reference { get; set; }
         public int StaffId {get; set;}
         public DateTime Date{get; set;}
         public DateTime NextCheckDate{get; set;}

@@ -25,7 +25,7 @@ namespace AwesomeCare.Model.Models
         public string Address { get; set; }
         public string Email { get; set; }
         public string Contact { get; set; }
-        public string Attach { get; set; }
+        public string Attachment { get; set; }
         public int ConfirmedBy { get; set; }
         public int Status { get; set; }
 

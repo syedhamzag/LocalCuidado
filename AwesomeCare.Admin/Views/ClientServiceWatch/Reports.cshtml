@@ -36,7 +36,12 @@
                                         <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "ClientServiceWatch", new { WatchId = item.data.WatchId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("Edit", "Edit", "ClientServiceWatch", new { Reference = item.data.Reference }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("View", "View", "ClientServiceWatch", new { Reference = item.data.Reference }, new { @class = "dropdown-item" })
+                                            <button type="button" class="dropdown-item" id="@item.data.Reference" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
+                                                Email
+                                            </button>
+                                            @Html.ActionLink("Download", "Download", "ClientServiceWatch", new { Reference = item.data.Reference }, new { @class = "dropdown-item" })
                                         </div>
                                     </div>
                                 </td>
@@ -50,4 +55,58 @@
         </div>
     </div>
 </div>
+<div class="modal" id="EmailModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="Email" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <select class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12" name="Smtp">
+                            <option value="smtp.gmail.com">Gmail</option>
+                            <option value="smtp.live.com">Hotmail</option>
+                            <option value="smtp.mail.yahoo.com">Yahoo</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="Reference" name="Reference" />
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <label class="control-label">Your Email</label>
+                            <input type="text" name="sender" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <label class="control-label">Your Password</label>
+                            <input type="password" name="password" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <label class="control-label">Email Sent To</label>
+                            <input type="text" name="recipient" class="form-control" />
+                        </div>
+                    </div>
+                    <Label></Label>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Send Email</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function Setid(e)
+    {
+        var Id = e.id;
+        $('#Reference').val(Id);
+    }
+</script>
 

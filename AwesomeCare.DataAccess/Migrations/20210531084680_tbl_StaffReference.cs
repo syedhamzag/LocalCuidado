@@ -32,7 +32,7 @@ namespace AwesomeCare.DataAccess.Migrations
                     Address = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     Contact = table.Column<string>(nullable: false),
-                    Attach = table.Column<string>(nullable: false),
+                    Attachment = table.Column<string>(nullable: false),
                     ConfirmedBy = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: true),
                 },

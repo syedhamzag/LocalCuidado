@@ -7,6 +7,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffReference
     public class PostStaffReference
     {
         public int StaffReferenceId { get; set; }
+        public string Reference { get; set; }
         public int StaffId { get; set; }
         public DateTime Date { get; set; }
         public int ApplicantRole { get; set; }
@@ -24,7 +25,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffReference
         public string Address { get; set; }
         public string Email { get; set; }
         public string Contact { get; set; }
-        public string Attach { get; set; }
+        public string Attachment { get; set; }
         public int ConfirmedBy { get; set; }
         public int Status { get; set; }
     }

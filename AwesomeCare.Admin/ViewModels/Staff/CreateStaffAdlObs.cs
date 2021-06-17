@@ -15,17 +15,19 @@ namespace AwesomeCare.Admin.ViewModels.Staff
     {
         public CreateStaffAdlObs() 
         {
-            OfficerToActList = new List<GetStaffs>();
+            OfficerToActList = new List<SelectListItem>();
             ClientList = new List<GetClient>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
-        public ICollection<GetStaffs> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<GetClient> ClientList { get; set; }
 
         public string ActiveTab { get; set; } = "adlobs";
+        public List<int> AdlObsIds { get; set; }
+        public string Reference { get; set; }
         [Required]
         public int ObservationID { get; set; }
         [Required]
@@ -53,7 +55,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
-        public int OfficerToAct { get; set; }
+        public List<int> OfficerToAct { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]

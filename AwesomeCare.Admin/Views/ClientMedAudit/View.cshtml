@@ -1,0 +1,185 @@
+﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.ClientMedicationAudit.GetClientMedAudit>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h2>View</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MedAuditId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextDueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GapsInAdmistration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RightsOfMedication)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MarChartReview)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicationConcern)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HardCopyReview)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThinkingServiceUsers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicationSupplyEfficiency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicationInfoUploadEefficiency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observations)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameOfAuditor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionRecommended)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionTaken)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvidenceOfActionTaken)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficerToTakeAction)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RepeatOfIncident)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RotCause)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessonLearntAndShared)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LogURL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attachment)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedAuditId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextDueDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GapsInAdmistration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RightsOfMedication)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MarChartReview)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedicationConcern)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HardCopyReview)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThinkingServiceUsers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedicationSupplyEfficiency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedicationInfoUploadEefficiency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Observations)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameOfAuditor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionRecommended)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionTaken)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EvidenceOfActionTaken)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficerToTakeAction)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RepeatOfIncident)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RotCause)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessonLearntAndShared)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LogURL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attachment)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
