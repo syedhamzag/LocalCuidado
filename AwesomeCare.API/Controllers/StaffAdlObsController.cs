@@ -16,6 +16,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class StaffAdlObsController : ControllerBase
@@ -40,6 +41,20 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffAdlObsRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+
+        /// <summary>
+        /// Get All ClientLogAudit
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetStaffAdlObs>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _StaffAdlObsRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -49,40 +64,67 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostStaffAdlObs postStaffAdlObs)
+        public async Task<IActionResult> Create([FromBody] List<PostStaffAdlObs> postStaffAdlObs)
         {
             if (postStaffAdlObs == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffAdlObs = Mapper.Map<StaffAdlObs>(postStaffAdlObs);
-            var newStaffAdlObs = await _StaffAdlObsRepository.InsertEntity(StaffAdlObs);
-            var getStaffAdlObs = Mapper.Map<GetStaffAdlObs>(newStaffAdlObs);
-            return Ok(getStaffAdlObs);
+            foreach (var item in postStaffAdlObs)
+            {
+                if (item.Attachment == null)
+                    item.Attachment = "No Image";
+            }
 
-
+            var StaffAdlObs = Mapper.Map<List<StaffAdlObs>>(postStaffAdlObs);
+            await _StaffAdlObsRepository.InsertEntities(StaffAdlObs);
+            return Ok();
         }
         /// <summary>
         /// Update StaffAdlObs
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetStaffAdlObs), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutStaffAdlObs model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutStaffAdlObs> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _StaffAdlObsRepository.GetEntity(model.ObservationID);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _StaffAdlObsRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetStaffAdlObs>(updateEntity);
-            return Ok(getEntity);
+            var Entity = _dbContext.Set<StaffAdlObs>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (StaffAdlObs item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
+
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<StaffAdlObs>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
+
+
         /// <summary>
         /// Get StaffAdlObs by ProgramId
         /// </summary>

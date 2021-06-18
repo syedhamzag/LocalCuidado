@@ -6,6 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister
 {
     public class GetClientComplainRegister
     {
+        public string Reference { get; set; }
         public int ComplainId { get; set; }
         public int ClientId { get; set; }
         public string LINK { get; set; }

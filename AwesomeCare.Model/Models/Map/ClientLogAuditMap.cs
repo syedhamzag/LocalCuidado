@@ -14,6 +14,10 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasKey(k => k.LogAuditId);
 
             #region Properties
+            builder.Property(p => p.Reference)
+               .HasColumnName("Reference")
+               .IsRequired();
+
             builder.Property(p => p.ClientId)
                .HasColumnName("ClientId")
                .IsRequired();
@@ -28,62 +32,50 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.IsCareExpected)
                .HasColumnName("IsCareExpected")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.IsCareDifference)
                .HasColumnName("IsCareDifference")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ProperDocumentation)
                .HasColumnName("ProperDocumentation")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ImproperDocumentation)
                .HasColumnName("ImproperDocumentation")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Communication)
                .HasColumnName("Communication")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ThinkingServiceUsers)
                .HasColumnName("ThinkingServiceUsers")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ThinkingStaff)
                .HasColumnName("ThinkingStaff")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ThinkingStaffStop)
                .HasColumnName("ThinkingStaffStop")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Observations)
                .HasColumnName("Observations")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.NameOfAuditor)
                .HasColumnName("NameOfAuditor")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ActionRecommended)
                .HasColumnName("ActionRecommended")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ActionTaken)
                .HasColumnName("ActionTaken")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.EvidenceOfActionTaken)
@@ -104,7 +96,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.RepeatOfIncident)
@@ -118,17 +109,15 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.LessonLearntAndShared)
              .HasColumnName("LessonLearntAndShared")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.LogURL)
              .HasColumnName("LogURL")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.EvidenceFilePath)
              .HasColumnName("EvidenceFilePath")
-             .IsRequired();
+             .IsRequired(false);
 
 
 

@@ -14,6 +14,11 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasKey(k => k.VisitId);
 
             #region Properties
+
+            builder.Property(p => p.Reference)
+               .HasColumnName("Reference")
+               .IsRequired();
+
             builder.Property(p => p.ClientId)
                .HasColumnName("ClientId")
                .IsRequired();
@@ -36,22 +41,18 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.RateServiceRecieving)
                .HasColumnName("RateServiceRecieving")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.RateManagers)
                .HasColumnName("RateManagers")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Observation)
                .HasColumnName("Observation")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.HowToComplain)
                .HasColumnName("HowToComplain")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.EvidenceOfActionTaken)
@@ -72,7 +73,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ImprovementExpect)
@@ -81,12 +81,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.ActionRequired)
              .HasColumnName("ActionRequired")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.ActionsTakenByMPCC)
              .HasColumnName("ActionsTakenByMPCC")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.RotCause)
@@ -96,17 +94,15 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.LessonLearntAndShared)
              .HasColumnName("LessonLearntAndShared")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.URL)
              .HasColumnName("URL")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.Attachment)
              .HasColumnName("Attachment")
-             .IsRequired();
+             .IsRequired(false);
             #endregion
 
             #region Relationship

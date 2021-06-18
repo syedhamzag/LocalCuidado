@@ -14,6 +14,10 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasKey(k => k.StaffReferenceId);
 
             #region Properties
+            builder.Property(p => p.Reference)
+               .HasColumnName("Reference")
+               .IsRequired();
+
             builder.Property(p => p.StaffId)
                .HasColumnName("StaffId")
                .IsRequired();
@@ -89,8 +93,8 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(255)
                .IsRequired();
 
-            builder.Property(p => p.Attach)
-               .HasColumnName("Attach")
+            builder.Property(p => p.Attachment)
+               .HasColumnName("Attachment")
                .HasMaxLength(255)
                .IsRequired();
 

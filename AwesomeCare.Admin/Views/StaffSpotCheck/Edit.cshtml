@@ -19,8 +19,12 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
+                            <select asp-for="SpotCheckIds"
+                                    asp-items="@(new SelectList(Model.SpotCheckIds))" style="display:none;">
+                            </select>
                             <input type="hidden" asp-for="SpotCheckId" />
                             <input type="hidden" asp-for="StaffId" />
+                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
@@ -41,16 +45,16 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Client Name</label>
-                                    <baserecord asp-key="GetClient" asp-for="ClientId" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","FirstName",Model.ClientId))" />
+                                    <baserecord asp-key="GetClient" asp-for="ClientId" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname",Model.ClientId))" />
                                     <span asp-validation-for="ClientId" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Did Staff Arrive on Time</label>
+                                    <label class="control-label">Staff Arrive on Time</label>
                                     <baserecord asp-key="Staff_Arrive_On_Time" asp-for="StaffArriveOnTime" asp-items="null" />
                                     <span asp-validation-for="StaffArriveOnTime" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Did Staff Comply With Dress Code</label>
+                                    <label class="control-label">Staff Comply With Dress Code</label>
                                     <baserecord asp-key="Staff_Dress_Code" asp-for="StaffDressCode" asp-items="null" />
                                     <span asp-validation-for="StaffDressCode" class="text-danger"></span>
                                 </div>
@@ -63,7 +67,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficerToAct" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficerToAct))" />
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -78,15 +82,22 @@
                                     <input type="text" asp-for="AreaComments" class="form-control" />
                                     <span asp-validation-for="AreaComments" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Remrks</label>
-                                    <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
-                                    <span asp-validation-for="Remarks" class="text-danger"></span>
-                                </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">URL</label>
                                     <input type="text" asp-for="URL" class="form-control" />
                                     <span asp-validation-for="URL" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" readonly />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Remrks</label>
+                                    <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">

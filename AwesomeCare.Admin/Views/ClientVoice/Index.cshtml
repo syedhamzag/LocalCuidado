@@ -51,19 +51,19 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff name, whom you think best support you.</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="StaffBestSupport" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.StaffBestSupport))" />
+                                    <baserecord asp-key="GetStaffs" asp-for="StaffBestSupport" asp-items="@Model.OfficerToActList" />
                                     <span asp-validation-for="StaffBestSupport" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff you have concerns with dont support you enough</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="StaffPoorSupport" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.StaffPoorSupport))" />
+                                    <baserecord asp-key="GetStaffs" asp-for="StaffPoorSupport" asp-items="@Model.OfficerToActList" />
                                     <span asp-validation-for="StaffPoorSupport" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">You are recieve enough support from the office staff</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficeStaffSupport" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficeStaffSupport))" />
+                                    <baserecord asp-key="GetStaffs" asp-for="OfficeStaffSupport" asp-items="@Model.OfficerToActList" />
                                     <span asp-validation-for="OfficeStaffSupport" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -75,7 +75,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Name of Officer to Act</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficerToAct" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficerToAct))" />
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -85,15 +85,15 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Name of Caller</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="NameOfCaller" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.NameOfCaller))" />
+                                    <baserecord asp-key="GetStaffs" asp-for="NameOfCaller" asp-items="@Model.OfficerToActList" />
                                     <span asp-validation-for="NameOfCaller" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Remark/Closing Comment</label>
-                                    <input type="text" asp-for="Remarks" class="form-control" />
-                                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Rot Cause</label>
@@ -126,6 +126,11 @@
 
 
                             <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Remark/Closing Comment</label>
+                                    <input type="text" asp-for="Remarks" class="form-control" />
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                                </div>
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">If No to receiving enough support, do you mind to mention areas of improvements that you expect.</label>
                                     <textarea type="text" asp-for="AreasOfImprovements" class="form-control"></textarea>

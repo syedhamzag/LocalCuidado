@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.ClientMgtVisit;
 @model CreateClientMgtVisit
 @{
-    ViewData["Title"] = "Create Client Log Audit";
+    ViewData["Title"] = "Create Client Mgt Visit";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff Best Support</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="StaffBestSupport" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.StaffBestSupport))" />
+                                    <baserecord asp-key="GetStaffs" asp-for="StaffBestSupport" asp-items="@Model.OfficerToActList" />
                                     <span asp-validation-for="StaffBestSupport" class="text-danger"></span>
                                 </div>
                             </div>
@@ -69,16 +69,16 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficerToAct" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficerToAct))" />
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Remark/Closing Comment</label>
-                                    <input type="text" asp-for="Remarks" class="form-control" />
-                                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Rot Cause</label>
@@ -92,6 +92,11 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Remark/Closing Comment</label>
+                                    <input type="text" asp-for="Remarks" class="form-control" />
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                                </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
                                     <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />

@@ -14,26 +14,27 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     ComplainId = table.Column<int>(nullable:false)
                             .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Reference = table.Column<string>(maxLength: 50, nullable: false),
                     ClientId = table.Column<int>(nullable: false),
-                    LINK = table.Column<string>(maxLength: 255, nullable: false),
+                    LINK = table.Column<string>(nullable: false),
                     IRFNUMBER = table.Column<string>(maxLength: 50, nullable: false),
                     INCIDENTDATE = table.Column<DateTime>(nullable: false),
                     DATERECIEVED = table.Column<DateTime>(nullable: false),
                     DATEOFACKNOWLEDGEMENT = table.Column<DateTime>(nullable: false),
                     OFFICERTOACTId = table.Column<int>(nullable: false),
-                    SOURCEOFCOMPLAINTS = table.Column<string>(maxLength: 255, nullable: false),
+                    SOURCEOFCOMPLAINTS = table.Column<string>(nullable: false),
                     COMPLAINANTCONTACT = table.Column<string>(maxLength: 50, nullable: false),
                     STAFFId = table.Column<int>(nullable: false),
-                    CONCERNSRAISED = table.Column<string>(maxLength: 255, nullable: false),
+                    CONCERNSRAISED = table.Column<string>(nullable: false),
                     DUEDATE = table.Column<DateTime>(nullable: false),
-                    LETTERTOSTAFF = table.Column<string>(maxLength: 255, nullable: false),
-                    INVESTIGATIONOUTCOME = table.Column<string>(maxLength: 255, nullable: false),
+                    LETTERTOSTAFF = table.Column<string>(nullable: false),
+                    INVESTIGATIONOUTCOME = table.Column<string>(nullable: false),
                     ACTIONTAKEN = table.Column<string>(maxLength: 50, nullable: false),
-                    FINALRESPONSETOFAMILY = table.Column<string>(maxLength: 255, nullable: false),
+                    FINALRESPONSETOFAMILY = table.Column<string>(nullable: false),
                     ROOTCAUSE = table.Column<string>(maxLength: 50, nullable: false),
-                    REMARK = table.Column<string>(maxLength: 255, nullable: false),
+                    REMARK = table.Column<string>(nullable: false),
                     StatusId = table.Column<int>(nullable: false),
-                    EvidenceFilePath = table.Column<string>(nullable: false)
+                    EvidenceFilePath = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

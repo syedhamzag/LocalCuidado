@@ -1,0 +1,167 @@
+﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice.GetStaffKeyWorkerVoice>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h2>View</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.KeyWorkerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StaffId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextCheckDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamYouWorkFor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NotComfortableServices)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServicesRequiresTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServicesRequiresServices)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WellSupportedServices)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChangesWeNeed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NutritionalChanges)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HealthAndWellNessChanges)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicationChanges)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MovingAndHandling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RiskAssessment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionRequired)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficertoAct)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attachment)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.KeyWorkerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextCheckDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Details)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamYouWorkFor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NotComfortableServices)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServicesRequiresTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServicesRequiresServices)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WellSupportedServices)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChangesWeNeed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NutritionalChanges)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HealthAndWellNessChanges)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedicationChanges)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MovingAndHandling)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RiskAssessment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficertoAct)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.URL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attachment)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

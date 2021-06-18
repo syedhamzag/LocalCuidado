@@ -14,6 +14,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     WatchId = table.Column<int>(nullable: false)
                             .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Reference = table.Column<string>(maxLength: 50, nullable: false),
                     ClientId = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     NextCheckDate = table.Column<DateTime>(nullable: false),
@@ -21,14 +22,14 @@ namespace AwesomeCare.DataAccess.Migrations
                     Details = table.Column<int>(nullable: false),
                     PersonInvolved = table.Column<int>(nullable: false),
                     Contact = table.Column<int>(nullable: false),
-                    Observation = table.Column<string>(maxLength: 255, nullable: false),
-                    ActionRequired = table.Column<string>(maxLength: 255, nullable: false),
+                    Observation = table.Column<string>(nullable: false),
+                    ActionRequired = table.Column<string>(nullable: false),
                     OfficerToAct = table.Column<int>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Remarks = table.Column<string>(maxLength: 255, nullable: false),
-                    URL = table.Column<string>(maxLength: 255, nullable: false),
-                    Attachment = table.Column<string>(nullable: false)
+                    Remarks = table.Column<string>(nullable: false),
+                    URL = table.Column<string>(nullable: false),
+                    Attachment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

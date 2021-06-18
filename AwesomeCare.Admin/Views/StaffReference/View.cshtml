@@ -1,0 +1,154 @@
+﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.StaffReference.GetStaffReference>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StaffReferenceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StaffId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicantRole)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateofEmployement)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateofExit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RehireStaff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Relationship)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TeamWork)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Integrity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Knowledgeable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkUnderPressure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Caring)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousExperience)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RefreeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contact)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attachment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConfirmedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffReferenceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicantRole)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateofEmployement)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateofExit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RehireStaff)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Relationship)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamWork)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Integrity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Knowledgeable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkUnderPressure)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Caring)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PreviousExperience)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RefreeName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contact)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attachment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfirmedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

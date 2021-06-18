@@ -1,0 +1,138 @@
+﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.StaffMedComp.GetStaffMedComp>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h2>View</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MedCompId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StaffId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextCheckDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnderstandingofMedication)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnderstandingofRights)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReadingMedicalPrescriptions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CarePlan)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RateStaff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficerToAct)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionRequired)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attachment)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MedCompId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextCheckDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Details)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnderstandingofMedication)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnderstandingofRights)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReadingMedicalPrescriptions)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CarePlan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RateStaff)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficerToAct)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.URL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attachment)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

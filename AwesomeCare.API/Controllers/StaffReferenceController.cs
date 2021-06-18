@@ -41,7 +41,7 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffReferenceRepository.Table.ToList();
-            return Ok(getEntities);
+            return Ok(getEntities.Distinct().ToList());
         }
         /// <summary>
         /// Create StaffReference
@@ -56,6 +56,8 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+                if (postStaffReference.Attachment == null)
+                    postStaffReference.Attachment = "No Image";
             var StaffReference = Mapper.Map<StaffReference>(postStaffReference);
             var newStaffReference = await _StaffReferenceRepository.InsertEntity(StaffReference);
             var getStaffReference = Mapper.Map<GetStaffReference>(newStaffReference);
@@ -102,11 +104,13 @@ namespace AwesomeCare.API.Controllers
                                            where c.StaffReferenceId == id
                                            select new GetStaffReference
                                            {
+                                               StaffReferenceId = c.StaffReferenceId,
                                                Date = c.Date,
+                                               Reference = c.Reference,
                                                Status = c.Status,
                                                Address = c.Address,
                                                ApplicantRole = c.ApplicantRole,
-                                               Attach = c.Attach,
+                                               Attachment = c.Attachment,
                                                Caring = c.Caring,
                                                ConfirmedBy = c.ConfirmedBy,
                                                Contact = c.Contact,

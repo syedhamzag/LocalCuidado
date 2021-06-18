@@ -19,8 +19,12 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
+                            <select asp-for="MedCompIds"
+                                    asp-items="@(new SelectList(Model.MedCompIds))" style="display:none;">
+                            </select>
                             <input type="hidden" asp-for="MedCompId" />
                             <input type="hidden" asp-for="StaffId" />
+                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
@@ -41,7 +45,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Client Name</label>
-                                    <baserecord asp-key="GetClient" asp-for="ClientId" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","FirstName",Model.ClientId))" />
+                                    <baserecord asp-key="GetClient" asp-for="ClientId" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname",Model.ClientId))" />
                                     <span asp-validation-for="ClientId" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -57,36 +61,48 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Does Staff Understand Five Rights</label>
+                                    <label class="control-label">Understand Five Rights</label>
                                     <baserecord asp-key="Understanding_of_Rights" asp-for="UnderstandingofRights" asp-items="null" />
                                     <span asp-validation-for="UnderstandingofRights" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficerToAct" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficerToAct))" />
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Did Staff Read Medication Prescription</label>
+                                    <label class="control-label">Read Medication Prescription</label>
                                     <baserecord asp-key="Reading_Medical_Prescriptions" asp-for="ReadingMedicalPrescriptions" asp-items="null" />
                                     <span asp-validation-for="ReadingMedicalPrescriptions" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Did Staff Follow Care Plan</label>
+                                    <label class="control-label">Follow Care Plan</label>
                                     <baserecord asp-key="Care_Plan" asp-for="CarePlan" asp-items="null" />
                                     <span asp-validation-for="CarePlan" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Rate Staff Compliance</label>
-                                    <baserecord asp-key="Rate_Staff" asp-for="RateStaff" asp-items="null" />
+                                    <baserecord asp-key="Rate_Staff_Compliance" asp-for="RateStaff" asp-items="null" />
                                     <span asp-validation-for="RateStaff" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
                                     <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
                                     <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">URL</label>
+                                    <input type="text" asp-for="URL" class="form-control" />
+                                    <span asp-validation-for="URL" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" readonly />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -99,11 +115,6 @@
                                     <label class="control-label">Action Required</label>
                                     <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
                                     <span asp-validation-for="ActionRequired" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">URL</label>
-                                    <input type="text" asp-for="URL" class="form-control" />
-                                    <span asp-validation-for="URL" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

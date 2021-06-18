@@ -14,22 +14,27 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
     {
         public CreateClientLogAudit()
         {
-            OFFICERTOACT = new List<GetStaffs>();       
+            OFFICERTOACT = new List<SelectListItem>();       
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Evidence { get; set; }
+
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
+        
         #region DropDowns
-        public ICollection<GetStaffs> OFFICERTOACT { get; set; }
+        public ICollection<SelectListItem> OFFICERTOACT { get; set; }
         public ICollection<SelectListItem> Status_ { get; set; }
         #endregion
+
         public string ActiveTab { get; set; } = "logaudit";
         public int LogAuditId { get; set; }
+        public List<int> LogAuditIds { get; set; }
+        public string Reference { get; set; }
         [Required]
         public int ClientId { get; set; }
         [Required]
@@ -75,7 +80,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         public string EvidenceOfActionTaken { get; set; }
         [Required]
         [Display(Name = "OFFICERTOACT")]
-        public int OfficerToTakeAction { get; set; }
+        public List<int> OfficerToTakeAction { get; set; }
         [Required]
         [Display(Name = "Status_")]
         public int Status { get; set; }

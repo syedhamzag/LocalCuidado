@@ -41,6 +41,20 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientMgtVisitRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+
+        /// <summary>
+        /// Get All ClientMgtVisit
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetClientMgtVisit>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _clientMgtVisitRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -50,40 +64,68 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostClientMgtVisit postClientMgtVisit)
+        public async Task<IActionResult> Create([FromBody] List<PostClientMgtVisit> postClientMgtVisit)
         {
             if (postClientMgtVisit == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientMgtVisit = Mapper.Map<ClientMgtVisit>(postClientMgtVisit);
-            var newClientMgtVisit = await _clientMgtVisitRepository.InsertEntity(ClientMgtVisit);
-            var getClientMgtVisit = Mapper.Map<GetClientMgtVisit>(newClientMgtVisit);
-            return Ok(getClientMgtVisit);
+            foreach (var item in postClientMgtVisit)
+            {
+                if (item.Attachment == null)
+                    item.Attachment = "No Image";
+                if (item.EvidenceOfActionTaken == null)
+                    item.EvidenceOfActionTaken = "No Image";
+            }
 
-
+            var ClientMgtVisit = Mapper.Map<List<ClientMgtVisit>>(postClientMgtVisit);
+            await _clientMgtVisitRepository.InsertEntities(ClientMgtVisit);
+            return Ok();
         }
         /// <summary>
         /// Update ClientMgtVisit
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetClientMgtVisit), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutClientMgtVisit model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutClientMgtVisit> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _clientMgtVisitRepository.GetEntity(model.VisitId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _clientMgtVisitRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetClientMgtVisit>(updateEntity);
-            return Ok(getEntity);
+            var Entity = _dbContext.Set<ClientMgtVisit>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (ClientMgtVisit item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
+
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<ClientMgtVisit>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
+
         /// <summary>
         /// Get ClientMgtVisit by MgtVisitId
         /// </summary>

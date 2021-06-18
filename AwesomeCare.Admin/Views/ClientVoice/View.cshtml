@@ -1,0 +1,185 @@
+﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.ClientVoice.GetClientVoice>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h2>View</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.VoiceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextCheckDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RateServiceRecieving)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RateStaffAttending)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StaffBestSupport)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StaffPoorSupport)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeStaffSupport)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AreasOfImprovements)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SomethingSpecial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InterestedInPrograms)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HealthGoalShortTerm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HealthGoalLongTerm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameOfCaller)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionRequired)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionsTakenByMPCC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EvidenceOfActionTaken)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficerToAct)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RotCause)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LessonLearntAndShared)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attachment)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.VoiceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextCheckDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RateServiceRecieving)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RateStaffAttending)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffBestSupport)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffPoorSupport)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeStaffSupport)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AreasOfImprovements)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SomethingSpecial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InterestedInPrograms)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HealthGoalShortTerm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HealthGoalLongTerm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameOfCaller)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionsTakenByMPCC)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EvidenceOfActionTaken)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficerToAct)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RotCause)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LessonLearntAndShared)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.URL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attachment)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -14,6 +14,10 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasKey(k => k.SpotCheckId);
 
             #region Properties
+            builder.Property(p => p.Reference)
+               .HasColumnName("Reference")
+               .IsRequired();
+
             builder.Property(p => p.StaffId)
                .HasColumnName("StaffId")
                .IsRequired();

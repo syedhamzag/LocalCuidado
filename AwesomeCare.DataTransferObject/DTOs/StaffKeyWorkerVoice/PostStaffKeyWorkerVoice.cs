@@ -7,6 +7,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice
     public class PostStaffKeyWorkerVoice
     {
         public int KeyWorkerId { get; set; }
+        public string Reference { get; set; }
         public int StaffId { get; set; }
         public DateTime Date { get; set; }
         public DateTime NextCheckDate { get; set; }

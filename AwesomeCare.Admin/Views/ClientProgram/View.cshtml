@@ -1,0 +1,125 @@
+﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.ClientProgram.GetClientProgram>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h2>View</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProgramId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextCheckDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProgramOfChoice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DaysOfChoice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlaceLocationProgram)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DetailsOfProgram)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionRequired)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficerToAct)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attachment)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProgramId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextCheckDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProgramOfChoice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DaysOfChoice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlaceLocationProgram)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DetailsOfProgram)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Observation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficerToAct)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.URL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attachment)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -10,6 +10,9 @@ namespace AwesomeCare.Admin.Services.StaffOneToOne
 {
     public interface IStaffOneToOneService
     {
+        [Get("/StaffOneToOne/GetByRef/{Reference}")]
+        Task<List<GetStaffOneToOne>> GetByRef(string Reference);
+
         [Get("/StaffOneToOne")]
         Task<List<GetStaffOneToOne>> Get();
 
@@ -17,9 +20,9 @@ namespace AwesomeCare.Admin.Services.StaffOneToOne
         Task<GetStaffOneToOne> Get(int id);
 
         [Post("/StaffOneToOne/Create")]
-        Task<HttpResponseMessage> Create([Body] PostStaffOneToOne model);
+        Task<HttpResponseMessage> Create([Body] List<PostStaffOneToOne> model);
 
-        [Put("/StaffOneToOne")]
-        Task<GetStaffOneToOne> Put([Body] PutStaffOneToOne model);
+        [Put("/StaffOneToOne/Put")]
+        Task<HttpResponseMessage> Put([Body] List<PutStaffOneToOne> model);
     }
 }

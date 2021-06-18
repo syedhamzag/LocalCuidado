@@ -14,23 +14,24 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     ObservationID = table.Column<int>(nullable: false)
                             .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Reference = table.Column<string>(maxLength: 50, nullable: false),
                     StaffId = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     NextCheckDate = table.Column<DateTime>(nullable: false),
-                    Details = table.Column<string>(maxLength: 255, nullable: false),
+                    Details = table.Column<string>(nullable: false),
                     ClientId = table.Column<int>(nullable: false),
                     UnderstandingofEquipment = table.Column<int>(nullable: false),
                     UnderstandingofService = table.Column<int>(nullable: false),
                     UnderstandingofControl = table.Column<int>(nullable: false),
                     FivePrinciples = table.Column<int>(nullable: false),
-                    Comments = table.Column<string>(maxLength: 255, nullable: false),
-                    ActionRequired = table.Column<string>(maxLength: 255, nullable: false),
+                    Comments = table.Column<string>(nullable: false),
+                    ActionRequired = table.Column<string>(nullable: false),
                     OfficertoAct = table.Column<int>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    Remarks = table.Column<string>(maxLength: 255, nullable: false),
-                    URL = table.Column<string>(maxLength: 255, nullable: false),
-                    Attachment = table.Column<string>(nullable: false)
+                    Remarks = table.Column<string>(nullable: false),
+                    URL = table.Column<string>(nullable: false),
+                    Attachment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

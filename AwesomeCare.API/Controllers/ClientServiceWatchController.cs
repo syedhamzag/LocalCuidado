@@ -40,6 +40,20 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientServiceWatchRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+
+        /// <summary>
+        /// Get All ClientServiceWatch
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetClientServiceWatch>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _clientServiceWatchRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -49,40 +63,66 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostClientServiceWatch postClientServiceWatch)
+        public async Task<IActionResult> Create([FromBody] List<PostClientServiceWatch> postClientServiceWatch)
         {
             if (postClientServiceWatch == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientServiceWatch = Mapper.Map<ClientServiceWatch>(postClientServiceWatch);
-            var newClientServiceWatch = await _clientServiceWatchRepository.InsertEntity(ClientServiceWatch);
-            var getClientServiceWatch = Mapper.Map<GetClientServiceWatch>(newClientServiceWatch);
-            return Ok(getClientServiceWatch);
+            foreach (var item in postClientServiceWatch)
+            {
+                if (item.Attachment == null)
+                    item.Attachment = "No Image";
+            }
 
-
+            var ClientServiceWatch = Mapper.Map<List<ClientServiceWatch>>(postClientServiceWatch);
+            await _clientServiceWatchRepository.InsertEntities(ClientServiceWatch);
+            return Ok();
         }
         /// <summary>
         /// Update ClientServiceWatch
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetClientServiceWatch), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutClientServiceWatch model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutClientServiceWatch> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _clientServiceWatchRepository.GetEntity(model.WatchId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _clientServiceWatchRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetClientServiceWatch>(updateEntity);
-            return Ok(getEntity);
+            var Entity = _dbContext.Set<ClientServiceWatch>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (ClientServiceWatch item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
+
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<ClientServiceWatch>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
+
         /// <summary>
         /// Get ClientServiceWatch by ServiceWatchId
         /// </summary>

@@ -1,0 +1,148 @@
+﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.StaffSurvey.GetStaffSurvey>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StaffSurveyId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StaffId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NextCheckDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Details)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkTeam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdequateTrainingReceived)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HealthCareServicesSatisfaction)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SupportFromCompany)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyManagement)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccessToPolicies)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkEnvironmentSuggestions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AreaRequiringImprovements)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActionRequired)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OfficerToAct)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deadline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attachment)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffSurveyId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StaffId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextCheckDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Details)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkTeam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdequateTrainingReceived)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HealthCareServicesSatisfaction)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupportFromCompany)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyManagement)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccessToPolicies)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkEnvironmentSuggestions)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AreaRequiringImprovements)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionRequired)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficerToAct)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deadline)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.URL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attachment)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

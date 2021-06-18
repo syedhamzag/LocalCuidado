@@ -40,6 +40,20 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientVoiceRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+
+        /// <summary>
+        /// Get All ClientLogAudit
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetClientVoice>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _clientVoiceRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -49,42 +63,68 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostClientVoice postClientVoice)
+        public async Task<IActionResult> Create([FromBody] List<PostClientVoice> postClientVoice)
         {
             if (postClientVoice == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            foreach (var item in postClientVoice)
+            {
+                if (item.Attachment == null)   // only one attachment in ViewModel
+                    item.Attachment = "No Image";
+                 if (item.EvidenceOfActionTaken == null)
+                     item.EvidenceOfActionTaken = "No Image";
+            }
 
-            var ClientVoice = Mapper.Map<ClientVoice>(postClientVoice);
-            var newClientVoice = await _clientVoiceRepository.InsertEntity(ClientVoice);
-            var getClientVoice = Mapper.Map<GetClientVoice>(newClientVoice);
-            return Ok(getClientVoice);
-
-
+            var ClientVoice = Mapper.Map<List<ClientVoice>>(postClientVoice);
+            await _clientVoiceRepository.InsertEntities(ClientVoice);
+            return Ok();
         }
         /// <summary>
         /// Update ClientVoice
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetClientVoice), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutClientVoice model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutClientVoice> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _clientVoiceRepository.GetEntity(model.VoiceId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _clientVoiceRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetClientVoice>(updateEntity);
+            var Entity = _dbContext.Set<ClientVoice>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (ClientVoice item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
 
-            return Ok(getEntity);
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<ClientVoice>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
+
         /// <summary>
         /// Get ClientVoice by VoiceId
         /// </summary>

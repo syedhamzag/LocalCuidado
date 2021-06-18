@@ -16,6 +16,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.DataTransferObject.DTOs.Client;
+using Newtonsoft.Json;
+using System.IO;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Kernel.Geom;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -24,17 +30,19 @@ namespace AwesomeCare.Admin.Controllers
         private IStaffReferenceService _StaffReferenceService;
         private IClientService _clientService;
         private IStaffService _staffService;
+        private readonly IEmailService _emailService;
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
 
         public StaffReferenceController(IStaffReferenceService StaffReferenceService, IFileUpload fileUpload,
             IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
-            ILogger<ClientController> logger, IMemoryCache cache) : base(fileUpload)
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService) : base(fileUpload)
         {
             _StaffReferenceService = StaffReferenceService;
             _clientService = clientService;
             _staffService = staffService;
+            _emailService = emailService;
             _env = env;
             _logger = logger;
             _cache = cache;
@@ -49,20 +57,75 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int? staffId)
         {
             var model = new CreateStaffReference();
-            List<GetStaffs> staffNames = await _staffService.GetStaffs();
+            var staffs = await _staffService.GetStaffs();
+            model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetStaffs = staffNames;
             ViewBag.GetClients = clientNames;
             return View(model);
 
         }
-        public async Task<IActionResult> Edit(int StaffReferenceId)
+        public async Task<IActionResult> View(int? id)
         {
-            var StaffReference = _StaffReferenceService.Get(StaffReferenceId);
-            List<GetStaffs> staffNames = await _staffService.GetStaffs();
-            ViewBag.GetStaffs = staffNames;
+            var staffRef = await _StaffReferenceService.Get(id.Value);
+            var json = JsonConvert.SerializeObject(staffRef);
+            return View(staffRef);
+        }
+        public async Task<IActionResult> Email(int? id, string sender, string password, string recipient, string Smtp)
+        {
+
+            var staffRef = await _StaffReferenceService.Get(id.Value);
+            var json = JsonConvert.SerializeObject(staffRef);
+            byte[] byte1 = GeneratePdf(json);
+            System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "StaffReference.pdf");
+            string subject = "StaffReference";
+            string body = "";
+            await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
+            return RedirectToAction("Reports");
+        }
+        public async Task<IActionResult> Download(int? id)
+        {
+            var staffRef = await _StaffReferenceService.Get(id.Value);
+            var json = JsonConvert.SerializeObject(staffRef);
+            byte[] byte1 = GeneratePdf(json);
+
+            return File(byte1, "application/pdf", "StaffReference.pdf");
+        }
+        public byte[] GeneratePdf(string paragraphs)
+        {
+            byte[] buffer;
+            PdfDocument pdfDoc = null;
+            using (MemoryStream memStream = new MemoryStream())
+            {
+                using (PdfWriter pdfWriter = new PdfWriter(memStream))
+                {
+                    pdfWriter.SetCloseStream(true);
+                    using (pdfDoc = new PdfDocument(pdfWriter))
+                    {
+
+                        pdfDoc.SetDefaultPageSize(PageSize.A4);
+                        pdfDoc.SetCloseWriter(true);
+                        Document document = new Document(pdfDoc);
+                        var para = new Paragraph(paragraphs.Replace("{", "").Replace("}", "").Replace("\"", "").Replace(",", "\n"));
+                        document.Add(para);
+                        buffer = memStream.ToArray();
+                        document.Close();
+                    }
+                }
+                buffer = memStream.ToArray();
+            }
+            return buffer;
+        }
+        public async Task<IActionResult> Edit(int ReferenceId)
+        {
+            var StaffReference = _StaffReferenceService.Get(ReferenceId);
+            var staffs = await _staffService.GetStaffs();
+            
+            List<GetClient> clientNames = await _clientService.GetClients();
+            ViewBag.GetClients = clientNames;
             var putEntity = new CreateStaffReference
             {
+                StaffReferenceId = StaffReference.Result.StaffReferenceId,
+                Reference = StaffReference.Result.Reference,
                 Address = StaffReference.Result.Address,
                 ApplicantRole = StaffReference.Result.ApplicantRole,
                 Caring = StaffReference.Result.Caring,
@@ -82,7 +145,8 @@ namespace AwesomeCare.Admin.Controllers
                 Integrity = StaffReference.Result.Integrity,
                 Date = StaffReference.Result.Date,
                 Status = StaffReference.Result.Status,
-                Attachment = StaffReference.Result.Attach
+                Attachment = StaffReference.Result.Attachment,
+                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
         }
@@ -92,17 +156,20 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
-                List<GetStaffs> staffNames = await _staffService.GetStaffs();
+                var staffs = await _staffService.GetStaffs();
+                model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetStaffs = staffNames;
                 ViewBag.GetClients = clientNames;
                 return View(model);
             }
             #region Attachment
-            string folderA = "clientcomplain";
-            string filenameA = string.Concat(folderA, "_Attachment_", model.StaffId);
-            string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-            model.Attachment = pathA;
+            if (model.Attach != null)
+            { 
+                string folderA = "clientcomplain";
+                string filenameA = string.Concat(folderA, "_Attachment_", model.StaffId);
+                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
+                model.Attachment = pathA;
+            }
             #endregion
 
             var postVoice = Mapper.Map<PostStaffReference>(model);
@@ -110,7 +177,7 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _StaffReferenceService.Create(postVoice);
             var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Reference successfully registered" : "An Error Occurred" });
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Reference successfully registered" : "An Error Occurred" });
             return RedirectToAction("Details", "Staff", new { staffId = model.StaffId, ActiveTab = model.ActiveTab });
 
         }
@@ -120,8 +187,10 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                List<GetStaffs> staffNames = await _staffService.GetStaffs();
-                ViewBag.GetStaffs = staffNames;
+                var staffs = await _staffService.GetStaffs();
+                model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                List<GetClient> clientNames = await _clientService.GetClients();
+                ViewBag.GetClients = clientNames;
                 return View(model);
             }
             #region Evidence
@@ -138,14 +207,14 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = model.Attachment;
             }
             #endregion
-            var putComplain = Mapper.Map<PutStaffReference>(model);
-            var entity = await _StaffReferenceService.Put(putComplain);
+            var put = Mapper.Map<PutStaffReference>(model);
+            var entity = await _StaffReferenceService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
-                IsSuccessful = entity != null,
-                Message = entity != null ? "Successful" : "Operation failed"
+                IsSuccessful = entity.IsSuccessStatusCode,
+                Message = entity.IsSuccessStatusCode ? "Successful" : "Operation failed"
             });
-            if (entity != null)
+            if (entity.IsSuccessStatusCode)
             {
                 return RedirectToAction("Reports");
             }

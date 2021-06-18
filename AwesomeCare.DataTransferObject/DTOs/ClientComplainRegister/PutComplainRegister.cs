@@ -13,6 +13,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister
         {
 
         }
+        public string Reference { get; set; }
         public int ComplainId { get; set; }
         public int ClientId { get; set; }
         [Required]

@@ -43,6 +43,19 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientLogAuditRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+        /// <summary>
+        /// Get All ClientLogAudit
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetClientLogAudit>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _clientLogAuditRepository.Table.Where(s=>s.Reference==Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -52,40 +65,65 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostClientLogAudit postClientLogAudit)
+        public async Task<IActionResult> Create([FromBody] List<PostClientLogAudit> postClientLogAudit)
         {
             if (postClientLogAudit == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var ClientLogAudit = Mapper.Map<ClientLogAudit>(postClientLogAudit);
-            var newClientLogAudit = await _clientLogAuditRepository.InsertEntity(ClientLogAudit);
-            var getClientLogAudit = Mapper.Map<GetClientLogAudit>(newClientLogAudit);
-            return Ok(getClientLogAudit);
-
-
+            foreach (var item in postClientLogAudit)
+            {
+                if (item.EvidenceFilePath == null)
+                    item.EvidenceFilePath = "No Image";
+                if (item.EvidenceOfActionTaken == null)
+                    item.EvidenceOfActionTaken = "No Image";
+            }
+            
+            var ClientLogAudit = Mapper.Map<List<ClientLogAudit>>(postClientLogAudit);
+            await _clientLogAuditRepository.InsertEntities(ClientLogAudit);
+            return Ok();
         }
         /// <summary>
         /// Update ClientLogAudit
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetClientLogAudit), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutClientLogAudit model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutClientLogAudit> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _clientLogAuditRepository.GetEntity(model.LogAuditId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _clientLogAuditRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetClientLogAudit>(updateEntity);
+            var Entity = _dbContext.Set<ClientLogAudit>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (ClientLogAudit item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficerToTakeAction == item.OfficerToTakeAction).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
 
-            return Ok(getEntity);
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToTakeAction == item.OfficerToTakeAction);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<ClientLogAudit>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
         /// <summary>
@@ -106,6 +144,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.LogAuditId == id.Value
                                            select new GetClientLogAudit
                                            {
+                                               LogAuditId = c.LogAuditId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRecommended = c.ActionRecommended,
                                                ActionTaken = c.ActionTaken,

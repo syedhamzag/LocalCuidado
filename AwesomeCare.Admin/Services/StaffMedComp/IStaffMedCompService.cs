@@ -10,6 +10,9 @@ namespace AwesomeCare.Admin.Services.StaffMedComp
 {
     public interface IStaffMedCompService
     {
+        [Get("/StaffMedComp/GetByRef/{Reference}")]
+        Task<List<GetStaffMedComp>> GetByRef(string Reference);
+
         [Get("/StaffMedComp")]
         Task<List<GetStaffMedComp>> Get();
 
@@ -17,9 +20,9 @@ namespace AwesomeCare.Admin.Services.StaffMedComp
         Task<GetStaffMedComp> Get(int id);
 
         [Post("/StaffMedComp/Create")]
-        Task<HttpResponseMessage> Create([Body] PostStaffMedComp model);
+        Task<HttpResponseMessage> Create([Body] List<PostStaffMedComp> model);
 
-        [Put("/StaffMedComp")]
-        Task<GetStaffMedComp> Put([Body] PutStaffMedComp model);
+        [Put("/StaffMedComp/Put")]
+        Task<HttpResponseMessage> Put([Body] List<PutStaffMedComp> model);
     }
 }

@@ -14,7 +14,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
     {
         public CreateClientMgtVisit()
         {
-            OfficerToActList = new List<GetStaffs>();
+            OfficerToActList = new List<SelectListItem>();
             StatusList = new List<SelectListItem>();
 
         }
@@ -27,11 +27,13 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Evidence { get; set; }
         #region DropDowns
-        public ICollection<GetStaffs> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         #endregion
         public string ActiveTab { get; set; } = "mgtvisit";
+        public List<int> VisitIds { get; set; }
         public int VisitId { get; set; }
+        public string Reference { get; set; }
         [Required]
         public int ClientId { get; set; }
         [Required]
@@ -58,7 +60,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
         [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
-        public int OfficerToAct { get; set; }
+        [Display(Name = "OFFICERTOACT")]
+        public List<int> OfficerToAct { get; set; }
         [Required]
         [MaxLength(255)]
         public string ActionsTakenByMPCC { get; set; }

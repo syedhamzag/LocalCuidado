@@ -19,6 +19,9 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
+                            <select asp-for="VisitIds"
+                                    asp-items="@(new SelectList(Model.VisitIds))" style="display:none;">
+                            </select>
                             <input type="hidden" asp-for="VisitId" />
                             <input type="hidden" asp-for="ClientId" />
                             <div class="row">
@@ -52,7 +55,8 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff Best Support</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="StaffBestSupport" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.StaffBestSupport))" />
+                                    <select class="custom-select" asp-for="StaffBestSupport" asp-items="@Model.OfficerToActList">
+                                    </select>
                                     <span asp-validation-for="StaffBestSupport" class="text-danger"></span>
                                 </div>
                             </div>
@@ -69,16 +73,16 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficerToAct" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficerToAct))" />
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Remark/Closing Comment</label>
-                                    <input type="text" asp-for="Remarks" class="form-control" />
-                                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" readonly />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Rot Cause</label>
@@ -93,11 +97,17 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Remark/Closing Comment</label>
+                                    <input type="text" asp-for="Remarks" class="form-control" />
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
                                     <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
                                     <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                             </div>
+
 
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
@@ -137,25 +147,27 @@
 
 
                         </div>
+                        <input type="hidden" value="@Model.EvidenceOfActionTaken" asp-for="EvidenceOfActionTaken">
+                        <input type="hidden" value="@Model.Attachment" asp-for="Attachment">
                         <div class="col-xs-4 col-sm-4 col-md-4">
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>Evidence of Action Taken<small></small></h2>
-                                    </div>         
-                                    <div class="body">
-                                        <input type="hidden" value="@Model.EvidenceOfActionTaken" asp-for="EvidenceOfActionTaken">
-                                        <image alt="Evidence" src="@Model.EvidenceOfActionTaken" style="width:300px; height:198px;">
-                                    </div>
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Evidence of Action Taken<small></small></h2>
                                 </div>
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>Attachment Image<small></small></h2>
-                                    </div>
-                                    <div class="body">
-                                        <input type="hidden" value="@Model.Attachment" asp-for="Attachment">
-                                        <image alt="Attachment" src="@Model.Attachment" style="width:300px; height:198px;">
-                                    </div>
+                                <div class="body">
+                                    <input type="file" asp-for="Evidence" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Evidence" class="text-danger"></span>
                                 </div>
+                            </div>
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Attachment Image<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Attach" class="text-danger"></span>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">

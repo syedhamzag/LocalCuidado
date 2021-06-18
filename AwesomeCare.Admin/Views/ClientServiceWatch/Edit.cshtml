@@ -19,6 +19,9 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
+                            <select asp-for="WatchIds"
+                                    asp-items="@(new SelectList(Model.WatchIds))" style="display:none;">
+                            </select>
                             <input type="hidden" asp-for="WatchId" />
                             <input type="hidden" asp-for="ClientId" />
                             <input type="hidden" asp-for="Attachment" />
@@ -52,7 +55,8 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Person Involved</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="PersonInvolved" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.PersonInvolved))" />
+                                    <select class="custom-select" asp-for="PersonInvolved" asp-items="@Model.OfficerToActList">
+                                    </select>
                                     <span asp-validation-for="PersonInvolved" class="text-danger"></span>
                                 </div>
                             </div>
@@ -64,7 +68,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OfficerToAct" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname",Model.OfficerToAct))" />
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -75,6 +79,11 @@
 
                             </div>
                             <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" readonly />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
+                                </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Remark/Closing Comment</label>
                                     <input type="text" asp-for="Remarks" class="form-control" />

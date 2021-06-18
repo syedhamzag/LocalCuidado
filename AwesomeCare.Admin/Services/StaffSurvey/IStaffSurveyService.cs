@@ -10,6 +10,9 @@ namespace AwesomeCare.Admin.Services.StaffSurvey
 {
     public interface IStaffSurveyService
     {
+        [Get("/StaffSurvey/GetByRef/{Reference}")]
+        Task<List<GetStaffSurvey>> GetByRef(string Reference);
+
         [Get("/StaffSurvey")]
         Task<List<GetStaffSurvey>> Get();
 
@@ -17,9 +20,9 @@ namespace AwesomeCare.Admin.Services.StaffSurvey
         Task<GetStaffSurvey> Get(int id);
 
         [Post("/StaffSurvey/Create")]
-        Task<HttpResponseMessage> Create([Body] PostStaffSurvey model);
+        Task<HttpResponseMessage> Create([Body] List<PostStaffSurvey> model);
 
-        [Put("/StaffSurvey")]
-        Task<GetStaffSurvey> Put([Body] PutStaffSurvey model);
+        [Put("/StaffSurvey/Put")]
+        Task<HttpResponseMessage> Put([Body] List<PutStaffSurvey> model);
     }
 }

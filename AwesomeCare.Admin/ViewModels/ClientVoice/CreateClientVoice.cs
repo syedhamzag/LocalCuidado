@@ -23,23 +23,30 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
             InterestedInProgramList = new List<SelectListItem>();
             RateServiceRecievingList = new List<SelectListItem>();
             RateStaffAttendingList = new List<SelectListItem>();
+            OfficerToActList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
+        [DataType(DataType.Upload)]
+        [MaxFileSize(Lenght = 1)]
+        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
+        public IFormFile Evidence { get; set; }
         #region DropDowns
         public ICollection<GetStaffs> StaffPoorSupportList { get; set; }
         public ICollection<GetStaffs> StaffBestSupportList { get; set; }
         public ICollection<GetStaffs> OfficeStaffSupportList { get; set; }
         public ICollection<GetStaffs> NameOfCallerList { get; set; }
-        public ICollection<GetStaffs> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         public ICollection<SelectListItem> InterestedInProgramList { get; set; }
         public ICollection<SelectListItem> RateServiceRecievingList { get; set; }
         public ICollection<SelectListItem> RateStaffAttendingList { get; set; }
         #endregion
         public string ActiveTab { get; set; } = "voice";
+        public List<int> VoiceIds { get; set; }
+        public string Reference { get; set; }
         public int VoiceId { get; set; }
         [Required]
         public int ClientId { get; set; }
@@ -79,10 +86,9 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         [Required]
         [MaxLength(255)]
         public string ActionsTakenByMPCC { get; set; }
-        [Required]
         public string EvidenceOfActionTaken { get; set; }
         [Required]
-        public int OfficerToAct { get; set; }
+        public List<int> OfficerToAct { get; set; }
         [Required]
         public int Status { get; set; }
         [Required]

@@ -15,7 +15,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
     {
         public CreateStaffKeyWorkerVoice()
         {
-            OfficerToActList = new List<GetStaffs>();
+            OfficerToActList = new List<SelectListItem>();
             ClientList = new List<GetClient>();
         }
 
@@ -24,9 +24,12 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
 
-        public ICollection<GetStaffs> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<GetClient> ClientList { get; set; }
         public string ActiveTab { get; set; } = "keyworker";
+        public List<int> KeyWorkerIds { get; set; }
+        public string Reference { get; set; }
+
         [Required]
         public int KeyWorkerId { get; set; }
         [Required]
@@ -70,7 +73,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
-        public int OfficerToAct { get; set; }
+        public List<int> OfficerToAct { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]

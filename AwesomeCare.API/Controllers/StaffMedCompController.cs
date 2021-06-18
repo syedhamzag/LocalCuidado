@@ -16,6 +16,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class StaffMedCompController : ControllerBase
@@ -40,6 +41,20 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffMedCompRepository.Table.ToList();
+            return Ok(getEntities.Distinct().ToList());
+        }
+
+        /// <summary>
+        /// Get All StaffMedComp
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetByRef/{Reference}")]
+        [ProducesResponseType(type: typeof(List<GetStaffMedComp>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetByRef(string Reference)
+        {
+            var getEntities = _StaffMedCompRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -49,40 +64,66 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostStaffMedComp postStaffMedComp)
+        public async Task<IActionResult> Create([FromBody] List<PostStaffMedComp> postStaffMedComp)
         {
             if (postStaffMedComp == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffMedComp = Mapper.Map<StaffMedComp>(postStaffMedComp);
-            var newStaffMedComp = await _StaffMedCompRepository.InsertEntity(StaffMedComp);
-            var getStaffMedComp = Mapper.Map<GetStaffMedComp>(newStaffMedComp);
-            return Ok(getStaffMedComp);
+            foreach (var item in postStaffMedComp)
+            {
+                if (item.Attachment == null)
+                    item.Attachment = "No Image";
+            }
 
-
+            var StaffMedComp = Mapper.Map<List<StaffMedComp>>(postStaffMedComp);
+            await _StaffMedCompRepository.InsertEntities(StaffMedComp);
+            return Ok();
         }
         /// <summary>
         /// Update StaffMedComp
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetStaffMedComp), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody] PutStaffMedComp model)
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] List<PutStaffMedComp> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _StaffMedCompRepository.GetEntity(model.MedCompId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _StaffMedCompRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetStaffMedComp>(updateEntity);
-            return Ok(getEntity);
+            var Entity = _dbContext.Set<StaffMedComp>();
+            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
+            foreach (StaffMedComp item in filterEntity)
+            {
+                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
+                if (modelRecord == null)
+                {
+                    _dbContext.Entry(item).State = EntityState.Deleted;
+
+                }
+                else
+                {
+                    var putEntity = Mapper.Map(modelRecord, item);
+                    _dbContext.Entry(putEntity).State = EntityState.Modified;
+                }
+
+            }
+            //Model not in Database
+            foreach (var item in model)
+            {
+                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
+                if (NotInDb == null)
+                {
+                    var postEntity = Mapper.Map<StaffMedComp>(item);
+                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            return Ok();
 
         }
+
         /// <summary>
         /// Get StaffMedComp by ProgramId
         /// </summary>
