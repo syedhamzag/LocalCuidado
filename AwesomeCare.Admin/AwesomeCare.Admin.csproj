@@ -59,6 +59,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Resources\Edit.cshtml" />
+    <None Include="Views\Enotice\Index.cshtml" />
+    <None Include="Views\Enotice\Reports.cshtml" />
+    <None Include="Views\IncomingMeds\Edit.cshtml" />
+    <None Include="Views\IncomingMeds\Index.cshtml" />
+    <None Include="Views\IncomingMeds\Reports.cshtml" />
+    <None Include="Views\Enotice\Edit.cshtml" />
+    <None Include="Views\Resources\Index.cshtml" />
+    <None Include="Views\Resources\Reports.cshtml" />
     <None Include="Views\StaffAdlObs\Edit.cshtml" />
     <None Include="Views\StaffAdlObs\Index.cshtml" />
     <None Include="Views\StaffAdlObs\Reports.cshtml" />
@@ -77,6 +86,9 @@
     <None Include="Views\StaffSurvey\Edit.cshtml" />
     <None Include="Views\StaffSurvey\Index.cshtml" />
     <None Include="Views\StaffSurvey\Reports.cshtml" />
+    <None Include="Views\WhisttleBlower\Edit.cshtml" />
+    <None Include="Views\WhisttleBlower\Index.cshtml" />
+    <None Include="Views\WhisttleBlower\Reports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

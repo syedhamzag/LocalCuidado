@@ -26,6 +26,10 @@ namespace AwesomeCare.Model.Models
             StaffMedCompObs = new HashSet<StaffMedComp>();
             StaffKeyWorkerVoice = new HashSet<StaffKeyWorkerVoice>();
             StaffReference = new HashSet<StaffReference>();
+            Enotice = new HashSet<Enotice>();
+            Resources = new HashSet<Resources>();
+            IncomingMeds = new HashSet<IncomingMeds>();
+            WhisttleBlower = new HashSet<WhisttleBlower>();
         }
 
         public int ClientId { get; set; }
@@ -81,6 +85,11 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffMedComp> StaffMedCompObs { get; set; }
         public virtual ICollection<StaffKeyWorkerVoice> StaffKeyWorkerVoice { get; set; }
         public virtual ICollection<StaffReference> StaffReference { get; set; }
+
+        public virtual ICollection<Enotice> Enotice { get; set; }
+        public virtual ICollection<Resources> Resources { get; set; }
+        public virtual ICollection<IncomingMeds> IncomingMeds { get; set; }
+        public virtual ICollection<WhisttleBlower> WhisttleBlower { get; set; }
 
     }
 }

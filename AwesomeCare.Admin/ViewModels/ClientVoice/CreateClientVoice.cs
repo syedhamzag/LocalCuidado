@@ -44,6 +44,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         public ICollection<SelectListItem> RateServiceRecievingList { get; set; }
         public ICollection<SelectListItem> RateStaffAttendingList { get; set; }
         #endregion
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         public string ActiveTab { get; set; } = "voice";
         public List<int> VoiceIds { get; set; }
         public string Reference { get; set; }

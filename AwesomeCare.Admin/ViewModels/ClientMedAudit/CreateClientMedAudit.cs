@@ -28,6 +28,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientMedAudit
         public ICollection<SelectListItem> OFFICERTOACT { get; set; }
         public ICollection<SelectListItem> Status_ { get; set; }
         #endregion
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         public string ActiveTab { get; set; } = "medaudit";
         public int MedAuditId { get; set; }
         public List<int> MedAuditIds { get; set; }

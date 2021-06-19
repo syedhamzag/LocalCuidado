@@ -12,7 +12,9 @@
         <div class="card planned_task">
             <div class="header">
 
-                <h2></h2>
+                <h2>Client: @if (Model.ClientName != null)
+                {@Model.ClientName;
+            }</h2>
 
             </div>
             <div class="body">

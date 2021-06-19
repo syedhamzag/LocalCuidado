@@ -25,7 +25,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         [MaxFileSize(Lenght = 1)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
-        
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         #region DropDowns
         public ICollection<SelectListItem> OFFICERTOACT { get; set; }
         public ICollection<SelectListItem> Status_ { get; set; }

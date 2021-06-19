@@ -60,6 +60,10 @@ using AwesomeCare.Admin.Services.StaffSurvey;
 using AwesomeCare.Admin.Services.StaffOneToOne;
 using AwesomeCare.Admin.Services.StaffSupervisionAppraisal;
 using AwesomeCare.Admin.Services.StaffReference;
+using AwesomeCare.Admin.Services.Enotice;
+using AwesomeCare.Admin.Services.Resources;
+using AwesomeCare.Admin.Services.IncomingMeds;
+using AwesomeCare.Admin.Services.WhisttleBlower;
 
 namespace AwesomeCare.Admin
 {
@@ -642,6 +646,30 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffReferenceService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("enotice", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IEnoticeService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("resources", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IResourcesService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("incomingmeds", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IIncomingMedsService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("whisttleblower", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IWhisttleBlowerService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

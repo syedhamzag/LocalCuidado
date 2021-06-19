@@ -28,6 +28,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientProgram
         public int ProgramId { get; set; }
         public List<int> ProgramIds { get; set; }
         public string Reference { get; set; }
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         [Required]
         public int ClientId { get; set; }
         [Required]

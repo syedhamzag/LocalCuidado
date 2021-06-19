@@ -30,6 +30,7 @@ using iText.Layout.Element;
 using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
+using AwesomeCare.Admin.Services.Admin;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -42,15 +43,17 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
+        private IBaseRecordService _baseService;
 
         public ClientMedAuditController(IClientMedAuditService clientMedAuditService, IFileUpload fileUpload, 
             IClientService clientService, IStaffService staffService, IWebHostEnvironment env, 
-            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService) : base(fileUpload)
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
         {
             _clientMedAuditService = clientMedAuditService;
             _clientService = clientService;
             _staffService = staffService;
             _emailService = emailService;
+            _baseService = baseService;
             _env = env;
             _logger = logger;
             _cache = cache;
@@ -58,12 +61,28 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _clientMedAuditService.Get();
-            return View(entities);
+
+            var client = await _clientService.GetClients();
+            var baserecord = await _baseService.GetBaseRecordsWithItems();
+            List<CreateClientMedAudit> reports = new List<CreateClientMedAudit>();
+            foreach (GetClientMedAudit item in entities)
+            {
+                var report = new CreateClientMedAudit();
+                report.MedAuditId = item.MedAuditId;
+                report.Reference = item.Reference;
+                report.NextDueDate = item.NextDueDate;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.Firstname).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                reports.Add(report);
+            }
+            return View(reports);
         }
 
         public async Task<IActionResult> Index(int? clientId)
         {
             var model = new CreateClientMedAudit();
+            var client = await _clientService.GetClient(clientId.Value);
+            model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
             var staffs = await _staffService.GetStaffs();
             model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             model.ClientId = clientId.Value;
@@ -198,6 +217,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
+                var client = await _clientService.GetClient(model.ClientId);
+                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
                 var staffs = await _staffService.GetStaffs();
                 model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
@@ -266,6 +287,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var client = await _clientService.GetClient(model.ClientId);
+                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
                 var staffs = await _staffService.GetStaffs();
                 model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
