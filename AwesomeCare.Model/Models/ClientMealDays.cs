@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models
         public int ClientMealId { get; set; }
         public int NutritionId { get; set; }
         public int MealDayofWeekId { get; set; }
-        public int MealId { get; set; }
+        public int ClientMealTypeId { get; set; }
         public int TypeId { get; set; }
         public string MEALDETAILS { get; set; }
         public string HOWTOPREPARE { get; set; }

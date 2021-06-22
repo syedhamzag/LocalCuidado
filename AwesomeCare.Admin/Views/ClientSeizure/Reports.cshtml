@@ -1,0 +1,104 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.ClientSeizure  ;
+@model List<GetClientSeizure>
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>All Client Seizure</h2>
+            </div>
+            <div class="body">
+                <table class="table m-b-0 datatables">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                            <tr>
+                                <td>@item.index </td>
+                                <td>@item.data.Date</td>
+                                <td>@item.data.Status</td>
+                                <td>@item.data.Remarks</td>
+
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Edit", "Edit", "ClientSeizure", new { SeizureID = item.data.SeizureId }, new { @class = "dropdown-item" })
+                                            <button type="button" class="dropdown-item" id="@item.data.SeizureId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
+                                                Email
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="EmailModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="Email" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <select class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12" name="Smtp">
+                            <option value="smtp.gmail.com">Gmail</option>
+                            <option value="smtp.live.com">Hotmail</option>
+                            <option value="smtp.mail.yahoo.com">Yahoo</option>
+                        </select>
+                        <input type="text" id="SeizureId" name="SeizureId" />
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <label class="control-label">Your Email</label>
+                            <input type="text" name="sender" class="form-control" />
+                        </div>
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <label class="control-label">Your Password</label>
+                            <input type="password" name="password" class="form-control" />
+                        </div>
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <label class="control-label">Email Sent To</label>
+                            <input type="text" name="recipient" class="form-control" />
+                        </div>
+                    </div>
+                    <Label></Label>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Send Email</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function Setid(e)
+    {
+        var Id = e.id;
+        $('#SeizureId').val(Id);
+    }
+</script>
+

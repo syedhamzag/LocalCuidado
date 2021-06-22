@@ -34,6 +34,7 @@ namespace AwesomeCare.API.Controllers
     public class ClientController : ControllerBase
     {
         private IGenericRepository<Client> _clientRepository;
+        private IGenericRepository<ClientInvolvingParty> _clientInvolvingPartRepository;
         private IGenericRepository<ClientComplainRegister> _complainRepository;
         private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
         private IGenericRepository<BaseRecordModel> _baseRecordRepository;
@@ -54,7 +55,7 @@ namespace AwesomeCare.API.Controllers
         public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<ClientMedicationPeriod> clientMedicationPeriodRepository,
             IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<ClientMedicationDay> clientMedicationDayRepository,
             IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<ClientComplainRegister> complainRepository,
-            IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
+            IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<ClientInvolvingParty> clientInvolvingPartRepository,
             IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository,
             IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<ClientVoice> clientVoiceRepository,
             IGenericRepository<ClientMgtVisit> clientMgtVisitRepository, IGenericRepository<ClientProgram> clientProgramRepository,IGenericRepository<ClientServiceWatch> clientServiceWatchRepository)
@@ -77,6 +78,7 @@ namespace AwesomeCare.API.Controllers
             _clientMgtVisitRepository = clientMgtVisitRepository;
             _clientProgramRepository = clientProgramRepository;
             _clientServiceWatchRepository = clientServiceWatchRepository;
+            _clientInvolvingPartRepository = clientInvolvingPartRepository;
         }
         /// <summary>
         /// Create Client

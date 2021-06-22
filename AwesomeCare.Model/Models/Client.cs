@@ -30,6 +30,19 @@ namespace AwesomeCare.Model.Models
             Resources = new HashSet<Resources>();
             IncomingMeds = new HashSet<IncomingMeds>();
             WhisttleBlower = new HashSet<WhisttleBlower>();
+            ClientBloodPressure = new HashSet<ClientBloodPressure>();
+            ClientFoodIntake = new HashSet<ClientFoodIntake>();
+            ClientBowelMovement = new HashSet<ClientBowelMovement>();
+            ClientPainChart = new HashSet<ClientPainChart>();
+            ClientWoundCare = new HashSet<ClientWoundCare>();
+            ClientSeizure = new HashSet<ClientSeizure>();
+            ClientBloodCoagulationRecord = new HashSet<ClientBloodCoagulationRecord>();
+            ClientEyeHealthMonitoring = new HashSet<ClientEyeHealthMonitoring>();
+            ClientHeartRate = new HashSet<ClientHeartRate>();
+            ClientPulseRate = new HashSet<ClientPulseRate>();
+            ClientBodyTemp = new HashSet<ClientBodyTemp>();
+            ClientOxygenLvl = new HashSet<ClientOxygenLvl>();
+            ClientBMIChart = new HashSet<ClientBMIChart>(); 
         }
 
         public int ClientId { get; set; }
@@ -90,6 +103,19 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<Resources> Resources { get; set; }
         public virtual ICollection<IncomingMeds> IncomingMeds { get; set; }
         public virtual ICollection<WhisttleBlower> WhisttleBlower { get; set; }
+        public virtual ICollection<ClientBloodPressure> ClientBloodPressure { get; set; }
+        public virtual ICollection<ClientFoodIntake> ClientFoodIntake { get; set; }
+        public virtual ICollection<ClientBowelMovement> ClientBowelMovement { get; set; }
+        public virtual ICollection<ClientPainChart> ClientPainChart { get; set; }
+        public virtual ICollection<ClientWoundCare> ClientWoundCare { get; set; }
+        public virtual ICollection<ClientSeizure> ClientSeizure { get; set; }
+        public virtual ICollection<ClientBloodCoagulationRecord> ClientBloodCoagulationRecord { get; set; }
+        public virtual ICollection<ClientEyeHealthMonitoring> ClientEyeHealthMonitoring { get; set; }
+        public virtual ICollection<ClientHeartRate> ClientHeartRate { get; set; }
+        public virtual ICollection<ClientPulseRate> ClientPulseRate { get; set; }
+        public virtual ICollection<ClientBodyTemp> ClientBodyTemp { get; set; }
+        public virtual ICollection<ClientOxygenLvl> ClientOxygenLvl { get; set; }
+        public virtual ICollection<ClientBMIChart> ClientBMIChart { get; set; }
 
     }
 }

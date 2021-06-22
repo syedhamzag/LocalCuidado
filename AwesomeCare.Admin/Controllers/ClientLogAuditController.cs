@@ -290,6 +290,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+
             #region Evidence
             if (model.Evidence != null)
             {
@@ -315,6 +316,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.EvidenceFilePath = model.EvidenceFilePath;
             }
             #endregion
+
             List<PutClientLogAudit> puts = new List<PutClientLogAudit>();
             int count = model.LogAuditIds.Count;
             int i = 0;
@@ -322,7 +324,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var put = new PutClientLogAudit();
                 if(i < count)
-                    put.LogAuditId = model.LogAuditIds[i];
+                put.LogAuditId = model.LogAuditIds[i];
                 put.ClientId = model.ClientId;
                 put.Reference = model.Reference;
                 put.ActionRecommended = model.ActionRecommended;

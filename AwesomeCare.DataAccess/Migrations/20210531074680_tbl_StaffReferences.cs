@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class tbl_StaffReference : Migration
+    public partial class tbl_StaffReferences : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_StaffReference",
+                name: "tbl_StaffReferences",
                 columns: table => new
                 {
                     StaffReferenceId = table.Column<int>(nullable: false)
@@ -38,24 +38,24 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_StaffReference", x => x.StaffReferenceId);
+                    table.PrimaryKey("PK_tbl_StaffReferences", x => x.StaffReferenceId);
                     table.ForeignKey(
-                        name: "FK_tbl_StaffReference_tbl_StaffPersonalInfo_StaffId",
+                        name: "FK_tbl_StaffReferences_tbl_StaffPersonalInfo_StaffId",
                         column: x => x.StaffId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
                         onDelete: ReferentialAction.Cascade);
                 }); ;
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_StaffReference_StaffReferenceId",
-                table: "tbl_StaffReference",
+                name: "IX_tbl_StaffReferences_StaffReferenceId",
+                table: "tbl_StaffReferences",
                 column: "StaffReferenceId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_StaffReference");
+                name: "tbl_StaffReferences");
         }
     }
 }

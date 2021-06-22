@@ -99,7 +99,7 @@
                                             @{
 
                                                 <input type="hidden" asp-for="@MealType.ClientRotaTypeId" />
-                                                var MealTypeId = Model.ClientMealDays.FirstOrDefault(c => c.MealId == MealType.ClientRotaTypeId);
+                                                var MealTypeId = Model.ClientMealDays.FirstOrDefault(c => c.ClientMealTypeId == MealType.ClientRotaTypeId);
                                                 if (MealTypeId != null)
                                                 {
                                                     //display and for edit
@@ -127,7 +127,7 @@
                                     @foreach (var weekDay in Model.WeekDays)
                                     {
                                         int i = 1;
-                                        var mealDywk = Model.ClientMealDays.FirstOrDefault(d => d.MealId == MealType.ClientRotaTypeId && d.MealDayofWeekId == weekDay.RotaDayofWeekId);
+                                        var mealDywk = Model.ClientMealDays.FirstOrDefault(d => d.ClientMealTypeId == MealType.ClientRotaTypeId && d.MealDayofWeekId == weekDay.RotaDayofWeekId);
                                         <td>
                                             @if (mealDywk != null)
                                             {

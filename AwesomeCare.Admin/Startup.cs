@@ -64,6 +64,19 @@ using AwesomeCare.Admin.Services.Enotice;
 using AwesomeCare.Admin.Services.Resources;
 using AwesomeCare.Admin.Services.IncomingMeds;
 using AwesomeCare.Admin.Services.WhisttleBlower;
+using AwesomeCare.Admin.Services.ClientBloodCoagulationRecord;
+using AwesomeCare.Admin.Services.ClientBloodPressure;
+using AwesomeCare.Admin.Services.ClientBMIChart;
+using AwesomeCare.Admin.Services.ClientBodyTemp;
+using AwesomeCare.Admin.Services.ClientBowelMovement;
+using AwesomeCare.Admin.Services.ClientEyeHealthMonitoring;
+using AwesomeCare.Admin.Services.ClientFoodIntake;
+using AwesomeCare.Admin.Services.ClientHeartRate;
+using AwesomeCare.Admin.Services.ClientOxygenLvl;
+using AwesomeCare.Admin.Services.ClientPainChart;
+using AwesomeCare.Admin.Services.ClientPulseRate;
+using AwesomeCare.Admin.Services.ClientSeizure;
+using AwesomeCare.Admin.Services.ClientWoundCare;
 
 namespace AwesomeCare.Admin
 {
@@ -666,10 +679,82 @@ namespace AwesomeCare.Admin
             }).AddTypedClient(r => RestService.For<IIncomingMedsService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
-            services.AddHttpClient("whisttleblower", c =>
+            services.AddHttpClient("clientbloodcoagulationrecord", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IWhisttleBlowerService>(r))
+            }).AddTypedClient(r => RestService.For<IClientBloodCoagulationRecordService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientbloodpressure", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientBloodPressureService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientbmichart", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientBMIChartService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientbodytemp", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientBodyTempService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientbowelmovement", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientBowelMovementService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clienteyehealth", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientEyeHealthMonitoringService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientfoodintake", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientFoodIntakeService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientheartrate", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientHeartRateService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientoxygenlvl", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientOxygenLvlService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientpainchart", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientPainChartService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientpulserate", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientPulseRateService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientseizure", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientSeizureService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("clientwoundcare", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientWoundCareService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

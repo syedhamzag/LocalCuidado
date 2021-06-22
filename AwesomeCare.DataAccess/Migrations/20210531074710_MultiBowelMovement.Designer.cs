@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    [Migration("20210531084680_tbl_StaffReference")]
-    partial class tbl_StaffReference
+    [Migration("20210531074710_MultiBowelMovement")]
+    partial class MultiBowelMovement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

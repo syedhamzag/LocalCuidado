@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="AutoMapperConfiguration\**" />
+    <Compile Remove="Views\View\**" />
     <Content Remove="AutoMapperConfiguration\**" />
+    <Content Remove="Views\View\**" />
     <EmbeddedResource Remove="AutoMapperConfiguration\**" />
+    <EmbeddedResource Remove="Views\View\**" />
     <None Remove="AutoMapperConfiguration\**" />
+    <None Remove="Views\View\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,9 +60,49 @@
   <ItemGroup>
     <Folder Include="Uploads\" />
     <Folder Include="Validations\" />
+    <Folder Include="Views\TeleHealth\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\ClientBloodCoagulationRecord\Edit.cshtml" />
+    <None Include="Views\ClientBloodCoagulationRecord\Index.cshtml" />
+    <None Include="Views\ClientBloodCoagulationRecord\Reports.cshtml" />
+    <None Include="Views\ClientBloodPressure\Edit.cshtml" />
+    <None Include="Views\ClientBloodPressure\Index.cshtml" />
+    <None Include="Views\ClientBloodPressure\Reports.cshtml" />
+    <None Include="Views\ClientBMIChart\Edit.cshtml" />
+    <None Include="Views\ClientBMIChart\Index.cshtml" />
+    <None Include="Views\ClientBMIChart\Reports.cshtml" />
+    <None Include="Views\ClientBodyTemp\Edit.cshtml" />
+    <None Include="Views\ClientBodyTemp\Index.cshtml" />
+    <None Include="Views\ClientBodyTemp\Reports.cshtml" />
+    <None Include="Views\ClientBowelMovement\Edit.cshtml" />
+    <None Include="Views\ClientBowelMovement\Index.cshtml" />
+    <None Include="Views\ClientBowelMovement\Reports.cshtml" />
+    <None Include="Views\ClientEyeHealthMonitoring\Edit.cshtml" />
+    <None Include="Views\ClientEyeHealthMonitoring\Index.cshtml" />
+    <None Include="Views\ClientEyeHealthMonitoring\Reports.cshtml" />
+    <None Include="Views\ClientFoodIntake\Edit.cshtml" />
+    <None Include="Views\ClientFoodIntake\Index.cshtml" />
+    <None Include="Views\ClientFoodIntake\Reports.cshtml" />
+    <None Include="Views\ClientHeartRate\Edit.cshtml" />
+    <None Include="Views\ClientHeartRate\Index.cshtml" />
+    <None Include="Views\ClientHeartRate\Reports.cshtml" />
+    <None Include="Views\ClientOxygenLvl\Edit.cshtml" />
+    <None Include="Views\ClientOxygenLvl\Index.cshtml" />
+    <None Include="Views\ClientOxygenLvl\Reports.cshtml" />
+    <None Include="Views\ClientPainChart\Edit.cshtml" />
+    <None Include="Views\ClientPainChart\Index.cshtml" />
+    <None Include="Views\ClientPainChart\Reports.cshtml" />
+    <None Include="Views\ClientPulseRate\Edit.cshtml" />
+    <None Include="Views\ClientPulseRate\Index.cshtml" />
+    <None Include="Views\ClientPulseRate\Reports.cshtml" />
+    <None Include="Views\ClientSeizure\Edit.cshtml" />
+    <None Include="Views\ClientSeizure\Index.cshtml" />
+    <None Include="Views\ClientSeizure\Reports.cshtml" />
+    <None Include="Views\ClientWoundCare\Edit.cshtml" />
+    <None Include="Views\ClientWoundCare\Index.cshtml" />
+    <None Include="Views\ClientWoundCare\Reports.cshtml" />
     <None Include="Views\Resources\Edit.cshtml" />
     <None Include="Views\Enotice\Index.cshtml" />
     <None Include="Views\Enotice\Reports.cshtml" />

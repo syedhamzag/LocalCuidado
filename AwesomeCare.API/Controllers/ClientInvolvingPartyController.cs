@@ -85,25 +85,25 @@ namespace AwesomeCare.API.Controllers
 
 
         [HttpPut()]
-        [ProducesResponseType(type: typeof(GetClientInvolvingParty), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put([FromBody]PutClientInvolvingParty model)
+        [Route("action")]
+        public async Task<IActionResult> Put([FromBody] List<PutClientInvolvingParty> model)
         {
 
             if (model == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _clientInvolvingPartyRepository.GetEntity(model.ClientInvolvingPartyItemId);
-            if (entity == null)
-                return NotFound();
+            foreach (var item in model)
+            {
+                var entity = await _clientInvolvingPartyRepository.GetEntity(item.ClientInvolvingPartyItemId);
+                if (entity == null)
+                    return NotFound();
 
-            var clientInvolvingParty = Mapper.Map(model, entity);
+                var clientInvolvingParty = Mapper.Map(model, entity);
+                await _clientInvolvingPartyRepository.UpdateEntity(clientInvolvingParty);
 
-            var updateClientInvolvingParty = await _clientInvolvingPartyRepository.UpdateEntity(clientInvolvingParty);
-            var getClientInvParty = Mapper.Map<GetClientInvolvingParty>(updateClientInvolvingParty);
-            return Ok(getClientInvParty);
+            }        
+            return Ok();
 
         }
     }
