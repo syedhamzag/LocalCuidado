@@ -4,28 +4,34 @@ using System;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class tbl_ClientServiceWatch : Migration
+    public partial class tbl_ClientMgtVisit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_ClientServiceWatch",
+                name: "tbl_ClientMgtVisit",
                 columns: table => new
                 {
-                    WatchId = table.Column<int>(nullable: false)
+                    VisitId = table.Column<int>(nullable: false)
                             .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Reference = table.Column<string>(maxLength: 50, nullable: false),
                     ClientId = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     NextCheckDate = table.Column<DateTime>(nullable: false),
-                    Incident = table.Column<int>(nullable: false),
-                    Details = table.Column<int>(nullable: false),
-                    PersonInvolved = table.Column<int>(nullable: false),
-                    Contact = table.Column<int>(nullable: false),
+                    RateServiceRecieving = table.Column<int>(nullable: false),
+                    RateManagers = table.Column<int>(nullable: false),
+                    //StaffBestSupport = table.Column<int>(nullable: false),
+                    HowToComplain = table.Column<int>(nullable: false),
+                    ServiceRecommended = table.Column<int>(nullable: false),
+                    ImprovementExpect = table.Column<string>(nullable: false),
                     Observation = table.Column<string>(nullable: false),
                     ActionRequired = table.Column<string>(nullable: false),
-                    OfficerToAct = table.Column<int>(nullable: false),
+                    //OfficerToAct = table.Column<int>(nullable: false),
+                    ActionsTakenByMPCC = table.Column<string>(nullable: false),
+                    EvidenceOfActionTaken = table.Column<string>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
+                    RotCause = table.Column<string>(maxLength: 50, nullable: false),
+                    LessonLearntAndShared = table.Column<string>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Remarks = table.Column<string>(nullable: false),
                     URL = table.Column<string>(nullable: false),
@@ -33,30 +39,24 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_ClientServiceWatch", x => x.WatchId);
+                    table.PrimaryKey("PK_tbl_ClientMgtVisit", x => x.VisitId);
                     table.ForeignKey(
-                        name: "FK_tbl_ClientServiceWatch_tbl_Client_ClientId",
+                        name: "FK_tbl_ClientMgtVisit_tbl_Client_ClientId",
                         column: x => x.ClientId,
                         principalTable: "tbl_Client",
                         principalColumn: "ClientId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_tbl_ClientServiceWatch_tbl_StaffPersonalInfo_OfficerToAct",
-                        column: x => x.OfficerToAct,
-                        principalTable: "tbl_StaffPersonalInfo",
-                        principalColumn: "StaffPersonalInfoId",
-                        onDelete: ReferentialAction.Cascade);
                 });
                 migrationBuilder.CreateIndex(
-                    name: "IX_tbl_ClientServiceWatch_WatchId",
-                    table: "tbl_ClientServiceWatch",
-                    column: "WatchId");
+                    name: "IX_tbl_ClientMgtVisit_VisitId",
+                    table: "tbl_ClientMgtVisit",
+                    column: "VisitId");
                 }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_ClientServiceWatch");
+                name: "tbl_ClientMgtVisit");
         }
     }
 }
