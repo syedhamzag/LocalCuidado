@@ -6,8 +6,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientBodyTemp
 {
     public class GetClientBodyTemp
     {
-
+        public GetClientBodyTemp()
+        {
+            OfficerToAct = new List<GetBodyTempOfficerToAct>();
             StaffName = new List<GetBodyTempStaffName>();
+            Physician = new List<GetBodyTempPhysician>();
         }
 
         public List<GetBodyTempOfficerToAct> OfficerToAct { get; set; }
