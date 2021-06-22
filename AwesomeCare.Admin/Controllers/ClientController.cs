@@ -395,6 +395,26 @@ namespace AwesomeCare.Admin.Controllers
             }
             return RedirectToAction("HomeCareDetails", new { clientId = model.ClientId });
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _EditInvolvingParties(GetClientForEdit model)
+        {
+
+            if (model == null || !ModelState.IsValid)
+            {
+                return View("EditRegistration", model);
+            }
+            var putClient = Mapper.Map<List<PutClientInvolvingParty>>(model.InvolvingParties);
+            var result = await _clientInvolvingPartyService.Put(putClient);
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "Client Involving Party successfully updated" : "An Error Occurred" });
+            if (result.IsSuccessStatusCode == false)
+            {
+                // model.DeleteFileFromDisk(_env);
+                return View("EditRegistration", model);
+            }
+            return RedirectToAction("HomeCareDetails", new { clientId = model.ClientId });
+        }
         #endregion
 
 

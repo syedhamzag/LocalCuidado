@@ -65,7 +65,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> PostComplainRegister([FromBody] PostComplainRegister postComplain)
+        public async Task<IActionResult> Create([FromBody] PostComplainRegister postComplain)
         {
 
             if (postComplain == null || !ModelState.IsValid)
@@ -74,9 +74,8 @@ namespace AwesomeCare.API.Controllers
             }
 
             var complain = Mapper.Map<ClientComplainRegister>(postComplain);
-            var newComplain = await _complainRepository.InsertEntity(complain);
-            var getComplain = Mapper.Map<GetClientComplainRegister>(newComplain);
-            return Ok(getComplain);
+            await _complainRepository.InsertEntity(complain);
+            return Ok();
         }
         /// <summary>
         /// Update Medication
@@ -84,9 +83,7 @@ namespace AwesomeCare.API.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        [ProducesResponseType(type: typeof(GetClientComplainRegister), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("[action]")]
         public async Task<IActionResult> Put([FromBody] PutComplainRegister model)
         {
             if (!ModelState.IsValid)
@@ -95,10 +92,9 @@ namespace AwesomeCare.API.Controllers
             }
             var entity = await _complainRepository.GetEntity(model.ComplainId);
             var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _complainRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetClientComplainRegister>(updateEntity);
+            await _complainRepository.UpdateEntity(putEntity);
 
-            return Ok(getEntity);
+            return Ok();
 
 
         }

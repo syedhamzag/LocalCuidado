@@ -50,7 +50,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">OFFICER TO ACT</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="OFFICERTOACTId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                                    <select class="custom-select" asp-for="OFFICERTOACTId" asp-items="@Model.STAFFINVOLVED"></select>
                                     <span asp-validation-for="OFFICERTOACTId" class="text-danger"></span>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">STAFF</label>
-                                    <baserecord asp-key="GetStaffs" asp-for="STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                                    <select class="custom-select" asp-for="STAFFId" asp-items="@Model.STAFFINVOLVED"></select>
                                     <span asp-validation-for="STAFFId" class="text-danger"></span>
                                 </div>
                             </div>
@@ -95,14 +95,21 @@
                                     <span asp-validation-for="ROOTCAUSE" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label asp-for="REMARK" class="control-label"></label>
-                                    <input asp-for="REMARK" class="form-control" />
-                                    <span asp-validation-for="REMARK" class="text-danger"></span>
+                                    <label asp-for="Reference" class="control-label"></label>
+                                    <input type="text" asp-for="Reference" class="form-control" />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
                                     <baserecord asp-key="Staff_Communication_Status" asp-for="StatusId" asp-items="null" />
                                     <span asp-validation-for="StatusId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label asp-for="REMARK" class="control-label"></label>
+                                    <input type="text" asp-for="REMARK" class="form-control" />
+                                    <span asp-validation-for="REMARK" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -115,7 +122,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-12">
                                     <label class="control-label">INVESTIGATION OUTCOME</label>
-                                    <textarea asp-for="INVESTIGATIONOUTCOME" class="form-control" rows="4" cols="50" ></textarea>
+                                    <textarea asp-for="INVESTIGATIONOUTCOME" class="form-control" rows="4" cols="50"></textarea>
                                     <span asp-validation-for="INVESTIGATIONOUTCOME" class="text-danger"></span>
                                 </div>
                             </div>

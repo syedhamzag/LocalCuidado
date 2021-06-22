@@ -32,6 +32,7 @@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#mgtvisit">Management Visit</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#program">Program</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#servicewatch">Service Watch</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#telehealth">Tele Health</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
@@ -650,6 +651,316 @@
 
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="tab-pane" id="telehealth">
+                        <div class="header">
+                        </div>
+                        <div class="body">
+                            <ul class="nav nav-tabs-new2">
+                                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#bloodcoag">Blood Coagulation</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bloodpressure">Blood Pressure</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bmichart">BMI Chart</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bodytemp">Body Temp</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bowel">Bowel Movement</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#eyehealth">Eye Health</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#foodintake">Food Intake</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#heartrate">Heart Rate</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#oxygen">Oxygen Level</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#painchart">Pain Chart</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pulserate">Pulse Rate</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seizure">Seizure</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#woundcare">Wound Care</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane" id="bloodcoag">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBloodCoagulationRecord">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="bloodpressure">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBloodPressure">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="bmichart">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBMIChart">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="bodytemp">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBodyTemp">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="bowel">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBowelMovement">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="eyehealth">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientEyeHealthMonitoring">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="foodintake">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientFoodIntake">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="heartrate">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientHeartRate">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="oxygen">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientOxygenLvl">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="painchart">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientPainChart">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="pulserate">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientPulseRate">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="seizure">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientSeizure">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="woundcare">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientWoundCare">Create New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Action Required</th>
+                                                <th>Attachment</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

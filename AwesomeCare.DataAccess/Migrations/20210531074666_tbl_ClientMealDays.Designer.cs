@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    [Migration("20210531074666_tbl_ClientMealDays")]
+    [Migration("20210531974666_tbl_ClientMealDay")]
     partial class tbl_ClientMealDays
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

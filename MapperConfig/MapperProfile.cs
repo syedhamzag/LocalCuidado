@@ -63,6 +63,23 @@ using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
 using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
 using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
 using AwesomeCare.DataTransferObject.DTOs.StaffReference;
+using AwesomeCare.DataTransferObject.DTOs.Enotice;
+using AwesomeCare.DataTransferObject.DTOs.Resources;
+using AwesomeCare.DataTransferObject.DTOs.IncomingMeds;
+using AwesomeCare.DataTransferObject.DTOs.WhisttleBlower;
+using AwesomeCare.DataTransferObject.DTOs.ClientOxygenLvl;
+using AwesomeCare.DataTransferObject.DTOs.ClientBMIChart;
+using AwesomeCare.DataTransferObject.DTOs.ClientBloodPressure;
+using AwesomeCare.DataTransferObject.DTOs.ClientBloodCoagulationRecord;
+using AwesomeCare.DataTransferObject.DTOs.ClientBowelMovement;
+using AwesomeCare.DataTransferObject.DTOs.ClientFoodIntake;
+using AwesomeCare.DataTransferObject.DTOs.ClientPainChart;
+using AwesomeCare.DataTransferObject.DTOs.ClientEyeHealthMonitoring;
+using AwesomeCare.DataTransferObject.DTOs.ClientHeartRate;
+using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
+using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
+using AwesomeCare.DataTransferObject.DTOs.ClientBodyTemp;
+using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
 
 namespace MapperConfig
 {
@@ -176,7 +193,24 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffKeyWorkerVoice, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffReference, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientProgram, mem => mem.Ignore())
-                .ForMember(dto => dto.ClientServiceWatch, mem => mem.Ignore());
+                .ForMember(dto => dto.ClientServiceWatch, mem => mem.Ignore())
+                .ForMember(dto => dto.Enotice, mem => mem.Ignore())
+                .ForMember(dto => dto.WhisttleBlower, mem => mem.Ignore())
+                .ForMember(dto => dto.Resources, mem => mem.Ignore())
+                .ForMember(dto => dto.IncomingMeds, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBloodPressure, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientFoodIntake, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBowelMovement, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientPainChart, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientWoundCare, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientEyeHealthMonitoring, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBloodCoagulationRecord, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientSeizure, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientHeartRate, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientPulseRate, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBodyTemp, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientOxygenLvl, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBMIChart, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
@@ -225,7 +259,24 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffAdlObs, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffMedCompObs, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffKeyWorkerVoice, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffReference, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffReference, mem => mem.Ignore())
+                .ForMember(dto => dto.Enotice, mem => mem.Ignore())
+                .ForMember(dto => dto.WhisttleBlower, mem => mem.Ignore())
+                .ForMember(dto => dto.Resources, mem => mem.Ignore())
+                .ForMember(dto => dto.IncomingMeds, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBloodPressure, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientFoodIntake, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBowelMovement, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientPainChart, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientWoundCare, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientEyeHealthMonitoring, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBloodCoagulationRecord, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientSeizure, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientHeartRate, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientPulseRate, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBodyTemp, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientOxygenLvl, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientBMIChart, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
@@ -541,14 +592,27 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffReference, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientServiceWatch, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientVoice, mem => mem.Ignore());
+            //.ForMember(dto => dto.ClientBloodPressure, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientFoodIntake, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientBowelMovement, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientPainChart, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientWoundCare, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientEyeHealthMonitoring, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientBloodCoagulationRecord, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientSeizure, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientHeartRate, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientPulseRate, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientBodyTemp, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientOxygenLvl, mem => mem.Ignore())
+            //.ForMember(dto => dto.ClientBMIChart, mem => mem.Ignore());
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
                .ForMember(dto => dto.StaffWorkTeam, mem => mem.Ignore())
-               .ForMember(dto => dto.Education, mem => mem.MapFrom(src=>src.Education))
-               .ForMember(dto => dto.Trainings, mem => mem.MapFrom(src=>src.Trainings))
-               .ForMember(dto => dto.References, mem => mem.MapFrom(src=>src.References))
+               .ForMember(dto => dto.Education, mem => mem.MapFrom(src => src.Education))
+               .ForMember(dto => dto.Trainings, mem => mem.MapFrom(src => src.Trainings))
+               .ForMember(dto => dto.References, mem => mem.MapFrom(src => src.References))
                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore())
-               .ForMember(dto => dto.EmergencyContacts, mem => mem.MapFrom(src=>src.EmergencyContacts))
+               .ForMember(dto => dto.EmergencyContacts, mem => mem.MapFrom(src => src.EmergencyContacts))
                .ForMember(dto => dto.ShiftBookings, mem => mem.Ignore())
                .ForMember(dto => dto.ApplicationUser, mem => mem.Ignore())
                .ForMember(dto => dto.ClientNutrition, mem => mem.Ignore())
@@ -575,6 +639,19 @@ namespace MapperConfig
                .ForMember(dto => dto.StaffSupervisionAppraisal, mem => mem.Ignore())
                .ForMember(dto => dto.StaffOneToOne, mem => mem.Ignore())
                .ForMember(dto => dto.StaffReference, mem => mem.Ignore());
+               //.ForMember(dto => dto.ClientBloodPressure, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientFoodIntake, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientBowelMovement, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientPainChart, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientWoundCare, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientEyeHealthMonitoring, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientBloodCoagulationRecord, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientSeizure, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientHeartRate, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientPulseRate, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientBodyTemp, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientOxygenLvl, mem => mem.Ignore())
+               // .ForMember(dto => dto.ClientBMIChart, mem => mem.Ignore());
 
             CreateMap<PutStaffEducation, StaffEducation>()
                   .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -617,6 +694,19 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffSupervisionAppraisal, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffOneToOne, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffReference, mem => mem.Ignore());
+                //.ForMember(dto => dto.ClientBloodPressure, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientFoodIntake, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientBowelMovement, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientPainChart, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientWoundCare, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientEyeHealthMonitoring, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientBloodCoagulationRecord, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientSeizure, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientHeartRate, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientPulseRate, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientBodyTemp, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientOxygenLvl, mem => mem.Ignore())
+                //.ForMember(dto => dto.ClientBMIChart, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffProfile>()
                 .ForMember(dto => dto.GetStaffSpotCheck, mem => mem.Ignore())
@@ -1027,7 +1117,7 @@ namespace MapperConfig
 
             CreateMap<ClientProgram, GetClientProgram>();
             #endregion
-            #region ServiceWatch
+            #region ClientServiceWatch
             CreateMap<PutClientServiceWatch, ClientServiceWatch>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -1038,7 +1128,7 @@ namespace MapperConfig
             CreateMap<ClientServiceWatch, GetClientServiceWatch>();
             #endregion
 
-            #region ServiceWatch
+            #region StaffSpotCheck
             CreateMap<PutStaffSpotCheck, StaffSpotCheck>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -1049,7 +1139,7 @@ namespace MapperConfig
             CreateMap<StaffSpotCheck, GetStaffSpotCheck>();
             #endregion
 
-            #region ServiceWatch
+            #region StaffAdlObs
             CreateMap<PutStaffAdlObs, StaffAdlObs>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -1060,7 +1150,7 @@ namespace MapperConfig
             CreateMap<StaffAdlObs, GetStaffAdlObs>();
             #endregion
 
-            #region ServiceWatch
+            #region StaffMedComp
             CreateMap<PutStaffMedComp, StaffMedComp>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -1071,7 +1161,7 @@ namespace MapperConfig
             CreateMap<StaffMedComp, GetStaffMedComp>();
             #endregion
 
-            #region ServiceWatch
+            #region StaffKeyWorkerVoice
             CreateMap<PutStaffKeyWorkerVoice, StaffKeyWorkerVoice>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -1082,9 +1172,9 @@ namespace MapperConfig
             CreateMap<StaffKeyWorkerVoice, GetStaffKeyWorkerVoice>();
             #endregion
 
-           
 
-            #region ServiceWatch
+
+            #region StaffSurvey
             CreateMap<PutStaffSurvey, StaffSurvey>()
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
             CreateMap<PostStaffSurvey, StaffSurvey>()
@@ -1093,7 +1183,7 @@ namespace MapperConfig
             CreateMap<StaffSurvey, GetStaffSurvey>();
             #endregion
 
-            #region ServiceWatch
+            #region StaffOneToOne
             CreateMap<PutStaffOneToOne, StaffOneToOne>()
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
             CreateMap<PostStaffOneToOne, StaffOneToOne>()
@@ -1102,7 +1192,7 @@ namespace MapperConfig
             CreateMap<StaffOneToOne, GetStaffOneToOne>();
             #endregion
 
-            #region ServiceWatch
+            #region StaffSupervisionAppraisal
             CreateMap<PutStaffSupervisionAppraisal, StaffSupervisionAppraisal>()
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
             CreateMap<PostStaffSupervisionAppraisal, StaffSupervisionAppraisal>()
@@ -1111,7 +1201,7 @@ namespace MapperConfig
             CreateMap<StaffSupervisionAppraisal, GetStaffSupervisionAppraisal>();
             #endregion
 
-            #region ServiceWatch
+            #region StaffReference
             CreateMap<PutStaffReference, StaffReference>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -1120,6 +1210,180 @@ namespace MapperConfig
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
 
             CreateMap<StaffReference, GetStaffReference>();
+            #endregion
+
+            #region Enotice
+            CreateMap<PutEnotice, Enotice>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostEnotice, Enotice>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<Enotice, GetEnotice>();
+            #endregion
+
+            #region Resources
+            CreateMap<PutResources, Resources>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostResources, Resources>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<Resources, GetResources>();
+            #endregion
+
+            #region IncomingMeds
+            CreateMap<PutIncomingMeds, IncomingMeds>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostIncomingMeds, IncomingMeds>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<IncomingMeds, GetIncomingMeds>();
+            #endregion
+
+            #region WhisttleBlower
+            CreateMap<PutWhisttleBlower, WhisttleBlower>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostWhisttleBlower, WhisttleBlower>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<WhisttleBlower, GetWhisttleBlower>();
+            #endregion
+
+            #region BloodPressure
+            CreateMap<PutClientBloodPressure, ClientBloodPressure>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientBloodPressure, ClientBloodPressure>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientBloodPressure, GetClientBloodPressure>();
+            #endregion
+
+            #region FoodIntake
+            CreateMap<PutClientFoodIntake, ClientFoodIntake>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientFoodIntake, ClientFoodIntake>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientFoodIntake, GetClientFoodIntake>();
+            #endregion
+
+            #region BowelMovement
+            CreateMap<PutClientBowelMovement, ClientBowelMovement>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientBowelMovement, ClientBowelMovement>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientBowelMovement, GetClientBowelMovement>();
+            #endregion
+
+            #region PainChart
+            CreateMap<PutClientPainChart, ClientPainChart>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientPainChart, ClientPainChart>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientPainChart, GetClientPainChart>();
+            #endregion
+
+            #region WoundCare
+            CreateMap<PutClientWoundCare, ClientWoundCare>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientWoundCare, ClientWoundCare>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientWoundCare, GetClientWoundCare>();
+            #endregion
+
+            #region EyeHealthMonitoring
+            CreateMap<PutClientEyeHealthMonitoring, ClientEyeHealthMonitoring>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientEyeHealthMonitoring, ClientEyeHealthMonitoring>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientEyeHealthMonitoring, GetClientEyeHealthMonitoring>();
+            #endregion
+
+            #region BloodCoagulationRecord
+            CreateMap<PutClientBloodCoagulationRecord, ClientBloodCoagulationRecord>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientBloodCoagulationRecord, ClientBloodCoagulationRecord>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientBloodCoagulationRecord, GetClientBloodCoagulationRecord>();
+            #endregion
+
+            #region HeartRate
+            CreateMap<PutClientHeartRate, ClientHeartRate>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientHeartRate, ClientHeartRate>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientHeartRate, GetClientHeartRate>();
+            #endregion
+
+            #region PulseRate
+            CreateMap<PutClientPulseRate, ClientPulseRate>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientPulseRate, ClientPulseRate>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientPulseRate, GetClientPulseRate>();
+            #endregion
+
+            #region Seizure
+            CreateMap<PutClientSeizure, ClientSeizure>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientSeizure, ClientSeizure>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientSeizure, GetClientSeizure>();
+            #endregion
+
+            #region BodyTemp
+            CreateMap<PutClientBodyTemp, ClientBodyTemp>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientBodyTemp, ClientBodyTemp>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientBodyTemp, GetClientBodyTemp>();
+            #endregion
+
+            #region OxygenLvl
+            CreateMap<PutClientOxygenLvl, ClientOxygenLvl>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientOxygenLvl, ClientOxygenLvl>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientOxygenLvl, GetClientOxygenLvl>();
+            #endregion
+
+            #region BMIChart
+            CreateMap<PutClientBMIChart, ClientBMIChart>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientBMIChart, ClientBMIChart>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ClientBMIChart, GetClientBMIChart>();
+            #endregion
+
+            #region BloodCoagOfficerToAct
+            CreateMap<PostBloodCoagOfficerToAct, BloodCoagOfficerToAct>()
+                .ForMember(dto => dto.BloodCoagulation, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodCoagOfficerToActId, mem => mem.Ignore());
+            #endregion
+
+            #region BloodCoagStaffName
+            CreateMap<PostBloodCoagStaffName, BloodCoagStaffName>()
+                .ForMember(dto => dto.BloodCoagulation, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodCoagStaffNameId, mem => mem.Ignore());
+            #endregion
+
+            #region BloodCoagPhysician
+            CreateMap<PostBloodCoagPhysician, BloodCoagPhysician>()
+                .ForMember(dto => dto.BloodCoagulation, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodCoagPhysicianId, mem => mem.Ignore());
             #endregion
         }
     }

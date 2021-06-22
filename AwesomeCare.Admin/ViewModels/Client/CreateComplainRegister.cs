@@ -18,18 +18,15 @@ namespace AwesomeCare.Admin.ViewModels.Client
 
         public CreateComplainRegister()
         {
-            STAFFINVOLVED = new List<GetStaffs>();
-            OFFICERTOACT = new List<GetStaffs>();
+            STAFFINVOLVED = new List<SelectListItem>();
         }
         public int ComplainId { get; set; }
         public int ClientId { get; set; }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Evidence { get; set; }
         #region DropDowns
-        public ICollection<GetStaffs> OFFICERTOACT { get; set; }
-        public ICollection<GetStaffs> STAFFINVOLVED { get; set; }
+        public ICollection<SelectListItem> STAFFINVOLVED { get; set; }
         public ICollection<SelectListItem> Status { get; set; }
         #endregion
 
@@ -38,6 +35,10 @@ namespace AwesomeCare.Admin.ViewModels.Client
         // public string[] Tabs { get; set; } = new string[] { "" };
         #endregion
         public string ClientName { get; set; }
+        public string StatusName { get; set; }
+
+        [Required]
+        public string Reference { get; set; }
         #region ComplainRegister
         [Required]
         [MaxLength(255)]
@@ -52,7 +53,6 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [Required]
         public DateTime? DATEOFACKNOWLEDGEMENT { get; set; }
         [Required]
-        [Display(Name = "OFFICERTOACT")]
         public int OFFICERTOACTId { get; set; }
         [Required]
         [MaxLength(255)]
@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [MaxLength(50)]
         public string COMPLAINANTCONTACT { get; set; }
         [Required]
-        [Display(Name = "STAFFINVOLVED")]
         public int STAFFId { get; set; }
         [Required]
         [MaxLength(255)]

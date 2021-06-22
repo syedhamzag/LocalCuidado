@@ -1,5 +1,5 @@
-﻿@using AwesomeCare.DataTransferObject.DTOs.ClientMedicationAudit;
-@model List<GetClientMedAudit>
+﻿@using AwesomeCare.Admin.ViewModels.ClientMedAudit;
+@model List<CreateClientMedAudit>
 @{
     ViewData["Title"] = "Reports";
 }
@@ -15,9 +15,9 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Log URL</th>
+                            <th>Client</th>
                             <th>Next Due Date</th>
-                            <th>Remarks</th>
+                            <th>Status</th>
 
                             <th></th>
                         </tr>
@@ -27,9 +27,9 @@
                         {
                             <tr>
                                 <td>@item.index </td>
-                                <td>@item.data.LogURL</td>
+                                <td>@item.data.ClientName</td>
                                 <td>@item.data.NextDueDate</td>
-                                <td>@item.data.Remarks</td>
+                                <td>@item.data.StatusName</td>
 
                                 <td>
                                     <div class="btn-group" role="group">

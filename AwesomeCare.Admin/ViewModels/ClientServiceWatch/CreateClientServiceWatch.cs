@@ -25,7 +25,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         #endregion
-
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         public string ActiveTab { get; set; } = "servicewatch";
         public int WatchId { get; set; }
         public List<int> WatchIds { get; set; }

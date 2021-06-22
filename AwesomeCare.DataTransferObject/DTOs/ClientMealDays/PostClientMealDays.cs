@@ -23,7 +23,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMealDays
         [Required]
         public string PICTURE { get; set; }
         [Required(ErrorMessage = "Please provide Meal")]
-        public int MealId { get; set; }
+        public int ClientMealTypeId { get; set; }
         [Required]
         public int ClientMealId { get; set; }
     }

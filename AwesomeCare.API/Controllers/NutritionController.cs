@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class NutritionController : ControllerBase
@@ -87,7 +88,7 @@ namespace AwesomeCare.API.Controllers
             {
 
                 //check if Meal in db is part of the Meals in Model if not mark as Deleted
-                var currentMeal = model.ClientMealDays.Select(s=>s).Where(s=>s.MealId == Meal.MealId);
+                var currentMeal = model.ClientMealDays.Select(s=>s).Where(s=>s.ClientMealTypeId == Meal.ClientMealTypeId);
                 if (currentMeal == null)
                 {
                     //delete from database
@@ -105,7 +106,7 @@ namespace AwesomeCare.API.Controllers
                         Meal.HOWTOPREPARE = currentDbMeal.HOWTOPREPARE;
                         Meal.TypeId = currentDbMeal.TypeId;
                         Meal.SEEVIDEO = currentDbMeal.SEEVIDEO;
-                        Meal.MealId = currentDbMeal.MealId;
+                        Meal.ClientMealTypeId = currentDbMeal.ClientMealTypeId;
                         Meal.PICTURE = Meal.PICTURE;
                         Meal.NutritionId = Meal.NutritionId;
 
@@ -177,7 +178,7 @@ namespace AwesomeCare.API.Controllers
             //Meals from Model not in Database
             foreach (var item in model.ClientMealDays)
             {
-                var MealNotInDb = Nutrition[0].ClientMealDays.FirstOrDefault(r => r.MealId == item.MealId);
+                var MealNotInDb = Nutrition[0].ClientMealDays.FirstOrDefault(r => r.ClientMealTypeId == item.ClientMealTypeId);
                 if (MealNotInDb == null)
                 {
                     var postEntity = Mapper.Map<ClientMealDays>(item);
@@ -226,7 +227,7 @@ namespace AwesomeCare.API.Controllers
                                  ClientMealDays = (from d in c.ClientMealDays
                                                    select new GetClientMealDays
                                                    {
-                                                       MealId = d.MealId,
+                                                       ClientMealTypeId = d.ClientMealTypeId,
                                                        ClientMealId = d.ClientMealId,
                                                        MealDayofWeekId = d.MealDayofWeekId,
                                                        MEALDETAILS = d.MEALDETAILS,

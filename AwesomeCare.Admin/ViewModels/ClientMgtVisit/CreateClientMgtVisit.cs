@@ -30,6 +30,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         #endregion
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         public string ActiveTab { get; set; } = "mgtvisit";
         public List<int> VisitIds { get; set; }
         public int VisitId { get; set; }

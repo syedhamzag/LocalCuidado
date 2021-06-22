@@ -26,6 +26,7 @@ using iText.Layout.Element;
 using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
+using AwesomeCare.Admin.Services.Admin;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -33,6 +34,7 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IClientMgtVisitService _clientMgtVisitService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
         private IStaffService _staffService;
         private readonly IEmailService _emailService;
         private readonly IWebHostEnvironment _env;
@@ -41,12 +43,13 @@ namespace AwesomeCare.Admin.Controllers
 
         public ClientMgtVisitController(IClientMgtVisitService clientMgtVisitService, IFileUpload fileUpload,
             IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
-            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService) : base(fileUpload)
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
         {
             _clientMgtVisitService = clientMgtVisitService;
             _clientService = clientService;
             _staffService = staffService;
             _emailService = emailService;
+            _baseService = baseService;
             _env = env;
             _logger = logger;
             _cache = cache;
@@ -55,12 +58,27 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _clientMgtVisitService.Get();
-            return View(entities);
+            var client = await _clientService.GetClients();
+            var baserecord = await _baseService.GetBaseRecordsWithItems();
+            List<CreateClientMgtVisit> reports = new List<CreateClientMgtVisit>();
+            foreach (GetClientMgtVisit item in entities)
+            {
+                var report = new CreateClientMgtVisit();
+                report.VisitId = item.VisitId;
+                report.Reference = item.Reference;
+                report.NextCheckDate = item.NextCheckDate;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.Firstname).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                reports.Add(report);
+            }
+            return View(reports);
         }
 
         public async Task<IActionResult> Index(int? clientId)
         {
             var model = new CreateClientMgtVisit();
+            var client = await _clientService.GetClient(clientId.Value);
+            model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
             var staffs = await _staffService.GetStaffs();
             model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             model.ClientId = clientId.Value;
@@ -190,6 +208,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
+                var client = await _clientService.GetClient(model.ClientId);
+                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
@@ -254,6 +274,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var client = await _clientService.GetClient(model.ClientId);
+                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);

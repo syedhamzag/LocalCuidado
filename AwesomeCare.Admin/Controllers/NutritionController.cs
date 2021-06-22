@@ -211,7 +211,7 @@ namespace AwesomeCare.Admin.Controllers
                                 MealDay.MealDayofWeekId = int.Parse(weekday);
                                 MealDay.ClientMealId = int.TryParse(clientMealDayId, out int dayId) ? dayId : 0;
                                 MealDay.NutritionId = Nutrition.NutritionId;
-                                MealDay.MealId = MealTypes.FirstOrDefault(r => r.RotaType.Equals(MealType.RotaType)).ClientRotaTypeId;
+                                MealDay.ClientMealTypeId = MealTypes.FirstOrDefault(r => r.RotaType.Equals(MealType.RotaType)).ClientRotaTypeId;
 
                                 MealDays.Add(MealDay);
                                 i++;
@@ -352,6 +352,7 @@ namespace AwesomeCare.Admin.Controllers
                 Cleanings.Add(Cleaning);
             }
             Nutrition.ClientCleaning = Cleanings;
+            var json = JsonConvert.SerializeObject(Nutrition);
             #endregion
             if (Nutrition != null)
             {
