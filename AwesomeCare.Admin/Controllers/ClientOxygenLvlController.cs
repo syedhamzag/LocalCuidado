@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientOxygenLvlService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientOxygenLvl> reports = new List<CreateClientOxygenLvl>();
             foreach (GetClientOxygenLvl item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,14 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int oxygenId)
         {
-            string OfficerToAct = "";
             var OxygenLvl = await _clientOxygenLvlService.Get(oxygenId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in OxygenLvl.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(OxygenLvl);
             return View(OxygenLvl);
         }
         public async Task<IActionResult> Email(int oxygenId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var OxygenLvl = await _clientOxygenLvlService.Get(oxygenId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in OxygenLvl.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(OxygenLvl);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientOxygenLvl.pdf");
             string subject = "ClientOxygenLvl";
             string body = "";
@@ -121,16 +106,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int oxygenId)
         {
-            string OfficerToAct = "";
             var OxygenLvl = await _clientOxygenLvlService.Get(oxygenId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in OxygenLvl.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(OxygenLvl);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientOxygenLvl.pdf");
         }
@@ -182,6 +160,8 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = OxygenLvl.Result.Deadline,
                 Remarks = OxygenLvl.Result.Remarks,
                 Status = OxygenLvl.Result.Status,
+                SeeChartAttach = OxygenLvl.Result.SeeChartAttach,
+                TargetOxygenAttach = OxygenLvl.Result.TargetOxygenAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -242,8 +222,9 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
+                postlog.SeeChartAttach = model.SeeChartAttach;
+                postlog.TargetOxygenAttach = model.TargetOxygenAttach;
 
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientOxygenLvlService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -292,6 +273,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientOxygenLvl put = new PutClientOxygenLvl();
+            put.OxygenLvlId = model.OxygenLvlId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -300,13 +282,15 @@ namespace AwesomeCare.Admin.Controllers
             put.CurrentReading = model.CurrentReading;
             put.SeeChart = model.SeeChart;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutOxygenLvlStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutOxygenLvlPhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutOxygenLvlStaffName { StaffPersonalInfoId = o, OxygenLvlId = model.OxygenLvlId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutOxygenLvlPhysician { StaffPersonalInfoId = o, OxygenLvlId = model.OxygenLvlId }).ToList();
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutOxygenLvlOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutOxygenLvlOfficerToAct { StaffPersonalInfoId = o, OxygenLvlId = model.OxygenLvlId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;
+            put.SeeChartAttach = model.SeeChartAttach;
+            put.TargetOxygenAttach = model.TargetOxygenAttach;
 
             var entity = await _clientOxygenLvlService.Put(put);
             SetOperationStatus(new Models.OperationStatus

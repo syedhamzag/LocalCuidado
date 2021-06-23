@@ -63,7 +63,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientMedAuditService.Get();
 
             var client = await _clientService.GetClients();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientMedAudit> reports = new List<CreateClientMedAudit>();
             foreach (GetClientMedAudit item in entities)
             {
@@ -81,61 +80,36 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int? clientId)
         {
             var model = new CreateClientMedAudit();
-            var client = await _clientService.GetClient(clientId.Value);
-            model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
             var staffs = await _staffService.GetStaffs();
-            model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             model.ClientId = clientId.Value;
+            var client = await _clientService.GetClientDetail();
+            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
+            model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             return View(model);
 
         }
 
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int medId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var MedAudit = await _clientMedAuditService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in MedAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToTakeAction).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(MedAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(MedAudit.FirstOrDefault());
+            var MedAudit = await _clientMedAuditService.Get(medId);
+            return View(MedAudit);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int medId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var MedAudit = await _clientMedAuditService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in MedAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToTakeAction).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(MedAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var MedAudit = await _clientMedAuditService.Get(medId);
+            var json = JsonConvert.SerializeObject(MedAudit);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientMedAudit.pdf");
             string subject = "ClientMedAudit";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int medId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var MedAudit = await _clientMedAuditService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in MedAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToTakeAction).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(MedAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var MedAudit = await _clientMedAuditService.Get(medId);
+            var json = JsonConvert.SerializeObject(MedAudit);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientMedAudit.pdf");
         }
@@ -165,48 +139,40 @@ namespace AwesomeCare.Admin.Controllers
             return buffer;
         }
 
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int MedAuditId)
         {
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var MedAudit = _clientMedAuditService.GetByRef(Reference);
-            foreach (var item in MedAudit.Result)
-            {
-                officer.Add(item.OfficerToTakeAction);
-                Ids.Add(item.MedAuditId);
-            }
+            var MedAudit = _clientMedAuditService.Get(MedAuditId);
             var staffs = await _staffService.GetStaffs();
 
             var putEntity = new CreateClientMedAudit
             {
-                MedAuditId = MedAudit.Result.FirstOrDefault().MedAuditId,
-                MedAuditIds = Ids,
-                Reference = MedAudit.Result.FirstOrDefault().Reference,
-                ClientId = MedAudit.Result.FirstOrDefault().ClientId,
-                ActionRecommended = MedAudit.Result.FirstOrDefault().ActionRecommended,
-                ActionTaken = MedAudit.Result.FirstOrDefault().ActionTaken,
-                Attachment = MedAudit.Result.FirstOrDefault().Attachment,
-                Date = MedAudit.Result.FirstOrDefault().Date,
-                NextDueDate = MedAudit.Result.FirstOrDefault().NextDueDate,
-                Deadline = MedAudit.Result.FirstOrDefault().Deadline,
-                EvidenceOfActionTaken = MedAudit.Result.FirstOrDefault().EvidenceOfActionTaken,
-                LessonLearntAndShared = MedAudit.Result.FirstOrDefault().LessonLearntAndShared,
-                LogURL = MedAudit.Result.FirstOrDefault().LogURL,
-                NameOfAuditor = MedAudit.Result.FirstOrDefault().NameOfAuditor,
-                Observations = MedAudit.Result.FirstOrDefault().Observations,
-                OfficerToTakeAction = officer,
-                Remarks = MedAudit.Result.FirstOrDefault().Remarks,
-                RepeatOfIncident = MedAudit.Result.FirstOrDefault().RepeatOfIncident,
-                RotCause = MedAudit.Result.FirstOrDefault().RotCause,
-                Status = MedAudit.Result.FirstOrDefault().Status,
-                ThinkingServiceUsers = MedAudit.Result.FirstOrDefault().ThinkingServiceUsers,
-                GapsInAdmistration = MedAudit.Result.FirstOrDefault().GapsInAdmistration,
-                RightsOfMedication = MedAudit.Result.FirstOrDefault().RightsOfMedication,
-                MarChartReview = MedAudit.Result.FirstOrDefault().MarChartReview,
-                MedicationConcern = MedAudit.Result.FirstOrDefault().MedicationConcern,
-                HardCopyReview = MedAudit.Result.FirstOrDefault().HardCopyReview,
-                MedicationSupplyEfficiency = MedAudit.Result.FirstOrDefault().MedicationSupplyEfficiency,
-                MedicationInfoUploadEefficiency = MedAudit.Result.FirstOrDefault().MedicationInfoUploadEefficiency,
+                MedAuditId = MedAudit.Result.MedAuditId,
+                Reference = MedAudit.Result.Reference,
+                ClientId = MedAudit.Result.ClientId,
+                ActionRecommended = MedAudit.Result.ActionRecommended,
+                ActionTaken = MedAudit.Result.ActionTaken,
+                Attachment = MedAudit.Result.Attachment,
+                Date = MedAudit.Result.Date,
+                NextDueDate = MedAudit.Result.NextDueDate,
+                Deadline = MedAudit.Result.Deadline,
+                EvidenceOfActionTaken = MedAudit.Result.EvidenceOfActionTaken,
+                LessonLearntAndShared = MedAudit.Result.LessonLearntAndShared,
+                LogURL = MedAudit.Result.LogURL,
+                NameOfAuditor = MedAudit.Result.NameOfAuditor,
+                Observations = MedAudit.Result.Observations,
+                //OfficerToTakeAction = MedAudit.Result.OfficerToTakeAction.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = MedAudit.Result.Remarks,
+                RepeatOfIncident = MedAudit.Result.RepeatOfIncident,
+                RotCause = MedAudit.Result.RotCause,
+                Status = MedAudit.Result.Status,
+                ThinkingServiceUsers = MedAudit.Result.ThinkingServiceUsers,
+                GapsInAdmistration = MedAudit.Result.GapsInAdmistration,
+                RightsOfMedication = MedAudit.Result.RightsOfMedication,
+                MarChartReview = MedAudit.Result.MarChartReview,
+                MedicationConcern = MedAudit.Result.MedicationConcern,
+                HardCopyReview = MedAudit.Result.HardCopyReview,
+                MedicationSupplyEfficiency = MedAudit.Result.MedicationSupplyEfficiency,
+                MedicationInfoUploadEefficiency = MedAudit.Result.MedicationInfoUploadEefficiency,
                 OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -217,12 +183,14 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
-                var client = await _clientService.GetClient(model.ClientId);
-                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                var client = await _clientService.GetClientDetail();
+                model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 var staffs = await _staffService.GetStaffs();
                 model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+            PostClientMedAudit postlog = new PostClientMedAudit();
+
             #region Evidence
             if (model.Evidence != null)
             {
@@ -231,50 +199,53 @@ namespace AwesomeCare.Admin.Controllers
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
                 model.EvidenceOfActionTaken = path;
             }
+            else
+            {
+                model.EvidenceOfActionTaken = "No Image";
+            }
             #endregion
             #region Attachment
             if (model.Attach != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
+                string folder = "clientcomplain";
+                string filename = string.Concat(folder, "_Attach_", model.ClientId);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
+            }
+            else
+            {
+                model.Attachment = "No Image";
             }
             #endregion
-            List<PostClientMedAudit> postMedAudits = new List<PostClientMedAudit>();
-            foreach (var officer in model.OfficerToTakeAction)
-            {
-                var postMedAudit = new PostClientMedAudit();
 
-                postMedAudit.Reference = model.Reference;
-                postMedAudit.ClientId = model.ClientId;
-                postMedAudit.ActionRecommended = model.ActionRecommended;
-                postMedAudit.ActionTaken = model.ActionTaken;
-                postMedAudit.Attachment = model.Attachment;
-                postMedAudit.Date = model.Date;
-                postMedAudit.NextDueDate = model.NextDueDate;
-                postMedAudit.Deadline = model.Deadline;
-                postMedAudit.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
-                postMedAudit.LessonLearntAndShared = model.LessonLearntAndShared;
-                postMedAudit.LogURL = model.LogURL;
-                postMedAudit.NameOfAuditor = model.NameOfAuditor;
-                postMedAudit.Observations = model.Observations;
-                postMedAudit.OfficerToTakeAction = officer;
-                postMedAudit.Remarks = model.Remarks;
-                postMedAudit.RepeatOfIncident = model.RepeatOfIncident;
-                postMedAudit.RotCause = model.RotCause;
-                postMedAudit.Status = model.Status;
-                postMedAudit.ThinkingServiceUsers = model.ThinkingServiceUsers;
-                postMedAudit.GapsInAdmistration = model.GapsInAdmistration;
-                postMedAudit.RightsOfMedication = model.RightsOfMedication;
-                postMedAudit.MarChartReview = model.MarChartReview;
-                postMedAudit.MedicationConcern = model.MedicationConcern;
-                postMedAudit.HardCopyReview = model.HardCopyReview;
-                postMedAudit.MedicationSupplyEfficiency = model.MedicationSupplyEfficiency;
-                postMedAudit.MedicationInfoUploadEefficiency = model.MedicationInfoUploadEefficiency;
-                postMedAudits.Add(postMedAudit);
-            }
-            var result = await _clientMedAuditService.Create(postMedAudits);
+                postlog.Reference = model.Reference;
+                postlog.ClientId = model.ClientId;
+                postlog.ActionRecommended = model.ActionRecommended;
+                postlog.ActionTaken = model.ActionTaken;
+                postlog.Attachment = model.Attachment;
+                postlog.Date = model.Date;
+                postlog.NextDueDate = model.NextDueDate;
+                postlog.Deadline = model.Deadline;
+                postlog.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+                postlog.LessonLearntAndShared = model.LessonLearntAndShared;
+                postlog.LogURL = model.LogURL;
+                postlog.NameOfAuditor = model.NameOfAuditor;
+                postlog.Observations = model.Observations;
+                //postlog.OfficerToTakeAction = model.OfficerToTakeAction.Select(o => new PostMedAuditOfficerToAct { StaffPersonalInfoId = o, MedAuditId = model.MedAuditId }).ToList();
+                postlog.Remarks = model.Remarks;
+                postlog.RepeatOfIncident = model.RepeatOfIncident;
+                postlog.RotCause = model.RotCause;
+                postlog.Status = model.Status;
+                postlog.ThinkingServiceUsers = model.ThinkingServiceUsers;
+                postlog.GapsInAdmistration = model.GapsInAdmistration;
+                postlog.RightsOfMedication = model.RightsOfMedication;
+                postlog.MarChartReview = model.MarChartReview;
+                postlog.MedicationConcern = model.MedicationConcern;
+                postlog.HardCopyReview = model.HardCopyReview;
+                postlog.MedicationSupplyEfficiency = model.MedicationSupplyEfficiency;
+                postlog.MedicationInfoUploadEefficiency = model.MedicationInfoUploadEefficiency;
+               
+            var result = await _clientMedAuditService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Med Audit successfully registered" : "An Error Occurred" });
@@ -293,6 +264,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+
             #region Evidence
             if (model.Evidence != null)
             {
@@ -318,44 +290,38 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = model.Attachment;
             }
             #endregion
-            List<PutClientMedAudit> putMedAudits = new List<PutClientMedAudit>();
-            int count = model.MedAuditIds.Count;
-            int i = 0;
-            foreach (var item in model.OfficerToTakeAction)
-            {
-                var putMedAudit = new PutClientMedAudit();
-                if(i < count)
-                    putMedAudit.MedAuditId = model.MedAuditIds[i];
-                putMedAudit.Reference = model.Reference;
-                putMedAudit.ClientId = model.ClientId;
-                putMedAudit.ActionRecommended = model.ActionRecommended;
-                putMedAudit.ActionTaken = model.ActionTaken;
-                putMedAudit.Attachment = model.Attachment;
-                putMedAudit.Date = model.Date;
-                putMedAudit.NextDueDate = model.NextDueDate;
-                putMedAudit.Deadline = model.Deadline;
-                putMedAudit.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
-                putMedAudit.LessonLearntAndShared = model.LessonLearntAndShared;
-                putMedAudit.LogURL = model.LogURL;
-                putMedAudit.NameOfAuditor = model.NameOfAuditor;
-                putMedAudit.Observations = model.Observations;
-                putMedAudit.OfficerToTakeAction = item;
-                putMedAudit.Remarks = model.Remarks;
-                putMedAudit.RepeatOfIncident = model.RepeatOfIncident;
-                putMedAudit.RotCause = model.RotCause;
-                putMedAudit.Status = model.Status;
-                putMedAudit.ThinkingServiceUsers = model.ThinkingServiceUsers;
-                putMedAudit.GapsInAdmistration = model.GapsInAdmistration;
-                putMedAudit.RightsOfMedication = model.RightsOfMedication;
-                putMedAudit.MarChartReview = model.MarChartReview;
-                putMedAudit.MedicationConcern = model.MedicationConcern;
-                putMedAudit.HardCopyReview = model.HardCopyReview;
-                putMedAudit.MedicationSupplyEfficiency = model.MedicationSupplyEfficiency;
-                putMedAudit.MedicationInfoUploadEefficiency = model.MedicationInfoUploadEefficiency;
-                putMedAudits.Add(putMedAudit);
-            }
-            var json = JsonConvert.SerializeObject(putMedAudits);
-            var entity = await _clientMedAuditService.Put(putMedAudits);
+
+            PutClientMedAudit put = new PutClientMedAudit();
+            put.MedAuditId = model.MedAuditId;
+            put.Reference = model.Reference;
+            put.ClientId = model.ClientId;
+            put.ActionRecommended = model.ActionRecommended;
+            put.ActionTaken = model.ActionTaken;
+            put.Attachment = model.Attachment;
+            put.Date = model.Date;
+            put.NextDueDate = model.NextDueDate;
+            put.Deadline = model.Deadline;
+            put.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+            put.LessonLearntAndShared = model.LessonLearntAndShared;
+            put.LogURL = model.LogURL;
+            put.NameOfAuditor = model.NameOfAuditor;
+            put.Observations = model.Observations;
+            //put.OfficerToTakeAction = model.OFFICERTOACT.Select(o => new PutMedAuditOfficerToAct { StaffPersonalInfoId = o, MedAuditId = model.MedAuditId }).ToList();
+            put.Remarks = model.Remarks;
+            put.RepeatOfIncident = model.RepeatOfIncident;
+            put.RotCause = model.RotCause;
+            put.Status = model.Status;
+            put.ThinkingServiceUsers = model.ThinkingServiceUsers;
+            put.GapsInAdmistration = model.GapsInAdmistration;
+            put.RightsOfMedication = model.RightsOfMedication;
+            put.MarChartReview = model.MarChartReview;
+            put.MedicationConcern = model.MedicationConcern;
+            put.HardCopyReview = model.HardCopyReview;
+            put.MedicationSupplyEfficiency = model.MedicationSupplyEfficiency;
+            put.MedicationInfoUploadEefficiency = model.MedicationInfoUploadEefficiency;
+
+            var json = JsonConvert.SerializeObject(put);
+            var entity = await _clientMedAuditService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

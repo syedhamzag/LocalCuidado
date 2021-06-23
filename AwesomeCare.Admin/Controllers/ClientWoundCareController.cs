@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientWoundCareService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientWoundCare> reports = new List<CreateClientWoundCare>();
             foreach (GetClientWoundCare item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,14 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int woundId)
         {
-            string OfficerToAct = "";
             var WoundCare = await _clientWoundCareService.Get(woundId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in WoundCare.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(WoundCare);
             return View(WoundCare);
         }
         public async Task<IActionResult> Email(int woundId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var WoundCare = await _clientWoundCareService.Get(woundId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in WoundCare.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(WoundCare);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientWoundCare.pdf");
             string subject = "ClientWoundCare";
             string body = "";
@@ -121,16 +106,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int woundId)
         {
-            string OfficerToAct = "";
             var WoundCare = await _clientWoundCareService.Get(woundId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in WoundCare.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(WoundCare);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientWoundCare.pdf");
         }
@@ -188,6 +166,10 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = WoundCare.Result.Deadline,
                 Remarks = WoundCare.Result.Remarks,
                 Status = WoundCare.Result.Status,
+                LocationAttach = WoundCare.Result.LocationAttach,
+                MeasurementAttach = WoundCare.Result.MeasurementAttach,
+                TypeAttach = WoundCare.Result.TypeAttach,
+                UlcerStageAttach = WoundCare.Result.UlcerStageAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -289,8 +271,11 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
+                postlog.LocationAttach = model.LocationAttach;
+                postlog.MeasurementAttach = model.MeasurementAttach;
+                postlog.TypeAttach = model.TypeAttach;
+                postlog.UlcerStageAttach = model.UlcerStageAttach;
 
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientWoundCareService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -374,6 +359,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientWoundCare put = new PutClientWoundCare();
+            put.WoundCareId = model.WoundCareId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -388,13 +374,18 @@ namespace AwesomeCare.Admin.Controllers
             put.StatusImage = model.StatusImage;
             put.StatusAttach = model.StatusAttach;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutWoundCareStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutWoundCarePhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutWoundCareStaffName { StaffPersonalInfoId = o, WoundCareId = model.WoundCareId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutWoundCarePhysician { StaffPersonalInfoId = o, WoundCareId = model.WoundCareId }).ToList();
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutWoundCareOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutWoundCareOfficerToAct { StaffPersonalInfoId = o, WoundCareId = model.WoundCareId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;
+            put.LocationAttach = model.LocationAttach;
+            put.MeasurementAttach = model.MeasurementAttach;
+            put.TypeAttach = model.TypeAttach;
+            put.UlcerStageAttach = model.UlcerStageAttach;
+
 
             var entity = await _clientWoundCareService.Put(put);
             SetOperationStatus(new Models.OperationStatus

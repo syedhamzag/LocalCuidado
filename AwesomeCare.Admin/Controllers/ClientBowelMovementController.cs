@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientBowelMovementService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientBowelMovement> reports = new List<CreateClientBowelMovement>();
             foreach (GetClientBowelMovement item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,14 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int bowelId)
         {
-            string OfficerToAct = "";
             var BowelMovement = await _clientBowelMovementService.Get(bowelId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BowelMovement.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(BowelMovement);
             return View(BowelMovement);
         }
         public async Task<IActionResult> Email(int bowelId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var BowelMovement = await _clientBowelMovementService.Get(bowelId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BowelMovement.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(BowelMovement);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientBowelMovement.pdf");
             string subject = "ClientBowelMovement";
             string body = "";
@@ -121,16 +106,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int bowelId)
         {
-            string OfficerToAct = "";
             var BowelMovement = await _clientBowelMovementService.Get(bowelId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BowelMovement.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(BowelMovement);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientBowelMovement.pdf");
         }
@@ -183,6 +161,8 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = BowelMovement.Result.Deadline,
                 Remarks = BowelMovement.Result.Remarks,
                 Status = BowelMovement.Result.Status,
+                ColorAttach = BowelMovement.Result.ColorAttach,
+                TypeAttach = BowelMovement.Result.TypeAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -256,7 +236,10 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
-            var json = JsonConvert.SerializeObject(postlog);
+                postlog.ColorAttach = model.ColorAttach;
+                postlog.TypeAttach = model.TypeAttach;
+                postlog.StatusAttach = model.StatusAttach;
+            
             var result = await _clientBowelMovementService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -317,6 +300,7 @@ namespace AwesomeCare.Admin.Controllers
 
             
             PutClientBowelMovement put = new PutClientBowelMovement();
+            put.BowelMovementId = model.BowelMovementId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -327,13 +311,16 @@ namespace AwesomeCare.Admin.Controllers
             put.StatusImage = model.StatusImage;
             put.StatusAttach = model.StatusAttach;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutBowelMovementStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutBowelMovementPhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutBowelMovementStaffName { StaffPersonalInfoId = o, BowelMovementId = model.BowelMovementId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutBowelMovementPhysician { StaffPersonalInfoId = o, BowelMovementId = model.BowelMovementId }).ToList();
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBowelMovementOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBowelMovementOfficerToAct { StaffPersonalInfoId = o, BowelMovementId = model.BowelMovementId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;
+            put.ColorAttach = model.ColorAttach;
+            put.TypeAttach = model.TypeAttach;
+            put.StatusAttach = model.StatusAttach;
             var entity = await _clientBowelMovementService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
