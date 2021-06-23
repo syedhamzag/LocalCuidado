@@ -13,10 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientPainChart
             StaffName = new List<PutPainChartStaffName>();
         }
 
-        public List<PutPainChartOfficerToAct> OfficerToAct { get; set; }
-        public List<PutPainChartPhysician> Physician { get; set; }
-        public List<PutPainChartStaffName> StaffName { get; set; }
-
         public int PainChartId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -34,5 +30,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientPainChart
         public string Remarks { get; set; }
         public int Status { get; set; }
         public string StatusAttach { get; set; }
+
+        public List<PutPainChartOfficerToAct> OfficerToAct { get; set; }
+        public List<PutPainChartPhysician> Physician { get; set; }
+        public List<PutPainChartStaffName> StaffName { get; set; }
     }
 }

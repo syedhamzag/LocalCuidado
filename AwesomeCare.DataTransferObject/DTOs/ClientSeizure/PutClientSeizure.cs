@@ -13,10 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientSeizure
             StaffName = new List<PutSeizureStaffName>();
         }
 
-        public List<PutSeizureOfficerToAct> OfficerToAct { get; set; }
-        public List<PutSeizurePhysician> Physician { get; set; }
-        public List<PutSeizureStaffName> StaffName { get; set; }
-
         public int SeizureId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -34,5 +30,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientSeizure
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PutSeizureOfficerToAct> OfficerToAct { get; set; }
+        public List<PutSeizurePhysician> Physician { get; set; }
+        public List<PutSeizureStaffName> StaffName { get; set; }
     }
 }

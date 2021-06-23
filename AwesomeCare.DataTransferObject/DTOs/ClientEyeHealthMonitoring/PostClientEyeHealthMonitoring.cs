@@ -14,10 +14,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientEyeHealthMonitoring
             StaffName = new List<PostEyeHealthStaffName>();
         }
 
-        public List<PostEyeHealthOfficerToAct> OfficerToAct { get; set; }
-        public List<PostEyeHealthPhysician> Physician { get; set; }
-        public List<PostEyeHealthStaffName> StaffName { get; set; }
-
         public int EyeHealthId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -37,5 +33,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientEyeHealthMonitoring
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PostEyeHealthOfficerToAct> OfficerToAct { get; set; }
+        public List<PostEyeHealthPhysician> Physician { get; set; }
+        public List<PostEyeHealthStaffName> StaffName { get; set; }
     }
 }

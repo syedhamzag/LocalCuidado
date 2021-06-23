@@ -13,11 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientEyeHealthMonitoring
             Physician = new List<PutEyeHealthPhysician>();
             StaffName = new List<PutEyeHealthStaffName>();
         }
-
-        public List<PutEyeHealthOfficerToAct> OfficerToAct { get; set; }
-        public List<PutEyeHealthPhysician> Physician { get; set; }
-        public List<PutEyeHealthStaffName> StaffName { get; set; }
-
         public int EyeHealthId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -37,5 +32,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientEyeHealthMonitoring
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+        public List<PutEyeHealthOfficerToAct> OfficerToAct { get; set; }
+        public List<PutEyeHealthPhysician> Physician { get; set; }
+        public List<PutEyeHealthStaffName> StaffName { get; set; }
     }
 }
