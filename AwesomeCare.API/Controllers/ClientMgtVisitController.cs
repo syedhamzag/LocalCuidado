@@ -41,22 +41,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientMgtVisitRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All ClientMgtVisit
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetClientMgtVisit>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _clientMgtVisitRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
+
         /// <summary>
         /// Create ClientMgtVisit
         /// </summary>
@@ -64,22 +51,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientMgtVisit> postClientMgtVisit)
+        public async Task<IActionResult> Create([FromBody] PostClientMgtVisit postClientMgtVisit)
         {
             if (postClientMgtVisit == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postClientMgtVisit)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-                if (item.EvidenceOfActionTaken == null)
-                    item.EvidenceOfActionTaken = "No Image";
-            }
 
-            var ClientMgtVisit = Mapper.Map<List<ClientMgtVisit>>(postClientMgtVisit);
-            await _clientMgtVisitRepository.InsertEntities(ClientMgtVisit);
+            var ClientMgtVisit = Mapper.Map<ClientMgtVisit>(postClientMgtVisit);
+            await _clientMgtVisitRepository.InsertEntity(ClientMgtVisit);
             return Ok();
         }
         /// <summary>
@@ -88,40 +68,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientMgtVisit> model)
+        public async Task<IActionResult> Put([FromBody] PutClientMgtVisit model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<ClientMgtVisit>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (ClientMgtVisit item in filterEntity)
-            {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
-                {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
-
-                }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<ClientMgtVisit>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
-            var result = _dbContext.SaveChanges();
+            var ClientMgtVisit = Mapper.Map<ClientMgtVisit>(model);
+            await _clientMgtVisitRepository.UpdateEntity(ClientMgtVisit);
             return Ok();
 
         }
@@ -159,11 +113,9 @@ namespace AwesomeCare.API.Controllers
                                                HowToComplain = c.HowToComplain,
                                                ImprovementExpect = c.ImprovementExpect,
                                                Observation = c.Observation,
-                                               OfficerToAct = c.OfficerToAct,
                                                RateManagers = c.RateManagers,
                                                RateServiceRecieving = c.RateServiceRecieving,
                                                ServiceRecommended = c.ServiceRecommended,
-                                               StaffBestSupport = c.StaffBestSupport,
                                                URL = c.URL
                                            }
                       ).FirstOrDefaultAsync();

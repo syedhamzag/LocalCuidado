@@ -43,21 +43,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientLogAuditRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-        /// <summary>
-        /// Get All ClientLogAudit
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetClientLogAudit>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _clientLogAuditRepository.Table.Where(s=>s.Reference==Reference).ToList();
             return Ok(getEntities);
         }
+        
         /// <summary>
         /// Create ClientLogAudit
         /// </summary>
@@ -65,22 +53,16 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientLogAudit> postClientLogAudit)
+        public async Task<IActionResult> Create([FromBody] PostClientLogAudit postClientLogAudit)
         {
             if (postClientLogAudit == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postClientLogAudit)
-            {
-                if (item.EvidenceFilePath == null)
-                    item.EvidenceFilePath = "No Image";
-                if (item.EvidenceOfActionTaken == null)
-                    item.EvidenceOfActionTaken = "No Image";
-            }
             
-            var ClientLogAudit = Mapper.Map<List<ClientLogAudit>>(postClientLogAudit);
-            await _clientLogAuditRepository.InsertEntities(ClientLogAudit);
+            
+            var ClientLogAudit = Mapper.Map<ClientLogAudit>(postClientLogAudit);
+            await _clientLogAuditRepository.InsertEntity(ClientLogAudit);
             return Ok();
         }
         /// <summary>
@@ -89,40 +71,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientLogAudit> model)
+        public async Task<IActionResult> Put([FromBody] PutClientLogAudit model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<ClientLogAudit>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (ClientLogAudit item in filterEntity)
-            {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToTakeAction == item.OfficerToTakeAction).FirstOrDefault();
-                if (modelRecord == null)
-                {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
-
-                }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToTakeAction == item.OfficerToTakeAction);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<ClientLogAudit>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
-            var result = _dbContext.SaveChanges();
+            var ClientLogAudit = Mapper.Map<ClientLogAudit>(model);
+            await _clientLogAuditRepository.UpdateEntity(ClientLogAudit);
             return Ok();
 
         }
@@ -156,9 +112,7 @@ namespace AwesomeCare.API.Controllers
                                                EvidenceOfActionTaken = c.EvidenceOfActionTaken,
                                                LessonLearntAndShared = c.LessonLearntAndShared,
                                                LogURL = c.LogURL,
-                                               NameOfAuditor = c.NameOfAuditor,
                                                Observations = c.Observations,
-                                               OfficerToTakeAction = c.OfficerToTakeAction,
                                                Remarks = c.Remarks,
                                                RepeatOfIncident = c.RepeatOfIncident,
                                                RotCause = c.RotCause,
