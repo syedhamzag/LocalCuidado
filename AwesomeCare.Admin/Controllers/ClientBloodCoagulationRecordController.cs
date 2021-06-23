@@ -165,6 +165,7 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = BloodCoagulationRecord.Result.Deadline,
                 Remark = BloodCoagulationRecord.Result.Remark,
                 Status = BloodCoagulationRecord.Result.Status,
+                TargetINRAttach = BloodCoagulationRecord.Result.TargetINRAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -267,14 +268,15 @@ namespace AwesomeCare.Admin.Controllers
             put.NewINR = model.NewINR;
             put.BloodStatus = model.BloodStatus;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutBloodCoagStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutBloodCoagPhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutBloodCoagStaffName { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutBloodCoagPhysician { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
             put.PhysicianResponce = model.PhysicianResponce;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBloodCoagOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBloodCoagOfficerToAct { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
             put.Deadline = model.Deadline;
             put.Remark = model.Remark;
             put.Status = model.Status;
             put.TargetINRAttach = model.TargetINRAttach;
+            var json = JsonConvert.SerializeObject(put);
             var entity = await _clientBloodCoagulationRecordService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {

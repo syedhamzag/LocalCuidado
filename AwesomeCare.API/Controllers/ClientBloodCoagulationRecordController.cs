@@ -77,14 +77,54 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutClientBloodCoagulationRecord model)
+        public async Task<IActionResult> Put([FromBody] PutClientBloodCoagulationRecord models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<BloodCoagOfficerToAct>();
+                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+                    
+                }
+            }
+            foreach (var model in models.Physician.ToList())
+            {
+                var entity = _dbContext.Set<BloodCoagPhysician>();
+                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
-            var ClientBloodCoagulationRecord = Mapper.Map<ClientBloodCoagulationRecord>(model);
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<BloodCoagStaffName>();
+                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+
+            var ClientBloodCoagulationRecord = Mapper.Map<ClientBloodCoagulationRecord>(models);         
             await _ClientBloodCoagulationRecordRepository.UpdateEntity(ClientBloodCoagulationRecord);
             return Ok();
         }

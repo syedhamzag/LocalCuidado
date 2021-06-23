@@ -1107,6 +1107,7 @@ namespace MapperConfig
 
             CreateMap<ClientMgtVisit, GetClientMgtVisit>();
             #endregion
+
             #region Program
             CreateMap<PutClientProgram, ClientProgram>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
@@ -1117,6 +1118,7 @@ namespace MapperConfig
 
             CreateMap<ClientProgram, GetClientProgram>();
             #endregion
+
             #region ClientServiceWatch
             CreateMap<PutClientServiceWatch, ClientServiceWatch>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
@@ -1585,6 +1587,231 @@ namespace MapperConfig
                 .ForMember(dto => dto.WoundCareStaffNameId, mem => mem.Ignore());
 
             CreateMap<PostWoundCarePhysician, WoundCarePhysician>()
+                .ForMember(dto => dto.WoundCare, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.WoundCarePhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region BloodCoag
+            CreateMap<PutBloodCoagOfficerToAct, BloodCoagOfficerToAct>()
+                .ForMember(dto => dto.BloodCoagulation, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodCoagOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutBloodCoagStaffName, BloodCoagStaffName>()
+                .ForMember(dto => dto.BloodCoagulation, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodCoagStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutBloodCoagPhysician, BloodCoagPhysician>()
+                .ForMember(dto => dto.BloodCoagulation, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodCoagPhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region BloodPressure
+            CreateMap<PutBloodPressureOfficerToAct, BloodPressureOfficerToAct>()
+                .ForMember(dto => dto.BloodPressure, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodPressureOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutBloodPressureStaffName, BloodPressureStaffName>()
+                .ForMember(dto => dto.BloodPressure, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodPressureStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutBloodPressurePhysician, BloodPressurePhysician>()
+                .ForMember(dto => dto.BloodPressure, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BloodPressurePhysicianId, mem => mem.Ignore());
+
+            #endregion
+
+            #region BMIChart
+            CreateMap<PutBMIChartOfficerToAct, BMIChartOfficerToAct>()
+                .ForMember(dto => dto.BMIChart, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BMIChartOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutBMIChartStaffName, BMIChartStaffName>()
+                .ForMember(dto => dto.BMIChart, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BMIChartStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutBMIChartPhysician, BMIChartPhysician>()
+                .ForMember(dto => dto.BMIChart, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BMIChartPhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region BodyTemp
+            CreateMap<PutBodyTempOfficerToAct, BodyTempOfficerToAct>()
+                .ForMember(dto => dto.BodyTemp, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BodyTempOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutBodyTempStaffName, BodyTempStaffName>()
+                .ForMember(dto => dto.BodyTemp, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BodyTempStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutBodyTempPhysician, BodyTempPhysician>()
+                .ForMember(dto => dto.BodyTemp, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BodyTempPhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region BowelMovement
+            CreateMap<PutBowelMovementOfficerToAct, BowelMovementOfficerToAct>()
+                .ForMember(dto => dto.BowelMovement, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BowelMovementOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutBowelMovementStaffName, BowelMovementStaffName>()
+                .ForMember(dto => dto.BowelMovement, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BowelMovementStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutBowelMovementPhysician, BowelMovementPhysician>()
+                .ForMember(dto => dto.BowelMovement, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.BowelMovementPhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region EyeHealth
+            CreateMap<PutEyeHealthOfficerToAct, EyeHealthOfficerToAct>()
+                .ForMember(dto => dto.EyeHealth, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.EyeHealthOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutEyeHealthStaffName, EyeHealthStaffName>()
+                .ForMember(dto => dto.EyeHealth, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.EyeHealthStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutEyeHealthPhysician, EyeHealthPhysician>()
+                .ForMember(dto => dto.EyeHealth, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.EyeHealthPhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region FoodIntake
+            CreateMap<PutFoodIntakeOfficerToAct, FoodIntakeOfficerToAct>()
+                .ForMember(dto => dto.FoodIntake, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.FoodIntakeOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutFoodIntakeStaffName, FoodIntakeStaffName>()
+                .ForMember(dto => dto.FoodIntake, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.FoodIntakeStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutFoodIntakePhysician, FoodIntakePhysician>()
+                .ForMember(dto => dto.FoodIntake, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.FoodIntakePhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region HeartRate
+            CreateMap<PutHeartRateOfficerToAct, HeartRateOfficerToAct>()
+                .ForMember(dto => dto.HeartRate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.HeartRateOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutHeartRateStaffName, HeartRateStaffName>()
+                .ForMember(dto => dto.HeartRate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.HeartRateStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutHeartRatePhysician, HeartRatePhysician>()
+                .ForMember(dto => dto.HeartRate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.HeartRatePhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region OxygenLvl
+            CreateMap<PutOxygenLvlOfficerToAct, OxygenLvlOfficerToAct>()
+                .ForMember(dto => dto.OxygenLvl, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.OxygenLvlOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutOxygenLvlStaffName, OxygenLvlStaffName>()
+                .ForMember(dto => dto.OxygenLvl, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.OxygenLvlStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutOxygenLvlPhysician, OxygenLvlPhysician>()
+                .ForMember(dto => dto.OxygenLvl, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.OxygenLvlPhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region PainChart
+            CreateMap<PutPainChartOfficerToAct, PainChartOfficerToAct>()
+                .ForMember(dto => dto.PainChart, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.PainChartOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutPainChartStaffName, PainChartStaffName>()
+                .ForMember(dto => dto.PainChart, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.PainChartStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutPainChartPhysician, PainChartPhysician>()
+                .ForMember(dto => dto.PainChart, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.PainChartPhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region PulseRate
+
+            CreateMap<PutPulseRateOfficerToAct, PulseRateOfficerToAct>()
+                .ForMember(dto => dto.PulseRate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.PulseRateOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutPulseRateStaffName, PulseRateStaffName>()
+                .ForMember(dto => dto.PulseRate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.PulseRateStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutPulseRatePhysician, PulseRatePhysician>()
+                .ForMember(dto => dto.PulseRate, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.PulseRatePhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region Seizure
+
+            CreateMap<PutSeizureOfficerToAct, SeizureOfficerToAct>()
+                .ForMember(dto => dto.Seizure, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SeizureOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutSeizureStaffName, SeizureStaffName>()
+                .ForMember(dto => dto.Seizure, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SeizureStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutSeizurePhysician, SeizurePhysician>()
+                .ForMember(dto => dto.Seizure, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SeizurePhysicianId, mem => mem.Ignore());
+            #endregion
+
+            #region WoundCare
+
+            CreateMap<PutWoundCareOfficerToAct, WoundCareOfficerToAct>()
+                .ForMember(dto => dto.WoundCare, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.WoundCareOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutWoundCareStaffName, WoundCareStaffName>()
+                .ForMember(dto => dto.WoundCare, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.WoundCareStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutWoundCarePhysician, WoundCarePhysician>()
                 .ForMember(dto => dto.WoundCare, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
                 .ForMember(dto => dto.WoundCarePhysicianId, mem => mem.Ignore());
