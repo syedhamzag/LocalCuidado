@@ -13,10 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientFoodIntake
             StaffName = new List<PutFoodIntakeStaffName>();
         }
 
-        public List<PutFoodIntakeOfficerToAct> OfficerToAct { get; set; }
-        public List<PutFoodIntakePhysician> Physician { get; set; }
-        public List<PutFoodIntakeStaffName> StaffName { get; set; }
-
         public string Reference { get; set; }
         public int FoodIntakeId { get; set; }
         public int ClientId { get; set; }
@@ -31,5 +27,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientFoodIntake
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PutFoodIntakeOfficerToAct> OfficerToAct { get; set; }
+        public List<PutFoodIntakePhysician> Physician { get; set; }
+        public List<PutFoodIntakeStaffName> StaffName { get; set; }
     }
 }

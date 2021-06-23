@@ -105,6 +105,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetClientBowelMovement
                                            {
                                                BowelMovementId = c.BowelMovementId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                Time = c.Time,
                                                Size = c.Size,

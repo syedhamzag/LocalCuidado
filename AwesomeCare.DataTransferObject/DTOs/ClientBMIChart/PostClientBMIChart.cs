@@ -13,9 +13,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientBMIChart
             StaffName = new List<PostBMIChartStaffName>();
         }
 
-        public List<PostBMIChartOfficerToAct> OfficerToAct { get; set; }
-        public List<PostBMIChartPhysician> Physician { get; set; }
-        public List<PostBMIChartStaffName> StaffName { get; set; }
+
 
         public int BMIChartId { get; set; }
         public string Reference { get; set; }
@@ -32,5 +30,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientBMIChart
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PostBMIChartOfficerToAct> OfficerToAct { get; set; }
+        public List<PostBMIChartPhysician> Physician { get; set; }
+        public List<PostBMIChartStaffName> StaffName { get; set; }
     }
 }

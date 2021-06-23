@@ -51,8 +51,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Get()
         {
-            var getEntities = _ClientBloodCoagulationRecordRepository.Table.Include(d => d.Physician)
-                .Include(d => d.OfficerToAct).Include(d => d.StaffName).ToList();
+            var getEntities = _ClientBloodCoagulationRecordRepository.Table.ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -108,6 +107,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetClientBloodCoagulationRecord
                                            {
                                                BloodRecordId = c.BloodRecordId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                BloodStatus = c.BloodStatus,
                                                CurrentDose = c.CurrentDose,

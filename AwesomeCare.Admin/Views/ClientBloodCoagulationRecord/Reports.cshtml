@@ -1,5 +1,5 @@
-﻿@using AwesomeCare.DataTransferObject.DTOs.ClientBloodCoagulationRecord  ;
-@model List<GetClientBloodCoagulationRecord>
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+@model List<CreateClientBloodCoagulationRecord>
 @{
     ViewData["Title"] = "Reports";
 }
@@ -16,8 +16,9 @@
                         <tr>
                             <th>#</th>
                             <th>Date</th>
+                            <th>Client</th>
                             <th>Status</th>
-                            <th>Remark</th>
+
 
                             <th></th>
                         </tr>
@@ -25,25 +26,26 @@
                     <tbody>
                         @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
                         {
-                            <tr>
-                                <td>@item.index </td>
-                                <td>@item.data.Date</td>
-                                <td>@item.data.Status</td>
-                                <td>@item.data.Remark</td>
+                        <tr>
+                            <td>@item.index </td>
+                            <td>@item.data.Date</td>
+                            <td>@item.data.ClientName</td>
+                            <td>@item.data.StatusName</td>
 
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @Html.ActionLink("Edit", "Edit", "ClientBloodCoagulationRecord", new { BloodRecordId = item.data.BloodRecordId }, new { @class = "dropdown-item" })
+                                        <button type="button" class="dropdown-item" id="@item.data.BloodRecordId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
+                                            Email
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "ClientBloodCoagulationRecord", new { BloodRecordId = item.data.BloodRecordId }, new { @class = "dropdown-item" })
-                                            <button type="button" class="dropdown-item" id="@item.data.BloodRecordId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
-                                                Email
-                                            </button>
-                                        </div>
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

@@ -13,10 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientHeartRate
             StaffName = new List<PutHeartRateStaffName>();
         }
 
-        public List<PutHeartRateOfficerToAct> OfficerToAct { get; set; }
-        public List<PutHeartRatePhysician> Physician { get; set; }
-        public List<PutHeartRateStaffName> StaffName { get; set; }
-
         public int HeartRateId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -35,5 +31,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientHeartRate
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PutHeartRateOfficerToAct> OfficerToAct { get; set; }
+        public List<PutHeartRatePhysician> Physician { get; set; }
+        public List<PutHeartRateStaffName> StaffName { get; set; }
     }
 }

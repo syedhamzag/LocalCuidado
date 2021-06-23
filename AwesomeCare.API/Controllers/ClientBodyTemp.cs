@@ -16,6 +16,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientBodyTempController : ControllerBase
@@ -105,6 +106,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetClientBodyTemp
                                            {
                                                BodyTempId = c.BodyTempId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                Date = c.Date,
                                                Time = c.Time,
