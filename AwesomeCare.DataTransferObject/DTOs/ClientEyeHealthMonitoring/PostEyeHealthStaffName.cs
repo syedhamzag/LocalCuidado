@@ -6,7 +6,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientEyeHealthMonitoring
 {
     public class PostEyeHealthStaffName
     {
-        public int EyeHealthOfficerToActId { get; set; }
         public int EyeHealthId { get; set; }
         public int StaffPersonalInfoId { get; set; }
     }

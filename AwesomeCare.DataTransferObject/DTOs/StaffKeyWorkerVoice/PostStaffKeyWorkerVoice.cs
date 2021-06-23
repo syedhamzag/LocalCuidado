@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientKeyWorker;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,13 +7,17 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice
 {
     public class PostStaffKeyWorkerVoice
     {
+        public PostStaffKeyWorkerVoice()
+        {
+            OfficerToAct = new List<PostKeyWorkerOfficerToAct>();
+            Workteam = new List<PostKeyWorkerWorkteam>();
+        }
         public int KeyWorkerId { get; set; }
         public string Reference { get; set; }
         public int StaffId { get; set; }
         public DateTime Date { get; set; }
         public DateTime NextCheckDate { get; set; }
         public string Details { get; set; }
-        public int TeamYouWorkFor { get; set; }
         public int NotComfortableServices { get; set; }
         public int ServicesRequiresTime { get; set; }
         public int ServicesRequiresServices { get; set; }
@@ -24,11 +29,13 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice
         public string MovingAndHandling { get; set; }
         public string RiskAssessment { get; set; }
         public string ActionRequired { get; set; }
-        public int OfficertoAct { get; set; }
         public DateTime Deadline { get; set; }
         public int Status { get; set; }
         public string Remarks { get; set; }
         public string URL { get; set; }
         public string Attachment { get; set; }
+
+        public List<PostKeyWorkerOfficerToAct> OfficerToAct { get; set; }
+        public List<PostKeyWorkerWorkteam> Workteam { get; set; }
     }
 }

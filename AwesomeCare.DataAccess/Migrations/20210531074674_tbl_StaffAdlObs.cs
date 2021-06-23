@@ -26,7 +26,7 @@ namespace AwesomeCare.DataAccess.Migrations
                     FivePrinciples = table.Column<int>(nullable: false),
                     Comments = table.Column<string>(nullable: false),
                     ActionRequired = table.Column<string>(nullable: false),
-                    OfficertoAct = table.Column<int>(nullable: false),
+                    //OfficertoAct = table.Column<int>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Remarks = table.Column<string>(nullable: false),
@@ -41,12 +41,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         column: x => x.ClientId,
                         principalTable: "tbl_Client",
                         principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_tbl_StaffAdlObs_tbl_StaffPersonalInfo_StaffId",
-                        column: x => x.StaffId,
-                        principalTable: "tbl_StaffPersonalInfo",
-                        principalColumn: "StaffPersonalInfoId",
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateIndex(

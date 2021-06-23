@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientMedAudit;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,6 +9,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMedicationAudit
     {
         public PostClientMedAudit()
         {
+            OfficerToAct = new List<PostMedAuditOfficerToAct>();
+            StaffName = new List<PostMedAuditStaffName>();
         }
         public int MedAuditId { get; set; }
         public string Reference { get; set; }
@@ -23,11 +26,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMedicationAudit
         public int MedicationSupplyEfficiency { get; set; }
         public int MedicationInfoUploadEefficiency { get; set; }
         public string Observations { get; set; }
-        public string NameOfAuditor { get; set; }
         public string ActionRecommended { get; set; }
         public string ActionTaken { get; set; }
         public string EvidenceOfActionTaken { get; set; }
-        public int OfficerToTakeAction { get; set; }
         public int Status { get; set; }
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
@@ -36,5 +37,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMedicationAudit
         public string LessonLearntAndShared { get; set; }
         public string LogURL { get; set; }
         public string Attachment { get; set; }
+
+        public List<PostMedAuditOfficerToAct> OfficerToAct { get; set; }
+        public List<PostMedAuditStaffName> StaffName { get; set; }
     }
 }

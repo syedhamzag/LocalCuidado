@@ -111,7 +111,7 @@ namespace AwesomeCare.Admin.Controllers
                 
                 #endregion
 
-                var postComplain = Mapper.Map<PostComplainRegister>(model);
+                var postComplain = Mapper.Map<PostClientComplainRegister>(model);
 
                 var json = JsonConvert.SerializeObject(postComplain);
                 var result = await _complainService.Create(postComplain);
@@ -187,7 +187,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.EvidenceFilePath = model.EvidenceFilePath;
             }
             #endregion
-            var putComplain = Mapper.Map<PutComplainRegister>(model);
+            var putComplain = Mapper.Map<PutClientComplainRegister>(model);
             var entity = await _complainService.Put(putComplain);
             SetOperationStatus(new Models.OperationStatus
             {

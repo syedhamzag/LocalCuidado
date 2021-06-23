@@ -25,7 +25,7 @@ namespace AwesomeCare.DataAccess.Migrations
                     ReadingMedicalPrescriptions = table.Column<int>(nullable: false),
                     CarePlan = table.Column<int>(nullable: false),
                     RateStaff = table.Column<int>(nullable: false),
-                    OfficerToAct = table.Column<int>(nullable: false),
+                    //OfficerToAct = table.Column<int>(nullable: false),
                     ActionRequired = table.Column<string>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
@@ -41,12 +41,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         column: x => x.ClientId,
                         principalTable: "tbl_Client",
                         principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_tbl_StaffMedCompObs_tbl_StaffPersonalInfo_StaffId",
-                        column: x => x.StaffId,
-                        principalTable: "tbl_StaffPersonalInfo",
-                        principalColumn: "StaffPersonalInfoId",
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateIndex(

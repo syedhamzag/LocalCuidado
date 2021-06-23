@@ -855,8 +855,8 @@ namespace MapperConfig
             #endregion
 
             #region Complain Register
-            CreateMap<PutComplainRegister, ClientComplainRegister>();
-            CreateMap<PostComplainRegister, ClientComplainRegister>();
+            CreateMap<PutClientComplainRegister, ClientComplainRegister>();
+            CreateMap<PostClientComplainRegister, ClientComplainRegister>();
 
             CreateMap<ClientComplainRegister, GetClientComplainRegister>();
             #endregion

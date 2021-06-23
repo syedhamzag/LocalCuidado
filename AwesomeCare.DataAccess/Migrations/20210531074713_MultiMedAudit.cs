@@ -35,7 +35,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_MedAuditStaffName",
+                name: "tbl_MedAuditAuditorName",
                 columns: table => new
                 {
                     MedAuditStaffNameId = table.Column<int>(nullable: false)
@@ -77,7 +77,7 @@ namespace AwesomeCare.DataAccess.Migrations
             migrationBuilder.DropTable(
                 name: "tbl_MedAuditOfficerToAct");
             migrationBuilder.DropTable(
-                name: "tbl_MedAuditStaffName");
+                name: "tbl_MedAuditAuditorName");
         }
     }
 }

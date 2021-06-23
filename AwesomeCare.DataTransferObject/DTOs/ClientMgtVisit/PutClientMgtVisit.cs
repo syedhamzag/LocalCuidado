@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientVisit;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit
 {
     public class PutClientMgtVisit
     {
+        public PutClientMgtVisit()
+        {
+            OfficerToAct = new List<PutVisitOfficerToAct>();
+            StaffName = new List<PutVisitStaffName>();
+        }
         public int VisitId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -13,13 +19,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit
         public DateTime NextCheckDate { get; set; }
         public int RateServiceRecieving { get; set; }
         public int RateManagers { get; set; }
-        public int StaffBestSupport { get; set; }
         public int HowToComplain { get; set; }
         public int ServiceRecommended { get; set; }
         public string ImprovementExpect { get; set; }
         public string Observation { get; set; }
         public string ActionRequired { get; set; }
-        public int OfficerToAct { get; set; }
         public string ActionsTakenByMPCC { get; set; }
         public string EvidenceOfActionTaken { get; set; }
         public DateTime Deadline { get; set; }
@@ -29,5 +33,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit
         public string Remarks { get; set; }
         public string URL { get; set; }
         public string Attachment { get; set; }
+
+        public List<PutVisitOfficerToAct> OfficerToAct { get; set; }
+        public List<PutVisitStaffName> StaffName { get; set; }
     }
 }

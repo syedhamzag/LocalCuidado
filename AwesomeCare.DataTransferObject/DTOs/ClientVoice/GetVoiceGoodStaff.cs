@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace AwesomeCare.DataTransferObject.DTOs.ClientVoice
+{
+    public class GetVoiceGoodStaff
+    {
+        public int VoiceGoodStaffId { get; set; }
+        public int VoiceId { get; set; }
+        public int StaffPersonalInfoId { get; set; }
+        public string StaffName { get; set; }
+
+    }
+}

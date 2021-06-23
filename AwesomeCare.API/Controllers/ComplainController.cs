@@ -53,7 +53,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostComplainRegister postComplain)
+        public async Task<IActionResult> Create([FromBody] PostClientComplainRegister postComplain)
         {
 
             if (postComplain == null || !ModelState.IsValid)
@@ -72,7 +72,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutComplainRegister model)
+        public async Task<IActionResult> Put([FromBody] PutClientComplainRegister model)
         {
             if (!ModelState.IsValid)
             {

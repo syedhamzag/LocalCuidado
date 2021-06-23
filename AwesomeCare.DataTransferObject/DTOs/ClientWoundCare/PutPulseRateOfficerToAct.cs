@@ -6,7 +6,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientWoundCare
 {
     public class PutWoundCareOfficerToAct
     {
-        public int WoundCareOfficerToActId { get; set; }
         public int WoundCareId { get; set; }
         public int StaffPersonalInfoId { get; set; }
     }
