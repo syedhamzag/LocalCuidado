@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.DTOs.ClientSpotCheck;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck
 {
     public class PostStaffSpotCheck
     {
+        public PostStaffSpotCheck()
+        {
+            OfficerToAct = new List<PostSpotCheckOfficerToAct>();
+        }
         public int SpotCheckId { get; set; }
         public string Reference { get; set; }
         public int StaffId { get; set; }
@@ -17,11 +22,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck
         public int StaffDressCode { get; set; }
         public string AreaComments { get; set; }
         public string ActionRequired { get; set; }
-        public int OfficerToAct { get; set; }
         public DateTime Deadline { get; set; }
         public int Status { get; set; }
         public string Remarks { get; set; }
         public string URL { get; set; }
         public string Attachment { get; set; }
+
+        public List<PostSpotCheckOfficerToAct> OfficerToAct { get; set; }
     }
 }

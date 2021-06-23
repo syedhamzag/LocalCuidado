@@ -6,7 +6,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientBloodPressure
 {
     public class PutBloodPressurePhysician
     {
-        public int BloodPressureOfficerToActId { get; set; }
         public int BloodPressureId { get; set; }
         public int StaffPersonalInfoId { get; set; }
 

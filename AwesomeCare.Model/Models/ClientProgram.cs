@@ -6,6 +6,11 @@ namespace AwesomeCare.Model.Models
 {
     public class ClientProgram
     {
+        public ClientProgram()
+        {
+            OfficerToAct = new HashSet<ProgramOfficerToAct>();
+        }
+
         public int ProgramId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -17,7 +22,6 @@ namespace AwesomeCare.Model.Models
         public int DetailsOfProgram { get; set; }
         public string Observation { get; set; }
         public string ActionRequired { get; set; }
-        public int OfficerToAct { get; set; }
         public DateTime Deadline { get; set; }
         public int Status { get; set; }
         public string Remarks { get; set; }
@@ -25,6 +29,6 @@ namespace AwesomeCare.Model.Models
         public string Attachment { get; set; }
 
         public virtual Client Client { get; set; }
-        public virtual StaffPersonalInfo Staff { get; set; }
+        public virtual ICollection<ProgramOfficerToAct> OfficerToAct { get; set; }
     }
 }

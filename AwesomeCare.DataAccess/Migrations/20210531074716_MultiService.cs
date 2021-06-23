@@ -68,7 +68,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_tbl_ServiceStaffName_WatchId",
-                table: "tbl_ServiceStaffName",
+                table: "tbl_ServicePersonInvolved",
                 column: "WatchId");
         }
 

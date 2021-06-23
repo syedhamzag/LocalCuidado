@@ -6,13 +6,17 @@ namespace AwesomeCare.Model.Models
 {
     public class StaffKeyWorkerVoice
     {
+        public StaffKeyWorkerVoice()
+        {
+            OfficerToAct = new HashSet<KeyWorkerOfficerToAct>();
+            Workteam = new HashSet<KeyWorkerWorkteam>();
+        }
         public int KeyWorkerId { get; set; }
         public string Reference { get; set; }
         public int StaffId { get; set; }
         public DateTime Date { get; set; }
         public DateTime NextCheckDate { get; set; }
         public string Details { get; set; }
-        public int TeamYouWorkFor { get; set; }
         public int NotComfortableServices { get; set; }
         public int ServicesRequiresTime { get; set; }
         public int ServicesRequiresServices { get; set; }
@@ -24,7 +28,6 @@ namespace AwesomeCare.Model.Models
         public string MovingAndHandling { get; set; }
         public string RiskAssessment { get; set; }
         public string ActionRequired { get; set; }
-        public int OfficerToAct { get; set; }
         public DateTime Deadline { get; set; }
         public int Status { get; set; }
         public string Remarks { get; set; }
@@ -32,6 +35,7 @@ namespace AwesomeCare.Model.Models
         public string Attachment { get; set; }
 
         public virtual Client Client { get; set; }
-        public virtual StaffPersonalInfo Staff { get; set; }
+        public virtual ICollection<KeyWorkerOfficerToAct> OfficerToAct { get; set; }
+        public virtual ICollection<KeyWorkerWorkteam> Workteam { get; set; }
     }
 }

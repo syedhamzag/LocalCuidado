@@ -45,7 +45,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_ComplainStaffId", x => x.ComplainStaffNameId);
+                    table.PrimaryKey("PK_tbl_ComplainStaffName", x => x.ComplainStaffNameId);
                     table.ForeignKey(
                         name: "FK_tbl_ComplainStaffName_tbl_ClientComplainRegister_ComplainId",
                         column: x => x.ComplainId,
@@ -68,7 +68,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_tbl_ComplainStaffId_ComplainId",
-                table: "tbl_ComplainStaffId",
+                table: "tbl_ComplainStaffName",
                 column: "ComplainId");
         }
 

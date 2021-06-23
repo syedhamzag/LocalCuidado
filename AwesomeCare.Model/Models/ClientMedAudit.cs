@@ -6,6 +6,12 @@ namespace AwesomeCare.Model.Models
 {
     public class ClientMedAudit
     {
+        public ClientMedAudit()
+        {
+            StaffName = new HashSet<MedAuditStaffName>();
+            OfficerToAct = new HashSet<MedAuditOfficerToAct>();
+        }
+
         public int MedAuditId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -20,11 +26,9 @@ namespace AwesomeCare.Model.Models
         public int MedicationSupplyEfficiency { get; set; }
         public int MedicationInfoUploadEefficiency { get; set; }
         public string Observations { get; set; }
-        public string NameOfAuditor { get; set; }
         public string ActionRecommended { get; set; }
         public string ActionTaken { get; set; }
         public string EvidenceOfActionTaken { get; set; }
-        public int OfficerToTakeAction { get; set; }
         public int Status { get; set; }
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
@@ -35,7 +39,8 @@ namespace AwesomeCare.Model.Models
         public string Attachment { get; set; }
 
         public virtual Client Client { get; set; }
-        public virtual StaffPersonalInfo Staff { get; set; }
+        public virtual ICollection<MedAuditOfficerToAct> OfficerToAct { get; set; }
+        public virtual ICollection<MedAuditStaffName> StaffName { get; set; }
 
     }
 }
