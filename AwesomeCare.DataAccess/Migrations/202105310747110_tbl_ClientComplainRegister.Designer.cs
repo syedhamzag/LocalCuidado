@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    [Migration("20210531074661_tbl_ClientLogAudit")]
-    partial class tbl_ClientLogAudit
+    [Migration("202105310747110_tbl_ClientComplainRegister")]
+    partial class tbl_ClientComplainRegister
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

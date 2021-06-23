@@ -4,27 +4,27 @@ using System;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class tbl_ClientProgram : Migration
+    public partial class tbl_ClientServiceWatch : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_ClientProgram",
+                name: "tbl_ClientServiceWatch",
                 columns: table => new
                 {
-                    ProgramId = table.Column<int>(nullable: false)
+                    WatchId = table.Column<int>(nullable: false)
                             .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Reference = table.Column<string>(maxLength: 50, nullable: false),
                     ClientId = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     NextCheckDate = table.Column<DateTime>(nullable: false),
-                    ProgramOfChoice = table.Column<int>(nullable: false),
-                    DaysOfChoice = table.Column<int>(nullable: false),
-                    PlaceLocationProgram = table.Column<int>(nullable: false),
-                    DetailsOfProgram = table.Column<int>(nullable: false),
+                    Incident = table.Column<int>(nullable: false),
+                    Details = table.Column<int>(nullable: false),
+                    //PersonInvolved = table.Column<int>(nullable: false),
+                    Contact = table.Column<int>(nullable: false),
                     Observation = table.Column<string>(nullable: false),
                     ActionRequired = table.Column<string>(nullable: false),
-                    OfficerToAct = table.Column<int>(nullable: false),
+                    //OfficerToAct = table.Column<int>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Remarks = table.Column<string>(nullable: false),
@@ -33,30 +33,24 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_ClientProgram", x => x.ProgramId);
+                    table.PrimaryKey("PK_tbl_ClientServiceWatch", x => x.WatchId);
                     table.ForeignKey(
-                        name: "FK_tbl_ClientProgram_tbl_Client_ClientId",
+                        name: "FK_tbl_ClientServiceWatch_tbl_Client_ClientId",
                         column: x => x.ClientId,
                         principalTable: "tbl_Client",
                         principalColumn: "ClientId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_tbl_ClientProgram_tbl_StaffPersonalInfo_OfficerToAct",
-                        column: x => x.OfficerToAct,
-                        principalTable: "tbl_StaffPersonalInfo",
-                        principalColumn: "StaffPersonalInfoId",
-                        onDelete: ReferentialAction.Cascade);
                 });
                 migrationBuilder.CreateIndex(
-                    name: "IX_tbl_ClientProgram_ProgramId",
-                    table: "tbl_ClientProgram",
-                    column: "ProgramId");
+                    name: "IX_tbl_ClientServiceWatch_WatchId",
+                    table: "tbl_ClientServiceWatch",
+                    column: "WatchId");
                 }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_ClientProgram");
+                name: "tbl_ClientServiceWatch");
         }
     }
 }

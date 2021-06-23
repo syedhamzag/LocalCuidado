@@ -31,7 +31,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     ActionRecommended = table.Column<string>(nullable: false),
                     ActionTaken = table.Column<string>(nullable: false),
                     EvidenceOfActionTaken = table.Column<string>(nullable: true),
-                    OfficerToTakeAction = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Deadline = table.Column<DateTime>(nullable: false),
                     Remarks = table.Column<string>(nullable: false),
