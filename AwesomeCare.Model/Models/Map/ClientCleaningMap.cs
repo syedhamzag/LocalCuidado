@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientCleaning> builder)
         {
-            builder.ToTable("tbl_ClientCleaning");
+            builder.ToTable("tbl_Client_Cleaning");
             builder.HasKey(p => p.CleaningId);
 
             #region Properties

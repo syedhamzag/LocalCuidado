@@ -7,7 +7,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<Resources> builder)
         {
-            builder.ToTable("tbl_Resources");
+            builder.ToTable("tbl_Resources_");
             builder.HasKey(k => k.ResourcesId);
 
             #region Properties

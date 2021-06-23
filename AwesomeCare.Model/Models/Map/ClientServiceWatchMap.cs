@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientServiceWatch> builder)
         {
-            builder.ToTable("tbl_ClientServiceWatch");
+            builder.ToTable("tbl_Client_ServiceWatch");
             builder.HasKey(k => k.WatchId);
 
             #region Properties

@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientFoodIntake> builder)
         {
-            builder.ToTable("tbl_ClientFoodIntake");
+            builder.ToTable("tbl_Client_FoodIntake");
             builder.HasKey(k => k.FoodIntakeId);
 
             #region Properties

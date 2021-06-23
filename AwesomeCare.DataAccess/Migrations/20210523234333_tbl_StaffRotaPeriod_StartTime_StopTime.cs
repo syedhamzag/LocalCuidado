@@ -8,8 +8,8 @@ namespace AwesomeCare.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_tbl_ClientComplainRegister_ComplainId",
-                table: "tbl_ClientComplainRegister");
+                name: "IX_tbl_Client_ComplainRegister_ComplainId",
+                table: "tbl_Client_ComplainRegister");
 
             migrationBuilder.AddColumn<string>(
                 name: "StartTime",
@@ -25,7 +25,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "SOURCEOFCOMPLAINTS",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -35,7 +35,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ROOTCAUSE",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -45,7 +45,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "REMARK",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -55,7 +55,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LINK",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -64,7 +64,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LETTERTOSTAFF",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -74,7 +74,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "IRFNUMBER ",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -83,7 +83,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "INVESTIGATIONOUTCOME",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -93,7 +93,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "FINALRESPONSETOFAMILY",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -103,21 +103,21 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "EvidenceFilePath",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "DATEOFACKNOWLEDGEMENT",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 nullable: false,
                 oldClrType: typeof(DateTime),
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "CONCERNSRAISED",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 255,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -127,7 +127,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "COMPLAINANTCONTACT",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -137,7 +137,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ACTIONTAKEN",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 50,
                 nullable: false,
                 oldClrType: typeof(string),
@@ -158,7 +158,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "SOURCEOFCOMPLAINTS",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(255)",
                 maxLength: 255,
                 nullable: true,
@@ -167,7 +167,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ROOTCAUSE",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(50)",
                 maxLength: 50,
                 nullable: true,
@@ -176,7 +176,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "REMARK",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(255)",
                 maxLength: 255,
                 nullable: true,
@@ -185,7 +185,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LINK",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(255)",
                 nullable: true,
                 oldClrType: typeof(string),
@@ -193,7 +193,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "LETTERTOSTAFF",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(255)",
                 maxLength: 255,
                 nullable: true,
@@ -202,7 +202,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "IRFNUMBER ",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 maxLength: 50,
                 nullable: true,
                 oldClrType: typeof(string),
@@ -210,7 +210,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "INVESTIGATIONOUTCOME",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(255)",
                 maxLength: 255,
                 nullable: true,
@@ -219,7 +219,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "FINALRESPONSETOFAMILY",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(255)",
                 maxLength: 255,
                 nullable: true,
@@ -228,19 +228,19 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "EvidenceFilePath",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 nullable: true,
                 oldClrType: typeof(string));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "DATEOFACKNOWLEDGEMENT",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 nullable: true,
                 oldClrType: typeof(DateTime));
 
             migrationBuilder.AlterColumn<string>(
                 name: "CONCERNSRAISED",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(255)",
                 maxLength: 255,
                 nullable: true,
@@ -249,7 +249,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "COMPLAINANTCONTACT",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(50)",
                 maxLength: 50,
                 nullable: true,
@@ -258,7 +258,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ACTIONTAKEN",
-                table: "tbl_ClientComplainRegister",
+                table: "tbl_Client_ComplainRegister",
                 type: "nvarchar(50)",
                 maxLength: 50,
                 nullable: true,
@@ -266,8 +266,8 @@ namespace AwesomeCare.DataAccess.Migrations
                 oldMaxLength: 50);
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_ClientComplainRegister_ComplainId",
-                table: "tbl_ClientComplainRegister",
+                name: "IX_tbl_Client_ComplainRegister_ComplainId",
+                table: "tbl_Client_ComplainRegister",
                 column: "ComplainId");
         }
     }

@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientMealType> builder)
         {
-            builder.ToTable("tbl_ClientMealType");
+            builder.ToTable("tbl_Client_MealType");
             builder.HasKey(p => p.ClientMealTypeId);
 
             #region Properties
@@ -29,7 +29,7 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.HasIndex(i => i.MealType)
                 .IsUnique(true)
-                .HasName("IX_tbl_ClientMealType_MealType");
+                .HasName("IX_tbl_Client_MealType_MealType");
             #endregion
         }
     }

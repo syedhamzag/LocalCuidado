@@ -554,7 +554,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientComplainRegister");
+                    b.ToTable("tbl_Client_ComplainRegister");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientLogAudit", b => {
@@ -704,7 +704,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                 b.HasIndex("ClientId");
 
-                b.ToTable("tbl_ClientLogAudit");
+                b.ToTable("tbl_Client_LogAudit");
             });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedAudit", b => {
@@ -849,7 +849,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                 b.HasIndex("ClientId");
 
-                b.ToTable("tbl_ClientMedAudit");
+                b.ToTable("tbl_Client_MedAudit");
             });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientVoice", b => {
@@ -995,7 +995,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                 b.HasIndex("ClientId");
 
-                b.ToTable("tbl_ClientVoice");
+                b.ToTable("tbl_Client_Voice");
             });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealType", b => {

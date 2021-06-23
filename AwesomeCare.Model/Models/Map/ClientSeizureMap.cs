@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientSeizure> builder)
         {
-            builder.ToTable("tbl_ClientSeizure");
+            builder.ToTable("tbl_Client_Seizure");
             builder.HasKey(k => k.SeizureId);
 
             #region Properties

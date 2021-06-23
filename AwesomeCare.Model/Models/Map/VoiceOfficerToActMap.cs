@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<VoiceOfficerToAct> builder)
         {
-            builder.ToTable("tbl_VoiceOfficerToAct");
+            builder.ToTable("tbl_Voice_OfficerToAct");
             builder.HasKey(k => k.VoiceOfficerToActId);
 
             #region Properties
