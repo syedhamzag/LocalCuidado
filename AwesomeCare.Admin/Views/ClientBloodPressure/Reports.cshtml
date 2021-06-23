@@ -1,5 +1,5 @@
-﻿@using AwesomeCare.DataTransferObject.DTOs.ClientBloodPressure  ;
-@model List<GetClientBloodPressure>
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+@model List<CreateClientBloodPressure>
 @{
     ViewData["Title"] = "Reports";
 }
@@ -27,9 +27,9 @@
                         {
                             <tr>
                                 <td>@item.index </td>
-                                <td>@item.data.Date</td>
-                                <td>@item.data.Status</td>
-                                <td>@item.data.Remarks</td>
+                                <td>@item.data.Deadline</td>
+                                <td>@item.data.ClientName</td>
+                                <td>@item.data.StatusName</td>
 
                                 <td>
                                     <div class="btn-group" role="group">

@@ -27,6 +27,7 @@ using iText.Layout.Element;
 using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
+using AwesomeCare.Admin.Services.Admin;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -35,6 +36,7 @@ namespace AwesomeCare.Admin.Controllers
         private IStaffAdlObsService _StaffAdlObsService;
         private IClientService _clientService;
         private IStaffService _staffService;
+        private IBaseRecordService _baseService;
         private readonly IEmailService _emailService;
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
@@ -42,11 +44,12 @@ namespace AwesomeCare.Admin.Controllers
 
         public StaffAdlObsController(IStaffAdlObsService StaffAdlObsService, IFileUpload fileUpload,
             IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
-            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService) : base(fileUpload)
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
         {
             _StaffAdlObsService = StaffAdlObsService;
             _clientService = clientService;
             _staffService = staffService;
+            _baseService = baseService;
             _emailService = emailService;
             _env = env;
             _logger = logger;
@@ -56,67 +59,55 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _StaffAdlObsService.Get();
-            return View(entities);
+
+            var client = await _clientService.GetClientDetail();
+            List<CreateStaffAdlObs> reports = new List<CreateStaffAdlObs>();
+            foreach (GetStaffAdlObs item in entities)
+            {
+                var report = new CreateStaffAdlObs();
+                report.ObservationID = item.ObservationID;
+                report.Reference = item.Reference;
+                report.Deadline = item.Deadline;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                reports.Add(report);
+            }
+            return View(reports);
         }
 
-        public async Task<IActionResult> Index(int? staffId)
+        public async Task<IActionResult> Index(int? clientId)
         {
             var model = new CreateStaffAdlObs();
-            List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetClients = clientNames;
             var staffs = await _staffService.GetStaffs();
+            model.ClientId = clientId.Value;
+            var client = await _clientService.GetClientDetail();
+            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
             model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-            model.StaffId = staffId.Value;
             return View(model);
 
         }
 
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int obsId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffAdlObsService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(logAudit.FirstOrDefault());
+            var AdlObs = await _StaffAdlObsService.Get(obsId);
+            return View(AdlObs);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int obsId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffAdlObsService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var AdlObs = await _StaffAdlObsService.Get(obsId);
+            var json = JsonConvert.SerializeObject(AdlObs);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "StaffAdlObs.pdf");
             string subject = "StaffAdlObs";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int obsId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffAdlObsService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var BloodCoagulationRecord = await _StaffAdlObsService.Get(obsId);
+            var json = JsonConvert.SerializeObject(BloodCoagulationRecord);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "StaffAdlObs.pdf");
         }
@@ -146,43 +137,32 @@ namespace AwesomeCare.Admin.Controllers
             return buffer;
         }
 
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int ObservationID)
         {
-            List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetClients = clientNames;
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var AdlObs = _StaffAdlObsService.GetByRef(Reference);
-            foreach (var item in AdlObs.Result)
-            {
-                officer.Add(item.OfficerToAct);
-                Ids.Add(item.ObservationID);
-            }
+            var AdlObs = _StaffAdlObsService.Get(ObservationID);
             var staffs = await _staffService.GetStaffs();
 
             var putEntity = new CreateStaffAdlObs
             {
-                AdlObsIds = Ids,
-                
-                Reference = AdlObs.Result.FirstOrDefault().Reference,
-                ObservationID = AdlObs.Result.FirstOrDefault().ObservationID,
-                ClientId = AdlObs.Result.FirstOrDefault().ClientId,
-                Attachment = AdlObs.Result.FirstOrDefault().Attachment,
-                Date = AdlObs.Result.FirstOrDefault().Date,
-                Deadline = AdlObs.Result.FirstOrDefault().Deadline,
-                URL = AdlObs.Result.FirstOrDefault().URL,
-                OfficerToAct = officer,
-                Remarks = AdlObs.Result.FirstOrDefault().Remarks,
-                Status = AdlObs.Result.FirstOrDefault().Status,
-                ActionRequired = AdlObs.Result.FirstOrDefault().ActionRequired,
-                Details = AdlObs.Result.FirstOrDefault().Details,
-                UnderstandingofControl = AdlObs.Result.FirstOrDefault().UnderstandingofControl,
-                UnderstandingofEquipment = AdlObs.Result.FirstOrDefault().UnderstandingofEquipment,
-                StaffId = AdlObs.Result.FirstOrDefault().StaffId,
-                UnderstandingofService = AdlObs.Result.FirstOrDefault().UnderstandingofService,
-                NextCheckDate = AdlObs.Result.FirstOrDefault().NextCheckDate,
-                FivePrinciples = AdlObs.Result.FirstOrDefault().FivePrinciples,
-                Comments = AdlObs.Result.FirstOrDefault().Comments,
+                ObservationID = AdlObs.Result.ObservationID,
+                Reference = AdlObs.Result.Reference,
+                ClientId = AdlObs.Result.ClientId,
+                Attachment = AdlObs.Result.Attachment,
+                Date = AdlObs.Result.Date,
+                Deadline = AdlObs.Result.Deadline,
+                URL = AdlObs.Result.URL,
+                OfficerToAct = AdlObs.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = AdlObs.Result.Remarks,
+                Status = AdlObs.Result.Status,
+                ActionRequired = AdlObs.Result.ActionRequired,
+                Details = AdlObs.Result.Details,
+                UnderstandingofControl = AdlObs.Result.UnderstandingofControl,
+                UnderstandingofEquipment = AdlObs.Result.UnderstandingofEquipment,
+                StaffId = AdlObs.Result.StaffId,
+                UnderstandingofService = AdlObs.Result.UnderstandingofService,
+                NextCheckDate = AdlObs.Result.NextCheckDate,
+                FivePrinciples = AdlObs.Result.FivePrinciples,
+                Comments = AdlObs.Result.Comments,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -193,47 +173,48 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
+                var client = await _clientService.GetClientDetail();
+                model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetClients = clientNames;
                 return View(model);
             }
+            PostStaffAdlObs postlog = new PostStaffAdlObs();
+
             #region Attachment
             if (model.Attach != null)
-            { 
-                string folderA = "clientcomplain";
-            string filenameA = string.Concat(folderA, "_Attachment_", model.StaffId);
-            string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-            model.Attachment = pathA;
+            {
+                string folder = "clientcomplain";
+                string filename = string.Concat(folder, "_TargetINR_", model.ClientId);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
+            }
+            else
+            {
+                model.Attachment = "No Image";
             }
             #endregion
 
-            List<PostStaffAdlObs> posts = new List<PostStaffAdlObs>();
-
-            foreach (var officer in model.OfficerToAct)
-            {
-                var post = new PostStaffAdlObs();
-                post.Reference = model.Reference;
-                post.ClientId = model.ClientId;
-                post.Attachment = model.Attachment;
-                post.Date = model.Date;
-                post.Deadline = model.Deadline;
-                post.URL = model.URL;
-                post.OfficerToAct = officer;
-                post.Remarks = model.Remarks;
-                post.Status = model.Status;
-                post.ActionRequired = model.ActionRequired;
-                post.Details = model.Details;
-                post.UnderstandingofControl = model.UnderstandingofControl;
-                post.UnderstandingofEquipment = model.UnderstandingofEquipment;
-                post.StaffId = model.StaffId;
-                post.UnderstandingofService = model.UnderstandingofService;
-                post.NextCheckDate = model.NextCheckDate;
-                post.FivePrinciples = model.FivePrinciples;
-                post.Comments = model.Comments;
-                posts.Add(post);
-            }
+            
+                postlog.Reference = model.Reference;
+                postlog.ClientId = model.ClientId;
+                postlog.Attachment = model.Attachment;
+                postlog.Date = model.Date;
+                postlog.Deadline = model.Deadline;
+                postlog.URL = model.URL;
+                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostAdlObsOfficerToAct { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
+                postlog.Remarks = model.Remarks;
+                postlog.Status = model.Status;
+                postlog.ActionRequired = model.ActionRequired;
+                postlog.Details = model.Details;
+                postlog.UnderstandingofControl = model.UnderstandingofControl;
+                postlog.UnderstandingofEquipment = model.UnderstandingofEquipment;
+                postlog.StaffId = model.StaffId;
+                postlog.UnderstandingofService = model.UnderstandingofService;
+                postlog.NextCheckDate = model.NextCheckDate;
+                postlog.FivePrinciples = model.FivePrinciples;
+                postlog.Comments = model.Comments;
+            
 
                 var result = await _StaffAdlObsService.Create(posts);
                 var content = await result.Content.ReadAsStringAsync();

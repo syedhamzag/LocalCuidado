@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientFoodIntakeService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientFoodIntake> reports = new List<CreateClientFoodIntake>();
             foreach (GetClientFoodIntake item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,14 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int foodId)
         {
-            string OfficerToAct = "";
             var FoodIntake = await _clientFoodIntakeService.Get(foodId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in FoodIntake.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(FoodIntake);
             return View(FoodIntake);
         }
         public async Task<IActionResult> Email(int foodId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var FoodIntake = await _clientFoodIntakeService.Get(foodId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in FoodIntake.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(FoodIntake);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientFoodIntake.pdf");
             string subject = "ClientFoodIntake";
             string body = "";
@@ -121,16 +106,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int foodId)
         {
-            string OfficerToAct = "";
             var FoodIntake = await _clientFoodIntakeService.Get(foodId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in FoodIntake.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(FoodIntake);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientFoodIntake.pdf");
         }
@@ -232,7 +210,6 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
 
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientFoodIntakeService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -267,6 +244,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientFoodIntake put = new PutClientFoodIntake();
+            put.FoodIntakeId = model.FoodIntakeId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -276,10 +254,10 @@ namespace AwesomeCare.Admin.Controllers
             put.StatusImage = model.StatusImage;
             put.StatusAttach = model.StatusAttach;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutFoodIntakeStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutFoodIntakePhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutFoodIntakeStaffName { StaffPersonalInfoId = o, FoodIntakeId = model.FoodIntakeId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutFoodIntakePhysician { StaffPersonalInfoId = o, FoodIntakeId = model.FoodIntakeId }).ToList();
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutFoodIntakeOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutFoodIntakeOfficerToAct { StaffPersonalInfoId = o, FoodIntakeId = model.FoodIntakeId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;

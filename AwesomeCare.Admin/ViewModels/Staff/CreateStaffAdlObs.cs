@@ -26,6 +26,8 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public ICollection<GetClient> ClientList { get; set; }
 
         public string ActiveTab { get; set; } = "adlobs";
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         public List<int> AdlObsIds { get; set; }
         public string Reference { get; set; }
         [Required]

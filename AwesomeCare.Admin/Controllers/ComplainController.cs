@@ -50,7 +50,6 @@ namespace AwesomeCare.Admin.Controllers
         {
             var entities = await _complainService.Get();
             var client = await _clientService.GetClients();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateComplainRegister> reports = new List<CreateComplainRegister>();
             foreach (GetClientComplainRegister item in entities)
             {
@@ -75,11 +74,10 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> CreateComplainRegister(int? clientId)
         {
             var model = new CreateComplainRegister();
-            var client = await _clientService.GetClient(clientId.Value);
             var staffNames = await _staffService.GetStaffs();
             model.STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-            model.ClientId = clientId.Value;
-            model.ClientName = client.Firstname +" "+client.Middlename+" "+client.Surname ;
+            var client = await _clientService.GetClientDetail();
+            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
             return View(model);
         }
         [HttpPost]
@@ -90,10 +88,10 @@ namespace AwesomeCare.Admin.Controllers
             {
                 if (model == null || !ModelState.IsValid)
                 {
+                    var client = await _clientService.GetClientDetail();
+                    model.ClientName = client.Where(s => s.ClientId == model.ClientId).FirstOrDefault().FullName;
                     var staffNames = await _staffService.GetStaffs();
                     model.STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                    var client = await _clientService.GetClient(model.ClientId);
-                    model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
                     return View(model);
                 }
 
@@ -108,12 +106,15 @@ namespace AwesomeCare.Admin.Controllers
                     model.EvidenceFilePath = path;
 
                 }
-                
+                else
+                {
+                    model.EvidenceFilePath = "No Image";
+                }
+
                 #endregion
 
-                var postComplain = Mapper.Map<PostClientComplainRegister>(model);
+                var postComplain = Mapper.Map<PostComplainRegister>(model);
 
-                var json = JsonConvert.SerializeObject(postComplain);
                 var result = await _complainService.Create(postComplain);
                 var content = await result.Content.ReadAsStringAsync();
 
@@ -131,12 +132,12 @@ namespace AwesomeCare.Admin.Controllers
         {
             var complain = await _complainService.Get(complainId);
             var staffNames = await _staffService.GetStaffs();
-            var client = await _clientService.GetClient(complain.ClientId);
+            var client = await _clientService.GetClientDetail();
             if (complain == null) return NotFound();
 
             var putEntity = new CreateComplainRegister
             {
-                ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname,
+                ClientName = client.Where(s => s.ClientId == complain.ClientId).FirstOrDefault().FullName,
                 Reference = complain.Reference,
                 ComplainId = complain.ComplainId,
                 ClientId = complain.ClientId,
@@ -153,11 +154,9 @@ namespace AwesomeCare.Admin.Controllers
                 IRFNUMBER = complain.IRFNUMBER,
                 LETTERTOSTAFF = complain.LETTERTOSTAFF,
                 LINK = complain.LINK,
-                OFFICERTOACTId = complain.OFFICERTOACTId,
                 REMARK = complain.REMARK,
                 ROOTCAUSE = complain.ROOTCAUSE,
                 SOURCEOFCOMPLAINTS = complain.SOURCEOFCOMPLAINTS,
-                STAFFId = complain.STAFFId,
                 StatusId = complain.StatusId,
                 STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
@@ -187,7 +186,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.EvidenceFilePath = model.EvidenceFilePath;
             }
             #endregion
-            var putComplain = Mapper.Map<PutClientComplainRegister>(model);
+            var putComplain = Mapper.Map<PutComplainRegister>(model);
             var entity = await _complainService.Put(putComplain);
             SetOperationStatus(new Models.OperationStatus
             {
