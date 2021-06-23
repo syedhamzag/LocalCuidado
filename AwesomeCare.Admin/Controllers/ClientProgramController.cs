@@ -59,7 +59,6 @@ namespace AwesomeCare.Admin.Controllers
         {
             var entities = await _clientProgramService.Get();
             var client = await _clientService.GetClients();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientProgram> reports = new List<CreateClientProgram>();
             foreach (GetClientProgram item in entities)
             {
@@ -77,61 +76,36 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int? clientId)
         {
             var model = new CreateClientProgram();
-            var client = await _clientService.GetClient(clientId.Value);
-            model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
             var staffs = await _staffService.GetStaffs();
-            model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             model.ClientId = clientId.Value;
+            var client = await _clientService.GetClientDetail();
+            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
+            model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             return View(model);
 
         }
 
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int progId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var Program = await _clientProgramService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Program)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(Program.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(Program.FirstOrDefault());
+            var Program = await _clientProgramService.Get(progId);
+            return View(Program);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int progId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var Program = await _clientProgramService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Program)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(Program.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var Program = await _clientProgramService.Get(progId);
+            var json = JsonConvert.SerializeObject(Program);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientProgram.pdf");
             string subject = "ClientProgram";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int progId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var Program = await _clientProgramService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Program)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(Program.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var Program = await _clientProgramService.Get(progId);
+            var json = JsonConvert.SerializeObject(Program);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientProgram.pdf");
         }
@@ -161,36 +135,30 @@ namespace AwesomeCare.Admin.Controllers
             return buffer;
         }
 
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int ProgramId)
         {
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var Program = _clientProgramService.GetByRef(Reference);
-            foreach (var item in Program.Result)
-            {
-                officer.Add(item.OfficerToAct);
-                Ids.Add(item.ProgramId);
-            }
+            var Program = _clientProgramService.Get(ProgramId);
             var staffs = await _staffService.GetStaffs();
+
             var putEntity = new CreateClientProgram
             {
-                ProgramIds = Ids,
-                ClientId = Program.Result.FirstOrDefault().ClientId,
-                Reference = Program.Result.FirstOrDefault().Reference,
-                Attachment = Program.Result.FirstOrDefault().Attachment,
-                Date = Program.Result.FirstOrDefault().Date,
-                NextCheckDate = Program.Result.FirstOrDefault().NextCheckDate,
-                Deadline = Program.Result.FirstOrDefault().Deadline,
-                ProgramOfChoice = Program.Result.FirstOrDefault().ProgramOfChoice,
-                URL = Program.Result.FirstOrDefault().URL,
-                DaysOfChoice = Program.Result.FirstOrDefault().DaysOfChoice,
-                OfficerToTakeAction = officer,
-                Remarks = Program.Result.FirstOrDefault().Remarks,
-                DetailsOfProgram = Program.Result.FirstOrDefault().DetailsOfProgram,
-                Status = Program.Result.FirstOrDefault().Status,
-                ActionRequired = Program.Result.FirstOrDefault().ActionRequired,
-                Observation = Program.Result.FirstOrDefault().Observation,
-                PlaceLocationProgram = Program.Result.FirstOrDefault().PlaceLocationProgram,
+                ProgramId = Program.Result.ProgramId,
+                ClientId = Program.Result.ClientId,
+                Reference = Program.Result.Reference,
+                Attachment = Program.Result.Attachment,
+                Date = Program.Result.Date,
+                NextCheckDate = Program.Result.NextCheckDate,
+                Deadline = Program.Result.Deadline,
+                ProgramOfChoice = Program.Result.ProgramOfChoice,
+                URL = Program.Result.URL,
+                DaysOfChoice = Program.Result.DaysOfChoice,
+                OfficerToTakeAction = Program.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = Program.Result.Remarks,
+                DetailsOfProgram = Program.Result.DetailsOfProgram,
+                Status = Program.Result.Status,
+                ActionRequired = Program.Result.ActionRequired,
+                Observation = Program.Result.Observation,
+                PlaceLocationProgram = Program.Result.PlaceLocationProgram,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
 
             };
@@ -202,46 +170,46 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
-                var client = await _clientService.GetClient(model.ClientId);
-                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                var client = await _clientService.GetClientDetail();
+                model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+            PostClientProgram postlog = new PostClientProgram();
+
             #region Attachment
             if (model.Attach != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
+                string folder = "clientcomplain";
+                string filename = string.Concat(folder, "_Attach_", model.ClientId);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
+            }
+            else
+            {
+                model.Attachment = "No Image";
             }
             #endregion
 
-            List<PostClientProgram> posts = new List<PostClientProgram>();
-            foreach (var item in model.OfficerToTakeAction)
-            {
-                var post = new PostClientProgram();
-                post.ClientId = model.ClientId;
-                post.Reference = model.Reference;
-                post.Attachment = model.Attachment;
-                post.Date = model.Date;
-                post.NextCheckDate = model.NextCheckDate;
-                post.Deadline = model.Deadline;
-                post.ProgramOfChoice = model.ProgramOfChoice;
-                post.URL = model.URL;
-                post.DaysOfChoice = model.DaysOfChoice;
-                post.OfficerToAct = item;
-                post.Remarks = model.Remarks;
-                post.DetailsOfProgram = model.DetailsOfProgram;
-                post.Status = model.Status;
-                post.ActionRequired = model.ActionRequired;
-                post.Observation = model.Observation;
-                post.PlaceLocationProgram = model.PlaceLocationProgram;
-                    posts.Add(post);
-            }
-
-            var result = await _clientProgramService.Create(posts);
+                postlog.ClientId = model.ClientId;
+                postlog.Reference = model.Reference;
+                postlog.Attachment = model.Attachment;
+                postlog.Date = model.Date;
+                postlog.NextCheckDate = model.NextCheckDate;
+                postlog.Deadline = model.Deadline;
+                postlog.ProgramOfChoice = model.ProgramOfChoice;
+                postlog.URL = model.URL;
+                postlog.DaysOfChoice = model.DaysOfChoice;
+                postlog.OfficerToAct = model.OfficerToTakeAction.Select(o => new PostProgramOfficerToAct { StaffPersonalInfoId = o, ProgramId = model.ProgramId }).ToList();
+                postlog.Remarks = model.Remarks;
+                postlog.DetailsOfProgram = model.DetailsOfProgram;
+                postlog.Status = model.Status;
+                postlog.ActionRequired = model.ActionRequired;
+                postlog.Observation = model.Observation;
+                postlog.PlaceLocationProgram = model.PlaceLocationProgram;
+                    
+            var result = await _clientProgramService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result != null ? "New Program successfully registered" : "An Error Occurred" });
@@ -260,6 +228,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+
             #region Evidence
             if (model.Attach != null)
             {
@@ -274,14 +243,9 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = model.Attachment;
             }
             #endregion
-            int count = model.ProgramIds.Count;
-            int i = 0;
-            List<PutClientProgram> puts = new List<PutClientProgram>();
-            foreach (var item in model.OfficerToTakeAction)
-            {
-                var put = new PutClientProgram();
-                if (i < count)
-                    put.ProgramId = model.ProgramIds[i];
+
+                PutClientProgram put = new PutClientProgram();
+                put.ProgramId = model.ProgramId;
                 put.ClientId = model.ClientId;
                 put.Reference = model.Reference;
                 put.Attachment = model.Attachment;
@@ -291,18 +255,16 @@ namespace AwesomeCare.Admin.Controllers
                 put.ProgramOfChoice = model.ProgramOfChoice;
                 put.URL = model.URL;
                 put.DaysOfChoice = model.DaysOfChoice;
-                put.OfficerToAct = item;
+                put.OfficerToAct = model.OfficerToTakeAction.Select(o => new PutProgramOfficerToAct { StaffPersonalInfoId = o, ProgramId = model.ProgramId }).ToList();
                 put.Remarks = model.Remarks;
                 put.DetailsOfProgram = model.DetailsOfProgram;
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;
                 put.Observation = model.Observation;
                 put.PlaceLocationProgram = model.PlaceLocationProgram;
-                puts.Add(put);
 
-
-            }
-            var entity = await _clientProgramService.Put(puts);
+            var json = JsonConvert.SerializeObject(put);
+            var entity = await _clientProgramService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,
