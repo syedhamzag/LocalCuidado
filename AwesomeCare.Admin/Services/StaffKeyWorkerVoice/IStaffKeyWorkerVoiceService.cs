@@ -10,9 +10,6 @@ namespace AwesomeCare.Admin.Services.StaffKeyWorkerVoice
 {
     public interface IStaffKeyWorkerVoiceService
     {
-        [Get("/StaffKeyWorkerVoice/GetByRef/{Reference}")]
-        Task<List<GetStaffKeyWorkerVoice>> GetByRef(string Reference);
-
         [Get("/StaffKeyWorkerVoice")]
         Task<List<GetStaffKeyWorkerVoice>> Get();
 
@@ -20,9 +17,9 @@ namespace AwesomeCare.Admin.Services.StaffKeyWorkerVoice
         Task<GetStaffKeyWorkerVoice> Get(int id);
 
         [Post("/StaffKeyWorkerVoice/Create")]
-        Task<HttpResponseMessage> Create([Body] List<PostStaffKeyWorkerVoice> model);
+        Task<HttpResponseMessage> Create([Body] PostStaffKeyWorkerVoice model);
 
         [Put("/StaffKeyWorkerVoice/Put")]
-        Task<HttpResponseMessage> Put([Body] List<PutStaffKeyWorkerVoice> model);
+        Task<HttpResponseMessage> Put([Body] PutStaffKeyWorkerVoice model);
     }
 }

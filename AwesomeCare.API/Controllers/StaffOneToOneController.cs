@@ -41,22 +41,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffOneToOneRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All StaffOneToOne
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetStaffOneToOne>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _StaffOneToOneRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
+
         /// <summary>
         /// Create StaffOneToOne
         /// </summary>
@@ -64,20 +51,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostStaffOneToOne> postStaffOneToOne)
+        public async Task<IActionResult> Create([FromBody] PostStaffOneToOne postStaffOneToOne)
         {
             if (postStaffOneToOne == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postStaffOneToOne)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
-
-            var StaffOneToOne = Mapper.Map<List<StaffOneToOne>>(postStaffOneToOne);
-            await _StaffOneToOneRepository.InsertEntities(StaffOneToOne);
+           
+            var StaffOneToOne = Mapper.Map<StaffOneToOne>(postStaffOneToOne);
+            await _StaffOneToOneRepository.InsertEntity(StaffOneToOne);
             return Ok();
         }
         /// <summary>
@@ -86,40 +68,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutStaffOneToOne> model)
+        public async Task<IActionResult> Put([FromBody] PutStaffOneToOne model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<StaffOneToOne>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (StaffOneToOne item in filterEntity)
-            {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
-                {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
-
-                }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<StaffOneToOne>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
-            var result = _dbContext.SaveChanges();
+            var StaffOneToOne = Mapper.Map<StaffOneToOne>(model);
+            await _StaffOneToOneRepository.UpdateEntity(StaffOneToOne);
             return Ok();
 
         }
@@ -153,7 +109,6 @@ namespace AwesomeCare.API.Controllers
                                                CurrentEventArea = c.CurrentEventArea,
                                                DecisionsReached = c.DecisionsReached,
                                                ImprovementRecorded = c.ImprovementRecorded,
-                                               OfficerToAct = c.OfficerToAct,
                                                PreviousSupervision = c.PreviousSupervision,
                                                Purpose =c.Purpose,
                                                StaffConclusion = c.StaffConclusion,

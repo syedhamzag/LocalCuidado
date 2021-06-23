@@ -40,20 +40,6 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientServiceWatchRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All ClientServiceWatch
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetClientServiceWatch>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _clientServiceWatchRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -63,20 +49,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientServiceWatch> postClientServiceWatch)
+        public async Task<IActionResult> Create([FromBody] PostClientServiceWatch postClientServiceWatch)
         {
             if (postClientServiceWatch == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postClientServiceWatch)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
 
-            var ClientServiceWatch = Mapper.Map<List<ClientServiceWatch>>(postClientServiceWatch);
-            await _clientServiceWatchRepository.InsertEntities(ClientServiceWatch);
+            var ClientServiceWatch = Mapper.Map<ClientServiceWatch>(postClientServiceWatch);
+            await _clientServiceWatchRepository.InsertEntity(ClientServiceWatch);
             return Ok();
         }
         /// <summary>
@@ -85,40 +66,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientServiceWatch> model)
+        public async Task<IActionResult> Put([FromBody] PutClientServiceWatch model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<ClientServiceWatch>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (ClientServiceWatch item in filterEntity)
-            {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
-                {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
-
-                }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<ClientServiceWatch>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
-            var result = _dbContext.SaveChanges();
+            var ClientServiceWatch = Mapper.Map<ClientServiceWatch>(model);
+            await _clientServiceWatchRepository.UpdateEntity(ClientServiceWatch);
             return Ok();
 
         }
@@ -150,8 +105,6 @@ namespace AwesomeCare.API.Controllers
                                                Remarks = c.Remarks,
                                                Status = c.Status,
                                                URL = c.URL,
-                                               PersonInvolved = c.PersonInvolved,
-                                               OfficerToAct = c.OfficerToAct,
                                                Observation = c.Observation,
                                                Incident = c.Incident,
                                                Contact = c.Contact,

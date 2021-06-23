@@ -10,10 +10,6 @@ namespace AwesomeCare.Admin.Services.ClientProgram
 {
     public interface IClientProgramService
     {
-
-        [Get("/ClientProgram/GetByRef/{Reference}")]
-        Task<List<GetClientProgram>> GetByRef(string Reference);
-
         [Get("/ClientProgram")]
         Task<List<GetClientProgram>> Get();
 
@@ -21,9 +17,9 @@ namespace AwesomeCare.Admin.Services.ClientProgram
         Task<GetClientProgram> Get(int id);
 
         [Post("/ClientProgram/Create")]
-        Task<HttpResponseMessage> Create([Body] List<PostClientProgram> model);
+        Task<HttpResponseMessage> Create([Body] PostClientProgram model);
 
         [Put("/ClientProgram/Put")]
-        Task<HttpResponseMessage> Put([Body] List<PutClientProgram> model);
+        Task<HttpResponseMessage> Put([Body] PutClientProgram model);
     }
 }

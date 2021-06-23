@@ -40,19 +40,6 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffSurveyRepository.Table.ToList();      
-            return Ok(getEntities.Distinct().ToList());
-        }
-        /// <summary>
-        /// Get All Survey
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetStaffSurvey>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _StaffSurveyRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -62,19 +49,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostStaffSurvey> postStaffSurvey)
+        public async Task<IActionResult> Create([FromBody] PostStaffSurvey postStaffSurvey)
         {
             if (postStaffSurvey == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postStaffSurvey)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
-            var StaffSurvey = Mapper.Map<List<StaffSurvey>>(postStaffSurvey);
-            await _StaffSurveyRepository.InsertEntities(StaffSurvey);
+            var StaffSurvey = Mapper.Map<StaffSurvey>(postStaffSurvey);
+            await _StaffSurveyRepository.InsertEntity(StaffSurvey);
             
             return Ok();
 
@@ -86,40 +68,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutStaffSurvey> model)
+        public async Task<IActionResult> Put([FromBody] PutStaffSurvey model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<StaffSurvey>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (StaffSurvey item in filterEntity)
-            {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
-                {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
-
-                }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<StaffSurvey>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
-            var result = _dbContext.SaveChanges();
+            var StaffSurvey = Mapper.Map<StaffSurvey>(model);
+            await _StaffSurveyRepository.UpdateEntity(StaffSurvey);
             return Ok();
         }
         /// <summary>
@@ -147,7 +103,6 @@ namespace AwesomeCare.API.Controllers
                                                Remarks = c.Remarks,
                                                Status = c.Status,
                                                StaffId = c.StaffId,
-                                               OfficerToAct = c.OfficerToAct,
                                                Details = c.Details,
                                                HealthCareServicesSatisfaction = c.HealthCareServicesSatisfaction,
                                                CompanyManagement = c.CompanyManagement,
@@ -155,7 +110,6 @@ namespace AwesomeCare.API.Controllers
                                                AdequateTrainingReceived = c.AdequateTrainingReceived,
                                                AccessToPolicies = c.AccessToPolicies,
                                                AreaRequiringImprovements = c.AreaRequiringImprovements,
-                                               WorkTeam = c.WorkTeam,
                                                SupportFromCompany = c.SupportFromCompany,
                                                WorkEnvironmentSuggestions = c.WorkEnvironmentSuggestions,
                                                URL = c.URL
