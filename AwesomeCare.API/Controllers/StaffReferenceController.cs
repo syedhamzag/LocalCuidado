@@ -41,7 +41,7 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffReferenceRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
+            return Ok(getEntities);
         }
         /// <summary>
         /// Create StaffReference
@@ -56,14 +56,10 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-                if (postStaffReference.Attachment == null)
-                    postStaffReference.Attachment = "No Image";
+                
             var StaffReference = Mapper.Map<StaffReference>(postStaffReference);
-            var newStaffReference = await _StaffReferenceRepository.InsertEntity(StaffReference);
-            var getStaffReference = Mapper.Map<GetStaffReference>(newStaffReference);
-            return Ok(getStaffReference);
-
-
+            await _StaffReferenceRepository.InsertEntity(StaffReference);
+            return Ok();
         }
         /// <summary>
         /// Update StaffReference
@@ -79,11 +75,9 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _StaffReferenceRepository.GetEntity(model.StaffReferenceId);
-            var putEntity = Mapper.Map(model, entity);
-            var updateEntity = await _StaffReferenceRepository.UpdateEntity(putEntity);
-            var getEntity = Mapper.Map<GetStaffReference>(updateEntity);
-            return Ok(getEntity);
+            var StaffReference = Mapper.Map<StaffReference>(model);
+            await _StaffReferenceRepository.UpdateEntity(StaffReference);
+            return Ok();
 
         }
         /// <summary>
@@ -112,7 +106,6 @@ namespace AwesomeCare.API.Controllers
                                                ApplicantRole = c.ApplicantRole,
                                                Attachment = c.Attachment,
                                                Caring = c.Caring,
-                                               ConfirmedBy = c.ConfirmedBy,
                                                Contact = c.Contact,
                                                DateofEmployement = c.DateofEmployement,
                                                DateofExit = c.DateofExit,

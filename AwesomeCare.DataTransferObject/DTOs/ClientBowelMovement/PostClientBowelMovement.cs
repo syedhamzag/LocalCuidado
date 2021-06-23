@@ -13,10 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientBowelMovement
             StaffName = new List<PostBowelMovementStaffName>();
         }
 
-        public List<PostBowelMovementOfficerToAct> OfficerToAct { get; set; }
-        public List<PostBowelMovementPhysician> Physician { get; set; }
-        public List<PostBowelMovementStaffName> StaffName { get; set; }
-
         public int BowelMovementId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -34,5 +30,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientBowelMovement
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PostBowelMovementOfficerToAct> OfficerToAct { get; set; }
+        public List<PostBowelMovementPhysician> Physician { get; set; }
+        public List<PostBowelMovementStaffName> StaffName { get; set; }
     }
 }

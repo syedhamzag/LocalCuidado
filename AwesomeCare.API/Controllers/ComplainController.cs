@@ -45,19 +45,7 @@ namespace AwesomeCare.API.Controllers
             var getEntities = _complainRepository.Table.ToList();
             return Ok(getEntities);
         }
-        /// <summary>
-        /// Get All Complain
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("{complainId}")]
-        [ProducesResponseType(type: typeof(GetClientComplainRegister), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Get(int complainId)
-        {
-            var getEntities = _complainRepository.Table.ProjectTo<GetClientComplainRegister>().FirstOrDefault(s=>s.ComplainId==complainId);
-            return Ok(getEntities);
-        }
+        
         /// <summary>
         /// Create Complain
         /// </summary>
@@ -90,10 +78,8 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _complainRepository.GetEntity(model.ComplainId);
-            var putEntity = Mapper.Map(model, entity);
-            await _complainRepository.UpdateEntity(putEntity);
-
+            var complain = Mapper.Map<ClientComplainRegister>(model);
+            await _complainRepository.UpdateEntity(complain);
             return Ok();
 
 
@@ -138,11 +124,9 @@ namespace AwesomeCare.API.Controllers
                                                                   IRFNUMBER = complain.IRFNUMBER,
                                                                   LETTERTOSTAFF = complain.LETTERTOSTAFF,
                                                                   LINK = complain.LINK,
-                                                                  OFFICERTOACTId = complain.OFFICERTOACTId,
                                                                   REMARK = complain.REMARK,
                                                                   ROOTCAUSE = complain.ROOTCAUSE,
                                                                   SOURCEOFCOMPLAINTS = complain.SOURCEOFCOMPLAINTS,
-                                                                  STAFFId = complain.STAFFId,
                                                                   StatusId = complain.StatusId,
                                                               }).ToList()
                                      }

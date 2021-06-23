@@ -41,22 +41,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffAdlObsRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All ClientLogAudit
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetStaffAdlObs>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _StaffAdlObsRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
+
         /// <summary>
         /// Create StaffAdlObs
         /// </summary>
@@ -64,20 +51,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostStaffAdlObs> postStaffAdlObs)
+        public async Task<IActionResult> Create([FromBody] PostStaffAdlObs postStaffAdlObs)
         {
             if (postStaffAdlObs == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postStaffAdlObs)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
 
-            var StaffAdlObs = Mapper.Map<List<StaffAdlObs>>(postStaffAdlObs);
-            await _StaffAdlObsRepository.InsertEntities(StaffAdlObs);
+            var StaffAdlObs = Mapper.Map<StaffAdlObs>(postStaffAdlObs);
+            await _StaffAdlObsRepository.InsertEntity(StaffAdlObs);
             return Ok();
         }
         /// <summary>
@@ -86,40 +68,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutStaffAdlObs> model)
+        public async Task<IActionResult> Put([FromBody] PutStaffAdlObs model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<StaffAdlObs>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (StaffAdlObs item in filterEntity)
-            {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
-                {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
-
-                }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<StaffAdlObs>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
-            var result = _dbContext.SaveChanges();
+            var StaffAdlObs = Mapper.Map<StaffAdlObs>(model);
+            await _StaffAdlObsRepository.UpdateEntity(StaffAdlObs);
             return Ok();
 
         }
@@ -154,7 +110,6 @@ namespace AwesomeCare.API.Controllers
                                                Comments = c.Comments,
                                                Details = c.Details,
                                                FivePrinciples = c.FivePrinciples,
-                                               OfficerToAct = c.OfficerToAct,
                                                StaffId = c.StaffId,
                                                UnderstandingofControl = c.UnderstandingofControl,
                                                UnderstandingofEquipment = c.UnderstandingofEquipment,

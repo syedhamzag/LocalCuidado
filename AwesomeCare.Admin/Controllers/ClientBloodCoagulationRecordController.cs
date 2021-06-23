@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientBloodCoagulationRecordService.Get();
             
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientBloodCoagulationRecord> reports = new List<CreateClientBloodCoagulationRecord>();
             foreach (GetClientBloodCoagulationRecord item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
             
@@ -91,28 +90,14 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int bloodId)
         {
-            string OfficerToAct = "";
             var BloodCoagulationRecord = await _clientBloodCoagulationRecordService.Get(bloodId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BloodCoagulationRecord.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(BloodCoagulationRecord);
             return View(BloodCoagulationRecord);
         }
         public async Task<IActionResult> Email(int bloodId,string sender,string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var BloodCoagulationRecord = await _clientBloodCoagulationRecordService.Get(bloodId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BloodCoagulationRecord.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(BloodCoagulationRecord);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientBloodCoagulationRecord.pdf");
             string subject = "ClientBloodCoagulationRecord";
             string body = "";
@@ -121,16 +106,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int bloodId)
         {
-            string OfficerToAct = "";
             var BloodCoagulationRecord = await _clientBloodCoagulationRecordService.Get(bloodId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BloodCoagulationRecord.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(BloodCoagulationRecord);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
     
             return File(byte1, "application/pdf","ClientBloodCoagulationRecord.pdf");
         }
@@ -187,6 +165,7 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = BloodCoagulationRecord.Result.Deadline,
                 Remark = BloodCoagulationRecord.Result.Remark,
                 Status = BloodCoagulationRecord.Result.Status,
+                TargetINRAttach = BloodCoagulationRecord.Result.TargetINRAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -238,8 +217,8 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remark = model.Remark;
                 postlog.Status = model.Status;
+                postlog.TargetINRAttach = model.TargetINRAttach;
             
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientBloodCoagulationRecordService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -275,6 +254,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientBloodCoagulationRecord put = new PutClientBloodCoagulationRecord();
+            put.BloodRecordId = model.BloodRecordId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -288,13 +268,15 @@ namespace AwesomeCare.Admin.Controllers
             put.NewINR = model.NewINR;
             put.BloodStatus = model.BloodStatus;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutBloodCoagStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutBloodCoagPhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutBloodCoagStaffName { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutBloodCoagPhysician { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
             put.PhysicianResponce = model.PhysicianResponce;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBloodCoagOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBloodCoagOfficerToAct { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
             put.Deadline = model.Deadline;
             put.Remark = model.Remark;
             put.Status = model.Status;
+            put.TargetINRAttach = model.TargetINRAttach;
+            var json = JsonConvert.SerializeObject(put);
             var entity = await _clientBloodCoagulationRecordService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {

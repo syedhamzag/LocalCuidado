@@ -16,6 +16,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientHeartRateController : ControllerBase
@@ -105,6 +106,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetClientHeartRate
                                            {
                                                HeartRateId = c.HeartRateId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                Time = c.Time,
                                                Age = c.Age,

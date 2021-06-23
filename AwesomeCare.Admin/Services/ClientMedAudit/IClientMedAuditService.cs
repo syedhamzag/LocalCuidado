@@ -14,16 +14,13 @@ namespace AwesomeCare.Admin.Services.ClientMedAudit
         [Get("/ClientMedAudit")]
         Task<List<GetClientMedAudit>> Get();
 
-        [Get("/ClientMedAudit/GetByRef/{Reference}")]
-        Task<List<GetClientMedAudit>> GetByRef(string Reference);
-
         [Get("/ClientMedAudit/Get/{id}")]
         Task<GetClientMedAudit> Get(int id);
 
         [Post("/ClientMedAudit/Create")]
-        Task<HttpResponseMessage> Create([Body] List<PostClientMedAudit> model);
+        Task<HttpResponseMessage> Create([Body] PostClientMedAudit model);
 
         [Put("/ClientMedAudit/Put")]
-        Task<HttpResponseMessage> Put([Body] List<PutClientMedAudit> model);
+        Task<HttpResponseMessage> Put([Body] PutClientMedAudit model);
     }
 }

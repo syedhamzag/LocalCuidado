@@ -16,6 +16,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientBloodPressureController : ControllerBase
@@ -49,8 +50,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Get()
         {
-            var getEntities = _ClientBloodPressureRepository.Table.Include(d => d.Physician)
-                .Include(d => d.OfficerToAct).Include(d => d.StaffName).ToList();
+            var getEntities = _ClientBloodPressureRepository.Table.ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -106,6 +106,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetClientBloodPressure
                                            {
                                                BloodPressureId = c.BloodPressureId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                Date = c.Date,
                                                Time = c.Time,
