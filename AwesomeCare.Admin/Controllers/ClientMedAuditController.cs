@@ -31,6 +31,7 @@ using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
 using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedAudit;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -84,7 +85,7 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId.Value;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
-            model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+            model.OFFICERTOACTList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             return View(model);
 
         }
@@ -158,9 +159,9 @@ namespace AwesomeCare.Admin.Controllers
                 EvidenceOfActionTaken = MedAudit.Result.EvidenceOfActionTaken,
                 LessonLearntAndShared = MedAudit.Result.LessonLearntAndShared,
                 LogURL = MedAudit.Result.LogURL,
-                NameOfAuditor = MedAudit.Result.NameOfAuditor,
+                NameOfAuditor = MedAudit.Result.StaffName.Select(s=>s.StaffPersonalInfoId).ToList(),
                 Observations = MedAudit.Result.Observations,
-                //OfficerToTakeAction = MedAudit.Result.OfficerToTakeAction.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToTakeAction = MedAudit.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 Remarks = MedAudit.Result.Remarks,
                 RepeatOfIncident = MedAudit.Result.RepeatOfIncident,
                 RotCause = MedAudit.Result.RotCause,
@@ -173,7 +174,7 @@ namespace AwesomeCare.Admin.Controllers
                 HardCopyReview = MedAudit.Result.HardCopyReview,
                 MedicationSupplyEfficiency = MedAudit.Result.MedicationSupplyEfficiency,
                 MedicationInfoUploadEefficiency = MedAudit.Result.MedicationInfoUploadEefficiency,
-                OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
+                OFFICERTOACTList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
         }
@@ -186,7 +187,7 @@ namespace AwesomeCare.Admin.Controllers
                 var client = await _clientService.GetClientDetail();
                 model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 var staffs = await _staffService.GetStaffs();
-                model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                model.OFFICERTOACTList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
             PostClientMedAudit postlog = new PostClientMedAudit();
@@ -229,9 +230,9 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
                 postlog.LessonLearntAndShared = model.LessonLearntAndShared;
                 postlog.LogURL = model.LogURL;
-                postlog.NameOfAuditor = model.NameOfAuditor;
+                postlog.StaffName = model.NameOfAuditor.Select(o => new PostMedAuditStaffName { StaffPersonalInfoId = o, MedAuditId = model.MedAuditId }).ToList(); ;
                 postlog.Observations = model.Observations;
-                //postlog.OfficerToTakeAction = model.OfficerToTakeAction.Select(o => new PostMedAuditOfficerToAct { StaffPersonalInfoId = o, MedAuditId = model.MedAuditId }).ToList();
+                postlog.OfficerToAct = model.OfficerToTakeAction.Select(o => new PostMedAuditOfficerToAct { StaffPersonalInfoId = o, MedAuditId = model.MedAuditId }).ToList();
                 postlog.Remarks = model.Remarks;
                 postlog.RepeatOfIncident = model.RepeatOfIncident;
                 postlog.RotCause = model.RotCause;
@@ -261,7 +262,7 @@ namespace AwesomeCare.Admin.Controllers
                 var client = await _clientService.GetClient(model.ClientId);
                 model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
                 var staffs = await _staffService.GetStaffs();
-                model.OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                model.OFFICERTOACTList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
 
@@ -304,9 +305,9 @@ namespace AwesomeCare.Admin.Controllers
             put.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
             put.LessonLearntAndShared = model.LessonLearntAndShared;
             put.LogURL = model.LogURL;
-            put.NameOfAuditor = model.NameOfAuditor;
+            put.StaffName = model.NameOfAuditor.Select(o => new PutMedAuditStaffName { StaffPersonalInfoId = o, MedAuditId = model.MedAuditId}).ToList();
             put.Observations = model.Observations;
-            //put.OfficerToTakeAction = model.OFFICERTOACT.Select(o => new PutMedAuditOfficerToAct { StaffPersonalInfoId = o, MedAuditId = model.MedAuditId }).ToList();
+            put.OfficerToAct = model.OfficerToTakeAction.Select(o => new PutMedAuditOfficerToAct { StaffPersonalInfoId = o, MedAuditId = model.MedAuditId }).ToList();
             put.Remarks = model.Remarks;
             put.RepeatOfIncident = model.RepeatOfIncident;
             put.RotCause = model.RotCause;

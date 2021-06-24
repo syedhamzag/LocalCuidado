@@ -38,14 +38,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("RateStaffAttending")
                .IsRequired();
 
-            builder.Property(p => p.StaffBestSupport)
-               .HasColumnName("StaffBestSupport")
-               .IsRequired();
-
-            builder.Property(p => p.StaffPoorSupport)
-               .HasColumnName("StaffPoorSupport")
-               .IsRequired();
-
             builder.Property(p => p.OfficeStaffSupport)
                .HasColumnName("OfficeStaffSupport")
                .IsRequired();
@@ -74,9 +66,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(255)
                .IsRequired();
 
-            builder.Property(p => p.NameOfCaller)
-               .HasColumnName("NameOfCaller")
-               .IsRequired();
 
             builder.Property(p => p.ActionRequired)
                .HasColumnName("ActionRequired")
@@ -106,10 +95,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(255)
                .IsRequired();
 
-            builder.Property(p => p.OfficerToAct)
-             .HasColumnName("OfficerToAct")
-             .IsRequired();
-
             builder.Property(p => p.RotCause)
              .HasColumnName("RotCause")
              .HasMaxLength(50)
@@ -136,10 +121,6 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.ClientVoice)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }
