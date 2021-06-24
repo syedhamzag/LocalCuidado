@@ -21,15 +21,14 @@ namespace AwesomeCare.Admin.ViewModels.Staff
 
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
 
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<GetClient> ClientList { get; set; }
         public string ActiveTab { get; set; } = "medcomp";
-        public List<int> MedCompIds { get; set; }
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         public string Reference { get; set; }
-
         [Required]
         public int MedCompId { get; set; }
         [Required]
@@ -39,7 +38,6 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [Required]
         public DateTime NextCheckDate { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Details { get; set; }
         [Required]
         public int ClientId { get; set; }
@@ -54,19 +52,17 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [Required]
         public int RateStaff { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
         public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]
         public int Status { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Remarks { get; set; }
         [Required]
-        [MaxLength(255)]
         public string URL { get; set; }
         public string Attachment { get; set; }
     }

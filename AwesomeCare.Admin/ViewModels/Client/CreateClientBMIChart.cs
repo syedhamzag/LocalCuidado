@@ -16,16 +16,12 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public CreateClientBMIChart() 
         {
             OfficerToActList = new List<SelectListItem>();
-            StaffNameList = new List<SelectListItem>();
-            PhysicianList = new List<SelectListItem>();
             ClientList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         public IFormFile SeeChartAttachment { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
-        public ICollection<SelectListItem> StaffNameList { get; set; }
-        public ICollection<SelectListItem> PhysicianList { get; set; }
         public ICollection<SelectListItem> ClientList { get; set; }
 
         public string ActiveTab { get; set; } = "BMIChart";
@@ -54,12 +50,15 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Comment { get; set; }
         [Required]
         public List<int> StaffName { get; set; }
+        public List<string> Staff_Name { get; set; }
         [Required]
         public List<int> Physician { get; set; }
+        public List<string> PhysicianName { get; set; }
         [Required]
         public string PhysicianResponse { get; set; }
         [Required]
         public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]

@@ -68,21 +68,6 @@ namespace AwesomeCare.Model.Models.Map
                  .WithMany(p => p.ClientFoodIntake)
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<FoodIntakePhysician>(p => p.Physician)
-                .WithOne(p => p.FoodIntake)
-                .HasForeignKey(p => p.FoodIntakeId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<FoodIntakeStaffName>(p => p.StaffName)
-                .WithOne(p => p.FoodIntake)
-                .HasForeignKey(p => p.FoodIntakeId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<FoodIntakeOfficerToAct>(p => p.OfficerToAct)
-                .WithOne(p => p.FoodIntake)
-                .HasForeignKey(p => p.FoodIntakeId)
-                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

@@ -18,7 +18,6 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
 
         #region DropDowns
@@ -29,7 +28,6 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         public string StatusName { get; set; }
         public string ActiveTab { get; set; } = "servicewatch";
         public int WatchId { get; set; }
-        public List<int> WatchIds { get; set; }
         public string Reference { get; set; }
         [Required]
         public int ClientId { get; set; }
@@ -43,26 +41,24 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         public int Details { get; set; }
         [Required]
         public int PersonInvolved { get; set; }
+        public List<string> PersonName { get; set; }
         [Required]
         public int Contact { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Observation { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
         [Display(Name = "OFFICERTOACT")]
         public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]
         public int Status { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Remarks { get; set; }
         [Required]
-        [MaxLength(255)]
         public string URL { get; set; }
         public string Attachment { get; set; }
     }

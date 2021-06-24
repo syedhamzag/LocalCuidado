@@ -19,14 +19,13 @@ namespace AwesomeCare.Admin.ViewModels.Staff
 
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
-
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public string ActiveTab { get; set; } = "supervision";
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         [Required]
         public int StaffSupervisionAppraisalId { get; set; }
-        public List<int> StaffSupervisionAppraisalIds { get; set; }
         [Required]
         public int StaffId { get; set; }
         [Required]
@@ -36,10 +35,10 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [Required]
         public DateTime NextCheckDate { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Details { get; set; }
         [Required]
-        public int WorkTeam { get; set; }
+        public List<int> WorkTeam { get; set; }
+        public List<string> WorkTeamName { get; set; }
         [Required]
         public int StaffRating { get; set; }
         [Required]
@@ -47,39 +46,31 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [Required]
         public int StaffComplaints { get; set; }
         [Required]
-        [MaxLength(255)]
         public string FiveStarRating { get; set; }
         [Required]
-        [MaxLength(255)]
         public string StaffDevelopment { get; set; }
         [Required]
-        [MaxLength(255)]
         public string StaffAbility { get; set; }
         [Required]
-        [MaxLength(255)]
         public string NoAbilityToSupport { get; set; }
         [Required]
-        [MaxLength(255)]
         public string CondourAndWhistleBlowing { get; set; }
         [Required]
-        [MaxLength(255)]
         public string NoCondourAndWhistleBlowing { get; set; }
         [Required]
         public int StaffSupportAreas { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
         public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]
         public int Status { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Remarks { get; set; }
         [Required]
-        [MaxLength(255)]
         public string URL { get; set; }
         public string Attachment { get; set; }
     }

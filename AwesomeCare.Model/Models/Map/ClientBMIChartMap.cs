@@ -72,21 +72,6 @@ namespace AwesomeCare.Model.Models.Map
                  .WithMany(p => p.ClientBMIChart)
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<BMIChartPhysician>(p => p.Physician)
-                .WithOne(p => p.BMIChart)
-                .HasForeignKey(p => p.BMIChartId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<BMIChartStaffName>(p => p.StaffName)
-                .WithOne(p => p.BMIChart)
-                .HasForeignKey(p => p.BMIChartId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<BMIChartOfficerToAct>(p => p.OfficerToAct)
-                .WithOne(p => p.BMIChart)
-                .HasForeignKey(p => p.BMIChartId)
-                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }
