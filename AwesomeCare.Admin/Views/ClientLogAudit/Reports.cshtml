@@ -36,12 +36,12 @@
                                         <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "ClientLogAudit", new { Reference = item.data.Reference }, new { @class = "dropdown-item" })
-                                            @Html.ActionLink("View", "View", "ClientLogAudit", new { Reference = item.data.Reference }, new { @class = "dropdown-item" })
-                                            <button type="button" class="dropdown-item" id="@item.data.Reference" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
+                                            @Html.ActionLink("Edit", "Edit", "ClientLogAudit", new { LogAuditId = item.data.LogAuditId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("View", "View", "ClientLogAudit", new { logId = item.data.LogAuditId }, new { @class = "dropdown-item" })
+                                            <button type="button" class="dropdown-item" id="@item.data.LogAuditId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
                                                 Email
                                             </button>
-                                            @Html.ActionLink("Download", "Download", "ClientLogAudit", new { Reference = item.data.Reference }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("Download", "Download", "ClientLogAudit", new { logId = item.data.LogAuditId }, new { @class = "dropdown-item" })
                                         </div>
                                     </div>
                                 </td>
@@ -74,7 +74,7 @@
                         </select>
                     </div>
                     <div class="row">
-                        <input type="text" id="Reference" name="Reference" />
+                        <input type="hidden" id="LogAuditId" name="logId" />
                         <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                             <label class="control-label">Your Email</label>
                             <input type="text" name="sender" class="form-control" />
@@ -106,6 +106,6 @@
     function Setid(e)
     {
         var Id = e.id;
-        $('#Reference').val(Id);
+        $('#LogAuditId').val(Id);
     }
 </script>
