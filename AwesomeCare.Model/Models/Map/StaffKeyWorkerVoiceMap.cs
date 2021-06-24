@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<StaffKeyWorkerVoice> builder)
         {
-            builder.ToTable("tbl_StaffKeyWorkerVoice");
+            builder.ToTable("tbl_Staff_KeyWorkerVoice");
             builder.HasKey(k => k.KeyWorkerId);
 
             #region Properties
@@ -33,10 +33,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.Details)
                .HasColumnName("Details")
                .HasMaxLength(255)
-               .IsRequired();
-
-            builder.Property(p => p.TeamYouWorkFor)
-               .HasColumnName("TeamYouWorkFor")
                .IsRequired();
 
             builder.Property(p => p.NotComfortableServices)
@@ -90,10 +86,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(255)
                .IsRequired();
 
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
-               .IsRequired();
-
             builder.Property(p => p.Deadline)
                .HasColumnName("Deadline")
                .IsRequired();
@@ -119,11 +111,6 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Relationship
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffKeyWorkerVoice)
-                 .HasForeignKey(p => p.TeamYouWorkFor)
-                 .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasOne(p => p.Client)
                  .WithMany(p => p.StaffKeyWorkerVoice)
                  .HasForeignKey(p => p.NotComfortableServices)
@@ -137,11 +124,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasOne(p => p.Client)
                  .WithMany(p => p.StaffKeyWorkerVoice)
                  .HasForeignKey(p => p.ServicesRequiresServices)
-                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffKeyWorkerVoice)
-                 .HasForeignKey(p => p.OfficerToAct)
                  .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }

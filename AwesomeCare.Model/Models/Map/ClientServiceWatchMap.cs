@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientServiceWatch> builder)
         {
-            builder.ToTable("tbl_ClientServiceWatch");
+            builder.ToTable("tbl_Client_ServiceWatch");
             builder.HasKey(k => k.WatchId);
 
             #region Properties
@@ -38,17 +38,9 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("Details")
                .IsRequired();
 
-            builder.Property(p => p.PersonInvolved)
-             .HasColumnName("PersonInvolved")
-             .IsRequired();
-
             builder.Property(p => p.Contact)
                 .HasColumnName("Contact")
                 .IsRequired();
-
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
-               .IsRequired();
 
             builder.Property(p => p.Status)
                .HasColumnName("Status")
@@ -87,11 +79,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasOne(p => p.Client)
                  .WithMany(p => p.ClientServiceWatch)
                  .HasForeignKey(p => p.ClientId)
-                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.ClientServiceWatch)
-                 .HasForeignKey(p => p.OfficerToAct)
                  .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }

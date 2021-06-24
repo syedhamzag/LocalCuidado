@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientComplainRegister> builder)
         {
-            builder.ToTable("tbl_ClientComplainRegister");
+            builder.ToTable("tbl_Client_ComplainRegister");
             builder.HasKey(k => k.ComplainId);
 
             #region Properties
@@ -43,10 +43,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.DATEOFACKNOWLEDGEMENT)
                .HasColumnName("DATEOFACKNOWLEDGEMENT");
 
-            builder.Property(p => p.OFFICERTOACTId)
-               .HasColumnName("OFFICERTOACTId")
-               .IsRequired();
-
             builder.Property(p => p.SOURCEOFCOMPLAINTS)
                .HasColumnName("SOURCEOFCOMPLAINTS")
                .HasMaxLength(255)
@@ -55,10 +51,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.COMPLAINANTCONTACT)
                .HasColumnName("COMPLAINANTCONTACT")
                .HasMaxLength(50)
-               .IsRequired();
-
-            builder.Property(p => p.STAFFId)
-               .HasColumnName("STAFFId")
                .IsRequired();
 
             builder.Property(p => p.CONCERNSRAISED)

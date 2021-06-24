@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<StaffOneToOne> builder)
         {
-            builder.ToTable("tbl_StaffOneToOne");
+            builder.ToTable("tbl_Staff_OneToOne");
             builder.HasKey(k => k.OneToOneId);
 
             #region Properties
@@ -69,10 +69,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(255)
                .IsRequired();
 
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
-               .IsRequired();
-
             builder.Property(p => p.Deadline)
                .HasColumnName("Deadline")
                .IsRequired();
@@ -98,10 +94,6 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Relationship
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffOneToOne)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

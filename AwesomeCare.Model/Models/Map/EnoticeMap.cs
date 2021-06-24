@@ -7,7 +7,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<Enotice> builder)
         {
-            builder.ToTable("tbl_Enotice");
+            builder.ToTable("tbl_Enotice_");
             builder.HasKey(k => k.EnoticeId);
 
             #region Properties
