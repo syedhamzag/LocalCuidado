@@ -43,10 +43,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.DATEOFACKNOWLEDGEMENT)
                .HasColumnName("DATEOFACKNOWLEDGEMENT");
 
-            builder.Property(p => p.OFFICERTOACTId)
-               .HasColumnName("OFFICERTOACTId")
-               .IsRequired();
-
             builder.Property(p => p.SOURCEOFCOMPLAINTS)
                .HasColumnName("SOURCEOFCOMPLAINTS")
                .HasMaxLength(255)
@@ -55,10 +51,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.COMPLAINANTCONTACT)
                .HasColumnName("COMPLAINANTCONTACT")
                .HasMaxLength(50)
-               .IsRequired();
-
-            builder.Property(p => p.STAFFId)
-               .HasColumnName("STAFFId")
                .IsRequired();
 
             builder.Property(p => p.CONCERNSRAISED)

@@ -82,10 +82,6 @@ namespace AwesomeCare.Model.Models.Map
              .HasColumnName("EvidenceOfActionTaken")
              .IsRequired();
 
-            builder.Property(p => p.OfficerToTakeAction)
-               .HasColumnName("OfficerToTakeAction")
-               .IsRequired();
-
             builder.Property(p => p.Status)
                .HasColumnName("Status")
                .IsRequired();
@@ -133,10 +129,6 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.ClientLogAudit)
-                 .HasForeignKey(p => p.OfficerToTakeAction)
-                 .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

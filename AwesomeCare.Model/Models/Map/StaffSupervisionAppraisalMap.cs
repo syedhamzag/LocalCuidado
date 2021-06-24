@@ -35,10 +35,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(255)
                .IsRequired();
 
-            builder.Property(p => p.WorkTeam)
-               .HasColumnName("WorkTeam")
-               .IsRequired();
-
             builder.Property(p => p.StaffRating)
                .HasColumnName("StaffRating")
                .HasMaxLength(255)
@@ -93,10 +89,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(255)
                .IsRequired();
 
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
-               .IsRequired();
-
             builder.Property(p => p.Deadline)
                .HasColumnName("Deadline")
                .IsRequired();
@@ -122,16 +114,6 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Relationship
 
-
-            builder.HasOne(p => p.Staff)
-                .WithMany(p => p.StaffSupervisionAppraisal)
-                .HasForeignKey(p => p.WorkTeam)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffSupervisionAppraisal)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }
