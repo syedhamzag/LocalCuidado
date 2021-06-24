@@ -40,7 +40,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         [Required]
         public int Details { get; set; }
         [Required]
-        public int PersonInvolved { get; set; }
+        public List<int> PersonInvolved { get; set; }
         public List<string> PersonName { get; set; }
         [Required]
         public int Contact { get; set; }

@@ -50,13 +50,14 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         [Required]
         public int RateStaffAttending { get; set; }
         [Required]
-        public int StaffBestSupport { get; set; }
+        public List<int> StaffBestSupport { get; set; }
         public List<string> Best_Staff { get; set; }
         [Required]
-        public int StaffPoorSupport { get; set; }
+        public List<int> StaffPoorSupport { get; set; }
         public List<string> Poor_Staff { get; set; }
         [Required]
-        public int OfficeStaffSupport { get; set; }
+        public List<int> OfficeStaffSupport { get; set; }
+        public List<string> StaffSupportName { get; set; }
         [Required]
         public string AreasOfImprovements { get; set; }
         [Required]
@@ -68,7 +69,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         [Required]
         public string HealthGoalLongTerm { get; set; }
         [Required]
-        public int NameOfCaller { get; set; }
+        public List<int> NameOfCaller { get; set; }
         public List<string> Caller_Name { get; set; }
         [Required]
         public string ActionRequired { get; set; }

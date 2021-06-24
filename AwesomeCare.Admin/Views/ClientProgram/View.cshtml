@@ -1,125 +1,129 @@
-﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.ClientProgram.GetClientProgram>
-
+﻿@using AwesomeCare.Admin.ViewModels.ClientProgram;
+@model CreateClientProgram
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "View Client Program";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+                <h2></h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="Edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <input type="hidden" asp-for="ProgramId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">DATE</label>
+                                    <label class="control-label">@Model.Date</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">NEXT DUE DATE</label>
+                                    <label class="control-label">@Model.NextCheckDate</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">DEADLINE</label>
+                                    <label class="control-label">@Model.Deadline</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Program Of Choice</label>
+                                    <label class="control-label">@Model.ProgramOfChoice</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Days Of Choice</label>
+                                    <label class="control-label">@Model.DaysOfChoice</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Program Place and Location</label>
+                                    <label class="control-label">@Model.PlaceLocationProgram</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Details Of Program</label>
+                                    <label class="control-label">@Model.DetailsOfProgram</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Officer to Take Action</label>
+                                    <label class="control-label">@Model.OfficerName.ToList()</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Status</label>
+                                    <label class="control-label">@Model.Status</label>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <label class="control-label">@Model.Reference</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Remark/Closing Comment</label>
+                                    <label class="control-label">@Model.Remarks</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">URL</label>
+                                    <label class="control-label">@Model.URL</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Action Required</label>
+                                    <label class="control-label">@Model.ActionRequired</label>danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Observation</label>
+                                    <label class="control-label">@Model.Observation</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Attach<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <img src="@Model.Attachment" alt="image" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 }
 
-<h2>View</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProgramId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reference)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NextCheckDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProgramOfChoice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DaysOfChoice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PlaceLocationProgram)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DetailsOfProgram)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Observation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ActionRequired)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfficerToAct)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deadline)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Remarks)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.URL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Attachment)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProgramId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reference)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NextCheckDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProgramOfChoice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DaysOfChoice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlaceLocationProgram)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DetailsOfProgram)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActionRequired)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfficerToAct)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deadline)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Remarks)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.URL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Attachment)
-            </td>
-        </tr>
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
 }
-    </tbody>
-</table>
+

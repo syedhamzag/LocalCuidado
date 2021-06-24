@@ -44,7 +44,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
         [Required]
         public int RateManagers { get; set; }
         [Required]
-        public int StaffBestSupport { get; set; }
+        public List<int> StaffBestSupport { get; set; }
         public List<string> Staff_Name { get; set; }
         [Required]
         public int HowToComplain { get; set; }
