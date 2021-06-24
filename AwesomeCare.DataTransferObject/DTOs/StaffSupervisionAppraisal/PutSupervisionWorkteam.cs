@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.ClientSupervision
+namespace AwesomeCare.DataTransferObject.DTOs.StaffSupervision
 {
     public class PutSupervisionWorkteam
     {

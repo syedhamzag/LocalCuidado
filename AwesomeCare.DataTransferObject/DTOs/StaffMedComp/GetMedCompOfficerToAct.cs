@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.ClientMedComp
+namespace AwesomeCare.DataTransferObject.DTOs.StaffMedComp
 {
     public class GetMedCompOfficerToAct
     {

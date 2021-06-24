@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedAudit;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -25,12 +26,21 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Client> _clientRepository;
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientMedAudit> _clientMedAuditRepository;
-        
-        public ClientMedAuditController(AwesomeCareDbContext dbContext, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<Client> clientRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<MedAuditOfficerToAct> _officertoactRepository;
+        private IGenericRepository<MedAuditStaffName> _staffnameRepository;
+
+        public ClientMedAuditController(AwesomeCareDbContext dbContext, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<Client> clientRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+        IGenericRepository<MedAuditOfficerToAct> officertoactRepository,
+        IGenericRepository<MedAuditStaffName> staffnameRepository )
         {
             _clientMedAuditRepository = clientMedAuditRepository;
             _clientRepository = clientRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffnameRepository = staffnameRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientMedAudit
         /// <summary>
@@ -116,7 +126,6 @@ namespace AwesomeCare.API.Controllers
                                                MedicationConcern = c.MedicationConcern,
                                                MedicationInfoUploadEefficiency = c.MedicationInfoUploadEefficiency,
                                                MedicationSupplyEfficiency = c.MedicationSupplyEfficiency,
-                                               NameOfAuditor = c.NameOfAuditor,
                                                Observations = c.Observations,
                                                Remarks = c.Remarks,
                                                RepeatOfIncident = c.RepeatOfIncident,
@@ -124,6 +133,24 @@ namespace AwesomeCare.API.Controllers
                                                RotCause = c.RotCause,
                                                Status = c.Status,
                                                ThinkingServiceUsers = c.ThinkingServiceUsers,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                where com.MedAuditId == c.MedAuditId
+                                                select new GetMedAuditOfficerToAct
+                                                {
+                                                    StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                    StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                }).ToList(),
+                                               StaffName = (from com in _staffnameRepository.Table
+                                                            join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                            where com.MedAuditId == c.MedAuditId
+                                                            select new GetMedAuditStaffName
+                                                            {
+                                                                StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+                                                            }).ToList(),
+
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getClientMedAudit);

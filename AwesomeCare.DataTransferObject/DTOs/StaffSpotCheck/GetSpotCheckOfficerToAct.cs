@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.ClientSpotCheck
+namespace AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck
 {
     public class GetSpotCheckOfficerToAct
     {

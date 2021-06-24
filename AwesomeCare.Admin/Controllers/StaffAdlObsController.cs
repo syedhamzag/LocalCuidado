@@ -36,7 +36,6 @@ namespace AwesomeCare.Admin.Controllers
         private IStaffAdlObsService _StaffAdlObsService;
         private IClientService _clientService;
         private IStaffService _staffService;
-        private IBaseRecordService _baseService;
         private readonly IEmailService _emailService;
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
@@ -44,12 +43,11 @@ namespace AwesomeCare.Admin.Controllers
 
         public StaffAdlObsController(IStaffAdlObsService StaffAdlObsService, IFileUpload fileUpload,
             IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
-            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService) : base(fileUpload)
         {
             _StaffAdlObsService = StaffAdlObsService;
             _clientService = clientService;
             _staffService = staffService;
-            _baseService = baseService;
             _emailService = emailService;
             _env = env;
             _logger = logger;
@@ -59,38 +57,44 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _StaffAdlObsService.Get();
-
-            var client = await _clientService.GetClientDetail();
-            List<CreateStaffAdlObs> reports = new List<CreateStaffAdlObs>();
-            foreach (GetStaffAdlObs item in entities)
-            {
-                var report = new CreateStaffAdlObs();
-                report.ObservationID = item.ObservationID;
-                report.Reference = item.Reference;
-                report.Deadline = item.Deadline;
-                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
-                reports.Add(report);
-            }
-            return View(reports);
+            return View(entities);
         }
-
-        public async Task<IActionResult> Index(int? clientId)
+        public async Task<IActionResult> Index(int? staffId)
         {
             var model = new CreateStaffAdlObs();
             var staffs = await _staffService.GetStaffs();
-            model.ClientId = clientId.Value;
-            var client = await _clientService.GetClientDetail();
-            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
             model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+            model.StaffId = staffId.Value;
+            List<GetClient> clientNames = await _clientService.GetClients();
+            ViewBag.GetClients = clientNames;
             return View(model);
-
         }
-
         public async Task<IActionResult> View(int obsId)
         {
-            var AdlObs = await _StaffAdlObsService.Get(obsId);
-            return View(AdlObs);
+            var AdlObs = _StaffAdlObsService.Get(obsId);
+            var putEntity = new CreateStaffAdlObs
+            {
+                ObservationID = AdlObs.Result.ObservationID,
+                Reference = AdlObs.Result.Reference,
+                ClientId = AdlObs.Result.ClientId,
+                Attachment = AdlObs.Result.Attachment,
+                Date = AdlObs.Result.Date,
+                Deadline = AdlObs.Result.Deadline,
+                URL = AdlObs.Result.URL,
+                Remarks = AdlObs.Result.Remarks,
+                Status = AdlObs.Result.Status,
+                ActionRequired = AdlObs.Result.ActionRequired,
+                Details = AdlObs.Result.Details,
+                UnderstandingofControl = AdlObs.Result.UnderstandingofControl,
+                UnderstandingofEquipment = AdlObs.Result.UnderstandingofEquipment,
+                StaffId = AdlObs.Result.StaffId,
+                UnderstandingofService = AdlObs.Result.UnderstandingofService,
+                NextCheckDate = AdlObs.Result.NextCheckDate,
+                FivePrinciples = AdlObs.Result.FivePrinciples,
+                Comments = AdlObs.Result.Comments,
+                OfficerName = AdlObs.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int obsId, string sender, string password, string recipient, string Smtp)
         {
@@ -105,10 +109,10 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int obsId)
         {
-            var BloodCoagulationRecord = await _StaffAdlObsService.Get(obsId);
-            var json = JsonConvert.SerializeObject(BloodCoagulationRecord);
+            var Adlobs = await _StaffAdlObsService.Get(obsId);
+            var staff = _staffService.GetStaffs();
+            var json = JsonConvert.SerializeObject(Adlobs);
             byte[] byte1 = GeneratePdf(json);
-
             return File(byte1, "application/pdf", "StaffAdlObs.pdf");
         }
         public byte[] GeneratePdf(string paragraphs)
@@ -136,7 +140,6 @@ namespace AwesomeCare.Admin.Controllers
             }
             return buffer;
         }
-
         public async Task<IActionResult> Edit(int ObservationID)
         {
             var AdlObs = _StaffAdlObsService.Get(ObservationID);
@@ -195,31 +198,31 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-            
-                postlog.Reference = model.Reference;
-                postlog.ClientId = model.ClientId;
-                postlog.Attachment = model.Attachment;
-                postlog.Date = model.Date;
-                postlog.Deadline = model.Deadline;
-                postlog.URL = model.URL;
-                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostAdlObsOfficerToAct { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
-                postlog.Remarks = model.Remarks;
-                postlog.Status = model.Status;
-                postlog.ActionRequired = model.ActionRequired;
-                postlog.Details = model.Details;
-                postlog.UnderstandingofControl = model.UnderstandingofControl;
-                postlog.UnderstandingofEquipment = model.UnderstandingofEquipment;
-                postlog.StaffId = model.StaffId;
-                postlog.UnderstandingofService = model.UnderstandingofService;
-                postlog.NextCheckDate = model.NextCheckDate;
-                postlog.FivePrinciples = model.FivePrinciples;
-                postlog.Comments = model.Comments;
-            
+            var post = new PostStaffAdlObs();
+                post.Reference = model.Reference;
+                post.ClientId = model.ClientId;
+                post.Attachment = model.Attachment;
+                post.Date = model.Date;
+                post.Deadline = model.Deadline;
+                post.URL = model.URL;
+                post.OfficerToAct = model.OfficerToAct.Select(o => new PostAdlObsOfficerToAct { StaffPersonalInfoId = o, AdlObsId = model.ObservationID }).ToList();
+                post.Remarks = model.Remarks;
+                post.Status = model.Status;
+                post.ActionRequired = model.ActionRequired;
+                post.Details = model.Details;
+                post.UnderstandingofControl = model.UnderstandingofControl;
+                post.UnderstandingofEquipment = model.UnderstandingofEquipment;
+                post.StaffId = model.StaffId;
+                post.UnderstandingofService = model.UnderstandingofService;
+                post.NextCheckDate = model.NextCheckDate;
+                post.FivePrinciples = model.FivePrinciples;
+                post.Comments = model.Comments;
 
-                var result = await _StaffAdlObsService.Create(posts);
-                var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Adl Observation successfully registered" : "An Error Occurred" });
+            var result = await _StaffAdlObsService.Create(post);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New AdlObs successfully registered" : "An Error Occurred" });
             return RedirectToAction("Details", "Staff", new { staffId = model.StaffId, ActiveTab = model.ActiveTab });
 
         }
@@ -249,21 +252,15 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = model.Attachment;
             }
             #endregion
-            List<PutStaffAdlObs> puts = new List<PutStaffAdlObs>();
-            int count = model.AdlObsIds.Count;
-            int i = 0;
-            foreach (var officer in model.OfficerToAct)
-            {
-                var put = new PutStaffAdlObs();
-                if (i < count)
-                    put.ObservationID = model.AdlObsIds[i];
+
+            var put = new PutStaffAdlObs();
                 put.Reference = model.Reference;
                 put.ClientId = model.ClientId;
                 put.Attachment = model.Attachment;
                 put.Date = model.Date;
                 put.Deadline = model.Deadline;
                 put.URL = model.URL;
-                put.OfficerToAct = officer;
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutAdlObsOfficerToAct { StaffPersonalInfoId = o, AdlObsId = model.ObservationID }).ToList();
                 put.Remarks = model.Remarks;
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;
@@ -275,11 +272,8 @@ namespace AwesomeCare.Admin.Controllers
                 put.NextCheckDate = model.NextCheckDate;
                 put.FivePrinciples = model.FivePrinciples;
                 put.Comments = model.Comments;
-                puts.Add(put);
-                i++;
-            }
-            var json = JsonConvert.SerializeObject(puts);
-            var entity = await _StaffAdlObsService.Put(puts);
+
+            var entity = await _StaffAdlObsService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

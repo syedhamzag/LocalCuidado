@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
-using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 
 namespace AwesomeCare.API.Controllers
 {

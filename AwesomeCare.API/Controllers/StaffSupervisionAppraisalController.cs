@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
-using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

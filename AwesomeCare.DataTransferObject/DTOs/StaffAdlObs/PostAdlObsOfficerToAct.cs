@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.ClientAdlObs
+namespace AwesomeCare.DataTransferObject.DTOs.StaffAdlObs
 {
     public class PostAdlObsOfficerToAct
     {

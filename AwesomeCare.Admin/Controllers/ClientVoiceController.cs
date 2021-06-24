@@ -149,7 +149,7 @@ namespace AwesomeCare.Admin.Controllers
                 EvidenceOfActionTaken = Voice.Result.EvidenceOfActionTaken,
                 LessonLearntAndShared = Voice.Result.LessonLearntAndShared,
                 URL = Voice.Result.URL,
-                NameOfCaller = Voice.Result.NameOfCaller,
+                NameOfCaller = Voice.Result.CallerName.Select(s=>s.StaffPersonalInfoId).ToList(),
                 OfficerToAct = Voice.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 Remarks = Voice.Result.Remarks,
                 RotCause = Voice.Result.RotCause,
@@ -165,8 +165,8 @@ namespace AwesomeCare.Admin.Controllers
                 RateServiceRecieving = Voice.Result.RateServiceRecieving,
                 RateStaffAttending = Voice.Result.RateStaffAttending,
                 SomethingSpecial = Voice.Result.SomethingSpecial,
-                StaffBestSupport = Voice.Result.StaffBestSupport,
-                StaffPoorSupport = Voice.Result.StaffPoorSupport,
+                StaffBestSupport = Voice.Result.GoodStaff.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffPoorSupport = Voice.Result.PoorStaff.Select(s => s.StaffPersonalInfoId).ToList(),
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -222,7 +222,7 @@ namespace AwesomeCare.Admin.Controllers
                 post.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
                 post.LessonLearntAndShared = model.LessonLearntAndShared;
                 post.URL = model.URL;
-                post.NameOfCaller = model.NameOfCaller;
+                post.CallerName = model.OfficerToAct.Select(o => new PostVoiceCallerName{ StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
                 post.OfficerToAct = model.OfficerToAct.Select(o => new PostVoiceOfficerToAct { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
                 post.Remarks = model.Remarks;
                 post.RotCause = model.RotCause;
@@ -238,8 +238,8 @@ namespace AwesomeCare.Admin.Controllers
                 post.RateServiceRecieving = model.RateServiceRecieving;
                 post.RateStaffAttending = model.RateStaffAttending;
                 post.SomethingSpecial = model.SomethingSpecial;
-                post.StaffBestSupport = model.StaffBestSupport;
-                post.StaffPoorSupport = model.StaffPoorSupport;
+                post.GoodStaff = model.StaffBestSupport.Select(o => new PostVoiceGoodStaff { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
+                post.PoorStaff = model.StaffPoorSupport.Select(o => new PostVoicePoorStaff { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList(); ;
                 
             var result = await _clientVoiceService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
@@ -299,7 +299,7 @@ namespace AwesomeCare.Admin.Controllers
                 put.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
                 put.LessonLearntAndShared = model.LessonLearntAndShared;
                 put.URL = model.URL;
-                put.NameOfCaller = model.NameOfCaller;
+                put.CallerName = model.NameOfCaller.Select(o => new PutVoiceCallerName { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
                 put.OfficerToAct = model.OfficerToAct.Select(o => new PutVoiceOfficerToAct { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
                 put.Remarks = model.Remarks;
                 put.RotCause = model.RotCause;
@@ -315,9 +315,9 @@ namespace AwesomeCare.Admin.Controllers
                 put.RateServiceRecieving = model.RateServiceRecieving;
                 put.RateStaffAttending = model.RateStaffAttending;
                 put.SomethingSpecial = model.SomethingSpecial;
-                put.StaffBestSupport = model.StaffBestSupport;
-                put.StaffPoorSupport = model.StaffPoorSupport;
-                
+                put.GoodStaff = model.StaffBestSupport.Select(o => new PutVoiceGoodStaff { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList(); ;
+                put.PoorStaff = model.StaffPoorSupport.Select(o => new PutVoicePoorStaff { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
+
             var entity = await _clientVoiceService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {

@@ -58,9 +58,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _StaffSpotCheckService.Get();
             return View(entities);
         }
-
-
-
         public async Task<IActionResult> Index(int? staffId)
         {
             var model = new CreateStaffSpotCheck();
@@ -71,53 +68,48 @@ namespace AwesomeCare.Admin.Controllers
             model.StaffId = staffId.Value;
             return View(model);
         }
-
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int spotcheckid)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSpotCheckService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
+            var SpotCheck = _StaffSpotCheckService.Get(spotcheckid);
+            var putEntity = new CreateStaffSpotCheck
             {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(logAudit.FirstOrDefault());
+                SpotCheckId = SpotCheck.Result.SpotCheckId,
+                ClientId = SpotCheck.Result.ClientId,
+                Attachment = SpotCheck.Result.Attachment,
+                Date = SpotCheck.Result.Date,
+                Deadline = SpotCheck.Result.Deadline,
+                URL = SpotCheck.Result.URL,
+                OfficerName = SpotCheck.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Remarks = SpotCheck.Result.Remarks,
+                Status = SpotCheck.Result.Status,
+                ActionRequired = SpotCheck.Result.ActionRequired,
+                NextCheckDate = SpotCheck.Result.NextCheckDate,
+                AreaComments = SpotCheck.Result.AreaComments,
+                StaffDressCode = SpotCheck.Result.StaffDressCode,
+                StaffArriveOnTime = SpotCheck.Result.StaffArriveOnTime,
+                StaffId = SpotCheck.Result.StaffId,
+                Details = SpotCheck.Result.Details
+            };
+            return View(putEntity);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int spotCheckId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSpotCheckService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
+            var spotCheck = await _StaffSpotCheckService.Get(spotCheckId);
 
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var json = JsonConvert.SerializeObject(spotCheck);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "StaffSpotCheck.pdf");
             string subject = "StaffSpotCheck";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int spotCheckId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSpotCheckService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
+            var spotCheck = await _StaffSpotCheckService.Get(spotCheckId);
 
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var json = JsonConvert.SerializeObject(spotCheck);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "StaffSpotCheck.pdf");
         }
@@ -147,40 +139,33 @@ namespace AwesomeCare.Admin.Controllers
             return buffer;
         }
 
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int spotCheckId)
         {
             List<GetClient> clientNames = await _clientService.GetClients();
             ViewBag.GetClients = clientNames;
 
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var SpotCheck = _StaffSpotCheckService.GetByRef(Reference);
-            foreach (var item in SpotCheck.Result)
-            {
-                officer.Add(item.OfficerToAct);
-                Ids.Add(item.SpotCheckId);
-            }
+
+            var SpotCheck = _StaffSpotCheckService.Get(spotCheckId);
             var staffs = await _staffService.GetStaffs();
 
             var putEntity = new CreateStaffSpotCheck
             {
-                SpotCheckIds = Ids,
-                Reference = SpotCheck.Result.FirstOrDefault().Reference,
-                ClientId = SpotCheck.Result.FirstOrDefault().ClientId,
-                Attachment = SpotCheck.Result.FirstOrDefault().Attachment,
-                Date = SpotCheck.Result.FirstOrDefault().Date,
-                Deadline = SpotCheck.Result.FirstOrDefault().Deadline,
-                URL = SpotCheck.Result.FirstOrDefault().URL,
-                OfficerToAct = officer,
-                Remarks = SpotCheck.Result.FirstOrDefault().Remarks,
-                Status = SpotCheck.Result.FirstOrDefault().Status,
-                ActionRequired = SpotCheck.Result.FirstOrDefault().ActionRequired,
-                NextCheckDate = SpotCheck.Result.FirstOrDefault().NextCheckDate,
-                AreaComments = SpotCheck.Result.FirstOrDefault().AreaComments,
-                StaffDressCode = SpotCheck.Result.FirstOrDefault().StaffDressCode,
-                StaffArriveOnTime = SpotCheck.Result.FirstOrDefault().StaffArriveOnTime,
-                StaffId = SpotCheck.Result.FirstOrDefault().StaffId,
-                Details = SpotCheck.Result.FirstOrDefault().Details,
+                SpotCheckId = SpotCheck.Result.SpotCheckId,
+                ClientId = SpotCheck.Result.ClientId,
+                Attachment = SpotCheck.Result.Attachment,
+                Date = SpotCheck.Result.Date,
+                Deadline = SpotCheck.Result.Deadline,
+                URL = SpotCheck.Result.URL,
+                OfficerToAct = SpotCheck.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = SpotCheck.Result.Remarks,
+                Status = SpotCheck.Result.Status,
+                ActionRequired = SpotCheck.Result.ActionRequired,
+                NextCheckDate = SpotCheck.Result.NextCheckDate,
+                AreaComments = SpotCheck.Result.AreaComments,
+                StaffDressCode = SpotCheck.Result.StaffDressCode,
+                StaffArriveOnTime = SpotCheck.Result.StaffArriveOnTime,
+                StaffId = SpotCheck.Result.StaffId,
+                Details = SpotCheck.Result.Details,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -205,19 +190,19 @@ namespace AwesomeCare.Admin.Controllers
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.Attachment = pathA;
             }
-            #endregion
-
-            List<PostStaffSpotCheck> posts = new List<PostStaffSpotCheck>();
-            foreach (var item in model.OfficerToAct)
+            else
             {
+                model.Attachment = "No Image";
+            }
+            #endregion
                 var post = new PostStaffSpotCheck();
-                post.Reference = model.Reference;
+                post.SpotCheckId = model.SpotCheckId;
                 post.ClientId = model.ClientId;
                 post.Attachment = model.Attachment;
                 post.Date = model.Date;
                 post.Deadline = model.Deadline;
                 post.URL = model.URL;
-                post.OfficerToAct = item;
+                post.OfficerToAct = model.OfficerToAct.Select(o => new PostSpotCheckOfficerToAct { StaffPersonalInfoId = o, SpotCheckId = model.SpotCheckId }).ToList();
                 post.Remarks = model.Remarks;
                 post.Status = model.Status;
                 post.ActionRequired = model.ActionRequired;
@@ -227,10 +212,8 @@ namespace AwesomeCare.Admin.Controllers
                 post.StaffArriveOnTime = model.StaffArriveOnTime;
                 post.StaffId = model.StaffId;
                 post.Details = model.Details;
-                posts.Add(post);
-            }
 
-            var result = await _StaffSpotCheckService.Create(posts);
+            var result = await _StaffSpotCheckService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Spot Check successfully registered" : "An Error Occurred" });
@@ -263,21 +246,14 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = model.Attachment;
             }
             #endregion
-            List<PutStaffSpotCheck> puts = new List<PutStaffSpotCheck>();
-            int count = model.SpotCheckIds.Count;
-            int i = 0;
-            foreach (var item in model.OfficerToAct)
-            {
                 var put = new PutStaffSpotCheck();
-                if (i < count)
-                    put.SpotCheckId = model.SpotCheckIds[i];
-                put.Reference = model.Reference;
+                put.SpotCheckId = model.SpotCheckId;
                 put.ClientId = model.ClientId;
                 put.Attachment = model.Attachment;
                 put.Date = model.Date;
                 put.Deadline = model.Deadline;
                 put.URL = model.URL;
-                put.OfficerToAct = item;
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutSpotCheckOfficerToAct { StaffPersonalInfoId = o, SpotCheckId = model.SpotCheckId }).ToList();
                 put.Remarks = model.Remarks;
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;
@@ -287,9 +263,8 @@ namespace AwesomeCare.Admin.Controllers
                 put.StaffArriveOnTime = model.StaffArriveOnTime;
                 put.StaffId = model.StaffId;
                 put.Details = model.Details;
-                puts.Add(put);
-            }
-            var entity = await _StaffSpotCheckService.Put(puts);
+
+            var entity = await _StaffSpotCheckService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

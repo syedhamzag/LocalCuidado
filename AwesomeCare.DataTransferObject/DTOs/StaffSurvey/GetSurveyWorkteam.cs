@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.ClientSurvey
+namespace AwesomeCare.DataTransferObject.DTOs.StaffSurvey
 {
     public class GetSurveyWorkteam
     {

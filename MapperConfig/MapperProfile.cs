@@ -58,10 +58,10 @@ using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
 using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
 using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
 using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
-using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
 using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
-using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.DataTransferObject.DTOs.StaffReference;
 using AwesomeCare.DataTransferObject.DTOs.Enotice;
 using AwesomeCare.DataTransferObject.DTOs.Resources;
@@ -855,8 +855,10 @@ namespace MapperConfig
             #endregion
 
             #region Complain Register
-            CreateMap<PutComplainRegister, ClientComplainRegister>();
-            CreateMap<PostComplainRegister, ClientComplainRegister>();
+            CreateMap<PutComplainRegister, ClientComplainRegister>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostComplainRegister, ClientComplainRegister>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<ClientComplainRegister, GetClientComplainRegister>();
             #endregion

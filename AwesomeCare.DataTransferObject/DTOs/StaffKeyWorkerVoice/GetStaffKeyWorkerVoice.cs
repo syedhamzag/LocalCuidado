@@ -1,9 +1,8 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.ClientKeyWorker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice
+namespace AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker
 {
     public class GetStaffKeyWorkerVoice
     {

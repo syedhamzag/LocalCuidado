@@ -1,5 +1,4 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.ClientMedComp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 

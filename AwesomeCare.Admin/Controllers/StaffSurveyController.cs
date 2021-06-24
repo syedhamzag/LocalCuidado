@@ -57,7 +57,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _StaffSurveyService.Get();
             return View(entities);
         }
-
         public async Task<IActionResult> Index(int? staffId)
         {
             var model = new CreateStaffSurvey();
@@ -67,54 +66,51 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int surveyId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSurveyService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
+            var Survey = _StaffSurveyService.Get(surveyId);
+            var putEntity = new CreateStaffSurvey
             {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(logAudit.FirstOrDefault());
+                Attachment = Survey.Result.Attachment,
+                Reference = Survey.Result.Reference,
+                Date = Survey.Result.Date,
+                Deadline = Survey.Result.Deadline,
+                URL = Survey.Result.URL,
+                OfficerName = Survey.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Remarks = Survey.Result.Remarks,
+                Status = Survey.Result.Status,
+                ActionRequired = Survey.Result.ActionRequired,
+                NextCheckDate = Survey.Result.NextCheckDate,
+                WorkteamName = Survey.Result.Workteam.Select(s => s.StaffName).ToList(),
+                StaffId = Survey.Result.StaffId,
+                AccessToPolicies = Survey.Result.AccessToPolicies,
+                AdequateTrainingReceived = Survey.Result.AdequateTrainingReceived,
+                AreaRequiringImprovements = Survey.Result.AreaRequiringImprovements,
+                CompanyManagement = Survey.Result.CompanyManagement,
+                HealthCareServicesSatisfaction = Survey.Result.HealthCareServicesSatisfaction,
+                SupportFromCompany = Survey.Result.SupportFromCompany,
+                WorkEnvironmentSuggestions = Survey.Result.WorkEnvironmentSuggestions,
+                Details = Survey.Result.Details
+            };
+            return View(putEntity);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int surveyId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSurveyService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var survey = await _StaffSurveyService.Get(surveyId);
+            var json = JsonConvert.SerializeObject(survey);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "StaffSurvey.pdf");
             string subject = "StaffSurvey";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int surveyId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSurveyService.GetByRef(Reference);
+            var survey = await _StaffSurveyService.Get(surveyId);
             var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
-
+            var json = JsonConvert.SerializeObject(survey);
+            byte[] byte1 = GeneratePdf(json);
             return File(byte1, "application/pdf", "StaffSurvey.pdf");
         }
         public byte[] GeneratePdf(string paragraphs)
@@ -142,42 +138,33 @@ namespace AwesomeCare.Admin.Controllers
             }
             return buffer;
         }
-
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int surveyId)
         {
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var Survey = _StaffSurveyService.GetByRef(Reference);
-            foreach (var item in Survey.Result)
-            {
-                officer.Add(item.OfficerToAct);
-                Ids.Add(item.StaffSurveyId);
-            }
+            var Survey = _StaffSurveyService.Get(surveyId);
             var staffs = await _staffService.GetStaffs();
 
             var putEntity = new CreateStaffSurvey
             {
-                SurveyIds = Ids,
-                Attachment = Survey.Result.FirstOrDefault().Attachment,
-                Reference = Survey.Result.FirstOrDefault().Reference,
-                Date = Survey.Result.FirstOrDefault().Date,
-                Deadline = Survey.Result.FirstOrDefault().Deadline,
-                URL = Survey.Result.FirstOrDefault().URL,
-                OfficerToAct = officer,
-                Remarks = Survey.Result.FirstOrDefault().Remarks,
-                Status = Survey.Result.FirstOrDefault().Status,
-                ActionRequired = Survey.Result.FirstOrDefault().ActionRequired,
-                NextCheckDate = Survey.Result.FirstOrDefault().NextCheckDate,
-                WorkTeam = Survey.Result.FirstOrDefault().WorkTeam,
-                StaffId = Survey.Result.FirstOrDefault().StaffId,
-                AccessToPolicies = Survey.Result.FirstOrDefault().AccessToPolicies,
-                AdequateTrainingReceived = Survey.Result.FirstOrDefault().AdequateTrainingReceived,
-                AreaRequiringImprovements = Survey.Result.FirstOrDefault().AreaRequiringImprovements,
-                CompanyManagement = Survey.Result.FirstOrDefault().CompanyManagement,
-                HealthCareServicesSatisfaction = Survey.Result.FirstOrDefault().HealthCareServicesSatisfaction,
-                SupportFromCompany = Survey.Result.FirstOrDefault().SupportFromCompany,
-                WorkEnvironmentSuggestions = Survey.Result.FirstOrDefault().WorkEnvironmentSuggestions,
-                Details = Survey.Result.FirstOrDefault().Details,
+                Attachment = Survey.Result.Attachment,
+                Reference = Survey.Result.Reference,
+                Date = Survey.Result.Date,
+                Deadline = Survey.Result.Deadline,
+                URL = Survey.Result.URL,
+                OfficerToAct = Survey.Result.OfficerToAct.Select(s=> s.StaffPersonalInfoId).ToList(),
+                Remarks = Survey.Result.Remarks,
+                Status = Survey.Result.Status,
+                ActionRequired = Survey.Result.ActionRequired,
+                NextCheckDate = Survey.Result.NextCheckDate,
+                WorkTeam = Survey.Result.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffId = Survey.Result.StaffId,
+                AccessToPolicies = Survey.Result.AccessToPolicies,
+                AdequateTrainingReceived = Survey.Result.AdequateTrainingReceived,
+                AreaRequiringImprovements = Survey.Result.AreaRequiringImprovements,
+                CompanyManagement = Survey.Result.CompanyManagement,
+                HealthCareServicesSatisfaction = Survey.Result.HealthCareServicesSatisfaction,
+                SupportFromCompany = Survey.Result.SupportFromCompany,
+                WorkEnvironmentSuggestions = Survey.Result.WorkEnvironmentSuggestions,
+                Details = Survey.Result.Details,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -200,23 +187,24 @@ namespace AwesomeCare.Admin.Controllers
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.Attachment = pathA;
             }
+            else
+            {
+                model.Attachment = "No Image";
+            }
             #endregion
 
-            List<PostStaffSurvey> posts = new List<PostStaffSurvey>();
-            foreach (var item in model.OfficerToAct)
-            {
-                var post = new PostStaffSurvey();
+            var post = new PostStaffSurvey();
                 post.Attachment = model.Attachment;
                 post.Reference = model.Reference;
                 post.Date = model.Date;
                 post.Deadline = model.Deadline;
                 post.URL = model.URL;
-                post.OfficerToAct = item;
+                post.OfficerToAct = model.OfficerToAct.Select(o => new PostSurveyOfficerToAct { StaffPersonalInfoId = o, SurveyId = model.StaffSurveyId }).ToList();
                 post.Remarks = model.Remarks;
                 post.Status = model.Status;
                 post.ActionRequired = model.ActionRequired;
                 post.NextCheckDate = model.NextCheckDate;
-                post.WorkTeam = model.WorkTeam;
+                post.Workteam = model.WorkTeam.Select(o => new PostSurveyWorkteam { StaffPersonalInfoId = o, SurveyId = model.StaffSurveyId }).ToList();
                 post.StaffId = model.StaffId;
                 post.AccessToPolicies = model.AccessToPolicies;
                 post.AdequateTrainingReceived = model.AdequateTrainingReceived;
@@ -226,10 +214,8 @@ namespace AwesomeCare.Admin.Controllers
                 post.SupportFromCompany = model.SupportFromCompany;
                 post.WorkEnvironmentSuggestions = model.WorkEnvironmentSuggestions;
                 post.Details = model.Details;
-                posts.Add(post);
-            }
 
-            var result = await _StaffSurveyService.Create(posts);
+            var result = await _StaffSurveyService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Survey successfully registered" : "An Error Occurred" });
@@ -260,25 +246,19 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = model.Attachment;
             }
             #endregion
-            int count = model.SurveyIds.Count;
-            int i = 0;
-            List<PutStaffSurvey> puts = new List<PutStaffSurvey>();
-            foreach (var item in model.OfficerToAct)
-            {
+
                 var put = new PutStaffSurvey();
-                if (i < count)
-                    put.StaffSurveyId = model.SurveyIds[i];
                 put.Attachment = model.Attachment;
                 put.Reference = model.Reference;
                 put.Date = model.Date;
                 put.Deadline = model.Deadline;
                 put.URL = model.URL;
-                put.OfficerToAct = item;
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutSurveyOfficerToAct { StaffPersonalInfoId = o, SurveyId = model.StaffSurveyId }).ToList();
                 put.Remarks = model.Remarks;
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;
                 put.NextCheckDate = model.NextCheckDate;
-                put.WorkTeam = model.WorkTeam;
+                put.Workteam = model.WorkTeam.Select(o => new PutSurveyWorkteam { StaffPersonalInfoId = o, SurveyId = model.StaffSurveyId }).ToList();
                 put.StaffId = model.StaffId;
                 put.AccessToPolicies = model.AccessToPolicies;
                 put.AdequateTrainingReceived = model.AdequateTrainingReceived;
@@ -288,9 +268,8 @@ namespace AwesomeCare.Admin.Controllers
                 put.SupportFromCompany = model.SupportFromCompany;
                 put.WorkEnvironmentSuggestions = model.WorkEnvironmentSuggestions;
                 put.Details = model.Details;
-                puts.Add(put);
-            }
-            var entity = await _StaffSurveyService.Put(puts);
+
+            var entity = await _StaffSurveyService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

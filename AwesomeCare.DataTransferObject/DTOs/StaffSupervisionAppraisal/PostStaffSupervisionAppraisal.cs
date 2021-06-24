@@ -1,9 +1,8 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.ClientSupervision;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal
+namespace AwesomeCare.DataTransferObject.DTOs.StaffSupervision
 {
     public class PostStaffSupervisionAppraisal
     {

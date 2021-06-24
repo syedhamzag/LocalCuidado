@@ -27,6 +27,7 @@ using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
 using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.DataTransferObject.DTOs.ClientVisit;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -152,7 +153,7 @@ namespace AwesomeCare.Admin.Controllers
                 LessonLearntAndShared = MgtVisit.Result.LessonLearntAndShared,
                 URL = MgtVisit.Result.URL,
                 HowToComplain = MgtVisit.Result.HowToComplain,
-                //OfficerToAct = MgtVisit.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToAct = MgtVisit.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 Remarks = MgtVisit.Result.Remarks,
                 RotCause = MgtVisit.Result.RotCause,
                 Status = MgtVisit.Result.Status,
@@ -164,7 +165,7 @@ namespace AwesomeCare.Admin.Controllers
                 ServiceRecommended = MgtVisit.Result.ServiceRecommended,
                 NextCheckDate = MgtVisit.Result.NextCheckDate,
                 RateServiceRecieving = MgtVisit.Result.RateServiceRecieving,
-                StaffBestSupport = MgtVisit.Result.StaffBestSupport,
+                StaffBestSupport = MgtVisit.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -219,7 +220,7 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.LessonLearntAndShared = model.LessonLearntAndShared;
                 postlog.URL = model.URL;
                 postlog.HowToComplain = model.HowToComplain;
-                //postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostMgtVisitOfficerToAct { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
+                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostVisitOfficerToAct { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
                 postlog.Remarks = model.Remarks;
                 postlog.RotCause = model.RotCause;
                 postlog.Status = model.Status;
@@ -231,8 +232,8 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.ServiceRecommended = model.ServiceRecommended;
                 postlog.NextCheckDate = model.NextCheckDate;
                 postlog.RateServiceRecieving = model.RateServiceRecieving;
-                postlog.StaffBestSupport = model.StaffBestSupport;
-                
+                postlog.StaffName = model.StaffBestSupport.Select(o => new PostVisitStaffName { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
+
             var result = await _clientMgtVisitService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -279,7 +280,7 @@ namespace AwesomeCare.Admin.Controllers
                 put.LessonLearntAndShared = model.LessonLearntAndShared;
                 put.URL = model.URL;
                 put.HowToComplain = model.HowToComplain;
-                //put.OfficerToAct = model.OfficerToAct.Select(o => new PutMgtVisitOfficerToAct { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutVisitOfficerToAct { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
                 put.Remarks = model.Remarks;
                 put.RotCause = model.RotCause;
                 put.Status = model.Status;
@@ -291,7 +292,7 @@ namespace AwesomeCare.Admin.Controllers
                 put.ServiceRecommended = model.ServiceRecommended;
                 put.NextCheckDate = model.NextCheckDate;
                 put.RateServiceRecieving = model.RateServiceRecieving;
-                put.StaffBestSupport = model.StaffBestSupport;
+                put.StaffName = model.StaffBestSupport.Select(o => new PutVisitStaffName { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
             var json = JsonConvert.SerializeObject(put);
             var entity = await _clientMgtVisitService.Put(put);
             SetOperationStatus(new Models.OperationStatus

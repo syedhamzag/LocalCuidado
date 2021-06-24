@@ -27,6 +27,7 @@ using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
 using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.DataTransferObject.DTOs.ClientService;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -202,13 +203,13 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Details = model.Details;
                 postlog.URL = model.URL;
                 postlog.Incident = model.Incident;
-                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostServiceOfficerToAct { StaffPersonalInfoId = o, WatchId = model.WatchId }).ToList();
+                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostServiceOfficerToAct { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
                 postlog.Remarks = model.Remarks;
                 postlog.Observation = model.Observation;
                 postlog.Status = model.Status;
                 postlog.ActionRequired = model.ActionRequired;
-                postlog.PersonInvolved = model.PersonInvolved;
-                
+                postlog.StaffName = model.PersonInvolved.Select(o => new PostServiceStaffName { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
+
             var result = await _clientServiceWatchService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -256,12 +257,12 @@ namespace AwesomeCare.Admin.Controllers
                 put.Details = model.Details;
                 put.URL = model.URL;
                 put.Incident = model.Incident;
-                put.OfficerToAct = model.OfficerToAct.Select(o => new PutServiceOfficerToAct { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutServiceOfficerToAct { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
                 put.Remarks = model.Remarks;
                 put.Observation = model.Observation;
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;
-                put.PersonInvolved = model.PersonInvolved;
+                put.StaffName = model.PersonInvolved.Select(o => new PutServiceStaffName { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
             var json = JsonConvert.SerializeObject(put);
             var entity = await _clientServiceWatchService.Put(put);
             SetOperationStatus(new Models.OperationStatus
