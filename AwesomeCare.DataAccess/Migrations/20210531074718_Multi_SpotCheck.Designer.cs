@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    [Migration("20210531074722_MultiSurvey")]
-    partial class MultiSurvey
+    [Migration("20210531074718_Multi_SpotCheck")]
+    partial class Multi_SpotCheck
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

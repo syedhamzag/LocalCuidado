@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class MultiKeyWorker : Migration
+    public partial class Multi_KeyWorker : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_KeyWorkerOfficerToAct",
+                name: "tbl_KeyWorker_OfficerToAct",
                 columns: table => new
                 {
                     KeyWorkerOfficerToActId = table.Column<int>(nullable: false)
@@ -19,15 +19,15 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_KeyWorkerOfficerToAct", x => x.KeyWorkerOfficerToActId);
+                    table.PrimaryKey("PK_tbl_KeyWorker_OfficerToAct", x => x.KeyWorkerOfficerToActId);
                     table.ForeignKey(
-                        name: "FK_tbl_KeyWorkerOfficerToAct_tbl_ClientKeyWorker_KeyWorkerId",
+                        name: "FK_tbl_KeyWorker_OfficerToAct_tbl_ClientKeyWorker_KeyWorkerId",
                         column: x => x.KeyWorkerId,
                         principalTable: "tbl_ClientKeyWorker",
                         principalColumn: "KeyWorkerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_KeyWorkerOfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_KeyWorker_OfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -35,7 +35,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_KeyWorkerStaffName",
+                name: "tbl_KeyWorker_StaffName",
                 columns: table => new
                 {
                     KeyWorkerStaffNameId = table.Column<int>(nullable: false)
@@ -47,13 +47,13 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_tbl_KeyWorkerStaffInvolved", x => x.KeyWorkerStaffNameId);
                     table.ForeignKey(
-                        name: "FK_tbl_KeyWorkerStaffName_tbl_ClientKeyWorker_KeyWorkerId",
+                        name: "FK_tbl_KeyWorker_StaffName_tbl_ClientKeyWorker_KeyWorkerId",
                         column: x => x.KeyWorkerId,
                         principalTable: "tbl_ClientKeyWorker",
                         principalColumn: "KeyWorkerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_KeyWorkerStaffName_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_KeyWorker_StaffName_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -62,22 +62,22 @@ namespace AwesomeCare.DataAccess.Migrations
 
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_KeyWorkerOfficerToAct_KeyWorkerId",
-                table: "tbl_KeyWorkerOfficerToAct",
+                name: "IX_tbl_KeyWorker_OfficerToAct_KeyWorkerId",
+                table: "tbl_KeyWorker_OfficerToAct",
                 column: "KeyWorkerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_KeyWorkerStaffName_KeyWorkerId",
-                table: "tbl_KeyWorkerStaffName",
+                name: "IX_tbl_KeyWorker_StaffName_KeyWorkerId",
+                table: "tbl_KeyWorker_StaffName",
                 column: "KeyWorkerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_KeyWorkerOfficerToAct");
+                name: "tbl_KeyWorker_OfficerToAct");
             migrationBuilder.DropTable(
-                name: "tbl_KeyWorkerStaffName");
+                name: "tbl_KeyWorker_StaffName");
         }
     }
 }

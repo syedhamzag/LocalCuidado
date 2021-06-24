@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class MultiVisit : Migration
+    public partial class Multi_Visit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_VisitOfficerToAct",
+                name: "tbl_Visit_OfficerToAct",
                 columns: table => new
                 {
                     VisitOfficerToActId = table.Column<int>(nullable: false)
@@ -19,15 +19,15 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_VisitOfficerToAct", x => x.VisitOfficerToActId);
+                    table.PrimaryKey("PK_tbl_Visit_OfficerToAct", x => x.VisitOfficerToActId);
                     table.ForeignKey(
-                        name: "FK_tbl_VisitOfficerToAct_tbl_ClientMgtVisit_BloodRecordId",
+                        name: "FK_tbl_Visit_OfficerToAct_tbl_Client_MgtVisit_BloodRecordId",
                         column: x => x.BloodRecordId,
-                        principalTable: "tbl_ClientMgtVisit",
+                        principalTable: "tbl_Client_MgtVisit",
                         principalColumn: "BloodRecordId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_VisitOfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_Visit_OfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -35,7 +35,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_VisitStaffName",
+                name: "tbl_Visit_StaffName",
                 columns: table => new
                 {
                     VisitStaffNameId = table.Column<int>(nullable: false)
@@ -47,13 +47,13 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_tbl_VisitStaffBestSupport", x => x.VisitStaffNameId);
                     table.ForeignKey(
-                        name: "FK_tbl_VisitStaffName_tbl_ClientMgtVisit_BloodRecordId",
+                        name: "FK_tbl_Visit_StaffName_tbl_Client_MgtVisit_BloodRecordId",
                         column: x => x.BloodRecordId,
-                        principalTable: "tbl_ClientMgtVisit",
+                        principalTable: "tbl_Client_MgtVisit",
                         principalColumn: "BloodRecordId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_VisitStaffName_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_Visit_StaffName_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -61,22 +61,22 @@ namespace AwesomeCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_VisitOfficerToAct_BloodRecordId",
-                table: "tbl_VisitOfficerToAct",
+                name: "IX_tbl_Visit_OfficerToAct_BloodRecordId",
+                table: "tbl_Visit_OfficerToAct",
                 column: "BloodRecordId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_VisitStaffBestSupport_BloodRecordId",
-                table: "tbl_VisitStaffBestSupport",
+                name: "IX_tbl_Visit_StaffName_BloodRecordId",
+                table: "tbl_Visit_StaffName",
                 column: "BloodRecordId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_VisitOfficerToAct");
+                name: "tbl_Visit_OfficerToAct");
             migrationBuilder.DropTable(
-                name: "tbl_VisitStaffName");
+                name: "tbl_Visit_StaffName");
         }
     }
 }

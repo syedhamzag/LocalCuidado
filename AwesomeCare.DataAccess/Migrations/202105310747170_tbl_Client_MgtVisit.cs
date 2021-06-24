@@ -4,12 +4,12 @@ using System;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class tbl_ClientMgtVisit : Migration
+    public partial class tbl_Client_MgtVisit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_ClientMgtVisit",
+                name: "tbl_Client_MgtVisit",
                 columns: table => new
                 {
                     VisitId = table.Column<int>(nullable: false)
@@ -39,24 +39,24 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_ClientMgtVisit", x => x.VisitId);
+                    table.PrimaryKey("PK_tbl_Client_MgtVisit", x => x.VisitId);
                     table.ForeignKey(
-                        name: "FK_tbl_ClientMgtVisit_tbl_Client_ClientId",
+                        name: "FK_tbl_Client_MgtVisit_tbl_Client_ClientId",
                         column: x => x.ClientId,
                         principalTable: "tbl_Client",
                         principalColumn: "ClientId",
                         onDelete: ReferentialAction.Cascade);
                 });
                 migrationBuilder.CreateIndex(
-                    name: "IX_tbl_ClientMgtVisit_VisitId",
-                    table: "tbl_ClientMgtVisit",
+                    name: "IX_tbl_Client_MgtVisit_VisitId",
+                    table: "tbl_Client_MgtVisit",
                     column: "VisitId");
                 }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_ClientMgtVisit");
+                name: "tbl_Client_MgtVisit");
         }
     }
 }

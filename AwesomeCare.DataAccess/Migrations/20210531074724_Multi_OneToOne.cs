@@ -4,30 +4,30 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class MultiAdlObs : Migration
+    public partial class Multi_OneToOne : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_AdlObsOfficerToAct",
+                name: "tbl_OneToOne_OfficerToAct",
                 columns: table => new
                 {
-                    AdlObsOfficerToActId = table.Column<int>(nullable: false)
+                    OneToOneOfficerToActId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     StaffPersonalInfoId = table.Column<int>(nullable: false),
-                    ObservationID = table.Column<int>(nullable: false)
+                    OneToOneId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_AdlObsOfficerToAct", x => x.AdlObsOfficerToActId);
+                    table.PrimaryKey("PK_tbl_OneToOne_OfficerToAct", x => x.OneToOneOfficerToActId);
                     table.ForeignKey(
-                        name: "FK_tbl_AdlObsOfficerToAct_tbl_ClientAdlObs_ObservationID",
-                        column: x => x.ObservationID,
-                        principalTable: "tbl_ClientAdlObs",
-                        principalColumn: "ObservationID",
+                        name: "FK_tbl_OneToOne_OfficerToAct_tbl_ClientOneToOne_OneToOneId",
+                        column: x => x.OneToOneId,
+                        principalTable: "tbl_ClientOneToOne",
+                        principalColumn: "OneToOneId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_AdlObsOfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_OneToOne_OfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -36,15 +36,16 @@ namespace AwesomeCare.DataAccess.Migrations
 
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_AdlObsOfficerToAct_ObservationID",
-                table: "tbl_AdlObsOfficerToAct",
-                column: "ObservationID");
+                name: "IX_tbl_OneToOne_OfficerToAct_OneToOneId",
+                table: "tbl_OneToOne_OfficerToAct",
+                column: "OneToOneId");
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_AdlObsOfficerToAct");
+                name: "tbl_OneToOne_OfficerToAct");
         }
     }
 }

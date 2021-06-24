@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class MultiSupervision : Migration
+    public partial class Multi_Supervision : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_SupervisionOfficerToAct",
+                name: "tbl_Supervision_OfficerToAct",
                 columns: table => new
                 {
                     SupervisionOfficerToActId = table.Column<int>(nullable: false)
@@ -19,15 +19,15 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_SupervisionOfficerToAct", x => x.SupervisionOfficerToActId);
+                    table.PrimaryKey("PK_tbl_Supervision_OfficerToAct", x => x.SupervisionOfficerToActId);
                     table.ForeignKey(
-                        name: "FK_tbl_SupervisionOfficerToAct_tbl_ClientSupervision_StaffSupervisionAppraisalId",
+                        name: "FK_tbl_Supervision_OfficerToAct_tbl_ClientSupervision_StaffSupervisionAppraisalId",
                         column: x => x.StaffSupervisionAppraisalId,
                         principalTable: "tbl_ClientSupervision",
                         principalColumn: "StaffSupervisionAppraisalId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_SupervisionOfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_Supervision_OfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -35,7 +35,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_SupervisionStaffName",
+                name: "tbl_Supervision_StaffName",
                 columns: table => new
                 {
                     SupervisionStaffNameId = table.Column<int>(nullable: false)
@@ -47,13 +47,13 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_tbl_SupervisionStaffInvolved", x => x.SupervisionStaffNameId);
                     table.ForeignKey(
-                        name: "FK_tbl_SupervisionStaffName_tbl_ClientSupervision_StaffSupervisionAppraisalId",
+                        name: "FK_tbl_Supervision_StaffName_tbl_ClientSupervision_StaffSupervisionAppraisalId",
                         column: x => x.StaffSupervisionAppraisalId,
                         principalTable: "tbl_ClientSupervision",
                         principalColumn: "StaffSupervisionAppraisalId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_SupervisionStaffName_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_Supervision_StaffName_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -61,22 +61,22 @@ namespace AwesomeCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_SupervisionOfficerToAct_StaffSupervisionAppraisalId",
-                table: "tbl_SupervisionOfficerToAct",
+                name: "IX_tbl_Supervision_OfficerToAct_StaffSupervisionAppraisalId",
+                table: "tbl_Supervision_OfficerToAct",
                 column: "StaffSupervisionAppraisalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_SupervisionStaffName_StaffSupervisionAppraisalId",
-                table: "tbl_SupervisionStaffName",
+                name: "IX_tbl_Supervision_StaffName_StaffSupervisionAppraisalId",
+                table: "tbl_Supervision_StaffName",
                 column: "StaffSupervisionAppraisalId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_SupervisionOfficerToAct");
+                name: "tbl_Supervision_OfficerToAct");
             migrationBuilder.DropTable(
-                name: "tbl_SupervisionStaffName");
+                name: "tbl_Supervision_StaffName");
         }
     }
 }

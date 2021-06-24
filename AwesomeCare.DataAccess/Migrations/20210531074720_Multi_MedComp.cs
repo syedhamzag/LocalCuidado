@@ -4,48 +4,46 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class MultiOneToOne : Migration
+    public partial class Multi_MedComp : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_OneToOneOfficerToAct",
+                name: "tbl_MedComp_OfficerToAct",
                 columns: table => new
                 {
-                    OneToOneOfficerToActId = table.Column<int>(nullable: false)
+                    MedCompOfficerToActId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     StaffPersonalInfoId = table.Column<int>(nullable: false),
-                    OneToOneId = table.Column<int>(nullable: false)
+                    MedCompId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_OneToOneOfficerToAct", x => x.OneToOneOfficerToActId);
+                    table.PrimaryKey("PK_tbl_MedComp_OfficerToAct", x => x.MedCompOfficerToActId);
                     table.ForeignKey(
-                        name: "FK_tbl_OneToOneOfficerToAct_tbl_ClientOneToOne_OneToOneId",
-                        column: x => x.OneToOneId,
-                        principalTable: "tbl_ClientOneToOne",
-                        principalColumn: "OneToOneId",
+                        name: "FK_tbl_MedComp_OfficerToAct_tbl_ClientMedComp_MedCompId",
+                        column: x => x.MedCompId,
+                        principalTable: "tbl_ClientMedComp",
+                        principalColumn: "MedCompId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_OneToOneOfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_MedComp_OfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_OneToOneOfficerToAct_OneToOneId",
-                table: "tbl_OneToOneOfficerToAct",
-                column: "OneToOneId");
-
+                name: "IX_tbl_MedComp_OfficerToAct_MedCompId",
+                table: "tbl_MedComp_OfficerToAct",
+                column: "MedCompId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_OneToOneOfficerToAct");
+                name: "tbl_MedComp_OfficerToAct");
         }
     }
 }

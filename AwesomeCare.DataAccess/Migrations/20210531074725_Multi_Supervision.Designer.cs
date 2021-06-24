@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    [Migration("20210531074725_MultiSupervision")]
-    partial class MultiSupervision
+    [Migration("20210531074725_Multi_Supervision")]
+    partial class Multi_Supervision
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

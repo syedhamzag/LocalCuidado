@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    [Migration("20210531074717_MultiVisit")]
-    partial class MultiVisit
+    [Migration("20210531074719_Multi_AdlObs")]
+    partial class Multi_AdlObs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

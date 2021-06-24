@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class MultiSurvey : Migration
+    public partial class Multi_Survey : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "tbl_SurveyOfficerToAct",
+                name: "tbl_Survey_OfficerToAct",
                 columns: table => new
                 {
                     SurveyOfficerToActId = table.Column<int>(nullable: false)
@@ -19,15 +19,15 @@ namespace AwesomeCare.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tbl_SurveyOfficerToAct", x => x.SurveyOfficerToActId);
+                    table.PrimaryKey("PK_tbl_Survey_OfficerToAct", x => x.SurveyOfficerToActId);
                     table.ForeignKey(
-                        name: "FK_tbl_SurveyOfficerToAct_tbl_ClientSurvey_StaffSurveyId",
+                        name: "FK_tbl_Survey_OfficerToAct_tbl_ClientSurvey_StaffSurveyId",
                         column: x => x.StaffSurveyId,
                         principalTable: "tbl_ClientSurvey",
                         principalColumn: "StaffSurveyId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_SurveyOfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_Survey_OfficerToAct_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -35,7 +35,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "tbl_SurveyStaffName",
+                name: "tbl_Survey_StaffName",
                 columns: table => new
                 {
                     SurveyStaffNameId = table.Column<int>(nullable: false)
@@ -47,13 +47,13 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_tbl_SurveyStaffInvolved", x => x.SurveyStaffNameId);
                     table.ForeignKey(
-                        name: "FK_tbl_SurveyStaffName_tbl_ClientSurvey_StaffSurveyId",
+                        name: "FK_tbl_Survey_StaffName_tbl_ClientSurvey_StaffSurveyId",
                         column: x => x.StaffSurveyId,
                         principalTable: "tbl_ClientSurvey",
                         principalColumn: "StaffSurveyId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_tbl_SurveyStaffName_tbl_StaffPersonalInfo_StaffPersonalInfoId",
+                        name: "FK_tbl_Survey_StaffName_tbl_StaffPersonalInfo_StaffPersonalInfoId",
                         column: x => x.StaffPersonalInfoId,
                         principalTable: "tbl_StaffPersonalInfo",
                         principalColumn: "StaffPersonalInfoId",
@@ -61,22 +61,22 @@ namespace AwesomeCare.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_SurveyOfficerToAct_StaffSurveyId",
-                table: "tbl_SurveyOfficerToAct",
+                name: "IX_tbl_Survey_OfficerToAct_StaffSurveyId",
+                table: "tbl_Survey_OfficerToAct",
                 column: "StaffSurveyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_tbl_SurveyStaffName_StaffSurveyId",
-                table: "tbl_SurveyStaffName",
+                name: "IX_tbl_Survey_StaffName_StaffSurveyId",
+                table: "tbl_Survey_StaffName",
                 column: "StaffSurveyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tbl_SurveyOfficerToAct");
+                name: "tbl_Survey_OfficerToAct");
             migrationBuilder.DropTable(
-                name: "tbl_SurveyStaffName");
+                name: "tbl_Survey_StaffName");
         }
     }
 }
