@@ -15,9 +15,9 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
+                            <th>Deadline</th>
+                            <th>Clinet</th>
                             <th>Status</th>
-                            <th>Remarks</th>
 
                             <th></th>
                         </tr>
@@ -25,25 +25,27 @@
                     <tbody>
                         @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
                         {
-                            <tr>
-                                <td>@item.index </td>
-                                <td>@item.data.Date</td>
-                                <td>@item.data.Status</td>
-                                <td>@item.data.Remarks</td>
+                        <tr>
+                            <td>@item.index </td>
+                            <td>@item.data.Deadline</td>
+                            <td>@item.data.ClientName</td>
+                            <td>@item.data.StatusName</td>
 
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @Html.ActionLink("Edit", "Edit", "ClientWoundCare", new { WoundCareId = item.data.WoundCareId }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("View", "View", "ClientWoundCare", new { woundId = item.data.WoundCareId }, new { @class = "dropdown-item" })
+                                        <button type="button" class="dropdown-item" id="@item.data.WoundCareId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
+                                            Email
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "ClientWoundCare", new { WoundCareID = item.data.WoundCareId }, new { @class = "dropdown-item" })
-                                            <button type="button" class="dropdown-item" id="@item.data.WoundCareId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
-                                                Email
-                                            </button>
-                                        </div>
+                                        @Html.ActionLink("Download", "Download", "ClientWoundCare", new { woundId = item.data.WoundCareId }, new { @class = "dropdown-item" })
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         }
 
 
@@ -70,7 +72,7 @@
                             <option value="smtp.live.com">Hotmail</option>
                             <option value="smtp.mail.yahoo.com">Yahoo</option>
                         </select>
-                        <input type="text" id="WoundCareId" name="WoundCareId" />
+                        <input type="hidden" id="WoundCareId" name="woundId" />
                         <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                             <label class="control-label">Your Email</label>
                             <input type="text" name="sender" class="form-control" />

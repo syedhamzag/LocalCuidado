@@ -90,8 +90,33 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int bloodId)
         {
-            var BloodCoagulationRecord = await _clientBloodCoagulationRecordService.Get(bloodId);
-            return View(BloodCoagulationRecord);
+            var BloodCoagulationRecord = _clientBloodCoagulationRecordService.Get(bloodId);
+            var putEntity = new CreateClientBloodCoagulationRecord
+            {
+                BloodRecordId = BloodCoagulationRecord.Result.BloodRecordId,
+                Reference = BloodCoagulationRecord.Result.Reference,
+                ClientId = BloodCoagulationRecord.Result.ClientId,
+                Date = BloodCoagulationRecord.Result.Date,
+                Time = BloodCoagulationRecord.Result.Time,
+                Indication = BloodCoagulationRecord.Result.Indication,
+                TargetINR = BloodCoagulationRecord.Result.TargetINR,
+                StartDate = BloodCoagulationRecord.Result.StartDate,
+                CurrentDose = BloodCoagulationRecord.Result.CurrentDose,
+                INR = BloodCoagulationRecord.Result.INR,
+                NewDose = BloodCoagulationRecord.Result.NewDose,
+                NewINR = BloodCoagulationRecord.Result.NewINR,
+                BloodStatus = BloodCoagulationRecord.Result.BloodStatus,
+                Comment = BloodCoagulationRecord.Result.Comment,
+                Staff_Name = BloodCoagulationRecord.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = BloodCoagulationRecord.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponce = BloodCoagulationRecord.Result.PhysicianResponce,
+                OfficerToActName = BloodCoagulationRecord.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = BloodCoagulationRecord.Result.Deadline,
+                Remark = BloodCoagulationRecord.Result.Remark,
+                Status = BloodCoagulationRecord.Result.Status,
+                TargetINRAttach = BloodCoagulationRecord.Result.TargetINRAttach,
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int bloodId,string sender,string password, string recipient, string Smtp)
         {

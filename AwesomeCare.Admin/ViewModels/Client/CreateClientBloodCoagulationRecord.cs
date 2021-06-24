@@ -62,12 +62,15 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Comment { get; set; }
         [Required]
         public List<int> StaffName { get; set; }
+        public List<string> Staff_Name { get; set; }
         [Required]
         public List<int> Physician { get; set; }
+        public List<string> PhysicianName { get; set; }
         [Required]
         public string PhysicianResponce { get; set; }
         [Required]
         public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerToActName { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]
