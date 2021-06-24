@@ -1,168 +1,199 @@
-﻿@model AwesomeCare.DataTransferObject.DTOs.ClientLogAudit.GetClientLogAudit
-
+﻿@using AwesomeCare.Admin.ViewModels.ClientLogAudit;
+@model CreateClientLogAudit
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "View Client Log Audit";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+                <h2></h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="Edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <input type="hidden" asp-for="LogAuditId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">DATE</label>
+                                    <label class="control-label">@Model.Date</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">NEXT DUE DATE</label>
+                                    <label class="control-label">@Model.NextDueDate</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">DEADLINE</label>
+                                    <label class="control-label">@Model.Deadline</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <label class="control-label">@Model.Reference</label>
+
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Action Recommended</label>
+                                    <label class="control-label">@Model.ActionRecommended</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Action Taken</label>
+                                    <label class="control-label">@Model.ActionTaken</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Officer to Take Action</label>
+                                    <label class="control-label">@Model.OfficerName.ToList()</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Status</label>
+                                    <label class="control-label">@Model.Status</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Is there a Repeat of Incident</label>
+                                    <label class="control-label">@Model.RepeatOfIncident</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name of Auditor</label>
+                                    <label class="control-label">@Model.NameOfAuditor</label>
+
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Rot Cause</label>
+                                    <label class="control-label">@Model.RotCause</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Remark/Closing Comment</label>
+                                    <label class="control-label">@Model.Remarks</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Log URL</label>
+                                    <label class="control-label">@Model.LogURL</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Is care given is inline with care plan expectations</label>
+                                    <label class="control-label">@Model.IsCareExpected</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">If care given is difference from expected, please give staff name and date of incident</label>
+                                    <label class="control-label">@Model.IsCareDifference</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Are documentation properly done including use of appropriate pen and clarity</label>
+                                    <label class="control-label">@Model.ProperDocumentation</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">If no to proper documentation and use of pen, please give name of staff and date of incidents</label>
+                                    <label class="control-label">@Model.ImproperDocumentation</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">How well are communication from outgoing staff to incoming staff picked from the note</label>
+                                    <label class="control-label">@Model.Communication</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Do you think service users needs are being met?</label>
+                                    <label class="control-label">@Model.ThinkingServiceUsers</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Do you think staff understand Safety, Caring, Responsiveness, Dignity and Respect?</label>
+                                    <label class="control-label">@Model.ThinkingStaff</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Do you think this staff should be stopped immidiately</label>
+                                    <label class="control-label">@Model.ThinkingStaffStop</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Observations</label>
+                                    <label class="control-label">@Model.Observations</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Lesson Learnt and Shared</label>
+                                    <label class="control-label">@Model.LessonLearntAndShared</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Evidence<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <img src="@Model.EvidenceOfActionTaken" alt="image" />
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Attach<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <img src="@Model.EvidenceFilePath" alt="image" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 }
 
-<div>
-    <h4>Client Log Audit</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.LogAuditId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LogAuditId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Reference)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Reference)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ClientId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ClientId)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.NextDueDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.NextDueDate)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsCareExpected)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsCareExpected)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsCareDifference)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsCareDifference)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ProperDocumentation)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ProperDocumentation)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ImproperDocumentation)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ImproperDocumentation)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Communication)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Communication)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ThinkingServiceUsers)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ThinkingServiceUsers)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ThinkingStaff)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ThinkingStaff)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ThinkingStaffStop)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ThinkingStaffStop)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Observations)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Observations)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.NameOfAuditor)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.NameOfAuditor)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ActionRecommended)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ActionRecommended)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.ActionTaken)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ActionTaken)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.EvidenceOfActionTaken)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.EvidenceOfActionTaken)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Deadline)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Deadline)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Remarks)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Remarks)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.RepeatOfIncident)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.RepeatOfIncident)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.RotCause)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.RotCause)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LessonLearntAndShared)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LessonLearntAndShared)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LogURL)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LogURL)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.EvidenceFilePath)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.EvidenceFilePath)
-        </dd>
-    </dl>
-</div>
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}
+

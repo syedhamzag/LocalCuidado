@@ -1,0 +1,151 @@
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+@model CreateComplainRegister
+@{
+    ViewData["Title"] = "Client - View Complain Register";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<h4></h4>
+<hr />
+<div class="row">
+    <form asp-route="Edit" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-xs-8 col-sm-8 col-md-8">
+                <input type="hidden" asp-for="ComplainId" />
+                <input type="hidden" asp-for="ClientId" />
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="LINK" class="control-label"></label>
+                        <label class="control-label">@Model.LINK</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">IRF-NUMBER</label>
+                        <label class="control-label">@Model.IRFNUMBER</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">INCIDENT DATE</label>
+                        <label class="control-label">@Model.INCIDENTDATE</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">DATE RECIEVED</label>
+                        <label class="control-label">@Model.DATERECIEVED</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">DATE OF ACKNOWLEDGEMENT</label>
+                        <label class="control-label">@Model.DATEOFACKNOWLEDGEMENT</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">OFFICER TO ACT</label>
+                        <label class="control-label">@Model.OfficerName.ToList()</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">SOURCE OF COMPLAINTS</label>
+                        <label class="control-label">@Model.SOURCEOFCOMPLAINTS</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">COMPLAINANT CONTACT</label>
+                        <label class="control-label">@Model.COMPLAINANTCONTACT</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">STAFF</label>
+                        <label class="control-label">@Model.Staff_Name.ToList()</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">FINAL RESPONSE TO FAMILY</label>
+                        <label class="control-label">@Model.FINALRESPONSETOFAMILY</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">DUE DATE</label>
+                        <label class="control-label">@Model.DUEDATE</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">LETTER TO STAFF</label>
+                        <label class="control-label">@Model.LETTERTOSTAFF</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">ROOT CAUSE</label>
+                        <label class="control-label">@Model.ROOTCAUSE</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="Reference" class="control-label"></label>
+                        <label class="control-label">@Model.Reference</label>
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">Status</label>
+                        <label class="control-label">@Model.StatusId</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                        <label asp-for="REMARK" class="control-label"></label>
+                        <label class="control-label">@Model.REMARK</label>
+                    </div>
+                </div>HI
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-12">
+                        <label class="control-label">CONCERNS RAISED</label>
+                        <label class="control-label">@Model.CONCERNSRAISED</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-12">
+                        <label class="control-label">INVESTIGATION OUTCOME</label>
+                        <label class="control-label">@Model.INVESTIGATIONOUTCOME</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-12">
+                        <label class="control-label">ACTION TAKEN</label>
+                        <label class="control-label">@Model.ACTIONTAKEN</label>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <div class="card">
+                    <div class="header">
+                        <h2>Evidence<small></small></h2>
+                    </div>
+                    <div class="body">
+                        <img src="@Model.EvidenceFilePath" alt="image" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                        <a asp-action="Complain" asp-route-clientId="@Model.ClientId" asp-controller="Client" class="btn btn-primary pull-left">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script>
+        $(document).ready(function () {
+             $('a[href="#@Model.ActiveTab"]').tab('show');
+
+        })
+    </script>
+}
