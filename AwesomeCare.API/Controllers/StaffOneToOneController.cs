@@ -23,11 +23,17 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffOneToOne> _StaffOneToOneRepository;
-        
-        public StaffOneToOneController(AwesomeCareDbContext dbContext, IGenericRepository<StaffOneToOne> StaffOneToOneRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<OneToOneOfficerToAct> _officertoactRepository;
+
+        public StaffOneToOneController(AwesomeCareDbContext dbContext, IGenericRepository<StaffOneToOne> StaffOneToOneRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<OneToOneOfficerToAct> officertoactRepository)
         {
             _StaffOneToOneRepository = StaffOneToOneRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region StaffOneToOne
         /// <summary>
@@ -68,13 +74,28 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutStaffOneToOne model)
+        public async Task<IActionResult> Put([FromBody] PutStaffOneToOne models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffOneToOne = Mapper.Map<StaffOneToOne>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<OneToOneOfficerToAct>();
+                var filterentity = entity.Where(c => c.OneToOneId == model.OneToOneId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            var result = _dbContext.SaveChanges();
+            var StaffOneToOne = Mapper.Map<StaffOneToOne>(models);
             await _StaffOneToOneRepository.UpdateEntity(StaffOneToOne);
             return Ok();
 
@@ -99,6 +120,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.OneToOneId == id
                                            select new GetStaffOneToOne
                                            {
+                                               OneToOneId = c.OneToOneId,
+                                               Reference = c.Reference,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
                                                Date = c.Date,
@@ -114,7 +137,16 @@ namespace AwesomeCare.API.Controllers
                                                StaffConclusion = c.StaffConclusion,
                                                StaffId = c.StaffId,
                                                StaffImprovedInAreas = c.StaffImprovedInAreas,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.OneToOneId == c.OneToOneId
+                                                               select new GetOneToOneOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffOneToOne);

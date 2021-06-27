@@ -23,11 +23,17 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffAdlObs> _StaffAdlObsRepository;
-        
-        public StaffAdlObsController(AwesomeCareDbContext dbContext, IGenericRepository<StaffAdlObs> StaffAdlObsRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<AdlObsOfficerToAct> _officertoactRepository;
+
+        public StaffAdlObsController(AwesomeCareDbContext dbContext, IGenericRepository<StaffAdlObs> StaffAdlObsRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<AdlObsOfficerToAct> officertoactRepository)
         {
             _StaffAdlObsRepository = StaffAdlObsRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region StaffAdlObs
         /// <summary>
@@ -68,13 +74,28 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutStaffAdlObs model)
+        public async Task<IActionResult> Put([FromBody] PutStaffAdlObs models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffAdlObs = Mapper.Map<StaffAdlObs>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<AdlObsOfficerToAct>();
+                var filterentity = entity.Where(c => c.ObservationId == model.ObservationId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            var result = _dbContext.SaveChanges();
+            var StaffAdlObs = Mapper.Map<StaffAdlObs>(models);
             await _StaffAdlObsRepository.UpdateEntity(StaffAdlObs);
             return Ok();
 
@@ -99,6 +120,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.ObservationID == id
                                            select new GetStaffAdlObs
                                            {
+                                               ObservationID = c.ObservationID,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -114,7 +137,16 @@ namespace AwesomeCare.API.Controllers
                                                UnderstandingofControl = c.UnderstandingofControl,
                                                UnderstandingofEquipment = c.UnderstandingofEquipment,
                                                UnderstandingofService = c.UnderstandingofService,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.ObservationId == c.ObservationID
+                                                               select new GetAdlObsOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffAdlObs);

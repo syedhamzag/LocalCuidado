@@ -32,7 +32,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Details)
                .HasColumnName("Details")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.AdequateTrainingReceived)
@@ -57,17 +56,14 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.WorkEnvironmentSuggestions)
                .HasColumnName("WorkEnvironmentSuggestions")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.AreaRequiringImprovements)
                .HasColumnName("AreaRequiringImprovements")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ActionRequired)
                .HasColumnName("ActionRequired")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Deadline)
@@ -80,12 +76,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
                .HasColumnName("URL")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -94,6 +88,16 @@ namespace AwesomeCare.Model.Models.Map
             #endregion
 
             #region Relationship
+
+            builder.HasMany<SurveyWorkteam>(p => p.Workteam)
+                .WithOne(p => p.Survey)
+                .HasForeignKey(p => p.StaffSurveyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<SurveyOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.Survey)
+                .HasForeignKey(p => p.StaffSurveyId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

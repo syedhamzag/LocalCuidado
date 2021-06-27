@@ -90,8 +90,29 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int pulseId)
         {
-            var PulseRate = await _clientPulseRateService.Get(pulseId);
-            return View(PulseRate);
+            var PulseRate =  _clientPulseRateService.Get(pulseId);
+            var putEntity = new CreateClientPulseRate
+            {
+                PulseRateId = PulseRate.Result.PulseRateId,
+                ClientId = PulseRate.Result.ClientId,
+                Date = PulseRate.Result.Date,
+                Time = PulseRate.Result.Time,
+                TargetPulse = PulseRate.Result.TargetPulse,
+                CurrentPulse = PulseRate.Result.CurrentPulse,
+                SeeChart = PulseRate.Result.SeeChart,
+                Comment = PulseRate.Result.Comment,
+                Staff_Name = PulseRate.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = PulseRate.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = PulseRate.Result.PhysicianResponse,
+                OfficerName = PulseRate.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = PulseRate.Result.Deadline,
+                Remarks = PulseRate.Result.Remarks,
+                Status = PulseRate.Result.Status,
+                SeeChartAttach = PulseRate.Result.SeeChartAttach,
+                TargetPulseAttach = PulseRate.Result.TargetPulseAttach,
+                Chart = PulseRate.Result.Chart
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int pulseId, string sender, string password, string recipient, string Smtp)
         {
@@ -163,7 +184,7 @@ namespace AwesomeCare.Admin.Controllers
                 TargetPulseAttach = PulseRate.Result.TargetPulseAttach,
                 Chart = PulseRate.Result.Chart,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-        };
+            };
             return View(putEntity);
         }
         [HttpPost]

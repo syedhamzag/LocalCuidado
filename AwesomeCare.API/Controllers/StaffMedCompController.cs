@@ -23,11 +23,17 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffMedComp> _StaffMedCompRepository;
-        
-        public StaffMedCompController(AwesomeCareDbContext dbContext, IGenericRepository<StaffMedComp> StaffMedCompRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<MedCompOfficerToAct> _officertoactRepository;
+
+        public StaffMedCompController(AwesomeCareDbContext dbContext, IGenericRepository<StaffMedComp> StaffMedCompRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<MedCompOfficerToAct> officertoactRepository)
         {
             _StaffMedCompRepository = StaffMedCompRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region StaffMedComp
         /// <summary>
@@ -67,13 +73,29 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutStaffMedComp model)
+        public async Task<IActionResult> Put([FromBody] PutStaffMedComp models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffMedComp = Mapper.Map<StaffMedComp>(model);
+
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<MedCompOfficerToAct>();
+                var filterentity = entity.Where(c => c.MedCompId == model.MedCompId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            var result = _dbContext.SaveChanges();
+            var StaffMedComp = Mapper.Map<StaffMedComp>(models);
             await _StaffMedCompRepository.UpdateEntity(StaffMedComp);
             return Ok();
 
@@ -97,6 +119,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.MedCompId == id
                                            select new GetStaffMedComp
                                            {
+                                               MedCompId = c.MedCompId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -112,7 +136,16 @@ namespace AwesomeCare.API.Controllers
                                                ReadingMedicalPrescriptions = c.ReadingMedicalPrescriptions,
                                                UnderstandingofMedication = c.UnderstandingofMedication,
                                                UnderstandingofRights = c.UnderstandingofRights,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.MedCompId == c.MedCompId
+                                                               select new GetMedCompOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffMedComp);

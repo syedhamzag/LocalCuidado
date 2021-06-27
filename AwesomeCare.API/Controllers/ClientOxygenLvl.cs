@@ -76,13 +76,53 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientOxygenLvl> model)
+        public async Task<IActionResult> Put([FromBody] PutClientOxygenLvl models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientOxygenLvl = Mapper.Map<ClientOxygenLvl>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<OxygenLvlOfficerToAct>();
+                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.Physician.ToList())
+            {
+                var entity = _dbContext.Set<OxygenLvlPhysician>();
+                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<OxygenLvlStaffName>();
+                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            var ClientOxygenLvl = Mapper.Map<ClientOxygenLvl>(models);
             await _ClientOxygenLvlRepository.UpdateEntity(ClientOxygenLvl);
             return Ok();
 

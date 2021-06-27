@@ -49,16 +49,16 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [Required]
         public DateTime DATERECIEVED { get; set; }
         [Required]
-        public DateTime? DATEOFACKNOWLEDGEMENT { get; set; }
+        public DateTime DATEOFACKNOWLEDGEMENT { get; set; }
         [Required]
-        public List<int> OFFICERTOACTId { get; set; }
+        public List<int> OfficerToAct { get; set; }
         public List<string> OfficerName { get; set; }
         [Required]
         public string SOURCEOFCOMPLAINTS { get; set; }
         [Required]
         public string COMPLAINANTCONTACT { get; set; }
         [Required]
-        public List<int> STAFFId { get; set; }
+        public List<int> StaffName { get; set; }
         public List<string> Staff_Name { get; set; }
         [Required]
         public string CONCERNSRAISED { get; set; }

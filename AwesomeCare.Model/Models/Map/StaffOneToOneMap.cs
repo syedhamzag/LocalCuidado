@@ -32,7 +32,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Purpose)
                .HasColumnName("Purpose")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.PreviousSupervision)
@@ -41,32 +40,26 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.StaffImprovedInAreas)
                .HasColumnName("StaffImprovedInAreas")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.CurrentEventArea)
                .HasColumnName("CurrentEventArea")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.StaffConclusion)
                .HasColumnName("StaffConclusion")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.DecisionsReached)
                .HasColumnName("DecisionsReached")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ImprovementRecorded)
                .HasColumnName("ImprovementRecorded")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ActionRequired)
                .HasColumnName("ActionRequired")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Deadline)
@@ -79,12 +72,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
                .HasColumnName("URL")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -94,6 +85,10 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Relationship
 
+            builder.HasMany<OneToOneOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.OneToOne)
+                .HasForeignKey(p => p.OneToOneId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

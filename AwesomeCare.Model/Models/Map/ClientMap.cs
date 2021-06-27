@@ -176,6 +176,12 @@ namespace AwesomeCare.Model.Models.Map
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
+
+            builder.HasMany<ClientNutrition>(p => p.ClientNutrition)
+                .WithOne(p => p.Client)
+                .HasForeignKey(p => p.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

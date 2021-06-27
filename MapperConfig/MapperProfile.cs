@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AwesomeCare.DataTransferObject.DTOs;
+using AwesomeCare.DataTransferObject.DTOs.ClientComplain;
 using AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecordItem;
@@ -80,6 +81,9 @@ using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
 using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
 using AwesomeCare.DataTransferObject.DTOs.ClientBodyTemp;
 using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
+using AwesomeCare.DataTransferObject.DTOs.ClientMedAudit;
+using AwesomeCare.DataTransferObject.DTOs.ClientVisit;
+using AwesomeCare.DataTransferObject.DTOs.ClientService;
 
 namespace MapperConfig
 {
@@ -1226,6 +1230,28 @@ namespace MapperConfig
             CreateMap<WhisttleBlower, GetWhisttleBlower>();
             #endregion
 
+            #region Complain
+            CreateMap<PostComplainOfficerToAct, ComplainOfficerToAct>()
+                .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ComplainOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PostComplainStaffName, ComplainStaffName>()
+                .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ComplainStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutComplainOfficerToAct, ComplainOfficerToAct>()
+                .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ComplainOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutComplainStaffName, ComplainStaffName>()
+                .ForMember(dto => dto.ComplainRegister, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ComplainStaffNameId, mem => mem.Ignore());
+            #endregion
+
             #region BloodPressure
             CreateMap<PutClientBloodPressure, ClientBloodPressure>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
@@ -1792,6 +1818,253 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
                 .ForMember(dto => dto.WoundCarePhysicianId, mem => mem.Ignore());
             #endregion
+
+            #region Multi-Log Audit
+            CreateMap<PostLogAuditOfficerToAct, LogAuditOfficerToAct>()
+                .ForMember(dto => dto.LogAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.LogAuditOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutLogAuditOfficerToAct, LogAuditOfficerToAct>()
+                .ForMember(dto => dto.LogAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.LogAuditOfficerToActId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-Med Audit
+            CreateMap<PostMedAuditOfficerToAct, MedAuditOfficerToAct>()
+                .ForMember(dto => dto.MedAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.MedAuditOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PostMedAuditStaffName, MedAuditStaffName>()
+                .ForMember(dto => dto.MedAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.MedAuditStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutMedAuditOfficerToAct, MedAuditOfficerToAct>()
+                .ForMember(dto => dto.MedAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.MedAuditOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutMedAuditStaffName, MedAuditStaffName>()
+                .ForMember(dto => dto.MedAudit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.MedAuditStaffNameId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-Mgt Visit
+            CreateMap<PostVisitOfficerToAct, VisitOfficerToAct>()
+                .ForMember(dto => dto.Visit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VisitOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PostVisitStaffName, VisitStaffName>()
+                .ForMember(dto => dto.Visit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VisitStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutVisitOfficerToAct, VisitOfficerToAct>()
+                .ForMember(dto => dto.Visit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VisitOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutVisitStaffName, VisitStaffName>()
+                .ForMember(dto => dto.Visit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VisitStaffNameId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-Program
+            CreateMap<PostProgramOfficerToAct, ProgramOfficerToAct>()
+                .ForMember(dto => dto.Program, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ProgramOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutProgramOfficerToAct, ProgramOfficerToAct>()
+                .ForMember(dto => dto.Program, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ProgramOfficerToActId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-Service Watch
+            CreateMap<PostServiceOfficerToAct, ServiceOfficerToAct>()
+                .ForMember(dto => dto.Service, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ServiceOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PostServiceStaffName, ServiceStaffName>()
+                .ForMember(dto => dto.Service, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ServiceStaffNameId, mem => mem.Ignore());
+
+            CreateMap<PutServiceOfficerToAct, ServiceOfficerToAct>()
+                .ForMember(dto => dto.Service, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ServiceOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutServiceStaffName, ServiceStaffName>()
+                .ForMember(dto => dto.Service, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.ServiceStaffNameId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-Voice
+            CreateMap<PostVoiceOfficerToAct, VoiceOfficerToAct>()
+                .ForMember(dto => dto.Voice, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VoiceOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PostVoiceCallerName, VoiceCallerName>()
+                .ForMember(dto => dto.Voice, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VoiceCallerNameId, mem => mem.Ignore());
+
+            CreateMap<PostVoiceGoodStaff, VoiceGoodStaff>()
+               .ForMember(dto => dto.Voice, mem => mem.Ignore())
+               .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+               .ForMember(dto => dto.VoiceGoodStaffId, mem => mem.Ignore());
+
+            CreateMap<PostVoicePoorStaff, VoicePoorStaff>()
+                .ForMember(dto => dto.Voice, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VoicePoorStaffId, mem => mem.Ignore());
+
+            CreateMap<PutVoiceOfficerToAct, VoiceOfficerToAct>()
+                .ForMember(dto => dto.Voice, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VoiceOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutVoiceCallerName, VoiceCallerName>()
+                .ForMember(dto => dto.Voice, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VoiceCallerNameId, mem => mem.Ignore());
+
+            CreateMap<PutVoiceGoodStaff, VoiceGoodStaff>()
+                .ForMember(dto => dto.Voice, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VoiceGoodStaffId, mem => mem.Ignore());
+
+            CreateMap<PutVoicePoorStaff, VoicePoorStaff>()
+                .ForMember(dto => dto.Voice, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.VoicePoorStaffId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-Survey
+            CreateMap<PostSurveyOfficerToAct, SurveyOfficerToAct>()
+                .ForMember(dto => dto.Survey, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SurveyOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutSurveyOfficerToAct, SurveyOfficerToAct>()
+                .ForMember(dto => dto.Survey, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SurveyOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PostSurveyWorkteam, SurveyWorkteam>()
+               .ForMember(dto => dto.Survey, mem => mem.Ignore())
+               .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+               .ForMember(dto => dto.SurveyWorkteamId, mem => mem.Ignore());
+
+            CreateMap<PutSurveyWorkteam, SurveyWorkteam>()
+                .ForMember(dto => dto.Survey, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SurveyWorkteamId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-Supervision Appraisal
+            CreateMap<PostSupervisionOfficerToAct, SupervisionOfficerToAct>()
+                .ForMember(dto => dto.Supervision, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SupervisionOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutSupervisionOfficerToAct, SupervisionOfficerToAct>()
+                .ForMember(dto => dto.Supervision, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SupervisionOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PostSupervisionWorkteam, SupervisionWorkteam>()
+               .ForMember(dto => dto.Supervision, mem => mem.Ignore())
+               .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+               .ForMember(dto => dto.SupervisionWorkteamId, mem => mem.Ignore());
+
+            CreateMap<PutSupervisionWorkteam, SupervisionWorkteam>()
+                .ForMember(dto => dto.Supervision, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SupervisionWorkteamId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-KeyWorker
+            CreateMap<PostKeyWorkerOfficerToAct, KeyWorkerOfficerToAct>()
+                .ForMember(dto => dto.KeyWorker, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.KeyWorkerOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutKeyWorkerOfficerToAct, KeyWorkerOfficerToAct>()
+                .ForMember(dto => dto.KeyWorker, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.KeyWorkerOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PostKeyWorkerWorkteam, KeyWorkerWorkteam>()
+               .ForMember(dto => dto.KeyWorker, mem => mem.Ignore())
+               .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+               .ForMember(dto => dto.KeyWorkerWorkteamId, mem => mem.Ignore());
+
+            CreateMap<PutKeyWorkerWorkteam, KeyWorkerWorkteam>()
+                .ForMember(dto => dto.KeyWorker, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.KeyWorkerWorkteamId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-SpotCheck
+            CreateMap<PostSpotCheckOfficerToAct, SpotCheckOfficerToAct>()
+                .ForMember(dto => dto.SpotCheck, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SpotCheckOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutSpotCheckOfficerToAct, SpotCheckOfficerToAct>()
+                .ForMember(dto => dto.SpotCheck, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.SpotCheckOfficerToActId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-OneToOne
+            CreateMap<PostOneToOneOfficerToAct, OneToOneOfficerToAct>()
+                .ForMember(dto => dto.OneToOne, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.OneToOneOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutOneToOneOfficerToAct, OneToOneOfficerToAct>()
+                .ForMember(dto => dto.OneToOne, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.OneToOneOfficerToActId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-MedComp
+            CreateMap<PostMedCompOfficerToAct, MedCompOfficerToAct>()
+                .ForMember(dto => dto.MedComp, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.MedCompOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutMedCompOfficerToAct, MedCompOfficerToAct>()
+                .ForMember(dto => dto.MedComp, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.MedCompOfficerToActId, mem => mem.Ignore());
+            #endregion
+
+            #region Multi-AdlObs
+            CreateMap<PostAdlObsOfficerToAct, AdlObsOfficerToAct>()
+                .ForMember(dto => dto.AdlObs, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.AdlObsOfficerToActId, mem => mem.Ignore());
+
+            CreateMap<PutAdlObsOfficerToAct, AdlObsOfficerToAct>()
+                .ForMember(dto => dto.AdlObs, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.AdlObsOfficerToActId, mem => mem.Ignore());
+            #endregion
+
         }
     }
 }

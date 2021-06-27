@@ -89,8 +89,29 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int BMIId)
         {
-            var BMIChart = await _clientBMIChartService.Get(BMIId);
-            return View(BMIChart);
+            var BMIChart = _clientBMIChartService.Get(BMIId);
+            var putEntity = new CreateClientBMIChart
+            {
+                BMIChartId = BMIChart.Result.BMIChartId,
+                Reference = BMIChart.Result.Reference,
+                ClientId = BMIChart.Result.ClientId,
+                Date = BMIChart.Result.Date,
+                Time = BMIChart.Result.Time,
+                Height = BMIChart.Result.Height,
+                Weight = BMIChart.Result.Weight,
+                NumberRange = BMIChart.Result.NumberRange,
+                SeeChart = BMIChart.Result.SeeChart,
+                Comment = BMIChart.Result.Comment,
+                Staff_Name = BMIChart.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = BMIChart.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = BMIChart.Result.PhysicianResponse,
+                OfficerName = BMIChart.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = BMIChart.Result.Deadline,
+                Remarks = BMIChart.Result.Remarks,
+                Status = BMIChart.Result.Status,
+                SeeChartAttach = BMIChart.Result.SeeChartAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int BMIId, string sender, string password, string recipient, string Smtp)
         {

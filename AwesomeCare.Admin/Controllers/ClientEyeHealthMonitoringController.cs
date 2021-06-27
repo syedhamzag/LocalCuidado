@@ -90,8 +90,33 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int eyeId)
         {
-            var EyeHealthMonitoring = await _clientEyeHealthMonitoringService.Get(eyeId);
-            return View(EyeHealthMonitoring);
+            var EyeHealthMonitoring = _clientEyeHealthMonitoringService.Get(eyeId);
+            var putEntity = new CreateClientEyeHealthMonitoring
+            {
+                EyeHealthId = EyeHealthMonitoring.Result.EyeHealthId,
+                Reference = EyeHealthMonitoring.Result.Reference,
+                ClientId = EyeHealthMonitoring.Result.ClientId,
+                Date = EyeHealthMonitoring.Result.Date,
+                Time = EyeHealthMonitoring.Result.Time,
+                ToolUsed = EyeHealthMonitoring.Result.ToolUsed,
+                MethodUsed = EyeHealthMonitoring.Result.MethodUsed,
+                TargetSet = EyeHealthMonitoring.Result.TargetSet,
+                CurrentScore = EyeHealthMonitoring.Result.CurrentScore,
+                PatientGlasses = EyeHealthMonitoring.Result.PatientGlasses,
+                StatusImage = EyeHealthMonitoring.Result.StatusImage,
+                StatusAttach = EyeHealthMonitoring.Result.StatusAttach,
+                Comment = EyeHealthMonitoring.Result.Comment,
+                Staff_Name = EyeHealthMonitoring.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = EyeHealthMonitoring.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = EyeHealthMonitoring.Result.PhysicianResponse,
+                OfficerName = EyeHealthMonitoring.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = EyeHealthMonitoring.Result.Deadline,
+                Remarks = EyeHealthMonitoring.Result.Remarks,
+                Status = EyeHealthMonitoring.Result.Status,
+                MethodUsedAttach = EyeHealthMonitoring.Result.MethodUsedAttach,
+                ToolUsedAttach = EyeHealthMonitoring.Result.ToolUsedAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int eyeId, string sender, string password, string recipient, string Smtp)
         {

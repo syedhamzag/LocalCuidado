@@ -80,13 +80,43 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutClientMedAudit model)
+        public async Task<IActionResult> Put([FromBody] PutClientMedAudit models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientMedAudit = Mapper.Map<ClientMedAudit>(model);
+
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<MedAuditOfficerToAct>();
+                var filterentity = entity.Where(c => c.MedAuditId == model.MedAuditId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<MedAuditStaffName>();
+                var filterentity = entity.Where(c => c.MedAuditId == model.MedAuditId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+
+            var ClientMedAudit = Mapper.Map<ClientMedAudit>(models);
             await _clientMedAuditRepository.UpdateEntity(ClientMedAudit);
             return Ok();
 
@@ -110,6 +140,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.MedAuditId == id
                                            select new GetClientMedAudit
                                            {
+                                               MedAuditId = c.MedAuditId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRecommended = c.ActionRecommended,
                                                ActionTaken = c.ActionTaken,

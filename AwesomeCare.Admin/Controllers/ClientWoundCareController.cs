@@ -90,8 +90,37 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int woundId)
         {
-            var WoundCare = await _clientWoundCareService.Get(woundId);
-            return View(WoundCare);
+            var WoundCare = _clientWoundCareService.Get(woundId);
+            var putEntity = new CreateClientWoundCare
+            {
+                WoundCareId = WoundCare.Result.WoundCareId,
+                Reference = WoundCare.Result.Reference,
+                ClientId = WoundCare.Result.ClientId,
+                Date = WoundCare.Result.Date,
+                Time = WoundCare.Result.Time,
+                Type = WoundCare.Result.Type,
+                Goal = WoundCare.Result.Goal,
+                Measurment = WoundCare.Result.Measurment,
+                UlcerStage = WoundCare.Result.UlcerStage,
+                PainLvl = WoundCare.Result.PainLvl,
+                Location = WoundCare.Result.Location,
+                WoundCause = WoundCare.Result.WoundCause,
+                StatusImage = WoundCare.Result.StatusImage,
+                StatusAttach = WoundCare.Result.StatusAttach,
+                Comment = WoundCare.Result.Comment,
+                Staff_Name = WoundCare.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = WoundCare.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = WoundCare.Result.PhysicianResponse,
+                OfficerName = WoundCare.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = WoundCare.Result.Deadline,
+                Remarks = WoundCare.Result.Remarks,
+                Status = WoundCare.Result.Status,
+                LocationAttach = WoundCare.Result.LocationAttach,
+                MeasurementAttach = WoundCare.Result.MeasurementAttach,
+                TypeAttach = WoundCare.Result.TypeAttach,
+                UlcerStageAttach = WoundCare.Result.UlcerStageAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int woundId, string sender, string password, string recipient, string Smtp)
         {

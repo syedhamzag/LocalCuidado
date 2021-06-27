@@ -90,8 +90,31 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int painId)
         {
-            var PainChart = await _clientPainChartService.Get(painId);
-            return View(PainChart);
+            var PainChart = _clientPainChartService.Get(painId);
+            var putEntity = new CreateClientPainChart
+            {
+                PainChartId = PainChart.Result.PainChartId,
+                Reference = PainChart.Result.Reference,
+                ClientId = PainChart.Result.ClientId,
+                Date = PainChart.Result.Date,
+                Time = PainChart.Result.Time,
+                Type = PainChart.Result.Type,
+                Location = PainChart.Result.Location,
+                PainLvl = PainChart.Result.PainLvl,
+                StatusImage = PainChart.Result.StatusImage,
+                StatusAttach = PainChart.Result.StatusAttach,
+                Comment = PainChart.Result.Comment,
+                Staff_Name = PainChart.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = PainChart.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = PainChart.Result.PhysicianResponse,
+                OfficerName = PainChart.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = PainChart.Result.Deadline,
+                Remarks = PainChart.Result.Remarks,
+                Status = PainChart.Result.Status,
+                TypeAttach = PainChart.Result.TypeAttach,
+                LocationAttach = PainChart.Result.LocationAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int painId, string sender, string password, string recipient, string Smtp)
         {

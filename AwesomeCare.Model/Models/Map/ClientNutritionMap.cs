@@ -49,11 +49,6 @@ namespace AwesomeCare.Model.Models.Map
             #endregion
 
             #region Relationship
-            builder.HasOne(p => p.Client)
-                 .WithMany(p => p.ClientNutrition)
-                 .HasForeignKey(p => p.ClientId)
-                 .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasOne(p => p.Staff)
                  .WithMany(p => p.ClientNutrition)
                  .HasForeignKey(p => p.StaffId)

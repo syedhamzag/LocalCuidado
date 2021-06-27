@@ -19,9 +19,6 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <select asp-for="ProgramIds"
-                                    asp-items="@(new SelectList(Model.ProgramIds))" style="display:none;">
-                            </select>
                             <input type="hidden" asp-for="ProgramId" />
                             <input type="hidden" asp-for="ClientId" />
                             <input type="hidden" asp-for="Attachment" />
@@ -81,7 +78,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Reference</label>
-                                    <input type="text" asp-for="Reference" class="form-control" readonly />
+                                    <input type="text" asp-for="Reference" class="form-control" />
                                     <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">

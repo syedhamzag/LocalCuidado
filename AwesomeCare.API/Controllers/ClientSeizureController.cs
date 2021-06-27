@@ -77,13 +77,53 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutClientSeizure model)
+        public async Task<IActionResult> Put([FromBody] PutClientSeizure models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientSeizure = Mapper.Map<ClientSeizure>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<SeizureOfficerToAct>();
+                var filterentity = entity.Where(c => c.SeizureId == model.SeizureId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.Physician.ToList())
+            {
+                var entity = _dbContext.Set<SeizurePhysician>();
+                var filterentity = entity.Where(c => c.SeizureId == model.SeizureId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<SeizureStaffName>();
+                var filterentity = entity.Where(c => c.SeizureId == model.SeizureId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            var ClientSeizure = Mapper.Map<ClientSeizure>(models);
             await _ClientSeizureRepository.InsertEntity(ClientSeizure);
             return Ok();
 

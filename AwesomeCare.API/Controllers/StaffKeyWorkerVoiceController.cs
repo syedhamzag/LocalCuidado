@@ -22,11 +22,19 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffKeyWorkerVoice> _StaffKeyWorkerVoiceRepository;
-        
-        public StaffKeyWorkerVoiceController(AwesomeCareDbContext dbContext, IGenericRepository<StaffKeyWorkerVoice> StaffKeyWorkerVoiceRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<KeyWorkerOfficerToAct> _officertoactRepository;
+        private IGenericRepository<KeyWorkerWorkteam> _workteamRepository;
+
+        public StaffKeyWorkerVoiceController(AwesomeCareDbContext dbContext, IGenericRepository<StaffKeyWorkerVoice> StaffKeyWorkerVoiceRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<KeyWorkerOfficerToAct> officertoactRepository, IGenericRepository<KeyWorkerWorkteam> workteamRepository)
         {
             _StaffKeyWorkerVoiceRepository = StaffKeyWorkerVoiceRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
+            _workteamRepository = workteamRepository;
         }
         #region StaffKeyWorkerVoice
         /// <summary>
@@ -67,13 +75,40 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutStaffKeyWorkerVoice model)
+        public async Task<IActionResult> Put([FromBody] PutStaffKeyWorkerVoice models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffKeyWorkerVoice = Mapper.Map<StaffKeyWorkerVoice>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<KeyWorkerOfficerToAct>();
+                var filterentity = entity.Where(c => c.KeyWorkerId == model.KeyWorkerId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.Workteam.ToList())
+            {
+                var entity = _dbContext.Set<KeyWorkerWorkteam>();
+                var filterentity = entity.Where(c => c.KeyWorkerId == model.KeyWorkerId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            var StaffKeyWorkerVoice = Mapper.Map<StaffKeyWorkerVoice>(models);
             await _StaffKeyWorkerVoiceRepository.UpdateEntity(StaffKeyWorkerVoice);
             return Ok();
 
@@ -97,6 +132,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.KeyWorkerId == id
                                            select new GetStaffKeyWorkerVoice
                                            {
+                                               KeyWorkerId = c.KeyWorkerId,
+                                               Reference = c.Reference,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
                                                Date = c.Date,
@@ -116,7 +153,25 @@ namespace AwesomeCare.API.Controllers
                                                StaffId = c.StaffId,
                                                WellSupportedServices = c.WellSupportedServices,
                                                ChangesWeNeed = c.ChangesWeNeed,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.KeyWorkerId == c.KeyWorkerId
+                                                               select new GetKeyWorkerOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
+                                               Workteam = (from com in _workteamRepository.Table
+                                                           join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                           where com.KeyWorkerId == c.KeyWorkerId
+                                                           select new GetKeyWorkerWorkteam
+                                                           {
+                                                               StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                               StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                           }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffKeyWorkerVoice);

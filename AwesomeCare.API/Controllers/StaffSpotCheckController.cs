@@ -22,11 +22,17 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffSpotCheck> _StaffSpotCheckRepository;
-        
-        public StaffSpotCheckController(AwesomeCareDbContext dbContext, IGenericRepository<StaffSpotCheck> StaffSpotCheckRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<SpotCheckOfficerToAct> _officertoactRepository;
+
+        public StaffSpotCheckController(AwesomeCareDbContext dbContext, IGenericRepository<StaffSpotCheck> StaffSpotCheckRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<SpotCheckOfficerToAct> officertoactRepository)
         {
             _StaffSpotCheckRepository = StaffSpotCheckRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region StaffSpotCheck
         /// <summary>
@@ -66,13 +72,28 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutStaffSpotCheck model)
+        public async Task<IActionResult> Put([FromBody] PutStaffSpotCheck models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffSpotCheck = Mapper.Map<StaffSpotCheck>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<SpotCheckOfficerToAct>();
+                var filterentity = entity.Where(c => c.SpotCheckId == model.SpotCheckId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            var result = _dbContext.SaveChanges();
+            var StaffSpotCheck = Mapper.Map<StaffSpotCheck>(models);
             await _StaffSpotCheckRepository.UpdateEntity(StaffSpotCheck);
             return Ok();
 
@@ -97,6 +118,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.SpotCheckId == id
                                            select new GetStaffSpotCheck
                                            {
+                                               SpotCheckId = c.SpotCheckId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -110,7 +133,16 @@ namespace AwesomeCare.API.Controllers
                                                Details = c.Details,
                                                StaffArriveOnTime = c.StaffArriveOnTime,
                                                StaffDressCode = c.StaffDressCode,
-                                               StaffId = c.StaffId
+                                               StaffId = c.StaffId,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.SpotCheckId == c.SpotCheckId
+                                                               select new GetSpotCheckOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffSpotCheck);

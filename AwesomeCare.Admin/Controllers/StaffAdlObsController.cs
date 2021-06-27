@@ -205,7 +205,7 @@ namespace AwesomeCare.Admin.Controllers
                 post.Date = model.Date;
                 post.Deadline = model.Deadline;
                 post.URL = model.URL;
-                post.OfficerToAct = model.OfficerToAct.Select(o => new PostAdlObsOfficerToAct { StaffPersonalInfoId = o, AdlObsId = model.ObservationID }).ToList();
+                post.OfficerToAct = model.OfficerToAct.Select(o => new PostAdlObsOfficerToAct { StaffPersonalInfoId = o, ObservationId = model.ObservationID }).ToList();
                 post.Remarks = model.Remarks;
                 post.Status = model.Status;
                 post.ActionRequired = model.ActionRequired;
@@ -260,7 +260,7 @@ namespace AwesomeCare.Admin.Controllers
                 put.Date = model.Date;
                 put.Deadline = model.Deadline;
                 put.URL = model.URL;
-                put.OfficerToAct = model.OfficerToAct.Select(o => new PutAdlObsOfficerToAct { StaffPersonalInfoId = o, AdlObsId = model.ObservationID }).ToList();
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutAdlObsOfficerToAct { StaffPersonalInfoId = o, ObservationId = model.ObservationID }).ToList();
                 put.Remarks = model.Remarks;
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;

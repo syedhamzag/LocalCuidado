@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataTransferObject.DTOs.ClientService;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -22,11 +23,20 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientServiceWatch> _clientServiceWatchRepository;
-        
-        public ClientServiceWatchController(AwesomeCareDbContext dbContext, IGenericRepository<ClientServiceWatch> clientServiceWatchRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<ServiceOfficerToAct> _officertoactRepository;
+        private IGenericRepository<ServiceStaffName> _staffnameRepository;
+
+        public ClientServiceWatchController(AwesomeCareDbContext dbContext, IGenericRepository<ClientServiceWatch> clientServiceWatchRepository,
+             IGenericRepository<StaffPersonalInfo> staffRepository,
+        IGenericRepository<ServiceOfficerToAct> officertoactRepository,
+        IGenericRepository<ServiceStaffName> staffnameRepository)
         {
             _clientServiceWatchRepository = clientServiceWatchRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffnameRepository = staffnameRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientServiceWatch
         /// <summary>
@@ -66,13 +76,40 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutClientServiceWatch model)
+        public async Task<IActionResult> Put([FromBody] PutClientServiceWatch models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientServiceWatch = Mapper.Map<ClientServiceWatch>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<ServiceOfficerToAct>();
+                var filterentity = entity.Where(c => c.ServiceId == model.ServiceId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<ServiceStaffName>();
+                var filterentity = entity.Where(c => c.ServiceId == model.ServiceId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            var ClientServiceWatch = Mapper.Map<ClientServiceWatch>(models);
             await _clientServiceWatchRepository.UpdateEntity(ClientServiceWatch);
             return Ok();
 
@@ -96,6 +133,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.WatchId == id
                                            select new GetClientServiceWatch
                                            {
+                                               WatchId = c.WatchId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -108,7 +147,24 @@ namespace AwesomeCare.API.Controllers
                                                Observation = c.Observation,
                                                Incident = c.Incident,
                                                Contact = c.Contact,
-                                               Details = c.Details
+                                               Details = c.Details,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.ServiceId == c.WatchId
+                                                               select new GetServiceOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
+                                               StaffName = (from com in _staffnameRepository.Table
+                                                            join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                            where com.ServiceId == c.WatchId
+                                                            select new GetServiceStaffName
+                                                            {
+                                                                StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+                                                            }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getClientServiceWatch);

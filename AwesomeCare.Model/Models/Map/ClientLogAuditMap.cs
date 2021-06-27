@@ -100,7 +100,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.RotCause)
              .HasColumnName("RotCause")
-             .HasMaxLength(50)
              .IsRequired();
 
             builder.Property(p => p.LessonLearntAndShared)
@@ -112,14 +111,7 @@ namespace AwesomeCare.Model.Models.Map
              .IsRequired();
 
             builder.Property(p => p.EvidenceFilePath)
-             .HasColumnName("EvidenceFilePath")
-             .IsRequired(false);
-
-
-
-
-
-
+             .HasColumnName("EvidenceFilePath");
 
             #endregion
 
@@ -129,6 +121,10 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasMany<LogAuditOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.LogAudit)
+                .HasForeignKey(p => p.LogAuditId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

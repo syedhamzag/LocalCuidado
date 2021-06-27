@@ -90,8 +90,29 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int oxygenId)
         {
-            var OxygenLvl = await _clientOxygenLvlService.Get(oxygenId);
-            return View(OxygenLvl);
+            var OxygenLvl = _clientOxygenLvlService.Get(oxygenId);
+            var putEntity = new CreateClientOxygenLvl
+            {
+                OxygenLvlId = OxygenLvl.Result.OxygenLvlId,
+                Reference = OxygenLvl.Result.Reference,
+                ClientId = OxygenLvl.Result.ClientId,
+                Date = OxygenLvl.Result.Date,
+                Time = OxygenLvl.Result.Time,
+                TargetOxygen = OxygenLvl.Result.TargetOxygen,
+                CurrentReading = OxygenLvl.Result.CurrentReading,
+                SeeChart = OxygenLvl.Result.SeeChart,
+                Comment = OxygenLvl.Result.Comment,
+                Staff_Name = OxygenLvl.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = OxygenLvl.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = OxygenLvl.Result.PhysicianResponse,
+                OfficerName = OxygenLvl.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = OxygenLvl.Result.Deadline,
+                Remarks = OxygenLvl.Result.Remarks,
+                Status = OxygenLvl.Result.Status,
+                SeeChartAttach = OxygenLvl.Result.SeeChartAttach,
+                TargetOxygenAttach = OxygenLvl.Result.TargetOxygenAttach,
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int oxygenId, string sender, string password, string recipient, string Smtp)
         {
@@ -163,7 +184,7 @@ namespace AwesomeCare.Admin.Controllers
                 SeeChartAttach = OxygenLvl.Result.SeeChartAttach,
                 TargetOxygenAttach = OxygenLvl.Result.TargetOxygenAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-        };
+            };
             return View(putEntity);
         }
         [HttpPost]

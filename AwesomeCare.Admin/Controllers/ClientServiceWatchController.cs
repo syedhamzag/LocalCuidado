@@ -159,7 +159,7 @@ namespace AwesomeCare.Admin.Controllers
                 Observation = ServiceWatch.Result.Observation,
                 Status = ServiceWatch.Result.Status,
                 ActionRequired = ServiceWatch.Result.ActionRequired,
-                //PersonInvolved = ServiceWatch.Result.PersonInvolved.Select(s => s.StaffPersonalInfoId).ToList(),
+                PersonInvolved = ServiceWatch.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);

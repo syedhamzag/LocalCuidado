@@ -19,9 +19,6 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <select asp-for="SpotCheckIds"
-                                    asp-items="@(new SelectList(Model.SpotCheckIds))" style="display:none;">
-                            </select>
                             <input type="hidden" asp-for="SpotCheckId" />
                             <input type="hidden" asp-for="StaffId" />
                             <input type="hidden" asp-for="Attachment" />

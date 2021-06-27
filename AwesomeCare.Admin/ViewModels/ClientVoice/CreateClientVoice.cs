@@ -56,8 +56,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         public List<int> StaffPoorSupport { get; set; }
         public List<string> Poor_Staff { get; set; }
         [Required]
-        public List<int> OfficeStaffSupport { get; set; }
-        public List<string> StaffSupportName { get; set; }
+        public int OfficeStaffSupport { get; set; }
         [Required]
         public string AreasOfImprovements { get; set; }
         [Required]

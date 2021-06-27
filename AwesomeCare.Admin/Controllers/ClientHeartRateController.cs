@@ -90,8 +90,32 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int HeartId)
         {
-            var HeartRate = await _clientHeartRateService.Get(HeartId);
-            return View(HeartRate);
+            var HeartRate = _clientHeartRateService.Get(HeartId);
+            var putEntity = new CreateClientHeartRate
+            {
+                HeartRateId = HeartRate.Result.HeartRateId,
+                Reference = HeartRate.Result.Reference,
+                ClientId = HeartRate.Result.ClientId,
+                Date = HeartRate.Result.Date,
+                Time = HeartRate.Result.Time,
+                TargetHR = HeartRate.Result.TargetHR,
+                Gender = HeartRate.Result.Gender,
+                Age = HeartRate.Result.Age,
+                BeatsPerSeconds = HeartRate.Result.BeatsPerSeconds,
+                SeeChart = HeartRate.Result.SeeChart,
+                Comment = HeartRate.Result.Comment,
+                Staff_Name = HeartRate.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = HeartRate.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = HeartRate.Result.PhysicianResponse,
+                OfficerName = HeartRate.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = HeartRate.Result.Deadline,
+                Remarks = HeartRate.Result.Remarks,
+                Status = HeartRate.Result.Status,
+                GenderAttach = HeartRate.Result.GenderAttach,
+                SeeChartAttach = HeartRate.Result.SeeChartAttach,
+                TargetHRAttach = HeartRate.Result.TargetHRAttach,
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int HeartId, string sender, string password, string recipient, string Smtp)
         {

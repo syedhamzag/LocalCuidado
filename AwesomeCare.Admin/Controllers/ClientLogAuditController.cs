@@ -228,7 +228,7 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.LogURL = model.LogURL;
                 postlog.NameOfAuditor = model.NameOfAuditor;
                 postlog.Observations = model.Observations;
-                //postlog.OfficerToTakeAction = model.OfficerToTakeAction.Select(o => new PostLogAuditOfficerToAct { StaffPersonalInfoId = o, LogAuditId = model.LogAuditId }).ToList();
+                postlog.OfficerToAct = model.OfficerToTakeAction.Select(o => new PostLogAuditOfficerToAct { StaffPersonalInfoId = o, LogAuditId = model.LogAuditId }).ToList();
                 postlog.Remarks = model.Remarks;
                 postlog.RepeatOfIncident = model.RepeatOfIncident;
                 postlog.RotCause = model.RotCause;

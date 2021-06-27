@@ -1,4 +1,4 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
+﻿using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using Refit;
 using System;
 using System.Collections.Generic;

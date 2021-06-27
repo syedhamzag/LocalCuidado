@@ -90,8 +90,31 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int SeizId)
         {
-            var Seizure = await _clientSeizureService.Get(SeizId);
-            return View(Seizure);
+            var Seizure = _clientSeizureService.Get(SeizId);
+            var putEntity = new CreateClientSeizure
+            {
+                SeizureId = Seizure.Result.SeizureId,
+                Reference = Seizure.Result.Reference,
+                ClientId = Seizure.Result.ClientId,
+                Date = Seizure.Result.Date,
+                Time = Seizure.Result.Time,
+                SeizureType = Seizure.Result.SeizureType,
+                SeizureLength = Seizure.Result.SeizureLength,
+                Often = Seizure.Result.Often,
+                StatusImage = Seizure.Result.StatusImage,
+                StatusAttach = Seizure.Result.StatusAttach,
+                WhatHappened = Seizure.Result.WhatHappened,
+                Staff_Name = Seizure.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = Seizure.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = Seizure.Result.PhysicianResponse,
+                OfficerName = Seizure.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = Seizure.Result.Deadline,
+                Remarks = Seizure.Result.Remarks,
+                Status = Seizure.Result.Status,
+                SeizureLengthAttach = Seizure.Result.SeizureLengthAttach,
+                SeizureTypeAttach = Seizure.Result.SeizureTypeAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int SeizId, string sender, string password, string recipient, string Smtp)
         {
@@ -165,7 +188,7 @@ namespace AwesomeCare.Admin.Controllers
                 SeizureLengthAttach = Seizure.Result.SeizureLengthAttach,
                 SeizureTypeAttach = Seizure.Result.SeizureTypeAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-        };
+            };
             return View(putEntity);
         }
         [HttpPost]

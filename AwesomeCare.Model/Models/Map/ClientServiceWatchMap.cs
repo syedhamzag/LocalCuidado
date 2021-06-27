@@ -52,27 +52,22 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Observation)
              .HasColumnName("Observation")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.ActionRequired)
              .HasColumnName("ActionRequired")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.URL)
              .HasColumnName("URL")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.Attachment)
-             .HasColumnName("Attachment")
-             .IsRequired();
+             .HasColumnName("Attachment");
             #endregion
 
             #region Relationship
@@ -80,6 +75,16 @@ namespace AwesomeCare.Model.Models.Map
                  .WithMany(p => p.ClientServiceWatch)
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<ServiceStaffName>(p => p.StaffName)
+                .WithOne(p => p.Service)
+                .HasForeignKey(p => p.ServiceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<ServiceOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.Service)
+                .HasForeignKey(p => p.ServiceId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

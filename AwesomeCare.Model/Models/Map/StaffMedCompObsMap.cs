@@ -32,7 +32,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Details)
             .HasColumnName("Details")
-            .HasMaxLength(255)
             .IsRequired();
 
             builder.Property(p => p.ClientId)
@@ -61,7 +60,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.ActionRequired)
              .HasColumnName("ActionRequired")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.Deadline)
@@ -74,12 +72,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
              .HasColumnName("URL")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -92,6 +88,11 @@ namespace AwesomeCare.Model.Models.Map
                  .WithMany(p => p.StaffMedCompObs)
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<MedCompOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.MedComp)
+                .HasForeignKey(p => p.MedCompId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

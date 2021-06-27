@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataTransferObject.DTOs.ClientVisit;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -23,11 +24,20 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientMgtVisit> _clientMgtVisitRepository;
-        
-        public ClientMgtVisitController(AwesomeCareDbContext dbContext, IGenericRepository<ClientMgtVisit> clientMgtVisitRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<VisitOfficerToAct> _officertoactRepository;
+        private IGenericRepository<VisitStaffName> _staffnameRepository;
+
+        public ClientMgtVisitController(AwesomeCareDbContext dbContext, IGenericRepository<ClientMgtVisit> clientMgtVisitRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+        IGenericRepository<VisitOfficerToAct> officertoactRepository,
+        IGenericRepository<VisitStaffName> staffnameRepository)
         {
             _clientMgtVisitRepository = clientMgtVisitRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffnameRepository = staffnameRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientMgtVisit
         /// <summary>
@@ -68,13 +78,43 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutClientMgtVisit model)
+        public async Task<IActionResult> Put([FromBody] PutClientMgtVisit models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientMgtVisit = Mapper.Map<ClientMgtVisit>(model);
+
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<VisitOfficerToAct>();
+                var filterentity = entity.Where(c => c.VisitId == model.VisitId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<VisitStaffName>();
+                var filterentity = entity.Where(c => c.VisitId == model.VisitId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+
+            var ClientMgtVisit = Mapper.Map<ClientMgtVisit>(models);
             await _clientMgtVisitRepository.UpdateEntity(ClientMgtVisit);
             return Ok();
 
@@ -98,6 +138,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.VisitId == id
                                            select new GetClientMgtVisit
                                            {
+                                               VisitId = c.VisitId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                ActionsTakenByMPCC = c.ActionsTakenByMPCC,
@@ -116,7 +158,24 @@ namespace AwesomeCare.API.Controllers
                                                RateManagers = c.RateManagers,
                                                RateServiceRecieving = c.RateServiceRecieving,
                                                ServiceRecommended = c.ServiceRecommended,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.VisitId == c.VisitId
+                                                               select new GetVisitOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
+                                               StaffName = (from com in _staffnameRepository.Table
+                                                            join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                            where com.VisitId == c.VisitId
+                                                            select new GetVisitStaffName
+                                                            {
+                                                                StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+                                                            }).ToList(),
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getClientMgtVisit);

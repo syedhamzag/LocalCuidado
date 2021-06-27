@@ -89,8 +89,30 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int bloodId)
         {
-            var BloodPressure = await _clientBloodPressureService.Get(bloodId);
-            return View(BloodPressure);
+            var BloodPressure = _clientBloodPressureService.Get(bloodId);
+            var putEntity = new CreateClientBloodPressure
+            {
+                BloodPressureId = BloodPressure.Result.BloodPressureId,
+                Reference = BloodPressure.Result.Reference,
+                ClientId = BloodPressure.Result.ClientId,
+                Date = BloodPressure.Result.Date,
+                Time = BloodPressure.Result.Time,
+                GoalSystolic = BloodPressure.Result.GoalSystolic,
+                GoalDiastolic = BloodPressure.Result.GoalDiastolic,
+                ReadingSystolic = BloodPressure.Result.ReadingSystolic,
+                ReadingDiastolic = BloodPressure.Result.ReadingDiastolic,
+                StatusImage = BloodPressure.Result.StatusImage,
+                StatusAttach = BloodPressure.Result.StatusAttach,
+                Comment = BloodPressure.Result.Comment,
+                Staff_Name = BloodPressure.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = BloodPressure.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = BloodPressure.Result.PhysicianResponse,
+                OfficerName = BloodPressure.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = BloodPressure.Result.Deadline,
+                Remarks = BloodPressure.Result.Remarks,
+                Status = BloodPressure.Result.Status
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int bloodId, string sender, string password, string recipient, string Smtp)
         {

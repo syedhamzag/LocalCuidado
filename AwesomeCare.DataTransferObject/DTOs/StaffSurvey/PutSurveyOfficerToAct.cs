@@ -6,7 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffSurvey
 {
     public class PutSurveyOfficerToAct
     {
-        public int SurveyId { get; set; }
+        public int StaffSurveyId { get; set; }
         public int StaffPersonalInfoId { get; set; }
 
     }

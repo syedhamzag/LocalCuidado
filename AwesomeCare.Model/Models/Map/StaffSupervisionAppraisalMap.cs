@@ -32,52 +32,42 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Details)
                .HasColumnName("Details")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.StaffRating)
                .HasColumnName("StaffRating")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ProfessionalDevelopment)
                .HasColumnName("ProfessionalDevelopment")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.StaffComplaints)
                .HasColumnName("StaffComplaints")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.FiveStarRating)
                .HasColumnName("FiveStarRating")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.StaffDevelopment)
                .HasColumnName("StaffDevelopment")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.StaffAbility)
                .HasColumnName("StaffAbility")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.NoAbilityToSupport)
                .HasColumnName("NoAbilityToSupport")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.CondourAndWhistleBlowing)
                .HasColumnName("CondourAndWhistleBlowing")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.NoCondourAndWhistleBlowing)
                .HasColumnName("NoCondourAndWhistleBlowing")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.StaffSupportAreas)
@@ -86,7 +76,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.ActionRequired)
                .HasColumnName("ActionRequired")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Deadline)
@@ -99,12 +88,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
                .HasColumnName("URL")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -114,6 +101,15 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Relationship
 
+            builder.HasMany<SupervisionWorkteam>(p => p.Workteam)
+                .WithOne(p => p.Supervision)
+                .HasForeignKey(p => p.StaffSupervisionAppraisalId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<SupervisionOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.Supervision)
+                .HasForeignKey(p => p.StaffSupervisionAppraisalId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

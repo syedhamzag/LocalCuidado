@@ -76,13 +76,53 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientPainChart> model)
+        public async Task<IActionResult> Put([FromBody] PutClientPainChart models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientPainChart = Mapper.Map<ClientPainChart>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<PainChartOfficerToAct>();
+                var filterentity = entity.Where(c => c.PainChartId == model.PainChartId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.Physician.ToList())
+            {
+                var entity = _dbContext.Set<PainChartPhysician>();
+                var filterentity = entity.Where(c => c.PainChartId == model.PainChartId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<PainChartStaffName>();
+                var filterentity = entity.Where(c => c.PainChartId == model.PainChartId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            var ClientPainChart = Mapper.Map<ClientPainChart>(models);
             await _ClientPainChartRepository.UpdateEntity(ClientPainChart);
             return Ok();
 

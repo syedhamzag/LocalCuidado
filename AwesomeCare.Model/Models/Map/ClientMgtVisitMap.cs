@@ -81,7 +81,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.RotCause)
              .HasColumnName("RotCause")
-             .HasMaxLength(50)
              .IsRequired();
 
             builder.Property(p => p.LessonLearntAndShared)
@@ -101,7 +100,17 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasOne(p => p.Client)
                  .WithMany(p => p.ClientMgtVisit)
                  .HasForeignKey(p => p.ClientId)
-                 .OnDelete(DeleteBehavior.Cascade);;
+                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<VisitStaffName>(p => p.StaffName)
+                .WithOne(p => p.Visit)
+                .HasForeignKey(p => p.VisitId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<VisitOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.Visit)
+                .HasForeignKey(p => p.VisitId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

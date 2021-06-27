@@ -41,7 +41,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Team You Work For</label>
-                                    <baserecord asp-key="Team_You_Work_For" asp-for="TeamYouWorkFor" asp-items="@Model.OfficerToActList" />
+                                    <select asp-for="TeamYouWorkFor" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="TeamYouWorkFor" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">

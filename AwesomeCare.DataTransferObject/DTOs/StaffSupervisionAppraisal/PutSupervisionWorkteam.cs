@@ -6,7 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffSupervision
 {
     public class PutSupervisionWorkteam
     {
-        public int SupervisionId { get; set; }
+        public int StaffSupervisionAppraisalId { get; set; }
         public int StaffPersonalInfoId { get; set; }
 
     }

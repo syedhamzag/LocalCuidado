@@ -1,10 +1,10 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.ClientBloodPressure;
-using AwesomeCare.DataTransferObject.Validations;
+﻿using AwesomeCare.DataTransferObject.Validations;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using AwesomeCare.DataTransferObject.DTOs.ClientComplain;
 
 namespace AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister
 {
@@ -12,8 +12,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister
     {
         public PostComplainRegister()
         {
-            OfficerToAct = new List<PostBloodPressureOfficerToAct>();
-            StaffName = new List<PostBloodPressureStaffName>();
+            OfficerToAct = new List<PostComplainOfficerToAct>();
+            StaffName = new List<PostComplainStaffName>();
         }
         public string Reference { get; set; }
         public int ComplainId { get; set; }
@@ -36,7 +36,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister
         public int StatusId { get; set; }
         public string EvidenceFilePath { get; set; }
 
-        public List<PostBloodPressureOfficerToAct> OfficerToAct { get; set; }
-        public List<PostBloodPressureStaffName> StaffName { get; set; }
+        public List<PostComplainOfficerToAct> OfficerToAct { get; set; }
+        public List<PostComplainStaffName> StaffName { get; set; }
     }
 }

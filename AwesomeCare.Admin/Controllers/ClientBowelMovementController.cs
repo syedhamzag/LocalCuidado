@@ -90,8 +90,31 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int bowelId)
         {
-            var BowelMovement = await _clientBowelMovementService.Get(bowelId);
-            return View(BowelMovement);
+            var BowelMovement = _clientBowelMovementService.Get(bowelId);
+            var putEntity = new CreateClientBowelMovement
+            {
+                BowelMovementId = BowelMovement.Result.BowelMovementId,
+                ClientId = BowelMovement.Result.ClientId,
+                Date = BowelMovement.Result.Date,
+                Time = BowelMovement.Result.Time,
+                Type = BowelMovement.Result.Type,
+                Color = BowelMovement.Result.Color,
+                Size = BowelMovement.Result.Size,
+                StatusImage = BowelMovement.Result.StatusImage,
+                StatusAttach = BowelMovement.Result.StatusAttach,
+                Comment = BowelMovement.Result.Comment,
+                Staff_Name = BowelMovement.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = BowelMovement.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = BowelMovement.Result.PhysicianResponse,
+                OfficerName = BowelMovement.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = BowelMovement.Result.Deadline,
+                Remarks = BowelMovement.Result.Remarks,
+                Status = BowelMovement.Result.Status,
+                Reference = BowelMovement.Result.Reference,
+                ColorAttach = BowelMovement.Result.ColorAttach,
+                TypeAttach = BowelMovement.Result.TypeAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int bowelId, string sender, string password, string recipient, string Smtp)
         {
@@ -161,6 +184,7 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = BowelMovement.Result.Deadline,
                 Remarks = BowelMovement.Result.Remarks,
                 Status = BowelMovement.Result.Status,
+                Reference = BowelMovement.Result.Reference,
                 ColorAttach = BowelMovement.Result.ColorAttach,
                 TypeAttach = BowelMovement.Result.TypeAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()

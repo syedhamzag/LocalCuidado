@@ -22,11 +22,19 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffSurvey> _StaffSurveyRepository;
-        
-        public StaffSurveyController(AwesomeCareDbContext dbContext, IGenericRepository<StaffSurvey> StaffSurveyRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<SurveyOfficerToAct> _officertoactRepository;
+        private IGenericRepository<SurveyWorkteam> _workteamRepository;
+
+        public StaffSurveyController(AwesomeCareDbContext dbContext, IGenericRepository<StaffSurvey> StaffSurveyRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<SurveyOfficerToAct> officertoactRepository, IGenericRepository<SurveyWorkteam> workteamRepository)
         {
             _StaffSurveyRepository = StaffSurveyRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
+            _workteamRepository = workteamRepository;
         }
         #region StaffSurvey
         /// <summary>
@@ -68,13 +76,40 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutStaffSurvey model)
+        public async Task<IActionResult> Put([FromBody] PutStaffSurvey models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var StaffSurvey = Mapper.Map<StaffSurvey>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<SurveyOfficerToAct>();
+                var filterentity = entity.Where(c => c.StaffSurveyId == model.StaffSurveyId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.Workteam.ToList())
+            {
+                var entity = _dbContext.Set<SurveyWorkteam>();
+                var filterentity = entity.Where(c => c.StaffSurveyId == model.StaffSurveyId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+            var StaffSurvey = Mapper.Map<StaffSurvey>(models);
             await _StaffSurveyRepository.UpdateEntity(StaffSurvey);
             return Ok();
         }
@@ -96,6 +131,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.StaffSurveyId == id
                                            select new GetStaffSurvey
                                            {
+                                               StaffSurveyId = c.StaffSurveyId,
+                                               Reference = c.Reference,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
                                                Date = c.Date,
@@ -112,7 +149,25 @@ namespace AwesomeCare.API.Controllers
                                                AreaRequiringImprovements = c.AreaRequiringImprovements,
                                                SupportFromCompany = c.SupportFromCompany,
                                                WorkEnvironmentSuggestions = c.WorkEnvironmentSuggestions,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.StaffSurveyId == c.StaffSurveyId
+                                                               select new GetSurveyOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
+                                               Workteam = (from com in _workteamRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.StaffSurveyId == c.StaffSurveyId
+                                                               select new GetSurveyWorkteam
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffSurvey);

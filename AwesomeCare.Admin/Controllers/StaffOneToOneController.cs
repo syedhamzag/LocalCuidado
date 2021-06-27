@@ -68,52 +68,50 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int oneToOneId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffOneToOneService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
+            var OneToOne = _StaffOneToOneService.Get(oneToOneId);
+            var putEntity = new CreateStaffOneToOne
             {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
+                OneToOneId = OneToOne.Result.OneToOneId,
+                Attachment = OneToOne.Result.Attachment,
+                Date = OneToOne.Result.Date,
+                Deadline = OneToOne.Result.Deadline,
+                URL = OneToOne.Result.URL,
+                OfficerToAct = OneToOne.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = OneToOne.Result.Remarks,
+                Status = OneToOne.Result.Status,
+                ActionRequired = OneToOne.Result.ActionRequired,
+                CurrentEventArea = OneToOne.Result.CurrentEventArea,
+                DecisionsReached = OneToOne.Result.DecisionsReached,
+                ImprovementRecorded = OneToOne.Result.ImprovementRecorded,
+                StaffImprovedInAreas = OneToOne.Result.StaffImprovedInAreas,
+                StaffId = OneToOne.Result.StaffId,
+                StaffConclusion = OneToOne.Result.StaffConclusion,
+                Purpose = OneToOne.Result.Purpose,
+                PreviousSupervision = OneToOne.Result.PreviousSupervision,
+                NextCheckDate = OneToOne.Result.NextCheckDate
 
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(logAudit.FirstOrDefault());
+            };
+            return View(putEntity);
+
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int oneToOneId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffOneToOneService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var oneToOne = await _StaffOneToOneService.Get(oneToOneId);
+            var json = JsonConvert.SerializeObject(oneToOne);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "StaffOneToOne.pdf");
             string subject = "StaffOneToOne";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int oneToOneId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffOneToOneService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var oneToOne = await _StaffOneToOneService.Get(oneToOneId);
+            var json = JsonConvert.SerializeObject(oneToOne);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "StaffOneToOne.pdf");
         }
@@ -143,38 +141,31 @@ namespace AwesomeCare.Admin.Controllers
             return buffer;
         }
 
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int oneToOneId)
         {
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var OneToOne = _StaffOneToOneService.GetByRef(Reference);
-            foreach (var item in OneToOne.Result)
-            {
-                officer.Add(item.OfficerToAct);
-                Ids.Add(item.OneToOneId);
-            }
+            var OneToOne = _StaffOneToOneService.Get(oneToOneId);
             var staffs = await _staffService.GetStaffs();
 
             var putEntity = new CreateStaffOneToOne
             {
-                OneToOneIds = Ids,
-                Attachment = OneToOne.Result.FirstOrDefault().Attachment,
-                Date = OneToOne.Result.FirstOrDefault().Date,
-                Deadline = OneToOne.Result.FirstOrDefault().Deadline,
-                URL = OneToOne.Result.FirstOrDefault().URL,
-                OfficerToAct = officer,
-                Remarks = OneToOne.Result.FirstOrDefault().Remarks,
-                Status = OneToOne.Result.FirstOrDefault().Status,
-                ActionRequired = OneToOne.Result.FirstOrDefault().ActionRequired,
-                CurrentEventArea = OneToOne.Result.FirstOrDefault().CurrentEventArea,
-                DecisionsReached = OneToOne.Result.FirstOrDefault().DecisionsReached,
-                ImprovementRecorded = OneToOne.Result.FirstOrDefault().ImprovementRecorded,
-                StaffImprovedInAreas = OneToOne.Result.FirstOrDefault().StaffImprovedInAreas,
-                StaffId = OneToOne.Result.FirstOrDefault().StaffId,
-                StaffConclusion = OneToOne.Result.FirstOrDefault().StaffConclusion,
-                Purpose = OneToOne.Result.FirstOrDefault().Purpose,
-                PreviousSupervision = OneToOne.Result.FirstOrDefault().PreviousSupervision,
-                NextCheckDate = OneToOne.Result.FirstOrDefault().NextCheckDate,
+                OneToOneId = OneToOne.Result.OneToOneId,
+                Attachment = OneToOne.Result.Attachment,
+                Date = OneToOne.Result.Date,
+                Deadline = OneToOne.Result.Deadline,
+                URL = OneToOne.Result.URL,
+                OfficerToAct = OneToOne.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = OneToOne.Result.Remarks,
+                Status = OneToOne.Result.Status,
+                ActionRequired = OneToOne.Result.ActionRequired,
+                CurrentEventArea = OneToOne.Result.CurrentEventArea,
+                DecisionsReached = OneToOne.Result.DecisionsReached,
+                ImprovementRecorded = OneToOne.Result.ImprovementRecorded,
+                StaffImprovedInAreas = OneToOne.Result.StaffImprovedInAreas,
+                StaffId = OneToOne.Result.StaffId,
+                StaffConclusion = OneToOne.Result.StaffConclusion,
+                Purpose = OneToOne.Result.Purpose,
+                PreviousSupervision = OneToOne.Result.PreviousSupervision,
+                NextCheckDate = OneToOne.Result.NextCheckDate,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
 
             };
@@ -198,19 +189,19 @@ namespace AwesomeCare.Admin.Controllers
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.Attachment = pathA;
             }
+            else
+            {
+                model.Attachment = "No Image";
+            }
             #endregion
 
-            List<PostStaffOneToOne> posts = new List<PostStaffOneToOne>();
-
-            foreach (var officer in model.OfficerToAct)
-            {
                 var post = new PostStaffOneToOne();
                 post.Attachment = model.Attachment;
                 post.Reference = model.Reference;
                 post.Date = model.Date;
                 post.Deadline = model.Deadline;
                 post.URL = model.URL;
-                post.OfficerToAct = officer;
+                post.OfficerToAct = model.OfficerToAct.Select(s => new PostOneToOneOfficerToAct { StaffPersonalInfoId = s, OneToOneId = model.OneToOneId }).ToList();
                 post.Remarks = model.Remarks;
                 post.Status = model.Status;
                 post.ActionRequired = model.ActionRequired;
@@ -223,10 +214,9 @@ namespace AwesomeCare.Admin.Controllers
                 post.Purpose = model.Purpose;
                 post.PreviousSupervision = model.PreviousSupervision;
                 post.NextCheckDate = model.NextCheckDate;
-                posts.Add(post);
-            }
 
-                var result = await _StaffOneToOneService.Create(posts);
+
+                var result = await _StaffOneToOneService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New One to One successfully registered" : "An Error Occurred" });
@@ -257,20 +247,14 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = model.Attachment;
             }
             #endregion
-            List<PutStaffOneToOne> puts = new List<PutStaffOneToOne>();
-            int count = model.OneToOneIds.Count;
-            int i = 0;
-            foreach (var officer in model.OfficerToAct)
-            {
                 var put = new PutStaffOneToOne();
-                if (i < count)
-                    put.OneToOneId = model.OneToOneIds[i];
+                put.OneToOneId = model.OneToOneId;
                 put.Reference = model.Reference;
                 put.Attachment = model.Attachment;
                 put.Date = model.Date;
                 put.Deadline = model.Deadline;
                 put.URL = model.URL;
-                put.OfficerToAct = officer;
+                put.OfficerToAct = model.OfficerToAct.Select(s => new PutOneToOneOfficerToAct { StaffPersonalInfoId = s, OneToOneId = model.OneToOneId }).ToList();
                 put.Remarks = model.Remarks;
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;
@@ -283,9 +267,8 @@ namespace AwesomeCare.Admin.Controllers
                 put.Purpose = model.Purpose;
                 put.PreviousSupervision = model.PreviousSupervision;
                 put.NextCheckDate = model.NextCheckDate;
-                puts.Add(put);
-            }
-            var entity = await _StaffOneToOneService.Put(puts);
+
+            var entity = await _StaffOneToOneService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

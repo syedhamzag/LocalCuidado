@@ -90,8 +90,29 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int TempId)
         {
-            var BodyTemp = await _clientBodyTempService.Get(TempId);
-            return View(BodyTemp);
+            var BodyTemp = _clientBodyTempService.Get(TempId);
+            var putEntity = new CreateClientBodyTemp
+            {
+                BodyTempId = BodyTemp.Result.BodyTempId,
+                Reference = BodyTemp.Result.Reference,
+                ClientId = BodyTemp.Result.ClientId,
+                Date = BodyTemp.Result.Date,
+                Time = BodyTemp.Result.Time,
+                TargetTemp = BodyTemp.Result.TargetTemp,
+                CurrentReading = BodyTemp.Result.CurrentReading,
+                SeeChart = BodyTemp.Result.SeeChart,
+                Comment = BodyTemp.Result.Comment,
+                Staff_Name = BodyTemp.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = BodyTemp.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = BodyTemp.Result.PhysicianResponse,
+                OfficerName = BodyTemp.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = BodyTemp.Result.Deadline,
+                Remarks = BodyTemp.Result.Remarks,
+                Status = BodyTemp.Result.Status,
+                SeeChartAttach = BodyTemp.Result.SeeChartAttach,
+                TargetTempAttach = BodyTemp.Result.TargetTempAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int TempId, string sender, string password, string recipient, string Smtp)
         {

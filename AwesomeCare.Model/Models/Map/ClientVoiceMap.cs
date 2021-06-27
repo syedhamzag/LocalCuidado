@@ -44,12 +44,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.AreasOfImprovements)
                .HasColumnName("AreasOfImprovements")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.SomethingSpecial)
                .HasColumnName("SomethingSpecial")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.InterestedInPrograms)
@@ -58,28 +56,23 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.HealthGoalShortTerm)
                .HasColumnName("HealthGoalShortTerm")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.HealthGoalLongTerm)
                .HasColumnName("HealthGoalLongTerm")
-               .HasMaxLength(255)
                .IsRequired();
 
 
             builder.Property(p => p.ActionRequired)
                .HasColumnName("ActionRequired")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.EvidenceOfActionTaken)
              .HasColumnName("EvidenceOfActionTaken")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.ActionsTakenByMPCC)
                .HasColumnName("ActionsTakenByMPCC")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Status)
@@ -92,27 +85,22 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.RotCause)
              .HasColumnName("RotCause")
-             .HasMaxLength(50)
              .IsRequired();
 
             builder.Property(p => p.LessonLearntAndShared)
              .HasColumnName("LessonLearntAndShared")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.URL)
              .HasColumnName("URL")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.Attachment)
-             .HasColumnName("Attachment")
-             .IsRequired();
+             .HasColumnName("Attachment");
             #endregion
 
             #region Relationship
@@ -121,6 +109,10 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasMany<VoiceOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.Voice)
+                .HasForeignKey(p => p.VoiceId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

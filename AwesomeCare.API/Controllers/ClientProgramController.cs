@@ -22,11 +22,17 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientProgram> _clientProgramRepository;
-        
-        public ClientProgramController(AwesomeCareDbContext dbContext, IGenericRepository<ClientProgram> clientProgramRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<ProgramOfficerToAct> _officertoactRepository;
+
+        public ClientProgramController(AwesomeCareDbContext dbContext, IGenericRepository<ClientProgram> clientProgramRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+        IGenericRepository<ProgramOfficerToAct> officertoactRepository)
         {
             _clientProgramRepository = clientProgramRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientProgram
         /// <summary>
@@ -67,13 +73,29 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutClientProgram model)
+        public async Task<IActionResult> Put([FromBody] PutClientProgram models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientProgram = Mapper.Map<ClientProgram>(model);
+
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<ProgramOfficerToAct>();
+                var filterentity = entity.Where(c => c.ProgramId == model.ProgramId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            var result = _dbContext.SaveChanges();
+            var ClientProgram = Mapper.Map<ClientProgram>(models);
             await _clientProgramRepository.UpdateEntity(ClientProgram);
             return Ok();
 
@@ -97,6 +119,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.ProgramId == id
                                            select new GetClientProgram
                                            {
+                                               ProgramId = c.ProgramId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -110,6 +134,15 @@ namespace AwesomeCare.API.Controllers
                                                Observation = c.Observation,
                                                PlaceLocationProgram = c.PlaceLocationProgram,
                                                ProgramOfChoice = c.ProgramOfChoice,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.ProgramId == c.ProgramId
+                                                               select new GetProgramOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
                                                URL = c.URL
                                            }
                       ).FirstOrDefaultAsync();

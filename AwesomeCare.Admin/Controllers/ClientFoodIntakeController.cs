@@ -90,8 +90,28 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int foodId)
         {
-            var FoodIntake = await _clientFoodIntakeService.Get(foodId);
-            return View(FoodIntake);
+            var FoodIntake = _clientFoodIntakeService.Get(foodId);
+            var putEntity = new CreateClientFoodIntake
+            {
+                FoodIntakeId = FoodIntake.Result.FoodIntakeId,
+                Reference = FoodIntake.Result.Reference,
+                ClientId = FoodIntake.Result.ClientId,
+                Date = FoodIntake.Result.Date,
+                Time = FoodIntake.Result.Time,
+                Goal = FoodIntake.Result.Goal,
+                CurrentIntake = FoodIntake.Result.CurrentIntake,
+                StatusImage = FoodIntake.Result.StatusImage,
+                StatusAttach = FoodIntake.Result.StatusAttach,
+                Comment = FoodIntake.Result.Comment,
+                Staff_Name = FoodIntake.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = FoodIntake.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = FoodIntake.Result.PhysicianResponse,
+                OfficerName = FoodIntake.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = FoodIntake.Result.Deadline,
+                Remarks = FoodIntake.Result.Remarks,
+                Status = FoodIntake.Result.Status,
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int foodId, string sender, string password, string recipient, string Smtp)
         {

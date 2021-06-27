@@ -32,7 +32,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Details)
                .HasColumnName("Details")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.NotComfortableServices)
@@ -53,37 +52,30 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.ChangesWeNeed)
                .HasColumnName("ChangesWeNeed")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.NutritionalChanges)
                .HasColumnName("NutritionalChanges")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.HealthAndWellNessChanges)
                .HasColumnName("HealthAndWellNessChanges")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.MedicationChanges)
                .HasColumnName("MedicationChanges")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.MovingAndHandling)
                .HasColumnName("MovingAndHandling")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.RiskAssessment)
                .HasColumnName("RiskAssessment")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ActionRequired)
                .HasColumnName("ActionRequired")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Deadline)
@@ -96,12 +88,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
                .HasColumnName("URL")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -125,6 +115,16 @@ namespace AwesomeCare.Model.Models.Map
                  .WithMany(p => p.StaffKeyWorkerVoice)
                  .HasForeignKey(p => p.ServicesRequiresServices)
                  .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<KeyWorkerWorkteam>(p => p.Workteam)
+                .WithOne(p => p.KeyWorker)
+                .HasForeignKey(p => p.KeyWorkerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<KeyWorkerOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.KeyWorker)
+                .HasForeignKey(p => p.KeyWorkerId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

@@ -24,12 +24,18 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Client> _clientRepository;
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientLogAudit> _clientLogAuditRepository;
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<LogAuditOfficerToAct> _officertoactRepository;
 
-        public ClientLogAuditController(AwesomeCareDbContext dbContext, IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<Client> clientRepository)
+        public ClientLogAuditController(AwesomeCareDbContext dbContext, IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<Client> clientRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<LogAuditOfficerToAct> officertoactRepository)
         {
             _clientLogAuditRepository = clientLogAuditRepository;
             _clientRepository = clientRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientLogAudit
         /// <summary>
@@ -71,13 +77,28 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutClientLogAudit model)
+        public async Task<IActionResult> Put([FromBody] PutClientLogAudit models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientLogAudit = Mapper.Map<ClientLogAudit>(model);
+
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<LogAuditOfficerToAct>();
+                var filterentity = entity.Where(c => c.LogAuditId == model.LogAuditId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            var ClientLogAudit = Mapper.Map<ClientLogAudit>(models);
             await _clientLogAuditRepository.UpdateEntity(ClientLogAudit);
             return Ok();
 
@@ -124,7 +145,16 @@ namespace AwesomeCare.API.Controllers
                                                IsCareExpected = c.IsCareExpected,
                                                ProperDocumentation = c.ProperDocumentation,
                                                ThinkingStaff = c.ThinkingStaff,
-                                               ThinkingStaffStop = c.ThinkingStaffStop
+                                               ThinkingStaffStop = c.ThinkingStaffStop,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.LogAuditId == c.LogAuditId
+                                                               select new GetLogAuditOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getClientLogAudit);
