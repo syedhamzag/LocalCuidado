@@ -143,6 +143,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 VoiceId = Voice.Result.VoiceId,
                 ClientId = Voice.Result.ClientId,
+                Reference = Voice.Result.Reference,
                 Attachment = Voice.Result.Attachment,
                 Date = Voice.Result.Date,
                 Deadline = Voice.Result.Deadline,

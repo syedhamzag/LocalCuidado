@@ -257,7 +257,7 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.SeeChartAttach = model.SeeChartAttach;
                 postlog.TargetPulseAttach = model.TargetPulseAttach;
                 postlog.Chart = model.Chart;
-
+            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientPulseRateService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 

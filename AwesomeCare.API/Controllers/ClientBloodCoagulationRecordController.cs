@@ -86,20 +86,20 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.OfficerToAct.ToList())
             {
                 var entity = _dbContext.Set<BloodCoagOfficerToAct>();
-                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
                     {
                         _dbContext.Entry(item).State = EntityState.Deleted;
                     }
-                    
+
                 }
             }
             foreach (var model in models.Physician.ToList())
             {
                 var entity = _dbContext.Set<BloodCoagPhysician>();
-                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -112,7 +112,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.StaffName.ToList())
             {
                 var entity = _dbContext.Set<BloodCoagStaffName>();
-                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.BloodRecordId == model.BloodRecordId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -123,7 +123,7 @@ namespace AwesomeCare.API.Controllers
                 }
             }
             var result = _dbContext.SaveChanges();
-
+            
             var ClientBloodCoagulationRecord = Mapper.Map<ClientBloodCoagulationRecord>(models);         
             await _ClientBloodCoagulationRecordRepository.UpdateEntity(ClientBloodCoagulationRecord);
             return Ok();

@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Name of Caller</label>
-                                    <select asp-for="NameOfCaller" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>/>
+                                    <select asp-for="NameOfCaller" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                                     <span asp-validation-for="NameOfCaller" class="text-danger"></span>
                                 </div>
                             </div>
@@ -118,11 +118,6 @@
                                     <label class="control-label">Action taken by MPCC</label>
                                     <input type="text" asp-for="ActionsTakenByMPCC" class="form-control" />
                                     <span asp-validation-for="ActionsTakenByMPCC" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Evidence of action taken</label>
-                                    <input type="text" asp-for="EvidenceOfActionTaken" class="form-control" />
-                                    <span asp-validation-for="EvidenceOfActionTaken" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -180,7 +175,15 @@
                                     <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>
-
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Evidence <small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <input type="file" asp-for="Evidence" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Evidence" class="text-danger"></span>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">

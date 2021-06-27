@@ -158,7 +158,7 @@ namespace AwesomeCare.Admin.Controllers
                 LogURL = LogAudit.Result.LogURL,
                 NameOfAuditor = LogAudit.Result.NameOfAuditor,
                 Observations = LogAudit.Result.Observations,
-                //OfficerToTakeAction = LogAudit.Result.OfficerToTakeAction.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToTakeAction = LogAudit.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 Remarks = LogAudit.Result.Remarks,
                 RepeatOfIncident = LogAudit.Result.RepeatOfIncident,
                 RotCause = LogAudit.Result.RotCause,

@@ -87,7 +87,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.OfficerToAct.ToList())
             {
                 var entity = _dbContext.Set<LogAuditOfficerToAct>();
-                var filterentity = entity.Where(c => c.LogAuditId == model.LogAuditId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.LogAuditId == model.LogAuditId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -124,6 +124,7 @@ namespace AwesomeCare.API.Controllers
                                                LogAuditId = c.LogAuditId,
                                                Reference = c.Reference,
                                                ClientId = c.ClientId,
+                                               NameOfAuditor = c.NameOfAuditor,
                                                ActionRecommended = c.ActionRecommended,
                                                ActionTaken = c.ActionTaken,
                                                EvidenceFilePath = c.EvidenceFilePath,

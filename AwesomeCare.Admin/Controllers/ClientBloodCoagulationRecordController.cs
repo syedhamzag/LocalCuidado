@@ -301,8 +301,10 @@ namespace AwesomeCare.Admin.Controllers
             put.Remark = model.Remark;
             put.Status = model.Status;
             put.TargetINRAttach = model.TargetINRAttach;
+
             var json = JsonConvert.SerializeObject(put);
             var entity = await _clientBloodCoagulationRecordService.Put(put);
+
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

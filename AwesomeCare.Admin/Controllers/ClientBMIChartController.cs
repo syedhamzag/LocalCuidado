@@ -231,7 +231,7 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
                 postlog.SeeChartAttach = model.SeeChartAttach;
-
+            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientBMIChartService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 

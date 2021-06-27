@@ -91,7 +91,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.OfficerToAct.ToList())
             {
                 var entity = _dbContext.Set<VoiceOfficerToAct>();
-                var filterentity = entity.Where(c => c.VoiceId == model.VoiceId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.VoiceId == model.VoiceId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -104,7 +104,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.GoodStaff.ToList())
             {
                 var entity = _dbContext.Set<VoiceGoodStaff>();
-                var filterentity = entity.Where(c => c.VoiceId == model.VoiceId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.VoiceId == model.VoiceId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -117,7 +117,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.PoorStaff.ToList())
             {
                 var entity = _dbContext.Set<VoicePoorStaff>();
-                var filterentity = entity.Where(c => c.VoiceId == model.VoiceId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.VoiceId == model.VoiceId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -130,7 +130,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.CallerName.ToList())
             {
                 var entity = _dbContext.Set<VoiceCallerName>();
-                var filterentity = entity.Where(c => c.VoiceId == model.VoiceId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.VoiceId == model.VoiceId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -174,6 +174,7 @@ namespace AwesomeCare.API.Controllers
                                                EvidenceOfActionTaken = c.EvidenceOfActionTaken,
                                                LessonLearntAndShared = c.LessonLearntAndShared,
                                                URL = c.URL,
+                                               OfficeStaffSupport = c.OfficeStaffSupport,                                               
                                                Remarks = c.Remarks,
                                                RotCause = c.RotCause,
                                                Status = c.Status,

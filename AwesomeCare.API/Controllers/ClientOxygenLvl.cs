@@ -85,7 +85,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.OfficerToAct.ToList())
             {
                 var entity = _dbContext.Set<OxygenLvlOfficerToAct>();
-                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -98,7 +98,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.Physician.ToList())
             {
                 var entity = _dbContext.Set<OxygenLvlPhysician>();
-                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
@@ -111,7 +111,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.StaffName.ToList())
             {
                 var entity = _dbContext.Set<OxygenLvlStaffName>();
-                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.OxygenLvlId == model.OxygenLvlId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)

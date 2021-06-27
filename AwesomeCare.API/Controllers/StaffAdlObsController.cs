@@ -83,7 +83,7 @@ namespace AwesomeCare.API.Controllers
             foreach (var model in models.OfficerToAct.ToList())
             {
                 var entity = _dbContext.Set<AdlObsOfficerToAct>();
-                var filterentity = entity.Where(c => c.ObservationId == model.ObservationId && c.StaffPersonalInfoId == model.StaffPersonalInfoId).ToList();
+                var filterentity = entity.Where(c => c.ObservationId == model.ObservationId).ToList();
                 if (filterentity != null)
                 {
                     foreach (var item in filterentity)
