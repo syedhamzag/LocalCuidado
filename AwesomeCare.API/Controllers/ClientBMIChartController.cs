@@ -60,7 +60,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientBMIChart> postClientBMIChart)
+        public async Task<IActionResult> Create([FromBody] PostClientBMIChart postClientBMIChart)
         {
             if (postClientBMIChart == null || !ModelState.IsValid)
             {

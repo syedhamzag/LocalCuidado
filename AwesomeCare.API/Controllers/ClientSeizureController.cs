@@ -124,7 +124,7 @@ namespace AwesomeCare.API.Controllers
             }
             var result = _dbContext.SaveChanges();
             var ClientSeizure = Mapper.Map<ClientSeizure>(models);
-            await _ClientSeizureRepository.InsertEntity(ClientSeizure);
+            await _ClientSeizureRepository.UpdateEntity(ClientSeizure);
             return Ok();
 
         }

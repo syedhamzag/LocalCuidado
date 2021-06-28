@@ -78,29 +78,54 @@ namespace AwesomeCare.API.Controllers
         /// <summary>
         /// Update Medication
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="models"></param>
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutComplainRegister model)
+        public async Task<IActionResult> Put([FromBody] PutComplainRegister models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var complain = Mapper.Map<ClientComplainRegister>(model);
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<ComplainOfficerToAct>();
+                var filterentity = entity.Where(c => c.ComplainId == model.ComplainId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<ComplainStaffName>();
+                var filterentity = entity.Where(c => c.ComplainId == model.ComplainId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var complain = Mapper.Map<ClientComplainRegister>(models);
             await _complainRepository.UpdateEntity(complain);
             return Ok();
 
 
         }
         /// <summary>
-        /// Get Complain by ClientId and ComplainId
+        /// Get Complain by id
         /// </summary>
-        /// <param name="complainId"></param>
-        /// <param name="clientId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("/Get/{id}")]
+        [HttpGet("Get/{id}")]
         [ProducesResponseType(type: typeof(GetClientComplainRegister), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
