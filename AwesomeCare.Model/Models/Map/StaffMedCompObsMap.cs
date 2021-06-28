@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<StaffMedComp> builder)
         {
-            builder.ToTable("tbl_StaffMedCompObs");
+            builder.ToTable("tbl_Staff_MedCompObs");
             builder.HasKey(k => k.MedCompId);
 
             #region Properties
@@ -32,7 +32,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Details)
             .HasColumnName("Details")
-            .HasMaxLength(255)
             .IsRequired();
 
             builder.Property(p => p.ClientId)
@@ -61,12 +60,7 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.ActionRequired)
              .HasColumnName("ActionRequired")
-             .HasMaxLength(255)
              .IsRequired();
-
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
-               .IsRequired();
 
             builder.Property(p => p.Deadline)
                .HasColumnName("Deadline")
@@ -78,12 +72,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
              .HasColumnName("URL")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -97,10 +89,10 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffMedCompObs)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<MedCompOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.MedComp)
+                .HasForeignKey(p => p.MedCompId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

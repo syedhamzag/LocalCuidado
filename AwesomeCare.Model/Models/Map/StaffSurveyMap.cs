@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<StaffSurvey> builder)
         {
-            builder.ToTable("tbl_StaffSurvey");
+            builder.ToTable("tbl_Staff_Survey");
             builder.HasKey(k => k.StaffSurveyId);
 
             #region Properties
@@ -32,11 +32,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Details)
                .HasColumnName("Details")
-               .HasMaxLength(255)
-               .IsRequired();
-
-            builder.Property(p => p.WorkTeam)
-               .HasColumnName("WorkTeam")
                .IsRequired();
 
             builder.Property(p => p.AdequateTrainingReceived)
@@ -61,21 +56,14 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.WorkEnvironmentSuggestions)
                .HasColumnName("WorkEnvironmentSuggestions")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.AreaRequiringImprovements)
                .HasColumnName("AreaRequiringImprovements")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ActionRequired)
                .HasColumnName("ActionRequired")
-               .HasMaxLength(255)
-               .IsRequired();
-
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
                .IsRequired();
 
             builder.Property(p => p.Deadline)
@@ -88,12 +76,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
                .HasColumnName("URL")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -103,15 +89,15 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Relationship
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffSurvey)
-                 .HasForeignKey(p => p.WorkTeam)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<SurveyWorkteam>(p => p.Workteam)
+                .WithOne(p => p.Survey)
+                .HasForeignKey(p => p.StaffSurveyId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffSurvey)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<SurveyOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.Survey)
+                .HasForeignKey(p => p.StaffSurveyId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

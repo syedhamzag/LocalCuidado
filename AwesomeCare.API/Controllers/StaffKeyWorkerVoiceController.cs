@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
-using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -22,11 +22,19 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffKeyWorkerVoice> _StaffKeyWorkerVoiceRepository;
-        
-        public StaffKeyWorkerVoiceController(AwesomeCareDbContext dbContext, IGenericRepository<StaffKeyWorkerVoice> StaffKeyWorkerVoiceRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<KeyWorkerOfficerToAct> _officertoactRepository;
+        private IGenericRepository<KeyWorkerWorkteam> _workteamRepository;
+
+        public StaffKeyWorkerVoiceController(AwesomeCareDbContext dbContext, IGenericRepository<StaffKeyWorkerVoice> StaffKeyWorkerVoiceRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<KeyWorkerOfficerToAct> officertoactRepository, IGenericRepository<KeyWorkerWorkteam> workteamRepository)
         {
             _StaffKeyWorkerVoiceRepository = StaffKeyWorkerVoiceRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
+            _workteamRepository = workteamRepository;
         }
         #region StaffKeyWorkerVoice
         /// <summary>
@@ -40,23 +48,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffKeyWorkerVoiceRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-
-        /// <summary>
-        /// Get All StaffKeyWorkerVoice
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetStaffKeyWorkerVoice>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _StaffKeyWorkerVoiceRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
+
         /// <summary>
         /// Create StaffKeyWorkerVoice
         /// </summary>
@@ -64,20 +58,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostStaffKeyWorkerVoice> postStaffKeyWorkerVoice)
+        public async Task<IActionResult> Create([FromBody] PostStaffKeyWorkerVoice postStaffKeyWorkerVoice)
         {
             if (postStaffKeyWorkerVoice == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postStaffKeyWorkerVoice)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
 
-            var StaffKeyWorkerVoice = Mapper.Map<List<StaffKeyWorkerVoice>>(postStaffKeyWorkerVoice);
-            await _StaffKeyWorkerVoiceRepository.InsertEntities(StaffKeyWorkerVoice);
+            var StaffKeyWorkerVoice = Mapper.Map<StaffKeyWorkerVoice>(postStaffKeyWorkerVoice);
+            await _StaffKeyWorkerVoiceRepository.InsertEntity(StaffKeyWorkerVoice);
             return Ok();
         }
         /// <summary>
@@ -86,40 +75,41 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutStaffKeyWorkerVoice> model)
+        public async Task<IActionResult> Put([FromBody] PutStaffKeyWorkerVoice models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<StaffKeyWorkerVoice>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (StaffKeyWorkerVoice item in filterEntity)
+            foreach (var model in models.OfficerToAct.ToList())
             {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficertoAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
+                var entity = _dbContext.Set<KeyWorkerOfficerToAct>();
+                var filterentity = entity.Where(c => c.KeyWorkerId == model.KeyWorkerId).ToList();
+                if (filterentity != null)
                 {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
                 }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
             }
-            //Model not in Database
-            foreach (var item in model)
+            foreach (var model in models.Workteam.ToList())
             {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficertoAct);
-                if (NotInDb == null)
+                var entity = _dbContext.Set<KeyWorkerWorkteam>();
+                var filterentity = entity.Where(c => c.KeyWorkerId == model.KeyWorkerId).ToList();
+                if (filterentity != null)
                 {
-                    var postEntity = Mapper.Map<StaffKeyWorkerVoice>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
                 }
             }
             var result = _dbContext.SaveChanges();
+            var StaffKeyWorkerVoice = Mapper.Map<StaffKeyWorkerVoice>(models);
+            await _StaffKeyWorkerVoiceRepository.UpdateEntity(StaffKeyWorkerVoice);
             return Ok();
 
         }
@@ -142,6 +132,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.KeyWorkerId == id
                                            select new GetStaffKeyWorkerVoice
                                            {
+                                               KeyWorkerId = c.KeyWorkerId,
+                                               Reference = c.Reference,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
                                                Date = c.Date,
@@ -152,7 +144,6 @@ namespace AwesomeCare.API.Controllers
                                                MovingAndHandling = c.MovingAndHandling,
                                                NotComfortableServices = c.NotComfortableServices,
                                                NutritionalChanges = c.NutritionalChanges,
-                                               OfficertoAct = c.OfficerToAct,
                                                RiskAssessment = c.RiskAssessment,
                                                ServicesRequiresServices = c.ServicesRequiresServices,
                                                ServicesRequiresTime = c.ServicesRequiresTime,
@@ -160,10 +151,27 @@ namespace AwesomeCare.API.Controllers
                                                Details = c.Details,
                                                HealthAndWellNessChanges = c.HealthAndWellNessChanges,
                                                StaffId = c.StaffId,
-                                               TeamYouWorkFor = c.TeamYouWorkFor,
                                                WellSupportedServices = c.WellSupportedServices,
                                                ChangesWeNeed = c.ChangesWeNeed,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.KeyWorkerId == c.KeyWorkerId
+                                                               select new GetKeyWorkerOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
+                                               Workteam = (from com in _workteamRepository.Table
+                                                           join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                           where com.KeyWorkerId == c.KeyWorkerId
+                                                           select new GetKeyWorkerWorkteam
+                                                           {
+                                                               StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                               StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                           }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffKeyWorkerVoice);

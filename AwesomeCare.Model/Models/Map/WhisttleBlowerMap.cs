@@ -7,7 +7,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<WhisttleBlower> builder)
         {
-            builder.ToTable("tbl_WhisttleBlower");
+            builder.ToTable("tbl_Whisttle_Blower");
             builder.HasKey(k => k.WhisttleBlowerId);
 
             #region Properties

@@ -58,7 +58,6 @@ namespace AwesomeCare.Admin.Controllers
         {
             var entities = await _clientVoiceService.Get();
             var client = await _clientService.GetClients();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientVoice> reports = new List<CreateClientVoice>();
             foreach (GetClientVoice item in entities)
             {
@@ -76,61 +75,36 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int? clientId)
         {
             var model = new CreateClientVoice();
-            var client = await _clientService.GetClient(clientId.Value);
-            model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;      
             var staffs = await _staffService.GetStaffs();
-            model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             model.ClientId = clientId.Value;
+            var client = await _clientService.GetClientDetail();
+            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
+            model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             return View(model);
 
         }
 
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int vId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var Voice = await _clientVoiceService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Voice)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(Voice.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(Voice.FirstOrDefault());
+            var Voice = await _clientVoiceService.Get(vId);
+            return View(Voice);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int vId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var Voice = await _clientVoiceService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Voice)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(Voice.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var Voice = await _clientVoiceService.Get(vId);
+            var json = JsonConvert.SerializeObject(Voice);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientVoice.pdf");
             string subject = "ClientVoice";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int vId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var Voice = await _clientVoiceService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Voice)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(Voice.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var Voice = await _clientVoiceService.Get(vId);
+            var json = JsonConvert.SerializeObject(Voice);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientVoice.pdf");
         }
@@ -160,46 +134,40 @@ namespace AwesomeCare.Admin.Controllers
             return buffer;
         }
 
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int VoiceId)
         {
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var Voice = _clientVoiceService.GetByRef(Reference);
-            foreach (var item in Voice.Result)
-            {
-                officer.Add(item.OfficerToAct);
-                Ids.Add(item.VoiceId);
-            }
+            var Voice = _clientVoiceService.Get(VoiceId);
             var staffs = await _staffService.GetStaffs();
 
             var putEntity = new CreateClientVoice
             {
-                VoiceIds = Ids,
-                ClientId = Voice.Result.FirstOrDefault().ClientId,
-                Attachment = Voice.Result.FirstOrDefault().Attachment,
-                Date = Voice.Result.FirstOrDefault().Date,
-                Deadline = Voice.Result.FirstOrDefault().Deadline,
-                EvidenceOfActionTaken = Voice.Result.FirstOrDefault().EvidenceOfActionTaken,
-                LessonLearntAndShared = Voice.Result.FirstOrDefault().LessonLearntAndShared,
-                URL = Voice.Result.FirstOrDefault().URL,
-                NameOfCaller = Voice.Result.FirstOrDefault().NameOfCaller,
-                OfficerToAct = officer,
-                Remarks = Voice.Result.FirstOrDefault().Remarks,
-                RotCause = Voice.Result.FirstOrDefault().RotCause,
-                Status = Voice.Result.FirstOrDefault().Status,
-                ActionRequired = Voice.Result.FirstOrDefault().ActionRequired,
-                ActionsTakenByMPCC = Voice.Result.FirstOrDefault().ActionsTakenByMPCC,
-                AreasOfImprovements = Voice.Result.FirstOrDefault().AreasOfImprovements,
-                HealthGoalLongTerm = Voice.Result.FirstOrDefault().HealthGoalLongTerm,
-                HealthGoalShortTerm = Voice.Result.FirstOrDefault().HealthGoalShortTerm,
-                InterestedInPrograms = Voice.Result.FirstOrDefault().InterestedInPrograms,
-                NextCheckDate = Voice.Result.FirstOrDefault().NextCheckDate,
-                OfficeStaffSupport = Voice.Result.FirstOrDefault().OfficeStaffSupport,
-                RateServiceRecieving = Voice.Result.FirstOrDefault().RateServiceRecieving,
-                RateStaffAttending = Voice.Result.FirstOrDefault().RateStaffAttending,
-                SomethingSpecial = Voice.Result.FirstOrDefault().SomethingSpecial,
-                StaffBestSupport = Voice.Result.FirstOrDefault().StaffBestSupport,
-                StaffPoorSupport = Voice.Result.FirstOrDefault().StaffPoorSupport,
+                VoiceId = Voice.Result.VoiceId,
+                ClientId = Voice.Result.ClientId,
+                Reference = Voice.Result.Reference,
+                Attachment = Voice.Result.Attachment,
+                Date = Voice.Result.Date,
+                Deadline = Voice.Result.Deadline,
+                EvidenceOfActionTaken = Voice.Result.EvidenceOfActionTaken,
+                LessonLearntAndShared = Voice.Result.LessonLearntAndShared,
+                URL = Voice.Result.URL,
+                NameOfCaller = Voice.Result.CallerName.Select(s=>s.StaffPersonalInfoId).ToList(),
+                OfficerToAct = Voice.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = Voice.Result.Remarks,
+                RotCause = Voice.Result.RotCause,
+                Status = Voice.Result.Status,
+                ActionRequired = Voice.Result.ActionRequired,
+                ActionsTakenByMPCC = Voice.Result.ActionsTakenByMPCC,
+                AreasOfImprovements = Voice.Result.AreasOfImprovements,
+                HealthGoalLongTerm = Voice.Result.HealthGoalLongTerm,
+                HealthGoalShortTerm = Voice.Result.HealthGoalShortTerm,
+                InterestedInPrograms = Voice.Result.InterestedInPrograms,
+                NextCheckDate = Voice.Result.NextCheckDate,
+                OfficeStaffSupport = Voice.Result.OfficeStaffSupport,
+                RateServiceRecieving = Voice.Result.RateServiceRecieving,
+                RateStaffAttending = Voice.Result.RateStaffAttending,
+                SomethingSpecial = Voice.Result.SomethingSpecial,
+                StaffBestSupport = Voice.Result.GoodStaff.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffPoorSupport = Voice.Result.PoorStaff.Select(s => s.StaffPersonalInfoId).ToList(),
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -210,12 +178,14 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
-                var client = await _clientService.GetClient(model.ClientId);
-                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                var client = await _clientService.GetClientDetail();
+                model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+            PostClientVoice post = new PostClientVoice();
+
             #region Attachment
             if (model.Attach != null)
             {
@@ -225,21 +195,26 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = pathA;
 
             }
+            else
+            {
+                model.Attachment = "No Image";
+            }
             if (model.Evidence != null)
             {
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_Evidence_", model.ClientId);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Evidence.OpenReadStream());
-                model.Attachment = pathA;
+                model.EvidenceOfActionTaken = pathA;
 
+            }
+            else
+            {
+                model.EvidenceOfActionTaken = "No Image";
             }
 
             #endregion
 
-            List<PostClientVoice> posts = new List<PostClientVoice>();
-            foreach (var item in model.OfficerToAct)
-            {
-                var post = new PostClientVoice();
+            
                 post.ClientId = model.ClientId;
                 post.Reference = model.Reference;
                 post.Attachment = model.Attachment;
@@ -248,8 +223,8 @@ namespace AwesomeCare.Admin.Controllers
                 post.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
                 post.LessonLearntAndShared = model.LessonLearntAndShared;
                 post.URL = model.URL;
-                post.NameOfCaller = model.NameOfCaller;
-                post.OfficerToAct = item;
+                post.CallerName = model.OfficerToAct.Select(o => new PostVoiceCallerName{ StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
+                post.OfficerToAct = model.OfficerToAct.Select(o => new PostVoiceOfficerToAct { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
                 post.Remarks = model.Remarks;
                 post.RotCause = model.RotCause;
                 post.Status = model.Status;
@@ -264,15 +239,13 @@ namespace AwesomeCare.Admin.Controllers
                 post.RateServiceRecieving = model.RateServiceRecieving;
                 post.RateStaffAttending = model.RateStaffAttending;
                 post.SomethingSpecial = model.SomethingSpecial;
-                post.StaffBestSupport = model.StaffBestSupport;
-                post.StaffPoorSupport = model.StaffPoorSupport;
-                posts.Add(post);
-            }
-
-            var result = await _clientVoiceService.Create(posts);
+                post.GoodStaff = model.StaffBestSupport.Select(o => new PostVoiceGoodStaff { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
+                post.PoorStaff = model.StaffPoorSupport.Select(o => new PostVoicePoorStaff { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList(); ;
+                
+            var result = await _clientVoiceService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Voice successfully registered" : "An Error Occurred" });
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Voice successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
 
         }
@@ -282,12 +255,13 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var client = await _clientService.GetClient(model.ClientId);
-                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                var client = await _clientService.GetClientDetail();
+                model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+
             #region Evidence
             if (model.Attach != null)
             {
@@ -301,15 +275,23 @@ namespace AwesomeCare.Admin.Controllers
             {
                 model.Attachment = model.Attachment;
             }
-            #endregion
-            int count = model.VoiceIds.Count;
-            int i = 0;
-            List<PutClientVoice> puts = new List<PutClientVoice>();
-            foreach (var item in model.OfficerToAct)
+
+            if (model.Evidence != null)
             {
-                var put = new PutClientVoice();
-            if (i < count)
-                put.VoiceId = model.VoiceIds[i];
+                string folderA = "clientcomplain";
+                string filenameA = string.Concat(folderA, "_Evidence_", model.ClientId);
+                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Evidence.OpenReadStream());
+                model.EvidenceOfActionTaken = pathA;
+
+            }
+            else
+            {
+                model.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+            }
+            #endregion
+
+            PutClientVoice put = new PutClientVoice();
+                put.VoiceId = model.VoiceId;
                 put.ClientId = model.ClientId;
                 put.Reference = model.Reference;
                 put.Attachment = model.Attachment;
@@ -318,8 +300,8 @@ namespace AwesomeCare.Admin.Controllers
                 put.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
                 put.LessonLearntAndShared = model.LessonLearntAndShared;
                 put.URL = model.URL;
-                put.NameOfCaller = model.NameOfCaller;
-                put.OfficerToAct = item;
+                put.CallerName = model.NameOfCaller.Select(o => new PutVoiceCallerName { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutVoiceOfficerToAct { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
                 put.Remarks = model.Remarks;
                 put.RotCause = model.RotCause;
                 put.Status = model.Status;
@@ -334,12 +316,10 @@ namespace AwesomeCare.Admin.Controllers
                 put.RateServiceRecieving = model.RateServiceRecieving;
                 put.RateStaffAttending = model.RateStaffAttending;
                 put.SomethingSpecial = model.SomethingSpecial;
-                put.StaffBestSupport = model.StaffBestSupport;
-                put.StaffPoorSupport = model.StaffPoorSupport;
-                puts.Add(put);
+                put.GoodStaff = model.StaffBestSupport.Select(o => new PutVoiceGoodStaff { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList(); ;
+                put.PoorStaff = model.StaffPoorSupport.Select(o => new PutVoicePoorStaff { StaffPersonalInfoId = o, VoiceId = model.VoiceId }).ToList();
 
-        }
-        var entity = await _clientVoiceService.Put(puts);
+            var entity = await _clientVoiceService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

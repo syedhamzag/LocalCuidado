@@ -6,6 +6,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffAdlObs
 {
     public class PostStaffAdlObs
     {
+        public PostStaffAdlObs()
+        {
+            OfficerToAct = new List<PostAdlObsOfficerToAct>();
+        }
 
         public int ObservationID {get; set;}
         public string Reference { get; set; }
@@ -20,11 +24,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffAdlObs
         public int FivePrinciples {get; set;}
         public string Comments {get; set;}
         public string ActionRequired {get; set;}
-        public int OfficerToAct {get; set;}
         public DateTime Deadline{get; set;}
         public int Status {get; set;}
         public string Remarks {get; set;}
         public string URL {get; set;}
         public string Attachment { get; set; }
+
+        public List<PostAdlObsOfficerToAct> OfficerToAct { get; set; }
     }
 }

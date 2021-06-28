@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientBodyTempService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientBodyTemp> reports = new List<CreateClientBodyTemp>();
             foreach (GetClientBodyTemp item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,35 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int TempId)
         {
-            string OfficerToAct = "";
-            var BodyTemp = await _clientBodyTempService.Get(TempId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BodyTemp.OfficerToAct)
+            var BodyTemp = _clientBodyTempService.Get(TempId);
+            var putEntity = new CreateClientBodyTemp
             {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(BodyTemp);
-            return View(BodyTemp);
+                BodyTempId = BodyTemp.Result.BodyTempId,
+                Reference = BodyTemp.Result.Reference,
+                ClientId = BodyTemp.Result.ClientId,
+                Date = BodyTemp.Result.Date,
+                Time = BodyTemp.Result.Time,
+                TargetTemp = BodyTemp.Result.TargetTemp,
+                CurrentReading = BodyTemp.Result.CurrentReading,
+                SeeChart = BodyTemp.Result.SeeChart,
+                Comment = BodyTemp.Result.Comment,
+                Staff_Name = BodyTemp.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = BodyTemp.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = BodyTemp.Result.PhysicianResponse,
+                OfficerName = BodyTemp.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = BodyTemp.Result.Deadline,
+                Remarks = BodyTemp.Result.Remarks,
+                Status = BodyTemp.Result.Status,
+                SeeChartAttach = BodyTemp.Result.SeeChartAttach,
+                TargetTempAttach = BodyTemp.Result.TargetTempAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int TempId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var BodyTemp = await _clientBodyTempService.Get(TempId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BodyTemp.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(BodyTemp);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientBodyTemp.pdf");
             string subject = "ClientBodyTemp";
             string body = "";
@@ -121,16 +127,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int TempId)
         {
-            string OfficerToAct = "";
             var BodyTemp = await _clientBodyTempService.Get(TempId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BodyTemp.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(BodyTemp);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientBodyTemp.pdf");
         }
@@ -182,6 +181,8 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = BodyTemp.Result.Deadline,
                 Remarks = BodyTemp.Result.Remarks,
                 Status = BodyTemp.Result.Status,
+                SeeChartAttach = BodyTemp.Result.SeeChartAttach,
+                TargetTempAttach = BodyTemp.Result.TargetTempAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -243,8 +244,9 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
+                postlog.SeeChartAttach = model.SeeChartAttach;
+                postlog.TargetTempAttach = model.TargetTempAttach;
 
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientBodyTempService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -293,6 +295,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientBodyTemp put = new PutClientBodyTemp();
+            put.BodyTempId = model.BodyTempId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -301,13 +304,15 @@ namespace AwesomeCare.Admin.Controllers
             put.CurrentReading = model.CurrentReading;
             put.SeeChart = model.SeeChart;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutBodyTempStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutBodyTempPhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutBodyTempStaffName { StaffPersonalInfoId = o, BodyTempId = model.BodyTempId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutBodyTempPhysician { StaffPersonalInfoId = o, BodyTempId = model.BodyTempId }).ToList();
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBodyTempOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBodyTempOfficerToAct { StaffPersonalInfoId = o, BodyTempId = model.BodyTempId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;
+            put.SeeChartAttach = model.SeeChartAttach;
+            put.TargetTempAttach = model.TargetTempAttach;
             var entity = await _clientBodyTempService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {

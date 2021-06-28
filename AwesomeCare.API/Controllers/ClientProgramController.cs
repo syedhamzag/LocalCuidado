@@ -22,11 +22,17 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientProgram> _clientProgramRepository;
-        
-        public ClientProgramController(AwesomeCareDbContext dbContext, IGenericRepository<ClientProgram> clientProgramRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<ProgramOfficerToAct> _officertoactRepository;
+
+        public ClientProgramController(AwesomeCareDbContext dbContext, IGenericRepository<ClientProgram> clientProgramRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+        IGenericRepository<ProgramOfficerToAct> officertoactRepository)
         {
             _clientProgramRepository = clientProgramRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientProgram
         /// <summary>
@@ -40,22 +46,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientProgramRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All ClientProgram
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetClientProgram>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _clientProgramRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
+
         /// <summary>
         /// Create ClientProgram
         /// </summary>
@@ -63,20 +56,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientProgram> postClientProgram)
+        public async Task<IActionResult> Create([FromBody] PostClientProgram postClientProgram)
         {
             if (postClientProgram == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postClientProgram)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
 
-            var ClientProgram = Mapper.Map<List<ClientProgram>>(postClientProgram);
-            await _clientProgramRepository.InsertEntities(ClientProgram);
+            var ClientProgram = Mapper.Map<ClientProgram>(postClientProgram);
+            await _clientProgramRepository.InsertEntity(ClientProgram);
             return Ok();
         }
         /// <summary>
@@ -85,40 +73,30 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientProgram> model)
+        public async Task<IActionResult> Put([FromBody] PutClientProgram models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<ClientProgram>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (ClientProgram item in filterEntity)
+
+            foreach (var model in models.OfficerToAct.ToList())
             {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
+                var entity = _dbContext.Set<ProgramOfficerToAct>();
+                var filterentity = entity.Where(c => c.ProgramId == model.ProgramId).ToList();
+                if (filterentity != null)
                 {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
                 }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
+            }
 
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<ClientProgram>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
             var result = _dbContext.SaveChanges();
+            var ClientProgram = Mapper.Map<ClientProgram>(models);
+            await _clientProgramRepository.UpdateEntity(ClientProgram);
             return Ok();
 
         }
@@ -141,6 +119,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.ProgramId == id
                                            select new GetClientProgram
                                            {
+                                               ProgramId = c.ProgramId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -152,9 +132,17 @@ namespace AwesomeCare.API.Controllers
                                                Deadline = c.Deadline,
                                                DetailsOfProgram = c.DetailsOfProgram,
                                                Observation = c.Observation,
-                                               OfficerToAct = c.OfficerToAct,
                                                PlaceLocationProgram = c.PlaceLocationProgram,
                                                ProgramOfChoice = c.ProgramOfChoice,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.ProgramId == c.ProgramId
+                                                               select new GetProgramOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
                                                URL = c.URL
                                            }
                       ).FirstOrDefaultAsync();

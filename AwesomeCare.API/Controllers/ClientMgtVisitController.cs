@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataTransferObject.DTOs.ClientVisit;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -23,11 +24,20 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientMgtVisit> _clientMgtVisitRepository;
-        
-        public ClientMgtVisitController(AwesomeCareDbContext dbContext, IGenericRepository<ClientMgtVisit> clientMgtVisitRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<VisitOfficerToAct> _officertoactRepository;
+        private IGenericRepository<VisitStaffName> _staffnameRepository;
+
+        public ClientMgtVisitController(AwesomeCareDbContext dbContext, IGenericRepository<ClientMgtVisit> clientMgtVisitRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+        IGenericRepository<VisitOfficerToAct> officertoactRepository,
+        IGenericRepository<VisitStaffName> staffnameRepository)
         {
             _clientMgtVisitRepository = clientMgtVisitRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffnameRepository = staffnameRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientMgtVisit
         /// <summary>
@@ -41,22 +51,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientMgtVisitRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All ClientMgtVisit
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetClientMgtVisit>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _clientMgtVisitRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
+
         /// <summary>
         /// Create ClientMgtVisit
         /// </summary>
@@ -64,22 +61,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientMgtVisit> postClientMgtVisit)
+        public async Task<IActionResult> Create([FromBody] PostClientMgtVisit postClientMgtVisit)
         {
             if (postClientMgtVisit == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postClientMgtVisit)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-                if (item.EvidenceOfActionTaken == null)
-                    item.EvidenceOfActionTaken = "No Image";
-            }
 
-            var ClientMgtVisit = Mapper.Map<List<ClientMgtVisit>>(postClientMgtVisit);
-            await _clientMgtVisitRepository.InsertEntities(ClientMgtVisit);
+            var ClientMgtVisit = Mapper.Map<ClientMgtVisit>(postClientMgtVisit);
+            await _clientMgtVisitRepository.InsertEntity(ClientMgtVisit);
             return Ok();
         }
         /// <summary>
@@ -88,40 +78,44 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientMgtVisit> model)
+        public async Task<IActionResult> Put([FromBody] PutClientMgtVisit models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<ClientMgtVisit>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (ClientMgtVisit item in filterEntity)
+
+            foreach (var model in models.OfficerToAct.ToList())
             {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
+                var entity = _dbContext.Set<VisitOfficerToAct>();
+                var filterentity = entity.Where(c => c.VisitId == model.VisitId).ToList();
+                if (filterentity != null)
                 {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
                 }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
             }
-            //Model not in Database
-            foreach (var item in model)
+
+            foreach (var model in models.StaffName.ToList())
             {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
+                var entity = _dbContext.Set<VisitStaffName>();
+                var filterentity = entity.Where(c => c.VisitId == model.VisitId).ToList();
+                if (filterentity != null)
                 {
-                    var postEntity = Mapper.Map<ClientMgtVisit>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
                 }
             }
             var result = _dbContext.SaveChanges();
+
+            var ClientMgtVisit = Mapper.Map<ClientMgtVisit>(models);
+            await _clientMgtVisitRepository.UpdateEntity(ClientMgtVisit);
             return Ok();
 
         }
@@ -144,6 +138,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.VisitId == id
                                            select new GetClientMgtVisit
                                            {
+                                               VisitId = c.VisitId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                ActionsTakenByMPCC = c.ActionsTakenByMPCC,
@@ -159,12 +155,27 @@ namespace AwesomeCare.API.Controllers
                                                HowToComplain = c.HowToComplain,
                                                ImprovementExpect = c.ImprovementExpect,
                                                Observation = c.Observation,
-                                               OfficerToAct = c.OfficerToAct,
                                                RateManagers = c.RateManagers,
                                                RateServiceRecieving = c.RateServiceRecieving,
                                                ServiceRecommended = c.ServiceRecommended,
-                                               StaffBestSupport = c.StaffBestSupport,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.VisitId == c.VisitId
+                                                               select new GetVisitOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
+                                               StaffName = (from com in _staffnameRepository.Table
+                                                            join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                            where com.VisitId == c.VisitId
+                                                            select new GetVisitStaffName
+                                                            {
+                                                                StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+                                                            }).ToList(),
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getClientMgtVisit);

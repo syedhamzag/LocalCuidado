@@ -6,7 +6,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientPulseRate
 {
     public class PutPulseRateStaffName
     {
-        public int PulseRateOfficerToActId { get; set; }
         public int PulseRateId { get; set; }
         public int StaffPersonalInfoId { get; set; }
     }

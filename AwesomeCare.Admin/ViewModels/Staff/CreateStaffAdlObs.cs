@@ -20,13 +20,13 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<GetClient> ClientList { get; set; }
 
         public string ActiveTab { get; set; } = "adlobs";
-        public List<int> AdlObsIds { get; set; }
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         public string Reference { get; set; }
         [Required]
         public int ObservationID { get; set; }
@@ -36,8 +36,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public DateTime Date { get; set; }
         [Required]
         public DateTime NextCheckDate { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string Details { get; set; }
         [Required]
         public int ClientId { get; set; }
@@ -51,20 +50,18 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public int FivePrinciples { get; set; }
         [Required]
         public string Comments { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string ActionRequired { get; set; }
         [Required]
         public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]
         public int Status { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string Remarks { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string URL { get; set; }
         public string Attachment { get; set; }
     }

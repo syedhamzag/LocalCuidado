@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientMedAudit> builder)
         {
-            builder.ToTable("tbl_ClientMedAudit");
+            builder.ToTable("tbl_Client_MedAudit");
             builder.HasKey(k => k.MedAuditId);
 
             #region Properties
@@ -67,10 +67,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("Observations")
                .IsRequired();
 
-            builder.Property(p => p.NameOfAuditor)
-               .HasColumnName("NameOfAuditor")
-               .IsRequired();
-
             builder.Property(p => p.ActionRecommended)
                .HasColumnName("ActionRecommended")
                .IsRequired();
@@ -82,10 +78,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.EvidenceOfActionTaken)
              .HasColumnName("EvidenceOfActionTaken")
              .IsRequired();
-
-            builder.Property(p => p.OfficerToTakeAction)
-               .HasColumnName("OfficerToTakeAction")
-               .IsRequired();
 
             builder.Property(p => p.Status)
                .HasColumnName("Status")
@@ -105,7 +97,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.RotCause)
              .HasColumnName("RotCause")
-             .HasMaxLength(50)
              .IsRequired();
 
             builder.Property(p => p.LessonLearntAndShared)
@@ -117,8 +108,7 @@ namespace AwesomeCare.Model.Models.Map
              .IsRequired();
 
             builder.Property(p => p.Attachment)
-             .HasColumnName("Attachment")
-             .IsRequired(false);
+             .HasColumnName("Attachment");
             #endregion
 
             #region Relationship
@@ -127,10 +117,15 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.ClientMedAudit)
-                 .HasForeignKey(p => p.OfficerToTakeAction)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<MedAuditStaffName>(p => p.StaffName)
+                .WithOne(p => p.MedAudit)
+                .HasForeignKey(p => p.MedAuditId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<MedAuditOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.MedAudit)
+                .HasForeignKey(p => p.MedAuditId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

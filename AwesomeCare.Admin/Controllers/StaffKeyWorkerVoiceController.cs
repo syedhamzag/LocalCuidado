@@ -3,7 +3,6 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.StaffKeyWorkerVoice;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.Staff;
-using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +26,7 @@ using iText.Layout.Element;
 using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -58,7 +58,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _StaffKeyWorkerVoiceService.Get();
             return View(entities);
         }
-
         public async Task<IActionResult> Index(int? staffId)
         {
             var model = new CreateStaffKeyWorkerVoice();
@@ -69,53 +68,27 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int workerId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffKeyWorkerVoiceService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficertoAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(logAudit.FirstOrDefault());
+            var keyWorker = await _StaffKeyWorkerVoiceService.Get(workerId);
+            return View(keyWorker);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int workerId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffKeyWorkerVoiceService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficertoAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var keyWorker = await _StaffKeyWorkerVoiceService.Get(workerId);
+            var json = JsonConvert.SerializeObject(keyWorker);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "StaffKeyWorkerVoice.pdf");
             string subject = "StaffKeyWorkerVoice";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int workerId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffKeyWorkerVoiceService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficertoAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var keyWorker = await _StaffKeyWorkerVoiceService.Get(workerId);
+            var json = JsonConvert.SerializeObject(keyWorker);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "StaffKeyWorkerVoice.pdf");
         }
@@ -144,47 +117,38 @@ namespace AwesomeCare.Admin.Controllers
             }
             return buffer;
         }
-
-
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int workerId)
         {
             List<GetClient> clientNames = await _clientService.GetClients();
             ViewBag.GetClients = clientNames;
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var KeyWorker = _StaffKeyWorkerVoiceService.GetByRef(Reference);
-            foreach (var item in KeyWorker.Result)
-            {
-                officer.Add(item.OfficertoAct);
-                Ids.Add(item.KeyWorkerId);
-            }
             var staffs = await _staffService.GetStaffs();
+            var KeyWorker = _StaffKeyWorkerVoiceService.Get(workerId);
 
             var putEntity = new CreateStaffKeyWorkerVoice
             {
-                KeyWorkerIds = Ids,
-                Attachment = KeyWorker.Result.FirstOrDefault().Attachment,
-                Date = KeyWorker.Result.FirstOrDefault().Date,
-                Deadline = KeyWorker.Result.FirstOrDefault().Deadline,
-                URL = KeyWorker.Result.FirstOrDefault().URL,
-                Remarks = KeyWorker.Result.FirstOrDefault().Remarks,
-                Status = KeyWorker.Result.FirstOrDefault().Status,
-                ActionRequired = KeyWorker.Result.FirstOrDefault().ActionRequired,
-                NextCheckDate = KeyWorker.Result.FirstOrDefault().NextCheckDate,
-                ChangesWeNeed = KeyWorker.Result.FirstOrDefault().ChangesWeNeed,
-                Details = KeyWorker.Result.FirstOrDefault().Details,
-                NotComfortableServices = KeyWorker.Result.FirstOrDefault().NotComfortableServices,
-                MovingAndHandling = KeyWorker.Result.FirstOrDefault().MovingAndHandling,
-                OfficerToAct  = officer,
-                ServicesRequiresTime = KeyWorker.Result.FirstOrDefault().ServicesRequiresTime,
-                MedicationChanges = KeyWorker.Result.FirstOrDefault().MedicationChanges,
-                NutritionalChanges = KeyWorker.Result.FirstOrDefault().NutritionalChanges,
-                RiskAssessment = KeyWorker.Result.FirstOrDefault().RiskAssessment,
-                ServicesRequiresServices = KeyWorker.Result.FirstOrDefault().ServicesRequiresServices,
-                WellSupportedServices = KeyWorker.Result.FirstOrDefault().WellSupportedServices,
-                TeamYouWorkFor = KeyWorker.Result.FirstOrDefault().TeamYouWorkFor,
-                StaffId = KeyWorker.Result.FirstOrDefault().StaffId,                
-                HealthAndWellNessChanges = KeyWorker.Result.FirstOrDefault().HealthAndWellNessChanges,
+                KeyWorkerId = KeyWorker.Result.KeyWorkerId,
+                Attachment = KeyWorker.Result.Attachment,
+                Date = KeyWorker.Result.Date,
+                Deadline = KeyWorker.Result.Deadline,
+                URL = KeyWorker.Result.URL,
+                Remarks = KeyWorker.Result.Remarks,
+                Status = KeyWorker.Result.Status,
+                ActionRequired = KeyWorker.Result.ActionRequired,
+                NextCheckDate = KeyWorker.Result.NextCheckDate,
+                ChangesWeNeed = KeyWorker.Result.ChangesWeNeed,
+                Details = KeyWorker.Result.Details,
+                NotComfortableServices = KeyWorker.Result.NotComfortableServices,
+                MovingAndHandling = KeyWorker.Result.MovingAndHandling,
+                OfficerToAct  = KeyWorker.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                ServicesRequiresTime = KeyWorker.Result.ServicesRequiresTime,
+                MedicationChanges = KeyWorker.Result.MedicationChanges,
+                NutritionalChanges = KeyWorker.Result.NutritionalChanges,
+                RiskAssessment = KeyWorker.Result.RiskAssessment,
+                ServicesRequiresServices = KeyWorker.Result.ServicesRequiresServices,
+                WellSupportedServices = KeyWorker.Result.WellSupportedServices,
+                TeamYouWorkFor = KeyWorker.Result.Workteam.Select(s=>s.StaffPersonalInfoId).ToList(),
+                StaffId = KeyWorker.Result.StaffId,                
+                HealthAndWellNessChanges = KeyWorker.Result.HealthAndWellNessChanges,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -209,12 +173,9 @@ namespace AwesomeCare.Admin.Controllers
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.Attachment = pathA;
             }
+            else
+            { model.Attachment = "No Image"; }
             #endregion
-
-            List<PostStaffKeyWorkerVoice> posts = new List<PostStaffKeyWorkerVoice>();
-
-            foreach (var officer in model.OfficerToAct)
-            {
                 var post = new PostStaffKeyWorkerVoice();
                 post.Reference = model.Reference;
                 post.Attachment =model.Attachment;
@@ -229,20 +190,18 @@ namespace AwesomeCare.Admin.Controllers
                 post.Details =model.Details;
                 post.NotComfortableServices =model.NotComfortableServices;
                 post.MovingAndHandling =model.MovingAndHandling;
-                post.OfficertoAct = officer;
+                post.OfficerToAct = model.OfficerToAct.Select(o => new PostKeyWorkerOfficerToAct { StaffPersonalInfoId = o, KeyWorkerId = model.KeyWorkerId }).ToList();
                 post.ServicesRequiresTime =model.ServicesRequiresTime;
                 post.MedicationChanges =model.MedicationChanges;
                 post.NutritionalChanges =model.NutritionalChanges;
                 post.RiskAssessment =model.RiskAssessment;
                 post.ServicesRequiresServices =model.ServicesRequiresServices;
                 post.WellSupportedServices =model.WellSupportedServices;
-                post.TeamYouWorkFor =model.TeamYouWorkFor;
+                post.Workteam = model.TeamYouWorkFor.Select(o => new PostKeyWorkerWorkteam { StaffPersonalInfoId = o, KeyWorkerId = model.KeyWorkerId }).ToList();
                 post.StaffId =model.StaffId;                
                 post.HealthAndWellNessChanges =model.HealthAndWellNessChanges;
-                posts.Add(post);
-            }
 
-                var result = await _StaffKeyWorkerVoiceService.Create(posts);
+                var result = await _StaffKeyWorkerVoiceService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Key worker Voice successfully registered" : "An Error Occurred" });
@@ -276,14 +235,8 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-            List<PutStaffKeyWorkerVoice> puts = new List<PutStaffKeyWorkerVoice>();
-            int count = model.KeyWorkerIds.Count;
-            int i = 0;
-            foreach (var officer in model.OfficerToAct)
-            {
                 var put = new PutStaffKeyWorkerVoice();
-                if (i < count)
-                    put.KeyWorkerId = model.KeyWorkerIds[i];
+                put.KeyWorkerId = model.KeyWorkerId;
                 put.Reference = model.Reference;
                 put.Attachment = model.Attachment;
                 put.Date = model.Date;
@@ -297,19 +250,18 @@ namespace AwesomeCare.Admin.Controllers
                 put.Details = model.Details;
                 put.NotComfortableServices = model.NotComfortableServices;
                 put.MovingAndHandling = model.MovingAndHandling;
-                put.OfficertoAct = officer;
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutKeyWorkerOfficerToAct { StaffPersonalInfoId = o, KeyWorkerId = model.KeyWorkerId }).ToList();
                 put.ServicesRequiresTime = model.ServicesRequiresTime;
                 put.MedicationChanges = model.MedicationChanges;
                 put.NutritionalChanges = model.NutritionalChanges;
                 put.RiskAssessment = model.RiskAssessment;
                 put.ServicesRequiresServices = model.ServicesRequiresServices;
                 put.WellSupportedServices = model.WellSupportedServices;
-                put.TeamYouWorkFor = model.TeamYouWorkFor;
+                put.Workteam = model.TeamYouWorkFor.Select(o => new PutKeyWorkerWorkteam { StaffPersonalInfoId = o, KeyWorkerId = model.KeyWorkerId }).ToList();
                 put.StaffId = model.StaffId;
                 put.HealthAndWellNessChanges = model.HealthAndWellNessChanges;
-                puts.Add(put);
-            }
-            var entity = await _StaffKeyWorkerVoiceService.Put(puts);
+
+            var entity = await _StaffKeyWorkerVoiceService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

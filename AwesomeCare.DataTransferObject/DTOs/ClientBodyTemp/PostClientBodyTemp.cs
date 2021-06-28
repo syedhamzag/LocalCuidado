@@ -13,10 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientBodyTemp
             StaffName = new List<PostBodyTempStaffName>();
         }
 
-        public List<PostBodyTempOfficerToAct> OfficerToAct { get; set; }
-        public List<PostBodyTempPhysician> Physician { get; set; }
-        public List<PostBodyTempStaffName> StaffName { get; set; }
-
         public int BodyTempId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -32,5 +28,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientBodyTemp
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PostBodyTempOfficerToAct> OfficerToAct { get; set; }
+        public List<PostBodyTempPhysician> Physician { get; set; }
+        public List<PostBodyTempStaffName> StaffName { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<StaffAdlObs> builder)
         {
-            builder.ToTable("tbl_StaffAdlObs");
+            builder.ToTable("tbl_Staff_AdlObs");
             builder.HasKey(k => k.ObservationID);
 
             #region Properties
@@ -62,12 +62,7 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.ActionRequired)
              .HasColumnName("ActionRequired")
-             .HasMaxLength(255)
              .IsRequired();
-
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
-               .IsRequired();
 
             builder.Property(p => p.Deadline)
                .HasColumnName("Deadline")
@@ -79,12 +74,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
              .HasColumnName("URL")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -98,10 +91,10 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffAdlObs)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<AdlObsOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.AdlObs)
+                .HasForeignKey(p => p.ObservationId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

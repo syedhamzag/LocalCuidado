@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientProgram> builder)
         {
-            builder.ToTable("tbl_ClientProgram");
+            builder.ToTable("tbl_Client_Program");
             builder.HasKey(k => k.ProgramId);
 
             #region Properties
@@ -46,9 +46,6 @@ namespace AwesomeCare.Model.Models.Map
                 .HasColumnName("DetailsOfProgram")
                 .IsRequired();
 
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
-               .IsRequired();
 
             builder.Property(p => p.Status)
                .HasColumnName("Status")
@@ -60,27 +57,22 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Observation)
              .HasColumnName("Observation")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.ActionRequired)
              .HasColumnName("ActionRequired")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.URL)
              .HasColumnName("URL")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.Attachment)
-             .HasColumnName("Attachment")
-             .IsRequired();
+             .HasColumnName("Attachment");
             #endregion
 
             #region Relationship
@@ -89,10 +81,10 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.ClientProgram)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<ProgramOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.Program)
+                .HasForeignKey(p => p.ProgramId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

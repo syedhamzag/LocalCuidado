@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<StaffReference> builder)
         {
-            builder.ToTable("tbl_StaffReferences");
+            builder.ToTable("tbl_Staff_Reference");
             builder.HasKey(k => k.StaffReferenceId);
 
             #region Properties
@@ -36,17 +36,14 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.DateofExit)
                .HasColumnName("DateofExit")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.RehireStaff)
                .HasColumnName("RehireStaff")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Relationship)
                .HasColumnName("Relationship")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.TeamWork)
@@ -75,27 +72,22 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.RefreeName)
                .HasColumnName("RefreeName")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Address)
                .HasColumnName("Address")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Email)
                .HasColumnName("Email")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Contact)
                .HasColumnName("Contact")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Attachment)
                .HasColumnName("Attachment")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ConfirmedBy)
@@ -104,7 +96,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Status)
                .HasColumnName("Status")
-               .HasMaxLength(255)
                .IsRequired();
             #endregion
 

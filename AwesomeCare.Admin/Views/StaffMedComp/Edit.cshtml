@@ -19,9 +19,6 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <select asp-for="MedCompIds"
-                                    asp-items="@(new SelectList(Model.MedCompIds))" style="display:none;">
-                            </select>
                             <input type="hidden" asp-for="MedCompId" />
                             <input type="hidden" asp-for="StaffId" />
                             <input type="hidden" asp-for="Attachment" />

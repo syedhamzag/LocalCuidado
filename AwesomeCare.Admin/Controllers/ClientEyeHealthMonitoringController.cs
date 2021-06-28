@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientEyeHealthMonitoringService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientEyeHealthMonitoring> reports = new List<CreateClientEyeHealthMonitoring>();
             foreach (GetClientEyeHealthMonitoring item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,39 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int eyeId)
         {
-            string OfficerToAct = "";
-            var EyeHealthMonitoring = await _clientEyeHealthMonitoringService.Get(eyeId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in EyeHealthMonitoring.OfficerToAct)
+            var EyeHealthMonitoring = _clientEyeHealthMonitoringService.Get(eyeId);
+            var putEntity = new CreateClientEyeHealthMonitoring
             {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(EyeHealthMonitoring);
-            return View(EyeHealthMonitoring);
+                EyeHealthId = EyeHealthMonitoring.Result.EyeHealthId,
+                Reference = EyeHealthMonitoring.Result.Reference,
+                ClientId = EyeHealthMonitoring.Result.ClientId,
+                Date = EyeHealthMonitoring.Result.Date,
+                Time = EyeHealthMonitoring.Result.Time,
+                ToolUsed = EyeHealthMonitoring.Result.ToolUsed,
+                MethodUsed = EyeHealthMonitoring.Result.MethodUsed,
+                TargetSet = EyeHealthMonitoring.Result.TargetSet,
+                CurrentScore = EyeHealthMonitoring.Result.CurrentScore,
+                PatientGlasses = EyeHealthMonitoring.Result.PatientGlasses,
+                StatusImage = EyeHealthMonitoring.Result.StatusImage,
+                StatusAttach = EyeHealthMonitoring.Result.StatusAttach,
+                Comment = EyeHealthMonitoring.Result.Comment,
+                Staff_Name = EyeHealthMonitoring.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = EyeHealthMonitoring.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = EyeHealthMonitoring.Result.PhysicianResponse,
+                OfficerName = EyeHealthMonitoring.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = EyeHealthMonitoring.Result.Deadline,
+                Remarks = EyeHealthMonitoring.Result.Remarks,
+                Status = EyeHealthMonitoring.Result.Status,
+                MethodUsedAttach = EyeHealthMonitoring.Result.MethodUsedAttach,
+                ToolUsedAttach = EyeHealthMonitoring.Result.ToolUsedAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int eyeId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var EyeHealthMonitoring = await _clientEyeHealthMonitoringService.Get(eyeId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in EyeHealthMonitoring.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(EyeHealthMonitoring);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientEyeHealthMonitoring.pdf");
             string subject = "ClientEyeHealthMonitoring";
             string body = "";
@@ -121,16 +131,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int eyeId)
         {
-            string OfficerToAct = "";
             var EyeHealthMonitoring = await _clientEyeHealthMonitoringService.Get(eyeId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in EyeHealthMonitoring.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(EyeHealthMonitoring);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientEyeHealthMonitoring.pdf");
         }
@@ -186,6 +189,8 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = EyeHealthMonitoring.Result.Deadline,
                 Remarks = EyeHealthMonitoring.Result.Remarks,
                 Status = EyeHealthMonitoring.Result.Status,
+                MethodUsedAttach = EyeHealthMonitoring.Result.MethodUsedAttach,
+                ToolUsedAttach = EyeHealthMonitoring.Result.ToolUsedAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -261,8 +266,9 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
+                postlog.ToolUsedAttach = model.ToolUsedAttach;
+                postlog.MethodUsedAttach = model.MethodUsedAttach;
 
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientEyeHealthMonitoringService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -322,6 +328,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientEyeHealthMonitoring put = new PutClientEyeHealthMonitoring();
+            put.EyeHealthId = model.EyeHealthId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -334,13 +341,15 @@ namespace AwesomeCare.Admin.Controllers
             put.StatusImage = model.StatusImage;
             put.StatusAttach = model.StatusAttach;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutEyeHealthStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutEyeHealthPhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutEyeHealthStaffName { StaffPersonalInfoId = o, EyeHealthId = model.EyeHealthId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutEyeHealthPhysician { StaffPersonalInfoId = o, EyeHealthId = model.EyeHealthId }).ToList();
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutEyeHealthOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutEyeHealthOfficerToAct { StaffPersonalInfoId = o, EyeHealthId = model.EyeHealthId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;
+            put.MethodUsedAttach = model.MethodUsedAttach;
+            put.ToolUsedAttach = model.ToolUsedAttach;
 
             var entity = await _clientEyeHealthMonitoringService.Put(put);
             SetOperationStatus(new Models.OperationStatus

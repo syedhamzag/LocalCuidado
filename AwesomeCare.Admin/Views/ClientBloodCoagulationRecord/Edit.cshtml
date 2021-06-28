@@ -19,7 +19,7 @@
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="BloodRecordId" />
                             <input type="hidden" asp-for="ClientId" />
-                            <input type="hidden" value="@Model.TargetINRAttach" asp-for="TargetINRAttach">
+                            <input type="hidden" asp-for="TargetINRAttach" value="@Model.TargetINRAttach" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date</label>
@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Target INR</label>
-                                    <baserecord asp-key="Target_INR" asp-for="TargetINR" asp-items="null" />
+                                    <baserecord asp-key="Target_INR_Image_Availibility" asp-for="TargetINR" asp-items="null" />
                                     <span asp-validation-for="TargetINR" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">

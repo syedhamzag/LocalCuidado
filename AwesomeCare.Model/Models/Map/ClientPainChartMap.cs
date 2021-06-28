@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientPainChart> builder)
         {
-            builder.ToTable("tbl_ClientPainChart");
+            builder.ToTable("tbl_Client_PainChart");
             builder.HasKey(k => k.PainChartId);
 
             #region Properties

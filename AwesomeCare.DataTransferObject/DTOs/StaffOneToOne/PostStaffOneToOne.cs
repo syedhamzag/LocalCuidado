@@ -6,6 +6,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffOneToOne
 {
     public class PostStaffOneToOne
     {
+        public PostStaffOneToOne()
+        {
+            OfficerToAct = new List<PostOneToOneOfficerToAct>();
+        }
         public int OneToOneId { get; set; }
         public string Reference { get; set; }
         public int StaffId { get; set; }
@@ -19,11 +23,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffOneToOne
         public string DecisionsReached { get; set; }
         public string ImprovementRecorded { get; set; }
         public string ActionRequired { get; set; }
-        public int OfficerToAct { get; set; }
         public DateTime Deadline { get; set; }
         public int Status { get; set; }
         public string Remarks { get; set; }
         public string URL { get; set; }
         public string Attachment { get; set; }
+
+        public List<PostOneToOneOfficerToAct> OfficerToAct { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
+﻿using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,6 @@ namespace AwesomeCare.Admin.Services.StaffSupervisionAppraisal
 {
     public interface IStaffSupervisionAppraisalService
     {
-        [Get("/StaffSupervisionAppraisal/GetByRef/{Reference}")]
-        Task<List<GetStaffSupervisionAppraisal>> GetByRef(string Reference);
-
         [Get("/StaffSupervisionAppraisal")]
         Task<List<GetStaffSupervisionAppraisal>> Get();
 
@@ -20,9 +17,9 @@ namespace AwesomeCare.Admin.Services.StaffSupervisionAppraisal
         Task<GetStaffSupervisionAppraisal> Get(int id);
 
         [Post("/StaffSupervisionAppraisal/Create")]
-        Task<HttpResponseMessage> Create([Body] List<PostStaffSupervisionAppraisal> model);
+        Task<HttpResponseMessage> Create([Body] PostStaffSupervisionAppraisal model);
 
         [Put("/StaffSupervisionAppraisal/Put")]
-        Task<HttpResponseMessage> Put([Body] List<PutStaffSupervisionAppraisal> model);
+        Task<HttpResponseMessage> Put([Body] PutStaffSupervisionAppraisal model);
     }
 }

@@ -18,12 +18,11 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
+
         public IFormFile Evidence { get; set; }
 
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
         public string ClientName { get; set; }
         public string StatusName { get; set; }
@@ -34,7 +33,6 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
 
         public string ActiveTab { get; set; } = "logaudit";
         public int LogAuditId { get; set; }
-        public List<int> LogAuditIds { get; set; }
         public string Reference { get; set; }
         [Required]
         public int ClientId { get; set; }
@@ -43,63 +41,48 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         [Required]
         public DateTime NextDueDate { get; set; }
         [Required]
-        [MaxLength(255)]
         public string IsCareExpected { get; set; }
         [Required]
-        [MaxLength(255)]
         public string IsCareDifference { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ProperDocumentation { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ImproperDocumentation { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Communication { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ThinkingServiceUsers { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ThinkingStaff { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]       
         public string ThinkingStaffStop { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]       
         public string Observations { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string NameOfAuditor { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]       
         public string ActionRecommended { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string ActionTaken { get; set; }
         public string EvidenceOfActionTaken { get; set; }
         [Required]
         [Display(Name = "OFFICERTOACT")]
         public List<int> OfficerToTakeAction { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
         [Display(Name = "Status_")]
         public int Status { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Remarks { get; set; }
         [Required]
         public int RepeatOfIncident { get; set; }
         [Required]
-        [MaxLength(50)]
         public string RotCause { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string LessonLearntAndShared { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string LogURL { get; set; }
         public string EvidenceFilePath { get; set; }
     }

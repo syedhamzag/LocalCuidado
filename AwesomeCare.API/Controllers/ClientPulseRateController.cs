@@ -16,6 +16,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientPulseRateController : ControllerBase
@@ -75,13 +76,55 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientPulseRate> model)
+        public async Task<IActionResult> Put([FromBody] PutClientPulseRate models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientPulseRate = Mapper.Map<ClientPulseRate>(model);
+
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<PulseRateOfficerToAct>();
+                var filterentity = entity.Where(c => c.PulseRateId == model.PulseRateId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.Physician.ToList())
+            {
+                var entity = _dbContext.Set<PulseRatePhysician>();
+                var filterentity = entity.Where(c => c.PulseRateId == model.PulseRateId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<PulseRateStaffName>();
+                var filterentity = entity.Where(c => c.PulseRateId == model.PulseRateId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
+
+            var ClientPulseRate = Mapper.Map<ClientPulseRate>(models);
             await _ClientPulseRateRepository.UpdateEntity(ClientPulseRate);
             return Ok();
 
@@ -105,6 +148,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetClientPulseRate
                                            {
                                                PulseRateId = c.PulseRateId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                Time = c.Time,
                                                CurrentPulse = c.CurrentPulse,

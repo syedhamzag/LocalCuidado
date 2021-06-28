@@ -8,6 +8,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientLogAudit
     {
         public PostClientLogAudit()
         {
+            OfficerToAct = new List<PostLogAuditOfficerToAct>();
         }
         public int LogAuditId { get; set; }
         public string Reference { get; set; }
@@ -27,7 +28,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientLogAudit
         public string ActionRecommended { get; set; }
         public string ActionTaken { get; set; }
         public string EvidenceOfActionTaken { get; set; }
-        public int OfficerToTakeAction { get; set; }
         public int Status { get; set; }
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
@@ -36,5 +36,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientLogAudit
         public string LessonLearntAndShared { get; set; }
         public string LogURL { get; set; }
         public string EvidenceFilePath { get; set; }
+
+        public List<PostLogAuditOfficerToAct> OfficerToAct { get; set; }
     }
 }

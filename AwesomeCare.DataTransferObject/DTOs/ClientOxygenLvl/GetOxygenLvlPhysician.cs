@@ -6,7 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientOxygenLvl
 {
     public class GetOxygenLvlPhysician
     {
-        public int OxygenLvlOfficerToActId { get; set; }
+        public int OxygenLvlPhysicianId { get; set; }
         public int OxygenLvlId { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string StaffName { get; set; }

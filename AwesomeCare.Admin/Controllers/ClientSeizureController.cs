@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientSeizureService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientSeizure> reports = new List<CreateClientSeizure>();
             foreach (GetClientSeizure item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,37 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int SeizId)
         {
-            string OfficerToAct = "";
-            var Seizure = await _clientSeizureService.Get(SeizId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Seizure.OfficerToAct)
+            var Seizure = _clientSeizureService.Get(SeizId);
+            var putEntity = new CreateClientSeizure
             {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(Seizure);
-            return View(Seizure);
+                SeizureId = Seizure.Result.SeizureId,
+                Reference = Seizure.Result.Reference,
+                ClientId = Seizure.Result.ClientId,
+                Date = Seizure.Result.Date,
+                Time = Seizure.Result.Time,
+                SeizureType = Seizure.Result.SeizureType,
+                SeizureLength = Seizure.Result.SeizureLength,
+                Often = Seizure.Result.Often,
+                StatusImage = Seizure.Result.StatusImage,
+                StatusAttach = Seizure.Result.StatusAttach,
+                WhatHappened = Seizure.Result.WhatHappened,
+                Staff_Name = Seizure.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = Seizure.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = Seizure.Result.PhysicianResponse,
+                OfficerName = Seizure.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = Seizure.Result.Deadline,
+                Remarks = Seizure.Result.Remarks,
+                Status = Seizure.Result.Status,
+                SeizureLengthAttach = Seizure.Result.SeizureLengthAttach,
+                SeizureTypeAttach = Seizure.Result.SeizureTypeAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int SeizId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var Seizure = await _clientSeizureService.Get(SeizId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Seizure.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(Seizure);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientSeizure.pdf");
             string subject = "ClientSeizure";
             string body = "";
@@ -121,16 +129,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int SeizId)
         {
-            string OfficerToAct = "";
             var Seizure = await _clientSeizureService.Get(SeizId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in Seizure.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(Seizure);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientSeizure.pdf");
         }
@@ -184,8 +185,10 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = Seizure.Result.Deadline,
                 Remarks = Seizure.Result.Remarks,
                 Status = Seizure.Result.Status,
+                SeizureLengthAttach = Seizure.Result.SeizureLengthAttach,
+                SeizureTypeAttach = Seizure.Result.SeizureTypeAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-        };
+            };
             return View(putEntity);
         }
         [HttpPost]
@@ -257,8 +260,9 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
+                postlog.SeizureLengthAttach = model.SeizureLengthAttach;
+                postlog.SeizureTypeAttach = model.SeizureTypeAttach;
 
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientSeizureService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -318,6 +322,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
                 PutClientSeizure put = new PutClientSeizure();
+                put.SeizureId = model.SeizureId;
                 put.ClientId = model.ClientId;
                 put.Reference = model.Reference;
                 put.Date = model.Date;
@@ -328,13 +333,15 @@ namespace AwesomeCare.Admin.Controllers
                 put.StatusImage = model.StatusImage;
                 put.StatusAttach = model.StatusAttach;
                 put.WhatHappened = model.WhatHappened;
-                put.StaffName = model.StaffName.Select(o => new PutSeizureStaffName { StaffPersonalInfoId = o }).ToList();
-                put.Physician = model.Physician.Select(o => new PutSeizurePhysician { StaffPersonalInfoId = o }).ToList();
+                put.StaffName = model.StaffName.Select(o => new PutSeizureStaffName { StaffPersonalInfoId = o, SeizureId = model.SeizureId }).ToList();
+                put.Physician = model.Physician.Select(o => new PutSeizurePhysician { StaffPersonalInfoId = o, SeizureId = model.SeizureId }).ToList();
                 put.PhysicianResponse = model.PhysicianResponse;
-                put.OfficerToAct = model.OfficerToAct.Select(o => new PutSeizureOfficerToAct { StaffPersonalInfoId = o }).ToList();
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutSeizureOfficerToAct { StaffPersonalInfoId = o, SeizureId = model.SeizureId }).ToList();
                 put.Deadline = model.Deadline;
                 put.Remarks = model.Remarks;
                 put.Status = model.Status;
+                put.SeizureLengthAttach = model.SeizureLengthAttach;
+                put.SeizureTypeAttach = model.SeizureTypeAttach;
 
             var entity = await _clientSeizureService.Put(put);
             SetOperationStatus(new Models.OperationStatus

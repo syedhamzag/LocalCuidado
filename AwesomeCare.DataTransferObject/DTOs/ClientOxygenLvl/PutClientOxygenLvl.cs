@@ -13,10 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientOxygenLvl
             StaffName = new List<PutOxygenLvlStaffName>();
         }
 
-        public List<PutOxygenLvlOfficerToAct> OfficerToAct { get; set; }
-        public List<PutOxygenLvlPhysician> Physician { get; set; }
-        public List<PutOxygenLvlStaffName> StaffName { get; set; }
-
         public int OxygenLvlId { get; set; }
         public int ClientId { get; set; }
         public string Reference { get; set; }
@@ -32,5 +28,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientOxygenLvl
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PutOxygenLvlOfficerToAct> OfficerToAct { get; set; }
+        public List<PutOxygenLvlPhysician> Physician { get; set; }
+        public List<PutOxygenLvlStaffName> StaffName { get; set; }
     }
 }

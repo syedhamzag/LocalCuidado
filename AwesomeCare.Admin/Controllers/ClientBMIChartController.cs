@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientBMIChartService.Get();
             
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientBMIChart> reports = new List<CreateClientBMIChart>();         
             foreach (GetClientBMIChart item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
             return View(reports);
@@ -90,28 +89,35 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int BMIId)
         {
-            string OfficerToAct = "";
-            var BMIChart = await _clientBMIChartService.Get(BMIId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BMIChart.OfficerToAct)
+            var BMIChart = _clientBMIChartService.Get(BMIId);
+            var putEntity = new CreateClientBMIChart
             {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(BMIChart);
-            return View(BMIChart);
+                BMIChartId = BMIChart.Result.BMIChartId,
+                Reference = BMIChart.Result.Reference,
+                ClientId = BMIChart.Result.ClientId,
+                Date = BMIChart.Result.Date,
+                Time = BMIChart.Result.Time,
+                Height = BMIChart.Result.Height,
+                Weight = BMIChart.Result.Weight,
+                NumberRange = BMIChart.Result.NumberRange,
+                SeeChart = BMIChart.Result.SeeChart,
+                Comment = BMIChart.Result.Comment,
+                Staff_Name = BMIChart.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = BMIChart.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = BMIChart.Result.PhysicianResponse,
+                OfficerName = BMIChart.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = BMIChart.Result.Deadline,
+                Remarks = BMIChart.Result.Remarks,
+                Status = BMIChart.Result.Status,
+                SeeChartAttach = BMIChart.Result.SeeChartAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int BMIId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var BMIChart = await _clientBMIChartService.Get(BMIId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BMIChart.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(BMIChart);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientBMIChart.pdf");
             string subject = "ClientBMIChart";
             string body = "";
@@ -120,16 +126,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int BMIId)
         {
-            string OfficerToAct = "";
             var BMIChart = await _clientBMIChartService.Get(BMIId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in BMIChart.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(BMIChart);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientBMIChart.pdf");
         }
@@ -182,6 +181,7 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = BMIChart.Result.Deadline,
                 Remarks = BMIChart.Result.Remarks,
                 Status = BMIChart.Result.Status,
+                SeeChartAttach = BMIChart.Result.SeeChartAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -230,7 +230,7 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
-
+                postlog.SeeChartAttach = model.SeeChartAttach;
             var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientBMIChartService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
@@ -268,6 +268,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientBMIChart put = new PutClientBMIChart();
+            put.BMIChartId = model.BMIChartId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -277,13 +278,14 @@ namespace AwesomeCare.Admin.Controllers
             put.SeeChart = model.SeeChart;
             put.NumberRange= model.NumberRange;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutBMIChartStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutBMIChartPhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutBMIChartStaffName { StaffPersonalInfoId = o, BMIChartId = model.BMIChartId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutBMIChartPhysician { StaffPersonalInfoId = o, BMIChartId = model.BMIChartId }).ToList();
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBMIChartOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutBMIChartOfficerToAct { StaffPersonalInfoId = o, BMIChartId = model.BMIChartId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;
+            put.SeeChartAttach = model.SeeChartAttach;
 
             var entity = await _clientBMIChartService.Put(put);
             SetOperationStatus(new Models.OperationStatus

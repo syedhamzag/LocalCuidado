@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientMgtVisit> builder)
         {
-            builder.ToTable("tbl_ClientMgtVisit");
+            builder.ToTable("tbl_Client_MgtVisit");
             builder.HasKey(k => k.VisitId);
 
             #region Properties
@@ -35,10 +35,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("ServiceRecommended")
                .IsRequired();
 
-            builder.Property(p => p.StaffBestSupport)
-               .HasColumnName("StaffBestSupport")
-               .IsRequired();
-
             builder.Property(p => p.RateServiceRecieving)
                .HasColumnName("RateServiceRecieving")
                .IsRequired();
@@ -58,10 +54,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.EvidenceOfActionTaken)
              .HasColumnName("EvidenceOfActionTaken")
              .IsRequired();
-
-            builder.Property(p => p.OfficerToAct)
-               .HasColumnName("OfficerToAct")
-               .IsRequired();
 
             builder.Property(p => p.Status)
                .HasColumnName("Status")
@@ -89,7 +81,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.RotCause)
              .HasColumnName("RotCause")
-             .HasMaxLength(50)
              .IsRequired();
 
             builder.Property(p => p.LessonLearntAndShared)
@@ -111,10 +102,15 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.ClientMgtVisit)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<VisitStaffName>(p => p.StaffName)
+                .WithOne(p => p.Visit)
+                .HasForeignKey(p => p.VisitId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany<VisitOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.Visit)
+                .HasForeignKey(p => p.VisitId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

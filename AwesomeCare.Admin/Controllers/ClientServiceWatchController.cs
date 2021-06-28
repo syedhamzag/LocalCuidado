@@ -27,6 +27,7 @@ using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
 using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.DataTransferObject.DTOs.ClientService;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -59,7 +60,6 @@ namespace AwesomeCare.Admin.Controllers
         {
             var entities = await _clientServiceWatchService.Get();
             var client = await _clientService.GetClients();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientServiceWatch> reports = new List<CreateClientServiceWatch>();
             foreach (GetClientServiceWatch item in entities)
             {
@@ -77,61 +77,36 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int? clientId)
         {
             var model = new CreateClientServiceWatch();
-            var client = await _clientService.GetClient(clientId.Value);
-            model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;          
             var staffs = await _staffService.GetStaffs();
-            model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             model.ClientId = clientId.Value;
+            var client = await _clientService.GetClientDetail();
+            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
+            model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             return View(model);
 
         }
 
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int serviceId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var ServiceWatch = await _clientServiceWatchService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in ServiceWatch)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(ServiceWatch.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(ServiceWatch.FirstOrDefault());
+            var ServiceWatch = await _clientServiceWatchService.Get(serviceId);
+            return View(ServiceWatch);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int serviceId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var ServiceWatch = await _clientServiceWatchService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in ServiceWatch)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(ServiceWatch.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var ServiceWatch = await _clientServiceWatchService.Get(serviceId);
+            var json = JsonConvert.SerializeObject(ServiceWatch);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientServiceWatch.pdf");
             string subject = "ClientServiceWatch";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int serviceId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var ServiceWatch = await _clientServiceWatchService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in ServiceWatch)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(ServiceWatch.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var ServiceWatch = await _clientServiceWatchService.Get(serviceId);
+            var json = JsonConvert.SerializeObject(ServiceWatch);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientServiceWatch.pdf");
         }
@@ -161,37 +136,30 @@ namespace AwesomeCare.Admin.Controllers
             return buffer;
         }
 
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int WatchId)
         {
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var ServiceWatch = _clientServiceWatchService.GetByRef(Reference);
-            foreach (var item in ServiceWatch.Result)
-            {
-                officer.Add(item.OfficerToAct);
-                Ids.Add(item.OfficerToAct);
-            }
+            var ServiceWatch = _clientServiceWatchService.Get(WatchId);
             var staffs = await _staffService.GetStaffs();
 
             var putEntity = new CreateClientServiceWatch
             {
-                WatchIds = Ids,
-                ClientId = ServiceWatch.Result.FirstOrDefault().ClientId,
-                Reference = ServiceWatch.Result.FirstOrDefault().Reference,
-                Attachment = ServiceWatch.Result.FirstOrDefault().Attachment,
-                Date = ServiceWatch.Result.FirstOrDefault().Date,
-                NextCheckDate = ServiceWatch.Result.FirstOrDefault().NextCheckDate,
-                Deadline = ServiceWatch.Result.FirstOrDefault().Deadline,
-                Contact = ServiceWatch.Result.FirstOrDefault().Contact,
-                Details = ServiceWatch.Result.FirstOrDefault().Details,
-                URL = ServiceWatch.Result.FirstOrDefault().URL,
-                Incident = ServiceWatch.Result.FirstOrDefault().Incident,
-                OfficerToAct = officer,
-                Remarks = ServiceWatch.Result.FirstOrDefault().Remarks,
-                Observation = ServiceWatch.Result.FirstOrDefault().Observation,
-                Status = ServiceWatch.Result.FirstOrDefault().Status,
-                ActionRequired = ServiceWatch.Result.FirstOrDefault().ActionRequired,
-                PersonInvolved = ServiceWatch.Result.FirstOrDefault().PersonInvolved,
+                WatchId = ServiceWatch.Result.WatchId,
+                ClientId = ServiceWatch.Result.ClientId,
+                Reference = ServiceWatch.Result.Reference,
+                Attachment = ServiceWatch.Result.Attachment,
+                Date = ServiceWatch.Result.Date,
+                NextCheckDate = ServiceWatch.Result.NextCheckDate,
+                Deadline = ServiceWatch.Result.Deadline,
+                Contact = ServiceWatch.Result.Contact,
+                Details = ServiceWatch.Result.Details,
+                URL = ServiceWatch.Result.URL,
+                Incident = ServiceWatch.Result.Incident,
+                OfficerToAct = ServiceWatch.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = ServiceWatch.Result.Remarks,
+                Observation = ServiceWatch.Result.Observation,
+                Status = ServiceWatch.Result.Status,
+                ActionRequired = ServiceWatch.Result.ActionRequired,
+                PersonInvolved = ServiceWatch.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -202,47 +170,47 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
-                var client = await _clientService.GetClient(model.ClientId);
-                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                var client = await _clientService.GetClientDetail();
+                model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+            PostClientServiceWatch postlog = new PostClientServiceWatch();
 
             #region Attachment
             if (model.Attach != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
+                string folder = "clientcomplain";
+                string filename = string.Concat(folder, "_Attach_", model.ClientId);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
+            }
+            else
+            {
+                model.Attachment = "No Image";
             }
             #endregion
 
-            List<PostClientServiceWatch> posts = new List<PostClientServiceWatch>();
-            foreach (var item in model.OfficerToAct)
-            {
-                var post = new PostClientServiceWatch();
-                post.ClientId = model.ClientId;
-                post.Reference = model.Reference;
-                post.Attachment = model.Attachment;
-                post.Date = model.Date;
-                post.NextCheckDate = model.NextCheckDate;
-                post.Deadline = model.Deadline;
-                post.Contact = model.Contact;
-                post.Details = model.Details;
-                post.URL = model.URL;
-                post.Incident = model.Incident;
-                post.OfficerToAct = item;
-                post.Remarks = model.Remarks;
-                post.Observation = model.Observation;
-                post.Status = model.Status;
-                post.ActionRequired = model.ActionRequired;
-                post.PersonInvolved = model.PersonInvolved;
-                posts.Add(post);
-            }
+            
+                postlog.ClientId = model.ClientId;
+                postlog.Reference = model.Reference;
+                postlog.Attachment = model.Attachment;
+                postlog.Date = model.Date;
+                postlog.NextCheckDate = model.NextCheckDate;
+                postlog.Deadline = model.Deadline;
+                postlog.Contact = model.Contact;
+                postlog.Details = model.Details;
+                postlog.URL = model.URL;
+                postlog.Incident = model.Incident;
+                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostServiceOfficerToAct { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
+                postlog.Remarks = model.Remarks;
+                postlog.Observation = model.Observation;
+                postlog.Status = model.Status;
+                postlog.ActionRequired = model.ActionRequired;
+                postlog.StaffName = model.PersonInvolved.Select(o => new PostServiceStaffName { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
 
-            var result = await _clientServiceWatchService.Create(posts);
+            var result = await _clientServiceWatchService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result != null ? "New Service Watch successfully registered" : "An Error Occurred" });
@@ -261,6 +229,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
+
             #region Evidence
             if (model.Attach != null)
             {
@@ -276,14 +245,8 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-            int count = model.WatchIds.Count;
-            int i = 0;
-            List<PutClientServiceWatch> puts = new List<PutClientServiceWatch>();
-            foreach (var item in model.OfficerToAct)
-            {
-                var put = new PutClientServiceWatch();
-                if (i < count)
-                    put.WatchId = model.WatchIds[i];
+                PutClientServiceWatch put = new PutClientServiceWatch();
+                put.WatchId = model.WatchId;
                 put.ClientId = model.ClientId;
                 put.Reference = model.Reference;
                 put.Attachment = model.Attachment;
@@ -294,16 +257,14 @@ namespace AwesomeCare.Admin.Controllers
                 put.Details = model.Details;
                 put.URL = model.URL;
                 put.Incident = model.Incident;
-                put.OfficerToAct = item;
+                put.OfficerToAct = model.OfficerToAct.Select(o => new PutServiceOfficerToAct { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
                 put.Remarks = model.Remarks;
                 put.Observation = model.Observation;
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;
-                put.PersonInvolved = model.PersonInvolved;
-                puts.Add(put);
-            }
-
-            var entity = await _clientServiceWatchService.Put(puts);
+                put.StaffName = model.PersonInvolved.Select(o => new PutServiceStaffName { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
+            var json = JsonConvert.SerializeObject(put);
+            var entity = await _clientServiceWatchService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

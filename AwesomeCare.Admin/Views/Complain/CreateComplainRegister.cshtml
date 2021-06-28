@@ -50,8 +50,8 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">OFFICER TO ACT</label>
-                                    <select class="custom-select" asp-for="OFFICERTOACTId" asp-items="@Model.STAFFINVOLVED"></select>
-                                    <span asp-validation-for="OFFICERTOACTId" class="text-danger"></span>
+                                    <select asp-for="OfficerToAct" asp-items="@Model.STAFFINVOLVED" class="selectpicker" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -67,8 +67,8 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">STAFF</label>
-                                    <select class="custom-select" asp-for="STAFFId" asp-items="@Model.STAFFINVOLVED"></select>
-                                    <span asp-validation-for="STAFFId" class="text-danger"></span>
+                                    <select asp-for="StaffName" asp-items="@Model.STAFFINVOLVED" class="selectpicker" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="StaffName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">

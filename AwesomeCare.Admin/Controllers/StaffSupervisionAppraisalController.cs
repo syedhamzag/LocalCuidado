@@ -3,7 +3,7 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.StaffSupervisionAppraisal;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.Staff;
-using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -68,52 +68,55 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
-        public async Task<IActionResult> View(string Reference)
+        public async Task<IActionResult> View(int visionId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSupervisionAppraisalService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
+            var superVision = _StaffSupervisionAppraisalService.Get(visionId);
 
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            return View(logAudit.FirstOrDefault());
+            var putEntity = new CreateStaffSupervisionAppraisal
+            {
+                StaffSupervisionAppraisalId = superVision.Result.StaffSupervisionAppraisalId,
+                Reference = superVision.Result.Reference,
+                Attachment = superVision.Result.Attachment,
+                Date = superVision.Result.Date,
+                Deadline = superVision.Result.Deadline,
+                URL = superVision.Result.URL,
+                Remarks = superVision.Result.Remarks,
+                Status = superVision.Result.Status,
+                ActionRequired = superVision.Result.ActionRequired,
+                NextCheckDate = superVision.Result.NextCheckDate,
+                WorkTeam = superVision.Result.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToAct = superVision.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                CondourAndWhistleBlowing = superVision.Result.CondourAndWhistleBlowing,
+                Details = superVision.Result.Details,
+                FiveStarRating = superVision.Result.FiveStarRating,
+                NoAbilityToSupport = superVision.Result.NoAbilityToSupport,
+                NoCondourAndWhistleBlowing = superVision.Result.NoCondourAndWhistleBlowing,
+                ProfessionalDevelopment = superVision.Result.ProfessionalDevelopment,
+                StaffAbility = superVision.Result.StaffAbility,
+                StaffComplaints = superVision.Result.StaffComplaints,
+                StaffDevelopment = superVision.Result.StaffDevelopment,
+                StaffRating = superVision.Result.StaffRating,
+                StaffSupportAreas = superVision.Result.StaffSupportAreas,
+                StaffId = superVision.Result.StaffId
+            };
+            return View(putEntity);
         }
-        public async Task<IActionResult> Email(string Reference, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int visionId, string sender, string password, string recipient, string Smtp)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSupervisionAppraisalService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var superVision = await _StaffSupervisionAppraisalService.Get(visionId);
+            var json = JsonConvert.SerializeObject(superVision);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "StaffSupervisionAppraisal.pdf");
             string subject = "StaffSupervisionAppraisal";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(string Reference)
+        public async Task<IActionResult> Download(int visionId)
         {
-            string staffName = "\n OfficerToTakeAction:";
-            var logAudit = await _StaffSupervisionAppraisalService.GetByRef(Reference);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in logAudit)
-            {
-                staffName = staffName + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.OfficerToAct).Select(s => s.Fullname).FirstOrDefault();
-
-            }
-            var json = JsonConvert.SerializeObject(logAudit.FirstOrDefault());
-            var newJson = json + staffName;
-            byte[] byte1 = GeneratePdf(newJson);
+            var superVision = await _StaffSupervisionAppraisalService.Get(visionId);
+            var json = JsonConvert.SerializeObject(superVision);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "StaffSupervisionAppraisal.pdf");
         }
@@ -143,43 +146,36 @@ namespace AwesomeCare.Admin.Controllers
             return buffer;
         }
 
-        public async Task<IActionResult> Edit(string Reference)
+        public async Task<IActionResult> Edit(int visionId)
         {
-            List<int> officer = new List<int>();
-            List<int> Ids = new List<int>();
-            var superVision = _StaffSupervisionAppraisalService.GetByRef(Reference);
-            foreach (var item in superVision.Result)
-            {
-                officer.Add(item.OfficerToAct);
-                Ids.Add(item.StaffSupervisionAppraisalId);
-            }
+            var superVision =  _StaffSupervisionAppraisalService.Get(visionId);
             var staffs = await _staffService.GetStaffs();
             var putEntity = new CreateStaffSupervisionAppraisal
             {
-                StaffSupervisionAppraisalIds = Ids,
-                Reference = superVision.Result.FirstOrDefault().Reference,
-                Attachment = superVision.Result.FirstOrDefault().Attachment,
-                Date = superVision.Result.FirstOrDefault().Date,
-                Deadline = superVision.Result.FirstOrDefault().Deadline,
-                URL = superVision.Result.FirstOrDefault().URL,
-                Remarks = superVision.Result.FirstOrDefault().Remarks,
-                Status = superVision.Result.FirstOrDefault().Status,
-                ActionRequired = superVision.Result.FirstOrDefault().ActionRequired,
-                NextCheckDate = superVision.Result.FirstOrDefault().NextCheckDate,
-                WorkTeam = superVision.Result.FirstOrDefault().WorkTeam,
-                OfficerToAct = officer,
-                CondourAndWhistleBlowing = superVision.Result.FirstOrDefault().CondourAndWhistleBlowing,
-                Details = superVision.Result.FirstOrDefault().Details,
-                FiveStarRating = superVision.Result.FirstOrDefault().FiveStarRating,
-                NoAbilityToSupport = superVision.Result.FirstOrDefault().NoAbilityToSupport,
-                NoCondourAndWhistleBlowing = superVision.Result.FirstOrDefault().NoCondourAndWhistleBlowing,
-                ProfessionalDevelopment = superVision.Result.FirstOrDefault().ProfessionalDevelopment,
-                StaffAbility = superVision.Result.FirstOrDefault().StaffAbility,
-                StaffComplaints = superVision.Result.FirstOrDefault().StaffComplaints,
-                StaffDevelopment = superVision.Result.FirstOrDefault().StaffDevelopment,
-                StaffRating = superVision.Result.FirstOrDefault().StaffRating,
-                StaffSupportAreas = superVision.Result.FirstOrDefault().StaffSupportAreas,
-                StaffId = superVision.Result.FirstOrDefault().StaffId,
+                StaffSupervisionAppraisalId = superVision.Result.StaffSupervisionAppraisalId,
+                Reference = superVision.Result.Reference,
+                Attachment = superVision.Result.Attachment,
+                Date = superVision.Result.Date,
+                Deadline = superVision.Result.Deadline,
+                URL = superVision.Result.URL,
+                Remarks = superVision.Result.Remarks,
+                Status = superVision.Result.Status,
+                ActionRequired = superVision.Result.ActionRequired,
+                NextCheckDate = superVision.Result.NextCheckDate,
+                WorkTeam = superVision.Result.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToAct = superVision.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                CondourAndWhistleBlowing = superVision.Result.CondourAndWhistleBlowing,
+                Details = superVision.Result.Details,
+                FiveStarRating = superVision.Result.FiveStarRating,
+                NoAbilityToSupport = superVision.Result.NoAbilityToSupport,
+                NoCondourAndWhistleBlowing = superVision.Result.NoCondourAndWhistleBlowing,
+                ProfessionalDevelopment = superVision.Result.ProfessionalDevelopment,
+                StaffAbility = superVision.Result.StaffAbility,
+                StaffComplaints = superVision.Result.StaffComplaints,
+                StaffDevelopment = superVision.Result.StaffDevelopment,
+                StaffRating = superVision.Result.StaffRating,
+                StaffSupportAreas = superVision.Result.StaffSupportAreas,
+                StaffId = superVision.Result.StaffId,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
             };
             return View(putEntity);
@@ -202,10 +198,11 @@ namespace AwesomeCare.Admin.Controllers
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.Attachment = pathA;
             }
-            #endregion
-            List<PostStaffSupervisionAppraisal> posts = new List<PostStaffSupervisionAppraisal>();
-            foreach (var item in model.OfficerToAct)
+            else 
             {
+                model.Attachment = "No Image";
+            }
+            #endregion
                 var post = new PostStaffSupervisionAppraisal();
                 post.Reference = model.Reference;
                 post.Attachment = model.Attachment;
@@ -216,8 +213,8 @@ namespace AwesomeCare.Admin.Controllers
                 post.Status = model.Status;
                 post.ActionRequired = model.ActionRequired;
                 post.NextCheckDate = model.NextCheckDate;
-                post.WorkTeam = model.WorkTeam;
-                post.OfficerToAct = item;
+                post.Workteam = model.WorkTeam.Select(s => new PostSupervisionWorkteam { StaffPersonalInfoId = s, StaffSupervisionAppraisalId =model.StaffSupervisionAppraisalId}).ToList();
+                post.OfficerToAct = model.OfficerToAct.Select(s => new PostSupervisionOfficerToAct { StaffPersonalInfoId = s, StaffSupervisionAppraisalId = model.StaffSupervisionAppraisalId }).ToList();
                 post.CondourAndWhistleBlowing = model.CondourAndWhistleBlowing;
                 post.Details = model.Details;
                 post.FiveStarRating = model.FiveStarRating;
@@ -230,9 +227,8 @@ namespace AwesomeCare.Admin.Controllers
                 post.StaffRating = model.StaffRating;
                 post.StaffSupportAreas = model.StaffSupportAreas;
                 post.StaffId = model.StaffId;
-                posts.Add(post);
-            }
-            var result = await _StaffSupervisionAppraisalService.Create(posts);
+
+            var result = await _StaffSupervisionAppraisalService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Supervision Appraisal successfully registered" : "An Error Occurred" });
@@ -263,14 +259,8 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = model.Attachment;
             }
             #endregion
-            int count = model.StaffSupervisionAppraisalIds.Count;
-            int i = 0;
-            List<PutStaffSupervisionAppraisal> puts = new List<PutStaffSupervisionAppraisal>();
-            foreach (var item in model.OfficerToAct)
-            {
                 var put = new PutStaffSupervisionAppraisal();
-                if (i < count)
-                    put.StaffSupervisionAppraisalId = model.StaffSupervisionAppraisalIds[i];
+                put.StaffSupervisionAppraisalId = model.StaffSupervisionAppraisalId;
                 put.Reference = model.Reference;
                 put.Attachment = model.Attachment;
                 put.Date = model.Date;
@@ -280,8 +270,8 @@ namespace AwesomeCare.Admin.Controllers
                 put.Status = model.Status;
                 put.ActionRequired = model.ActionRequired;
                 put.NextCheckDate = model.NextCheckDate;
-                put.WorkTeam = model.WorkTeam;
-                put.OfficerToAct = item;
+                put.Workteam = model.WorkTeam.Select(s => new PutSupervisionWorkteam { StaffPersonalInfoId = s, StaffSupervisionAppraisalId = model.StaffSupervisionAppraisalId }).ToList();
+                put.OfficerToAct = model.OfficerToAct.Select(s => new PutSupervisionOfficerToAct { StaffPersonalInfoId = s, StaffSupervisionAppraisalId = model.StaffSupervisionAppraisalId }).ToList();
                 put.CondourAndWhistleBlowing = model.CondourAndWhistleBlowing;
                 put.Details = model.Details;
                 put.FiveStarRating = model.FiveStarRating;
@@ -294,9 +284,7 @@ namespace AwesomeCare.Admin.Controllers
                 put.StaffRating = model.StaffRating;
                 put.StaffSupportAreas = model.StaffSupportAreas;
                 put.StaffId = model.StaffId;
-                puts.Add(put);
-            }
-            var entity = await _StaffSupervisionAppraisalService.Put(puts);
+            var entity = await _StaffSupervisionAppraisalService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

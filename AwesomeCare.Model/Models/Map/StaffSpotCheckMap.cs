@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<StaffSpotCheck> builder)
         {
-            builder.ToTable("tbl_StaffSpotCheck");
+            builder.ToTable("tbl_Staff_SpotCheck");
             builder.HasKey(k => k.SpotCheckId);
 
             #region Properties
@@ -32,7 +32,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Details)
                .HasColumnName("Details")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ClientId)
@@ -45,22 +44,15 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.StaffDressCode)
                .HasColumnName("StaffDressCode")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.AreaComments)
                .HasColumnName("AreaComments")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.ActionRequired)
                .HasColumnName("ActionRequired")
-               .HasMaxLength(255)
                .IsRequired();
-
-            builder.Property(p => p.OfficerToAct)
-             .HasColumnName("OfficerToAct")
-             .IsRequired();
 
             builder.Property(p => p.Deadline)
                .HasColumnName("Deadline")
@@ -72,12 +64,10 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.Remarks)
                .HasColumnName("Remarks")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.URL)
                .HasColumnName("URL")
-               .HasMaxLength(255)
                .IsRequired();
 
             builder.Property(p => p.Attachment)
@@ -91,10 +81,10 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.StaffSpotCheck)
-                 .HasForeignKey(p => p.OfficerToAct)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<SpotCheckOfficerToAct>(p => p.OfficerToAct)
+               .WithOne(p => p.SpotCheck)
+               .HasForeignKey(p => p.SpotCheckId)
+               .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

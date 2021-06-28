@@ -14,11 +14,6 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
     {
         public CreateClientVoice()
         {
-            StaffPoorSupportList = new List<GetStaffs>();
-            StaffPoorSupportList = new List<GetStaffs>();
-            StaffPoorSupportList = new List<GetStaffs>();
-            StaffPoorSupportList = new List<GetStaffs>();
-            StaffPoorSupportList = new List<GetStaffs>();
             StatusList = new List<SelectListItem>();
             InterestedInProgramList = new List<SelectListItem>();
             RateServiceRecievingList = new List<SelectListItem>();
@@ -27,17 +22,12 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Evidence { get; set; }
         #region DropDowns
-        public ICollection<GetStaffs> StaffPoorSupportList { get; set; }
-        public ICollection<GetStaffs> StaffBestSupportList { get; set; }
-        public ICollection<GetStaffs> OfficeStaffSupportList { get; set; }
-        public ICollection<GetStaffs> NameOfCallerList { get; set; }
+
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         public ICollection<SelectListItem> InterestedInProgramList { get; set; }
@@ -47,7 +37,6 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         public string ClientName { get; set; }
         public string StatusName { get; set; }
         public string ActiveTab { get; set; } = "voice";
-        public List<int> VoiceIds { get; set; }
         public string Reference { get; set; }
         public int VoiceId { get; set; }
         [Required]
@@ -61,51 +50,45 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         [Required]
         public int RateStaffAttending { get; set; }
         [Required]
-        public int StaffBestSupport { get; set; }
+        public List<int> StaffBestSupport { get; set; }
+        public List<string> Best_Staff { get; set; }
         [Required]
-        public int StaffPoorSupport { get; set; }
+        public List<int> StaffPoorSupport { get; set; }
+        public List<string> Poor_Staff { get; set; }
         [Required]
         public int OfficeStaffSupport { get; set; }
         [Required]
-        [MaxLength(255)]
         public string AreasOfImprovements { get; set; }
         [Required]
-        [MaxLength(255)]
         public string SomethingSpecial { get; set; }
         [Required]
         public int InterestedInPrograms { get; set; }
         [Required]
-        [MaxLength(255)]
         public string HealthGoalShortTerm { get; set; }
         [Required]
-        [MaxLength(255)]
         public string HealthGoalLongTerm { get; set; }
         [Required]
-        public int NameOfCaller { get; set; }
+        public List<int> NameOfCaller { get; set; }
+        public List<string> Caller_Name { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ActionRequired { get; set; }
         [Required]
-        [MaxLength(255)]
         public string ActionsTakenByMPCC { get; set; }
         public string EvidenceOfActionTaken { get; set; }
         [Required]
         public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
         public int Status { get; set; }
         [Required]
         public DateTime Deadline { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Remarks { get; set; }
         [Required]
-        [MaxLength(50)]
         public string RotCause { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]  
         public string LessonLearntAndShared { get; set; }
         [Required]
-        [MaxLength(255)]
         public string URL { get; set; }
         public string Attachment { get; set; }
     }

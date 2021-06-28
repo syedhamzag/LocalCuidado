@@ -23,11 +23,17 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffMedComp> _StaffMedCompRepository;
-        
-        public StaffMedCompController(AwesomeCareDbContext dbContext, IGenericRepository<StaffMedComp> StaffMedCompRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<MedCompOfficerToAct> _officertoactRepository;
+
+        public StaffMedCompController(AwesomeCareDbContext dbContext, IGenericRepository<StaffMedComp> StaffMedCompRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<MedCompOfficerToAct> officertoactRepository)
         {
             _StaffMedCompRepository = StaffMedCompRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region StaffMedComp
         /// <summary>
@@ -41,20 +47,6 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffMedCompRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All StaffMedComp
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetStaffMedComp>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _StaffMedCompRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -64,20 +56,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostStaffMedComp> postStaffMedComp)
+        public async Task<IActionResult> Create([FromBody] PostStaffMedComp postStaffMedComp)
         {
             if (postStaffMedComp == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postStaffMedComp)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
-
-            var StaffMedComp = Mapper.Map<List<StaffMedComp>>(postStaffMedComp);
-            await _StaffMedCompRepository.InsertEntities(StaffMedComp);
+            
+            var StaffMedComp = Mapper.Map<StaffMedComp>(postStaffMedComp);
+            await _StaffMedCompRepository.InsertEntity(StaffMedComp);
             return Ok();
         }
         /// <summary>
@@ -86,40 +73,30 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutStaffMedComp> model)
+        public async Task<IActionResult> Put([FromBody] PutStaffMedComp models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<StaffMedComp>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (StaffMedComp item in filterEntity)
+
+            foreach (var model in models.OfficerToAct.ToList())
             {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
+                var entity = _dbContext.Set<MedCompOfficerToAct>();
+                var filterentity = entity.Where(c => c.MedCompId == model.MedCompId).ToList();
+                if (filterentity != null)
                 {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
                 }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
+            }
 
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<StaffMedComp>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
             var result = _dbContext.SaveChanges();
+            var StaffMedComp = Mapper.Map<StaffMedComp>(models);
+            await _StaffMedCompRepository.UpdateEntity(StaffMedComp);
             return Ok();
 
         }
@@ -142,6 +119,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.MedCompId == id
                                            select new GetStaffMedComp
                                            {
+                                               MedCompId = c.MedCompId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -153,12 +132,20 @@ namespace AwesomeCare.API.Controllers
                                                Details = c.Details,
                                                Deadline = c.Deadline,
                                                StaffId = c.StaffId,
-                                               OfficerToAct = c.OfficerToAct,
                                                RateStaff = c.RateStaff,
                                                ReadingMedicalPrescriptions = c.ReadingMedicalPrescriptions,
                                                UnderstandingofMedication = c.UnderstandingofMedication,
                                                UnderstandingofRights = c.UnderstandingofRights,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.MedCompId == c.MedCompId
+                                                               select new GetMedCompOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffMedComp);

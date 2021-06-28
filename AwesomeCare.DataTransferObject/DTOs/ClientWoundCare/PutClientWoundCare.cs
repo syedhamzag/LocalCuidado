@@ -13,10 +13,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientWoundCare
             StaffName = new List<PutWoundCareStaffName>();
         }
 
-        public List<PutWoundCareOfficerToAct> OfficerToAct { get; set; }
-        public List<PutWoundCarePhysician> Physician { get; set; }
-        public List<PutWoundCareStaffName> StaffName { get; set; }
-
         public int WoundCareId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -40,5 +36,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientWoundCare
         public DateTime Deadline { get; set; }
         public string Remarks { get; set; }
         public int Status { get; set; }
+
+        public List<PutWoundCareOfficerToAct> OfficerToAct { get; set; }
+        public List<PutWoundCarePhysician> Physician { get; set; }
+        public List<PutWoundCareStaffName> StaffName { get; set; }
     }
 }

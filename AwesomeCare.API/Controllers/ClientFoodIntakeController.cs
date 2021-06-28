@@ -16,6 +16,7 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientFoodIntakeController : ControllerBase
@@ -75,13 +76,56 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientFoodIntake> model)
+        public async Task<IActionResult> Put([FromBody] PutClientFoodIntake models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientFoodIntake = Mapper.Map<ClientFoodIntake>(model);
+
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<FoodIntakeOfficerToAct>();
+                var filterentity = entity.Where(c => c.FoodIntakeId == model.FoodIntakeId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.Physician.ToList())
+            {
+                var entity = _dbContext.Set<FoodIntakePhysician>();
+                var filterentity = entity.Where(c => c.FoodIntakeId == model.FoodIntakeId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<FoodIntakeStaffName>();
+                var filterentity = entity.Where(c => c.FoodIntakeId == model.FoodIntakeId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            var result = _dbContext.SaveChanges();
+
+            var ClientFoodIntake = Mapper.Map<ClientFoodIntake>(models);
             await _ClientFoodIntakeRepository.UpdateEntity(ClientFoodIntake);
             return Ok();
 
@@ -105,6 +149,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetClientFoodIntake
                                            {
                                                FoodIntakeId = c.FoodIntakeId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                Time = c.Time,
                                                Goal = c.Goal,

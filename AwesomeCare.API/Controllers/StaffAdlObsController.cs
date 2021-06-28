@@ -23,11 +23,17 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffAdlObs> _StaffAdlObsRepository;
-        
-        public StaffAdlObsController(AwesomeCareDbContext dbContext, IGenericRepository<StaffAdlObs> StaffAdlObsRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<AdlObsOfficerToAct> _officertoactRepository;
+
+        public StaffAdlObsController(AwesomeCareDbContext dbContext, IGenericRepository<StaffAdlObs> StaffAdlObsRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<AdlObsOfficerToAct> officertoactRepository)
         {
             _StaffAdlObsRepository = StaffAdlObsRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region StaffAdlObs
         /// <summary>
@@ -41,22 +47,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffAdlObsRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All ClientLogAudit
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetStaffAdlObs>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _StaffAdlObsRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
+
         /// <summary>
         /// Create StaffAdlObs
         /// </summary>
@@ -64,20 +57,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostStaffAdlObs> postStaffAdlObs)
+        public async Task<IActionResult> Create([FromBody] PostStaffAdlObs postStaffAdlObs)
         {
             if (postStaffAdlObs == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postStaffAdlObs)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
 
-            var StaffAdlObs = Mapper.Map<List<StaffAdlObs>>(postStaffAdlObs);
-            await _StaffAdlObsRepository.InsertEntities(StaffAdlObs);
+            var StaffAdlObs = Mapper.Map<StaffAdlObs>(postStaffAdlObs);
+            await _StaffAdlObsRepository.InsertEntity(StaffAdlObs);
             return Ok();
         }
         /// <summary>
@@ -86,40 +74,29 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutStaffAdlObs> model)
+        public async Task<IActionResult> Put([FromBody] PutStaffAdlObs models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<StaffAdlObs>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (StaffAdlObs item in filterEntity)
+            foreach (var model in models.OfficerToAct.ToList())
             {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
+                var entity = _dbContext.Set<AdlObsOfficerToAct>();
+                var filterentity = entity.Where(c => c.ObservationId == model.ObservationId).ToList();
+                if (filterentity != null)
                 {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
                 }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
+            }
 
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<StaffAdlObs>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
             var result = _dbContext.SaveChanges();
+            var StaffAdlObs = Mapper.Map<StaffAdlObs>(models);
+            await _StaffAdlObsRepository.UpdateEntity(StaffAdlObs);
             return Ok();
 
         }
@@ -143,6 +120,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.ObservationID == id
                                            select new GetStaffAdlObs
                                            {
+                                               ObservationID = c.ObservationID,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -154,12 +133,20 @@ namespace AwesomeCare.API.Controllers
                                                Comments = c.Comments,
                                                Details = c.Details,
                                                FivePrinciples = c.FivePrinciples,
-                                               OfficerToAct = c.OfficerToAct,
                                                StaffId = c.StaffId,
                                                UnderstandingofControl = c.UnderstandingofControl,
                                                UnderstandingofEquipment = c.UnderstandingofEquipment,
                                                UnderstandingofService = c.UnderstandingofService,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.ObservationId == c.ObservationID
+                                                               select new GetAdlObsOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffAdlObs);

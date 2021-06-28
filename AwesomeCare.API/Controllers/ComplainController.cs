@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataTransferObject.DTOs.ClientComplain;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -24,12 +25,21 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Client> _clientRepository;
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientComplainRegister> _complainRepository;
-        
-        public ComplainController(AwesomeCareDbContext dbContext, IGenericRepository<ClientComplainRegister> complainRepository, IGenericRepository<Client> clientRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<ComplainOfficerToAct> _officertoactRepository;
+        private IGenericRepository<ComplainStaffName> _staffnameRepository;
+
+        public ComplainController(AwesomeCareDbContext dbContext, IGenericRepository<ClientComplainRegister> complainRepository, IGenericRepository<Client> clientRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+        IGenericRepository<ComplainOfficerToAct> officertoactRepository,
+        IGenericRepository<ComplainStaffName> staffnameRepository)
         {
             _complainRepository = complainRepository;
             _clientRepository = clientRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffnameRepository = staffnameRepository;
+            _staffRepository = staffRepository;
         }
         #region ComplainRegister
         /// <summary>
@@ -45,19 +55,7 @@ namespace AwesomeCare.API.Controllers
             var getEntities = _complainRepository.Table.ToList();
             return Ok(getEntities);
         }
-        /// <summary>
-        /// Get All Complain
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("{complainId}")]
-        [ProducesResponseType(type: typeof(GetClientComplainRegister), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Get(int complainId)
-        {
-            var getEntities = _complainRepository.Table.ProjectTo<GetClientComplainRegister>().FirstOrDefault(s=>s.ComplainId==complainId);
-            return Ok(getEntities);
-        }
+        
         /// <summary>
         /// Create Complain
         /// </summary>
@@ -90,10 +88,8 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var entity = await _complainRepository.GetEntity(model.ComplainId);
-            var putEntity = Mapper.Map(model, entity);
-            await _complainRepository.UpdateEntity(putEntity);
-
+            var complain = Mapper.Map<ClientComplainRegister>(model);
+            await _complainRepository.UpdateEntity(complain);
             return Ok();
 
 
@@ -104,26 +100,21 @@ namespace AwesomeCare.API.Controllers
         /// <param name="complainId"></param>
         /// <param name="clientId"></param>
         /// <returns></returns>
-        [HttpGet("/GetComplain/{clientId}/{complainId}", Name = "GetClientComplainRegister")]
+        [HttpGet("/Get/{id}")]
         [ProducesResponseType(type: typeof(GetClientComplainRegister), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetComplain(int? clientId, int? complainId)
+        public async Task<IActionResult> Get(int? id)
         {
-            if (!complainId.HasValue)
+            if (!id.HasValue)
                 return BadRequest("id Parameter is required");
 
-            var getComplain = await (from client in _clientRepository.Table
-                                     where client.ClientId == clientId.Value
-                                     select new GetClient
-                                     {
-                                         Firstname = client.Firstname,
-                                         Middlename = client.Middlename,
-                                         GetClientComplain = (from complain in _complainRepository.Table
-                                                              where complain.ComplainId == complainId.Value
-                                                              && complain.ClientId == clientId.Value
+            var getComplain = await (from complain in _complainRepository.Table
+                                                              where complain.ComplainId == id.Value
                                                               select new GetClientComplainRegister
                                                               {
+                                                                  ComplainId = complain.ComplainId,
+                                                                  Reference = complain.Reference,
                                                                   ClientId = complain.ClientId,
                                                                   ACTIONTAKEN = complain.ACTIONTAKEN,
                                                                   COMPLAINANTCONTACT = complain.COMPLAINANTCONTACT,
@@ -138,14 +129,29 @@ namespace AwesomeCare.API.Controllers
                                                                   IRFNUMBER = complain.IRFNUMBER,
                                                                   LETTERTOSTAFF = complain.LETTERTOSTAFF,
                                                                   LINK = complain.LINK,
-                                                                  OFFICERTOACTId = complain.OFFICERTOACTId,
                                                                   REMARK = complain.REMARK,
                                                                   ROOTCAUSE = complain.ROOTCAUSE,
                                                                   SOURCEOFCOMPLAINTS = complain.SOURCEOFCOMPLAINTS,
-                                                                  STAFFId = complain.STAFFId,
                                                                   StatusId = complain.StatusId,
-                                                              }).ToList()
-                                     }
+                                                                  OfficerToAct = (from com in _officertoactRepository.Table
+                                                                                  join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                                  where com.ComplainId == complain.ComplainId
+                                                                                  select new GetComplainOfficerToAct
+                                                                                  {
+                                                                                      StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                                      StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                                                  }).ToList(),
+                                                                  StaffName = (from com in _staffnameRepository.Table
+                                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                               where com.ComplainId == complain.ComplainId
+                                                                               select new GetComplainStaffName
+                                                                               {
+                                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+                                                                               }).ToList()
+
+                                                              }
                       ).FirstOrDefaultAsync();
             return Ok(getComplain);
         }

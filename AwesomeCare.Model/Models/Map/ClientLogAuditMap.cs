@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientLogAudit> builder)
         {
-            builder.ToTable("tbl_ClientLogAudit");
+            builder.ToTable("tbl_Client_LogAudit");
             builder.HasKey(k => k.LogAuditId);
 
             #region Properties
@@ -82,10 +82,6 @@ namespace AwesomeCare.Model.Models.Map
              .HasColumnName("EvidenceOfActionTaken")
              .IsRequired();
 
-            builder.Property(p => p.OfficerToTakeAction)
-               .HasColumnName("OfficerToTakeAction")
-               .IsRequired();
-
             builder.Property(p => p.Status)
                .HasColumnName("Status")
                .IsRequired();
@@ -104,7 +100,6 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.RotCause)
              .HasColumnName("RotCause")
-             .HasMaxLength(50)
              .IsRequired();
 
             builder.Property(p => p.LessonLearntAndShared)
@@ -116,14 +111,7 @@ namespace AwesomeCare.Model.Models.Map
              .IsRequired();
 
             builder.Property(p => p.EvidenceFilePath)
-             .HasColumnName("EvidenceFilePath")
-             .IsRequired(false);
-
-
-
-
-
-
+             .HasColumnName("EvidenceFilePath");
 
             #endregion
 
@@ -133,10 +121,10 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(p => p.Staff)
-                 .WithMany(p => p.ClientLogAudit)
-                 .HasForeignKey(p => p.OfficerToTakeAction)
-                 .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany<LogAuditOfficerToAct>(p => p.OfficerToAct)
+                .WithOne(p => p.LogAudit)
+                .HasForeignKey(p => p.LogAuditId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

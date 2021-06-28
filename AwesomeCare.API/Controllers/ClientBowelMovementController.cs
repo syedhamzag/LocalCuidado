@@ -75,13 +75,56 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutClientBowelMovement model)
+        public async Task<IActionResult> Put([FromBody] PutClientBowelMovement models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var ClientBowelMovement = Mapper.Map<ClientBowelMovement>(model);
+
+            foreach (var model in models.OfficerToAct.ToList())
+            {
+                var entity = _dbContext.Set<BowelMovementOfficerToAct>();
+                var filterentity = entity.Where(c => c.BowelMovementId == model.BowelMovementId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.Physician.ToList())
+            {
+                var entity = _dbContext.Set<BowelMovementPhysician>();
+                var filterentity = entity.Where(c => c.BowelMovementId == model.BowelMovementId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            foreach (var model in models.StaffName.ToList())
+            {
+                var entity = _dbContext.Set<BowelMovementStaffName>();
+                var filterentity = entity.Where(c => c.BowelMovementId == model.BowelMovementId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            var result = _dbContext.SaveChanges();
+
+            var ClientBowelMovement = Mapper.Map<ClientBowelMovement>(models);
             await _ClientBowelMovementRepository.UpdateEntity(ClientBowelMovement);
             return Ok();
 
@@ -105,6 +148,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetClientBowelMovement
                                            {
                                                BowelMovementId = c.BowelMovementId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                Time = c.Time,
                                                Size = c.Size,

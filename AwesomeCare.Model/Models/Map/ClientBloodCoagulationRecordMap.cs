@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientBloodCoagulationRecord> builder)
         {
-            builder.ToTable("tbl_ClientBloodCoagulationRecord");
+            builder.ToTable("tbl_Client_BloodCoagulationRecord");
             builder.HasKey(k => k.BloodRecordId);
 
             #region Properties
@@ -66,7 +66,6 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("Comment")
                .IsRequired();
 
-
             builder.Property(p => p.PhysicianResponce)
                .HasColumnName("PhysicianResponce")
                .IsRequired();
@@ -105,7 +104,6 @@ namespace AwesomeCare.Model.Models.Map
                 .WithOne(p => p.BloodCoagulation)
                 .HasForeignKey(p => p.BloodRecordId)
                 .OnDelete(DeleteBehavior.Cascade);
-
             #endregion
         }
     }

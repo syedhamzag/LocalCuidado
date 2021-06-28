@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper.QueryableExtensions;
+using AwesomeCare.DataTransferObject.DTOs.ClientService;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -22,11 +23,20 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientServiceWatch> _clientServiceWatchRepository;
-        
-        public ClientServiceWatchController(AwesomeCareDbContext dbContext, IGenericRepository<ClientServiceWatch> clientServiceWatchRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<ServiceOfficerToAct> _officertoactRepository;
+        private IGenericRepository<ServiceStaffName> _staffnameRepository;
+
+        public ClientServiceWatchController(AwesomeCareDbContext dbContext, IGenericRepository<ClientServiceWatch> clientServiceWatchRepository,
+             IGenericRepository<StaffPersonalInfo> staffRepository,
+        IGenericRepository<ServiceOfficerToAct> officertoactRepository,
+        IGenericRepository<ServiceStaffName> staffnameRepository)
         {
             _clientServiceWatchRepository = clientServiceWatchRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffnameRepository = staffnameRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientServiceWatch
         /// <summary>
@@ -40,20 +50,6 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientServiceWatchRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-
-        /// <summary>
-        /// Get All ClientServiceWatch
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetClientServiceWatch>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _clientServiceWatchRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -63,20 +59,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientServiceWatch> postClientServiceWatch)
+        public async Task<IActionResult> Create([FromBody] PostClientServiceWatch postClientServiceWatch)
         {
             if (postClientServiceWatch == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postClientServiceWatch)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
 
-            var ClientServiceWatch = Mapper.Map<List<ClientServiceWatch>>(postClientServiceWatch);
-            await _clientServiceWatchRepository.InsertEntities(ClientServiceWatch);
+            var ClientServiceWatch = Mapper.Map<ClientServiceWatch>(postClientServiceWatch);
+            await _clientServiceWatchRepository.InsertEntity(ClientServiceWatch);
             return Ok();
         }
         /// <summary>
@@ -85,40 +76,41 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientServiceWatch> model)
+        public async Task<IActionResult> Put([FromBody] PutClientServiceWatch models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<ClientServiceWatch>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (ClientServiceWatch item in filterEntity)
+            foreach (var model in models.OfficerToAct.ToList())
             {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
+                var entity = _dbContext.Set<ServiceOfficerToAct>();
+                var filterentity = entity.Where(c => c.ServiceId == model.ServiceId).ToList();
+                if (filterentity != null)
                 {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
                 }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
             }
-            //Model not in Database
-            foreach (var item in model)
+            foreach (var model in models.StaffName.ToList())
             {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
+                var entity = _dbContext.Set<ServiceStaffName>();
+                var filterentity = entity.Where(c => c.ServiceId == model.ServiceId).ToList();
+                if (filterentity != null)
                 {
-                    var postEntity = Mapper.Map<ClientServiceWatch>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
                 }
             }
             var result = _dbContext.SaveChanges();
+            var ClientServiceWatch = Mapper.Map<ClientServiceWatch>(models);
+            await _clientServiceWatchRepository.UpdateEntity(ClientServiceWatch);
             return Ok();
 
         }
@@ -141,6 +133,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.WatchId == id
                                            select new GetClientServiceWatch
                                            {
+                                               WatchId = c.WatchId,
+                                               Reference = c.Reference,
                                                ClientId = c.ClientId,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
@@ -150,12 +144,27 @@ namespace AwesomeCare.API.Controllers
                                                Remarks = c.Remarks,
                                                Status = c.Status,
                                                URL = c.URL,
-                                               PersonInvolved = c.PersonInvolved,
-                                               OfficerToAct = c.OfficerToAct,
                                                Observation = c.Observation,
                                                Incident = c.Incident,
                                                Contact = c.Contact,
-                                               Details = c.Details
+                                               Details = c.Details,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.ServiceId == c.WatchId
+                                                               select new GetServiceOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
+                                               StaffName = (from com in _staffnameRepository.Table
+                                                            join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                            where com.ServiceId == c.WatchId
+                                                            select new GetServiceStaffName
+                                                            {
+                                                                StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+                                                            }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getClientServiceWatch);

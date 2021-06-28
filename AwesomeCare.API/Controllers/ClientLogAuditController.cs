@@ -24,12 +24,18 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Client> _clientRepository;
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientLogAudit> _clientLogAuditRepository;
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<LogAuditOfficerToAct> _officertoactRepository;
 
-        public ClientLogAuditController(AwesomeCareDbContext dbContext, IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<Client> clientRepository)
+        public ClientLogAuditController(AwesomeCareDbContext dbContext, IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<Client> clientRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<LogAuditOfficerToAct> officertoactRepository)
         {
             _clientLogAuditRepository = clientLogAuditRepository;
             _clientRepository = clientRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
         }
         #region ClientLogAudit
         /// <summary>
@@ -43,21 +49,9 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _clientLogAuditRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-        /// <summary>
-        /// Get All ClientLogAudit
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetClientLogAudit>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _clientLogAuditRepository.Table.Where(s=>s.Reference==Reference).ToList();
             return Ok(getEntities);
         }
+        
         /// <summary>
         /// Create ClientLogAudit
         /// </summary>
@@ -65,22 +59,16 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientLogAudit> postClientLogAudit)
+        public async Task<IActionResult> Create([FromBody] PostClientLogAudit postClientLogAudit)
         {
             if (postClientLogAudit == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postClientLogAudit)
-            {
-                if (item.EvidenceFilePath == null)
-                    item.EvidenceFilePath = "No Image";
-                if (item.EvidenceOfActionTaken == null)
-                    item.EvidenceOfActionTaken = "No Image";
-            }
             
-            var ClientLogAudit = Mapper.Map<List<ClientLogAudit>>(postClientLogAudit);
-            await _clientLogAuditRepository.InsertEntities(ClientLogAudit);
+            
+            var ClientLogAudit = Mapper.Map<ClientLogAudit>(postClientLogAudit);
+            await _clientLogAuditRepository.InsertEntity(ClientLogAudit);
             return Ok();
         }
         /// <summary>
@@ -89,40 +77,29 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientLogAudit> model)
+        public async Task<IActionResult> Put([FromBody] PutClientLogAudit models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<ClientLogAudit>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (ClientLogAudit item in filterEntity)
+
+            foreach (var model in models.OfficerToAct.ToList())
             {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToTakeAction == item.OfficerToTakeAction).FirstOrDefault();
-                if (modelRecord == null)
+                var entity = _dbContext.Set<LogAuditOfficerToAct>();
+                var filterentity = entity.Where(c => c.LogAuditId == model.LogAuditId).ToList();
+                if (filterentity != null)
                 {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
                 }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
+            }
 
-            }
-            //Model not in Database
-            foreach (var item in model)
-            {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToTakeAction == item.OfficerToTakeAction);
-                if (NotInDb == null)
-                {
-                    var postEntity = Mapper.Map<ClientLogAudit>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
-                }
-            }
-            var result = _dbContext.SaveChanges();
+            var ClientLogAudit = Mapper.Map<ClientLogAudit>(models);
+            await _clientLogAuditRepository.UpdateEntity(ClientLogAudit);
             return Ok();
 
         }
@@ -147,6 +124,7 @@ namespace AwesomeCare.API.Controllers
                                                LogAuditId = c.LogAuditId,
                                                Reference = c.Reference,
                                                ClientId = c.ClientId,
+                                               NameOfAuditor = c.NameOfAuditor,
                                                ActionRecommended = c.ActionRecommended,
                                                ActionTaken = c.ActionTaken,
                                                EvidenceFilePath = c.EvidenceFilePath,
@@ -156,9 +134,7 @@ namespace AwesomeCare.API.Controllers
                                                EvidenceOfActionTaken = c.EvidenceOfActionTaken,
                                                LessonLearntAndShared = c.LessonLearntAndShared,
                                                LogURL = c.LogURL,
-                                               NameOfAuditor = c.NameOfAuditor,
                                                Observations = c.Observations,
-                                               OfficerToTakeAction = c.OfficerToTakeAction,
                                                Remarks = c.Remarks,
                                                RepeatOfIncident = c.RepeatOfIncident,
                                                RotCause = c.RotCause,
@@ -170,7 +146,16 @@ namespace AwesomeCare.API.Controllers
                                                IsCareExpected = c.IsCareExpected,
                                                ProperDocumentation = c.ProperDocumentation,
                                                ThinkingStaff = c.ThinkingStaff,
-                                               ThinkingStaffStop = c.ThinkingStaffStop
+                                               ThinkingStaffStop = c.ThinkingStaffStop,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.LogAuditId == c.LogAuditId
+                                                               select new GetLogAuditOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getClientLogAudit);

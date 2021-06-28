@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientPainChartService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientPainChart> reports = new List<CreateClientPainChart>();
             foreach (GetClientPainChart item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,37 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int painId)
         {
-            string OfficerToAct = "";
-            var PainChart = await _clientPainChartService.Get(painId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in PainChart.OfficerToAct)
+            var PainChart = _clientPainChartService.Get(painId);
+            var putEntity = new CreateClientPainChart
             {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(PainChart);
-            return View(PainChart);
+                PainChartId = PainChart.Result.PainChartId,
+                Reference = PainChart.Result.Reference,
+                ClientId = PainChart.Result.ClientId,
+                Date = PainChart.Result.Date,
+                Time = PainChart.Result.Time,
+                Type = PainChart.Result.Type,
+                Location = PainChart.Result.Location,
+                PainLvl = PainChart.Result.PainLvl,
+                StatusImage = PainChart.Result.StatusImage,
+                StatusAttach = PainChart.Result.StatusAttach,
+                Comment = PainChart.Result.Comment,
+                Staff_Name = PainChart.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = PainChart.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = PainChart.Result.PhysicianResponse,
+                OfficerName = PainChart.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = PainChart.Result.Deadline,
+                Remarks = PainChart.Result.Remarks,
+                Status = PainChart.Result.Status,
+                TypeAttach = PainChart.Result.TypeAttach,
+                LocationAttach = PainChart.Result.LocationAttach
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int painId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var PainChart = await _clientPainChartService.Get(painId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in PainChart.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(PainChart);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientPainChart.pdf");
             string subject = "ClientPainChart";
             string body = "";
@@ -121,16 +129,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int painId)
         {
-            string OfficerToAct = "";
             var PainChart = await _clientPainChartService.Get(painId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in PainChart.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(PainChart);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientPainChart.pdf");
         }
@@ -184,6 +185,8 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = PainChart.Result.Deadline,
                 Remarks = PainChart.Result.Remarks,
                 Status = PainChart.Result.Status,
+                TypeAttach = PainChart.Result.TypeAttach,
+                LocationAttach = PainChart.Result.LocationAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -257,8 +260,9 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
+                postlog.TypeAttach = model.TypeAttach;
+                postlog.LocationAttach = model.LocationAttach;
 
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientPainChartService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -318,6 +322,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientPainChart put = new PutClientPainChart();
+            put.PainChartId = model.PainChartId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -328,13 +333,15 @@ namespace AwesomeCare.Admin.Controllers
             put.StatusImage = model.StatusImage;
             put.StatusAttach = model.StatusAttach;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutPainChartStaffName { StaffPersonalInfoId = o }).ToList();
-            put.Physician = model.Physician.Select(o => new PutPainChartPhysician { StaffPersonalInfoId = o }).ToList();
+            put.StaffName = model.StaffName.Select(o => new PutPainChartStaffName { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
+            put.Physician = model.Physician.Select(o => new PutPainChartPhysician { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutPainChartOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutPainChartOfficerToAct { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;
+            put.TypeAttach = model.TypeAttach;
+            put.LocationAttach = model.LocationAttach;
 
             var entity = await _clientPainChartService.Put(put);
             SetOperationStatus(new Models.OperationStatus

@@ -556,7 +556,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientComplainRegister");
+                    b.ToTable("tbl_Client_ComplainRegister");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientInvolvingParty", b =>

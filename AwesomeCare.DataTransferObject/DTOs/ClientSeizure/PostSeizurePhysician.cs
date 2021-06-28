@@ -6,7 +6,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientSeizure
 {
     public class PostSeizurePhysician
     {
-        public int SeizureOfficerToActId { get; set; }
         public int SeizureId { get; set; }
         public int StaffPersonalInfoId { get; set; }
     }

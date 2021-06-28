@@ -10,9 +10,6 @@ namespace AwesomeCare.Admin.Services.ClientVoice
 {
     public interface IClientVoiceService
     {
-        [Get("/ClientVoice/GetByRef/{Reference}")]
-        Task<List<GetClientVoice>> GetByRef(string Reference);
-
         [Get("/ClientVoice")]
         Task<List<GetClientVoice>> Get();
 
@@ -20,9 +17,9 @@ namespace AwesomeCare.Admin.Services.ClientVoice
         Task<GetClientVoice> Get(int id);
 
         [Post("/ClientVoice/Create")]
-        Task<HttpResponseMessage> Create([Body] List<PostClientVoice> model);
+        Task<HttpResponseMessage> Create([Body] PostClientVoice model);
 
         [Put("/ClientVoice/Put")]
-        Task<HttpResponseMessage> Put([Body] List<PutClientVoice> model);
+        Task<HttpResponseMessage> Put([Body] PutClientVoice model);
     }
 }

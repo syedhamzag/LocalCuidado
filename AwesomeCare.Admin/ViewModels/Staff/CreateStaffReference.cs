@@ -21,12 +21,13 @@ namespace AwesomeCare.Admin.ViewModels.Staff
 
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile Attach { get; set; }
 
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<GetClient> ClientList { get; set; }
         public string ActiveTab { get; set; } = "reference";
+        public string ClientName { get; set; }
+        public string StatusName { get; set; }
         [Required]
         public int StaffReferenceId { get; set; }
         [Required]
@@ -39,14 +40,11 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public int ApplicantRole { get; set; }
         [Required]
         public int DateofEmployement { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]       
         public string DateofExit { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]     
         public string RehireStaff { get; set; }
         [Required]
-        [MaxLength(255)]
         public string Relationship { get; set; }
         [Required]
         public int TeamWork { get; set; }
@@ -60,17 +58,13 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public int Caring { get; set; }
         [Required]
         public int PreviousExperience { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string RefreeName { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]       
         public string Address { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]       
         public string Email { get; set; }
-        [Required]
-        [MaxLength(255)]
+        [Required]        
         public string Contact { get; set; }
         public string Attachment { get; set; }
         [Required]

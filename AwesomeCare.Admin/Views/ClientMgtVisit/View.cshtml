@@ -1,161 +1,178 @@
-﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit.GetClientMgtVisit>
-
+﻿@using AwesomeCare.Admin.ViewModels.ClientMgtVisit;
+@model CreateClientMgtVisit
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "View Client Mgt Visit";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+                <h2></h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="Edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <input type="hidden" asp-for="VisitId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">DATE</label>
+                                    <label class="control-label">@Model.Date</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Next Check Date</label>
+                                    <label class="control-label">@Model.NextCheckDate</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Deadline</label>
+                                    <label class="control-label">@Model.Deadline</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Rate Service Receiving</label>
+                                    <label class="control-label">@Model.RateServiceRecieving</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Rate Service Manager</label>
+                                    <label class="control-label">@Model.RateManagers</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Staff Best Support</label>
+                                    <label class="control-label">@Model.Staff_Name.ToList()</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">How To Complain</label>
+                                    <label class="control-label">@Model.HowToComplain</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Service Recommended</label>
+                                    <label class="control-label">@Model.ServiceRecommended</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Officer to Take Action</label>
+                                    <label class="control-label">@Model.OfficerName.ToList()</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <label class="control-label">@Model.Reference</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Rot Cause</label>
+                                    <label class="control-label">@Model.RotCause</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Log URL</label>
+                                    <label class="control-label">@Model.URL</label>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Remark/Closing Comment</label>
+                                    <label class="control-label">@Model.Remarks</label>
+
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Status</label>
+                                    <label class="control-label">@Model.Status</label>
+
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Improvement Do You Expect</label>
+                                    <label class="control-label">@Model.ImprovementExpect</label>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Action Required</label>
+                                    <label class="control-label">@Model.ActionRequired</label>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Actions Taken By MPCC</label>
+                                    <label class="control-label">@Model.ActionsTakenByMPCC</label>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Observations</label>
+                                    <label class="control-label">@Model.Observation</label>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Lesson Learnt and Shared</label>
+                                    <label class="control-label">@Model.LessonLearntAndShared</label>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Evidence<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <img src="@Model.EvidenceOfActionTaken" alt="image" />
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Attach<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <img src="@Model.Attachment" alt="image" />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 }
 
-<h2>View</h2>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.VisitId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Reference)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NextCheckDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RateServiceRecieving)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RateManagers)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StaffBestSupport)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HowToComplain)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ServiceRecommended)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImprovementExpect)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Observation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ActionRequired)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OfficerToAct)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ActionsTakenByMPCC)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EvidenceOfActionTaken)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deadline)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RotCause)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LessonLearntAndShared)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Remarks)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.URL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Attachment)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.VisitId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reference)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NextCheckDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RateServiceRecieving)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RateManagers)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StaffBestSupport)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HowToComplain)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServiceRecommended)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImprovementExpect)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActionRequired)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OfficerToAct)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActionsTakenByMPCC)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EvidenceOfActionTaken)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deadline)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RotCause)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LessonLearntAndShared)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Remarks)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.URL)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Attachment)
-            </td>
-        </tr>
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
 }
-    </tbody>
-</table>
+

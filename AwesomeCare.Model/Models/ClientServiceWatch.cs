@@ -6,6 +6,12 @@ namespace AwesomeCare.Model.Models
 {
     public class ClientServiceWatch
     {
+        public ClientServiceWatch()
+        {
+            StaffName = new HashSet<ServiceStaffName>();
+            OfficerToAct = new HashSet<ServiceOfficerToAct>();
+        }
+
         public int WatchId { get; set; }
         public string Reference { get; set; }
         public int ClientId { get; set; }
@@ -13,11 +19,9 @@ namespace AwesomeCare.Model.Models
         public DateTime NextCheckDate { get; set; }
         public int Incident { get; set; }
         public int Details { get; set; }
-        public int PersonInvolved { get; set; }
         public int Contact { get; set; }
         public string Observation { get; set; }
         public string ActionRequired { get; set; }
-        public int OfficerToAct { get; set; }
         public DateTime Deadline { get; set; }
         public int Status { get; set; }
         public string Remarks { get; set; }
@@ -25,6 +29,7 @@ namespace AwesomeCare.Model.Models
         public string Attachment { get; set; }
 
         public virtual Client Client { get; set; }
-        public virtual StaffPersonalInfo Staff { get; set; }
+        public virtual ICollection<ServiceOfficerToAct> OfficerToAct { get; set; }
+        public virtual ICollection<ServiceStaffName> StaffName { get; set; }
     }
 }

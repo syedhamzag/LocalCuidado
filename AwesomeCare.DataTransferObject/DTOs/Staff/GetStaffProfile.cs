@@ -11,9 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorkerVoice;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
-using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff

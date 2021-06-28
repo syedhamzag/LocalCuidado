@@ -41,50 +41,40 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Reference { get; set; }
         #region ComplainRegister
         [Required]
-        [MaxLength(255)]
         public string LINK { get; set; }
         [Required]
-        [MaxLength(50)]
         public string IRFNUMBER { get; set; }
         [Required]
         public DateTime INCIDENTDATE { get; set; }
         [Required]
         public DateTime DATERECIEVED { get; set; }
         [Required]
-        public DateTime? DATEOFACKNOWLEDGEMENT { get; set; }
+        public DateTime DATEOFACKNOWLEDGEMENT { get; set; }
         [Required]
-        public int OFFICERTOACTId { get; set; }
+        public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
-        [MaxLength(255)]
         public string SOURCEOFCOMPLAINTS { get; set; }
-
         [Required]
-        [MaxLength(50)]
         public string COMPLAINANTCONTACT { get; set; }
         [Required]
-        public int STAFFId { get; set; }
+        public List<int> StaffName { get; set; }
+        public List<string> Staff_Name { get; set; }
         [Required]
-        [MaxLength(255)]
         public string CONCERNSRAISED { get; set; }
         [Required]
         public DateTime DUEDATE { get; set; }
         [Required]
-        [MaxLength(255)]
         public string LETTERTOSTAFF { get; set; }
         [Required]
-        [MaxLength(255)]
         public string INVESTIGATIONOUTCOME { get; set; }
         [Required]
-        [MaxLength(50)]
         public string ACTIONTAKEN { get; set; }
         [Required]
-        [MaxLength(255)]
         public string FINALRESPONSETOFAMILY  { get; set; }
         [Required]
-        [MaxLength(50)]
         public string ROOTCAUSE { get; set; }
         [Required]
-        [MaxLength(255)]
         public string REMARK { get; set; }
         [Required]
         [Display(Name = "Status")]

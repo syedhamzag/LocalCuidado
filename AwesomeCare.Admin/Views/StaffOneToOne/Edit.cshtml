@@ -19,9 +19,6 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <select asp-for="OneToOneIds"
-                                    asp-items="@(new SelectList(Model.OneToOneIds))" style="display:none;">
-                            </select>
                             <input type="hidden" asp-for="OneToOneId" />
                             <input type="hidden" asp-for="StaffId" />
                             <input type="hidden" asp-for="Attachment" />

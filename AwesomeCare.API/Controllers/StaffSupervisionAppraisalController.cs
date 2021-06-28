@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
-using AwesomeCare.DataTransferObject.DTOs.StaffSupervisionAppraisal;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,11 +22,19 @@ namespace AwesomeCare.API.Controllers
     {
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<StaffSupervisionAppraisal> _StaffSupervisionAppraisalRepository;
-        
-        public StaffSupervisionAppraisalController(AwesomeCareDbContext dbContext, IGenericRepository<StaffSupervisionAppraisal> StaffSupervisionAppraisalRepository)
+        private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<SupervisionOfficerToAct> _officertoactRepository;
+        private IGenericRepository<SupervisionWorkteam> _workteamRepository;
+
+        public StaffSupervisionAppraisalController(AwesomeCareDbContext dbContext, IGenericRepository<StaffSupervisionAppraisal> StaffSupervisionAppraisalRepository,
+            IGenericRepository<StaffPersonalInfo> staffRepository,
+            IGenericRepository<SupervisionOfficerToAct> officertoactRepository, IGenericRepository<SupervisionWorkteam> workteamRepository)
         {
             _StaffSupervisionAppraisalRepository = StaffSupervisionAppraisalRepository;
             _dbContext = dbContext;
+            _officertoactRepository = officertoactRepository;
+            _staffRepository = staffRepository;
+            _workteamRepository = workteamRepository;
         }
         #region StaffSupervisionAppraisal
         /// <summary>
@@ -40,19 +48,6 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get()
         {
             var getEntities = _StaffSupervisionAppraisalRepository.Table.ToList();
-            return Ok(getEntities.Distinct().ToList());
-        }
-        /// <summary>
-        /// Get All Supervision Appraisal
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetByRef/{Reference}")]
-        [ProducesResponseType(type: typeof(List<GetStaffSupervisionAppraisal>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult GetByRef(string Reference)
-        {
-            var getEntities = _StaffSupervisionAppraisalRepository.Table.Where(s => s.Reference == Reference).ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -62,22 +57,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostStaffSupervisionAppraisal> postStaffSupervisionAppraisal)
+        public async Task<IActionResult> Create([FromBody] PostStaffSupervisionAppraisal postStaffSupervisionAppraisal)
         {
             if (postStaffSupervisionAppraisal == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in postStaffSupervisionAppraisal)
-            {
-                if (item.Attachment == null)
-                    item.Attachment = "No Image";
-            }
-            var StaffSupervisionAppraisal = Mapper.Map<List<StaffSupervisionAppraisal>>(postStaffSupervisionAppraisal);
-            await _StaffSupervisionAppraisalRepository.InsertEntities(StaffSupervisionAppraisal);
+            var StaffSupervisionAppraisal = Mapper.Map<StaffSupervisionAppraisal>(postStaffSupervisionAppraisal);
+            await _StaffSupervisionAppraisalRepository.InsertEntity(StaffSupervisionAppraisal);
             return Ok();
-
-
         }
         /// <summary>
         /// Update StaffSupervisionAppraisal
@@ -85,42 +73,43 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutStaffSupervisionAppraisal> model)
+        public async Task<IActionResult> Put([FromBody] PutStaffSupervisionAppraisal models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var Entity = _dbContext.Set<StaffSupervisionAppraisal>();
-            var filterEntity = Entity.Where(c => c.Reference == model.FirstOrDefault().Reference);
-            foreach (StaffSupervisionAppraisal item in filterEntity)
+            foreach (var model in models.OfficerToAct.ToList())
             {
-                var modelRecord = model.Select(s => s).Where(s => s.OfficerToAct == item.OfficerToAct).FirstOrDefault();
-                if (modelRecord == null)
+                var entity = _dbContext.Set<SupervisionOfficerToAct>();
+                var filterentity = entity.Where(c => c.StaffSupervisionAppraisalId == model.StaffSupervisionAppraisalId).ToList();
+                if (filterentity != null)
                 {
-                    _dbContext.Entry(item).State = EntityState.Deleted;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
                 }
-                else
-                {
-                    var putEntity = Mapper.Map(modelRecord, item);
-                    _dbContext.Entry(putEntity).State = EntityState.Modified;
-                }
-
             }
-            //Model not in Database
-            foreach (var item in model)
+
+            foreach (var model in models.Workteam.ToList())
             {
-                var NotInDb = filterEntity.FirstOrDefault(r => r.OfficerToAct == item.OfficerToAct);
-                if (NotInDb == null)
+                var entity = _dbContext.Set<SupervisionWorkteam>();
+                var filterentity = entity.Where(c => c.StaffSupervisionAppraisalId == model.StaffSupervisionAppraisalId).ToList();
+                if (filterentity != null)
                 {
-                    var postEntity = Mapper.Map<StaffSupervisionAppraisal>(item);
-                    _dbContext.Entry(postEntity).State = EntityState.Added;
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
                 }
             }
             var result = _dbContext.SaveChanges();
+            var StaffSupervisionAppraisal = Mapper.Map<StaffSupervisionAppraisal>(models);
+            await _StaffSupervisionAppraisalRepository.UpdateEntity(StaffSupervisionAppraisal);
             return Ok();
-
         }
         /// <summary>
         /// Get StaffSupervisionAppraisal by ProgramId
@@ -140,6 +129,8 @@ namespace AwesomeCare.API.Controllers
                                            where c.StaffSupervisionAppraisalId == id
                                            select new GetStaffSupervisionAppraisal
                                            {
+                                               StaffSupervisionAppraisalId = c.StaffSupervisionAppraisalId,
+                                               Reference = c.Reference,
                                                ActionRequired = c.ActionRequired,
                                                Attachment = c.Attachment,
                                                Date = c.Date,
@@ -153,15 +144,31 @@ namespace AwesomeCare.API.Controllers
                                                FiveStarRating =c.FiveStarRating,
                                                NoAbilityToSupport =c.NoAbilityToSupport,
                                                NoCondourAndWhistleBlowing = c.NoCondourAndWhistleBlowing,
-                                               OfficerToAct =c.OfficerToAct,
                                                StaffAbility =c.StaffAbility,
                                                StaffComplaints = c.StaffComplaints,
                                                StaffDevelopment = c.StaffDevelopment,
                                                StaffId =c.StaffId,
                                                StaffRating = c.StaffRating,
                                                StaffSupportAreas = c.StaffSupportAreas,
-                                               WorkTeam = c.WorkTeam,
-                                               URL = c.URL
+                                               URL = c.URL,
+                                               OfficerToAct = (from com in _officertoactRepository.Table
+                                                               join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                               where com.StaffSupervisionAppraisalId == c.StaffSupervisionAppraisalId
+                                                               select new GetSupervisionOfficerToAct
+                                                               {
+                                                                   StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                                   StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                               }).ToList(),
+                                               Workteam = (from com in _workteamRepository.Table
+                                                           join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                           where com.StaffSupervisionAppraisalId == c.StaffSupervisionAppraisalId
+                                                           select new GetSupervisionWorkteam
+                                                           {
+                                                               StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                               StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                           }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getStaffSupervisionAppraisal);

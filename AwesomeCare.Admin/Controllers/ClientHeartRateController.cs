@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             var entities = await _clientHeartRateService.Get();
 
             var client = await _clientService.GetClientDetail();
-            var baserecord = await _baseService.GetBaseRecordsWithItems();
             List<CreateClientHeartRate> reports = new List<CreateClientHeartRate>();
             foreach (GetClientHeartRate item in entities)
             {
@@ -71,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.StatusName = baserecord.Select(s => s.BaseRecordItems.FirstOrDefault(s => s.BaseRecordItemId == item.Status).ValueName).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
@@ -91,28 +90,38 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int HeartId)
         {
-            string OfficerToAct = "";
-            var HeartRate = await _clientHeartRateService.Get(HeartId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in HeartRate.OfficerToAct)
+            var HeartRate = _clientHeartRateService.Get(HeartId);
+            var putEntity = new CreateClientHeartRate
             {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
-            var json = JsonConvert.SerializeObject(HeartRate);
-            return View(HeartRate);
+                HeartRateId = HeartRate.Result.HeartRateId,
+                Reference = HeartRate.Result.Reference,
+                ClientId = HeartRate.Result.ClientId,
+                Date = HeartRate.Result.Date,
+                Time = HeartRate.Result.Time,
+                TargetHR = HeartRate.Result.TargetHR,
+                Gender = HeartRate.Result.Gender,
+                Age = HeartRate.Result.Age,
+                BeatsPerSeconds = HeartRate.Result.BeatsPerSeconds,
+                SeeChart = HeartRate.Result.SeeChart,
+                Comment = HeartRate.Result.Comment,
+                Staff_Name = HeartRate.Result.StaffName.Select(s => s.StaffName).ToList(),
+                PhysicianName = HeartRate.Result.Physician.Select(s => s.StaffName).ToList(),
+                PhysicianResponse = HeartRate.Result.PhysicianResponse,
+                OfficerName = HeartRate.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Deadline = HeartRate.Result.Deadline,
+                Remarks = HeartRate.Result.Remarks,
+                Status = HeartRate.Result.Status,
+                GenderAttach = HeartRate.Result.GenderAttach,
+                SeeChartAttach = HeartRate.Result.SeeChartAttach,
+                TargetHRAttach = HeartRate.Result.TargetHRAttach,
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int HeartId, string sender, string password, string recipient, string Smtp)
         {
-            string OfficerToAct = "";
             var HeartRate = await _clientHeartRateService.Get(HeartId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in HeartRate.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(HeartRate);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientHeartRate.pdf");
             string subject = "ClientHeartRate";
             string body = "";
@@ -121,16 +130,9 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Download(int HeartId)
         {
-            string OfficerToAct = "";
             var HeartRate = await _clientHeartRateService.Get(HeartId);
-            var staff = _staffService.GetStaffs();
-            foreach (var item in HeartRate.OfficerToAct)
-            {
-                OfficerToAct = OfficerToAct + "\n" + staff.Result.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname);
-            }
             var json = JsonConvert.SerializeObject(HeartRate);
-            var newJson = json + OfficerToAct;
-            byte[] byte1 = GeneratePdf(newJson);
+            byte[] byte1 = GeneratePdf(json);
 
             return File(byte1, "application/pdf", "ClientHeartRate.pdf");
         }
@@ -184,6 +186,9 @@ namespace AwesomeCare.Admin.Controllers
                 Deadline = HeartRate.Result.Deadline,
                 Remarks = HeartRate.Result.Remarks,
                 Status = HeartRate.Result.Status,
+                GenderAttach = HeartRate.Result.GenderAttach,
+                SeeChartAttach = HeartRate.Result.SeeChartAttach,
+                TargetHRAttach = HeartRate.Result.TargetHRAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
         };
             return View(putEntity);
@@ -258,8 +263,10 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.Deadline = model.Deadline;
                 postlog.Remarks = model.Remarks;
                 postlog.Status = model.Status;
+                postlog.SeeChartAttach = model.SeeChartAttach;
+                postlog.TargetHRAttach = model.TargetHRAttach;
+                postlog.GenderAttach = model.GenderAttach;
 
-            var json = JsonConvert.SerializeObject(postlog);
             var result = await _clientHeartRateService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -319,6 +326,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientHeartRate put = new PutClientHeartRate();
+            put.HeartRateId = model.HeartRateId;
             put.ClientId = model.ClientId;
             put.Reference = model.Reference;
             put.Date = model.Date;
@@ -329,13 +337,16 @@ namespace AwesomeCare.Admin.Controllers
             put.BeatsPerSeconds = model.BeatsPerSeconds;
             put.SeeChart = model.SeeChart;
             put.Comment = model.Comment;
-            put.StaffName = model.StaffName.Select(o => new PutHeartRateStaffName { StaffPersonalInfoId = o }).ToList(); ;
-            put.Physician = model.Physician.Select(o => new PutHeartRatePhysician { StaffPersonalInfoId = o }).ToList(); ;
+            put.StaffName = model.StaffName.Select(o => new PutHeartRateStaffName { StaffPersonalInfoId = o, HeartRateId = model.HeartRateId }).ToList(); ;
+            put.Physician = model.Physician.Select(o => new PutHeartRatePhysician { StaffPersonalInfoId = o, HeartRateId = model.HeartRateId }).ToList(); ;
             put.PhysicianResponse = model.PhysicianResponse;
-            put.OfficerToAct = model.OfficerToAct.Select(o => new PutHeartRateOfficerToAct { StaffPersonalInfoId = o }).ToList();
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutHeartRateOfficerToAct { StaffPersonalInfoId = o, HeartRateId = model.HeartRateId }).ToList();
             put.Deadline = model.Deadline;
             put.Remarks = model.Remarks;
             put.Status = model.Status;
+            put.SeeChartAttach = model.SeeChartAttach;
+            put.TargetHRAttach = model.TargetHRAttach;
+            put.GenderAttach = model.GenderAttach;
 
             var entity = await _clientHeartRateService.Put(put);
             SetOperationStatus(new Models.OperationStatus
