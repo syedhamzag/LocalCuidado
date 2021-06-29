@@ -303,7 +303,7 @@ namespace AwesomeCare.Admin.Controllers
             put.LogURL = model.LogURL;
             put.NameOfAuditor = model.NameOfAuditor;
             put.Observations = model.Observations;
-            //put.OfficerToTakeAction = model.OfficerToTakeAction.Select(o => new PutLogAuditOfficerToAct { StaffPersonalInfoId = o, LogAuditId = model.LogAuditId }).ToList();
+            put.OfficerToAct = model.OfficerToTakeAction.Select(o => new PutLogAuditOfficerToAct { StaffPersonalInfoId = o, LogAuditId = model.LogAuditId }).ToList();
             put.Remarks = model.Remarks;
             put.RepeatOfIncident = model.RepeatOfIncident;
             put.RotCause = model.RotCause;
@@ -316,7 +316,7 @@ namespace AwesomeCare.Admin.Controllers
             put.ProperDocumentation = model.ProperDocumentation;
             put.ThinkingStaff = model.ThinkingStaff;
             put.ThinkingStaffStop = model.ThinkingStaffStop;
-            var json = JsonConvert.SerializeObject(put);
+            
             var entity = await _clientlogAuditService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {

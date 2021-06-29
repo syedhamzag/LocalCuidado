@@ -30,12 +30,13 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Applicant Role</label>
-                                    <baserecord asp-key="GetClients" asp-for="ApplicantRole" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname",Model.ApplicantRole))" />
+                                    <select class="custom-select" asp-for="ApplicantRole" asp-items="Model.ClientList">
+                                    </select>
                                     <span asp-validation-for="ApplicantRole" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Reference</label>
-                                    <input type="text" class="form-control" asp-for="Reference" readonly />
+                                    <input type="text" class="form-control" asp-for="Reference" />
                                     <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                             </div>
@@ -150,7 +151,7 @@
                                     <button type="submit" class="btn btn-primary pull-right">Submit</button>
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <a asp-action="Index" asp-route-clientId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
+                                    <a asp-action="Index" asp-route-staffId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
                                 </div>
                             </div>
                         </div>

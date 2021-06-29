@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Client;
-@model CreateClientBloodPressure
+@model CreateClientBloodCoagulationRecord
 @{
-    ViewData["Title"] = "Update Client Blood Pressure";
+    ViewData["Title"] = "View Client Blood Coagulation Record";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -11,32 +11,46 @@
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
             <div class="header">
-
                 <h2></h2>
-
             </div>
             <div class="body">
-                <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <input type="hidden" asp-for="BloodPressureId" />
+                            <input type="hidden" asp-for="BloodRecordId" />
                             <input type="hidden" asp-for="ClientId" />
-                            <input type="hidden" value="@Model.StatusAttach" asp-for="StatusAttach">
+                            
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date</label>
-                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly/>
                                     <span asp-validation-for="Date" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Time</label>
-                                    <input type="text" asp-for="Time" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <input type="text" asp-for="Time" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly/>
                                     <span asp-validation-for="Time" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Start Date</label>
+                                    <input type="text" asp-for="StartDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly/>
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Deadline</label>
-                                    <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                                     <span asp-validation-for="Deadline" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Target INR</label>
+                                    <baserecord asp-key="Target_INR_Image_Availibility" asp-for="TargetINR" asp-items="null" />
+                                    <span asp-validation-for="TargetINR" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" readonly />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -56,33 +70,34 @@
                                     <span asp-validation-for="Physician" class="text-danger"></span>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Blood Pressure Status</label>
-                                    <baserecord asp-key="Blood_Pressure_Status" asp-for="StatusImage" asp-items="null" />
-                                    <span asp-validation-for="StatusImage" class="text-danger"></span>
+                                    <label class="control-label">Indication</label>
+                                    <baserecord asp-key="Indication" asp-for="Indication" asp-items="null" readonly />
+                                    <span asp-validation-for="Indication" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Goal Systolic</label>
-                                    <baserecord asp-key="Goal_Systolic" asp-for="GoalSystolic" asp-items="null" />
-                                    <span asp-validation-for="GoalSystolic" class="text-danger"></span>
+                                    <label class="control-label">CurrentDose INR</label>
+                                    <baserecord asp-key="CurrentDose_INR" asp-for="CurrentDose" asp-items="null" readonly />
+                                    <span asp-validation-for="CurrentDose" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Goal Distolic</label>
-                                    <baserecord asp-key="Goal_Distolic" asp-for="GoalDiastolic" asp-items="null" />
-                                    <span asp-validation-for="GoalDiastolic" class="text-danger"></span>
+                                    <label class="control-label">INR</label>
+                                    <baserecord asp-key="INR" asp-for="INR" asp-items="null"/>
+                                    <span asp-validation-for="INR" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Current Systolic Reading</label>
-                                    <baserecord asp-key="Current_Systolic_Reading" asp-for="ReadingSystolic" asp-items="null" />
-                                    <span asp-validation-for="ReadingSystolic" class="text-danger"></span>
+                                    <label class="control-label">NewDose</label>
+                                    <baserecord asp-key="NewDose" asp-for="NewDose" asp-items="null" />
+                                    <span asp-validation-for="NewDose" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Current Distolic Reading</label>
-                                    <baserecord asp-key="Current_Distolic_Reading" asp-for="ReadingDiastolic" asp-items="null" />
-                                    <span asp-validation-for="ReadingDiastolic" class="text-danger"></span>
+                                    <label class="control-label">NewDose INR</label>
+                                    <baserecord asp-key="NewDose_INR" asp-for="NewINR" asp-items="null" />
+                                    <span asp-validation-for="NewINR" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
@@ -91,56 +106,46 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Reference</label>
-                                    <input type="text" asp-for="Reference" class="form-control" />
-                                    <span asp-validation-for="Reference" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">PhysicianResponse</label>
-                                    <textarea type="text" asp-for="PhysicianResponse" class="form-control"></textarea>
-                                    <span asp-validation-for="PhysicianResponse" class="text-danger"></span>
+                                    <label class="control-label">Blood Status</label>
+                                    <baserecord asp-key="Blood_Status" asp-for="BloodStatus" asp-items="null" />
+                                    <span asp-validation-for="BloodStatus" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Comment</label>
-                                    <textarea type="text" asp-for="Comment" class="form-control"></textarea>
+                                    <textarea type="text" asp-for="Comment" class="form-control" readonly></textarea>
                                     <span asp-validation-for="Comment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Remarks</label>
-                                    <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
-                                    <span asp-validation-for="Remarks" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <div class="card">
-                                <div class="header">
-                                    <h2>Status Attachment<small></small></h2>
-                                </div>
-                                <div class="body">
-                                    <input type="file" asp-for="StatusAttachment" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                    <span asp-validation-for="StatusAttachment" class="text-danger"></span>
+                                    <label class="control-label">Physician Response</label>
+                                    <textarea type="text" asp-for="PhysicianResponce" class="form-control" readonly ></textarea>
+                                    <span asp-validation-for="PhysicianResponce" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Remarks</label>
+                                    <textarea type="text" asp-for="Remark" class="form-control" readonly ></textarea>
+                                    <span asp-validation-for="Remark" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>TargetINR Attachment<small></small></h2>
+                                </div>
+                                <div class="body">
+                                    <img src="@Model.TargetINRAttach" alt="image" />
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+
             </div>
         </div>
     </div>

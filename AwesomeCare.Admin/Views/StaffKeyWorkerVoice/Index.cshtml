@@ -46,19 +46,22 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Uncomfortable Users Services</label>
-                                    <baserecord asp-key="Not_Comfortable_Services" asp-for="NotComfortableServices" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname"))" />
+                                    <select class="custom-select" asp-for="NotComfortableServices" asp-items="Model.ClientList">
+                                    </select>
                                     <span asp-validation-for="NotComfortableServices" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Requiring More Time</label>
-                                    <baserecord asp-key="Services_Requires_Time" asp-for="ServicesRequiresTime" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname"))" />
+                                    <select class="custom-select" asp-for="ServicesRequiresTime" asp-items="Model.ClientList">
+                                    </select>
                                     <span asp-validation-for="ServicesRequiresTime" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Requiring More Services</label>
-                                    <baserecord asp-key="Services_Requires_Services" asp-for="ServicesRequiresServices" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname"))" />
+                                    <select class="custom-select" asp-for="ServicesRequiresServices" asp-items="Model.ClientList">
+                                    </select>
                                     <span asp-validation-for="ServicesRequiresServices" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -159,7 +162,7 @@
                                     <button type="submit" class="btn btn-primary pull-right">Submit</button>
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <a asp-action="Index" asp-route-clientId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
+                                    <a asp-action="Index" asp-route-staffId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
                                 </div>
                             </div>
                         </div>

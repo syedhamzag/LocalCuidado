@@ -26,7 +26,7 @@
   <ItemGroup>
     <Content Remove="appsettings.Production.Development.json" />
     <Content Remove="appsettings.Production.json" />
-    <Content Remove="Views\ClientBloodCoagulationRecord\View.cshtml" />
+    <Content Remove="Views\ClientBloodCoagulationRecord\Reporting.cshtml" />
     <Content Remove="Views\ClientBloodPressure\View.cshtml" />
     <Content Remove="Views\ClientBMIChart\View.cshtml" />
     <Content Remove="Views\ClientBodyTemp\View.cshtml" />
@@ -83,7 +83,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\ClientBloodCoagulationRecord\View.cshtml" />
+    <None Include="Views\ClientBloodCoagulationRecord\Reporting.cshtml" />
     <None Include="Views\ClientBloodCoagulationRecord\Edit.cshtml" />
     <None Include="Views\ClientBloodCoagulationRecord\Index.cshtml" />
     <None Include="Views\ClientBloodCoagulationRecord\Reports.cshtml" />

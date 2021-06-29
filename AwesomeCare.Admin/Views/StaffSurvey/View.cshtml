@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
 @model CreateStaffSurvey
 @{
-    ViewData["Title"] = "View Staff Survey";
+    ViewData["Title"] = "Update Staff Survey";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -19,91 +19,111 @@
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
+                       
                             <input type="hidden" asp-for="StaffSurveyId" />
                             <input type="hidden" asp-for="StaffId" />
+                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
-                                    <label class="control-label">@Model.Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">NEXT DUE DATE</label>
-                                    <label class="control-label">@Model.NextCheckDate</label>
+                                    <input type="text" asp-for="NextCheckDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="NextCheckDate" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DEADLINE</label>
-                                    <label class="control-label">@Model.Deadline</label>
+                                    <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Deadline" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">WorkTeam</label>
-                                    <label class="control-label">@Model.WorkteamName.ToList()</label>
+                                    <select asp-for="WorkTeam" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="WorkTeam" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Adequate Training Received</label>
-                                    <label class="control-label">@Model.AdequateTrainingReceived</label>
+                                    <baserecord asp-key="Adequate_Training_Received" asp-for="AdequateTrainingReceived" asp-items="null" />
+                                    <span asp-validation-for="AdequateTrainingReceived" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Health Services Satisfaction</label>
-                                    <label class="control-label">@Model.HealthCareServicesSatisfaction</label>
+                                    <baserecord asp-key="Health_Care_Services_Satisfaction" asp-for="HealthCareServicesSatisfaction" asp-items="null" />
+                                    <span asp-validation-for="HealthCareServicesSatisfaction" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Support From Company</label>
-                                    <label class="control-label">@Model.SupportFromCompany</label>
+                                    <baserecord asp-key="Support_From_Company" asp-for="SupportFromCompany" asp-items="null" />
+                                    <span asp-validation-for="SupportFromCompany" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <label class="control-label">@Model.OfficerName.ToList()</label>
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Rating Company Management</label>
-                                    <label class="control-label">@Model.CompanyManagement</label>
+                                    <baserecord asp-key="Company_Management" asp-for="CompanyManagement" asp-items="null" />
+                                    <span asp-validation-for="CompanyManagement" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Access To Policies</label>
-                                    <label class="control-label">@Model.AccessToPolicies</label>
+                                    <baserecord asp-key="Access_To_Policies" asp-for="AccessToPolicies" asp-items="null" />
+                                    <span asp-validation-for="AccessToPolicies" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
-                                    <label class="control-label">@Model.Status</label>
+                                    <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                                    <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Details</label>
-                                    <label class="control-label">@Model.Details</label>
+                                    <input type="text" asp-for="Details" class="form-control" />
+                                    <span asp-validation-for="Details" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Reference</label>
-                                    <label class="control-label">@Model.Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control"/>
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Work Environment Suggestions</label>
-                                    <label class="control-label">@Model.WorkEnvironmentSuggestions</label>
+                                    <input type="text" asp-for="WorkEnvironmentSuggestions" class="form-control" />
+                                    <span asp-validation-for="WorkEnvironmentSuggestions" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">URL</label>
-                                    <label class="control-label">@Model.URL</label>
+                                    <input type="text" asp-for="URL" class="form-control" />
+                                    <span asp-validation-for="URL" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Remarks</label>
-                                    <label class="control-label">@Model.Remarks</label>
+                                    <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Area Requiring Improvements</label>
-                                    <label class="control-label">@Model.AreaRequiringImprovements</label>
+                                    <textarea type="text" asp-for="AreaRequiringImprovements" class="form-control"></textarea>
+                                    <span asp-validation-for="AreaRequiringImprovements" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Action Required</label>
-                                    <label class="control-label">@Model.ActionRequired</label>
+                                    <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
+                                    <span asp-validation-for="ActionRequired" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +133,8 @@
                                     <h2>Attachment Image<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <img src="@Model.Attachment" alt="image" />
+                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -121,7 +142,7 @@
                                     <button type="submit" class="btn btn-primary pull-right">Submit</button>
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <a asp-action="Index" asp-route-clientId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
+                                    <a asp-action="Index" asp-route-staffId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
                                 </div>
                             </div>
                         </div>

@@ -16,7 +16,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public CreateStaffSpotCheck()
         {
             OfficerToActList = new List<SelectListItem>();
-            ClientList = new List<GetClient>();
+            ClientList = new List<SelectListItem>();
         }
 
         [DataType(DataType.Upload)]
@@ -24,7 +24,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public IFormFile Attach { get; set; }
 
         public ICollection<SelectListItem> OfficerToActList { get; set; }
-        public ICollection<GetClient> ClientList { get; set; }
+        public ICollection<SelectListItem> ClientList { get; set; }
         public string ActiveTab { get; set; } = "spotcheck";
         public string ClientName { get; set; }
         public string StatusName { get; set; }

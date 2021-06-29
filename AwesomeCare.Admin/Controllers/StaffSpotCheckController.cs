@@ -63,17 +63,18 @@ namespace AwesomeCare.Admin.Controllers
             var model = new CreateStaffSpotCheck();
             var staffs = await _staffService.GetStaffs();
             model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-            List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetClients = clientNames;
+            var client = await _clientService.GetClientDetail();
+            model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
             model.StaffId = staffId.Value;
             return View(model);
         }
-        public async Task<IActionResult> View(int spotcheckid)
+        public async Task<IActionResult> View(int spotCheckId)
         {
-            var SpotCheck = _StaffSpotCheckService.Get(spotcheckid);
+            var SpotCheck = _StaffSpotCheckService.Get(spotCheckId);
             var putEntity = new CreateStaffSpotCheck
             {
                 SpotCheckId = SpotCheck.Result.SpotCheckId,
+                Reference = SpotCheck.Result.Reference,
                 ClientId = SpotCheck.Result.ClientId,
                 Attachment = SpotCheck.Result.Attachment,
                 Date = SpotCheck.Result.Date,
@@ -147,10 +148,12 @@ namespace AwesomeCare.Admin.Controllers
 
             var SpotCheck = _StaffSpotCheckService.Get(spotCheckId);
             var staffs = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
 
             var putEntity = new CreateStaffSpotCheck
             {
                 SpotCheckId = SpotCheck.Result.SpotCheckId,
+                Reference = SpotCheck.Result.Reference,
                 ClientId = SpotCheck.Result.ClientId,
                 Attachment = SpotCheck.Result.Attachment,
                 Date = SpotCheck.Result.Date,
@@ -166,8 +169,9 @@ namespace AwesomeCare.Admin.Controllers
                 StaffArriveOnTime = SpotCheck.Result.StaffArriveOnTime,
                 StaffId = SpotCheck.Result.StaffId,
                 Details = SpotCheck.Result.Details,
-                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-            };
+                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
+                ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList()
+        };
             return View(putEntity);
         }
         [HttpPost]
@@ -178,8 +182,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetClients = clientNames;
+                var client = await _clientService.GetClientDetail();
+                model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 return View(model);
             }
             #region Attachment
@@ -197,6 +201,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
                 var post = new PostStaffSpotCheck();
                 post.SpotCheckId = model.SpotCheckId;
+                post.Reference = model.Reference;
                 post.ClientId = model.ClientId;
                 post.Attachment = model.Attachment;
                 post.Date = model.Date;
@@ -228,8 +233,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetClients = clientNames;
+                var client = await _clientService.GetClientDetail();
+                model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 return View(model);
             }
             #region Evidence
@@ -248,6 +253,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
                 var put = new PutStaffSpotCheck();
                 put.SpotCheckId = model.SpotCheckId;
+                put.Reference = model.Reference;
                 put.ClientId = model.ClientId;
                 put.Attachment = model.Attachment;
                 put.Date = model.Date;

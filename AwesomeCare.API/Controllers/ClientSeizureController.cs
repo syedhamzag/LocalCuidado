@@ -16,7 +16,6 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientSeizureController : ControllerBase
@@ -124,7 +123,7 @@ namespace AwesomeCare.API.Controllers
             }
             var result = _dbContext.SaveChanges();
             var ClientSeizure = Mapper.Map<ClientSeizure>(models);
-            await _ClientSeizureRepository.InsertEntity(ClientSeizure);
+            await _ClientSeizureRepository.UpdateEntity(ClientSeizure);
             return Ok();
 
         }

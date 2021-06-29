@@ -65,8 +65,8 @@ namespace AwesomeCare.Admin.Controllers
             var staffs = await _staffService.GetStaffs();
             model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             model.StaffId = staffId.Value;
-            List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetClients = clientNames;
+            var client = await _clientService.GetClientDetail();
+            model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
             return View(model);
         }
         public async Task<IActionResult> View(int obsId)
@@ -140,9 +140,10 @@ namespace AwesomeCare.Admin.Controllers
             }
             return buffer;
         }
-        public async Task<IActionResult> Edit(int ObservationID)
+        public async Task<IActionResult> Edit(int obsId)
         {
-            var AdlObs = _StaffAdlObsService.Get(ObservationID);
+            var AdlObs = _StaffAdlObsService.Get(obsId);
+            var client = await _clientService.GetClientDetail();
             var staffs = await _staffService.GetStaffs();
 
             var putEntity = new CreateStaffAdlObs
@@ -166,8 +167,9 @@ namespace AwesomeCare.Admin.Controllers
                 NextCheckDate = AdlObs.Result.NextCheckDate,
                 FivePrinciples = AdlObs.Result.FivePrinciples,
                 Comments = AdlObs.Result.Comments,
-                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-            };
+                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
+                ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList()
+        };
             return View(putEntity);
         }
         [HttpPost]
@@ -180,6 +182,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 return View(model);
             }
             PostStaffAdlObs postlog = new PostStaffAdlObs();
@@ -234,8 +237,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetClients = clientNames;
+                var client = await _clientService.GetClientDetail();
+                model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 return View(model);
             }
             #region Evidence
@@ -254,6 +257,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             var put = new PutStaffAdlObs();
+                put.ObservationID = model.ObservationID;
                 put.Reference = model.Reference;
                 put.ClientId = model.ClientId;
                 put.Attachment = model.Attachment;

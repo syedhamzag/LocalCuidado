@@ -63,8 +63,8 @@ namespace AwesomeCare.Admin.Controllers
             var model = new CreateStaffKeyWorkerVoice();
             var staffs = await _staffService.GetStaffs();
             model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-            List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetClients = clientNames;
+            var client = await _clientService.GetClientDetail();
+            model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
             return View(model);
 
         }
@@ -119,14 +119,14 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Edit(int workerId)
         {
-            List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetClients = clientNames;
+            var client = await _clientService.GetClientDetail();
             var staffs = await _staffService.GetStaffs();
             var KeyWorker = _StaffKeyWorkerVoiceService.Get(workerId);
 
             var putEntity = new CreateStaffKeyWorkerVoice
             {
                 KeyWorkerId = KeyWorker.Result.KeyWorkerId,
+                Reference = KeyWorker.Result.Reference,
                 Attachment = KeyWorker.Result.Attachment,
                 Date = KeyWorker.Result.Date,
                 Deadline = KeyWorker.Result.Deadline,
@@ -149,7 +149,8 @@ namespace AwesomeCare.Admin.Controllers
                 TeamYouWorkFor = KeyWorker.Result.Workteam.Select(s=>s.StaffPersonalInfoId).ToList(),
                 StaffId = KeyWorker.Result.StaffId,                
                 HealthAndWellNessChanges = KeyWorker.Result.HealthAndWellNessChanges,
-                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
+                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
+                ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList()
             };
             return View(putEntity);
         }
@@ -161,8 +162,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetClients = clientNames;
+                var client = await _clientService.GetClientDetail();
+                model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 return View(model);
             }
             #region Attachment
@@ -216,8 +217,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetClients = clientNames;
+                var client = await _clientService.GetClientDetail();
+                model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 return View(model);
             }
             #region Evidence

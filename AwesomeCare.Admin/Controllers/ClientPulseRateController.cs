@@ -95,6 +95,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 PulseRateId = PulseRate.Result.PulseRateId,
                 ClientId = PulseRate.Result.ClientId,
+                Reference = PulseRate.Result.Reference,
                 Date = PulseRate.Result.Date,
                 Time = PulseRate.Result.Time,
                 TargetPulse = PulseRate.Result.TargetPulse,
@@ -166,6 +167,7 @@ namespace AwesomeCare.Admin.Controllers
             var putEntity = new CreateClientPulseRate
             {
                 PulseRateId = PulseRate.Result.PulseRateId,
+                Reference = PulseRate.Result.Reference,
                 ClientId = PulseRate.Result.ClientId,
                 Date = PulseRate.Result.Date,
                 Time = PulseRate.Result.Time,
@@ -257,7 +259,7 @@ namespace AwesomeCare.Admin.Controllers
                 postlog.SeeChartAttach = model.SeeChartAttach;
                 postlog.TargetPulseAttach = model.TargetPulseAttach;
                 postlog.Chart = model.Chart;
-            var json = JsonConvert.SerializeObject(postlog);
+
             var result = await _clientPulseRateService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 

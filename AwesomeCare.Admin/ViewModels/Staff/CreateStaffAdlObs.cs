@@ -16,13 +16,13 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public CreateStaffAdlObs() 
         {
             OfficerToActList = new List<SelectListItem>();
-            ClientList = new List<GetClient>();
+            ClientList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         public IFormFile Attach { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
-        public ICollection<GetClient> ClientList { get; set; }
+        public ICollection<SelectListItem> ClientList { get; set; }
 
         public string ActiveTab { get; set; } = "adlobs";
         public string ClientName { get; set; }

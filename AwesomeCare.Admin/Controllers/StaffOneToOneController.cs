@@ -149,6 +149,7 @@ namespace AwesomeCare.Admin.Controllers
             var putEntity = new CreateStaffOneToOne
             {
                 OneToOneId = OneToOne.Result.OneToOneId,
+                Reference = OneToOne.Result.Reference,
                 Attachment = OneToOne.Result.Attachment,
                 Date = OneToOne.Result.Date,
                 Deadline = OneToOne.Result.Deadline,

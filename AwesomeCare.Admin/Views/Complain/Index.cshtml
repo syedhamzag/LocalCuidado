@@ -40,6 +40,7 @@
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                         @Html.ActionLink("Edit", "Edit", "Complain", new { complainId = item.data.ComplainId }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("View", "View", "Complain", new { complainId = item.data.ComplainId }, new { @class = "dropdown-item" })
                                     </div>
                                 </div>
                             </td>

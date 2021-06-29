@@ -48,7 +48,6 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string TargetPulseAttach { get; set; }
         [Required]
         public string CurrentPulse { get; set; }
-        [Required]
         public string Chart { get; set; }
         [Required]
         public int SeeChart { get; set; }

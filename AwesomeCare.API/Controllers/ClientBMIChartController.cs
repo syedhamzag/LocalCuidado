@@ -16,7 +16,6 @@ using AutoMapper.QueryableExtensions;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientBMIChartController : ControllerBase
@@ -60,7 +59,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] List<PostClientBMIChart> postClientBMIChart)
+        public async Task<IActionResult> Create([FromBody] PostClientBMIChart postClientBMIChart)
         {
             if (postClientBMIChart == null || !ModelState.IsValid)
             {
