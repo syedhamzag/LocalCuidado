@@ -23,6 +23,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientRotaDays
         public string StopTime { get; set; }
         [Required]
         public int RotaId { get; set; }
+        public string WeekDay { get; set; }
         public List<CreateClientRotaTask> RotaTasks { get; set; }
     }
 }

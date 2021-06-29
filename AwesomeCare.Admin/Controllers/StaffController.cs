@@ -247,32 +247,35 @@ namespace AwesomeCare.Admin.Controllers
                 {
                     string dayOfWeek = day.Date.DayOfWeek.ToString();
                     int? dayOfWeekId = rotaDayofWeeks.FirstOrDefault(d => d.DayofWeek.Equals(dayOfWeek, StringComparison.InvariantCultureIgnoreCase))?.RotaDayofWeekId;
-                    var rota = new PostStaffRota();
-                    rota.Remark = day.Remark;
-                    rota.ReferenceNumber = DateTime.Now.ToString("yyyyMMddhhmmssms") + day.SelectedStaffs.IndexOf(staff);
-                    rota.RotaDate = day.Date;//.ToString("MM/dd/yyyy");
-                    rota.RotaId = day.RotaId;
-                    rota.RotaDayofWeekId = dayOfWeekId;
-                    rota.StaffRotaPeriods = (from rp in day.RotaTypes
-                                             where rp.IsSelected
-                                             select new PostStaffRotaPeriod
-                                             {
-                                                 ClientRotaTypeId = rp.ClientRotaTypeId
-                                             }).ToList();
-                    rota.Staff = staff;
-                    rota.StaffRotaPartners = (from pt in day.SelectedStaffs
-                                              where pt != staff
-                                              select new PostStaffRotaPartner
-                                              {
-                                                  StaffId = pt
-                                              }).ToList();
+                    if (dayOfWeekId.HasValue)
+                    {
+                        var rota = new PostStaffRota();
+                        rota.Remark = day.Remark;
+                        rota.ReferenceNumber = DateTime.Now.ToString("yyyyMMddhhmmssms") + day.SelectedStaffs.IndexOf(staff);
+                        rota.RotaDate = day.Date;//.ToString("MM/dd/yyyy");
+                        rota.RotaId = day.RotaId;
+                        rota.RotaDayofWeekId = dayOfWeekId;
+                        rota.StaffRotaPeriods = (from rp in day.RotaTypes
+                                                 where rp.IsSelected
+                                                 select new PostStaffRotaPeriod
+                                                 {
+                                                     ClientRotaTypeId = rp.ClientRotaTypeId
+                                                 }).ToList();
+                        rota.Staff = staff;
+                        rota.StaffRotaPartners = (from pt in day.SelectedStaffs
+                                                  where pt != staff
+                                                  select new PostStaffRotaPartner
+                                                  {
+                                                      StaffId = pt
+                                                  }).ToList();
 
-                    rota.StaffRotaItem = (from item in day.Items
-                                          select new PostStaffRotaItem
-                                          {
-                                              StaffRotaDynamicAdditionId = item
-                                          }).ToList();
-                    rotas.Add(rota);
+                        rota.StaffRotaItem = (from item in day.Items
+                                              select new PostStaffRotaItem
+                                              {
+                                                  StaffRotaDynamicAdditionId = item
+                                              }).ToList();
+                        rotas.Add(rota);
+                    }
                 }
 
 
