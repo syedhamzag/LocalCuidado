@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
 @model CreateStaffReference
 @{
-    ViewData["Title"] = "View Staff Reference";
+    ViewData["Title"] = "Update Staff Reference";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -21,75 +21,91 @@
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="StaffReferenceId" />
                             <input type="hidden" asp-for="StaffId" />
+                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
-                                    <label class="control-label">@Model.Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Applicant Role</label>
-                                    <baserecord asp-key="GetClients" asp-for="ApplicantRole" asp-items="@(new SelectList(@ViewBag.GetClients,"ClientId","Firstname",Model.ApplicantRole))" />
+                                    <select class="custom-select" asp-for="ApplicantRole" asp-items="Model.ClientList">
+                                    </select>
                                     <span asp-validation-for="ApplicantRole" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Reference</label>
-                                    <label class="control-label">@Model.Reference</label>
+                                    <input type="text" class="form-control" asp-for="Reference" readonly />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date Of Employment</label>
-                                    <label class="control-label">@Model.DateofEmployement</label>
+                                    <baserecord asp-key="Date_Of_Employment" asp-for="DateofEmployement" asp-items="null" />
+                                    <span asp-validation-for="DateofEmployement" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">TeamWork</label>
-                                    <label class="control-label">@Model.TeamWork</label>
+                                    <baserecord asp-key="TeamWork" asp-for="TeamWork" asp-items="null" />
+                                    <span asp-validation-for="TeamWork" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Integrity</label>
-                                    <label class="control-label">@Model.Integrity</label>
+                                    <baserecord asp-key="Integrity" asp-for="Integrity" asp-items="null" />
+                                    <span asp-validation-for="Integrity" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Knowledgeable</label>
-                                    <label class="control-label">@Model.Knowledgeable</label>
+                                    <baserecord asp-key="Knowledge" asp-for="Knowledgeable" asp-items="null" />
+                                    <span asp-validation-for="Knowledgeable" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Caring</label>
-                                    <label class="control-label">@Model.Caring</label>
+                                    <baserecord asp-key="Caring" asp-for="Caring" asp-items="null" />
+                                    <span asp-validation-for="Caring" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Work Under Pressure</label>
-                                    <label class="control-label">@Model.WorkUnderPressure</label>
+                                    <baserecord asp-key="Work_Under_Pressure" asp-for="WorkUnderPressure" asp-items="null" />
+                                    <span asp-validation-for="WorkUnderPressure" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Previous Experience In Care</label>
-                                    <label class="control-label">@Model.PreviousExperience</label>
+                                    <baserecord asp-key="Previous_Experience" asp-for="PreviousExperience" asp-items="null" />
+                                    <span asp-validation-for="PreviousExperience" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
-                                    <label class="control-label">@Model.Status</label>
+                                    <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                                    <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date Of Exit</label>
-                                    <label class="control-label">@Model.DateofExit</label>>
+                                    <input type="text" asp-for="DateofExit" class="form-control" />
+                                    <span asp-validation-for="DateofExit" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Rehire Staff</label>
-                                    <label class="control-label">@Model.RehireStaff</label>
+                                    <input type="text" asp-for="RehireStaff" class="form-control" />
+                                    <span asp-validation-for="RehireStaff" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Relationship</label>
-                                    <label class="control-label">@Model.Relationship</label>
+                                    <input type="text" asp-for="Relationship" class="form-control" />
+                                    <span asp-validation-for="Relationship" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Refree Name</label>
-                                    <label class="control-label">@Model.RefreeName</label>
+                                    <input type="text" asp-for="RefreeName" class="form-control" />
+                                    <span asp-validation-for="RefreeName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -104,15 +120,18 @@
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Address</label>
-                                    <label class="control-label">@Model.Address</label>>
+                                    <textarea type="text" asp-for="Address" class="form-control"></textarea>
+                                    <span asp-validation-for="Address" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Email</label>
-                                    <label class="control-label">@Model.Email</label>>
+                                    <textarea type="text" asp-for="Email" class="form-control"></textarea>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Contact</label>
-                                    <label class="control-label">@Model.Contact</label>>
+                                    <textarea type="text" asp-for="Contact" class="form-control"></textarea>
+                                    <span asp-validation-for="Contact" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -123,7 +142,8 @@
                                     <h2>Attachment Image<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <img src="@Model.Attachment" alt="image" />
+                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -131,7 +151,7 @@
                                     <button type="submit" class="btn btn-primary pull-right">Submit</button>
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <a asp-action="Index" asp-route-clientId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
+                                    <a asp-action="Index" asp-route-staffId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
                                 </div>
                             </div>
                         </div>

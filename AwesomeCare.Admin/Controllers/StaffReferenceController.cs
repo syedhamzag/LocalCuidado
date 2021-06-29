@@ -22,6 +22,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Kernel.Geom;
+using AwesomeCare.Admin.Services.Admin;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -30,6 +31,7 @@ namespace AwesomeCare.Admin.Controllers
         private IStaffReferenceService _StaffReferenceService;
         private IClientService _clientService;
         private IStaffService _staffService;
+        private IBaseRecordService _baseService;
         private readonly IEmailService _emailService;
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
@@ -37,12 +39,13 @@ namespace AwesomeCare.Admin.Controllers
 
         public StaffReferenceController(IStaffReferenceService StaffReferenceService, IFileUpload fileUpload,
             IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
-            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService) : base(fileUpload)
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
         {
             _StaffReferenceService = StaffReferenceService;
             _clientService = clientService;
             _staffService = staffService;
             _emailService = emailService;
+            _baseService = baseService;
             _env = env;
             _logger = logger;
             _cache = cache;
@@ -51,29 +54,39 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _StaffReferenceService.Get();
-            return View(entities);
+            List<CreateStaffReference> reports = new List<CreateStaffReference>();
+            foreach (GetStaffReference item in entities)
+            {
+                var report = new CreateStaffReference();
+                report.StaffReferenceId = item.StaffReferenceId;
+                report.Reference = item.Reference;
+                report.Date = item.Date;
+                report.RefreeName = item.RefreeName;
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                reports.Add(report);
+            }
+            return View(reports);
         }
-
         public async Task<IActionResult> Index(int? staffId)
         {
             var model = new CreateStaffReference();
             var staffs = await _staffService.GetStaffs();
             model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-            List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetClients = clientNames;
+            var client = await _clientService.GetClientDetail();
+            model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
             return View(model);
 
         }
-        public async Task<IActionResult> View(int? id)
+        public async Task<IActionResult> View(int refId)
         {
-            var staffRef = await _StaffReferenceService.Get(id.Value);
+            var staffRef = await _StaffReferenceService.Get(refId);
             var json = JsonConvert.SerializeObject(staffRef);
             return View(staffRef);
         }
-        public async Task<IActionResult> Email(int? id, string sender, string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int refId, string sender, string password, string recipient, string Smtp)
         {
 
-            var staffRef = await _StaffReferenceService.Get(id.Value);
+            var staffRef = await _StaffReferenceService.Get(refId);
             var json = JsonConvert.SerializeObject(staffRef);
             byte[] byte1 = GeneratePdf(json);
             System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "StaffReference.pdf");
@@ -82,9 +95,9 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int? id)
+        public async Task<IActionResult> Download(int refId)
         {
-            var staffRef = await _StaffReferenceService.Get(id.Value);
+            var staffRef = await _StaffReferenceService.Get(refId);
             var json = JsonConvert.SerializeObject(staffRef);
             byte[] byte1 = GeneratePdf(json);
 
@@ -115,13 +128,12 @@ namespace AwesomeCare.Admin.Controllers
             }
             return buffer;
         }
-        public async Task<IActionResult> Edit(int ReferenceId)
+        public async Task<IActionResult> Edit(int refId)
         {
-            var StaffReference = _StaffReferenceService.Get(ReferenceId);
+            var StaffReference = _StaffReferenceService.Get(refId);
             var staffs = await _staffService.GetStaffs();
-            
-            List<GetClient> clientNames = await _clientService.GetClients();
-            ViewBag.GetClients = clientNames;
+
+            var client = await _clientService.GetClientDetail();
             var putEntity = new CreateStaffReference
             {
                 StaffReferenceId = StaffReference.Result.StaffReferenceId,
@@ -146,8 +158,9 @@ namespace AwesomeCare.Admin.Controllers
                 Date = StaffReference.Result.Date,
                 Status = StaffReference.Result.Status,
                 Attachment = StaffReference.Result.Attachment,
-                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-            };
+                OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
+                ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList()
+        };
             return View(putEntity);
         }
         [HttpPost]
@@ -158,17 +171,21 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetClients = clientNames;
+                var client = await _clientService.GetClientDetail();
+                model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 return View(model);
             }
             #region Attachment
             if (model.Attach != null)
-            { 
+            {
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_Attachment_", model.StaffId);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.Attachment = pathA;
+            }
+            else
+            {
+                model.Attachment = "No Image";
             }
             #endregion
 
@@ -189,8 +206,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var staffs = await _staffService.GetStaffs();
                 model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                List<GetClient> clientNames = await _clientService.GetClients();
-                ViewBag.GetClients = clientNames;
+                var client = await _clientService.GetClientDetail();
+                model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
                 return View(model);
             }
             #region Evidence
@@ -209,6 +226,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
             var put = Mapper.Map<PutStaffReference>(model);
             var entity = await _StaffReferenceService.Put(put);
+            
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,

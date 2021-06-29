@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Client;
 @model CreateClientFoodIntake
 @{
-    ViewData["Title"] = "View Client Food Intake";
+    ViewData["Title"] = "Update Client Food Intake";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -21,74 +21,89 @@
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="FoodIntakeId" />
                             <input type="hidden" asp-for="ClientId" />
+                            <input type="hidden" value="@Model.StatusAttach" asp-for="StatusAttach">
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date</label>
-                                    <label class="control-label">@Model.Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Time</label>
-                                    <label class="control-label">@Model.Time</label>
+                                    <input type="text" asp-for="Time" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Time" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Deadline</label>
-                                    <label class="control-label">@Model.Deadline</label>
+                                    <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Deadline" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer To Act</label>
-                                    <label class="control-label">@Model.OfficerName.ToList()</label>
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff Name</label>
-                                    <label class="control-label">@Model.Staff_Name.ToList()</label>
+                                    <<select asp-for="StaffName" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="StaffName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Physician Name</label>
-                                    <label class="control-label">@Model.PhysicianName.ToList()</label>
+                                    <select asp-for="Physician" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="Physician" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Food Intake Goal</label>
-                                    <label class="control-label">@Model.Goal</label>
+                                    <baserecord asp-key="Food_Intake_Goal" asp-for="Goal" asp-items="null" />
+                                    <span asp-validation-for="Goal" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Current Intake</label>
-                                    <label class="control-label">@Model.CurrentIntake</label>
+                                    <baserecord asp-key="Current_Intake" asp-for="CurrentIntake" asp-items="null" />
+                                    <span asp-validation-for="CurrentIntake" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Reference</label>
-                                    <label class="control-label">@Model.Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Food Intake Status</label>
-                                    <label class="control-label">@Model.StatusImage</label>
+                                    <baserecord asp-key="Food_Intake_Status" asp-for="StatusImage" asp-items="null" />
+                                    <span asp-validation-for="StatusImage" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
-                                    <label class="control-label">@Model.Status</label>
+                                    <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                                    <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Comment</label>
-                                    <label class="control-label">@Model.Comment</label>
+                                    <textarea type="text" asp-for="Comment" class="form-control"></textarea>
+                                    <span asp-validation-for="Comment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Physician Response</label>
-                                    <label class="control-label">@Model.PhysicianResponse</label>
+                                    <textarea type="text" asp-for="PhysicianResponse" class="form-control"></textarea>
+                                    <span asp-validation-for="PhysicianResponse" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Remarks</label>
-                                    <label class="control-label">@Model.Remarks</label>
+                                    <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +113,8 @@
                                     <h2>Status Attachment<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <img src="@Model.StatusAttach" alt="image" />
+                                    <input type="file" asp-for="StatusAttachment" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="StatusAttachment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">

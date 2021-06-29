@@ -16,14 +16,14 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public CreateStaffKeyWorkerVoice()
         {
             OfficerToActList = new List<SelectListItem>();
-            ClientList = new List<GetClient>();
+            ClientList = new List<SelectListItem>();
         }
 
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         public IFormFile Attach { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
-        public ICollection<GetClient> ClientList { get; set; }
+        public ICollection<SelectListItem> ClientList { get; set; }
         public string ActiveTab { get; set; } = "keyworker";
         public string Reference { get; set; }
         public string ClientName { get; set; }

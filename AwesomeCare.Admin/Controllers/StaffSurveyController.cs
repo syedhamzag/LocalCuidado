@@ -145,6 +145,7 @@ namespace AwesomeCare.Admin.Controllers
 
             var putEntity = new CreateStaffSurvey
             {
+                StaffSurveyId = Survey.Result.StaffSurveyId,
                 Attachment = Survey.Result.Attachment,
                 Reference = Survey.Result.Reference,
                 Date = Survey.Result.Date,
@@ -247,8 +248,9 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-                var put = new PutStaffSurvey();
+            var put = new PutStaffSurvey();
                 put.Attachment = model.Attachment;
+                put.StaffSurveyId = model.StaffSurveyId;
                 put.Reference = model.Reference;
                 put.Date = model.Date;
                 put.Deadline = model.Deadline;

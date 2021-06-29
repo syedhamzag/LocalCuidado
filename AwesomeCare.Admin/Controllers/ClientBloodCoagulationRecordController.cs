@@ -91,6 +91,7 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> View(int bloodId)
         {
             var BloodCoagulationRecord = _clientBloodCoagulationRecordService.Get(bloodId);
+            var staffs = await _staffService.GetStaffs();
             var putEntity = new CreateClientBloodCoagulationRecord
             {
                 BloodRecordId = BloodCoagulationRecord.Result.BloodRecordId,

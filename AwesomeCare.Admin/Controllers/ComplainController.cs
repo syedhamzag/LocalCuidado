@@ -239,6 +239,7 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
             var put = new PutComplainRegister();
+            put.EvidenceFilePath = model.EvidenceFilePath;
             put.ComplainId = model.ComplainId;
             put.ACTIONTAKEN = model.ACTIONTAKEN;
             put.ClientId = model.ClientId;

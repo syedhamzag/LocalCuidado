@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.ClientLogAudit;
 @model CreateClientLogAudit
 @{
-    ViewData["Title"] = "View Client Log Audit";
+    ViewData["Title"] = "Update Client Log Audit";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -25,55 +25,66 @@
 
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DATE</label>
-                                    <label class="control-label">@Model.Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">NEXT DUE DATE</label>
-                                    <label class="control-label">@Model.NextDueDate</label>
+                                    <input type="text" asp-for="NextDueDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="NextDueDate" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DEADLINE</label>
-                                    <label class="control-label">@Model.Deadline</label>
+                                    <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Deadline" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Reference</label>
-                                    <label class="control-label">@Model.Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
 
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Action Recommended</label>
-                                    <label class="control-label">@Model.ActionRecommended</label>
+                                    <input type="text" asp-for="ActionRecommended" class="form-control" />
+                                    <span asp-validation-for="ActionRecommended" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Action Taken</label>
-                                    <label class="control-label">@Model.ActionTaken</label>
+                                    <input type="text" asp-for="ActionTaken" class="form-control" />
+                                    <span asp-validation-for="ActionTaken" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <label class="control-label">@Model.OfficerName.ToList()</label>
+                                    <select asp-for="OfficerToTakeAction" asp-items="@Model.OFFICERTOACT" class="selectpicker" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="OfficerToTakeAction" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Status</label>
-                                    <label class="control-label">@Model.Status</label>
+                                    <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                                    <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Is there a Repeat of Incident</label>
-                                    <label class="control-label">@Model.RepeatOfIncident</label>
+                                    <baserecord asp-key="Repeat_Of_Incident" asp-for="RepeatOfIncident" asp-items="null" />
+                                    <span asp-validation-for="RepeatOfIncident" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Name of Auditor</label>
-                                    <label class="control-label">@Model.NameOfAuditor</label>
+                                    <input type="text" asp-for="NameOfAuditor" class="form-control" />
+                                    <span asp-validation-for="NameOfAuditor" class="text-danger"></span>
 
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Rot Cause</label>
-                                    <label class="control-label">@Model.RotCause</label>
+                                    <input type="text" asp-for="RotCause" class="form-control" />
+                                    <span asp-validation-for="RotCause" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
 
@@ -82,92 +93,110 @@
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Remark/Closing Comment</label>
-                                    <label class="control-label">@Model.Remarks</label>
+                                    <input type="text" asp-for="Remarks" class="form-control" />
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Log URL</label>
-                                    <label class="control-label">@Model.LogURL</label>
+                                    <input type="text" asp-for="LogURL" class="form-control" />
+                                    <span asp-validation-for="LogURL" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Is care given is inline with care plan expectations</label>
-                                    <label class="control-label">@Model.IsCareExpected</label>
+                                    <textarea type="text" asp-for="IsCareExpected" class="form-control"></textarea>
+                                    <span asp-validation-for="IsCareExpected" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">If care given is difference from expected, please give staff name and date of incident</label>
-                                    <label class="control-label">@Model.IsCareDifference</label>
+                                    <textarea type="text" asp-for="IsCareDifference" class="form-control"></textarea>
+                                    <span asp-validation-for="IsCareDifference" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Are documentation properly done including use of appropriate pen and clarity</label>
-                                    <label class="control-label">@Model.ProperDocumentation</label>
+                                    <textarea type="text" asp-for="ProperDocumentation" class="form-control"></textarea>
+                                    <span asp-validation-for="ProperDocumentation" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">If no to proper documentation and use of pen, please give name of staff and date of incidents</label>
-                                    <label class="control-label">@Model.ImproperDocumentation</label>
+                                    <textarea type="text" asp-for="ImproperDocumentation" class="form-control"></textarea>
+                                    <span asp-validation-for="ImproperDocumentation" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">How well are communication from outgoing staff to incoming staff picked from the note</label>
-                                    <label class="control-label">@Model.Communication</label>
+                                    <textarea type="text" asp-for="Communication" class="form-control"></textarea>
+                                    <span asp-validation-for="Communication" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Do you think service users needs are being met?</label>
-                                    <label class="control-label">@Model.ThinkingServiceUsers</label>
+                                    <textarea type="text" asp-for="ThinkingServiceUsers" class="form-control"></textarea>
+                                    <span asp-validation-for="ThinkingServiceUsers" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Do you think staff understand Safety, Caring, Responsiveness, Dignity and Respect?</label>
-                                    <label class="control-label">@Model.ThinkingStaff</label>
+                                    <textarea type="text" asp-for="ThinkingStaff" class="form-control"></textarea>
+                                    <span asp-validation-for="ThinkingStaff" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Do you think this staff should be stopped immidiately</label>
-                                    <label class="control-label">@Model.ThinkingStaffStop</label>
+                                    <textarea type="text" asp-for="ThinkingStaffStop" class="form-control"></textarea>
+                                    <span asp-validation-for="ThinkingStaffStop" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Observations</label>
-                                    <label class="control-label">@Model.Observations</label>
+                                    <textarea type="text" asp-for="Observations" class="form-control"></textarea>
+                                    <span asp-validation-for="Observations" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Lesson Learnt and Shared</label>
-                                    <label class="control-label">@Model.LessonLearntAndShared</label>
+                                    <textarea type="text" asp-for="LessonLearntAndShared" class="form-control"></textarea>
+                                    <span asp-validation-for="LessonLearntAndShared" class="text-danger"></span>
                                 </div>
                             </div>
+
+
                         </div>
+                        <input type="hidden" value="@Model.EvidenceOfActionTaken" asp-for="EvidenceOfActionTaken">
+                        <input type="hidden" value="@Model.EvidenceFilePath" asp-for="EvidenceFilePath">
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <div class="card">
                                 <div class="header">
-                                    <h2>Evidence<small></small></h2>
+                                    <h2>Evidence of Action Taken<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <img src="@Model.EvidenceOfActionTaken" alt="image" />
+                                    <input type="file" asp-for="Evidence" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Evidence" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="header">
-                                    <h2>Attach<small></small></h2>
+                                    <h2>Attachment Image<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <img src="@Model.EvidenceFilePath" alt="image" />
+                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>
 

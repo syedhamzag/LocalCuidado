@@ -40,7 +40,12 @@
                     </div>
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label class="control-label">OFFICER TO ACT</label>
-                        <label class="control-label">@Model.OfficerName.ToList()</label>
+                       @foreach (var item in Model.OfficerName)
+	                    {
+                            <label class="control-label">@item</label>
+                            <br />
+	                    }
+                        
                     </div>
                 </div>
                 <div class="row">
@@ -54,7 +59,11 @@
                     </div>
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label class="control-label">STAFF</label>
-                        <label class="control-label">@Model.Staff_Name.ToList()</label>
+                        @foreach (var item in Model.Staff_Name)
+                        {
+                            <label class="control-label">@item</label>
+                            <br />
+                        }
                     </div>
                 </div>
                 <div class="row">
@@ -90,7 +99,7 @@
                         <label asp-for="REMARK" class="control-label"></label>
                         <label class="control-label">@Model.REMARK</label>
                     </div>
-                </div>HI
+                </div>
                 <div class="row">
                     <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-12">
                         <label class="control-label">CONCERNS RAISED</label>
@@ -115,18 +124,10 @@
             <div class="col-xs-4 col-sm-4 col-md-4">
                 <div class="card">
                     <div class="header">
-                        <h2>Evidence<small></small></h2>
+                        <h2>Evidence</h2>
                     </div>
                     <div class="body">
-                        <img src="@Model.EvidenceFilePath" alt="image" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                    </div>
-                    <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                        <a asp-action="Complain" asp-route-clientId="@Model.ClientId" asp-controller="Client" class="btn btn-primary pull-left">Cancel</a>
+                        <img src="@Model.EvidenceFilePath" alt="image" width="300" height="240" />
                     </div>
                 </div>
             </div>
