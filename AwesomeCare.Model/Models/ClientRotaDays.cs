@@ -13,6 +13,7 @@ namespace AwesomeCare.Model.Models
         public int RotaId { get; set; }
         public string StartTime { get; set; }
         public string StopTime { get; set; }
+        public string WeekDay { get; set; }
 
         public virtual Rota Rota { get; set; }
         public virtual ClientRota ClientRota { get; set; }
