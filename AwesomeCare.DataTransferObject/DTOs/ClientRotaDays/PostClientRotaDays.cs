@@ -20,5 +20,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientRotaDays
         public int RotaId { get; set; }
 
         public string WeekDay { get; set; }
+        public int? ClientId { get; set; }
+        public int? ClientRotaTypeId { get; set; }
     }
 }
