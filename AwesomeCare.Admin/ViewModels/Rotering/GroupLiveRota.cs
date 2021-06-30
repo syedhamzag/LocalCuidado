@@ -11,8 +11,12 @@ namespace AwesomeCare.Admin.ViewModels.Rotering
         public GroupLiveRota()
         {
             Trackers = new List<LiveTracker>();
+           
         }
         public string StaffName { get; set; }
         public List<LiveTracker> Trackers { get; set; }
+       
     }
+
+   
 }
