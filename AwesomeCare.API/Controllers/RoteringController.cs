@@ -623,7 +623,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(typeof(List<LiveTracker>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult SampleLiveRota(string sdate, string edate)
+        public IActionResult LiveRota2(string sdate, string edate)
         {
             string format = "yyyy-MM-dd";
             bool isStartDateValid = DateTime.TryParseExact(sdate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime startDate);
@@ -639,25 +639,19 @@ namespace AwesomeCare.API.Controllers
             }
 
             var rotas = (from sr in _staffRotaRepository.Table
-                             //join shiftBooking in shiftBookingRepository.Table on sr.RotaId equals shiftBooking.Rota
-                             // join stafShiftBooking in staffShiftBookingRepository.Table on shiftBooking.ShiftBookingId equals stafShiftBooking.ShiftBookingId
                          join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
+                         join crd in _clientRotaDaysRepository.Table on new { key1 = srp.ClientRotaTypeId, key2 = srp.ClientId } equals new { key1 = crd.ClientRotaTypeId.GetValueOrDefault(), key2 = crd.ClientId }
+                         join c in _clientRepository.Table on srp.ClientId equals c.ClientId
                          join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
                          join crt in _clientRotaTypeRepository.Table on srp.ClientRotaTypeId equals crt.ClientRotaTypeId
-                         join cr in _clientRotaRepository.Table on crt.ClientRotaTypeId equals cr.ClientRotaTypeId
-                         join crd in _clientRotaDaysRepository.Table on cr.ClientRotaId equals crd.ClientRotaId
-                         //join crd in _clientRotaDaysRepository.Table on new { key1 = sr.RotaId, key2 = sr.RotaDayofWeekId.Value } equals new { key1 = crd.RotaId, key2 = crd.RotaDayofWeekId }
-                         // join rd in _rotaDayofWeekRepository.Table on crd.RotaDayofWeekId equals rd.RotaDayofWeekId
-                         join r in _rotaRepository.Table on crd.RotaId equals r.RotaId
-                         // 
-                         //  
-                         join c in _clientRepository.Table on cr.ClientId equals c.ClientId
-                         where sr.RotaDate >= startDate && sr.RotaDate <= stopDate
+                         join r in _rotaRepository.Table on sr.RotaId equals r.RotaId
+                         join rtwd in rotaDayOfWeekRepository.Table on crd.RotaDayofWeekId equals rtwd.RotaDayofWeekId
+                         where sr.RotaDate >= startDate && sr.RotaDate <= stopDate// && rtwd.RotaDayofWeekId == weekDayId
                          select new LiveTracker
                          {
                              AreaCode = c.AreaCodeId,
-                             ClientRotaId = cr.ClientRotaId,
-                             ClientId = cr.ClientId,
+                             ClientRotaId = crd.ClientRotaId,
+                             ClientId = srp.ClientId.GetValueOrDefault(),
                              ClientProviderReference = c.ProviderReference,
                              Period = crt.RotaType,
                              ClientName = c.Firstname + " " + c.Middlename + " " + c.Surname,

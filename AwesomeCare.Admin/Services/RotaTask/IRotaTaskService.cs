@@ -29,7 +29,7 @@ namespace AwesomeCare.Admin.Services.RotaTask
         [Get("/Rotering/RotaAdmin/{sDate}/{eDate}")]
         Task<List<RotaAdmin>> RotaAdmin(string sDate, string eDate);
 
-        [Get("/Rotering/LiveRota/{startDate}/{stopDate}")]
+        [Get("/Rotering/LiveRota2/{startDate}/{stopDate}")]
         Task<List<LiveTracker>> LiveRota(string startDate,string stopDate);
 
         [Delete("/Rotering/DeleteStaffRotaPeriod/{staffRotaPeriodId}")]
