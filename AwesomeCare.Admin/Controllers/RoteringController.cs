@@ -124,6 +124,10 @@ namespace AwesomeCare.Admin.Controllers
                             rotaDay.RotaDayofWeekId = int.Parse(weekday);
                             rotaDay.RotaId = int.TryParse(rota, out int rtid) ? rtid : 0;
                             rotaDay.ClientRotaDaysId = int.TryParse(clientRotaDayId, out int dayId) ? dayId : 0;
+                            rotaDay.WeekDay = weekDay.DayofWeek;
+                            rotaDay.ClientId = clientRota.ClientId;
+                            rotaDay.ClientRotaTypeId = clientRota.ClientRotaTypeId;
+
                             // rotaDay.ClientRotaId = int.TryParse(clientRotaid, out int crId) ? crId : 0;
                             //Count the number of Task
                             var tasks = new List<CreateClientRotaTask>();

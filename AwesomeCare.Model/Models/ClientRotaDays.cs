@@ -14,6 +14,8 @@ namespace AwesomeCare.Model.Models
         public string StartTime { get; set; }
         public string StopTime { get; set; }
         public string WeekDay { get; set; }
+        public int? ClientId { get; set; }
+        public int? ClientRotaTypeId { get; set; }
 
         public virtual Rota Rota { get; set; }
         public virtual ClientRota ClientRota { get; set; }

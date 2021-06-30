@@ -46,6 +46,14 @@ namespace AwesomeCare.Model.Models.Map
                 .HasColumnName("RotaId")
                 .IsRequired();
 
+            builder.Property(p => p.ClientId)
+              .HasColumnName("ClientId")
+              .IsRequired(false);
+
+            builder.Property(p => p.ClientRotaTypeId)
+             .HasColumnName("ClientRotaTypeId")
+             .IsRequired(false);
+
             #endregion
 
             #region Relationships
