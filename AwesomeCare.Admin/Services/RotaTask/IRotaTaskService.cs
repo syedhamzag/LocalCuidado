@@ -38,8 +38,8 @@ namespace AwesomeCare.Admin.Services.RotaTask
         [Get("/Rotering/GetStaffRotaPeriodById/{staffRotaPeriodId}")]
         Task<GetStaffRotaPeriodForEdit> GetStaffRotaPeriod(int staffRotaPeriodId);
 
-        [Get("/Rotering/Rota/AttachedClient/{rotaId}")]
-        Task<List<GetClientAttachedToRota>> GetAttachRotaClientAsync(int rotaId);
+        [Get("/Rotering/Rota/AttachedClient/{rotaId}/{rotaDayOfWeekId}/{clientRotaTypeId}")]
+        Task<List<GetClientAttachedToRota>> GetAttachRotaClientAsync(int rotaId,int rotaDayOfWeekId,int clientRotaTypeId);
 
         [Put("/Rotering/PatchStaffRotaPeriod")]
         Task<HttpResponseMessage> PatchStaffRotaPeriod([Body] EditStaffRotaPeriod model);

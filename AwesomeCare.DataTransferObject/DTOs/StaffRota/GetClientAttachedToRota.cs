@@ -15,7 +15,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffRota
         public int ClientRotaDaysId { get; set; }
         public int RotaDayofWeekId { get; set; }
         public int RotaId { get; set; }
-        public string StartTime { get; set; }
-        public string StopTime { get; set; }
+       
     }
 }
