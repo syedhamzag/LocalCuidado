@@ -246,13 +246,15 @@ namespace AwesomeCare.Admin.Controllers
 
             foreach (var day in model.RotaDays)
             {
+                string dayOfWeek = day.Date.DayOfWeek.ToString();
+                int? dayOfWeekId = rotaDayofWeeks.FirstOrDefault(d => d.DayofWeek.Equals(dayOfWeek, StringComparison.InvariantCultureIgnoreCase))?.RotaDayofWeekId;
+
+
                 var rotaId = day.RotaId;
-                var attachedRotaClients = await rotaTaskService.GetAttachRotaClientAsync(rotaId);
+
 
                 foreach (var staff in day.SelectedStaffs)
                 {
-                    string dayOfWeek = day.Date.DayOfWeek.ToString();
-                    int? dayOfWeekId = rotaDayofWeeks.FirstOrDefault(d => d.DayofWeek.Equals(dayOfWeek, StringComparison.InvariantCultureIgnoreCase))?.RotaDayofWeekId;
                     if (dayOfWeekId.HasValue)
                     {
                         var rota = new PostStaffRota();
@@ -261,16 +263,20 @@ namespace AwesomeCare.Admin.Controllers
                         rota.RotaDate = day.Date;//.ToString("MM/dd/yyyy");
                         rota.RotaId = day.RotaId;
                         rota.RotaDayofWeekId = dayOfWeekId;
-                        foreach (var rotaClient in attachedRotaClients)
+
+                        foreach (var rp in day.RotaTypes)
                         {
-                            rota.StaffRotaPeriods = (from rp in day.RotaTypes
-                                                     where rp.IsSelected
-                                                     select new PostStaffRotaPeriod
-                                                     {
-                                                         ClientRotaTypeId = rp.ClientRotaTypeId,
-                                                         ClientId = rotaClient.ClientId
-                                                     }).ToList();
+                            var attachedRotaClients = await rotaTaskService.GetAttachRotaClientAsync(rotaId, dayOfWeekId.Value, rp.ClientRotaTypeId);
+                            foreach (var rotaClient in attachedRotaClients)
+                            {
+                                rota.StaffRotaPeriods.Add(new PostStaffRotaPeriod
+                                {
+                                    ClientRotaTypeId = rp.ClientRotaTypeId,
+                                    ClientId = rotaClient.ClientId
+                                });
+                            }
                         }
+
 
                         rota.Staff = staff;
                         rota.StaffRotaPartners = (from pt in day.SelectedStaffs

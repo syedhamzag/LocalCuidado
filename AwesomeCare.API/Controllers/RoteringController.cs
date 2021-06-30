@@ -343,7 +343,7 @@ namespace AwesomeCare.API.Controllers
             // int staffId = 2;
             var dayOfWeek = sDate.Date.DayOfWeek.ToString();
 
-           var weekDayId = rotaDayOfWeekRepository.Table.FirstOrDefault(r => r.DayofWeek == dayOfWeek)?.RotaDayofWeekId;
+            var weekDayId = rotaDayOfWeekRepository.Table.FirstOrDefault(r => r.DayofWeek == dayOfWeek)?.RotaDayofWeekId;
 
 
 
@@ -370,7 +370,7 @@ namespace AwesomeCare.API.Controllers
                                   RotaId = sr.RotaId,
                                   Rota = r.RotaName,
                                   DayOfWeek = rtwd.DayofWeek,
-                                  RotaDayOfWeekId  = sr.RotaDayofWeekId,
+                                  RotaDayOfWeekId = sr.RotaDayofWeekId,
                                   StaffRotaPeriodId = srp.StaffRotaPeriodId,
                                   ClockInTime = srp.ClockInTime,
                                   ClockOutTime = srp.ClockOutTime,
@@ -783,23 +783,27 @@ namespace AwesomeCare.API.Controllers
         /// Get Clients attached to the specified Rota
         /// </summary>
         /// <param name="rotaId"></param>
+        /// <param name="rotaDayOfWeekId"></param>
+        /// <param name="clientRotaTypeId"></param>
         /// <returns></returns>
-        [HttpGet("Rota/AttachedClient/{rotaId}")]
+        [HttpGet("Rota/AttachedClient/{rotaId}/{rotaDayOfWeekId}/{clientRotaTypeId}")]
         [ProducesResponseType(typeof(List<GetClientAttachedToRota>), StatusCodes.Status200OK)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAttachedClientByRotaId(int rotaId)
+        public async Task<IActionResult> GetAttachedClientByRotaId(int rotaId, int rotaDayOfWeekId,int clientRotaTypeId)
         {
 
             //Get Clients attached to the specified Rota
             var clientByRota = await (from cl in _clientRotaRepository.Table
                                       join cld in _clientRotaDaysRepository.Table on cl.ClientRotaId equals cld.ClientRotaId
-                                      where cld.RotaId == rotaId
+                                      where cld.RotaId == rotaId && cld.RotaDayofWeekId == rotaDayOfWeekId && cl.ClientRotaTypeId == clientRotaTypeId
                                       select new GetClientAttachedToRota
                                       {
                                           ClientRotaId = cl.ClientRotaId,
                                           ClientId = cl.ClientId,
                                           ClientRotaTypeId = cl.ClientRotaTypeId,
-                                          RotaId = cld.RotaId
+                                          RotaId = cld.RotaId,
+                                          RotaDayofWeekId = cld.RotaDayofWeekId,
+                                          ClientRotaDaysId = cld.ClientRotaDaysId
                                       }).ToListAsync();
 
 
