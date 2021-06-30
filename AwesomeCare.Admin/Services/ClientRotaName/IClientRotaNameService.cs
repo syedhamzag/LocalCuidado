@@ -12,6 +12,9 @@ namespace AwesomeCare.Admin.Services.ClientRotaName
         [Get("/ClientRotaName")]
         Task<List<GetClientRotaName>> Get();
 
+        [Get("/ClientRotaName/ExcludeRotaByDates/{excludeDates}")]
+        Task<List<GetClientRotaName>> GetByExcludeDate(string excludeDates);
+
         [Post("/ClientRotaName")]
         Task<GetClientRotaName> Post([Body]PostClientRotaName model);
 

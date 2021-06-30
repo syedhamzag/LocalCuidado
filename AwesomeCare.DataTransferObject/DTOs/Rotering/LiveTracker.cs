@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Rotering
 {
-  public  class LiveTracker
+    public class LiveTracker
     {
         public LiveTracker()
         {
@@ -45,5 +46,45 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string ClockOutAddress { get; set; }
         public string Comment { get; set; }
         public string HandOver { get; set; }
+
+        public string RowClass()
+        {
+            try
+            {
+                string rowClass = "";
+                if (ClockInTime.HasValue)
+                {
+                    var st = DateTime.TryParseExact(StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
+                    var df = st.Subtract(ClockInTime.Value.DateTime).TotalMinutes;
+
+                    if (df <= 15 && df >= -15)
+                    {
+                        rowClass = "success";
+                    }
+                    else if (df > 15 && df <= 30)
+                    {
+                        // "blue";
+                       
+                    }
+                    else if (df >= -30)
+                    {
+                        // "yellow";
+                    }
+                    else
+                    {
+                        rowClass = "danger";
+                    }
+
+
+                }
+
+                return rowClass;
+            }
+            catch (Exception ex)
+            {
+                return "";
+
+            }
+        }
     }
 }
