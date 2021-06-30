@@ -467,7 +467,10 @@ namespace AwesomeCare.Admin.Controllers
         {
             var rotaTypes = await _clientRotaTypeService.Get();
 
-            var rotas = await _clientRotaNameService.Get();
+            var excludeDates = dates.Select(d => d.ToString("yyyy-MM-dd")).ToList();
+            var commaSeparatedDates = string.Join(",", excludeDates);
+
+            var rotas = await _clientRotaNameService.GetByExcludeDate(commaSeparatedDates);
 
             foreach (var date in dates)
             {
