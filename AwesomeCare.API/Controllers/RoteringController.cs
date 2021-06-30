@@ -347,11 +347,10 @@ namespace AwesomeCare.API.Controllers
 
 
 
-            var staffRotas = (from cr in _clientRotaRepository.Table
-                              join crd in _clientRotaDaysRepository.Table on cr.ClientRotaId equals crd.ClientRotaId
-                              join c in _clientRepository.Table on cr.ClientId equals c.ClientId
-                              join sr in _staffRotaRepository.Table on crd.RotaId equals sr.RotaId
+            var staffRotas = (from  sr in _staffRotaRepository.Table 
                               join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
+                              join crd in _clientRotaDaysRepository.Table on new { key1 = srp.ClientRotaTypeId, key2 = srp.ClientId } equals new { key1 = crd.ClientRotaTypeId.GetValueOrDefault(), key2 = crd.ClientId }
+                              join c in _clientRepository.Table on srp.ClientId equals c.ClientId                              
                               join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
                               join crt in _clientRotaTypeRepository.Table on srp.ClientRotaTypeId equals crt.ClientRotaTypeId
                               join r in _rotaRepository.Table on sr.RotaId equals r.RotaId
@@ -382,8 +381,8 @@ namespace AwesomeCare.API.Controllers
                                   ClockInAddress = srp.ClockInAddress,
                                   ClockOutAddress = srp.ClockOutAddress,
                                   Period = crt.RotaType,
-                                  ClientRotaTypeId = cr.ClientRotaTypeId,
-                                  ClientRotaId = cr.ClientRotaId,
+                                  ClientRotaTypeId = srp.ClientRotaTypeId,
+                                 // ClientRotaId = cr.ClientRotaId,
                                   ClientRotaDaysId = crd.ClientRotaDaysId,
                                   StartTime = crd.StartTime,
                                   StopTime = crd.StopTime,
@@ -544,7 +543,7 @@ namespace AwesomeCare.API.Controllers
                                                 StopTime = cl.StopTime,
                                                 DayofWeek = cl.DayOfWeek,
                                                 RotaDayOfWeekId = cl.RotaDayOfWeekId,
-                                                ClientRotaId = cl.ClientRotaId,
+                                              //  ClientRotaId = cl.ClientRotaId,
                                                 Tasks = (from t in cl.Tasks
                                                          select new DataTransferObject.DTOs.Rotering.Task
                                                          {
