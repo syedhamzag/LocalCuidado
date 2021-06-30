@@ -352,7 +352,7 @@ namespace AwesomeCare.API.Controllers
                               join sr in _staffRotaRepository.Table on crd.RotaId equals sr.RotaId
                               join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
                               join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
-                              join crt in _clientRotaTypeRepository.Table on cr.ClientRotaTypeId equals crt.ClientRotaTypeId
+                              join crt in _clientRotaTypeRepository.Table on srp.ClientRotaTypeId equals crt.ClientRotaTypeId
                               join r in _rotaRepository.Table on sr.RotaId equals r.RotaId
                               join rtwd in rotaDayOfWeekRepository.Table on crd.RotaDayofWeekId equals rtwd.RotaDayofWeekId
                               where sr.RotaDate >= sDate && sr.RotaDate <= sDate && sr.Staff == staffId && rtwd.RotaDayofWeekId == weekDayId
@@ -394,23 +394,23 @@ namespace AwesomeCare.API.Controllers
                                   ClientPostCode = c.PostCode,
                                   ClientRate = c.Rate,
                                   ClientTelephone = c.Telephone,
-                                  NumberOfStaff = c.NumberOfStaff
-                                  //Partners = (from p in sr.StaffRotaPartners
-                                  //            join strp in _staffPersonalInfoRepository.Table on p.StaffId equals strp.StaffPersonalInfoId
-                                  //            select new
-                                  //            {
-                                  //                Partner = strp.FirstName + " " + strp.MiddleName + " " + strp.LastName,
-                                  //                Telephone = strp.Telephone
-                                  //            }).ToList(),
-                                  //Tasks = (from tsk in crd.ClientRotaTask
-                                  //         join tk in rotaTaskRepository.Table on tsk.RotaTaskId equals tk.RotaTaskId
-                                  //         select new
-                                  //         {
-                                  //             RotaTaskId = tk.RotaTaskId,
-                                  //             TaskName = tk.TaskName,
-                                  //             GivenAcronym = tk.GivenAcronym,
-                                  //             NotGivenAcronym = tk.NotGivenAcronym
-                                  //         }).ToList()
+                                  NumberOfStaff = c.NumberOfStaff,
+                                  Partners = (from p in sr.StaffRotaPartners
+                                              join strp in _staffPersonalInfoRepository.Table on p.StaffId equals strp.StaffPersonalInfoId
+                                              select new
+                                              {
+                                                  Partner = strp.FirstName + " " + strp.MiddleName + " " + strp.LastName,
+                                                  Telephone = strp.Telephone
+                                              }).ToList(),
+                                  Tasks = (from tsk in crd.ClientRotaTask
+                                           join tk in rotaTaskRepository.Table on tsk.RotaTaskId equals tk.RotaTaskId
+                                           select new
+                                           {
+                                               RotaTaskId = tk.RotaTaskId,
+                                               TaskName = tk.TaskName,
+                                               GivenAcronym = tk.GivenAcronym,
+                                               NotGivenAcronym = tk.NotGivenAcronym
+                                           }).ToList()
                               }).ToList();
 
 
@@ -522,13 +522,13 @@ namespace AwesomeCare.API.Controllers
                                                 Feedback = cl.Feedback,
                                                 HandOver = cl.HandOver,
                                                 NumberOfStaff = cl.NumberOfStaff,
-                                                //Partners = (from p in cl.Partners
-                                                //            select new DataTransferObject.DTOs.Rotering.StaffRotaPartner
-                                                //            {
-                                                //                Partner = p.Partner,
-                                                //                Telephone = p.Telephone
-                                                //            }).ToList(),
-                                               // Period = cl.Period,
+                                                Partners = (from p in cl.Partners
+                                                            select new DataTransferObject.DTOs.Rotering.StaffRotaPartner
+                                                            {
+                                                                Partner = p.Partner,
+                                                                Telephone = p.Telephone
+                                                            }).ToList(),
+                                                Period = cl.Period,
                                                 ReferenceNumber = cl.ReferenceNumber,
                                                 Remark = cl.Remark,
                                                 Rota = cl.Rota,
@@ -544,14 +544,14 @@ namespace AwesomeCare.API.Controllers
                                                 DayofWeek = cl.DayOfWeek,
                                                 RotaDayOfWeekId = cl.RotaDayOfWeekId,
                                                 ClientRotaId = cl.ClientRotaId,
-                                                //Tasks = (from t in cl.Tasks
-                                                //         select new DataTransferObject.DTOs.Rotering.Task
-                                                //         {
-                                                //             GivenAcronym = t.GivenAcronym,
-                                                //             NotGivenAcronym = t.NotGivenAcronym,
-                                                //             RotaTaskId = t.RotaTaskId,
-                                                //             TaskName = t.TaskName
-                                                //         }).ToList()
+                                                Tasks = (from t in cl.Tasks
+                                                         select new DataTransferObject.DTOs.Rotering.Task
+                                                         {
+                                                             GivenAcronym = t.GivenAcronym,
+                                                             NotGivenAcronym = t.NotGivenAcronym,
+                                                             RotaTaskId = t.RotaTaskId,
+                                                             TaskName = t.TaskName
+                                                         }).ToList()
 
                                             }
                                             ).Distinct(new GetStaffRotaItemEqualityComparer()).ToList()
