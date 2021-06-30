@@ -24,6 +24,7 @@ using AwesomeCare.Model.Models;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using AutoMapper;
 using System.Globalization;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -194,10 +195,31 @@ namespace AwesomeCare.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> LiveRota(string startDate, string stopDate)
         {
+            var liveRotaViewModel = new LiveRota();
             // var date =DateTime.Now.ToString("yyyy-MM-dd");
             var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
             var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
             var rotaAdmin = await _rotaTaskService.LiveRota(sdate, edate);
+
+            var clockDifferences = new List<LiveRotaClockDifference>();
+
+            var groupedByPeriod = (from rt in rotaAdmin
+                                   group rt by rt.Period into rtGrp
+                                   select new
+                                   {
+                                       Period = rtGrp.Key,
+                                       Trackers = rtGrp.ToList()
+                                   }).ToList();
+
+            foreach (var grp in groupedByPeriod)
+            {
+                var totalClockDifference = CalculateTotalClockDifference(grp.Trackers);
+                clockDifferences.Add(new LiveRotaClockDifference
+                {
+                    Period = grp.Period,
+                    TotalClockDifference = totalClockDifference
+                });
+            }
 
             var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
@@ -208,9 +230,40 @@ namespace AwesomeCare.Admin.Controllers
 
                                }).ToList();
 
-            return View(groupedRota);
+            liveRotaViewModel.GroupLiveRotas = groupedRota;
+            liveRotaViewModel.ClockDifferences = clockDifferences;
+
+            return View(liveRotaViewModel);
         }
 
+        TimeSpan CalculateTotalClockDifference(List<LiveTracker> Trackers)
+        {
+            TimeSpan totalTime = new TimeSpan(0, 0, 0);
+            try
+            {
+
+                foreach (var rota in Trackers)
+                {
+                    if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
+                    {
+                        bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
+                        bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
+                        if (isClockInTimeValid && isClockOutTimeValid)
+                        {
+                            var clockDiff = clockOut.Subtract(clockIn);
+                            totalTime = totalTime.Add(clockDiff);
+                        }
+                    }
+                }
+
+                return totalTime;
+            }
+            catch (Exception ex)
+            {
+
+                return totalTime;
+            }
+        }
 
         [HttpPost]
         public IActionResult LiveRota(IFormCollection formCollection)
