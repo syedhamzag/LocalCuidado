@@ -33,6 +33,8 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Client> _clientRepository;
         private readonly IGenericRepository<ApplicationUser> applicationUserRepository;
         private readonly IGenericRepository<StaffWorkTeam> staffWorkTeamRepository;
+        private readonly IGenericRepository<ClientRota> clientRotaRepository;
+        private readonly IGenericRepository<ClientRotaDays> clientRotaDaysRepository;
         private IGenericRepository<StaffRating> _staffRatingRepository;
         private ILogger<StaffInfoController> _logger;
         private AwesomeCareDbContext _dbContext;
@@ -45,6 +47,8 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<StaffRating> staffRatingRepository,
             IGenericRepository<Client> clientRepository,
              IGenericRepository<StaffWorkTeam> staffWorkTeamRepository,
+             IGenericRepository<ClientRota> clientRotaRepository,
+             IGenericRepository<ClientRotaDays> clientRotaDaysRepository,
             IGenericRepository<ApplicationUser> applicationUserRepository)
         {
             _staffInfoRepository = staffInfoRepository;
@@ -59,6 +63,8 @@ namespace AwesomeCare.API.Controllers
             _clientRepository = clientRepository;
             this.applicationUserRepository = applicationUserRepository;
             this.staffWorkTeamRepository = staffWorkTeamRepository;
+            this.clientRotaRepository = clientRotaRepository;
+            this.clientRotaDaysRepository = clientRotaDaysRepository;
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
@@ -551,14 +557,17 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(model);
             }
             var postEntity = Mapper.Map<List<StaffRota>>(model);
-            await _staffRotaRepository.InsertEntities(postEntity);
+
+             await _staffRotaRepository.InsertEntities(postEntity);
 
 
             return Ok();
         }
 
+       
+
         [HttpGet("Rota/Get/{id}")]
-        [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> GetStaffRota(int id)
         {
             return Ok();

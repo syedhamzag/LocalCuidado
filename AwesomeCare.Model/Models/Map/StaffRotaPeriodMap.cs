@@ -64,9 +64,9 @@ namespace AwesomeCare.Model.Models.Map
         .IsRequired(false);
 
             builder.Property(p => p.ClockInMode)
-       .HasColumnName("ClockInMode")
-       .HasMaxLength(225)
-       .IsRequired(false);
+               .HasColumnName("ClockInMode")
+               .HasMaxLength(225)
+               .IsRequired(false);
 
             builder.Property(p => p.ClockOutMode)
                .HasColumnName("ClockOutMode")
@@ -83,6 +83,9 @@ namespace AwesomeCare.Model.Models.Map
               .HasMaxLength(50)
               .IsRequired(false);
 
+            builder.Property(p => p.ClientId)
+             .HasColumnName("ClientId")
+             .IsRequired(false);
             #endregion
 
             #region Relationship

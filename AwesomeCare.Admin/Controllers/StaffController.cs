@@ -10,6 +10,7 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
+using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.StaffCommunication;
 using AwesomeCare.Admin.Services.StaffWorkTeam;
@@ -40,7 +41,7 @@ namespace AwesomeCare.Admin.Controllers
         private IRotaDayofWeekService _rotaDayofWeekService;
         private IClientService _clientService;
         private IStaffWorkTeamService staffWorkTeamService;
-
+        private readonly IRotaTaskService rotaTaskService;
         const string profilePixFolder = "staffprofilepix";
         const string drivingFolder = "drivinglicense";
         const string rightToFolder = "righttowork";
@@ -55,12 +56,13 @@ namespace AwesomeCare.Admin.Controllers
 
         public StaffController(IStaffService staffService,
             IClientService clientService,
-            IRotaDayofWeekService rotaDayofWeekService, 
+            IRotaDayofWeekService rotaDayofWeekService,
             IClientRotaNameService clientRotaNameService,
-            ILogger<StaffController> logger, 
-            IFileUpload fileUpload, 
+            ILogger<StaffController> logger,
+            IFileUpload fileUpload,
             IStaffCommunication staffCommunication,
             IClientRotaTypeService clientRotaTypeService,
+            IRotaTaskService rotaTaskService,
             IStaffWorkTeamService staffWorkTeamService) : base(fileUpload)
         {
             _staffService = staffService;
@@ -72,6 +74,7 @@ namespace AwesomeCare.Admin.Controllers
             _rotaDayofWeekService = rotaDayofWeekService;
             _clientService = clientService;
             this.staffWorkTeamService = staffWorkTeamService;
+            this.rotaTaskService = rotaTaskService;
         }
         public async Task<IActionResult> Index()
         {
@@ -106,9 +109,9 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                SetOperationStatus(new OperationStatus { IsSuccessful = false, Message =  "All fields in the official section are required" });
+                SetOperationStatus(new OperationStatus { IsSuccessful = false, Message = "All fields in the official section are required" });
 
-                return RedirectToAction("Details",new { staffId= staff.StaffPersonalInfoId });
+                return RedirectToAction("Details", new { staffId = staff.StaffPersonalInfoId });
             }
 
             var postApproval = new PostStaffApproval
@@ -119,8 +122,8 @@ namespace AwesomeCare.Admin.Controllers
                 Status = staff.Status,
                 EmploymentDate = staff.EmploymentDate,
                 HasIdCard = staff.HasIdCard.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
-                HasUniform= staff.HasUniform.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
-                IsTeamLeader= staff.IsTeamLeader.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
+                HasUniform = staff.HasUniform.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
+                IsTeamLeader = staff.IsTeamLeader.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) ? true : false,
             };
             var kk = JsonConvert.SerializeObject(postApproval);
             var result = await _staffService.Approval(postApproval);
@@ -240,8 +243,11 @@ namespace AwesomeCare.Admin.Controllers
         {
             List<PostStaffRota> rotas = new List<PostStaffRota>();
             var rotaDayofWeeks = await _rotaDayofWeekService.Get();
+
             foreach (var day in model.RotaDays)
             {
+                var rotaId = day.RotaId;
+                var attachedRotaClients = await rotaTaskService.GetAttachRotaClientAsync(rotaId);
 
                 foreach (var staff in day.SelectedStaffs)
                 {
@@ -255,12 +261,17 @@ namespace AwesomeCare.Admin.Controllers
                         rota.RotaDate = day.Date;//.ToString("MM/dd/yyyy");
                         rota.RotaId = day.RotaId;
                         rota.RotaDayofWeekId = dayOfWeekId;
-                        rota.StaffRotaPeriods = (from rp in day.RotaTypes
-                                                 where rp.IsSelected
-                                                 select new PostStaffRotaPeriod
-                                                 {
-                                                     ClientRotaTypeId = rp.ClientRotaTypeId
-                                                 }).ToList();
+                        foreach (var rotaClient in attachedRotaClients)
+                        {
+                            rota.StaffRotaPeriods = (from rp in day.RotaTypes
+                                                     where rp.IsSelected
+                                                     select new PostStaffRotaPeriod
+                                                     {
+                                                         ClientRotaTypeId = rp.ClientRotaTypeId,
+                                                         ClientId = rotaClient.ClientId
+                                                     }).ToList();
+                        }
+
                         rota.Staff = staff;
                         rota.StaffRotaPartners = (from pt in day.SelectedStaffs
                                                   where pt != staff
@@ -294,7 +305,7 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
 
-          
+
             string sdate = DateTime.TryParseExact(model.StartDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime sdatetime) ? sdatetime.ToString("yyyy-MM-dd") : model.StartDate;
             string edate = DateTime.TryParseExact(model.StopDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime edatetime) ? edatetime.ToString("yyyy-MM-dd") : model.StopDate;
 
@@ -302,7 +313,7 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
-        [HttpGet("Profile/Edit",Name = "EditProfile")]
+        [HttpGet("Profile/Edit", Name = "EditProfile")]
         public async Task<IActionResult> EditProfile(int staffId)
         {
             var staffInfo = await _staffService.GetStaff(staffId);
@@ -319,7 +330,7 @@ namespace AwesomeCare.Admin.Controllers
 
             var workTeams = await staffWorkTeamService.Get();
             if (!ModelState.IsValid)
-            {               
+            {
                 model.WorkTeams = workTeams.Select(w => new SelectListItem(w.WorkTeam, w.StaffWorkTeamId.ToString())).ToList();
                 return View(model);
             }
@@ -391,7 +402,7 @@ namespace AwesomeCare.Admin.Controllers
 
 
 
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Operation successful" :content });
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Operation successful" : content });
             if (!result.IsSuccessStatusCode)
             {
                 model.WorkTeams = workTeams.Select(w => new SelectListItem(w.WorkTeam, w.StaffWorkTeamId.ToString())).ToList();
@@ -544,8 +555,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             var model = new StaffFeedback();
             await FeedbackItems(model, staffpersonalInfoId);
-           // var feedbacks = await _staffService.GetClientFeedback(staffpersonalInfoId);
-           // model.StaffRatings = feedbacks;
+            // var feedbacks = await _staffService.GetClientFeedback(staffpersonalInfoId);
+            // model.StaffRatings = feedbacks;
             return View(model);
         }
         [HttpPost]
@@ -556,7 +567,7 @@ namespace AwesomeCare.Admin.Controllers
                 await FeedbackItems(model, model.StaffPersonalInfoId);
                 return View(model);
             }
-          
+
             var result = await _staffService.PostClientFeedback(model);
             var content = await result.Content.ReadAsStringAsync();
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Feedback Successfully saved" : "An Error Occurred" });
@@ -569,7 +580,7 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("Feedback", new { staffpersonalInfoId = model.StaffPersonalInfoId });
         }
 
-        async Task FeedbackItems(StaffFeedback staffFeedback,int staffpersonalInfoId)
+        async Task FeedbackItems(StaffFeedback staffFeedback, int staffpersonalInfoId)
         {
             var clients = await _clientService.GetClients();
             var feedbacks = await _staffService.GetClientFeedback(staffpersonalInfoId);
