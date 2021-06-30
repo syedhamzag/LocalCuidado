@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using AwesomeCare.DataTransferObject.EqualityComparers;
+using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -777,5 +778,34 @@ namespace AwesomeCare.API.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Get Clients attached to the specified Rota
+        /// </summary>
+        /// <param name="rotaId"></param>
+        /// <returns></returns>
+        [HttpGet("Rota/AttachedClient/{rotaId}")]
+        [ProducesResponseType(typeof(List<GetClientAttachedToRota>), StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAttachedClientByRotaId(int rotaId)
+        {
+
+            //Get Clients attached to the specified Rota
+            var clientByRota = await (from cl in _clientRotaRepository.Table
+                                      join cld in _clientRotaDaysRepository.Table on cl.ClientRotaId equals cld.ClientRotaId
+                                      where cld.RotaId == rotaId
+                                      select new GetClientAttachedToRota
+                                      {
+                                          ClientRotaId = cl.ClientRotaId,
+                                          ClientId = cl.ClientId,
+                                          ClientRotaTypeId = cl.ClientRotaTypeId,
+                                          RotaId = cld.RotaId
+                                      }).ToListAsync();
+
+
+            return Ok(clientByRota);
+        }
+
+
     }
 }

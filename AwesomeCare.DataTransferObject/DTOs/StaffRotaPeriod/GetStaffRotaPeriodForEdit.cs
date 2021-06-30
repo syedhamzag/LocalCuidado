@@ -16,5 +16,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod
         public string Feedback { get; set; }
         public string Comment { get; set; }
         public string HandOver { get; set; }
+        public int? ClientId { get; set; }
     }
 }

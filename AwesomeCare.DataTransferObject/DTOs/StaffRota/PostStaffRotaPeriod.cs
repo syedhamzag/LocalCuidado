@@ -10,6 +10,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffRota
         public int ClientRotaTypeId { get; set; }
         public string StartTime { get; set; }
         public string StopTime { get; set; }
-
+        public int? ClientId { get; set; }
     }
 }
