@@ -70,6 +70,7 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int spotCheckId)
         {
+            var client = await _clientService.GetClientDetail();
             var SpotCheck = _StaffSpotCheckService.Get(spotCheckId);
             var putEntity = new CreateStaffSpotCheck
             {
@@ -89,7 +90,8 @@ namespace AwesomeCare.Admin.Controllers
                 StaffDressCode = SpotCheck.Result.StaffDressCode,
                 StaffArriveOnTime = SpotCheck.Result.StaffArriveOnTime,
                 StaffId = SpotCheck.Result.StaffId,
-                Details = SpotCheck.Result.Details
+                Details = SpotCheck.Result.Details,
+                ClientList = client.Select(s => new SelectListItem(s.FullName,s.ClientId.ToString())).ToList(),
             };
             return View(putEntity);
         }

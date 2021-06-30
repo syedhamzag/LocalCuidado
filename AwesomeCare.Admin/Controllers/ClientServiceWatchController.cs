@@ -89,7 +89,27 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> View(int serviceId)
         {
             var ServiceWatch = await _clientServiceWatchService.Get(serviceId);
-            return View(ServiceWatch);
+            var putEntity = new CreateClientServiceWatch
+            {
+                WatchId = ServiceWatch.WatchId,
+                ClientId = ServiceWatch.ClientId,
+                Reference = ServiceWatch.Reference,
+                Attachment = ServiceWatch.Attachment,
+                Date = ServiceWatch.Date,
+                NextCheckDate = ServiceWatch.NextCheckDate,
+                Deadline = ServiceWatch.Deadline,
+                Contact = ServiceWatch.Contact,
+                Details = ServiceWatch.Details,
+                URL = ServiceWatch.URL,
+                Incident = ServiceWatch.Incident,
+                OfficerName = ServiceWatch.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Remarks = ServiceWatch.Remarks,
+                Observation = ServiceWatch.Observation,
+                Status = ServiceWatch.Status,
+                ActionRequired = ServiceWatch.ActionRequired,
+                PersonName = ServiceWatch.StaffName.Select(s => s.StaffName).ToList(),
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int serviceId, string sender, string password, string recipient, string Smtp)
         {

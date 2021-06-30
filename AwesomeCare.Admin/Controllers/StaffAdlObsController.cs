@@ -71,6 +71,7 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int obsId)
         {
+            var client = await _clientService.GetClientDetail();
             var AdlObs = _StaffAdlObsService.Get(obsId);
             var putEntity = new CreateStaffAdlObs
             {
@@ -93,6 +94,7 @@ namespace AwesomeCare.Admin.Controllers
                 FivePrinciples = AdlObs.Result.FivePrinciples,
                 Comments = AdlObs.Result.Comments,
                 OfficerName = AdlObs.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList(),
             };
             return View(putEntity);
         }

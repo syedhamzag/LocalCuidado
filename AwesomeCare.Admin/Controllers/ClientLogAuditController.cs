@@ -91,7 +91,37 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> View(int logId)
         {
             var LogAudit = await _clientlogAuditService.Get(logId);
-            return View(LogAudit);
+            var putEntity = new CreateClientLogAudit
+            {
+                LogAuditId = LogAudit.LogAuditId,
+                Reference = LogAudit.Reference,
+                ClientId = LogAudit.ClientId,
+                ActionRecommended = LogAudit.ActionRecommended,
+                ActionTaken = LogAudit.ActionTaken,
+                EvidenceFilePath = LogAudit.EvidenceFilePath,
+                Date = LogAudit.Date,
+                NextDueDate = LogAudit.NextDueDate,
+                Deadline = LogAudit.Deadline,
+                EvidenceOfActionTaken = LogAudit.EvidenceOfActionTaken,
+                LessonLearntAndShared = LogAudit.LessonLearntAndShared,
+                LogURL = LogAudit.LogURL,
+                NameOfAuditor = LogAudit.NameOfAuditor,
+                Observations = LogAudit.Observations,
+                OfficerName = LogAudit.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Remarks = LogAudit.Remarks,
+                RepeatOfIncident = LogAudit.RepeatOfIncident,
+                RotCause = LogAudit.RotCause,
+                Status = LogAudit.Status,
+                ThinkingServiceUsers = LogAudit.ThinkingServiceUsers,
+                Communication = LogAudit.Communication,
+                ImproperDocumentation = LogAudit.ImproperDocumentation,
+                IsCareDifference = LogAudit.IsCareDifference,
+                IsCareExpected = LogAudit.IsCareExpected,
+                ProperDocumentation = LogAudit.ProperDocumentation,
+                ThinkingStaff = LogAudit.ThinkingStaff,
+                ThinkingStaffStop = LogAudit.ThinkingStaffStop,
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int logId, string sender,string password, string recipient, string Smtp)
         {

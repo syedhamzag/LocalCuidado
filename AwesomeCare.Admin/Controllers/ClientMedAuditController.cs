@@ -93,7 +93,37 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> View(int medId)
         {
             var MedAudit = await _clientMedAuditService.Get(medId);
-            return View(MedAudit);
+            var putEntity = new CreateClientMedAudit
+            {
+                MedAuditId = MedAudit.MedAuditId,
+                Reference = MedAudit.Reference,
+                ClientId = MedAudit.ClientId,
+                ActionRecommended = MedAudit.ActionRecommended,
+                ActionTaken = MedAudit.ActionTaken,
+                Attachment = MedAudit.Attachment,
+                Date = MedAudit.Date,
+                NextDueDate = MedAudit.NextDueDate,
+                Deadline = MedAudit.Deadline,
+                EvidenceOfActionTaken = MedAudit.EvidenceOfActionTaken,
+                LessonLearntAndShared = MedAudit.LessonLearntAndShared,
+                LogURL = MedAudit.LogURL,
+                Auditor_Name = MedAudit.StaffName.Select(s => s.StaffName).ToList(),
+                Observations = MedAudit.Observations,
+                OfficerName = MedAudit.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Remarks = MedAudit.Remarks,
+                RepeatOfIncident = MedAudit.RepeatOfIncident,
+                RotCause = MedAudit.RotCause,
+                Status = MedAudit.Status,
+                ThinkingServiceUsers = MedAudit.ThinkingServiceUsers,
+                GapsInAdmistration = MedAudit.GapsInAdmistration,
+                RightsOfMedication = MedAudit.RightsOfMedication,
+                MarChartReview = MedAudit.MarChartReview,
+                MedicationConcern = MedAudit.MedicationConcern,
+                HardCopyReview = MedAudit.HardCopyReview,
+                MedicationSupplyEfficiency = MedAudit.MedicationSupplyEfficiency,
+                MedicationInfoUploadEefficiency = MedAudit.MedicationInfoUploadEefficiency,
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int medId, string sender, string password, string recipient, string Smtp)
         {

@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
 @model CreateStaffReference
 @{
-    ViewData["Title"] = "Update Staff Reference";
+    ViewData["Title"] = "View Staff Reference";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -16,147 +16,115 @@
 
             </div>
             <div class="body">
-                <form asp-route="Edit" method="post" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-xs-8 col-sm-8 col-md-8">
-                            <input type="hidden" asp-for="StaffReferenceId" />
-                            <input type="hidden" asp-for="StaffId" />
-                            <input type="hidden" asp-for="Attachment" />
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">DATE</label>
-                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="Date" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Applicant Role</label>
-                                    <select class="custom-select" asp-for="ApplicantRole" asp-items="Model.ClientList">
-                                    </select>
-                                    <span asp-validation-for="ApplicantRole" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Reference</label>
-                                    <input type="text" class="form-control" asp-for="Reference" readonly />
-                                    <span asp-validation-for="Reference" class="text-danger"></span>
-                                </div>
+                <div class="row">
+                    <div class="col-xs-8 col-sm-8 col-md-8">
+                        <input type="hidden" asp-for="StaffReferenceId" />
+                        <input type="hidden" asp-for="StaffId" />
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">DATE</label>
+                                <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Date Of Employment</label>
-                                    <baserecord asp-key="Date_Of_Employment" asp-for="DateofEmployement" asp-items="null" />
-                                    <span asp-validation-for="DateofEmployement" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">TeamWork</label>
-                                    <baserecord asp-key="TeamWork" asp-for="TeamWork" asp-items="null" />
-                                    <span asp-validation-for="TeamWork" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Integrity</label>
-                                    <baserecord asp-key="Integrity" asp-for="Integrity" asp-items="null" />
-                                    <span asp-validation-for="Integrity" class="text-danger"></span>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Applicant Role</label>
+                                <select class="custom-select" asp-for="ApplicantRole" asp-items="@Model.ClientList">
+                                </select>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Knowledgeable</label>
-                                    <baserecord asp-key="Knowledge" asp-for="Knowledgeable" asp-items="null" />
-                                    <span asp-validation-for="Knowledgeable" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Caring</label>
-                                    <baserecord asp-key="Caring" asp-for="Caring" asp-items="null" />
-                                    <span asp-validation-for="Caring" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Work Under Pressure</label>
-                                    <baserecord asp-key="Work_Under_Pressure" asp-for="WorkUnderPressure" asp-items="null" />
-                                    <span asp-validation-for="WorkUnderPressure" class="text-danger"></span>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Reference</label>
+                                <input type="text" class="form-control" asp-for="Reference" readonly />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Previous Experience In Care</label>
-                                    <baserecord asp-key="Previous_Experience" asp-for="PreviousExperience" asp-items="null" />
-                                    <span asp-validation-for="PreviousExperience" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Status</label>
-                                    <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
-                                    <span asp-validation-for="Status" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Date Of Exit</label>
-                                    <input type="text" asp-for="DateofExit" class="form-control" />
-                                    <span asp-validation-for="DateofExit" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Rehire Staff</label>
-                                    <input type="text" asp-for="RehireStaff" class="form-control" />
-                                    <span asp-validation-for="RehireStaff" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Relationship</label>
-                                    <input type="text" asp-for="Relationship" class="form-control" />
-                                    <span asp-validation-for="Relationship" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Refree Name</label>
-                                    <input type="text" asp-for="RefreeName" class="form-control" />
-                                    <span asp-validation-for="RefreeName" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Confirmed By</label>
-                                    <select class="custom-select" asp-for="ConfirmedBy" asp-items="@Model.OfficerToActList">
-
-                                    </select>
-                                    <span asp-validation-for="ConfirmedBy" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Address</label>
-                                    <textarea type="text" asp-for="Address" class="form-control"></textarea>
-                                    <span asp-validation-for="Address" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Email</label>
-                                    <textarea type="text" asp-for="Email" class="form-control"></textarea>
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Contact</label>
-                                    <textarea type="text" asp-for="Contact" class="form-control"></textarea>
-                                    <span asp-validation-for="Contact" class="text-danger"></span>
-                                </div>
-                            </div>
-
                         </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <div class="card">
-                                <div class="header">
-                                    <h2>Attachment Image<small></small></h2>
-                                </div>
-                                <div class="body">
-                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                    <span asp-validation-for="Attach" class="text-danger"></span>
-                                </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Date Of Employment</label>
+                                <baserecord asp-key="Date_Of_Employment" asp-for="DateofEmployement" asp-items="null" />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                                </div>
-                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <a asp-action="Index" asp-route-staffId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">TeamWork</label>
+                                <baserecord asp-key="TeamWork" asp-for="TeamWork" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Integrity</label>
+                                <baserecord asp-key="Integrity" asp-for="Integrity" asp-items="null" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Knowledgeable</label>
+                                <baserecord asp-key="Knowledge" asp-for="Knowledgeable" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Caring</label>
+                                <baserecord asp-key="Caring" asp-for="Caring" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Work Under Pressure</label>
+                                <baserecord asp-key="Work_Under_Pressure" asp-for="WorkUnderPressure" asp-items="null" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Previous Experience In Care</label>
+                                <baserecord asp-key="Previous_Experience" asp-for="PreviousExperience" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Status</label>
+                                <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Date Of Exit</label>
+                                <input type="text" asp-for="DateofExit" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Rehire Staff</label>
+                                <input type="text" asp-for="RehireStaff" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Relationship</label>
+                                <input type="text" asp-for="Relationship" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Refree Name</label>
+                                <input type="text" asp-for="RefreeName" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Confirmed By</label>
+                                <select class="custom-select" asp-for="ConfirmedBy" asp-items="@Model.OfficerToActList">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Address</label>
+                                <textarea type="text" asp-for="Address" class="form-control" readonly></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Email</label>
+                                <textarea type="text" asp-for="Email" class="form-control" readonly></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Contact</label>
+                                <textarea type="text" asp-for="Contact" class="form-control" readonly></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="card">
+                            <div class="header">
+                                <h2>Attachment Image<small></small></h2>
+                            </div>
+                            <div class="body">
+                                <img src="@Model.Attach" alt="image" width="300" height="240" />
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -165,6 +133,12 @@
     <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
     <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.custom-select').attr("disabled", "disabled");
+        });
+    </script>
 }
 
 @section Scripts{

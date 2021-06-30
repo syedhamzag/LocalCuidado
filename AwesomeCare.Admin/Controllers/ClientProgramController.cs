@@ -88,7 +88,27 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> View(int progId)
         {
             var Program = await _clientProgramService.Get(progId);
-            return View(Program);
+            var putEntity = new CreateClientProgram
+            {
+                ProgramId = Program.ProgramId,
+                ClientId = Program.ClientId,
+                Reference = Program.Reference,
+                Attachment = Program.Attachment,
+                Date = Program.Date,
+                NextCheckDate = Program.NextCheckDate,
+                Deadline = Program.Deadline,
+                ProgramOfChoice = Program.ProgramOfChoice,
+                URL = Program.URL,
+                DaysOfChoice = Program.DaysOfChoice,
+                OfficerName = Program.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Remarks = Program.Remarks,
+                DetailsOfProgram = Program.DetailsOfProgram,
+                Status = Program.Status,
+                ActionRequired = Program.ActionRequired,
+                Observation = Program.Observation,
+                PlaceLocationProgram = Program.PlaceLocationProgram,
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int progId, string sender, string password, string recipient, string Smtp)
         {

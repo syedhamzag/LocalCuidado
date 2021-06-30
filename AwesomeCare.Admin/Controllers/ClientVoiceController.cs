@@ -87,7 +87,37 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> View(int vId)
         {
             var Voice = await _clientVoiceService.Get(vId);
-            return View(Voice);
+            var putEntity = new CreateClientVoice
+            {
+                VoiceId = Voice.VoiceId,
+                ClientId = Voice.ClientId,
+                Reference = Voice.Reference,
+                Attachment = Voice.Attachment,
+                Date = Voice.Date,
+                Deadline = Voice.Deadline,
+                EvidenceOfActionTaken = Voice.EvidenceOfActionTaken,
+                LessonLearntAndShared = Voice.LessonLearntAndShared,
+                URL = Voice.URL,
+                Caller_Name = Voice.CallerName.Select(s => s.StaffName).ToList(),
+                OfficerName = Voice.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Remarks = Voice.Remarks,
+                RotCause = Voice.RotCause,
+                Status = Voice.Status,
+                ActionRequired = Voice.ActionRequired,
+                ActionsTakenByMPCC = Voice.ActionsTakenByMPCC,
+                AreasOfImprovements = Voice.AreasOfImprovements,
+                HealthGoalLongTerm = Voice.HealthGoalLongTerm,
+                HealthGoalShortTerm = Voice.HealthGoalShortTerm,
+                InterestedInPrograms = Voice.InterestedInPrograms,
+                NextCheckDate = Voice.NextCheckDate,
+                OfficeStaffSupport = Voice.OfficeStaffSupport,
+                RateServiceRecieving = Voice.RateServiceRecieving,
+                RateStaffAttending = Voice.RateStaffAttending,
+                SomethingSpecial = Voice.SomethingSpecial,
+                Best_Staff = Voice.GoodStaff.Select(s => s.StaffName).ToList(),
+                Poor_Staff = Voice.PoorStaff.Select(s => s.StaffName).ToList(),
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int vId, string sender, string password, string recipient, string Smtp)
         {

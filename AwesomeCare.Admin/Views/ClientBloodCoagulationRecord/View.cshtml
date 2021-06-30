@@ -66,7 +66,7 @@
                             </div>
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label class="control-label">Physician Name</label>
-                                <select class="selectpicker" data-live-search="true" multiple>
+                                <select class="selectpicker">
                                     @foreach (var item in Model.PhysicianName)
                                     {
                                         <option>@item</option>
@@ -154,15 +154,17 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
 
-    $('.custom-select').attr("disabled","disabled");
-
-</script>
 @section VendorScripts{
     <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
     <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.custom-select').attr("disabled", "disabled");
+        });
+    </script>
 }
 
 @section Scripts{

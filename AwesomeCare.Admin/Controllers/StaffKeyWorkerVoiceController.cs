@@ -70,8 +70,37 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int workerId)
         {
+            var client = await _clientService.GetClientDetail();
             var keyWorker = await _StaffKeyWorkerVoiceService.Get(workerId);
-            return View(keyWorker);
+            var putEntity = new CreateStaffKeyWorkerVoice
+            {
+                KeyWorkerId = keyWorker.KeyWorkerId,
+                Reference = keyWorker.Reference,
+                Attachment = keyWorker.Attachment,
+                Date = keyWorker.Date,
+                Deadline = keyWorker.Deadline,
+                URL = keyWorker.URL,
+                Remarks = keyWorker.Remarks,
+                Status = keyWorker.Status,
+                ActionRequired = keyWorker.ActionRequired,
+                NextCheckDate = keyWorker.NextCheckDate,
+                ChangesWeNeed = keyWorker.ChangesWeNeed,
+                Details = keyWorker.Details,
+                NotComfortableServices = keyWorker.NotComfortableServices,
+                MovingAndHandling = keyWorker.MovingAndHandling,
+                OfficerName = keyWorker.OfficerToAct.Select(s => s.StaffName).ToList(),
+                ServicesRequiresTime = keyWorker.ServicesRequiresTime,
+                MedicationChanges = keyWorker.MedicationChanges,
+                NutritionalChanges = keyWorker.NutritionalChanges,
+                RiskAssessment = keyWorker.RiskAssessment,
+                ServicesRequiresServices = keyWorker.ServicesRequiresServices,
+                WellSupportedServices = keyWorker.WellSupportedServices,
+                WorkteamName = keyWorker.Workteam.Select(s => s.StaffName).ToList(),
+                StaffId = keyWorker.StaffId,
+                HealthAndWellNessChanges = keyWorker.HealthAndWellNessChanges,
+                ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList(),
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int workerId, string sender, string password, string recipient, string Smtp)
         {
