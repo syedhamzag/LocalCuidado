@@ -108,14 +108,18 @@ namespace AwesomeCare.Admin.Controllers
                 NewINR = BloodCoagulationRecord.Result.NewINR,
                 BloodStatus = BloodCoagulationRecord.Result.BloodStatus,
                 Comment = BloodCoagulationRecord.Result.Comment,
-                Staff_Name = BloodCoagulationRecord.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = BloodCoagulationRecord.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponce = BloodCoagulationRecord.Result.PhysicianResponce,
                 OfficerToActName = BloodCoagulationRecord.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = BloodCoagulationRecord.Result.Deadline,
                 Remark = BloodCoagulationRecord.Result.Remark,
                 Status = BloodCoagulationRecord.Result.Status,
                 TargetINRAttach = BloodCoagulationRecord.Result.TargetINRAttach,
+                OfficerToAct = BloodCoagulationRecord.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = BloodCoagulationRecord.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = BloodCoagulationRecord.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = BloodCoagulationRecord.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = BloodCoagulationRecord.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = BloodCoagulationRecord.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

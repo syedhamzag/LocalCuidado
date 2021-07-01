@@ -103,13 +103,16 @@ namespace AwesomeCare.Admin.Controllers
                 StatusImage = FoodIntake.Result.StatusImage,
                 StatusAttach = FoodIntake.Result.StatusAttach,
                 Comment = FoodIntake.Result.Comment,
-                Staff_Name = FoodIntake.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = FoodIntake.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = FoodIntake.Result.PhysicianResponse,
-                OfficerName = FoodIntake.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = FoodIntake.Result.Deadline,
                 Remarks = FoodIntake.Result.Remarks,
                 Status = FoodIntake.Result.Status,
+                OfficerToAct = FoodIntake.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = FoodIntake.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = FoodIntake.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = FoodIntake.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = FoodIntake.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = FoodIntake.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

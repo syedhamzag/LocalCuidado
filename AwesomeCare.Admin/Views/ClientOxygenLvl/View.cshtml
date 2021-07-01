@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Client;
 @model CreateClientOxygenLvl
 @{
-    ViewData["Title"] = "Update Client Oxygen Lvl";
+    ViewData["Title"] = "View Client Oxygen Lvl";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -16,128 +16,108 @@
 
             </div>
             <div class="body">
-                <form asp-route="Edit" method="post" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-xs-8 col-sm-8 col-md-8">
-                            <input type="hidden" asp-for="OxygenLvlId" />
-                            <input type="hidden" asp-for="ClientId" />
-                            <input type="hidden" value="@Model.SeeChartAttach" asp-for="SeeChartAttach">
-                            <input type="hidden" value="@Model.TargetOxygenAttach" asp-for="TargetOxygenAttach">
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Date</label>
-                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="Date" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Time</label>
-                                    <input type="text" asp-for="Time" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="Time" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Deadline</label>
-                                    <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="Deadline" class="text-danger"></span>
-                                </div>
+                <div class="row">
+                    <div class="col-xs-8 col-sm-8 col-md-8">
+                        <input type="hidden" asp-for="OxygenLvlId" />
+                        <input type="hidden" asp-for="ClientId" />
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Date</label>
+                                <input type="text" asp-for="Date" class="form-control" readonly />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Officer To Act</label>
-                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="OfficerToAct" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Staff Name</label>
-                                    <select asp-for="StaffName" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="StaffName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Physician Name</label>
-                                    <select asp-for="Physician" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="Physician" class="text-danger"></span>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Time</label>
+                                <input type="text" asp-for="Time" class="form-control" readonly />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">SeeChart Status</label>
-                                    <baserecord asp-key="SeeChart_Status" asp-for="SeeChart" asp-items="null" />
-                                    <span asp-validation-for="SeeChart" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Target Oxygen</label>
-                                    <baserecord asp-key="Target_Oxygen" asp-for="TargetOxygen" asp-items="null" />
-                                    <span asp-validation-for="TargetOxygen" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Current Reading</label>
-                                    <input type="text" asp-for="CurrentReading" class="form-control" />
-                                    <span asp-validation-for="CurrentReading" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Status</label>
-                                    <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
-                                    <span asp-validation-for="Status" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Reference</label>
-                                    <input type="text" asp-for="Reference" class="form-control" />
-                                    <span asp-validation-for="Reference" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Comment</label>
-                                    <textarea type="text" asp-for="Comment" class="form-control"></textarea>
-                                    <span asp-validation-for="Comment" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Physician Response</label>
-                                    <textarea type="text" asp-for="PhysicianResponse" class="form-control"></textarea>
-                                    <span asp-validation-for="PhysicianResponse" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Remarks</label>
-                                    <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
-                                    <span asp-validation-for="Remarks" class="text-danger"></span>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Deadline</label>
+                                <input type="text" asp-for="Deadline" class="form-control" readonly />
                             </div>
                         </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <div class="card">
-                                <div class="header">
-                                    <h2>SeeChart Attachment<small></small></h2>
-                                </div>
-                                <div class="body">
-                                    <input type="file" asp-for="SeeChartAttachment" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                    <span asp-validation-for="SeeChartAttachment" class="text-danger"></span>
-                                </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Officer To Act</label>
+                                <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                             </div>
-                            <div class="card">
-                                <div class="header">
-                                    <h2>Target Oxygen Attachment<small></small></h2>
-                                </div>
-                                <div class="body">
-                                    <input type="file" asp-for="TargetOxygenAttachment" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                    <span asp-validation-for="TargetOxygenAttachment" class="text-danger"></span>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Staff Name</label>
+                                <select asp-for="StaffName" asp-items="@Model.StaffNameList" class="selectpicker" data-live-search="true" multiple></select>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                                </div>
-                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Physician Name</label>
+                                <select asp-for="Physician" asp-items="@Model.PhysicianList" class="selectpicker" data-live-search="true" multiple></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">SeeChart Status</label>
+                                <baserecord asp-key="SeeChart_Status" asp-for="SeeChart" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Target Oxygen</label>
+                                <baserecord asp-key="Target_Oxygen" asp-for="TargetOxygen" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Current Reading</label>
+                                <input type="text" asp-for="CurrentReading" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Status</label>
+                                <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Reference</label>
+                                <input type="text" asp-for="Reference" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Comment</label>
+                                <textarea type="text" asp-for="Comment" class="form-control" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Physician Response</label>
+                                <textarea type="text" asp-for="PhysicianResponse" class="form-control" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Remarks</label>
+                                <textarea type="text" asp-for="Remarks" class="form-control" readonly></textarea>
                             </div>
                         </div>
                     </div>
-                </form>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="card">
+                            <div class="header">
+                                <h2>SeeChart Attachment<small></small></h2>
+                            </div>
+                            <div class="body">
+                                <img src="@Model.SeeChartAttach" alt="image" width="300" height="240" />
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="header">
+                                <h2>Target Oxygen Attachment<small></small></h2>
+                            </div>
+                            <div class="body">
+                                <img src="@Model.TargetOxygenAttach" alt="image" width="300" height="240" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                            </div>
+                            <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -146,6 +126,12 @@
     <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
     <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.custom-select').attr("disabled", "disabled");
+        });
+    </script>
 }
 
 @section Scripts{

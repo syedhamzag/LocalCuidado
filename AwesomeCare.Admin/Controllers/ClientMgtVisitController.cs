@@ -89,7 +89,33 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> View(int mgtId)
         {
             var MgtVisit = await _clientMgtVisitService.Get(mgtId);
-            return View(MgtVisit);
+            var putEntity = new CreateClientMgtVisit
+            {
+                VisitId = MgtVisit.VisitId,
+                Reference = MgtVisit.Reference,
+                ClientId = MgtVisit.ClientId,
+                Attachment = MgtVisit.Attachment,
+                Date = MgtVisit.Date,
+                Deadline = MgtVisit.Deadline,
+                EvidenceOfActionTaken = MgtVisit.EvidenceOfActionTaken,
+                LessonLearntAndShared = MgtVisit.LessonLearntAndShared,
+                URL = MgtVisit.URL,
+                HowToComplain = MgtVisit.HowToComplain,
+                OfficerName = MgtVisit.OfficerToAct.Select(s => s.StaffName).ToList(),
+                Remarks = MgtVisit.Remarks,
+                RotCause = MgtVisit.RotCause,
+                Status = MgtVisit.Status,
+                ActionRequired = MgtVisit.ActionRequired,
+                ActionsTakenByMPCC = MgtVisit.ActionsTakenByMPCC,
+                ImprovementExpect = MgtVisit.ImprovementExpect,
+                Observation = MgtVisit.Observation,
+                RateManagers = MgtVisit.RateManagers,
+                ServiceRecommended = MgtVisit.ServiceRecommended,
+                NextCheckDate = MgtVisit.NextCheckDate,
+                RateServiceRecieving = MgtVisit.RateServiceRecieving,
+                Staff_Name = MgtVisit.StaffName.Select(s => s.StaffName).ToList(),
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int mgtId, string sender, string password, string recipient, string Smtp)
         {

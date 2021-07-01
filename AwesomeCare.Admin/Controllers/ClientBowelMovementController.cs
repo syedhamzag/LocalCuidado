@@ -103,16 +103,19 @@ namespace AwesomeCare.Admin.Controllers
                 StatusImage = BowelMovement.Result.StatusImage,
                 StatusAttach = BowelMovement.Result.StatusAttach,
                 Comment = BowelMovement.Result.Comment,
-                Staff_Name = BowelMovement.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = BowelMovement.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = BowelMovement.Result.PhysicianResponse,
-                OfficerName = BowelMovement.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = BowelMovement.Result.Deadline,
                 Remarks = BowelMovement.Result.Remarks,
                 Status = BowelMovement.Result.Status,
                 Reference = BowelMovement.Result.Reference,
                 ColorAttach = BowelMovement.Result.ColorAttach,
-                TypeAttach = BowelMovement.Result.TypeAttach
+                TypeAttach = BowelMovement.Result.TypeAttach,
+                OfficerToAct = BowelMovement.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = BowelMovement.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = BowelMovement.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = BowelMovement.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = BowelMovement.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = BowelMovement.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

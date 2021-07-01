@@ -71,28 +71,31 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int medCompId)
         {
-            var MedComp = _StaffMedCompService.Get(medCompId);
+            var client = await _clientService.GetClientDetail();
+            var MedComp = await _StaffMedCompService.Get(medCompId);
             var putEntity = new CreateStaffMedComp
             {
-                ClientId = MedComp.Result.ClientId,
-                Attachment = MedComp.Result.Attachment,
-                Date = MedComp.Result.Date,
-                Deadline = MedComp.Result.Deadline,
-                URL = MedComp.Result.URL,
-                OfficerName = MedComp.Result.OfficerToAct.Select(s=>s.StaffName).ToList(),
-                Remarks = MedComp.Result.Remarks,
-                Status = MedComp.Result.Status,
-                ActionRequired = MedComp.Result.ActionRequired,
-                NextCheckDate = MedComp.Result.NextCheckDate,
-                StaffId = MedComp.Result.StaffId,
-                RateStaff = MedComp.Result.RateStaff,
-                UnderstandingofMedication = MedComp.Result.UnderstandingofMedication,
-                UnderstandingofRights = MedComp.Result.UnderstandingofRights,
-                ReadingMedicalPrescriptions = MedComp.Result.ReadingMedicalPrescriptions,
-                Details = MedComp.Result.Details,
-                CarePlan = MedComp.Result.CarePlan
+                ClientId = MedComp.ClientId,
+                Reference = MedComp.Reference,
+                Attachment = MedComp.Attachment,
+                Date = MedComp.Date,
+                Deadline = MedComp.Deadline,
+                URL = MedComp.URL,
+                OfficerToAct = MedComp.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                Remarks = MedComp.Remarks,
+                Status = MedComp.Status,
+                ActionRequired = MedComp.ActionRequired,
+                NextCheckDate = MedComp.NextCheckDate,
+                StaffId = MedComp.StaffId,
+                RateStaff = MedComp.RateStaff,
+                UnderstandingofMedication = MedComp.UnderstandingofMedication,
+                UnderstandingofRights = MedComp.UnderstandingofRights,
+                ReadingMedicalPrescriptions = MedComp.ReadingMedicalPrescriptions,
+                Details = MedComp.Details,
+                CarePlan = MedComp.CarePlan,
+                ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList(),
             };
-            return View(MedComp);
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int medCompId, string sender, string password, string recipient, string Smtp)
         {

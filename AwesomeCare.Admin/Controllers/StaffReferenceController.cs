@@ -79,9 +79,37 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int refId)
         {
+            var client = await _clientService.GetClientDetail();
+            var staff = await _staffService.GetStaffs();
             var staffRef = await _StaffReferenceService.Get(refId);
-            var json = JsonConvert.SerializeObject(staffRef);
-            return View(staffRef);
+            var putEntity = new CreateStaffReference
+            {
+                StaffReferenceId = staffRef.StaffReferenceId,
+                Reference = staffRef.Reference,
+                Address = staffRef.Address,
+                ApplicantRole = staffRef.ApplicantRole,
+                Caring = staffRef.Caring,
+                ConfirmedBy = staffRef.ConfirmedBy,
+                Contact = staffRef.Contact,
+                DateofEmployement = staffRef.DateofEmployement,
+                DateofExit = staffRef.DateofExit,
+                RehireStaff = staffRef.RehireStaff,
+                RefreeName = staffRef.RefreeName,
+                Relationship = staffRef.Relationship,
+                StaffId = staffRef.StaffId,
+                WorkUnderPressure = staffRef.WorkUnderPressure,
+                TeamWork = staffRef.TeamWork,
+                Email = staffRef.Email,
+                PreviousExperience = staffRef.PreviousExperience,
+                Knowledgeable = staffRef.Knowledgeable,
+                Integrity = staffRef.Integrity,
+                Date = staffRef.Date,
+                Status = staffRef.Status,
+                Attachment = staffRef.Attachment,
+                ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList(),
+                OfficerToActList = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
+            };
+            return View(putEntity);
         }
         public async Task<IActionResult> Email(int refId, string sender, string password, string recipient, string Smtp)
         {

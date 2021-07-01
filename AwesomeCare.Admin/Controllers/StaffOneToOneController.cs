@@ -80,6 +80,7 @@ namespace AwesomeCare.Admin.Controllers
                 URL = OneToOne.Result.URL,
                 OfficerToAct = OneToOne.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 Remarks = OneToOne.Result.Remarks,
+                Reference = OneToOne.Result.Reference,
                 Status = OneToOne.Result.Status,
                 ActionRequired = OneToOne.Result.ActionRequired,
                 CurrentEventArea = OneToOne.Result.CurrentEventArea,

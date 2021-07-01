@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
 @model CreateStaffKeyWorkerVoice
 @{
-    ViewData["Title"] = "Update Staff Key Voice Worker";
+    ViewData["Title"] = "View Staff Key Voice Worker";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -16,157 +16,124 @@
 
             </div>
             <div class="body">
-                <form asp-route="Edit" method="post" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-xs-8 col-sm-8 col-md-8">
-                            <input type="hidden" asp-for="KeyWorkerId" />
-                            <input type="hidden" asp-for="StaffId" />
-                            <input type="hidden" asp-for="Attachment" />
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">DATE</label>
-                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="Date" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">NEXT DUE DATE</label>
-                                    <input type="text" asp-for="NextCheckDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="NextCheckDate" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">DEADLINE</label>
-                                    <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="Deadline" class="text-danger"></span>
-                                </div>
+                <div class="row">
+                    <div class="col-xs-8 col-sm-8 col-md-8">
+                        <input type="hidden" asp-for="KeyWorkerId" />
+                        <input type="hidden" asp-for="StaffId" />
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">DATE</label>
+                                <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Team You Work For</label>
-                                    <select asp-for="TeamYouWorkFor" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="TeamYouWorkFor" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Uncomfortable Users Services</label>
-                                    <select class="custom-select" asp-for="NotComfortableServices" asp-items="Model.ClientList">
-                                    </select>
-                                    <span asp-validation-for="NotComfortableServices" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Requiring More Time</label>
-                                    <select class="custom-select" asp-for="ServicesRequiresTime" asp-items="Model.ClientList">
-                                    </select>
-                                    <span asp-validation-for="ServicesRequiresTime" class="text-danger"></span>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">NEXT DUE DATE</label>
+                                <input type="text" asp-for="NextCheckDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Requiring More Services</label>
-                                    <select class="custom-select" asp-for="ServicesRequiresServices" asp-items="Model.ClientList">
-                                    </select>
-                                    <span asp-validation-for="ServicesRequiresServices" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Details</label>
-                                    <baserecord asp-key="Details" asp-for="Details" asp-items="null" />
-                                    <span asp-validation-for="Details" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Officer to Take Action</label>
-                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="OfficerToAct" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Well Supported Services</label>
-                                    <baserecord asp-key="Well_Supported_Services" asp-for="WellSupportedServices" asp-items="null" />
-                                    <span asp-validation-for="WellSupportedServices" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Status</label>
-                                    <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
-                                    <span asp-validation-for="Status" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Reference</label>
-                                    <input type="text" asp-for="Reference" class="form-control"/>
-                                    <span asp-validation-for="Reference" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">URL</label>
-                                    <input type="text" asp-for="URL" class="form-control" />
-                                    <span asp-validation-for="URL" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Changes We Need To Make Client Happy</label>
-                                    <textarea type="text" asp-for="ChangesWeNeed" class="form-control"></textarea>
-                                    <span asp-validation-for="ChangesWeNeed" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Nutritional Changes</label>
-                                    <textarea type="text" asp-for="NutritionalChanges" class="form-control"></textarea>
-                                    <span asp-validation-for="NutritionalChanges" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Health And WellNess Changes</label>
-                                    <textarea type="text" asp-for="HealthAndWellNessChanges" class="form-control"></textarea>
-                                    <span asp-validation-for="HealthAndWellNessChanges" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Medication Changes</label>
-                                    <textarea type="text" asp-for="MedicationChanges" class="form-control"></textarea>
-                                    <span asp-validation-for="MedicationChanges" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Moving And Handling</label>
-                                    <textarea type="text" asp-for="MovingAndHandling" class="form-control"></textarea>
-                                    <span asp-validation-for="MovingAndHandling" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Risk Assessment</label>
-                                    <textarea type="text" asp-for="RiskAssessment" class="form-control"></textarea>
-                                    <span asp-validation-for="RiskAssessment" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Remrks</label>
-                                    <textarea type="text" asp-for="Remarks" class="form-control"></textarea>
-                                    <span asp-validation-for="Remarks" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Action Required</label>
-                                    <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
-                                    <span asp-validation-for="ActionRequired" class="text-danger"></span>
-                                </div>
-
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">DEADLINE</label>
+                                <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                             </div>
                         </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <div class="card">
-                                <div class="header">
-                                    <h2>Attachment Image<small></small></h2>
-                                </div>
-                                <div class="body">
-                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                    <span asp-validation-for="Attach" class="text-danger"></span>
-                                </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Team You Work For</label>
+                                <select asp-for="TeamYouWorkFor" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
-                                </div>
-                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                    <a asp-action="Index" asp-route-staffId="@Model.StaffId" class="btn btn-primary pull-left">Cancel</a>
-                                </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Uncomfortable Users Services</label>
+                                <select class="custom-select" asp-for="NotComfortableServices" asp-items="@Model.ClientList">
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Requiring More Time</label>
+                                <select class="custom-select" asp-for="ServicesRequiresTime" asp-items="@Model.ClientList">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Requiring More Services</label>
+                                <select class="custom-select" asp-for="ServicesRequiresServices" asp-items="@Model.ClientList">
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Details</label>
+                                <baserecord asp-key="Details" asp-for="Details" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Officer to Take Action</label>
+                                <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Well Supported Services</label>
+                                <baserecord asp-key="Well_Supported_Services" asp-for="WellSupportedServices" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Status</label>
+                                <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Reference</label>
+                                <input type="text" asp-for="Reference" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">URL</label>
+                                <input type="text" asp-for="URL" class="form-control" readonly />
+                            </div>
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Changes We Need To Make Client Happy</label>
+                                <textarea type="text" asp-for="ChangesWeNeed" class="form-control" readonly></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Nutritional Changes</label>
+                                <textarea type="text" asp-for="NutritionalChanges" class="form-control" readonly></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Health And WellNess Changes</label>
+                                <textarea type="text" asp-for="HealthAndWellNessChanges" class="form-control" readonly></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Medication Changes</label>
+                                <textarea type="text" asp-for="MedicationChanges" class="form-control" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Moving And Handling</label>
+                                <textarea type="text" asp-for="MovingAndHandling" class="form-control" readonly></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Risk Assessment</label>
+                                <textarea type="text" asp-for="RiskAssessment" class="form-control" readonly></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Remrks</label>
+                                <textarea type="text" asp-for="Remarks" class="form-control" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Action Required</label>
+                                <textarea type="text" asp-for="ActionRequired" class="form-control" readonly></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="card">
+                            <div class="header">
+                                <h2>Attachment Image<small></small></h2>
+                            </div>
+                            <div class="body">
+                                <img src="@Model.Attach" alt="image" width="300" height="240" />
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -175,6 +142,12 @@
     <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
     <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.custom-select').attr("disabled", "disabled");
+        });
+    </script>
 }
 
 @section Scripts{

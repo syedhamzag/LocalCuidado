@@ -102,15 +102,18 @@ namespace AwesomeCare.Admin.Controllers
                 CurrentReading = OxygenLvl.Result.CurrentReading,
                 SeeChart = OxygenLvl.Result.SeeChart,
                 Comment = OxygenLvl.Result.Comment,
-                Staff_Name = OxygenLvl.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = OxygenLvl.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = OxygenLvl.Result.PhysicianResponse,
-                OfficerName = OxygenLvl.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = OxygenLvl.Result.Deadline,
                 Remarks = OxygenLvl.Result.Remarks,
                 Status = OxygenLvl.Result.Status,
                 SeeChartAttach = OxygenLvl.Result.SeeChartAttach,
                 TargetOxygenAttach = OxygenLvl.Result.TargetOxygenAttach,
+                OfficerToAct = OxygenLvl.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = OxygenLvl.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = OxygenLvl.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = OxygenLvl.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = OxygenLvl.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = OxygenLvl.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }
