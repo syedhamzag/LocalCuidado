@@ -24,15 +24,15 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date</label>
-                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
+                                    <input type="text" asp-for="Date" class="form-control" readonly />
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Time</label>
-                                    <input type="text" asp-for="Time" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
+                                    <input type="text" asp-for="Time" class="form-control" readonly />
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Deadline</label>
-                                    <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
+                                    <input type="text" asp-for="Deadline" class="form-control" readonly />
                                 </div>
                             </div>
                             <div class="row">
@@ -42,11 +42,11 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff Name</label>
-                                    <select asp-for="StaffName" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="StaffName" asp-items="@Model.StaffNameList" class="selectpicker" data-live-search="true" multiple></select>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Physician Name</label>
-                                    <select asp-for="Physician" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="Physician" asp-items="@Model.PhysicianList" class="selectpicker" data-live-search="true" multiple></select>
                                 </div>
                             </div>
                             <div class="row">

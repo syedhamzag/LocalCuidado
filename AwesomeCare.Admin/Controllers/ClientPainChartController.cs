@@ -104,15 +104,18 @@ namespace AwesomeCare.Admin.Controllers
                 StatusImage = PainChart.Result.StatusImage,
                 StatusAttach = PainChart.Result.StatusAttach,
                 Comment = PainChart.Result.Comment,
-                Staff_Name = PainChart.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = PainChart.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = PainChart.Result.PhysicianResponse,
-                OfficerName = PainChart.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = PainChart.Result.Deadline,
                 Remarks = PainChart.Result.Remarks,
                 Status = PainChart.Result.Status,
                 TypeAttach = PainChart.Result.TypeAttach,
-                LocationAttach = PainChart.Result.LocationAttach
+                LocationAttach = PainChart.Result.LocationAttach,
+                OfficerToAct = PainChart.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = PainChart.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = PainChart.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = PainChart.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = PainChart.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = PainChart.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

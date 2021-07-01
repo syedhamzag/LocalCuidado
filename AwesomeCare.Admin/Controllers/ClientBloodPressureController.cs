@@ -104,13 +104,16 @@ namespace AwesomeCare.Admin.Controllers
                 StatusImage = BloodPressure.Result.StatusImage,
                 StatusAttach = BloodPressure.Result.StatusAttach,
                 Comment = BloodPressure.Result.Comment,
-                Staff_Name = BloodPressure.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = BloodPressure.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = BloodPressure.Result.PhysicianResponse,
-                OfficerName = BloodPressure.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = BloodPressure.Result.Deadline,
                 Remarks = BloodPressure.Result.Remarks,
-                Status = BloodPressure.Result.Status
+                Status = BloodPressure.Result.Status,
+                OfficerToAct = BloodPressure.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = BloodPressure.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = BloodPressure.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = BloodPressure.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = BloodPressure.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = BloodPressure.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

@@ -102,15 +102,18 @@ namespace AwesomeCare.Admin.Controllers
                 CurrentReading = BodyTemp.Result.CurrentReading,
                 SeeChart = BodyTemp.Result.SeeChart,
                 Comment = BodyTemp.Result.Comment,
-                Staff_Name = BodyTemp.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = BodyTemp.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = BodyTemp.Result.PhysicianResponse,
-                OfficerName = BodyTemp.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = BodyTemp.Result.Deadline,
                 Remarks = BodyTemp.Result.Remarks,
                 Status = BodyTemp.Result.Status,
                 SeeChartAttach = BodyTemp.Result.SeeChartAttach,
-                TargetTempAttach = BodyTemp.Result.TargetTempAttach
+                TargetTempAttach = BodyTemp.Result.TargetTempAttach,
+                OfficerToAct = BodyTemp.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = BodyTemp.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = BodyTemp.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = BodyTemp.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = BodyTemp.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = BodyTemp.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

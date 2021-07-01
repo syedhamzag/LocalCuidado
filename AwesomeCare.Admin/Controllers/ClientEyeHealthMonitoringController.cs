@@ -90,31 +90,34 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> View(int eyeId)
         {
-            var EyeHealthMonitoring = _clientEyeHealthMonitoringService.Get(eyeId);
+            var EyeHealthMonitoring = await _clientEyeHealthMonitoringService.Get(eyeId);
             var putEntity = new CreateClientEyeHealthMonitoring
             {
-                EyeHealthId = EyeHealthMonitoring.Result.EyeHealthId,
-                Reference = EyeHealthMonitoring.Result.Reference,
-                ClientId = EyeHealthMonitoring.Result.ClientId,
-                Date = EyeHealthMonitoring.Result.Date,
-                Time = EyeHealthMonitoring.Result.Time,
-                ToolUsed = EyeHealthMonitoring.Result.ToolUsed,
-                MethodUsed = EyeHealthMonitoring.Result.MethodUsed,
-                TargetSet = EyeHealthMonitoring.Result.TargetSet,
-                CurrentScore = EyeHealthMonitoring.Result.CurrentScore,
-                PatientGlasses = EyeHealthMonitoring.Result.PatientGlasses,
-                StatusImage = EyeHealthMonitoring.Result.StatusImage,
-                StatusAttach = EyeHealthMonitoring.Result.StatusAttach,
-                Comment = EyeHealthMonitoring.Result.Comment,
-                Staff_Name = EyeHealthMonitoring.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = EyeHealthMonitoring.Result.Physician.Select(s => s.StaffName).ToList(),
-                PhysicianResponse = EyeHealthMonitoring.Result.PhysicianResponse,
-                OfficerName = EyeHealthMonitoring.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
-                Deadline = EyeHealthMonitoring.Result.Deadline,
-                Remarks = EyeHealthMonitoring.Result.Remarks,
-                Status = EyeHealthMonitoring.Result.Status,
-                MethodUsedAttach = EyeHealthMonitoring.Result.MethodUsedAttach,
-                ToolUsedAttach = EyeHealthMonitoring.Result.ToolUsedAttach
+                EyeHealthId = EyeHealthMonitoring.EyeHealthId,
+                Reference = EyeHealthMonitoring.Reference,
+                ClientId = EyeHealthMonitoring.ClientId,
+                Date = EyeHealthMonitoring.Date,
+                Time = EyeHealthMonitoring.Time,
+                ToolUsed = EyeHealthMonitoring.ToolUsed,
+                MethodUsed = EyeHealthMonitoring.MethodUsed,
+                TargetSet = EyeHealthMonitoring.TargetSet,
+                CurrentScore = EyeHealthMonitoring.CurrentScore,
+                PatientGlasses = EyeHealthMonitoring.PatientGlasses,
+                StatusImage = EyeHealthMonitoring.StatusImage,
+                StatusAttach = EyeHealthMonitoring.StatusAttach,
+                Comment = EyeHealthMonitoring.Comment,
+                PhysicianResponse = EyeHealthMonitoring.PhysicianResponse,
+                Deadline = EyeHealthMonitoring.Deadline,
+                Remarks = EyeHealthMonitoring.Remarks,
+                Status = EyeHealthMonitoring.Status,
+                MethodUsedAttach = EyeHealthMonitoring.MethodUsedAttach,
+                ToolUsedAttach = EyeHealthMonitoring.ToolUsedAttach,
+                OfficerToAct = EyeHealthMonitoring.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = EyeHealthMonitoring.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = EyeHealthMonitoring.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = EyeHealthMonitoring.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = EyeHealthMonitoring.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = EyeHealthMonitoring.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

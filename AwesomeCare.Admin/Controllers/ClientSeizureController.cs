@@ -104,15 +104,18 @@ namespace AwesomeCare.Admin.Controllers
                 StatusImage = Seizure.Result.StatusImage,
                 StatusAttach = Seizure.Result.StatusAttach,
                 WhatHappened = Seizure.Result.WhatHappened,
-                Staff_Name = Seizure.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = Seizure.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = Seizure.Result.PhysicianResponse,
-                OfficerName = Seizure.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = Seizure.Result.Deadline,
                 Remarks = Seizure.Result.Remarks,
                 Status = Seizure.Result.Status,
                 SeizureLengthAttach = Seizure.Result.SeizureLengthAttach,
-                SeizureTypeAttach = Seizure.Result.SeizureTypeAttach
+                SeizureTypeAttach = Seizure.Result.SeizureTypeAttach,
+                OfficerToAct = Seizure.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = Seizure.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = Seizure.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = Seizure.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = Seizure.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = Seizure.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

@@ -104,16 +104,19 @@ namespace AwesomeCare.Admin.Controllers
                 BeatsPerSeconds = HeartRate.Result.BeatsPerSeconds,
                 SeeChart = HeartRate.Result.SeeChart,
                 Comment = HeartRate.Result.Comment,
-                Staff_Name = HeartRate.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = HeartRate.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = HeartRate.Result.PhysicianResponse,
-                OfficerName = HeartRate.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = HeartRate.Result.Deadline,
                 Remarks = HeartRate.Result.Remarks,
                 Status = HeartRate.Result.Status,
                 GenderAttach = HeartRate.Result.GenderAttach,
                 SeeChartAttach = HeartRate.Result.SeeChartAttach,
                 TargetHRAttach = HeartRate.Result.TargetHRAttach,
+                OfficerToAct = HeartRate.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = HeartRate.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = HeartRate.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = HeartRate.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = HeartRate.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = HeartRate.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

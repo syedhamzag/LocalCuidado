@@ -102,14 +102,17 @@ namespace AwesomeCare.Admin.Controllers
                 NumberRange = BMIChart.Result.NumberRange,
                 SeeChart = BMIChart.Result.SeeChart,
                 Comment = BMIChart.Result.Comment,
-                Staff_Name = BMIChart.Result.StaffName.Select(s => s.StaffName).ToList(),
-                PhysicianName = BMIChart.Result.Physician.Select(s => s.StaffName).ToList(),
                 PhysicianResponse = BMIChart.Result.PhysicianResponse,
-                OfficerName = BMIChart.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Deadline = BMIChart.Result.Deadline,
                 Remarks = BMIChart.Result.Remarks,
                 Status = BMIChart.Result.Status,
-                SeeChartAttach = BMIChart.Result.SeeChartAttach
+                SeeChartAttach = BMIChart.Result.SeeChartAttach,
+                OfficerToAct = BMIChart.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = BMIChart.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                Physician = BMIChart.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = BMIChart.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffNameList = BMIChart.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PhysicianList = BMIChart.Result.Physician.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

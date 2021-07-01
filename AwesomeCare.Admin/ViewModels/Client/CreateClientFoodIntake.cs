@@ -16,12 +16,16 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public CreateClientFoodIntake() 
         {
             OfficerToActList = new List<SelectListItem>();
+            PhysicianList = new List<SelectListItem>();
+            StaffNameList = new List<SelectListItem>();
             ClientList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         public IFormFile StatusAttachment { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> PhysicianList { get; set; }
+        public ICollection<SelectListItem> StaffNameList { get; set; }
         public ICollection<SelectListItem> ClientList { get; set; }
 
         public string ActiveTab { get; set; } = "foodintake";
