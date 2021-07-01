@@ -148,6 +148,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         [JsonProperty("rotaDayOfWeekId")]
         public int? RotaDayOfWeekId { get; set; }
 
+        [JsonProperty("clientUniqueId")]
+        public string ClientUniqueId { get; set; }
+
         [JsonProperty("tasks")]
         public List<Task> Tasks { get; set; }
 
