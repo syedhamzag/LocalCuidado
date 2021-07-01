@@ -51,20 +51,25 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         {
             try
             {
+                //var st = TimeSpan.TryParseExact("6:15", "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out d) ? d : default(TimeSpan);
+                //var ct = TimeSpan.TryParseExact("06:15:00", "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out c) ? c : default(TimeSpan);
+                //var df = st.Subtract(ct);
+
                 string rowColor = "";
                 if (clockInTime.HasValue)
                 {
-                    var st = DateTime.TryParseExact(startTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
-                    var df = st.Subtract(clockInTime.Value.DateTime).TotalMinutes;
+                    var st = TimeSpan.TryParseExact(startTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
+                    var ct = TimeSpan.TryParseExact(clockInTime.Value.DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
+                    var df = st.Subtract(ct).TotalMinutes;
 
                     if (df <= 15 && df >= -15)
                     {
-                        rowColor = "#dff0d8";
+                        rowColor = "#dff0d8";//green
                     }
                     else if (df > 15 && df <= 30)
                     {
                         rowColor = "blue";
-                       
+
                     }
                     else if (df >= -30)
                     {
@@ -72,7 +77,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
                     }
                     else
                     {
-                        rowColor = "#f2dede";
+                        rowColor = "#f2dede";//red
                     }
 
 
