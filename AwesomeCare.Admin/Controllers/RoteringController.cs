@@ -289,7 +289,7 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _rotaTaskService.DeleteStaffRotaPeriod(staffRotaId);
             var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully deleted" : "An Error Occurred" });
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully deleted" :content });
             return RedirectToActionPermanent("LiveRota");
         }
 

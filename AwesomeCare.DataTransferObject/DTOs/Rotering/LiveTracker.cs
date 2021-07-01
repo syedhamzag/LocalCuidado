@@ -47,42 +47,42 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string Comment { get; set; }
         public string HandOver { get; set; }
 
-        public string RowClass()
+        public string RowClass(string startTime, DateTimeOffset? clockInTime)
         {
             try
             {
-                string rowClass = "";
-                if (ClockInTime.HasValue)
+                string rowColor = "";
+                if (clockInTime.HasValue)
                 {
-                    var st = DateTime.TryParseExact(StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
-                    var df = st.Subtract(ClockInTime.Value.DateTime).TotalMinutes;
+                    var st = DateTime.TryParseExact(startTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
+                    var df = st.Subtract(clockInTime.Value.DateTime).TotalMinutes;
 
                     if (df <= 15 && df >= -15)
                     {
-                        rowClass = "success";
+                        rowColor = "#dff0d8";
                     }
                     else if (df > 15 && df <= 30)
                     {
-                        // "blue";
+                        rowColor = "blue";
                        
                     }
                     else if (df >= -30)
                     {
-                        // "yellow";
+                        rowColor = "yellow";
                     }
                     else
                     {
-                        rowClass = "danger";
+                        rowColor = "#f2dede";
                     }
 
 
                 }
 
-                return rowClass;
+                return rowColor;
             }
             catch (Exception ex)
             {
-                return "";
+                return "gray";
 
             }
         }

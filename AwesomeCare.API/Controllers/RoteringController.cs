@@ -216,7 +216,7 @@ namespace AwesomeCare.API.Controllers
             return Ok(rotas);
         }
 
-        [HttpGet,AllowAnonymous]
+        [HttpGet]
         [Route("GetStaffRotaPeriodById/{id}")]
         [ProducesResponseType(typeof(GetStaffRotaPeriodForEdit), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
