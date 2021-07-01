@@ -219,35 +219,39 @@
                                             </td>
                                             <td>
                                                 @{
-                                                    string color = "black";
+                                                   
                                                     string callStatus = "";
                                                     if (rota.ClockInTime.HasValue)
                                                     {
-                                                        var st = DateTime.TryParseExact(rota.StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
-                                                        var df = st.Subtract(rota.ClockInTime.Value.DateTime).TotalMinutes;
+                                                        var st = TimeSpan.TryParseExact(rota.StartTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
+                                                        var ct = TimeSpan.TryParseExact(rota.ClockInTime.Value.DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
+                                                        var df = st.Subtract(ct).TotalMinutes;
+
+                                                        //var st = DateTime.TryParseExact(rota.StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
+                                                        //var df = st.Subtract(rota.ClockInTime.Value.DateTime).TotalMinutes;
 
                                                         if (df <= 15 && df >= -15)
                                                         {
-                                                            color = "green";
+                                                            //color = "green";
                                                             callStatus = "ONTIME";
                                                         }
                                                         else if (df > 15 && df <= 30)
                                                         {
-                                                            color = "blue";
+                                                           // color = "blue";
                                                             callStatus = "EARLY";
                                                         }
                                                         else if (df >= -30)
                                                         {
-                                                            color = "yellow";
+                                                          //  color = "yellow";
                                                             callStatus = "MILD";
                                                         }
                                                         else
                                                         {
-                                                            color = "red";
+                                                          //  color = "red";
                                                             callStatus = "LATE";
                                                         }
 
-                                                        <p style="background-color:@color;color:white">@callStatus</p>
+                                                        <p style="color:white" class="text-center">@callStatus</p>
                                                     }
 
 
