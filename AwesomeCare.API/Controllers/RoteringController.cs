@@ -429,7 +429,10 @@ namespace AwesomeCare.API.Controllers
 
             // var test = staffRotas.Where(r => r.ClientRotaId == 310).ToList();
 
-            var groupedRota = (from rt in staffRotas
+            var orderedStaffRotas = staffRotas.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList();
+
+
+            var groupedRota = (from rt in orderedStaffRotas
                                group rt by rt.Period into rtgp
                                select new DataTransferObject.DTOs.Rotering.GetStaffRota
                                {
