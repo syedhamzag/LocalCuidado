@@ -74,7 +74,7 @@
                     @if (Model.GroupLiveRotas?.Count > 0)
                     {
 
-                        <table class="table table-condensed table-hover table-bordered datatablesExportExcel">
+                        <table class="table table-condensed table-hover table-bordered">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -387,6 +387,7 @@
         $(document).ready(function () {
 
             $("button.deleteRotaPeriodBtn").on("click", function (event) {
+                console.log('delete button clicked')
                 var confirmResult = confirm("The selected Staff Rota will be delete \n Do you want to continue?");
 
                 console.log(confirmResult)
