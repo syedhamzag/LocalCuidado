@@ -700,6 +700,7 @@ namespace AwesomeCare.API.Controllers
         /// <param name="staffRotaPeriodId"></param>
         /// <returns></returns>
         [HttpDelete("DeleteStaffRotaPeriod")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteStaffRotaPeriod(int staffRotaPeriodId)
         {
             var staffRotaPeriod = await _staffRotaPeriodRepository.GetEntity(staffRotaPeriodId);
