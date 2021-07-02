@@ -226,7 +226,7 @@ namespace AwesomeCare.Admin.Controllers
                 });
             }
 
-            var currentTime = DateTime.Now.TimeOfDay;
+            var currentTime = DateTime.Now.AddHours(1).TimeOfDay;
             var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
                                select new GroupLiveRota
