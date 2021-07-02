@@ -93,7 +93,8 @@ namespace AwesomeCare.Admin.Controllers
                 NextCheckDate = AdlObs.Result.NextCheckDate,
                 FivePrinciples = AdlObs.Result.FivePrinciples,
                 Comments = AdlObs.Result.Comments,
-                OfficerName = AdlObs.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
+                OfficerToAct = AdlObs.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = AdlObs.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
                 ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList(),
             };
             return View(putEntity);

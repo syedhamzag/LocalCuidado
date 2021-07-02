@@ -15,6 +15,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         public CreateClientServiceWatch()
         {
             OfficerToActList = new List<SelectListItem>();
+            PersonList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
@@ -22,6 +23,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
 
         #region DropDowns
         public ICollection<SelectListItem> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> PersonList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         #endregion
         public string ClientName { get; set; }

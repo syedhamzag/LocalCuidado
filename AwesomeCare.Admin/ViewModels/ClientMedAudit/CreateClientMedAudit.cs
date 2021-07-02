@@ -14,7 +14,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientMedAudit
     {
         public CreateClientMedAudit()
         {
-            OFFICERTOACTList = new List<SelectListItem>();       
+            OFFICERTOACTList = new List<SelectListItem>();
+            AuditorList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
@@ -24,6 +25,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientMedAudit
         public IFormFile Attach { get; set; }
         #region DropDowns
         public ICollection<SelectListItem> OFFICERTOACTList { get; set; }
+
+        public ICollection<SelectListItem> AuditorList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         #endregion
         public string ClientName { get; set; }

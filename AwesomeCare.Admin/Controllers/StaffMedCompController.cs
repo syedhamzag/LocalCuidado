@@ -81,7 +81,6 @@ namespace AwesomeCare.Admin.Controllers
                 Date = MedComp.Date,
                 Deadline = MedComp.Deadline,
                 URL = MedComp.URL,
-                OfficerToAct = MedComp.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 Remarks = MedComp.Remarks,
                 Status = MedComp.Status,
                 ActionRequired = MedComp.ActionRequired,
@@ -93,6 +92,8 @@ namespace AwesomeCare.Admin.Controllers
                 ReadingMedicalPrescriptions = MedComp.ReadingMedicalPrescriptions,
                 Details = MedComp.Details,
                 CarePlan = MedComp.CarePlan,
+                OfficerToAct = MedComp.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = MedComp.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
                 ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList(),
             };
             return View(putEntity);

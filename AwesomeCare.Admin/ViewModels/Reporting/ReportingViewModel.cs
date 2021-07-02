@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
+using AwesomeCare.DataTransferObject.DTOs.ClientRota;
 
 namespace AwesomeCare.Admin.ViewModels.Reporting
 {
@@ -21,12 +22,21 @@ namespace AwesomeCare.Admin.ViewModels.Reporting
         public ReportingViewModel()
         {
             ClientList = new List<SelectListItem>();
+            RotaTasks = new List<SelectListItem>();
+            ClientRotas = new List<GetClientRota>();
+            RotaTypes = new List<GetClientRotaType>();
         }
         [Required]
         public int ClientId { get; set; }
         public string ClientName { get; set; }
+
+        public string Month { get; set; }
+        public string Year { get; set; }
         public List<SelectListItem> ClientList {get; set;}
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
+        public List<GetClientRota> ClientRotas { get; set; }
+        public List<GetClientRotaType> RotaTypes { get; set; }
+        public List<SelectListItem> RotaTasks { get; set; }
     }
 }

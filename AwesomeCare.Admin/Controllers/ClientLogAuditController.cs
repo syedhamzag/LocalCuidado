@@ -107,7 +107,6 @@ namespace AwesomeCare.Admin.Controllers
                 LogURL = LogAudit.LogURL,
                 NameOfAuditor = LogAudit.NameOfAuditor,
                 Observations = LogAudit.Observations,
-                OfficerName = LogAudit.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Remarks = LogAudit.Remarks,
                 RepeatOfIncident = LogAudit.RepeatOfIncident,
                 RotCause = LogAudit.RotCause,
@@ -120,6 +119,8 @@ namespace AwesomeCare.Admin.Controllers
                 ProperDocumentation = LogAudit.ProperDocumentation,
                 ThinkingStaff = LogAudit.ThinkingStaff,
                 ThinkingStaffStop = LogAudit.ThinkingStaffStop,
+                OfficerToTakeAction = LogAudit.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                OFFICERTOACT = LogAudit.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

@@ -102,12 +102,14 @@ namespace AwesomeCare.Admin.Controllers
                 Details = ServiceWatch.Details,
                 URL = ServiceWatch.URL,
                 Incident = ServiceWatch.Incident,
-                OfficerName = ServiceWatch.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Remarks = ServiceWatch.Remarks,
                 Observation = ServiceWatch.Observation,
                 Status = ServiceWatch.Status,
                 ActionRequired = ServiceWatch.ActionRequired,
-                PersonName = ServiceWatch.StaffName.Select(s => s.StaffName).ToList(),
+                PersonInvolved = ServiceWatch.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToAct = ServiceWatch.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = ServiceWatch.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PersonList = ServiceWatch.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

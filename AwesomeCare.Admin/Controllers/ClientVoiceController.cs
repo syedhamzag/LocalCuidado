@@ -98,8 +98,6 @@ namespace AwesomeCare.Admin.Controllers
                 EvidenceOfActionTaken = Voice.EvidenceOfActionTaken,
                 LessonLearntAndShared = Voice.LessonLearntAndShared,
                 URL = Voice.URL,
-                Caller_Name = Voice.CallerName.Select(s => s.StaffName).ToList(),
-                OfficerName = Voice.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Remarks = Voice.Remarks,
                 RotCause = Voice.RotCause,
                 Status = Voice.Status,
@@ -114,8 +112,14 @@ namespace AwesomeCare.Admin.Controllers
                 RateServiceRecieving = Voice.RateServiceRecieving,
                 RateStaffAttending = Voice.RateStaffAttending,
                 SomethingSpecial = Voice.SomethingSpecial,
-                Best_Staff = Voice.GoodStaff.Select(s => s.StaffName).ToList(),
-                Poor_Staff = Voice.PoorStaff.Select(s => s.StaffName).ToList(),
+                NameOfCaller = Voice.CallerName.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToAct = Voice.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffBestSupport = Voice.GoodStaff.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffPoorSupport = Voice.PoorStaff.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = Voice.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                CallerList = Voice.CallerName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                BestSupportList = Voice.GoodStaff.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                PoorSupportList = Voice.PoorStaff.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

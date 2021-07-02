@@ -16,24 +16,166 @@
                     <div class="row">
                         <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                             <label class="control-label">Date</label>
-                            <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mmm/yyyy" />
+                            <input type="text" asp-for="Date" class="form-control" placeholder="07-2021"/>
                             <span asp-validation-for="Date" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                             <label>Select Client</label>
-                            <select class="form-control" name="ClientId" asp-items="@Model.ClientList">
+                            <select name="ClientId" asp-items="@Model.ClientList" class="selectpicker" data-live-search="true">
                             </select>
                         </div>
-                        <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                            <input type="submit" class="btn btn-default" style="margin-top:30px !important;" value="Search" />
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <input type="submit" class="btn btn-success" style="margin-top:30px !important;" value="Search" />
                         </div>
                     </div>
                 </form>
 
-                @if (Model != null)
+                @if (Model.ClientRotas != null)
                 {
+                    
+                    <h4>AWESOME HEALTHCARE SOLUTIONS LOG BOOK (Client Name: @Model.ClientName) (ID: @Model.ClientId)</h4>
+                    <p>@Model.Month and @Model.Year</p>
+                    <table class="table table-condensed table-hover table-bordered">
+                        <tbody>
+                            @foreach (var rotaType in Model.RotaTypes)
+                            {
+                                var rotaDywk = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == 1);
+                                if (rotaDywk != null)
+                                { 
+                                    <tr>
+                                    <td>
+                                        <div class="fancy-checkbox">
+                                            @{
+                                                var clientRotaType = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId);
+                                                if (clientRotaType != null)
+                                                {
+                                                    <label><input type="checkbox" name="@rotaType.RotaType" checked disabled><span>@rotaType.RotaType</span></label>
+                                                }
+                                            }
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <table class="table table-condensed table-hover table-bordered">
+                                            <tbody>
+                                                <tr><td>Date  </td></tr>
+                                                <tr><td>Time In:</td></tr>
+                                                <tr><td>Time Out:</td></tr>
+                                                <tr><td>Duration</td></tr>
+                                                <tr><td>Carer 1: Full Name</td></tr>
+                                                <tr><td>Signature: Remark(Text)</td></tr>
+                                                <tr><td>Carer 2: Full Name Signature:</td></tr>
+                                                <tr><td>Signature:</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="table table-condensed table-hover table-bordered">
+                                            <tbody>
+                                                <tr><td><br /></td></tr>
+                                                <tr><td><br /></td></tr>
+                                                <tr><td><br /></td></tr>
+                                                <tr><td><br /></td></tr>
+                                                <tr><td><br /></td></tr>
+                                                <tr><td><br /></td></tr>
+                                                <tr><td><br /></td></tr>
+                                                <tr><td><br /></td></tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var task = "";
+                                            foreach (var tk in Model.RotaTasks)
+                                            {
+                                                int id = int.Parse(tk.Value.ToString());
+                                                var tasks = rotaDywk.RotaTasks.Where(s => s.ClientRotaTaskId == id);
+                                                if (tasks != null)
+                                                {
+                                                    task += tk.Text.ToString()+",  ";
+                                                }
+
+                                            }
+                                            <textarea class="form-control" style="margin-top: 0px; margin-bottom: 0px; height: 383px;">@task</textarea>
+                                        }
+                                    </td>
+                                </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            <table class="table table-condensed table-hover table-bordered">
+                                                <tbody>
+                                                    <tr><td>Signature: Remark(Text)</td></tr>
+                                                    <tr><td>Carer 2: Full Name Signature:</td></tr>
+                                                    <tr><td>Signature:</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table class="table table-condensed table-hover table-bordered">
+                                                <tbody>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Bowel Movement:
+                                            <br />
+                                            Oral Care:
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" value="" />Yes
+                                            <input type="checkbox" value="" />No
+                                            <br />
+                                            <input type="checkbox" value="" />Yes
+                                            <input type="checkbox" value="" />No
+                                        </td>
+                                        <td>
+                                            <table class="table table-condensed table-hover table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Food and Fluid Prepared</td>
+                                                        <td><br /><br /><br /><br /><br /></td>
+                                                        <td>
+                                                            <input type="checkbox" value="" />1/4
+                                                            <br />
+                                                            <input type="checkbox" value="" />2/4
+                                                            <br />
+                                                            <input type="checkbox" value="" />3/4
+                                                            <br />
+                                                            <input type="checkbox" value="" />Full
+                                                            <br />
+                                                        </td>
+                                                        <td>Handover to next Carers </td>
+                                                        <td><br /><br /><br /><br /><br /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            </tbody>
+                    </table>
+
                 }
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(function () {
+
+        $(".date-picker").datepicker({
+            format: "mm-yyyy",
+            startView: "months",
+            minViewMode: "months"
+        });
+    });
+</script>	 	

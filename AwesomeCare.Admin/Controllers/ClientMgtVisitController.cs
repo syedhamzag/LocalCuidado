@@ -101,7 +101,6 @@ namespace AwesomeCare.Admin.Controllers
                 LessonLearntAndShared = MgtVisit.LessonLearntAndShared,
                 URL = MgtVisit.URL,
                 HowToComplain = MgtVisit.HowToComplain,
-                OfficerName = MgtVisit.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Remarks = MgtVisit.Remarks,
                 RotCause = MgtVisit.RotCause,
                 Status = MgtVisit.Status,
@@ -113,7 +112,10 @@ namespace AwesomeCare.Admin.Controllers
                 ServiceRecommended = MgtVisit.ServiceRecommended,
                 NextCheckDate = MgtVisit.NextCheckDate,
                 RateServiceRecieving = MgtVisit.RateServiceRecieving,
-                Staff_Name = MgtVisit.StaffName.Select(s => s.StaffName).ToList(),
+                OfficerToAct = MgtVisit.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffBestSupport = MgtVisit.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = MgtVisit.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffList = MgtVisit.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

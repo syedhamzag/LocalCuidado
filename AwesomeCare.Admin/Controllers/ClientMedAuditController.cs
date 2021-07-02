@@ -107,9 +107,7 @@ namespace AwesomeCare.Admin.Controllers
                 EvidenceOfActionTaken = MedAudit.EvidenceOfActionTaken,
                 LessonLearntAndShared = MedAudit.LessonLearntAndShared,
                 LogURL = MedAudit.LogURL,
-                Auditor_Name = MedAudit.StaffName.Select(s => s.StaffName).ToList(),
                 Observations = MedAudit.Observations,
-                OfficerName = MedAudit.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Remarks = MedAudit.Remarks,
                 RepeatOfIncident = MedAudit.RepeatOfIncident,
                 RotCause = MedAudit.RotCause,
@@ -122,6 +120,10 @@ namespace AwesomeCare.Admin.Controllers
                 HardCopyReview = MedAudit.HardCopyReview,
                 MedicationSupplyEfficiency = MedAudit.MedicationSupplyEfficiency,
                 MedicationInfoUploadEefficiency = MedAudit.MedicationInfoUploadEefficiency,
+                OfficerToTakeAction = MedAudit.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                NameOfAuditor = MedAudit.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                OFFICERTOACTList = MedAudit.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                AuditorList = MedAudit.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

@@ -100,13 +100,15 @@ namespace AwesomeCare.Admin.Controllers
                 ProgramOfChoice = Program.ProgramOfChoice,
                 URL = Program.URL,
                 DaysOfChoice = Program.DaysOfChoice,
-                OfficerName = Program.OfficerToAct.Select(s => s.StaffName).ToList(),
                 Remarks = Program.Remarks,
                 DetailsOfProgram = Program.DetailsOfProgram,
                 Status = Program.Status,
                 ActionRequired = Program.ActionRequired,
                 Observation = Program.Observation,
                 PlaceLocationProgram = Program.PlaceLocationProgram,
+                OfficerToTakeAction = Program.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = Program.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+
             };
             return View(putEntity);
         }

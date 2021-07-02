@@ -98,6 +98,10 @@ namespace AwesomeCare.Admin.Controllers
                 WorkteamName = keyWorker.Workteam.Select(s => s.StaffName).ToList(),
                 StaffId = keyWorker.StaffId,
                 HealthAndWellNessChanges = keyWorker.HealthAndWellNessChanges,
+                OfficerToAct = keyWorker.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                TeamYouWorkFor = keyWorker.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = keyWorker.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                WorkList = keyWorker.Workteam.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
                 ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList(),
             };
             return View(putEntity);
