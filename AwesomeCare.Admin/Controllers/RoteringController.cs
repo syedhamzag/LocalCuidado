@@ -25,6 +25,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using AutoMapper;
 using System.Globalization;
 using AwesomeCare.DataTransferObject.DTOs.Rotering;
+using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -35,13 +36,17 @@ namespace AwesomeCare.Admin.Controllers
         IRotaTaskService _rotaTaskService;
         IRotaDayofWeekService _rotaDayOfWeekService;
         IClientRotaService _clientRotaService;
-        public RoteringController(IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
+        private readonly ILogger<RoteringController> logger;
+
+        public RoteringController(ILogger<RoteringController> logger,
+            IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
         {
             _clientRotaTypeService = clientRotaTypeService;
             _clientRotaNameService = clientRotaNameService;
             _rotaTaskService = rotaTaskService;
             _rotaDayOfWeekService = rotaDayOfWeekService;
             _clientRotaService = clientRotaService;
+            this.logger = logger;
         }
         public async Task<IActionResult> Index(int client)
         {
@@ -221,12 +226,13 @@ namespace AwesomeCare.Admin.Controllers
                 });
             }
 
+            var currentTime = DateTime.Now.TimeOfDay;
             var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
                                select new GroupLiveRota
                                {
                                    StaffName = rtGrp.Key,
-                                   Trackers = rtGrp.OrderBy(t=>t.StartTime).ToList()
+                                   Trackers = rtGrp.Where(t=>TimeSpan.ParseExact(t.StartTime, "hh\\:mm", System.Globalization.CultureInfo.CurrentCulture,System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t=> TimeSpan.ParseExact(t.StartTime, "hh\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
                                }).ToList();
 
@@ -260,7 +266,7 @@ namespace AwesomeCare.Admin.Controllers
             }
             catch (Exception ex)
             {
-
+                logger.LogError(ex, "");
                 return totalTime;
             }
         }
