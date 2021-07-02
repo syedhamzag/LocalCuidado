@@ -192,7 +192,7 @@ namespace AwesomeCare.API.Controllers
                              ClockInTime = srp.ClockInTime,
                              ClockOutTime = srp.ClockOutTime,
                              Rota = r.RotaName,
-                             Staff = st.FirstName + " " +  st.LastName,
+                             Staff = st.FirstName + " " + st.LastName,
                              Remark = sr.Remark,
                              ReferenceNumber = sr.ReferenceNumber,
                              ClientKeySafe = c.KeySafe,
@@ -359,10 +359,10 @@ namespace AwesomeCare.API.Controllers
 
 
 
-            var staffRotas = (from  sr in _staffRotaRepository.Table 
+            var staffRotas = (from sr in _staffRotaRepository.Table
                               join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
                               join crd in _clientRotaDaysRepository.Table on new { key1 = srp.ClientRotaTypeId, key2 = srp.ClientId } equals new { key1 = crd.ClientRotaTypeId.GetValueOrDefault(), key2 = crd.ClientId }
-                              join c in _clientRepository.Table on srp.ClientId equals c.ClientId                              
+                              join c in _clientRepository.Table on srp.ClientId equals c.ClientId
                               join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
                               join crt in _clientRotaTypeRepository.Table on srp.ClientRotaTypeId equals crt.ClientRotaTypeId
                               join r in _rotaRepository.Table on sr.RotaId equals r.RotaId
@@ -373,7 +373,7 @@ namespace AwesomeCare.API.Controllers
                                   StaffRotaId = sr.StaffRotaId,
                                   RotaDate = sr.RotaDate,
                                   StaffId = sr.Staff,
-                                  Staff = st.FirstName + " "  + st.LastName,
+                                  Staff = st.FirstName + " " + st.LastName,
                                   StaffTelephone = st.Telephone,
                                   StaffRate = st.Rate,
                                   ReferenceNumber = sr.ReferenceNumber,
@@ -394,7 +394,7 @@ namespace AwesomeCare.API.Controllers
                                   ClockOutAddress = srp.ClockOutAddress,
                                   Period = crt.RotaType,
                                   ClientRotaTypeId = srp.ClientRotaTypeId,
-                                 // ClientRotaId = cr.ClientRotaId,
+                                  // ClientRotaId = cr.ClientRotaId,
                                   ClientRotaDaysId = crd.ClientRotaDaysId,
                                   StartTime = crd.StartTime,
                                   StopTime = crd.StopTime,
@@ -481,7 +481,7 @@ namespace AwesomeCare.API.Controllers
                                                 StopTime = cl.StopTime,
                                                 DayofWeek = cl.DayOfWeek,
                                                 RotaDayOfWeekId = cl.RotaDayOfWeekId,
-                                              //  ClientRotaId = cl.ClientRotaId,
+                                                //  ClientRotaId = cl.ClientRotaId,
                                                 Tasks = (from t in cl.Tasks
                                                          select new DataTransferObject.DTOs.Rotering.Task
                                                          {
@@ -538,7 +538,7 @@ namespace AwesomeCare.API.Controllers
 
         [HttpPost("ScanQr/ClockIn")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> ScanQrCodeClockIn(string rotaId, string distance, string geolocation)
+        public async Task<IActionResult> ScanQrCodeClockIn(string rotaId, string distance, string geolocation, string channel = "")
         {
 
             int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
@@ -546,9 +546,18 @@ namespace AwesomeCare.API.Controllers
             if (rota == null)
                 return NotFound();
 
+            string clockInMode = "";
+            if (string.IsNullOrEmpty(channel) || channel.Equals("QRCode"))
+            {
+                clockInMode = ClockModeEnum.ScanCode.ToString();
+            }
+            else
+            {
+                clockInMode = ClockModeEnum.RFID.ToString();
+            }
 
             rota.ClockInTime = DateTimeOffset.UtcNow;
-            rota.ClockInMode = ClockModeEnum.ScanCode.ToString();
+            rota.ClockInMode = clockInMode ;
             rota.ClockInAddress = geolocation;
 
             var result = await _staffRotaPeriodRepository.UpdateEntity(rota);
@@ -561,7 +570,7 @@ namespace AwesomeCare.API.Controllers
 
         [HttpPost("ScanQr/ClockOut")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> ScanQrCodeClockOut(string rotaId, string distance, string geolocation)
+        public async Task<IActionResult> ScanQrCodeClockOut(string rotaId, string distance, string geolocation, string channel = "")
         {
 
             int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
@@ -569,8 +578,18 @@ namespace AwesomeCare.API.Controllers
             if (rota == null)
                 return NotFound();
 
+            string clockInMode = "";
+            if (string.IsNullOrEmpty(channel) || channel.Equals("QRCode"))
+            {
+                clockInMode = ClockModeEnum.ScanCode.ToString();
+            }
+            else
+            {
+                clockInMode = ClockModeEnum.RFID.ToString();
+            }
+
             rota.ClockOutTime = DateTimeOffset.UtcNow;
-            rota.ClockOutMode = ClockModeEnum.ScanCode.ToString();
+            rota.ClockOutMode = clockInMode;
             rota.ClockOutAddress = geolocation;
 
             var result = await _staffRotaPeriodRepository.UpdateEntity(rota);
