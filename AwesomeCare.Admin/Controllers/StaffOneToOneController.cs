@@ -78,7 +78,6 @@ namespace AwesomeCare.Admin.Controllers
                 Date = OneToOne.Result.Date,
                 Deadline = OneToOne.Result.Deadline,
                 URL = OneToOne.Result.URL,
-                OfficerToAct = OneToOne.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 Remarks = OneToOne.Result.Remarks,
                 Reference = OneToOne.Result.Reference,
                 Status = OneToOne.Result.Status,
@@ -91,8 +90,9 @@ namespace AwesomeCare.Admin.Controllers
                 StaffConclusion = OneToOne.Result.StaffConclusion,
                 Purpose = OneToOne.Result.Purpose,
                 PreviousSupervision = OneToOne.Result.PreviousSupervision,
-                NextCheckDate = OneToOne.Result.NextCheckDate
-
+                NextCheckDate = OneToOne.Result.NextCheckDate,
+                OfficerToAct = OneToOne.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = OneToOne.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
 

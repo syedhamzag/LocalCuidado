@@ -96,7 +96,7 @@ namespace AwesomeCare.Admin.Controllers
                 SOURCEOFCOMPLAINTS = complain.Result.SOURCEOFCOMPLAINTS,
                 StatusId = complain.Result.StatusId,
                 OfficerName = complain.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
-                Staff_Name = complain.Result.StaffName.Select(s => s.StaffName).ToList()
+                Staff_Name = complain.Result.StaffName.Select(s => s.StaffName).ToList(),
             };
             return View(putEntity);
         }

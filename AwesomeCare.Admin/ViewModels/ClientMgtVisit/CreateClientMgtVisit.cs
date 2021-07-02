@@ -16,6 +16,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
         {
             OfficerToActList = new List<SelectListItem>();
             StatusList = new List<SelectListItem>();
+            StaffList = new List<SelectListItem>();
 
         }
         [DataType(DataType.Upload)]
@@ -27,6 +28,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
         #region DropDowns
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
+        public ICollection<SelectListItem> StaffList { get; set; }
         #endregion
         public string ClientName { get; set; }
         public string StatusName { get; set; }

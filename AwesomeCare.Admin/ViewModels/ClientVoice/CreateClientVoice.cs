@@ -19,6 +19,9 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
             RateServiceRecievingList = new List<SelectListItem>();
             RateStaffAttendingList = new List<SelectListItem>();
             OfficerToActList = new List<SelectListItem>();
+            CallerList = new List<SelectListItem>();
+            BestSupportList = new List<SelectListItem>();
+            PoorSupportList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
@@ -29,6 +32,9 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         #region DropDowns
 
         public ICollection<SelectListItem> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> CallerList { get; set; }
+        public ICollection<SelectListItem> BestSupportList { get; set; }
+        public ICollection<SelectListItem> PoorSupportList { get; set; }
         public ICollection<SelectListItem> StatusList { get; set; }
         public ICollection<SelectListItem> InterestedInProgramList { get; set; }
         public ICollection<SelectListItem> RateServiceRecievingList { get; set; }

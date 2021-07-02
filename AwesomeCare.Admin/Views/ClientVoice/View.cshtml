@@ -21,15 +21,15 @@
                         <div class="row">
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label class="control-label">DATE</label>
-                                <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
+                                <input type="text" asp-for="Date" class="form-control" readonly />
                             </div>
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label class="control-label">NEXT DUE DATE</label>
-                                <input type="text" asp-for="NextCheckDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
+                                <input type="text" asp-for="NextCheckDate" class="form-control" readonly />
                             </div>
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label class="control-label">DEADLINE</label>
-                                <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
+                                <input type="text" asp-for="Deadline" class="form-control" readonly />
                             </div>
                         </div>
                         <div class="row">
@@ -43,13 +43,13 @@
                             </div>
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label class="control-label">Staff name, whom you think best support you.</label>
-                                <select asp-for="StaffBestSupport" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                <select asp-for="StaffBestSupport" asp-items="@Model.BestSupportList" class="selectpicker" data-live-search="true" multiple></select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label class="control-label">Staff you have concerns with dont support you enough</label>
-                                <select asp-for="StaffPoorSupport" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                <select asp-for="StaffPoorSupport" asp-items="@Model.PoorSupportList" class="selectpicker" data-live-search="true" multiple></select>
                             </div>
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label class="control-label">You are recieve enough support from the office staff</label>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label class="control-label">Name of Caller</label>
-                                <select asp-for="NameOfCaller" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                <select asp-for="NameOfCaller" asp-items="@Model.CallerList" class="selectpicker" data-live-search="true" multiple></select>
                             </div>
                         </div>
                         <div class="row">
