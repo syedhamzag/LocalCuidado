@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="csrf-token" content="JvJuigwulPWpD2I47n6TJpwgu0DJy9ZkrDwRiZWY">
+
+<title>My Cuidado</title>
+
+<link rel="shortcut icon" href="homepage/favicon.ico">
+
+<link rel="stylesheet" href="homepage/bootstrap.min.css">
+<link rel="stylesheet" href="homepage/all.min.css">
+
+<link rel="stylesheet" href="homepage/animate.css">
+
+<link rel="stylesheet" href="homepage/mycuidado.css">
+
+<script>
+    
+        window.bgImages = [];
+</script>
+</head>
+<body>
+
+        <script>
+        
+            window.bgImages = ["img/5.jpg", "img/4.jpg", "img/3.jpg", "img/1.jpg", "img/7.jpg", "img/6.jpg", "img/8.jpeg", "img/9.jpeg"];
+    </script>
+
+    <section id="home">
+        
+    </section>
+
+    <section id="homeContent" class="d-none d-md-block">
+
+        <div class="company-logo ml-md-4">
+            <img src="img/logocud.png" alt="Human Capital"
+                 width="166">
+        </div>
+
+        <section class="company-hrms d-flex justify-content-end align-items-center align-content-center">
+                            <div class="welcome-heading ml-auto text-right mr-4">
+                    <div class="font-weight-light welcome-prefix">
+                        Welcome to 
+                    </div>
+                    <h1 class="welcome-heading-suffix font-kristi font-size-52">
+                        My Cuidado
+                    </h1>
+                </div>
+
+                    </section>
+
+        <div id="loginForm">
+
+    <a class="text-muted" id="closeButton">
+        <i class="fas fa-times fa-fw"></i>
+    </a>
+
+    <header class="login-form">
+        <h1 class="form-heading">
+                            Login Here
+                    </h1>
+    </header>
+
+    <div class="form-wrapper">
+
+        <form action="#"
+      method="post"
+      id="loginAuthForm"
+      class="">
+
+    <input type="hidden" name="_token" value="JvJuigwulPWpD2I47n6TJpwgu0DJy9ZkrDwRiZWY">
+    <div class="alert alert-success" id="success" style="display:none;"></div>
+
+<div class="alert alert-warning" id="warning" style="display:none;"></div>
+
+<div class="alert alert-danger" id="error" style="display:none;"></div>
+
+    <div class="form-group">
+        <label for="User" class="form-label">Username</label>
+        <input class="input-lg form-control"
+               id="username"
+               name="username"
+               value=""
+               placeholder="Enter Username"
+               type="text"
+               autocomplete="off"
+                              required>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input class="input-lg form-control"
+               id="password"
+               placeholder="password"
+               type="password"
+               name="password"
+               autocomplete="off"
+               required>
+    </div>
+
+    <input type="hidden" name="referrer_url" value="">
+    <input type="hidden" name="host" value="">
+    <input type="hidden" name="auth_link" value="">
+    <input type="hidden" name="company" value="1">
+        <input type="hidden" id="encodedFld" name="encoded" value="false">
+
+    <div class="form-group">
+        <button id="login-btn" type="submit" class="btn btn-lg btn-block stressed-btn stressed-btn-fh sign-in-btn" onclick="return preSubmit();">
+            Sign In
+            <i class="fa fa-angle-right fa-fw"></i>
+        </button>
+            </div>
+        
+<input type="hidden" name="__ncforminfo" value="CvMTk_AmGEn9I6Od8h5Fatv1mVATVUIePIbROdvo9K24C3FDXXOQQ3RSz_iLsA828EbYzQsI2gtdiVtBDLj9oKMVm1yMZJqRgbEofitH7IPLB9qvKwQ7SdcFjAUlLbrPoLpdk2zaZ1xXS1103c_1yyvWp2S5_A8fBxsa117uQFQ="/></form>
+
+<script type="text/javascript">
+    function preSubmit(){
+
+              if($("#encodedFld").val() == "false"){
+            $("#login-btn").attr('disabled', 'disabled');
+
+            var encpass = $("#password").val();
+
+            $("#password").val(btoa(encpass));
+            $("#encodedFld").val("true");
+
+            $("#loginAuthForm").submit();
+
+            return false;
+
+        }
+      
+
+
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('password')
+            .addEventListener('keypress', function(event) {
+                if (event.keyCode == 13) {
+                    return preSubmit();
+                }
+            });
+
+
+        document.getElementById('username')
+            .addEventListener('keypress', function(event) {
+                if (event.keyCode == 13) {
+                    return preSubmit();
+                }
+            });
+
+
+    })
+
+</script>
+
+    </div>
+</div>
+
+        <button id="callToActionBtn"
+                class="btn btn-lg stressed-btn stressed-btn-fw stressed-btn-fh animated infinite pulse">
+            <span class="mx-3">Sign in</span>
+            <i class="fas fa-angle-right fa-fw"></i>
+        </button>
+
+    </section>
+
+    <section id="homeContentMobile" class="d-block d-md-none d-flex flex-column justify-content-start">
+
+        <div class="py-3 px-3 bg-white col-auto">
+
+            <div class="d-flex justify-content-between align-content-center align-items-center">
+                <div class="company-hrms-logo">
+                                            <img src="#" alt="">
+                                    </div>
+
+                <div class="company-logo">
+                    <img src="#" alt="Human Capital">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="px-5 pt-5 bg-white col" id="loginFormMobile">
+
+            <form action="#"
+      method="post"
+      id="loginAuthForm"
+      class="">
+
+    <input type="hidden" name="_token" value="JvJuigwulPWpD2I47n6TJpwgu0DJy9ZkrDwRiZWY">
+    <div class="alert alert-success" id="success" style="display:none;"></div>
+
+<div class="alert alert-warning" id="warning" style="display:none;"></div>
+
+<div class="alert alert-danger" id="error" style="display:none;"></div>
+
+    <div class="form-group">
+        <label for="User" class="form-label">Username</label>
+        <input class="input-lg form-control"
+               id="username"
+               name="username"
+               value=""
+               placeholder="Enter Username"
+               type="text"
+               autocomplete="off"
+                              required>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <input class="input-lg form-control"
+               id="password"
+               placeholder="password"
+               type="password"
+               name="password"
+               autocomplete="off"
+               required>
+    </div>
+
+    <input type="hidden" name="referrer_url" value="">
+    <input type="hidden" name="host" value="">
+    <input type="hidden" name="auth_link" value="">
+    <input type="hidden" name="company" value="1">
+        <input type="hidden" id="encodedFld" name="encoded" value="false">
+
+    <div class="form-group">
+        <button id="login-btn" type="submit" class="btn btn-lg btn-block stressed-btn stressed-btn-fh sign-in-btn" onclick="return preSubmit();">
+            Sign In
+            <i class="fa fa-angle-right fa-fw"></i>
+        </button>
+            </div>
+        
+<input type="hidden" name="__ncforminfo" value="CvMTk_AmGEn9I6Od8h5Fatv1mVATVUIePIbROdvo9K2LAnpYViTWk05Ai0vuz2pqCCAn0xl26nWlk4j3V-svs24DfkEKPHBJNYBS6IM5dhqok3s-wZHsCgyL5jGT6GcF8oV_MTA23vWqUD08ncFqfD0V0qSxz7nkK1U-9AhR8sc="/></form>
+
+<script type="text/javascript">
+    function preSubmit(){
+
+              if($("#encodedFld").val() == "false"){
+            $("#login-btn").attr('disabled', 'disabled');
+
+            var encpass = $("#password").val();
+
+            $("#password").val(btoa(encpass));
+            $("#encodedFld").val("true");
+
+            $("#loginAuthForm").submit();
+
+            return false;
+
+        }
+      
+
+
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('password')
+            .addEventListener('keypress', function(event) {
+                if (event.keyCode == 13) {
+                    return preSubmit();
+                }
+            });
+
+
+        document.getElementById('username')
+            .addEventListener('keypress', function(event) {
+                if (event.keyCode == 13) {
+                    return preSubmit();
+                }
+            });
+
+
+    })
+
+</script>
+
+            <a class="text-muted d-block text-center pt-5" id="closeButtonMobile">
+                Close
+            </a>
+
+        </div>
+
+        <button id="callToActionBtnMobile"
+                class="btn btn-lg stressed-btn stressed-btn-fw stressed-btn-fh">
+            <span class="mx-3">Sign in</span>
+            <i class="fas fa-angle-right fa-fw"></i>
+        </button>
+
+    </section>
+
+
+<style type="text/css">
+    #loginForm{
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        width: 400px;
+        background: #fff;
+        overflow: scroll;
+    }
+    #loginForm header.login-form{
+        margin-bottom: 10px;
+    }
+    #loginForm div.form-wrapper {
+        height: auto;
+        padding-bottom: 0;
+    }
+    #loginForm header.login-form h1 {
+        font-size: 1.75rem;
+    }
+    .sign-in-btn{
+        font-size: 16px;
+    }
+    .form-label {
+        font-size: 13px;
+    }
+    .alert{
+        border: 0;
+        font-size: 13px;
+        padding: 5px 15px;
+    }
+    #homeContentMobile input.form-control, #homeContent input.form-control {
+        border-color: rgba(119, 119, 119, 0.39);
+    }
+    @media (min-width: 768px){
+        #closeButton {
+            top: 10px;
+            left: 10px;
+            color: #daa6a6;
+            font-size: 21px;
+            -webkit-text-stroke: 3px #fff;
+            text-stroke: 3px #fff;
+        }
+    }
+</style>
+
+
+
+
+
+    
+    <style>
+    .modal-body {
+        max-height: calc(100vh - 112px);
+        overflow-y: auto;
+    }
+</style>
+
+<div class="modal animated bounceInDown widemodal no-border no-shadow" id="commonModal" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content no-border no-shadow ">
+            <div class="modal-header no-border grey-lt5-bg clearfix bg-light">
+                <!-- Added pull-x to the following element to fix inconsistent positioning on element due to possible change in which bootstrap version powers the page -->
+                <h4 class="modal-title pull-left" id="myModalLabel"></h4>
+                <button type="button" class="fa-2x close pull-right" data-dismiss="modal" aria-hidden="true" style="">×</button>
+            </div>
+            <div class="modal-body">
+                Loading...
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="empChooserModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header clearfix bg-light">
+                <!-- Added pull-x to the following element to fix inconsistent positioning on element due to possible change in which bootstrap version powers the page -->
+                <h3 class="modal-title pull-left">Select an employee</h3>
+                <button type="button" class="close pull-right" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- END Regular Modal -->
+                <div class="block">
+                    <input size="30" id="empChooserFld" class='form-control' placeholder="Start typing the name..."/>&nbsp;
+                    <br/>
+                    <br/>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+    <a class="btn btn-success helpdesk d-none d-md-block"
+       href="#"
+       target="_top">
+        <i class="fa fa-envelope-o"></i> HELPDESK
+    </a>
+
+            <a class="btn btn-sm whistle-button"
+   data-params=""
+   data-target="#commonModal"
+   data-title="Report a case anonymously"
+   data-toggle="modal"
+   data-type="normal"
+   data-view="#"
+   href="#commonModal"
+   id="modalButton">
+    <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M22.1198 11.571C22.8323 10.4181 23.2496 9.05766 23.2575 7.60085C23.2785 3.77825 20.4471 0.536662 16.6717 0.0608028C16.5003 0.0389383 16.3285 0.0935994 16.1992 0.210169C16.07 0.326739 15.9958 0.494284 15.9958 0.670305V1.23608H12.2308V0.61417C12.2308 0.274903 11.9614 0 11.6288 0H0.601962C0.269438 0 0 0.274903 0 0.61417V4.18299C0 4.52226 0.269438 4.79716 0.601962 4.79716H5.68879C7.19742 4.79716 8.43277 6.05805 8.44264 7.60896L8.44385 7.70108C8.51656 11.6851 11.6274 14.9388 15.5262 15.1086C15.6344 15.1134 15.7429 15.1157 15.85 15.1157C15.8503 15.1157 15.8504 15.1157 15.8506 15.1157C17.2384 15.1157 18.5396 14.7217 19.6526 14.0382C19.7814 15.1414 20.7026 16 21.8179 16C23.0211 16 24 15.0012 24 13.7736C24.0001 12.6506 23.1804 11.7218 22.1198 11.571ZM21.818 14.7715C21.2786 14.7715 20.8398 14.3239 20.8398 13.7735C20.8398 13.2232 21.2786 12.7755 21.818 12.7755C22.3574 12.7755 22.7962 13.2232 22.7962 13.7735C22.7962 14.3238 22.3574 14.7715 21.818 14.7715Z"
+            fill="#701818"/>
+    </svg>
+    Whistle Blowing : Report an issue
+</a>
+
+<!--  
+          <a class="btn btn-sm whistle-button"
+   style="right: 17.5rem;"
+   data-params=""
+   data-target="#commonModal"
+   data-title="Returning from leave"
+   data-toggle="modal"
+   data-type="normal"
+   data-view="https://hchub.sterling.ng/leaves/return-from-leave"
+   href="#commonModal"
+   id="modalButton">
+    <i class="fas fa-user fa-fw"></i>
+    Return From Leave
+</a>
+-->
+    
+
+<script src="homepage/js/jquery.min.js"></script>
+<script src="homepage/popperjs/popper.min.js"></script>
+<script src="homepage/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="homepage/js/jquery.backstretch.min.js"></script>
+<script src="homepage/js/jquery.bootstrap-growl.min.js"></script>
+<script src="homepage/js/utils.js"></script>
+
+
+<script>
+    $(function () {
+        { /* Desktop Home : Everything homepage in this block */
+            var loginForm = $('#loginForm'),
+                companyHrms = $('.company-hrms'),
+                callToActionBtn = $('#callToActionBtn');
+
+            // windows.bgImages initialized in the ../view/pages/elements/head-content.blade.php file
+            if (window.bgImages.length) {
+                $('#home').backstretch(window.bgImages, {duration: 3000, fade: 750});
+            }
+
+            if (localStorage.getItem('showLoginForm') === 'true') {
+                // hide $(this)
+                callToActionBtn.fadeOut(function () {
+                    // hide Welcome Heading Note
+                    if (companyHrms.length) {
+                        $('.welcome-heading').fadeOut(function () {
+                            // show login form
+                            loginForm.fadeIn();
+                        });
+                    } else {
+                        loginForm.fadeIn();
+                    }
+                });
+            }
+
+            callToActionBtn.click(function () {
+                // hide $(this)
+                $(this).fadeOut(function () {
+                    // hide Welcome Heading Note
+                    if (companyHrms.length) {
+                        $('.welcome-heading').fadeOut(function () {
+                            // show login form
+                            loginForm.fadeIn();
+                        });
+                    } else {
+                        loginForm.fadeIn();
+                    }
+                });
+
+                // ClientSettings : save state in the browser
+                if (typeof (Storage) !== "undefined") {
+                    localStorage.setItem('showLoginForm', 'true');
+                }
+            });
+
+            $('a#closeButton').click(function () {
+                // hide login form
+                $(this).parent(loginForm).fadeOut(function () {
+                    // show Welcome Heading Note
+                    if (companyHrms.length) {
+                        $('.welcome-heading').fadeIn(function () {
+                            // show call to action button
+                            callToActionBtn.fadeIn();
+                        });
+                    } else {
+                        callToActionBtn.fadeIn();
+                    }
+                });
+
+                // ClientSettings : save state in the browser
+                if (typeof (Storage) !== "undefined") {
+                    localStorage.setItem('showLoginForm', 'false');
+                }
+            });
+        }
+
+        { /* Mobile Home : Everything homepage in this block */
+            var loginFormMobile = $('#loginFormMobile'),
+                callToActionBtnMobile = $('#callToActionBtnMobile'),
+                whistleBtn = $('#modalButton.whistle-button');
+
+            if (localStorage.getItem('showLoginFormMobile') === 'true') {
+                whistleBtn.hide();
+                callToActionBtnMobile.fadeOut(function () {
+                    loginFormMobile.fadeIn();
+                });
+            }
+
+            callToActionBtnMobile.click(function () {
+                // hide $(this)
+                whistleBtn.hide();
+                $(this).fadeOut(function () {
+                    loginFormMobile.fadeIn();
+                });
+
+                // ClientSettings : save state in the browser
+                if (typeof (Storage) !== "undefined") {
+                    localStorage.setItem('showLoginFormMobile', 'true');
+                }
+            });
+
+            $('a#closeButtonMobile').click(function () {
+                // hide login form
+                $(this).parent(loginFormMobile).fadeOut(function () {
+                    callToActionBtnMobile.fadeIn();
+                    whistleBtn.show();
+                });
+
+                // ClientSettings : save state in the browser
+                if (typeof (Storage) !== "undefined") {
+                    localStorage.setItem('showLoginFormMobile', 'false');
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+
+</html>
