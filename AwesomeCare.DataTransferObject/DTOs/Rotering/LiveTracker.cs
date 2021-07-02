@@ -55,11 +55,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
                 //var ct = TimeSpan.TryParseExact("06:15:00", "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out c) ? c : default(TimeSpan);
                 //var df = st.Subtract(ct);
 
-                string rowColor = "";
+                string rowColor = "#f2dede";
                 if (clockInTime.HasValue)
                 {
                     var st = TimeSpan.TryParseExact(startTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
-                    var ct = TimeSpan.TryParseExact(clockInTime.Value.DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
+                    var ct = TimeSpan.TryParseExact(clockInTime.Value.AddHours(1).DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
                     var df = st.Subtract(ct).TotalMinutes;
 
                     if (df <= 15 && df >= -15)
@@ -68,7 +68,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
                     }
                     else if (df > 15 && df <= 30)
                     {
-                        rowColor = "blue";
+                        rowColor = "#ADD8E6";
 
                     }
                     else if (df >= -30)
@@ -83,7 +83,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
 
                 }
 
-                return rowColor;
+                return rowColor;//missed;
             }
             catch (Exception ex)
             {

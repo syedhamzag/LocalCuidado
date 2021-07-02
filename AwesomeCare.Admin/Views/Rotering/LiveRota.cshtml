@@ -43,7 +43,7 @@
                             <button type="submit" asp-action="LiveRota" class="btn btn-primary">Search</button>
                         </div>
 
-                        <div  class="col-sm-2 col-lg-2 col-xs-2">
+                        <div class="col-sm-2 col-lg-2 col-xs-2">
 
                         </div>
                         <div class="col-sm-6 col-lg-6 col-xs-6">
@@ -142,7 +142,7 @@
                                                 @{
                                                     if (rota.ClockInTime.HasValue)
                                                     {
-                                                        var clockInTime = rota.ClockInTime.Value.ToString("HH:mm:ss tt");
+                                                        var clockInTime = rota.ClockInTime.Value.AddHours(1).ToString("HH:mm:ss tt");
                                                         @clockInTime;
                                                     }
                                                 }
@@ -151,7 +151,7 @@
                                                 @{
                                                     if (rota.ClockOutTime.HasValue)
                                                     {
-                                                        var clockOutTime = rota.ClockOutTime.Value.ToString("HH:mm:ss tt");
+                                                        var clockOutTime = rota.ClockOutTime.Value.AddHours(1).ToString("HH:mm:ss tt");
                                                         @clockOutTime;
                                                     }
                                                 }
@@ -167,8 +167,8 @@
                                                     TimeSpan clockOut = default;
                                                     if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
                                                     {
-                                                        isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockIn);
-                                                        isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockOut);
+                                                        isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.AddHours(1).ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockIn);
+                                                        isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.AddHours(1).ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockOut);
                                                         if (isClockInTimeValid && isClockOutTimeValid)
                                                         {
                                                             var clockDiff = clockOut.Subtract(clockIn);
@@ -220,12 +220,12 @@
                                             </td>
                                             <td>
                                                 @{
-                                                   
-                                                    string callStatus = "";
+
+                                                    string callStatus = "MISSED";
                                                     if (rota.ClockInTime.HasValue)
                                                     {
                                                         var st = TimeSpan.TryParseExact(rota.StartTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
-                                                        var ct = TimeSpan.TryParseExact(rota.ClockInTime.Value.DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
+                                                        var ct = TimeSpan.TryParseExact(rota.ClockInTime.Value.AddHours(1).DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
                                                         var df = st.Subtract(ct).TotalMinutes;
 
                                                         //var st = DateTime.TryParseExact(rota.StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
@@ -238,20 +238,24 @@
                                                         }
                                                         else if (df > 15 && df <= 30)
                                                         {
-                                                           // color = "blue";
+                                                            // color = "blue";
                                                             callStatus = "EARLY";
                                                         }
                                                         else if (df >= -30)
                                                         {
-                                                          //  color = "yellow";
+                                                            //  color = "yellow";
                                                             callStatus = "MILD";
                                                         }
                                                         else
                                                         {
-                                                          //  color = "red";
+                                                            //  color = "red";
                                                             callStatus = "LATE";
                                                         }
 
+                                                        <p style="color:black" class="text-center">@callStatus</p>
+                                                    }
+                                                    else
+                                                    {
                                                         <p style="color:black" class="text-center">@callStatus</p>
                                                     }
 
@@ -301,64 +305,64 @@
                                     }
 
                                     @*<tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Total</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Total</td>
 
-                                        <td>
-                                            @{
-                                                TimeSpan totalTime = new TimeSpan(0, 0, 0);
-                                                foreach (var rota in model.Trackers)
-                                                {
-                                                    if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
+                                            <td>
+                                                @{
+                                                    TimeSpan totalTime = new TimeSpan(0, 0, 0);
+                                                    foreach (var rota in model.Trackers)
                                                     {
-                                                        bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
-                                                        bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
-                                                        if (isClockInTimeValid && isClockOutTimeValid)
+                                                        if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
                                                         {
-                                                            var clockDiff = clockOut.Subtract(clockIn);
-                                                            totalTime = totalTime.Add(clockDiff);
+                                                            bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
+                                                            bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
+                                                            if (isClockInTimeValid && isClockOutTimeValid)
+                                                            {
+                                                                var clockDiff = clockOut.Subtract(clockIn);
+                                                                totalTime = totalTime.Add(clockDiff);
+                                                            }
                                                         }
                                                     }
+
+                                                    @totalTime;
                                                 }
+                                            </td>
 
-                                                @totalTime;
-                                            }
-                                        </td>
-
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>*@
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>*@
                                 }
 
                             </tbody>
