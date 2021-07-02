@@ -232,7 +232,7 @@ namespace AwesomeCare.Admin.Controllers
                                select new GroupLiveRota
                                {
                                    StaffName = rtGrp.Key,
-                                   Trackers = rtGrp.Where(t=>TimeSpan.ParseExact(t.StartTime, "hh\\:mm", System.Globalization.CultureInfo.CurrentCulture,System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t=> TimeSpan.ParseExact(t.StartTime, "hh\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+                                   Trackers = rtGrp.Where(t=>TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture,System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t=> TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
                                }).ToList();
 
