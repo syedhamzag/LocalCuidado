@@ -15,12 +15,14 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public CreateStaffSupervisionAppraisal()
         {
             OfficerToActList = new List<SelectListItem>();
+            WorkteamList = new List<SelectListItem>();
         }
 
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         public IFormFile Attach { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> WorkteamList { get; set; }
         public string ActiveTab { get; set; } = "supervision";
         public string ClientName { get; set; }
         public string StatusName { get; set; }

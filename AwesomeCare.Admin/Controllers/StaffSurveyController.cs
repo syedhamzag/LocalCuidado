@@ -90,7 +90,11 @@ namespace AwesomeCare.Admin.Controllers
                 HealthCareServicesSatisfaction = Survey.Result.HealthCareServicesSatisfaction,
                 SupportFromCompany = Survey.Result.SupportFromCompany,
                 WorkEnvironmentSuggestions = Survey.Result.WorkEnvironmentSuggestions,
-                Details = Survey.Result.Details
+                Details = Survey.Result.Details,
+                OfficerToAct = Survey.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                WorkTeam = Survey.Result.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = Survey.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                WorkteamList = Survey.Result.Workteam.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }
@@ -147,16 +151,16 @@ namespace AwesomeCare.Admin.Controllers
             {
                 StaffSurveyId = Survey.Result.StaffSurveyId,
                 Attachment = Survey.Result.Attachment,
+                OfficerToAct = Survey.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 Reference = Survey.Result.Reference,
                 Date = Survey.Result.Date,
                 Deadline = Survey.Result.Deadline,
                 URL = Survey.Result.URL,
-                OfficerToAct = Survey.Result.OfficerToAct.Select(s=> s.StaffPersonalInfoId).ToList(),
                 Remarks = Survey.Result.Remarks,
+                WorkTeam = Survey.Result.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
                 Status = Survey.Result.Status,
                 ActionRequired = Survey.Result.ActionRequired,
                 NextCheckDate = Survey.Result.NextCheckDate,
-                WorkTeam = Survey.Result.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
                 StaffId = Survey.Result.StaffId,
                 AccessToPolicies = Survey.Result.AccessToPolicies,
                 AdequateTrainingReceived = Survey.Result.AdequateTrainingReceived,

@@ -19,6 +19,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public CreateComplainRegister()
         {
             STAFFINVOLVED = new List<SelectListItem>();
+            OfficerToActList = new List<SelectListItem>();
+            StaffList = new List<SelectListItem>();
         }
         public int ComplainId { get; set; }
         public int ClientId { get; set; }
@@ -27,6 +29,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public IFormFile Evidence { get; set; }
         #region DropDowns
         public ICollection<SelectListItem> STAFFINVOLVED { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> StaffList { get; set; }
         public ICollection<SelectListItem> Status { get; set; }
         #endregion
 

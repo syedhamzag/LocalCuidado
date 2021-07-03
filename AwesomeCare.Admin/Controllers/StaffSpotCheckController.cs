@@ -92,6 +92,8 @@ namespace AwesomeCare.Admin.Controllers
                 StaffId = SpotCheck.Result.StaffId,
                 Details = SpotCheck.Result.Details,
                 ClientList = client.Select(s => new SelectListItem(s.FullName,s.ClientId.ToString())).ToList(),
+                OfficerToAct = SpotCheck.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = SpotCheck.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

@@ -95,8 +95,10 @@ namespace AwesomeCare.Admin.Controllers
                 ROOTCAUSE = complain.Result.ROOTCAUSE,
                 SOURCEOFCOMPLAINTS = complain.Result.SOURCEOFCOMPLAINTS,
                 StatusId = complain.Result.StatusId,
-                OfficerName = complain.Result.OfficerToAct.Select(s => s.StaffName).ToList(),
-                Staff_Name = complain.Result.StaffName.Select(s => s.StaffName).ToList(),
+                OfficerToAct = complain.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = complain.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = complain.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffList = complain.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

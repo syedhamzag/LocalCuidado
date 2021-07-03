@@ -41,18 +41,11 @@
                             {
                                 var rotaDywk = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == 1);
                                 if (rotaDywk != null)
-                                { 
+                                {
                                     <tr>
                                     <td>
                                         <div class="fancy-checkbox">
-                                            @{
-                                                var clientRotaType = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId);
-                                                if (clientRotaType != null)
-                                                {
-                                                    <label><input type="checkbox" name="@rotaType.RotaType" checked disabled><span>@rotaType.RotaType</span></label>
-                                                }
-                                            }
-
+                                            <label><input type="checkbox" name="@rotaType.RotaType" checked disabled><span>@rotaType.RotaType</span></label>
                                         </div>
                                     </td>
                                     <td>
@@ -85,18 +78,20 @@
                                     </td>
                                     <td>
                                         @{
-                                            var task = "";
+                                            var tasks = rotaDywk.RotaTasks.Where(s => s.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
                                             foreach (var tk in Model.RotaTasks)
                                             {
-                                                int id = int.Parse(tk.Value.ToString());
-                                                var tasks = rotaDywk.RotaTasks.Where(s => s.ClientRotaTaskId == id);
-                                                if (tasks != null)
+                                                if (tasks.FirstOrDefault(s => s.RotaTaskId.ToString() == tk.Value) != null)
                                                 {
-                                                    task += tk.Text.ToString()+",  ";
+                                                    <span>
+                                                        @tk.Text.ToString();
+                                                        <input type="checkbox" />Yes
+                                                        <input type="checkbox" />No
+                                                    </span>
+                                                    <br />
                                                 }
 
                                             }
-                                            <textarea class="form-control" style="margin-top: 0px; margin-bottom: 0px; height: 383px;">@task</textarea>
                                         }
                                     </td>
                                 </tr>
