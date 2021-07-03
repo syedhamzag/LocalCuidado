@@ -84,8 +84,6 @@ namespace AwesomeCare.Admin.Controllers
                 Status = superVision.Result.Status,
                 ActionRequired = superVision.Result.ActionRequired,
                 NextCheckDate = superVision.Result.NextCheckDate,
-                WorkTeam = superVision.Result.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
-                OfficerToAct = superVision.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 CondourAndWhistleBlowing = superVision.Result.CondourAndWhistleBlowing,
                 Details = superVision.Result.Details,
                 FiveStarRating = superVision.Result.FiveStarRating,
@@ -97,7 +95,11 @@ namespace AwesomeCare.Admin.Controllers
                 StaffDevelopment = superVision.Result.StaffDevelopment,
                 StaffRating = superVision.Result.StaffRating,
                 StaffSupportAreas = superVision.Result.StaffSupportAreas,
-                StaffId = superVision.Result.StaffId
+                StaffId = superVision.Result.StaffId,
+                OfficerToAct = superVision.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                WorkTeam = superVision.Result.Workteam.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = superVision.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                WorkteamList = superVision.Result.Workteam.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
             };
             return View(putEntity);
         }

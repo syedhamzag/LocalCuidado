@@ -15,6 +15,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.Admin.Extensions;
+using System.IO;
+using iText.Html2pdf;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Kernel.Geom;
+using Newtonsoft.Json;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -65,6 +72,39 @@ namespace AwesomeCare.Admin.Controllers
             }
             HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
             return View(model);
+        }
+        //public async Task<IActionResult> Download()
+        //{
+        //    ////var LogAudit = await _clientlogAuditService.Get(logId);
+        //    ////var json = JsonConvert.SerializeObject(LogAudit);
+        //    ////byte[] byte1 = GeneratePdf(json);
+
+        //    //return File(byte1, "application/pdf", "ClientLogAudit.pdf");
+        //}
+        public byte[] GeneratePdf(string paragraphs)
+        {
+            byte[] buffer;
+            PdfDocument pdfDoc = null;
+            using (MemoryStream memStream = new MemoryStream())
+            {
+                using (PdfWriter pdfWriter = new PdfWriter(memStream))
+                {
+                    pdfWriter.SetCloseStream(true);
+                    using (pdfDoc = new PdfDocument(pdfWriter))
+                    {
+
+                        pdfDoc.SetDefaultPageSize(PageSize.A4);
+                        pdfDoc.SetCloseWriter(true);
+                        Document document = new Document(pdfDoc);
+                        var para = new Paragraph(paragraphs);
+                        document.Add(para);
+                        buffer = memStream.ToArray();
+                        document.Close();
+                    }
+                }
+                buffer = memStream.ToArray();
+            }
+            return buffer;
         }
         public IActionResult FilledLog()
         {
