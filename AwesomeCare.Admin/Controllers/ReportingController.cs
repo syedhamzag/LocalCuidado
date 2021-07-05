@@ -21,6 +21,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Kernel.Geom;
+using OfficeOpenXml;
 using Newtonsoft.Json;
 
 namespace AwesomeCare.Admin.Controllers
@@ -73,14 +74,61 @@ namespace AwesomeCare.Admin.Controllers
             HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
             return View(model);
         }
-        //public async Task<IActionResult> Download()
-        //{
-        //    ////var LogAudit = await _clientlogAuditService.Get(logId);
-        //    ////var json = JsonConvert.SerializeObject(LogAudit);
-        //    ////byte[] byte1 = GeneratePdf(json);
+        public async Task<IActionResult> Download()
+        {
+            var client = await _clientService.GetClientDetail();
+            List<string> list = client.Select(s => s.FullName).ToList();
+            var stream = new MemoryStream();
+            int row = 2;
+            
+            using (var package = new ExcelPackage(stream))
+            {
+                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                workSheet.Column(4).Width = 30;
+                workSheet.Column(7).Width = 16;
+                workSheet.Column(10).Width = 16;
 
-        //    //return File(byte1, "application/pdf", "ClientLogAudit.pdf");
-        //}
+                workSheet.Cells["D2:J2"].Merge = true;
+                workSheet.Cells["D"+row].Value = "AWESOME HEALTHCARE SOLUTIONS LOG BOOK (Client Name:) (ID:)";
+                workSheet.Cells["D" + row].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                row++;
+                int startRow = row++;
+                workSheet.Cells["C" + row++].Value = "AM";
+                workSheet.Cells["D"+row++].Value= "Date";
+                workSheet.Cells["D"+row++].Value= "Time In:";
+                workSheet.Cells["D"+row++].Value= "Time Out:";
+                workSheet.Cells["D"+row++].Value= "Duration";
+                workSheet.Cells["D"+row++].Value= "Carer 1: Full Name";
+                workSheet.Cells["D"+row++].Value= "Signature:";
+                workSheet.Cells["D"+row++].Value= "Carer 2: Full Name Signature:";
+                workSheet.Cells["D" + row++].Value = "Signature:";
+                workSheet.Cells["D" + row].Value = "Bowel Movement: \n Oral Care: ";
+                workSheet.Cells["D" + row].Style.WrapText = true;
+                workSheet.Cells["D" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                workSheet.Cells["E" + row].Value = "Yes \t No";
+                workSheet.Cells["E" + row].Style.WrapText = true;
+                workSheet.Cells["E" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                workSheet.Cells["F" + row].Value = "Food and Fluid Prepared";
+                workSheet.Cells["F" + row].Style.WrapText = true;
+                workSheet.Cells["F" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                workSheet.Cells["G" + row].Value = "\n";
+                workSheet.Cells["H" + row].Value = "1/4 \n 2/4 \n 3/4 \n Full";
+                workSheet.Cells["H" + row].Style.WrapText = true;
+                workSheet.Cells["H" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                workSheet.Cells["I" + row].Value = "Handover to next Carers ";
+                workSheet.Cells["I" + row].Style.WrapText = true;
+                workSheet.Cells["I" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                workSheet.Cells["J" + row].Value = "\n";
+                workSheet.Cells["C" + startRow + ":C" + row].Merge = true;
+                workSheet.Cells["C" + startRow + ":C" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                workSheet.Cells["C" + startRow + ":C" + row].Style.TextRotation = 90;
+
+                package.Save();
+            }
+            stream.Position = 0;
+            string excelName = $"EmptyLog-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;

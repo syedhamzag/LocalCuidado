@@ -679,6 +679,12 @@ namespace AwesomeCare.Admin
             }).AddTypedClient(r => RestService.For<IIncomingMedsService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
 
+            services.AddHttpClient("whisttleblower", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IWhisttleBlowerService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
             services.AddHttpClient("clientbloodcoagulationrecord", c =>
             {
                 c.BaseAddress = new Uri(uri);
