@@ -2,12 +2,10 @@
 @using System.Globalization;
 @model LiveRota
 @{
-    ViewData["Title"] = "Live Rota";
+    ViewData["Title"] = "Rota Report";
 }
 
-@section Meta{
-    <meta http-equiv="refresh" content="60" />
-}
+
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
@@ -74,10 +72,10 @@
                     @if (Model.GroupLiveRotas?.Count > 0)
                     {
 
-                        <table id="liveRotaTable" class="table table-condensed table-hover table-bordered datatablesExportExcel">
+                        <table  class="table table-condensed table-hover table-bordered datatablesExportExcel">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    
                                     <th>Rota</th>
                                     <th>Rota Name</th>
                                     <th>Client Name</th>
@@ -111,8 +109,7 @@
                                     <th>Staff Pay by Com. Hrs</th>
                                     <th>Amount by Times Spent</th>
                                     <th></th>
-                                    <th></th>
-                                    <th></th>
+                                    
                                 </tr>
                             </thead>
 
@@ -123,9 +120,7 @@
                                     {
 
                                         <tr style="background-color:@rota.RowClass(rota.StartTime,rota.ClockInTime)">
-                                            <td>
-                                                <a asp-action="EditLiveRota" asp-controller="Rotering" asp-route-staffRotaPeriodId="@rota.StaffRotaPeriodId" target="_blank" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit"> <i class="icon-pencil" aria-hidden="true"></i></a>
-                                            </td>
+                                           
                                             <td>@rota.Period</td>
                                             <td>@rota.Rota</td>
                                             <td>@rota.ClientName</td>
@@ -291,78 +286,12 @@
                                                 }
                                             </td>
                                             <td>@rota.StaffRotaPeriodId</td>
-                                            <td>
-                                                <a asp-action="EditLiveRota" asp-controller="Rotering" asp-route-staffRotaPeriodId="@rota.StaffRotaPeriodId" target="_blank" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit"> <i class="icon-pencil" aria-hidden="true"></i></a>
-                                            </td>
-                                            <td>
-
-                                                @*<input type="hidden" value="@rota.StaffRotaPeriodId" name="deleteId" id="deleteId" />*@
-                                                <button type="submit" asp-route-deleteId="@rota.StaffRotaPeriodId" asp-action="DeleteRota" class="btn btn-danger deleteRotaPeriodBtn"><i class="icon-trash" aria-hidden="true"></i></button>
-
-
-                                            </td>
+                                            
+                                            
                                         </tr>
                                     }
 
-                                    @*<tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Total</td>
-
-                                            <td>
-                                                @{
-                                                    TimeSpan totalTime = new TimeSpan(0, 0, 0);
-                                                    foreach (var rota in model.Trackers)
-                                                    {
-                                                        if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
-                                                        {
-                                                            bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
-                                                            bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
-                                                            if (isClockInTimeValid && isClockOutTimeValid)
-                                                            {
-                                                                var clockDiff = clockOut.Subtract(clockIn);
-                                                                totalTime = totalTime.Add(clockDiff);
-                                                            }
-                                                        }
-                                                    }
-
-                                                    @totalTime;
-                                                }
-                                            </td>
-
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>*@
+                                    
                                 }
 
                             </tbody>
@@ -382,20 +311,6 @@
 
 @section Scripts{
 
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            $("#liveRotaTable tbody tr").on("click","button.deleteRotaPeriodBtn", function (event) {
-                console.log('delete button clicked')
-                var confirmResult = confirm("The selected Staff Rota will be delete \n Do you want to continue?");
-
-                console.log(confirmResult)
-                if (!confirmResult)
-                    event.preventDefault();
-            })
-
-        })
-    </script>
+    
 
 }
