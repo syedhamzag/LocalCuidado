@@ -274,10 +274,11 @@ namespace AwesomeCare.Admin.Controllers
            
             var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
+                               orderby rtGrp.Key
                                select new GroupLiveRota
                                {
                                    StaffName = rtGrp.Key,
-                                   Trackers = rtGrp.ToList()
+                                   Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
                                }).ToList();
 
@@ -286,6 +287,22 @@ namespace AwesomeCare.Admin.Controllers
 
             return View(liveRotaViewModel);
         }
+
+        [HttpPost]
+        public IActionResult RotaReport(IFormCollection formCollection)
+        {
+            string startDate = formCollection["startDate"];
+            string stopDate = formCollection["stopDate"];
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            // var date = DateTime.Now.ToString("yyyy-MM-dd");
+            //var rotaAdmin = await _rotaTaskService.LiveRota(date);
+
+            return RedirectToActionPermanent("RotaReport", new { startDate = sdate, stopDate = edate });
+            // return View(rotaAdmin);
+        }
+
+
         TimeSpan CalculateTotalClockDifference(List<LiveTracker> Trackers)
         {
             TimeSpan totalTime = new TimeSpan(0, 0, 0);
