@@ -647,6 +647,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(typeof(List<LiveTracker>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+         [AllowAnonymous]
         public IActionResult LiveRota2(string sdate, string edate)
         {
             string format = "yyyy-MM-dd";

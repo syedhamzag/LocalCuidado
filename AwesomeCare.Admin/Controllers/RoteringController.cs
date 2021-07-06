@@ -277,7 +277,7 @@ namespace AwesomeCare.Admin.Controllers
                                select new GroupLiveRota
                                {
                                    StaffName = rtGrp.Key,
-                                   Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+                                   Trackers = rtGrp.ToList()
 
                                }).ToList();
 
