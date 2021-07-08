@@ -74,8 +74,11 @@ namespace AwesomeCare.Admin.Controllers
             HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
             return View(model);
         }
-        public async Task<IActionResult> Download()
+        public async Task<IActionResult> Download(int clientId)
         {
+            var rotaTypes = await _clientRotaTypeService.Get();
+            var clientRotas = await _clientRotaService.GetForEdit(clientId);
+            var rotaTasks = await _rotaTaskService.Get();
             var client = await _clientService.GetClientDetail();
             List<string> list = client.Select(s => s.FullName).ToList();
             var stream = new MemoryStream();
@@ -85,43 +88,103 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var workSheet = package.Workbook.Worksheets.Add("Sheet1");
                 workSheet.Column(4).Width = 30;
+                workSheet.Column(5).Width = 12.8;
                 workSheet.Column(7).Width = 16;
-                workSheet.Column(10).Width = 16;
+                workSheet.Column(9).Width = 9.4;
 
-                workSheet.Cells["D2:J2"].Merge = true;
-                workSheet.Cells["D"+row].Value = "AWESOME HEALTHCARE SOLUTIONS LOG BOOK (Client Name:) (ID:)";
-                workSheet.Cells["D" + row].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                workSheet.Cells["D1:J1"].Merge = true;
+                workSheet.Cells["D1"].Value = "AWESOME HEALTHCARE SOLUTIONS LOG BOOK (Client Name:"+client.Where(s=>s.ClientId==clientId).FirstOrDefault().FullName+") (ID:"+ client.Where(s => s.ClientId == clientId).FirstOrDefault().ClientId + ")";
+                workSheet.Cells["D1"].Style.Font.Bold = true;
+                workSheet.Cells["D1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 row++;
-                int startRow = row++;
-                workSheet.Cells["C" + row++].Value = "AM";
-                workSheet.Cells["D"+row++].Value= "Date";
-                workSheet.Cells["D"+row++].Value= "Time In:";
-                workSheet.Cells["D"+row++].Value= "Time Out:";
-                workSheet.Cells["D"+row++].Value= "Duration";
-                workSheet.Cells["D"+row++].Value= "Carer 1: Full Name";
-                workSheet.Cells["D"+row++].Value= "Signature:";
-                workSheet.Cells["D"+row++].Value= "Carer 2: Full Name Signature:";
-                workSheet.Cells["D" + row++].Value = "Signature:";
-                workSheet.Cells["D" + row].Value = "Bowel Movement: \n Oral Care: ";
-                workSheet.Cells["D" + row].Style.WrapText = true;
-                workSheet.Cells["D" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                workSheet.Cells["E" + row].Value = "Yes \t No";
-                workSheet.Cells["E" + row].Style.WrapText = true;
-                workSheet.Cells["E" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                workSheet.Cells["F" + row].Value = "Food and Fluid Prepared";
-                workSheet.Cells["F" + row].Style.WrapText = true;
-                workSheet.Cells["F" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                workSheet.Cells["G" + row].Value = "\n";
-                workSheet.Cells["H" + row].Value = "1/4 \n 2/4 \n 3/4 \n Full";
-                workSheet.Cells["H" + row].Style.WrapText = true;
-                workSheet.Cells["H" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                workSheet.Cells["I" + row].Value = "Handover to next Carers ";
-                workSheet.Cells["I" + row].Style.WrapText = true;
-                workSheet.Cells["I" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-                workSheet.Cells["J" + row].Value = "\n";
-                workSheet.Cells["C" + startRow + ":C" + row].Merge = true;
-                workSheet.Cells["C" + startRow + ":C" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-                workSheet.Cells["C" + startRow + ":C" + row].Style.TextRotation = 90;
+                
+                foreach (var rotaType in rotaTypes)
+                {
+                    int startRow = row++;
+                    var rotaDywk = clientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == 1);
+                    if (rotaDywk != null)
+                    {
+                        workSheet.Cells["C" + startRow].Value = rotaType.RotaType;
+                        workSheet.Cells["C" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + startRow].Value = "Date";
+                        workSheet.Cells["D" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells[string.Concat("F", startRow, ":H", startRow)].Merge = true;
+                        workSheet.Cells["F" + startRow].Value = "Please select 'Yes' for care delivered:";
+                        workSheet.Cells["F" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["I" + startRow].Value = "Yes";
+                        workSheet.Cells["I" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["J" + startRow].Value = "No";
+                        workSheet.Cells["J" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                        int taskRow = row;
+                        var tasks = rotaDywk.RotaTasks.Where(s => s.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
+                        foreach (var tk in rotaTasks)
+                        {
+                            if (tasks.FirstOrDefault(s => s.RotaTaskId==tk.RotaTaskId) != null)
+                            {
+                                workSheet.Cells["F" + taskRow].Value = tk.TaskName+" \n";
+                                workSheet.Cells["I" + taskRow].Value = "[] \n";
+                                workSheet.Cells["J" + taskRow].Value = "[] \n";
+                            }
+                        }
+                        workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + row++].Value = "Time In:";
+                        workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + row++].Value = "Time Out:";
+                        workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + row++].Value = "Duration";
+                        workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + row++].Value = "Carer 1: Full Name";
+                        workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + row++].Value = "Signature:";
+                        workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + row++].Value = "Carer 2: Full Name Signature:";
+                        workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + row++].Value = "Signature:";
+
+                        workSheet.Cells["F" + taskRow + ":H" + (row - 1)].Merge = true;
+                        workSheet.Cells["F" + taskRow].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                        workSheet.Cells["F" + taskRow + ":H" + (row - 1)].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["I" + taskRow + ":I" + (row - 1)].Merge = true;
+                        workSheet.Cells["I" + taskRow].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                        workSheet.Cells["I" + taskRow + ":I" + (row - 1)].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["J" + taskRow + ":J" + (row - 1)].Merge = true;
+                        workSheet.Cells["J" + taskRow].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                        workSheet.Cells["J" + taskRow + ":J" + (row - 1)].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                        workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["D" + row].Value = "Bowel Movement: \n Oral Care: ";
+                        workSheet.Cells["D" + row].Style.WrapText = true;
+                        workSheet.Cells["D" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                        workSheet.Cells["E" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["E" + row].Value = " [] Yes \t [] No \n [] Yes \t [] No";
+                        workSheet.Cells["E" + row].Style.WrapText = true;
+                        workSheet.Cells["E" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                        
+                        workSheet.Cells["F" + row].Value = "Food and Fluid Prepared";
+                        workSheet.Cells["F" + row].Style.WrapText = true;
+                        workSheet.Cells["F" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                        workSheet.Cells["G" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["G" + row].Value = "\n";
+                        workSheet.Cells["H" + row].Value = " [] 1/4 \n [] 2/4 \n [] 3/4 \n [] Full";
+                        workSheet.Cells["H" + row].Style.WrapText = true;
+                        workSheet.Cells["H" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                        workSheet.Cells["H" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["I" + row].Value = "Handover to next Carers ";
+                        workSheet.Cells["I" + row].Style.WrapText = true;
+                        workSheet.Cells["I" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
+                        workSheet.Cells["I" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+                        workSheet.Cells["J" + row].Value = "\n";
+                        workSheet.Cells["J" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                        workSheet.Cells["E" +startRow +":E"+row].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+                        workSheet.Cells["C" + startRow + ":C" + row].Merge = true;
+                        workSheet.Cells["C" + startRow + ":C" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                        workSheet.Cells["C" + startRow + ":C" + row].Style.TextRotation = 90;
+                        workSheet.Cells["C" + startRow + ":J" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thick);
+                        row++;
+                    }
+                }
 
                 package.Save();
             }
