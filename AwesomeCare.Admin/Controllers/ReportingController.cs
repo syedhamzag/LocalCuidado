@@ -217,6 +217,21 @@ namespace AwesomeCare.Admin.Controllers
             }
             return buffer;
         }
+        public IActionResult DistanceFinder()
+        {
+            var model = new ReportingViewModel();
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DistanceFinder(string postcode)
+        {
+            var model = new ReportingViewModel();
+            var client = await _clientService.GetClients();
+            var clients = client.Where(s => s.PostCode.Contains(postcode)).ToList();
+            model.Client = clients;
+            return View(model);
+        }
         public IActionResult FilledLog()
         {
             return View();
