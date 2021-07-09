@@ -278,3 +278,4 @@ AwesomeCare.API/web.config
 AwesomeCare.Admin/appsettings.json
 AwesomeCare.API/appsettings.json
 *.json
+config.bat
