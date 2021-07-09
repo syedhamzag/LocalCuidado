@@ -42,7 +42,8 @@ namespace AwesomeCare.Model.Models
             ClientPulseRate = new HashSet<ClientPulseRate>();
             ClientBodyTemp = new HashSet<ClientBodyTemp>();
             ClientOxygenLvl = new HashSet<ClientOxygenLvl>();
-            ClientBMIChart = new HashSet<ClientBMIChart>(); 
+            ClientBMIChart = new HashSet<ClientBMIChart>();
+            PersonalDetail = new HashSet<PersonalDetail>();
         }
 
         public int ClientId { get; set; }
@@ -116,6 +117,6 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientBodyTemp> ClientBodyTemp { get; set; }
         public virtual ICollection<ClientOxygenLvl> ClientOxygenLvl { get; set; }
         public virtual ICollection<ClientBMIChart> ClientBMIChart { get; set; }
-
+        public virtual ICollection<PersonalDetail> PersonalDetail { get; set; }
     }
 }
