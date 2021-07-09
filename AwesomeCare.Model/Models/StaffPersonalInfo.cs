@@ -35,15 +35,7 @@ namespace AwesomeCare.Model.Models
             StaffOneToOne = new HashSet<StaffOneToOne>();
             StaffSupervisionAppraisal = new HashSet<StaffSupervisionAppraisal>();
             StaffReference = new HashSet<StaffReference>();
-            //BloodCoagPhysician = new HashSet<BloodCoagPhysician>();
-            //BloodCoagStaffName = new HashSet<BloodCoagStaffName>();
-            //BloodCoagOfficerToAct = new HashSet<BloodCoagOfficerToAct>();
-            //BloodPressurePhysician = new HashSet<BloodPressurePhysician>();
-            //BloodPressureStaffName = new HashSet<BloodPressureStaffName>();
-            //BloodPressureOfficerToAct = new HashSet<BloodPressureOfficerToAct>();
-            //BMIChartPhysician = new HashSet<BMIChartPhysician>();
-            //BMIChartStaffName = new HashSet<BMIChartStaffName>();
-            //BMIChartOfficerToAct = new HashSet<BMIChartOfficerToAct>();
+            Equipment = new HashSet<Equipment>();
         }
 
         public int StaffPersonalInfoId { get; set; }
@@ -126,18 +118,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffOneToOne> StaffOneToOne { get; set; }
         public virtual ICollection<StaffSupervisionAppraisal> StaffSupervisionAppraisal { get; set; }
         public virtual ICollection<StaffReference> StaffReference { get; set; }
-
-        //public virtual ICollection<BloodCoagOfficerToAct> BloodCoagOfficerToAct { get; set; }
-        //public virtual ICollection<BloodCoagStaffName> BloodCoagStaffName { get; set; }
-        //public virtual ICollection<BloodCoagPhysician> BloodCoagPhysician { get; set; }
-        //public virtual ICollection<BloodPressureOfficerToAct> BloodPressureOfficerToAct { get; set; }
-        //public virtual ICollection<BloodPressureStaffName> BloodPressureStaffName { get; set; }
-        //public virtual ICollection<BloodPressurePhysician> BloodPressurePhysician { get; set; }
-        //public virtual ICollection<BMIChartOfficerToAct> BMIChartOfficerToAct { get; set; }
-        //public virtual ICollection<BMIChartStaffName> BMIChartStaffName { get; set; }
-        //public virtual ICollection<BMIChartPhysician> BMIChartPhysician { get; set; }
-
-
+        public virtual ICollection<Equipment> Equipment { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
