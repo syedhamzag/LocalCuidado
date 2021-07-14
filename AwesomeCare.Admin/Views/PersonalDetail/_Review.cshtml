@@ -1,0 +1,40 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Review;
+@model List<GetReview>
+<h4>Review</h4>
+<hr />
+<div class="col-md-12">
+    <input type="hidden" asp-for="@Model.FirstOrDefault().ReviewId" />
+    <input type="hidden" asp-for="@Model.FirstOrDefault().PersonalDetailId" />
+    <div class="row">
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">CP_PreDate</label>
+            <input type="text" asp-for="FirstOrDefault().CP_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+            <span asp-validation-for="FirstOrDefault().CP_PreDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">CP_ReviewDate</label>
+            <input type="text" asp-for="FirstOrDefault().CP_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+            <span asp-validation-for="FirstOrDefault().CP_ReviewDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">RA_PreDate</label>
+            <input type="text" asp-for="FirstOrDefault().RA_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+            <span asp-validation-for="FirstOrDefault().RA_PreDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">RA_ReviewDate</label>
+            <input type="text" asp-for="FirstOrDefault().RA_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+            <span asp-validation-for="FirstOrDefault().RA_ReviewDate" class="text-danger"></span>
+        </div>
+        <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6"></div>
+        @*<div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+            <input type="submit" value="Create" class="btn btn-default" style="margin-top: 28px;" />
+        </div>*@
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

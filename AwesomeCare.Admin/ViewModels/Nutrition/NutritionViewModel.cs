@@ -27,6 +27,7 @@ namespace AwesomeCare.Admin.ViewModels.Nutrition
             ClientMealDays = new List<GetClientMealDays>();
             ClientShopping = new List<GetClientShopping>();
             ClientCleaning = new List<GetClientCleaning>();
+            ClientList = new List<SelectListItem>();
         }
         public int NutritionId { get; set; }
         [Required]
@@ -53,6 +54,7 @@ namespace AwesomeCare.Admin.ViewModels.Nutrition
         public string PlannerContact { get; set; }
         public string ShoppingStaffName { get; set; }
         public string CleaningStaffName { get; set; }
+        public List<SelectListItem> ClientList { get; set; }
         public List<GetStaffs> STAFF { get; set; }
         public List<GetRotaDayofWeek> WeekDays { get; set; }
         public List<GetClientRotaType> MealTypes { get; set; }

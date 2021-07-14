@@ -47,6 +47,8 @@
     <Compile Remove="Migrations\20210625162058_New_Migration.Designer.cs" />
     <Compile Remove="Migrations\20210625162919_New_Migration.cs" />
     <Compile Remove="Migrations\20210625162919_New_Migration.Designer.cs" />
+    <Compile Remove="Migrations\20210711080955_PersonalDetail.cs" />
+    <Compile Remove="Migrations\20210711080955_PersonalDetail.Designer.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
   </ItemGroup>

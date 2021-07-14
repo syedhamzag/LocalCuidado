@@ -1,0 +1,181 @@
+﻿@using AwesomeCare.Admin.ViewModels.PersonalDetail;
+
+@model CreatePersonalDetail
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12">
+            <div class="card planned_task">
+                <div class="header">
+                    <h2></h2>
+                </div>
+                <div class="body">
+
+                    <div class="row">
+                        <partial name="_ConsentCare" model="Model.ConsentCare" />
+                    </div>
+
+                    <div class="row">
+                        <partial name="_ConsentData" model="Model.ConsentData" />
+                    </div>
+
+                    <div class="row">
+                        <partial name="_ConsentLandLine" model="Model.ConsentLandLine" />
+                    </div>
+
+                    <div class="row">
+                        <partial name="_KeyIndicators" model="Model.KeyIndicators" />
+                    </div>
+
+                    <div class="row">
+                        <partial name="_Personal" model="Model.Personal" />
+                    </div>
+
+                    <div class="row">
+                        <partial name="_Review" model="Model.Review" />
+                    </div>
+
+                    <h4>Equipment</h4>
+                    <div class="row">
+                        <table class="table table-hover table-bordered table-responsive" name="@Model.Equipment" id="tblEquipment">
+                            <thead>
+                                <tr>
+                                    <th><label class="form-control" style="padding-left: 25px; border: none;">Name</label></th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Type</label>
+                                        <br />
+
+                                    </th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Location</label>
+                                        <br />
+
+                                    </th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Service Date</label>
+                                        <br />
+
+                                    </th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Next Service Date</label>
+                                        <br />
+
+                                    </th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Attachment</label>
+                                        <br />
+
+                                    </th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Person To Act</label>
+                                        <br />
+
+                                    </th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Status</label>
+                                        <br />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <baserecord asp-key="Equipment_Name" asp-for="@Model.Equipment.FirstOrDefault().Name" asp-items="null" />
+                                    </td>
+                                    <td>
+                                        <baserecord asp-key="Equipment_Type" asp-for="@Model.Equipment.FirstOrDefault().Type" asp-items="null" />
+                                    </td>
+                                    <td>
+                                        <baserecord asp-key="Equipment_Location" asp-for="@Model.Equipment.FirstOrDefault().Location" asp-items="null" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.Equipment.FirstOrDefault().ServiceDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.Equipment.FirstOrDefault().NextServiceDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <input type="file" asp-for="@Model.Equipment.FirstOrDefault().Attachment" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    </td>
+                                    <td>
+                                        <select class="custom-select" asp-for="@Model.Equipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList">
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <baserecord asp-key="Status" asp-for="@Model.Equipment.FirstOrDefault().Status" asp-items="null" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>PersonCentred</h4>
+                    <div class="row">
+                        <table class="table table-hover table-bordered table-responsive" name="@Model.PersonCentred" id="tblEquipment">
+                            <thead>
+                                <tr>
+                                    <th><label class="form-control" style="padding-left: 25px; border: none;">Class</label></th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Focus</label>
+                                        <br />
+
+                                    </th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Expected Support</label>
+                                        <br />
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <baserecord asp-key="Person_Class" asp-for="@Model.PersonCentred.FirstOrDefault().Class" asp-items="null" />
+                                    </td>
+                                    <td>
+                                        @*<select asp-for="@Model.PersonCentred.FirstOrDefault().FocusList" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>*@
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.PersonCentred.FirstOrDefault().ExpSupport" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>Capacity</h4>
+                    <div class="row">
+                        <table class="table table-hover table-bordered table-responsive" name="@Model.Capacity" id="tblEquipment">
+                            <thead>
+                                <tr>
+                                    <th><label class="form-control" style="padding-left: 25px; border: none;">Pointer</label></th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Indicator</label>
+                                        <br />
+
+                                    </th>
+                                    <th>
+                                        <label class="form-control" style="padding-left: 25px; border: none;">Implications</label>
+                                        <br />
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <baserecord asp-key="Capacity_Pointer" asp-for="@Model.Capacity.FirstOrDefault().Pointer" asp-items="null" />
+                                    </td>
+                                    <td>
+                                        @*<select asp-for="@Model.PersonCentred.FirstOrDefault().FocusList" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>*@
+                                    </td>
+                                    <td>
+                                        <baserecord asp-key="Capacity_Implications" asp-for="@Model.Capacity.FirstOrDefault().Implications" asp-items="null" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+                
