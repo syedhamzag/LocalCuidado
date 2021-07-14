@@ -11,10 +11,13 @@ namespace AwesomeCare.Model.Models
             Indicator = new HashSet<CapacityIndicator>();
         }
 
+        public int PersonalDetailId { get; set; }
         public int CapacityId { get; set; }
         public int Pointer { get; set; }
         public int Implications { get; set; }
 
         public virtual ICollection<CapacityIndicator> Indicator { get; set; }
+
+        public virtual PersonalDetail PersonalDetail { get; set; }
     }
 }

@@ -59,7 +59,7 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _clientServiceWatchService.Get();
-            var client = await _clientService.GetClients();
+            var client = await _clientService.GetClientDetail();
             List<CreateClientServiceWatch> reports = new List<CreateClientServiceWatch>();
             foreach (GetClientServiceWatch item in entities)
             {
@@ -67,7 +67,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.WatchId = item.WatchId;
                 report.Reference = item.Reference;
                 report.NextCheckDate = item.NextCheckDate;
-                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.Firstname).FirstOrDefault();
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }

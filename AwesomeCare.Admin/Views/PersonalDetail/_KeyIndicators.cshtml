@@ -1,0 +1,57 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.KeyIndicators;
+@model List<GetKeyIndicators>
+
+<h4>KeyIndicators</h4>
+<hr />
+<div class="col-md-12">
+    <input type="hidden" asp-for="FirstOrDefault().KeyId" />
+    <input type="hidden" asp-for="FirstOrDefault().PersonalDetailId" />
+    <div class="row">
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">Living Status</label>
+            <baserecord asp-key="Living_Status" asp-for="FirstOrDefault().LivingStatus" asp-items="null" />
+            <span asp-validation-for="FirstOrDefault().LivingStatus" class="text-danger"></span>
+        </div>
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">Debture</label>
+            <baserecord asp-key="Debture" asp-for="FirstOrDefault().Debture" asp-items="null" />
+            <span asp-validation-for="FirstOrDefault().Debture" class="text-danger"></span>
+        </div>
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">Method of Log</label>
+            <baserecord asp-key="LogMethod" asp-for="FirstOrDefault().LogMethod" asp-items="null" />
+            <span asp-validation-for="FirstOrDefault().LogMethod" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-8 col-xs-12 col-md-8 col-lg-8">
+            <label class="control-label">About Me</label>
+            <textarea type="text" asp-for="FirstOrDefault().AboutMe" class="form-control"></textarea>
+            <span asp-validation-for="FirstOrDefault().AboutMe" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-8 col-xs-12 col-md-8 col-lg-8">
+            <label class="control-label">Things I Like To Talk About</label>
+            <textarea type="text" asp-for="FirstOrDefault().ThingsILike" class="form-control"></textarea>
+            <span asp-validation-for="FirstOrDefault().ThingsILike" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-8 col-xs-12 col-md-8 col-lg-8">
+            <label class="control-label">Family Role</label>
+            <textarea type="text" asp-for="FirstOrDefault().FamilyRole" class="form-control"></textarea>
+            <span asp-validation-for="FirstOrDefault().FamilyRole" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-10 col-xs-12 col-md-10 col-lg-10"></div>
+        @*<div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+            <input type="submit" value="Create" class="btn btn-default" style="margin-top: 28px;" />
+        </div>*@
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
