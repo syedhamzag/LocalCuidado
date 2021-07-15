@@ -28,7 +28,7 @@ namespace AwesomeCare.Admin.ViewModels.Reporting
             ClientRotas = new List<GetClientRota>();
             RotaTypes = new List<GetClientRotaType>();
             Client = new List<GetClient>();
-            RotaAdmin = new List<LiveTracker>();
+            RotaLive = new List<LiveTracker>();
         }
         [Required]
         public int ClientId { get; set; }
@@ -40,12 +40,14 @@ namespace AwesomeCare.Admin.ViewModels.Reporting
 
         [Required]
         public string Date { get; set; }
+        [Required]
+        public string eDate { get; set; }
 
         public string Postcode { get; set; }
         public List<GetClientRota> ClientRotas { get; set; }
         public List<GetClientRotaType> RotaTypes { get; set; }
         public List<SelectListItem> RotaTasks { get; set; }
         public List<GetClient> Client { get; set; }
-        public List<LiveTracker> RotaAdmin { get; set; }
+        public List<LiveTracker> RotaLive { get; set; }
     }
 }
