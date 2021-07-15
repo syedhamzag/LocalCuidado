@@ -677,6 +677,7 @@ namespace AwesomeCare.API.Controllers
                              AreaCode = c.AreaCodeId,
                              ClientRotaId = crd.ClientRotaId,
                              ClientId = srp.ClientId.GetValueOrDefault(),
+                             ClientIdNumber = c.IdNumber,
                              ClientProviderReference = c.ProviderReference,
                              Period = crt.RotaType,
                              ClientName = c.Firstname + " " + c.Middlename + " " + c.Surname,

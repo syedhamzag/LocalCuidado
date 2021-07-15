@@ -22,6 +22,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string ClientPostCode { get; set; }
         public string ClientTelephone { get; set; }
         public string ClientProviderReference { get; set; }
+        public string ClientIdNumber { get; set; }
         public decimal ClientRate { get; set; }
         public int NumberOfStaff { get; set; }
         public int AreaCode { get; set; }
