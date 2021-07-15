@@ -252,7 +252,7 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
             
-            var rotaAdmin = await _rotaTaskService.LiveRota(model.Date);
+            var rotaLive = await _rotaTaskService.LiveRota(model.Date, model.eDate);
             model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
             var clientRotas = await _clientRotaService.GetForEdit(model.ClientId);
             var rotaTasks = await _rotaTaskService.Get();
@@ -266,7 +266,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.RotaTypes = rotaTypes;
                 model.RotaTasks = rotaTasks.Select(s => new SelectListItem(s.TaskName, s.RotaTaskId.ToString())).ToList();
                 model.ClientRotas = clientRotas;
-                model.RotaAdmin = rotaAdmin;
+                model.RotaLive = rotaLive;
             }
             HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
             return View(model);
