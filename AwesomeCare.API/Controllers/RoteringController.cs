@@ -557,7 +557,7 @@ namespace AwesomeCare.API.Controllers
             }
 
             rota.ClockInTime = DateTimeOffset.UtcNow;
-            rota.ClockInMode = clockInMode ;
+            rota.ClockInMode = clockInMode;
             rota.ClockInAddress = geolocation;
 
             var result = await _staffRotaPeriodRepository.UpdateEntity(rota);
@@ -647,7 +647,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(typeof(List<LiveTracker>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-         [AllowAnonymous]
+        [AllowAnonymous]
         public IActionResult LiveRota2(string sdate, string edate)
         {
             string format = "yyyy-MM-dd";
@@ -678,6 +678,8 @@ namespace AwesomeCare.API.Controllers
                              ClientRotaId = crd.ClientRotaId,
                              ClientId = srp.ClientId.GetValueOrDefault(),
                              ClientIdNumber = c.IdNumber,
+                             ClientLatitude = c.Latitude,
+                             ClientLongitude = c.Longitude,
                              ClientProviderReference = c.ProviderReference,
                              Period = crt.RotaType,
                              ClientName = c.Firstname + " " + c.Middlename + " " + c.Surname,
@@ -742,7 +744,7 @@ namespace AwesomeCare.API.Controllers
         [HttpGet("Rota/AttachedClient/{rotaId}/{rotaDayOfWeekId}/{clientRotaTypeId}")]
         [ProducesResponseType(typeof(List<GetClientAttachedToRota>), StatusCodes.Status200OK)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAttachedClientByRotaId(int rotaId, int rotaDayOfWeekId,int clientRotaTypeId)
+        public async Task<IActionResult> GetAttachedClientByRotaId(int rotaId, int rotaDayOfWeekId, int clientRotaTypeId)
         {
 
             //Get Clients attached to the specified Rota

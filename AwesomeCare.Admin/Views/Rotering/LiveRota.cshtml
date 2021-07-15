@@ -1,5 +1,6 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Rotering;
 @using System.Globalization;
+@using AwesomeCare.DataTransferObject.DTOs.Rotering;
 @model LiveRota
 @{
     ViewData["Title"] = "Live Rota";
@@ -84,8 +85,10 @@
                                     <th>Client IdNumber</th>
                                     <th>Client Tel. No.</th>
                                     <th>Client Address</th>
-                                    <th>Log In Address</th>
-                                    <th>Log Out Address</th>
+                                    <th>Clock In Address</th>
+                                    <th>Clock In Distance</th>
+                                    <th>Clock Out Address</th>
+                                    <th>Clock Out Distance</th>
                                     <th>Staff Name</th>
                                     <th>Staff Tel.</th>
                                     <th>Allocated Date</th>
@@ -134,7 +137,54 @@
                                             <td>@rota.ClientTelephone</td>
                                             <td>@rota.ClientPostCode</td>
                                             <td>@rota.ClockInAddress</td>
+                                            <td>
+                                                @{
+                                                    if (!string.IsNullOrWhiteSpace(rota.ClockInAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
+                                                    {
+                                                        var clockInLocation = rota.ClockInAddress.Split(";");
+                                                        var clockInLatitude = clockInLocation[0];
+                                                        var clockInLongitude = clockInLocation[1];
+
+                                                        var careerLocation = new Location();
+
+                                                        careerLocation.Latitude = double.TryParse(clockInLatitude, out double careerlat) ? careerlat : 0;
+                                                        careerLocation.Longitude = double.TryParse(clockInLongitude, out double careerlongi) ? careerlongi : 0;
+
+                                                        var clientLocation = new Location();
+                                                        clientLocation.Latitude = double.TryParse(clockInLatitude, out double clientlat) ? clientlat : 0;
+                                                        clientLocation.Longitude = double.TryParse(clockInLongitude, out double clientlongi) ? clientlongi : 0;
+
+                                                        var clockInDistance = rota.CalculateDistance(clientLocation, careerLocation);
+                                                        @clockInDistance;
+                                                    }
+                                                }
+                                              
+                                            </td>
                                             <td>@rota.ClockOutAddress</td>
+                                            <td>
+                                                @{
+                                                    if (!string.IsNullOrWhiteSpace(rota.ClockOutAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
+                                                    {
+                                                        var clockOutLocation = rota.ClockOutAddress.Split(";");
+                                                        var clockOutLatitude = clockOutLocation[0];
+                                                        var clockOutLongitude = clockOutLocation[1];
+
+                                                        var careerLocation = new Location();
+
+                                                        careerLocation.Latitude = double.TryParse(clockOutLatitude, out double careerlat) ? careerlat : 0;
+                                                        careerLocation.Longitude = double.TryParse(clockOutLongitude, out double careerlongi) ? careerlongi : 0;
+
+                                                        var clientLocation = new Location();
+                                                        clientLocation.Latitude = double.TryParse(clockOutLatitude, out double clientlatOut) ? clientlatOut : 0;
+                                                        clientLocation.Longitude = double.TryParse(clockOutLongitude, out double clientlongiOut) ? clientlongiOut : 0;
+
+                                                        var clockOutDistance = rota.CalculateDistance(clientLocation, careerLocation);
+                                                        @clockOutDistance;
+                                                    }
+                                                }
+                                               
+
+                                            </td>
                                             <td>@rota.Staff</td>
                                             <td>@rota.StaffTelephone</td>
                                             <td>@rota.RotaDate.ToString("MM/dd/yyyy")</td>
@@ -388,7 +438,7 @@
 
         $(document).ready(function () {
 
-            $("#liveRotaTable tbody tr").on("click","button.deleteRotaPeriodBtn", function (event) {
+            $("#liveRotaTable tbody tr").on("click", "button.deleteRotaPeriodBtn", function (event) {
                 console.log('delete button clicked')
                 var confirmResult = confirm("The selected Staff Rota will be delete \n Do you want to continue?");
 
