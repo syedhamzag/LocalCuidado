@@ -120,32 +120,33 @@ namespace AwesomeCare.API.Controllers
         public IActionResult Get(string excludeDates)
         {
             string format = "yyyy-MM-dd";
-            List<DateTime> dateTimes = new List<DateTime>();
-            if (excludeDates.Contains(","))
-            {
-                var dates = excludeDates.Split(",");
-                foreach (var date in dates)
-                {
-                    if (DateTime.TryParseExact(date, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime singleDate))
-                    {
-                        if (!dateTimes.Contains(singleDate))
-                            dateTimes.Add(singleDate);
-                    }
-                }
-            }
-            else
-            {
-                if (DateTime.TryParseExact(excludeDates, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime singleDate))
-                {
-                    if (!dateTimes.Contains(singleDate))
-                        dateTimes.Add(singleDate);
-                }
-            }
+            //List<DateTime> dateTimes = new List<DateTime>();
+            //if (excludeDates.Contains(","))
+            //{
+            //    var dates = excludeDates.Split(",");
+            //    foreach (var date in dates)
+            //    {
+            //        if (DateTime.TryParseExact(date, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime singleDate))
+            //        {
+            //            if (!dateTimes.Contains(singleDate))
+            //                dateTimes.Add(singleDate);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    if (DateTime.TryParseExact(excludeDates, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime singleDate))
+            //    {
+            //        if (!dateTimes.Contains(singleDate))
+            //            dateTimes.Add(singleDate);
+            //    }
+            //}
 
-            var rotas = staffRotaRepository.Table.Where(r => dateTimes.Contains(r.RotaDate)).Select(id => id.RotaId).ToList();
+            //var rotas = staffRotaRepository.Table.Where(r => dateTimes.Contains(r.RotaDate)).Select(id => id.RotaId).ToList();
 
 
-            var getEntities = _rotaRepository.Table.Where(r => !r.Deleted && !rotas.Contains(r.RotaId)).ProjectTo<GetClientRotaName>().ToList();
+           // var getEntities = _rotaRepository.Table.Where(r => !r.Deleted && !rotas.Contains(r.RotaId)).ProjectTo<GetClientRotaName>().ToList();
+            var getEntities = _rotaRepository.Table.Where(r => !r.Deleted ).ProjectTo<GetClientRotaName>().ToList();
             return Ok(getEntities);
         }
     }
