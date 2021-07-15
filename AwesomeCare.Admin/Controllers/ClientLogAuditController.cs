@@ -62,7 +62,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var entities = await _clientlogAuditService.Get();
             
-            var client = await _clientService.GetClients();
+            var client = await _clientService.GetClientDetail();
             List<CreateClientLogAudit> reports = new List<CreateClientLogAudit>();         
             foreach (GetClientLogAudit item in entities)
             {
@@ -70,7 +70,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.LogAuditId = item.LogAuditId;
                 report.Reference = item.Reference;
                 report.NextDueDate = item.NextDueDate;
-                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.Firstname).FirstOrDefault();
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }

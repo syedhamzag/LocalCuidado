@@ -15,6 +15,7 @@
                                             <li><label>Home Care</label></li>
                                             <li><a asp-controller="Client" asp-action="HomeCare">Home Care</a></li>
                                             <li><a asp-controller="Client" asp-action="HomeCareRegistration">Registration</a></li>
+                                            <li><a asp-controller="PersonalDetail" asp-action="Index">Client Care Plan</a></li>
 
                                         </ul>
                                     </div>
@@ -78,14 +79,12 @@
                                     <div class="mega-list">
                                         <ul class="list-unstyled">
                                             <li><label>Settings</label></li>
-
                                             <li><a asp-controller="Admin" asp-action="BaseRecord">BaseRecord</a></li>
                                             <li><a asp-controller="Admin" asp-action="InvolvingParty">Client Involving Party</a></li>
                                             <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
                                             <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
                                             <li><a asp-controller="RotaTask" asp-action="Index">Task</a></li>
                                             <li><a asp-controller="Admin" asp-action="ClientCareDetailsHeading">Client CareDetails</a></li>
-
                                         </ul>
                                     </div>
                                 </div>
@@ -138,8 +137,7 @@
                                             <li><a asp-controller="ClientProgram" asp-action="Reports">Program</a></li>
                                             <li><a asp-controller="ClientServiceWatch" asp-action="Reports">Ongoing/Service Watch</a></li>
                                             <li><a asp-controller="ClientBloodCoagulationRecord" asp-action="Reports">Blood Coagulation</a></li>
-                                            <li><a asp-controller="ClientBloodPressure" asp-action="Reports">Blood Pressure</a></li>
-
+                                            <li><a asp-controller="ClientBloodPressure" asp-action="Reports">Blood Pressure</a></li>    aX
                                         </ul>
                                     </div>
                                 </div>
@@ -191,6 +189,8 @@
                                     <div class="mega-list">
                                         <ul class="list-unstyled">
                                             <li><a asp-controller="Reporting" asp-action="EmptyLog">Empty Log Book</a></li>
+                                            <li><a asp-controller="Reporting" asp-action="FilledLog">Filled Log Book</a></li>
+                                            <li><a asp-controller="Reporting" asp-action="DistanceFinder">Distance Finder</a></li>
 
                                         </ul>
                                     </div>

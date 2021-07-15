@@ -14,6 +14,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.ClientRota;
+using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
 
 namespace AwesomeCare.Admin.ViewModels.Reporting
 {
@@ -25,6 +27,8 @@ namespace AwesomeCare.Admin.ViewModels.Reporting
             RotaTasks = new List<SelectListItem>();
             ClientRotas = new List<GetClientRota>();
             RotaTypes = new List<GetClientRotaType>();
+            Client = new List<GetClient>();
+            RotaLive = new List<LiveTracker>();
         }
         [Required]
         public int ClientId { get; set; }
@@ -34,9 +38,16 @@ namespace AwesomeCare.Admin.ViewModels.Reporting
         public string Year { get; set; }
         public List<SelectListItem> ClientList {get; set;}
 
+        [Required]
         public string Date { get; set; }
+        [Required]
+        public string eDate { get; set; }
+
+        public string Postcode { get; set; }
         public List<GetClientRota> ClientRotas { get; set; }
         public List<GetClientRotaType> RotaTypes { get; set; }
         public List<SelectListItem> RotaTasks { get; set; }
+        public List<GetClient> Client { get; set; }
+        public List<LiveTracker> RotaLive { get; set; }
     }
 }

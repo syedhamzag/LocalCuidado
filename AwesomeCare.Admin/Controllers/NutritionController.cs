@@ -25,6 +25,7 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -51,9 +52,10 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Reports()
         {
-            var Clients = await _clientService.GetClients();
-            ViewBag.AllClients = Clients;
-            return View();
+            var model = new NutritionViewModel();
+            var clients = await _clientService.GetClientDetail();
+            model.ClientList = clients.Select(s=> new SelectListItem(s.FullName,s.ClientId.ToString())).ToList();
+            return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -64,13 +66,13 @@ namespace AwesomeCare.Admin.Controllers
             var Client = await _clientService.GetClient(clientId);
             var nutrition = await _nutritionService.GetForEdit(clientId);
             List<GetStaffs> AllStaffs = await _staffService.GetStaffs();
-            var Clients = await _clientService.GetClients();
-            ViewBag.AllClients = Clients;
+            var Clients = await _clientService.GetClientDetail();
+            model.ClientList = Clients.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
 
             if (nutrition.Count > 0)
             {
                 model.ClientId = clientId;
-                model.ClientName = Client.Firstname + "" + Client.Middlename + " " + Client.Surname;
+                model.ClientName = Clients.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
                 model.NutritionId = nutrition.FirstOrDefault().NutritionId;
                 model.ClientCleaning = nutrition.FirstOrDefault().ClientCleaning;
                 model.ClientShopping = nutrition.FirstOrDefault().ClientShopping;
@@ -202,7 +204,6 @@ namespace AwesomeCare.Admin.Controllers
                                     string filename = pictureId;
                                     path = await _fileUpload.UploadFile(folder, true, filename, picture.OpenReadStream());
                                 }
-
                                 MealDay.MEALDETAILS = mealDetail[0].ToString();
                                 MealDay.HOWTOPREPARE = howtoPrepare[0].ToString();
                                 MealDay.TypeId = int.Parse(TypeId[i].ToString());

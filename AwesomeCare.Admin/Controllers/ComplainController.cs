@@ -50,7 +50,7 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var entities = await _complainService.Get();
-            var client = await _clientService.GetClients();
+            var client = await _clientService.GetClientDetail();
             List<CreateComplainRegister> reports = new List<CreateComplainRegister>();
             foreach (GetClientComplainRegister item in entities)
             {
@@ -59,7 +59,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Reference = item.Reference;
                 report.DUEDATE = item.DUEDATE;
                 report.CONCERNSRAISED = item.CONCERNSRAISED;
-                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.Firstname).FirstOrDefault();
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.StatusId).Result.ValueName;
                 reports.Add(report);
             }

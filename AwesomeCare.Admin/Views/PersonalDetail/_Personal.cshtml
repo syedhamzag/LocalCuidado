@@ -1,0 +1,28 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Personal;
+@model List<GetPersonal>
+<h4>Personal</h4>
+<hr />
+<div class="col-md-12">
+    <input type="hidden" asp-for="@Model.FirstOrDefault().PersonalId" />
+    <input type="hidden" asp-for="@Model.FirstOrDefault().PersonalDetailId" />
+    <div class="row">
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">Signature</label>
+            <baserecord asp-key="Smoking" asp-for="@Model.FirstOrDefault().Smoking" asp-items="null" />
+            <span asp-validation-for="@Model.FirstOrDefault().Smoking" class="text-danger"></span>
+        </div>
+        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+            <label class="control-label">DNR in Place</label>
+            <baserecord asp-key="DNR" asp-for="@Model.FirstOrDefault().DNR" asp-items="null" />
+            <span asp-validation-for="@Model.FirstOrDefault().DNR" class="text-danger"></span>
+        </div>
+        <div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2"></div>
+        @*<div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+            <input type="submit" value="Create" class="btn btn-default" style="margin-top: 28px;" />
+        </div>*@
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
