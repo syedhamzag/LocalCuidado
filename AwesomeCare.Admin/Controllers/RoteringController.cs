@@ -239,6 +239,8 @@ namespace AwesomeCare.Admin.Controllers
             liveRotaViewModel.GroupLiveRotas = groupedRota;
             liveRotaViewModel.ClockDifferences = clockDifferences;
 
+            ViewBag.Total = liveRotaViewModel.GroupLiveRotas.Count();
+
             return View(liveRotaViewModel);
         }
 
