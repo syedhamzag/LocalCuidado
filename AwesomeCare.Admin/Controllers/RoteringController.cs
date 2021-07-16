@@ -226,17 +226,23 @@ namespace AwesomeCare.Admin.Controllers
                 });
             }
 
-          //  var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
-            //var groupedRota = (from rt in rotaAdmin
-            //                   group rt by rt.Staff into rtGrp
-            //                   select new GroupLiveRota
-            //                   {
-            //                       StaffName = rtGrp.Key,
-            //                       Trackers = rtGrp.Where(t=>TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture,System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t=> TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+            List<GroupLiveRota> groupedRota = null;
+            var todaysDate = DateTime.Now.ToString("yyyy-MM-dd");
+            if (todaysDate.Equals(sdate))
+            {
+                var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
+                groupedRota = (from rt in rotaAdmin
+                               group rt by rt.Staff into rtGrp
+                               select new GroupLiveRota
+                               {
+                                   StaffName = rtGrp.Key,
+                                   Trackers = rtGrp.Where(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
-            //                   }).ToList();
-
-            var groupedRota = (from rt in rotaAdmin
+                               }).ToList();
+            }
+            else
+            {
+                groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
                                select new GroupLiveRota
                                {
@@ -244,11 +250,15 @@ namespace AwesomeCare.Admin.Controllers
                                    Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
                                }).ToList();
+            }
+
+
+
 
             liveRotaViewModel.GroupLiveRotas = groupedRota;
             liveRotaViewModel.ClockDifferences = clockDifferences;
 
-            ViewBag.Total = liveRotaViewModel.GroupLiveRotas.Count();
+
 
             return View(liveRotaViewModel);
         }
@@ -282,7 +292,7 @@ namespace AwesomeCare.Admin.Controllers
                 });
             }
 
-           
+
             var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
                                orderby rtGrp.Key
@@ -367,7 +377,7 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _rotaTaskService.DeleteStaffRotaPeriod(staffRotaId);
             var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully deleted" :content });
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully deleted" : content });
             return RedirectToActionPermanent("LiveRota");
         }
 
