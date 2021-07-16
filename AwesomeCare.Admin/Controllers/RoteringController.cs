@@ -226,13 +226,22 @@ namespace AwesomeCare.Admin.Controllers
                 });
             }
 
-            var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
+          //  var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
+            //var groupedRota = (from rt in rotaAdmin
+            //                   group rt by rt.Staff into rtGrp
+            //                   select new GroupLiveRota
+            //                   {
+            //                       StaffName = rtGrp.Key,
+            //                       Trackers = rtGrp.Where(t=>TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture,System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t=> TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+
+            //                   }).ToList();
+
             var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
                                select new GroupLiveRota
                                {
                                    StaffName = rtGrp.Key,
-                                   Trackers = rtGrp.Where(t=>TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture,System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t=> TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+                                   Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
                                }).ToList();
 
