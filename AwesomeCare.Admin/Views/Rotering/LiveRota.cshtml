@@ -141,7 +141,7 @@
                                             <td>@rota.ClientLatitude;@rota.ClientLongitude</td>
                                             <td>@rota.ClockInAddress</td>
                                             <td>
-                                                @*@{
+                                                @{
                                                     if (!string.IsNullOrWhiteSpace(rota.ClockInAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
                                                     {
                                                         var clockInLocation = rota.ClockInAddress.Split(";");
@@ -160,12 +160,12 @@
                                                         var clockInDistance = rota.CalculateDistance(clientLocation, careerLocation);
                                                         @clockInDistance.ToString();
                                                     }
-                                                }*@
+                                                }
                                           
                                             </td>
                                             <td>@rota.ClockOutAddress</td>
                                             <td>
-                                                @*@{
+                                                @{
                                                     if (!string.IsNullOrWhiteSpace(rota.ClockOutAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
                                                     {
                                                         var clockOutLocation = rota.ClockOutAddress.Split(";");
@@ -184,7 +184,7 @@
                                                         var clockOutDistance = rota.CalculateDistance(clientLocation, careerLocation);
                                                         @clockOutDistance.ToString();
                                                     }
-                                                }*@
+                                                }
                                                
 
                                             </td>
