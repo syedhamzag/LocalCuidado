@@ -100,7 +100,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
             }
         }
 
-        public double CalculateDistance(Location point1, Location point2)
+        public string CalculateDistance(Location point1, Location point2)
         {
             try
             {
@@ -110,12 +110,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
                 var num2 = point2.Longitude * (Math.PI / 180.0) - num1;
                 var d3 = Math.Pow(Math.Sin((d2 - d1) / 2.0), 2.0) +
                          Math.Cos(d1) * Math.Cos(d2) * Math.Pow(Math.Sin(num2 / 2.0), 2.0);
-                return 6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3)));
+                return (6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3)))).ToString();
             }
             catch (Exception ex)
             {
 
-                return 0.0000;
+                return "N/A";
             }
         }
     }

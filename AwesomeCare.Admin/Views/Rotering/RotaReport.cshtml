@@ -150,7 +150,7 @@
                                                         clientLocation.Longitude = double.TryParse(clockInLongitude, out double clientlongi) ? clientlongi : 0;
 
                                                         var clockInDistance = rota.CalculateDistance(clientLocation, careerLocation);
-                                                        @clockInDistance.ToString();
+                                                        @clockInDistance;
                                                     }
                                                 }
 
@@ -174,7 +174,7 @@
                                                         clientLocation.Longitude = double.TryParse(clockOutLongitude, out double clientlongiOut) ? clientlongiOut : 0;
 
                                                         var clockOutDistance = rota.CalculateDistance(clientLocation, careerLocation);
-                                                        @clockOutDistance.ToString();
+                                                        @clockOutDistance;
                                                     }
                                                 }
 
