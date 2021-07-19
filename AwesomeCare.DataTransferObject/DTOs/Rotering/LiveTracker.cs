@@ -59,7 +59,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
                 //var ct = TimeSpan.TryParseExact("06:15:00", "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out c) ? c : default(TimeSpan);
                 //var df = st.Subtract(ct);
 
-                string rowColor = "#f2dede";
+                string rowColor = "gray";
                 if (clockInTime.HasValue)
                 {
                     var st = TimeSpan.TryParseExact(startTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
