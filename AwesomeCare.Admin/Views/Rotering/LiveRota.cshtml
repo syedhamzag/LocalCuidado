@@ -158,8 +158,8 @@
                                                         careerLocation.Longitude = double.TryParse(clockInLongitude, out  careerlongi) ? careerlongi : 0;
 
                                                         var clientLocation = new Location();
-                                                        clientLocation.Latitude = double.TryParse(clockInLatitude, out  clientlat) ? clientlat : 0;
-                                                        clientLocation.Longitude = double.TryParse(clockInLongitude, out  clientlongi) ? clientlongi : 0;
+                                                        clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out  clientlat) ? clientlat : 0;
+                                                        clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out  clientlongi) ? clientlongi : 0;
 
                                                         var clockInDistance = rota.CalculateDistance(clientLocation, careerLocation);
                                                         @clockInDistance;
@@ -192,8 +192,8 @@
                                                         careerLocation.Longitude = double.TryParse(clockOutLongitude, out  careerlongi) ? careerlongi : 0;
 
                                                         var clientLocation = new Location();
-                                                        clientLocation.Latitude = double.TryParse(clockOutLatitude, out  clientlatOut) ? clientlatOut : 0;
-                                                        clientLocation.Longitude = double.TryParse(clockOutLongitude, out  clientlongiOut) ? clientlongiOut : 0;
+                                                        clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out  clientlatOut) ? clientlatOut : 0;
+                                                        clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out  clientlongiOut) ? clientlongiOut : 0;
 
                                                         var clockOutDistance = rota.CalculateDistance(clientLocation, careerLocation);
                                                         @clockOutDistance;
