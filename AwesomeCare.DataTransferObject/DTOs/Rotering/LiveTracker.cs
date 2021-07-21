@@ -81,7 +81,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
                     }
                     else
                     {
-                        rowColor = "#f2dede";//red
+                        rowColor = "#A9A9A9";// "#f2dede";//red
                     }
 
 
