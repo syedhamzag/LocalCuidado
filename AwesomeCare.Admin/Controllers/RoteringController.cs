@@ -230,26 +230,26 @@ namespace AwesomeCare.Admin.Controllers
             var todaysDate = DateTime.Now.ToString("yyyy-MM-dd");
             //if (todaysDate.Equals(sdate))
             //{
-            //    var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
-            //    groupedRota = (from rt in rotaAdmin
-            //                   group rt by rt.Staff into rtGrp
-            //                   select new GroupLiveRota
-            //                   {
-            //                       StaffName = rtGrp.Key,
-            //                       Trackers = rtGrp.Where(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+            var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
+            groupedRota = (from rt in rotaAdmin
+                           group rt by rt.Staff into rtGrp
+                           select new GroupLiveRota
+                           {
+                               StaffName = rtGrp.Key,
+                               Trackers = rtGrp.Where(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
-            //                   }).ToList();
-            //}
+                           }).ToList();
+            // }
             //else
             //{
-                groupedRota = (from rt in rotaAdmin
-                               group rt by rt.Staff into rtGrp
-                               select new GroupLiveRota
-                               {
-                                   StaffName = rtGrp.Key,
-                                   Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+            //groupedRota = (from rt in rotaAdmin
+            //                       group rt by rt.Staff into rtGrp
+            //                       select new GroupLiveRota
+            //                       {
+            //                           StaffName = rtGrp.Key,
+            //                           Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
-                               }).ToList();
+            //                       }).ToList();
             //}
 
 
