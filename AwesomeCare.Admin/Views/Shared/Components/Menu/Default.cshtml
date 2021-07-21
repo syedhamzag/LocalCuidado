@@ -152,6 +152,41 @@
                         <div class="blue"></div>
                         <span>Blue</span>
                     </li>
+
+                    <li class="nav-item dropdown mega-menu">
+                        <a href="javascript:void(0)" class="nav-link dropdown-toggle" data-toggle="dropdown"><i class="icon-user-follow"></i> <span> Staff</span></a>
+                        <div class="dropdown-menu mega-main padding-0 animated fadeIn">
+                            <div class="row">
+                                <div class="col-lg-2 col-lg-auto col-md-4 col-sm-4">
+                                    <div class="mega-list">
+                                        <ul class="list-unstyled">
+                                            <li><label>Staff</label></li>
+                                            <li><a asp-controller="User" asp-action="Index">All Users</a></li>
+                                            <li><a asp-controller="Staff" asp-action="Index">All Staffs</a></li>
+                                            <li><a asp-controller="Staff" asp-action="Communication">Communication</a></li>
+                                            <li><a asp-route="CreateRota">Create Rota</a></li>
+                                            <li><a asp-controller="StaffBlackList" asp-action="Index">Staff Blacklist</a></li>
+                                            <li><a asp-controller="Communication" asp-action="Index">Communication</a></li>
+                                            <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
+                                            <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
+                                            <li><a asp-controller="ShiftBooking" asp-action="CreateStaffShift">Create Shift</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-lg-auto col-md-4 col-sm-4">
+                                    <div class="mega-list">
+                                        <ul class="list-unstyled">
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-6 col-md-4 hidden-sm">
+                                    <div class="img-box" style="background-image: url(../assets/images/menu-img/1.jpg)"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     <li data-theme="cyan" class="active">
                         <div class="cyan"></div>
                         <span>Cyan</span>
