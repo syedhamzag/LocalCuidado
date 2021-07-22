@@ -141,7 +141,7 @@
                                             <td>@rota.ClockInAddress</td>
                                             <td>
                                                 @{
-                                                    if (!string.IsNullOrWhiteSpace(rota.ClockInAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
+                                                    @*if (!string.IsNullOrWhiteSpace(rota.ClockInAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
                                                     {
                                                         double careerlat = 0;
                                                         double careerlongi = 0;
@@ -169,7 +169,7 @@
                                                     {
                                                         var dist = "N/A";
                                                         @dist
-                                                    }
+                                                    }*@
                                                 }
 
                                             </td>
