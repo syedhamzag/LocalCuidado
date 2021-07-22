@@ -155,12 +155,12 @@
 
                                                         var careerLocation = new Location();
 
-                                                        careerLocation.Latitude = double.TryParse(clockInLatitude, out careerlat) ? Math.Round(careerlat, decimalPlaces) : 0;
-                                                        careerLocation.Longitude = double.TryParse(clockInLongitude, out careerlongi) ? Math.Round(careerlongi, decimalPlaces) : 0;
+                                                        careerLocation.Latitude = double.TryParse(clockInLatitude, out careerlat) ? careerlat : 0;
+                                                        careerLocation.Longitude = double.TryParse(clockInLongitude, out careerlongi) ? careerlongi : 0;
 
                                                         var clientLocation = new Location();
-                                                        clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlat) ? Math.Round(clientlat, decimalPlaces) : 0;
-                                                        clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongi) ? Math.Round(clientlongi, decimalPlaces) : 0;
+                                                        clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlat) ? clientlat : 0;
+                                                        clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongi) ? clientlongi : 0;
 
                                                         var clockInDistance = rota.CalculateDistance(clientLocation, careerLocation);
                                                         @clockInDistance;
@@ -191,12 +191,12 @@
 
                                                         var careerLocation = new Location();
 
-                                                        careerLocation.Latitude = double.TryParse(clockOutLatitude, out careerlat) ? Math.Round(careerlat, decimalPlaces) : 0;
-                                                        careerLocation.Longitude = double.TryParse(clockOutLongitude, out careerlongi) ? Math.Round(careerlongi, decimalPlaces) : 0;
+                                                        careerLocation.Latitude = double.TryParse(clockOutLatitude, out careerlat) ? careerlat : 0;
+                                                        careerLocation.Longitude = double.TryParse(clockOutLongitude, out careerlongi) ? careerlongi : 0;
 
                                                         var clientLocation = new Location();
-                                                        clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlatOut) ? Math.Round(clientlatOut, decimalPlaces) : 0;
-                                                        clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongiOut) ? Math.Round(clientlongiOut, decimalPlaces) : 0;
+                                                        clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlatOut) ? clientlatOut : 0;
+                                                        clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongiOut) ? clientlongiOut : 0;
 
                                                         var clockOutDistance = rota.CalculateDistance(clientLocation, careerLocation);
                                                         @clockOutDistance;
