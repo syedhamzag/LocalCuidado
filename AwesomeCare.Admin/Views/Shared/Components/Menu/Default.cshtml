@@ -1,16 +1,17 @@
-﻿<div id="left-sidebar" class="sidebar">
+﻿@using IdentityServer4.Extensions;
+<div id="left-sidebar" class="sidebar">
     <div class="sidebar-scroll">
         <div class="user-account">
             <img src="../assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture">
             <div class="dropdown">
-                <span>Welcome,</span>
+                <span>Welcome, @User.GetDisplayName()</span>
                 <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong></strong></a>
                 <ul class="dropdown-menu dropdown-menu-right account">
-                    <li><a href="doctor-profile.html"><i class="icon-user"></i>My Profile</a></li>
+                    @*<li><a href="doctor-profile.html"><i class="icon-user"></i>My Profile</a></li>
                     <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
                     <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
                     <li class="divider"></li>
-                    <li><a href="page-login.html"><i class="icon-power"></i>Logout</a></li>
+                    <li><a href="page-login.html"><i class="icon-power"></i>Logout</a></li>*@
                 </ul>
             </div>
             <hr>
@@ -137,7 +138,7 @@
                 </nav>
             </div>
             
-            <div class="tab-content p-l-15 p-r-15" id="setting">
+            @*<div class="tab-content p-l-15 p-r-15" id="setting">
                 <h6>Settings</h6>
                 <ul>
                 </ul>
@@ -205,7 +206,7 @@
                     </li>
                 </ul>
                 <hr>
-            </div>
+            </div>*@
         </div>
     </div>
 </div>
