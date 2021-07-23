@@ -25,6 +25,9 @@ namespace AwesomeCare.Model.Models
         public string StartTime { get; set; }
         public string StopTime { get; set; }
         public int? ClientId { get; set; }
+        public string BowelMovement { get; set; }
+        public string OralCare { get; set; }
+        public string FluidIntake { get; set; }
         public virtual StaffRota StaffRota { get; set; }
         public virtual ClientRotaType ClientRotaType { get; set; }
         public virtual ICollection<StaffRotaTask> StaffRotaTasks { get; set; }

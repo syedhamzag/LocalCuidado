@@ -322,7 +322,7 @@ namespace MapperConfig
 
             CreateMap<ClientRegulatoryContact, GetClientRegulatoryContact>();
             CreateMap<ClientRegulatoryContact, GetClientRegulatoryContactForEdit>()
-                .ForMember(dto=>dto.RegulatoryContact,mem=>mem.Ignore());
+                .ForMember(dto => dto.RegulatoryContact, mem => mem.Ignore());
             #endregion
 
             #region ClientRotaName
@@ -731,8 +731,8 @@ namespace MapperConfig
             CreateMap<StaffPersonalInfo, GetStaffs>()
                 .ForMember(dto => dto.Fullname, mem => mem.MapFrom(src => string.Concat(src.FirstName, " ", src.MiddleName, " ", src.LastName)))
                 .ForMember(dto => dto.Status, mem => mem.MapFrom(src => src.Status.ToString()));// mem.MapFrom(src => Enum.GetName(typeof(StaffRegistrationEnum), src.Status)));
-           
-            
+
+
             #endregion
 
             #region StaffEmergencyContact
@@ -835,12 +835,12 @@ namespace MapperConfig
             #endregion
 
             #region ShiftBookingBlockedDays
-            CreateMap<PostShiftBookingBlockedDays,ShiftBookingBlockedDays>()
-                .ForMember(dto=>dto.ShiftBookingBlockedDaysId,mem=>mem.Ignore())
-                .ForMember(dto=>dto.ShiftBooking,mem=>mem.Ignore());
+            CreateMap<PostShiftBookingBlockedDays, ShiftBookingBlockedDays>()
+                .ForMember(dto => dto.ShiftBookingBlockedDaysId, mem => mem.Ignore())
+                .ForMember(dto => dto.ShiftBooking, mem => mem.Ignore());
 
-            CreateMap<ShiftBookingBlockedDays,GetShiftBookingBlockedDays>();
-           
+            CreateMap<ShiftBookingBlockedDays, GetShiftBookingBlockedDays>();
+
             #endregion
 
             #region StaffWorkTeam
@@ -951,6 +951,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClockOutMode, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockInMode, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRotaTasks, mem => mem.Ignore())
+                .ForMember(dto => dto.BowelMovement, mem => mem.Ignore())
+                .ForMember(dto => dto.FluidIntake, mem => mem.Ignore())
+                .ForMember(dto => dto.OralCare, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
 
             CreateMap<StaffRotaPeriod, GetStaffRotaPeriodForEdit>();
@@ -964,6 +967,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.StopTime, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockInMode, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRotaTasks, mem => mem.Ignore())
+                .ForMember(dto => dto.BowelMovement, mem => mem.Ignore())
+                .ForMember(dto => dto.FluidIntake, mem => mem.Ignore())
+                .ForMember(dto => dto.OralCare, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
             //  CreateMap<StaffRotaPeriod, GetStaffRotaPeriod>();
             #endregion
@@ -974,7 +980,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffRota, mem => mem.Ignore());
 
-          
+
             #endregion
 
             #region StaffRotaItem
@@ -995,15 +1001,15 @@ namespace MapperConfig
 
             #region StaffRating
             CreateMap<PostStaffRating, StaffRating>()
-                .ForMember(dto=>dto.StaffRatingId,mem=>mem.Ignore())
-                .ForMember(dto=>dto.StaffPersonalInfo,mem=>mem.Ignore());
+                .ForMember(dto => dto.StaffRatingId, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
             #endregion
 
             #region StaffBlackList
             CreateMap<PostStaffBlackList, StaffBlackList>()
                 .ForMember(dto => dto.StaffBlackListId, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
-                .ForMember(dto => dto.Date, mem => mem.MapFrom(src=>DateTime.Now))
+                .ForMember(dto => dto.Date, mem => mem.MapFrom(src => DateTime.Now))
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<PutStaffBlackList, StaffBlackList>()
@@ -1087,7 +1093,7 @@ namespace MapperConfig
             CreateMap<PutClientMedAudit, ClientMedAudit>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
             CreateMap<PostClientMedAudit, ClientMedAudit>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore()); 
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<ClientMedAudit, GetClientMedAudit>();
             #endregion

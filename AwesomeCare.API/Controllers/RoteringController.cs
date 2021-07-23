@@ -709,7 +709,10 @@ namespace AwesomeCare.API.Controllers
                              StaffRate = st.Rate,
                              ClientRotaDaysId = crd.ClientRotaDaysId,
                              StaffRotaId = sr.StaffRotaId,
-                             StaffRotaPeriodId = srp.StaffRotaPeriodId
+                             StaffRotaPeriodId = srp.StaffRotaPeriodId,
+                             BowelMovement = srp.BowelMovement,
+                             OralCare = srp.OralCare,
+                             FluidIntake = srp.FluidIntake
                          }).OrderBy(o => o.RotaDate).ToList();
 
             var distinctRotas = rotas.Distinct(new LiveTrackerEqualityComparer()).ToList();

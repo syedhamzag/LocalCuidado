@@ -86,6 +86,23 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.ClientId)
              .HasColumnName("ClientId")
              .IsRequired(false);
+
+
+            builder.Property(p => p.BowelMovement)
+             .HasColumnName("BowelMovement")
+             .HasMaxLength(5)
+             .IsRequired(false);
+
+            builder.Property(p => p.OralCare)
+              .HasColumnName("OralCare")
+              .HasMaxLength(5)
+              .IsRequired(false);
+
+            builder.Property(p => p.FluidIntake)
+             .HasColumnName("FluidIntake")
+             .HasMaxLength(5)
+             .IsRequired(false);
+
             #endregion
 
             #region Relationship
