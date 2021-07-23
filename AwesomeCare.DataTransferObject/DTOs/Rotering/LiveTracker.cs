@@ -50,6 +50,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string ClockOutAddress { get; set; }
         public string Comment { get; set; }
         public string HandOver { get; set; }
+        public string BowelMovement { get; set; }
+        public string OralCare { get; set; }
+        public string FluidIntake { get; set; }
 
         public string RowClass(string startTime, DateTimeOffset? clockInTime)
         {

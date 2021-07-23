@@ -115,6 +115,9 @@
                                     <th>Staff Rate</th>
                                     <th>Staff Pay by Com. Hrs</th>
                                     <th>Amount by Times Spent</th>
+                                    <th>Bowel Movement</th>
+                                    <th>Oral Care</th>
+                                    <th>Fluid Intake</th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -384,6 +387,9 @@
                                                     }
                                                 }
                                             </td>
+                                            <td>@rota.BowelMovement</td>
+                                            <td>@rota.OralCare</td>
+                                            <td>@rota.FluidIntake</td>
                                             <td>@rota.StaffRotaPeriodId</td>
                                             <td>
                                                 <a asp-action="EditLiveRota" asp-controller="Rotering" asp-route-staffRotaPeriodId="@rota.StaffRotaPeriodId" target="_blank" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit"> <i class="icon-pencil" aria-hidden="true"></i></a>
