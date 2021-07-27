@@ -12,7 +12,7 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
         [Required]
         public int PersonalId { get; set; }
         [Required]
-        public int PersonalDetailId { get; set; }
+        public int ClientId { get; set; }
         [Required]
         public int Smoking { get; set; }
         [Required]

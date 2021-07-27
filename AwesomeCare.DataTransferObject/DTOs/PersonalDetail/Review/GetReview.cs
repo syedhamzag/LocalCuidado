@@ -6,7 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Review
 {
     public class GetReview
     {
-        public int PersonalDetailId { get; set; }
+        public int ClientId { get; set; }
         public int ReviewId { get; set; }
         public DateTime CP_PreDate { get; set; }
         public DateTime CP_ReviewDate { get; set; }

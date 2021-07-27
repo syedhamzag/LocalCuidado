@@ -43,7 +43,15 @@ namespace AwesomeCare.Model.Models
             ClientBodyTemp = new HashSet<ClientBodyTemp>();
             ClientOxygenLvl = new HashSet<ClientOxygenLvl>();
             ClientBMIChart = new HashSet<ClientBMIChart>();
-            PersonalDetail = new HashSet<PersonalDetail>();
+            Capacity = new HashSet<Capacity>();
+            ConsentCare = new HashSet<ConsentCare>();
+            ConsentData = new HashSet<ConsentData>();
+            ConsentLandLine = new HashSet<ConsentLandLine>();
+            Equipment = new HashSet<Equipment>();
+            KeyIndicators = new HashSet<KeyIndicators>();
+            Personal = new HashSet<Personal>();
+            PersonCentred = new HashSet<PersonCentred>();
+            Review = new HashSet<Review>();
         }
 
         public int ClientId { get; set; }
@@ -117,6 +125,14 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientBodyTemp> ClientBodyTemp { get; set; }
         public virtual ICollection<ClientOxygenLvl> ClientOxygenLvl { get; set; }
         public virtual ICollection<ClientBMIChart> ClientBMIChart { get; set; }
-        public virtual ICollection<PersonalDetail> PersonalDetail { get; set; }
+        public virtual ICollection<Capacity> Capacity { get; set; }
+        public virtual ICollection<ConsentCare> ConsentCare { get; set; }
+        public virtual ICollection<ConsentData> ConsentData { get; set; }
+        public virtual ICollection<ConsentLandLine> ConsentLandLine { get; set; }
+        public virtual ICollection<Equipment> Equipment { get; set; }
+        public virtual ICollection<KeyIndicators> KeyIndicators { get; set; }
+        public virtual ICollection<Personal> Personal { get; set; }
+        public virtual ICollection<PersonCentred> PersonCentred { get; set; }
+        public virtual ICollection<Review> Review { get; set; }
     }
 }

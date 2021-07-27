@@ -6,9 +6,15 @@ namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Capacity
 {
     public class PostCapacity
     {
-        public int PersonalDetailId { get; set; }
+        public PostCapacity()
+        {
+            Indicator = new List<PostCapacityIndicator>();
+        }
+        public int ClientId { get; set; }
         public int CapacityId { get; set; }
         public int Pointer { get; set; }
         public int Implications { get; set; }
+
+        public List<PostCapacityIndicator> Indicator { get; set; }
     }
 }

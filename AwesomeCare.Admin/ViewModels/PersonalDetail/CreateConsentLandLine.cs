@@ -11,7 +11,7 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
         [Required]
         public int LandlineId { get; set; }
         [Required]
-        public int PersonalDetailId { get; set; }
+        public int ClientId { get; set; }
         [Required]
         public int LogMethod { get; set; }
         [Required]

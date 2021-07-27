@@ -1,0 +1,68 @@
+﻿@using AwesomeCare.Admin.ViewModels.PersonalDetail;
+@model CreateConsentCare
+@{
+    ViewData["Title"] = "Create Consent Care";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+                <h2></h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="ConsentCare" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <input type="hidden" asp-for="CareId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+                                @*<div class="col-sm-1 col-xs-12 col-md-1 col-lg-1"></div>*@
+                                <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
+                                </div>
+                                @*<div class="col-sm-1 col-xs-12 col-md-1 col-lg-1"></div>*@
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Signature</label>
+                                    <baserecord asp-key="Signature" asp-for="Signature" asp-items="null" />
+                                    <span asp-validation-for="Signature" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="form-group col-sm-10 col-xs-12 col-md-10 col-lg-10">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}

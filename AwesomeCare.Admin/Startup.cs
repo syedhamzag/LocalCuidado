@@ -77,6 +77,15 @@ using AwesomeCare.Admin.Services.ClientPainChart;
 using AwesomeCare.Admin.Services.ClientPulseRate;
 using AwesomeCare.Admin.Services.ClientSeizure;
 using AwesomeCare.Admin.Services.ClientWoundCare;
+using AwesomeCare.Admin.Services.Capacity;
+using AwesomeCare.Admin.Services.ConsentCare;
+using AwesomeCare.Admin.Services.ConsentData;
+using AwesomeCare.Admin.Services.ConsentLandLine;
+using AwesomeCare.Admin.Services.Equipment;
+using AwesomeCare.Admin.Services.KeyIndicators;
+using AwesomeCare.Admin.Services.Personal;
+using AwesomeCare.Admin.Services.PersonCentred;
+using AwesomeCare.Admin.Services.Review;
 
 namespace AwesomeCare.Admin
 {
@@ -761,6 +770,60 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientWoundCareService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("capacity", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ICapacityService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("consentcare", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IConsentCareService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("consentdata", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IConsentDataService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("consentlandline", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IConsentLandLineService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("equipment", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IEquipmentService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("keyindicators", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IKeyIndicatorsService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("personal", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPersonalService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("personcentred", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPersonCentredService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("review", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IReviewService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

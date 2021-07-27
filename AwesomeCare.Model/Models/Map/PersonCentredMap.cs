@@ -19,16 +19,16 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("PersonCentredId")
                .IsRequired();
 
-            builder.Property(p => p.PersonalDetailId)
-               .HasColumnName("PersonalDetailId")
+            builder.Property(p => p.ClientId)
+               .HasColumnName("ClientId")
                .IsRequired();
 
             builder.Property(p => p.Class)
-              .HasColumnName("Signature")
+              .HasColumnName("Class")
               .IsRequired();
 
             builder.Property(p => p.ExpSupport)
-             .HasColumnName("Date")
+             .HasColumnName("ExpSupport")
              .IsRequired();
 
             #endregion

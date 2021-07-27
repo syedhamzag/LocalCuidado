@@ -19,8 +19,8 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("EquipmentId")
                .IsRequired();
 
-            builder.Property(p => p.PersonalDetailId)
-               .HasColumnName("PersonalDetailId")
+            builder.Property(p => p.ClientId)
+               .HasColumnName("ClientId")
                .IsRequired();
 
             builder.Property(p => p.Name)
@@ -54,16 +54,12 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.PersonToAct)
              .HasColumnName("PersonToAct")
              .IsRequired();
-
-            builder.Property(p => p.StaffId)
-             .HasColumnName("StaffId")
-             .IsRequired();
             #endregion
 
             #region Relationship
             builder.HasOne(p => p.Staff)
                  .WithMany(p => p.Equipment)
-                 .HasForeignKey(p => p.StaffId)
+                 .HasForeignKey(p => p.PersonToAct)
                  .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }

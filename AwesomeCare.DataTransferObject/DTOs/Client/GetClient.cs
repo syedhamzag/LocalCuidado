@@ -11,6 +11,28 @@ using AwesomeCare.DataTransferObject.DTOs.ClientVoice;
 using AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit;
 using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
 using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Capacity;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentData;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.PersonCentred;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentCare;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentLandline;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.KeyIndicators;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Personal;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Review;
+using AwesomeCare.DataTransferObject.DTOs.ClientBloodCoagulationRecord;
+using AwesomeCare.DataTransferObject.DTOs.ClientBMIChart;
+using AwesomeCare.DataTransferObject.DTOs.ClientBloodPressure;
+using AwesomeCare.DataTransferObject.DTOs.ClientBodyTemp;
+using AwesomeCare.DataTransferObject.DTOs.ClientBowelMovement;
+using AwesomeCare.DataTransferObject.DTOs.ClientEyeHealthMonitoring;
+using AwesomeCare.DataTransferObject.DTOs.ClientFoodIntake;
+using AwesomeCare.DataTransferObject.DTOs.ClientOxygenLvl;
+using AwesomeCare.DataTransferObject.DTOs.ClientHeartRate;
+using AwesomeCare.DataTransferObject.DTOs.ClientPainChart;
+using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
+using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
+using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -27,6 +49,30 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             GetClientMgtVisit = new HashSet<GetClientMgtVisit>();
             GetClientProgram = new HashSet<GetClientProgram>();
             GetClientServiceWatch = new HashSet<GetClientServiceWatch>();
+
+            GetClientBloodCoagulationRecord = new HashSet<GetClientBloodCoagulationRecord>();
+            GetClientBMIChart = new HashSet<GetClientBMIChart>();
+            GetClientBloodPressure = new HashSet<GetClientBloodPressure>();
+            GetClientBodyTemp = new HashSet<GetClientBodyTemp>();
+            GetClientBowelMovement = new HashSet<GetClientBowelMovement>();
+            GetClientEyeHealthMonitoring = new HashSet<GetClientEyeHealthMonitoring>();
+            GetClientFoodIntake = new HashSet<GetClientFoodIntake>();
+            GetClientOxygenLvl = new HashSet<GetClientOxygenLvl>();
+            GetClientPainChart = new HashSet<GetClientPainChart>();
+            GetClientHeartRate = new HashSet<GetClientHeartRate>();
+            GetClientPulseRate = new HashSet<GetClientPulseRate>();
+            GetClientSeizure = new HashSet<GetClientSeizure>();
+            GetClientWoundCare = new HashSet<GetClientWoundCare>();
+
+            GetCapacity = new HashSet<GetCapacity>();
+            GetConsentCare = new HashSet<GetConsentCare>();
+            GetConsentData = new HashSet<GetConsentData>();
+            GetConsentLandLine = new HashSet<GetConsentLandLine>();
+            GetEquipment = new HashSet<GetEquipment>();
+            GetKeyIndicators = new HashSet<GetKeyIndicators>();
+            GetPersonal = new HashSet<GetPersonal>();
+            GetPersonCentred = new HashSet<GetPersonCentred>();
+            GetReview = new HashSet<GetReview>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -106,5 +152,29 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetClientMgtVisit> GetClientMgtVisit { get; set; }
         public virtual ICollection<GetClientProgram> GetClientProgram { get; set; }
         public virtual ICollection<GetClientServiceWatch> GetClientServiceWatch { get; set; }
+
+        public virtual ICollection<GetClientBloodCoagulationRecord> GetClientBloodCoagulationRecord { get; set; }
+        public virtual ICollection<GetClientBMIChart> GetClientBMIChart { get; set; }
+        public virtual ICollection<GetClientBloodPressure> GetClientBloodPressure { get; set; }
+        public virtual ICollection<GetClientBodyTemp> GetClientBodyTemp{ get; set; }
+        public virtual ICollection<GetClientBowelMovement> GetClientBowelMovement { get; set; }
+        public virtual ICollection<GetClientEyeHealthMonitoring> GetClientEyeHealthMonitoring { get; set; }
+        public virtual ICollection<GetClientFoodIntake> GetClientFoodIntake { get; set; }
+        public virtual ICollection<GetClientHeartRate> GetClientHeartRate { get; set; }
+        public virtual ICollection<GetClientOxygenLvl> GetClientOxygenLvl { get; set; }
+        public virtual ICollection<GetClientPainChart> GetClientPainChart { get; set; }
+        public virtual ICollection<GetClientPulseRate> GetClientPulseRate { get; set; }
+        public virtual ICollection<GetClientSeizure> GetClientSeizure { get; set; }
+        public virtual ICollection<GetClientWoundCare> GetClientWoundCare { get; set; }
+
+        public virtual ICollection<GetCapacity> GetCapacity { get; set; }
+        public virtual ICollection<GetConsentCare> GetConsentCare { get; set; }
+        public virtual ICollection<GetConsentData> GetConsentData { get; set; }
+        public virtual ICollection<GetConsentLandLine> GetConsentLandLine { get; set; }
+        public virtual ICollection<GetEquipment> GetEquipment { get; set; }
+        public virtual ICollection<GetKeyIndicators> GetKeyIndicators { get; set; }
+        public virtual ICollection<GetPersonal> GetPersonal { get; set; }
+        public virtual ICollection<GetPersonCentred> GetPersonCentred { get; set; }
+        public virtual ICollection<GetReview> GetReview { get; set; }
     }
 }
