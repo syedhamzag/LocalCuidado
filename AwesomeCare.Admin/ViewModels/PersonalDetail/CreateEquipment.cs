@@ -13,22 +13,21 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
     {
         public CreateEquipment() 
         {
- 
+            StaffList = new List<SelectListItem>();
         }
-
 
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght = 1)]
         public IFormFile Attach { get; set; }
 
+        public ICollection<SelectListItem> StaffList { get; set; }
+
         [Required]
-        public int PersonalDetailId { get; set; }
+        public int ClientId { get; set; }
         [Required]
         public int EquipmentId { get; set; }
         [Required]
         public int Name { get; set; }
-        [Required]
-        public int StaffId { get; set; }
         [Required]
         public int Type { get; set; }
         [Required]
@@ -37,7 +36,6 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
         public DateTime ServiceDate { get; set; }
         [Required]
         public DateTime NextServiceDate { get; set; }
-        [Required]
         public string Attachment { get; set; }
         [Required]
         public int Status { get; set; }

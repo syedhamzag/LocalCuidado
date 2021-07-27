@@ -9,7 +9,7 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
     public class CreateReview
     {
         [Required]
-        public int PersonalDetailId { get; set; }
+        public int ClientId { get; set; }
         [Required]
         public int ReviewId { get; set; }
         [Required]

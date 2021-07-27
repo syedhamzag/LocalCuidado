@@ -559,12 +559,12 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Implications")
-                        .HasColumnName("Implications")
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
+                    b.Property<int>("Implications")
+                        .HasColumnName("Implications")
                         .HasColumnType("int");
 
                     b.Property<int>("Pointer")
@@ -573,7 +573,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("CapacityId");
 
-                    b.HasIndex("PersonalDetailId");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("tbl_Capacity");
                 });
@@ -585,6 +585,9 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("CapacityIndicatorId")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseRecordId")
+                        .HasColumnType("int");
 
                     b.Property<int>("CapacityId")
                         .HasColumnName("CapacityId")
@@ -3669,13 +3672,13 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnName("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Signature")
                         .HasColumnName("Signature")
@@ -3683,7 +3686,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("CareId");
 
-                    b.HasIndex("PersonalDetailId");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("tbl_ConsentCare");
                 });
@@ -3696,13 +3699,13 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnName("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Signature")
                         .HasColumnName("Signature")
@@ -3710,7 +3713,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("DataId");
 
-                    b.HasIndex("PersonalDetailId");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("tbl_ConsentData");
                 });
@@ -3723,6 +3726,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnName("Date")
                         .HasColumnType("datetime2");
@@ -3731,17 +3738,13 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("LogMethod")
                         .HasColumnType("int");
 
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Signature")
                         .HasColumnName("Signature")
                         .HasColumnType("int");
 
                     b.HasKey("LandlineId");
 
-                    b.HasIndex("PersonalDetailId");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("tbl_ConsentLandLine");
                 });
@@ -3806,6 +3809,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("Attachment")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Location")
                         .HasColumnName("Location")
                         .HasColumnType("int");
@@ -3822,17 +3829,9 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("PersonToAct")
                         .HasColumnType("int");
 
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ServiceDate")
                         .HasColumnName("ServiceDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnName("Status")
@@ -3844,9 +3843,9 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("EquipmentId");
 
-                    b.HasIndex("PersonalDetailId");
+                    b.HasIndex("ClientId");
 
-                    b.HasIndex("StaffId");
+                    b.HasIndex("PersonToAct");
 
                     b.ToTable("tbl_Equipment");
                 });
@@ -4197,6 +4196,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("AboutMe")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Debture")
                         .HasColumnName("Debture")
                         .HasColumnType("int");
@@ -4214,10 +4217,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("LogMethod")
                         .HasColumnType("int");
 
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ThingsILike")
                         .IsRequired()
                         .HasColumnName("ThingsILike")
@@ -4225,7 +4224,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("KeyId");
 
-                    b.HasIndex("PersonalDetailId");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("tbl_KeyIndicators");
                 });
@@ -4620,21 +4619,21 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Class")
-                        .HasColumnName("Signature")
+                        .HasColumnName("Class")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("ExpSupport")
                         .IsRequired()
-                        .HasColumnName("Date")
+                        .HasColumnName("ExpSupport")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
 
                     b.HasKey("PersonCentredId");
 
-                    b.HasIndex("PersonalDetailId");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("tbl_PersonCentred");
                 });
@@ -4646,6 +4645,9 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("PersonCentredFocusId")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseRecordId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PersonCentredId")
                         .HasColumnName("PersonCentredId")
@@ -4666,12 +4668,12 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DNR")
-                        .HasColumnName("DNR")
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
+                    b.Property<int>("DNR")
+                        .HasColumnName("DNR")
                         .HasColumnType("int");
 
                     b.Property<int>("Smoking")
@@ -4680,27 +4682,9 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("PersonalId");
 
-                    b.HasIndex("PersonalDetailId");
-
-                    b.ToTable("tbl_Personal");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalDetail", b =>
-                {
-                    b.Property<int>("PersonalDetailId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PersonalDetailId");
-
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_PersonalDetail");
+                    b.ToTable("tbl_Personal");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ProgramOfficerToAct", b =>
@@ -4866,8 +4850,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("CP_ReviewDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RA_PreDate")
@@ -4880,7 +4864,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("PersonalDetailId");
+                    b.HasIndex("ClientId");
 
                     b.ToTable("tbl_Review");
                 });
@@ -8090,9 +8074,9 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Capacity", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("Capacity")
-                        .HasForeignKey("PersonalDetailId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -8595,27 +8579,27 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentCare", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("ConsentCare")
-                        .HasForeignKey("PersonalDetailId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentData", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("ConsentData")
-                        .HasForeignKey("PersonalDetailId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandLine", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("ConsentLandLine")
-                        .HasForeignKey("PersonalDetailId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -8631,15 +8615,15 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Equipment", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("Equipment")
-                        .HasForeignKey("PersonalDetailId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("Equipment")
-                        .HasForeignKey("StaffId")
+                        .HasForeignKey("PersonToAct")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -8799,9 +8783,9 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicators", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
-                        .WithMany("KeyIndicator")
-                        .HasForeignKey("PersonalDetailId")
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("KeyIndicators")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -9003,9 +8987,9 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentred", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("PersonCentred")
-                        .HasForeignKey("PersonalDetailId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -9021,17 +9005,8 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Personal", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
-                        .WithMany("Personal")
-                        .HasForeignKey("PersonalDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalDetail", b =>
-                {
                     b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("PersonalDetail")
+                        .WithMany("Personal")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -9108,9 +9083,9 @@ namespace AwesomeCare.DataAccess.Migrations
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Review", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("Review")
-                        .HasForeignKey("PersonalDetailId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

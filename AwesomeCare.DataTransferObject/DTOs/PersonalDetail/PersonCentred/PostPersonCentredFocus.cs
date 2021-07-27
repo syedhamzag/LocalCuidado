@@ -8,5 +8,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail.PersonCentred
     {
         public int PersonCentredFocusId { get; set; }
         public int PersonCentredId { get; set; }
+        public int BaseRecordId { get; set; }
     }
 }

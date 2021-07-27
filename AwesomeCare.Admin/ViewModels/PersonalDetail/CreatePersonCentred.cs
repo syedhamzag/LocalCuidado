@@ -19,7 +19,9 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
         [Required]
         public int PersonCentredId { get; set; }
         [Required]
-        public int PersonalDetailId { get; set; }
+        public int ClientId { get; set; }
+        [Required]
+        public List<int> Focus { get; set; }
         [Required]
         public int Class { get; set; }
         [Required]

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,12 +14,14 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
         {
             IndicatorList = new List<SelectListItem>();
         }
-        public ICollection<SelectListItem> IndicatorList { get; set; }
+        public List<SelectListItem> IndicatorList { get; set; }
 
         [Required]
-        public int PersonalDetailId { get; set; } 
+        public int ClientId { get; set; } 
         [Required]
         public int CapacityId { get; set; }
+        [Required]
+        public List <int> Indicator { get; set; }
         [Required]
         public int Pointer { get; set; }
         [Required]

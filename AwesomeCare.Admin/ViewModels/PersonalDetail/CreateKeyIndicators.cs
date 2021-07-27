@@ -9,7 +9,7 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
     public class CreateKeyIndicators
     {
         [Required]
-        public int PersonalDetailId { get; set; }
+        public int ClientId { get; set; }
         [Required]
         public int KeyId { get; set; }
         [Required]

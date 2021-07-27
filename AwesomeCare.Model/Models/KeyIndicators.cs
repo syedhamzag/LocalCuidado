@@ -6,8 +6,8 @@ namespace AwesomeCare.Model.Models
 {
     public class KeyIndicators
     {
-        public int PersonalDetailId { get; set; }
         public int KeyId { get; set; }
+        public int ClientId { get; set; }
         public string AboutMe { get; set; }
         public string FamilyRole { get; set; }
         public int LivingStatus { get; set; }
@@ -15,6 +15,6 @@ namespace AwesomeCare.Model.Models
         public string ThingsILike { get; set; }
         public int LogMethod { get; set; }
 
-        public virtual PersonalDetail PersonalDetail { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

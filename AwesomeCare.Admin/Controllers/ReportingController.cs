@@ -14,6 +14,7 @@ using AwesomeCare.Admin.ViewModels.Reporting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
+using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.Admin.Extensions;
 using System.IO;
 using iText.Html2pdf;
@@ -57,6 +58,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var model = new ReportingViewModel();
             var client = await _clientService.GetClientDetail();
+            var _client = await _clientService.GetClients();
             model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
             var clientRotas = await _clientRotaService.GetForEdit(clientId);
             var rotaTasks = await _rotaTaskService.Get();
@@ -64,7 +66,7 @@ namespace AwesomeCare.Admin.Controllers
 
             if (clientRotas.Count > 0)
             {
-
+                model.IdNumber = _client.Where(s => s.ClientId == clientId).FirstOrDefault().IdNumber;
                 model.ClientId = client.Where(s => s.ClientId == clientId).FirstOrDefault().ClientId;
                 model.ClientName = client.Where(s=>s.ClientId==clientId).FirstOrDefault().FullName;
                 model.RotaTypes = rotaTypes;
@@ -227,10 +229,50 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> DistanceFinder(string postcode)
         {
             var model = new ReportingViewModel();
-            var client = await _clientService.GetClients();
-            var clients = client.Where(s => s.PostCode.Contains(postcode)).ToList();
-            model.Client = clients;
+            var list = new List<GetClientDistance>();
+            var clientdetail = await _clientService.GetClientDetail();
+            var getClient = await _clientService.GetClients();
+            var client = getClient.Where(s => s.PostCode == postcode).FirstOrDefault();
+            var location1 = new Location
+            {
+                Latitude = client.Latitude != null ? client.Latitude : "0",
+                Longitude = client.Longitude != null ? client.Latitude : "0",
+            };
+            var clients = getClient.ToList();
+            foreach (var item in clients)
+            {
+                
+                var location2 = new Location
+                {
+                    Latitude = item.Latitude != null ? item.Latitude : "0",
+                    Longitude = item.Longitude != null ? item.Longitude : "0"
+                };
+                double distance = CalculateDistance(location1, location2);
+                var result = new GetClientDistance
+                {
+                    Fullname = clientdetail.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName,
+                    Postcode = clients.Where(s => s.ClientId == item.ClientId).FirstOrDefault().PostCode,
+                    Distance = distance + " miles"
+                };
+                list.Add(result);
+            }
+            list.OrderBy(s => s.Postcode == client.PostCode);
+            model.Client = list;
             return View(model);
+        }
+        public double CalculateDistance(Location point1, Location point2)
+        {
+            var p1Lat = double.Parse(point1.Latitude);
+            var p1Lon = double.Parse(point1.Longitude);
+            var p2Lat = double.Parse(point2.Latitude);
+            var p2Lon = double.Parse(point2.Longitude);
+            var d1 = p1Lat * (Math.PI / 180.0);
+            var num1 = p1Lon * (Math.PI / 180.0);
+            var d2 = p2Lat * (Math.PI / 180.0);
+            var num2 = p2Lon * (Math.PI / 180.0) - num1;
+            var d3 = Math.Pow(Math.Sin((d2 - d1) / 2.0), 2.0) +
+                     Math.Cos(d1) * Math.Cos(d2) * Math.Pow(Math.Sin(num2 / 2.0), 2.0);
+            return 6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3)));
         }
         public async Task<IActionResult> FilledLog()
         {
@@ -245,6 +287,7 @@ namespace AwesomeCare.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> FilledLog(ReportingViewModel model)
         {
+            var _client = await _clientService.GetClients();
             var client = await _clientService.GetClientDetail();
             if (model.Date==null || !ModelState.IsValid)
             {             
@@ -260,7 +303,7 @@ namespace AwesomeCare.Admin.Controllers
 
             if (clientRotas.Count > 0)
             {
-
+                model.IdNumber = _client.Where(s => s.ClientId == model.ClientId).FirstOrDefault().IdNumber;
                 model.ClientId = client.Where(s => s.ClientId == model.ClientId).FirstOrDefault().ClientId;
                 model.ClientName = client.Where(s => s.ClientId == model.ClientId).FirstOrDefault().FullName;
                 model.RotaTypes = rotaTypes;

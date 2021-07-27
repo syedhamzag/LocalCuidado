@@ -6,10 +6,9 @@ namespace AwesomeCare.Model.Models
 {
     public class Equipment
     {
-        public int PersonalDetailId { get; set; }
         public int EquipmentId { get; set; }
+        public int ClientId { get; set; }
         public int Name { get; set; }
-        public int StaffId { get; set; }
         public int Type { get; set; }
         public int Location { get; set; }
         public DateTime ServiceDate { get; set; }
@@ -19,7 +18,6 @@ namespace AwesomeCare.Model.Models
         public int PersonToAct { get; set; } //Staff From DataBase
 
         public virtual StaffPersonalInfo Staff { get; set; }
-
-        public virtual PersonalDetail PersonalDetail { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

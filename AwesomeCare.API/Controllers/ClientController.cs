@@ -25,6 +25,28 @@ using AwesomeCare.DataTransferObject.DTOs.ClientVoice;
 using AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit;
 using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
 using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Capacity;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentData;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.PersonCentred;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentCare;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentLandline;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.KeyIndicators;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Personal;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Review;
+using AwesomeCare.DataTransferObject.DTOs.ClientBloodCoagulationRecord;
+using AwesomeCare.DataTransferObject.DTOs.ClientBMIChart;
+using AwesomeCare.DataTransferObject.DTOs.ClientBloodPressure;
+using AwesomeCare.DataTransferObject.DTOs.ClientBodyTemp;
+using AwesomeCare.DataTransferObject.DTOs.ClientBowelMovement;
+using AwesomeCare.DataTransferObject.DTOs.ClientEyeHealthMonitoring;
+using AwesomeCare.DataTransferObject.DTOs.ClientFoodIntake;
+using AwesomeCare.DataTransferObject.DTOs.ClientOxygenLvl;
+using AwesomeCare.DataTransferObject.DTOs.ClientHeartRate;
+using AwesomeCare.DataTransferObject.DTOs.ClientPainChart;
+using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
+using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
+using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -51,6 +73,30 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientServiceWatch> _clientServiceWatchRepository;
         private IGenericRepository<Medication> _medicationRepository;
         private IGenericRepository<MedicationManufacturer> _medicationManufacturerRepository;
+        private IGenericRepository<ClientBloodCoagulationRecord> _bloodcoagRepository;
+        private IGenericRepository<ClientBMIChart> _bmichartRepository;
+        private IGenericRepository<ClientBloodPressure> _bloodpressureRepository;
+        private IGenericRepository<ClientBodyTemp> _bodytempRepository;
+        private IGenericRepository<ClientBowelMovement> _bowelmovementRepository;
+        private IGenericRepository<ClientEyeHealthMonitoring> _eyehealthRepository;
+        private IGenericRepository<ClientFoodIntake> _foodintakeRepository;
+        private IGenericRepository<ClientOxygenLvl> _oxygenlvlRepository;
+        private IGenericRepository<ClientPulseRate> _pulserateRepository;
+        private IGenericRepository<ClientHeartRate> _heartrateRepository;
+        private IGenericRepository<ClientSeizure> _seizureRepository;
+        private IGenericRepository<ClientWoundCare> _woundcareRepository;
+        private IGenericRepository<ClientPainChart> _painchartRepository;
+        private IGenericRepository<Capacity> _capacityRepository;
+        private IGenericRepository<ConsentCare> _consentcareRepository;
+        private IGenericRepository<ConsentData> _consentdataRepository;
+        private IGenericRepository<ConsentLandLine> _consentlandlineRepository;
+        private IGenericRepository<Equipment> _equipmentRepository;
+        private IGenericRepository<Personal> _personalRepository;
+        private IGenericRepository<KeyIndicators> _keyindicatorsRepository;
+        private IGenericRepository<PersonCentred> _personcentredRepository;
+        private IGenericRepository<Review> _reviewRepository;
+
+
         private AwesomeCareDbContext _dbContext;
         public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<ClientMedicationPeriod> clientMedicationPeriodRepository,
             IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<ClientMedicationDay> clientMedicationDayRepository,
@@ -58,7 +104,29 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<ClientInvolvingParty> clientInvolvingPartRepository,
             IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository,
             IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<ClientVoice> clientVoiceRepository,
-            IGenericRepository<ClientMgtVisit> clientMgtVisitRepository, IGenericRepository<ClientProgram> clientProgramRepository,IGenericRepository<ClientServiceWatch> clientServiceWatchRepository)
+            IGenericRepository<ClientMgtVisit> clientMgtVisitRepository, IGenericRepository<ClientProgram> clientProgramRepository,IGenericRepository<ClientServiceWatch> clientServiceWatchRepository,
+         IGenericRepository<ClientBloodCoagulationRecord> bloodcoagRepository,
+         IGenericRepository<ClientBMIChart> bmichartRepository,
+         IGenericRepository<ClientBloodPressure> bloodpressureRepository,
+         IGenericRepository<ClientBodyTemp> bodytempRepository,
+         IGenericRepository<ClientBowelMovement> bowelmovementRepository,
+         IGenericRepository<ClientEyeHealthMonitoring> eyehealthRepository,
+         IGenericRepository<ClientFoodIntake> foodintakeRepository,
+         IGenericRepository<ClientOxygenLvl> oxygenlvlRepository,
+         IGenericRepository<ClientPulseRate> pulserateRepository,
+         IGenericRepository<ClientHeartRate> heartrateRepository,
+         IGenericRepository<ClientSeizure> seizureRepository,
+         IGenericRepository<ClientWoundCare> woundcareRepository,
+         IGenericRepository<ClientPainChart> painchartRepository,
+         IGenericRepository<Capacity> capacityRepository,
+         IGenericRepository<ConsentCare> consentcareRepository,
+         IGenericRepository<ConsentData> consentdataRepository,
+         IGenericRepository<ConsentLandLine> consentlandlineRepository,
+         IGenericRepository<Equipment> equipmentRepository,
+         IGenericRepository<Personal> personalRepository,
+         IGenericRepository<KeyIndicators> keyindicatorsRepository,
+         IGenericRepository<PersonCentred> personcentredRepository,
+         IGenericRepository<Review> reviewRepository)
         {
             _clientRepository = clientRepository;
             _complainRepository = complainRepository;
@@ -79,7 +147,29 @@ namespace AwesomeCare.API.Controllers
             _clientProgramRepository = clientProgramRepository;
             _clientServiceWatchRepository = clientServiceWatchRepository;
             _clientInvolvingPartRepository = clientInvolvingPartRepository;
-        }
+            _bloodcoagRepository = bloodcoagRepository;
+            _bmichartRepository = bmichartRepository;
+            _bloodpressureRepository = bloodpressureRepository;
+            _bodytempRepository = bodytempRepository;
+            _bowelmovementRepository = bowelmovementRepository;
+            _eyehealthRepository = eyehealthRepository;
+            _foodintakeRepository = foodintakeRepository;
+            _oxygenlvlRepository = oxygenlvlRepository;
+            _pulserateRepository = pulserateRepository;
+            _heartrateRepository = heartrateRepository;
+            _seizureRepository = seizureRepository;
+            _woundcareRepository = woundcareRepository;
+            _painchartRepository = painchartRepository;
+            _capacityRepository = capacityRepository;
+            _consentcareRepository = consentcareRepository;
+            _consentdataRepository = consentdataRepository;
+            _consentlandlineRepository = consentlandlineRepository;
+            _equipmentRepository = equipmentRepository;
+            _personalRepository = personalRepository;
+            _keyindicatorsRepository = keyindicatorsRepository;
+            _personcentredRepository = personcentredRepository;
+            _reviewRepository = reviewRepository;
+    }
         /// <summary>
         /// Create Client
         /// </summary>
@@ -247,7 +337,161 @@ namespace AwesomeCare.API.Controllers
                                                                 DueDate = reg.DueDate,
                                                                 Evidence = reg.Evidence,
                                                                 RegulatoryContact = baseRecordItem.ValueName
-                                                            }).ToList()
+                                                            }).ToList(),
+                                       GetClientBloodCoagulationRecord = (from sw in _bloodcoagRepository.Table
+                                                                where sw.ClientId == id.Value
+                                                                select new GetClientBloodCoagulationRecord
+                                                                {
+                                                                    Remark = sw.Remark,
+                                                                    TargetINRAttach = sw.TargetINRAttach
+                                                                }).ToList(),
+                                       GetClientBloodPressure= (from sw in _bloodpressureRepository.Table
+                                                                          where sw.ClientId == id.Value
+                                                                          select new GetClientBloodPressure
+                                                                          {
+                                                                              Remarks = sw.Remarks,
+                                                                              StatusAttach = sw.StatusAttach
+                                                                          }).ToList(),
+                                       GetClientBMIChart= (from sw in _bmichartRepository.Table
+                                                                 where sw.ClientId == id.Value
+                                                                 select new GetClientBMIChart
+                                                                 {
+                                                                     Remarks = sw.Remarks,
+                                                                     SeeChartAttach = sw.SeeChartAttach
+                                                                 }).ToList(),
+                                       GetClientBodyTemp = (from sw in _bodytempRepository.Table
+                                                            where sw.ClientId == id.Value
+                                                            select new GetClientBodyTemp
+                                                            {
+                                                                Remarks = sw.Remarks,
+                                                                SeeChartAttach = sw.SeeChartAttach
+                                                            }).ToList(),
+                                       GetClientBowelMovement = (from sw in _bowelmovementRepository.Table
+                                                            where sw.ClientId == id.Value
+                                                            select new GetClientBowelMovement
+                                                            {
+                                                                Remarks = sw.Remarks,
+                                                                StatusAttach = sw.StatusAttach
+                                                            }).ToList(),
+                                       GetClientEyeHealthMonitoring = (from sw in _eyehealthRepository.Table
+                                                                 where sw.ClientId == id.Value
+                                                                 select new GetClientEyeHealthMonitoring
+                                                                 {
+                                                                     Remarks = sw.Remarks,
+                                                                     StatusAttach = sw.StatusAttach
+                                                                 }).ToList(),
+                                       GetClientFoodIntake= (from sw in _foodintakeRepository.Table
+                                                                       where sw.ClientId == id.Value
+                                                                       select new GetClientFoodIntake
+                                                                       {
+                                                                           Remarks = sw.Remarks,
+                                                                           StatusAttach = sw.StatusAttach
+                                                                       }).ToList(),
+                                       GetClientHeartRate= (from sw in _heartrateRepository.Table
+                                                              where sw.ClientId == id.Value
+                                                              select new GetClientHeartRate
+                                                              {
+                                                                  Remarks = sw.Remarks,
+                                                                  SeeChartAttach = sw.SeeChartAttach
+                                                              }).ToList(),
+                                       GetClientOxygenLvl = (from sw in _oxygenlvlRepository.Table
+                                                             where sw.ClientId == id.Value
+                                                             select new GetClientOxygenLvl
+                                                             {
+                                                                 Remarks = sw.Remarks,
+                                                                 SeeChartAttach = sw.SeeChartAttach
+                                                             }).ToList(),
+                                       GetClientPainChart= (from sw in _painchartRepository.Table
+                                                             where sw.ClientId == id.Value
+                                                             select new GetClientPainChart
+                                                             {
+                                                                 Remarks = sw.Remarks,
+                                                                 StatusAttach = sw.StatusAttach
+                                                             }).ToList(),
+                                       GetClientPulseRate= (from sw in _pulserateRepository.Table
+                                                             where sw.ClientId == id.Value
+                                                             select new GetClientPulseRate
+                                                             {
+                                                                 Remarks = sw.Remarks,
+                                                                 SeeChartAttach= sw.SeeChartAttach
+                                                             }).ToList(),
+                                       GetClientSeizure= (from sw in _seizureRepository.Table
+                                                             where sw.ClientId == id.Value
+                                                             select new GetClientSeizure
+                                                             {
+                                                                 Remarks = sw.Remarks,
+                                                                 StatusAttach = sw.StatusAttach
+                                                             }).ToList(),
+                                       GetClientWoundCare = (from sw in _woundcareRepository.Table
+                                                           where sw.ClientId == id.Value
+                                                           select new GetClientWoundCare
+                                                           {
+                                                               Remarks = sw.Remarks,
+                                                               StatusAttach = sw.StatusAttach
+                                                           }).ToList(),
+                                       GetCapacity = (from sw in _capacityRepository.Table
+                                                             where sw.ClientId == id.Value
+                                                             select new GetCapacity
+                                                             {
+                                                                 Pointer = sw.Pointer,
+                                                                 Implications = sw.Implications
+                                                             }).ToList(),
+                                       GetConsentCare = (from sw in _consentcareRepository.Table
+                                                      where sw.ClientId == id.Value
+                                                      select new GetConsentCare
+                                                      {
+                                                          Date = sw.Date,
+                                                          Signature = sw.Signature
+                                                      }).ToList(),
+                                       GetConsentData= (from sw in _consentdataRepository.Table
+                                                         where sw.ClientId == id.Value
+                                                         select new GetConsentData
+                                                         {
+                                                             Date = sw.Date,
+                                                             Signature = sw.Signature
+                                                         }).ToList(),
+                                       GetConsentLandLine = (from sw in _consentlandlineRepository.Table
+                                                         where sw.ClientId == id.Value
+                                                         select new GetConsentLandLine
+                                                         {
+                                                             Date = sw.Date,
+                                                             Signature = sw.Signature
+                                                         }).ToList(),
+                                       GetEquipment = (from sw in _equipmentRepository.Table
+                                                             where sw.ClientId == id.Value
+                                                             select new GetEquipment
+                                                             {
+                                                                 Name = sw.Name,
+                                                                 Attachment = sw.Attachment
+                                                             }).ToList(),
+                                       GetKeyIndicators = (from sw in _keyindicatorsRepository.Table
+                                                       where sw.ClientId == id.Value
+                                                       select new GetKeyIndicators
+                                                       {
+                                                           LivingStatus = sw.LivingStatus,
+                                                           Debture = sw.Debture
+                                                       }).ToList(),
+                                       GetPersonal = (from sw in _personalRepository.Table
+                                                           where sw.ClientId == id.Value
+                                                           select new GetPersonal
+                                                           {
+                                                               DNR = sw.DNR,
+                                                               Smoking = sw.Smoking
+                                                           }).ToList(),
+                                       GetPersonCentred = (from sw in _personcentredRepository.Table
+                                                      where sw.ClientId == id.Value
+                                                      select new GetPersonCentred
+                                                      {
+                                                          Class = sw.Class,
+                                                          ExpSupport = sw.ExpSupport
+                                                      }).ToList(),
+                                       GetReview = (from sw in _reviewRepository.Table
+                                                           where sw.ClientId == id.Value
+                                                           select new GetReview
+                                                           {
+                                                               CP_PreDate = sw.CP_PreDate,
+                                                               CP_ReviewDate = sw.CP_ReviewDate
+                                                           }).ToList(),
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);
