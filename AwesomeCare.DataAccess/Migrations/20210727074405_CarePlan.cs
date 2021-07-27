@@ -28,6 +28,7 @@ namespace AwesomeCare.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+
             migrationBuilder.CreateTable(
                 name: "tbl_ConsentCare",
                 columns: table => new
