@@ -73,7 +73,7 @@
                     @if (Model.GroupLiveRotas?.Count > 0)
                     {
 
-                        <table class="table table-condensed table-hover table-bordered datatablesExportExcel">
+                        <table id="rotaReportTable" class="table table-condensed table-hover table-bordered datatablesExportExcel">
                             <thead>
                                 <tr>
 
@@ -112,6 +112,8 @@
                                     <th>Staff Rate</th>
                                     <th>Staff Pay by Com. Hrs</th>
                                     <th>Amount by Times Spent</th>
+                                    <th></th>
+                                    <th></th>
                                     <th></th>
 
                                 </tr>
@@ -339,7 +341,16 @@
                                             </td>
                                             <td>@rota.StaffRotaPeriodId</td>
 
+                                            <td>
+                                                <a asp-action="EditLiveRota" asp-controller="Rotering" asp-route-staffRotaPeriodId="@rota.StaffRotaPeriodId" target="_blank" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit"> <i class="icon-pencil" aria-hidden="true"></i></a>
+                                            </td>
+                                            <td>
 
+                                                @*<input type="hidden" value="@rota.StaffRotaPeriodId" name="deleteId" id="deleteId" />*@
+                                                <button type="submit" asp-route-deleteId="@rota.StaffRotaPeriodId" asp-route-redirectAction="RotaReport" asp-action="DeleteRota" class="btn btn-danger deleteRotaPeriodBtn"><i class="icon-trash" aria-hidden="true"></i></button>
+
+
+                                            </td>
                                         </tr>
                                     }
 
@@ -360,9 +371,21 @@
         </div>
     </div>
 </div>
-
 @section Scripts{
+    <script type="text/javascript">
 
+        $(document).ready(function () {
 
+            $("#rotaReportTable tbody tr").on("click", "button.deleteRotaPeriodBtn", function (event) {
+                console.log('delete button clicked')
+                var confirmResult = confirm("The selected Staff Rota will be delete \n Do you want to continue?");
+
+                console.log(confirmResult)
+                if (!confirmResult)
+                    event.preventDefault();
+            })
+
+        })
+    </script>
 
 }

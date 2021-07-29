@@ -397,7 +397,7 @@
                                             <td>
 
                                                 @*<input type="hidden" value="@rota.StaffRotaPeriodId" name="deleteId" id="deleteId" />*@
-                                                <button type="submit" asp-route-deleteId="@rota.StaffRotaPeriodId" asp-action="DeleteRota" class="btn btn-danger deleteRotaPeriodBtn"><i class="icon-trash" aria-hidden="true"></i></button>
+                                                <button type="submit" asp-route-deleteId="@rota.StaffRotaPeriodId" asp-route-redirectAction="LiveRota" asp-action="DeleteRota" class="btn btn-danger deleteRotaPeriodBtn"><i class="icon-trash" aria-hidden="true"></i></button>
 
 
                                             </td>
