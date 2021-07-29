@@ -369,7 +369,7 @@ namespace AwesomeCare.Admin.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> DeleteRota(IFormCollection formCollection, string deleteId)
+        public async Task<IActionResult> DeleteRota(IFormCollection formCollection, string deleteId,string redirectAction)
         {
             //string id = formCollection["deleteId"];
             int staffRotaId = int.TryParse(deleteId, out int rtId) ? rtId : 0;
@@ -378,7 +378,7 @@ namespace AwesomeCare.Admin.Controllers
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully deleted" : content });
-            return RedirectToActionPermanent("LiveRota");
+            return RedirectToActionPermanent(redirectAction);
         }
 
         [HttpGet("LiveRota/Edit", Name = "LiveRotaEdit")]
