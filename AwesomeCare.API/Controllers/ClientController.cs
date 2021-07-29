@@ -47,6 +47,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientPainChart;
 using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
 using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
 using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
+using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -264,6 +265,12 @@ namespace AwesomeCare.API.Controllers
                                        Latitude = client.Latitude,
                                        Longitude = client.Longitude,
                                        Address = client.Address,
+                                       GetBaseRecords = (from baseRecItems in _baseRecordItemRepository.Table
+                                                         select new GetBaseRecordItem
+                                                         {
+                                                             BaseRecordItemId = baseRecItems.BaseRecordItemId,
+                                                             ValueName = baseRecItems.ValueName
+                                                         }).ToList(),
                                        InvolvingParties = (from inv in client.InvolvingParties
                                                            select new GetClientInvolvingPartyForEdit
                                                            {
@@ -342,92 +349,92 @@ namespace AwesomeCare.API.Controllers
                                                                 where sw.ClientId == id.Value
                                                                 select new GetClientBloodCoagulationRecord
                                                                 {
-                                                                    Remark = sw.Remark,
-                                                                    TargetINRAttach = sw.TargetINRAttach
+                                                                    Date = sw.Date,
+                                                                    Comment = sw.Comment
                                                                 }).ToList(),
                                        GetClientBloodPressure= (from sw in _bloodpressureRepository.Table
                                                                           where sw.ClientId == id.Value
                                                                           select new GetClientBloodPressure
                                                                           {
-                                                                              Remarks = sw.Remarks,
-                                                                              StatusAttach = sw.StatusAttach
+                                                                              Date = sw.Date,
+                                                                              Comment = sw.Comment
                                                                           }).ToList(),
                                        GetClientBMIChart= (from sw in _bmichartRepository.Table
                                                                  where sw.ClientId == id.Value
                                                                  select new GetClientBMIChart
                                                                  {
-                                                                     Remarks = sw.Remarks,
-                                                                     SeeChartAttach = sw.SeeChartAttach
+                                                                     Date = sw.Date,
+                                                                     Comment = sw.Comment
                                                                  }).ToList(),
                                        GetClientBodyTemp = (from sw in _bodytempRepository.Table
                                                             where sw.ClientId == id.Value
                                                             select new GetClientBodyTemp
                                                             {
-                                                                Remarks = sw.Remarks,
-                                                                SeeChartAttach = sw.SeeChartAttach
+                                                                Date = sw.Date,
+                                                                Comment = sw.Comment
                                                             }).ToList(),
                                        GetClientBowelMovement = (from sw in _bowelmovementRepository.Table
                                                             where sw.ClientId == id.Value
                                                             select new GetClientBowelMovement
                                                             {
-                                                                Remarks = sw.Remarks,
-                                                                StatusAttach = sw.StatusAttach
+                                                                Date = sw.Date,
+                                                                Comment = sw.Comment
                                                             }).ToList(),
                                        GetClientEyeHealthMonitoring = (from sw in _eyehealthRepository.Table
                                                                  where sw.ClientId == id.Value
                                                                  select new GetClientEyeHealthMonitoring
                                                                  {
-                                                                     Remarks = sw.Remarks,
-                                                                     StatusAttach = sw.StatusAttach
+                                                                     Date = sw.Date,
+                                                                     Comment = sw.Comment
                                                                  }).ToList(),
                                        GetClientFoodIntake= (from sw in _foodintakeRepository.Table
                                                                        where sw.ClientId == id.Value
                                                                        select new GetClientFoodIntake
                                                                        {
-                                                                           Remarks = sw.Remarks,
-                                                                           StatusAttach = sw.StatusAttach
+                                                                           Date = sw.Date,
+                                                                           Comment = sw.Comment
                                                                        }).ToList(),
-                                       GetClientHeartRate= (from sw in _heartrateRepository.Table
+                                       GetClientHeartRate = (from sw in _heartrateRepository.Table
                                                               where sw.ClientId == id.Value
                                                               select new GetClientHeartRate
                                                               {
-                                                                  Remarks = sw.Remarks,
-                                                                  SeeChartAttach = sw.SeeChartAttach
+                                                                  Date = sw.Date,
+                                                                  Comment = sw.Comment
                                                               }).ToList(),
                                        GetClientOxygenLvl = (from sw in _oxygenlvlRepository.Table
                                                              where sw.ClientId == id.Value
                                                              select new GetClientOxygenLvl
                                                              {
-                                                                 Remarks = sw.Remarks,
-                                                                 SeeChartAttach = sw.SeeChartAttach
+                                                                 Date = sw.Date,
+                                                                 Comment = sw.Comment
                                                              }).ToList(),
-                                       GetClientPainChart= (from sw in _painchartRepository.Table
+                                       GetClientPainChart = (from sw in _painchartRepository.Table
                                                              where sw.ClientId == id.Value
                                                              select new GetClientPainChart
                                                              {
-                                                                 Remarks = sw.Remarks,
-                                                                 StatusAttach = sw.StatusAttach
+                                                                 Date = sw.Date,
+                                                                 Comment = sw.Comment
                                                              }).ToList(),
-                                       GetClientPulseRate= (from sw in _pulserateRepository.Table
+                                       GetClientPulseRate = (from sw in _pulserateRepository.Table
                                                              where sw.ClientId == id.Value
                                                              select new GetClientPulseRate
                                                              {
-                                                                 Remarks = sw.Remarks,
-                                                                 SeeChartAttach= sw.SeeChartAttach
+                                                                 Date = sw.Date,
+                                                                 Comment = sw.Comment
                                                              }).ToList(),
-                                       GetClientSeizure= (from sw in _seizureRepository.Table
+                                       GetClientSeizure = (from sw in _seizureRepository.Table
                                                              where sw.ClientId == id.Value
                                                              select new GetClientSeizure
                                                              {
-                                                                 Remarks = sw.Remarks,
-                                                                 StatusAttach = sw.StatusAttach
+                                                                 Date = sw.Date,
+                                                                 Remarks = sw.Remarks
                                                              }).ToList(),
                                        GetClientWoundCare = (from sw in _woundcareRepository.Table
                                                            where sw.ClientId == id.Value
                                                            select new GetClientWoundCare
                                                            {
-                                                               Remarks = sw.Remarks,
-                                                               StatusAttach = sw.StatusAttach
+                                                               Date = sw.Date,
+                                                               Comment = sw.Comment
                                                            }).ToList(),
                                        GetCapacity = (from sw in _capacityRepository.Table
                                                              where sw.ClientId == id.Value

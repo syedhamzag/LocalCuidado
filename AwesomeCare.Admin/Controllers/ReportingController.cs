@@ -233,30 +233,36 @@ namespace AwesomeCare.Admin.Controllers
             var clientdetail = await _clientService.GetClientDetail();
             var getClient = await _clientService.GetClients();
             var client = getClient.Where(s => s.PostCode == postcode).FirstOrDefault();
-            var location1 = new Location
-            {
-                Latitude = client.Latitude != null ? client.Latitude : "0",
-                Longitude = client.Longitude != null ? client.Latitude : "0",
-            };
-            var clients = getClient.ToList();
-            foreach (var item in clients)
-            {
+            if (client != null)
+            { 
+                var location1 = new Location
+                {
+                    Latitude = client.Latitude,
+                    Longitude = client.Longitude,
+                };
+                var clients = getClient.ToList();
+                foreach (var item in clients)
+                {
                 
-                var location2 = new Location
-                {
-                    Latitude = item.Latitude != null ? item.Latitude : "0",
-                    Longitude = item.Longitude != null ? item.Longitude : "0"
-                };
-                double distance = CalculateDistance(location1, location2);
-                var result = new GetClientDistance
-                {
-                    Fullname = clientdetail.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName,
-                    Postcode = clients.Where(s => s.ClientId == item.ClientId).FirstOrDefault().PostCode,
-                    Distance = distance + " miles"
-                };
-                list.Add(result);
+                    var location2 = new Location
+                    {
+                        Latitude = item.Latitude,
+                        Longitude = item.Longitude
+                    };
+                    if (item.Latitude != null && item.Longitude != null)
+                    { 
+                        double distance = CalculateDistance(location1, location2);
+                        var result = new GetClientDistance
+                        {
+                            Fullname = clientdetail.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName,
+                            Postcode = clients.Where(s => s.ClientId == item.ClientId).FirstOrDefault().PostCode,
+                            Distance = distance
+                        };
+                        list.Add(result);
+                    }
+                }
+                list.OrderBy(s=>s.Distance);
             }
-            list.OrderBy(s => s.Postcode == client.PostCode);
             model.Client = list;
             return View(model);
         }
