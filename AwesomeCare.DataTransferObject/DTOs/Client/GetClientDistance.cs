@@ -8,6 +8,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
     {
         public string Fullname { get; set; }
         public string Postcode { get; set; }
-        public string Distance { get; set; }
+        public double Distance { get; set; }
     }
 }

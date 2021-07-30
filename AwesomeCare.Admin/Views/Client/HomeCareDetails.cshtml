@@ -688,11 +688,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientBloodCoagulationRecord)
+                                            {
+                                            <tr>
+                                                <td>
+                                                    @item.Date
+                                                </td>
+                                                <td>
+                                                    @item.Comment
+                                                </td>
+                                            </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -710,11 +721,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientBloodPressure)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -732,11 +754,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientBMIChart)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -754,11 +787,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientBodyTemp)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -776,11 +820,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientBowelMovement)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -798,11 +853,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientEyeHealthMonitoring)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -820,11 +886,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientFoodIntake)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -842,11 +919,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientHeartRate)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -864,11 +952,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientOxygenLvl)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -886,11 +985,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientPainChart)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -908,11 +1018,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientPulseRate)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -930,11 +1051,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Remarks</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientSeizure)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Remarks
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -952,11 +1084,22 @@
                                     <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Action Required</th>
-                                                <th>Attachment</th>
+                                                <th>Date</th>
+                                                <th>Comments</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetClientWoundCare)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -999,6 +1142,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+
+                                            @foreach (var item in Model.GetCapacity)
+                                            {
+                                            <tr>
+                                                <td>@Model.GetBaseRecords.Where(s=>s.BaseRecordItemId==item.Pointer).FirstOrDefault().ValueName</td>
+                                                <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Implications).FirstOrDefault().ValueName</td>
+                                            </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1021,6 +1172,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetConsentCare)
+                                            {
+                                                <tr>
+                                                    <td>@item.Date</td>
+                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Signature).FirstOrDefault().ValueName</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1043,6 +1201,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetConsentData)
+                                            {
+                                                <tr>
+                                                    <td>@item.Date</td>
+                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Signature).FirstOrDefault().ValueName</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1065,6 +1230,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetConsentLandLine)
+                                            {
+                                                <tr>
+                                                    <td>@item.Date</td>
+                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Signature).FirstOrDefault().ValueName</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1087,6 +1259,18 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetEquipment)
+                                            {
+                                            <tr>
+                                                <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Name).FirstOrDefault().ValueName</td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(item.Attachment))
+                                                    {
+                                                        <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1105,10 +1289,17 @@
                                         <thead>
                                             <tr>
                                                 <th>Living Status</th>
-                                                <th>Depture</th>
+                                                <th>Debture</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetKeyIndicators)
+                                            {
+                                                <tr>
+                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.LivingStatus).FirstOrDefault().ValueName</td>
+                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Debture).FirstOrDefault().ValueName</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1131,6 +1322,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetPersonal)
+                                            {
+                                                <tr>
+                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Smoking).FirstOrDefault().ValueName</td>
+                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.DNR).FirstOrDefault().ValueName</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1153,6 +1351,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetPersonCentred)
+                                            {
+                                                <tr>
+                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Class).FirstOrDefault().ValueName</td>
+                                                    <td>@item.ExpSupport</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1175,6 +1380,13 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach (var item in Model.GetReview)
+                                            {
+                                                <tr>
+                                                    <td>@item.CP_PreDate</td>
+                                                    <td>@item.CP_ReviewDate</td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1182,7 +1394,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

@@ -268,7 +268,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetPersonal, mem => mem.Ignore())
                 .ForMember(dto => dto.GetKeyIndicators, mem => mem.Ignore())
                 .ForMember(dto => dto.GetPersonCentred, mem => mem.Ignore())
-                .ForMember(dto => dto.GetReview, mem => mem.Ignore());
+                .ForMember(dto => dto.GetReview, mem => mem.Ignore())
+                .ForMember(dto => dto.GetBaseRecords, mem => mem.Ignore());
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));

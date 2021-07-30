@@ -33,6 +33,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientPainChart;
 using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
 using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
 using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
+using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -73,6 +74,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             GetPersonal = new HashSet<GetPersonal>();
             GetPersonCentred = new HashSet<GetPersonCentred>();
             GetReview = new HashSet<GetReview>();
+            GetBaseRecords = new HashSet<GetBaseRecordItem>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -176,5 +178,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetPersonal> GetPersonal { get; set; }
         public virtual ICollection<GetPersonCentred> GetPersonCentred { get; set; }
         public virtual ICollection<GetReview> GetReview { get; set; }
+
+        public virtual ICollection<GetBaseRecordItem> GetBaseRecords { get; set; }
     }
 }
