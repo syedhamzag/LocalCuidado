@@ -265,12 +265,6 @@ namespace AwesomeCare.API.Controllers
                                        Latitude = client.Latitude,
                                        Longitude = client.Longitude,
                                        Address = client.Address,
-                                       GetBaseRecords = (from baseRecItems in _baseRecordItemRepository.Table
-                                                         select new GetBaseRecordItem
-                                                         {
-                                                             BaseRecordItemId = baseRecItems.BaseRecordItemId,
-                                                             ValueName = baseRecItems.ValueName
-                                                         }).ToList(),
                                        InvolvingParties = (from inv in client.InvolvingParties
                                                            select new GetClientInvolvingPartyForEdit
                                                            {
@@ -436,69 +430,13 @@ namespace AwesomeCare.API.Controllers
                                                                Date = sw.Date,
                                                                Comment = sw.Comment
                                                            }).ToList(),
-                                       GetCapacity = (from sw in _capacityRepository.Table
-                                                             where sw.ClientId == id.Value
-                                                             select new GetCapacity
-                                                             {
-                                                                 Pointer = sw.Pointer,
-                                                                 Implications = sw.Implications
-                                                             }).ToList(),
-                                       GetConsentCare = (from sw in _consentcareRepository.Table
-                                                      where sw.ClientId == id.Value
-                                                      select new GetConsentCare
-                                                      {
-                                                          Date = sw.Date,
-                                                          Signature = sw.Signature
-                                                      }).ToList(),
-                                       GetConsentData= (from sw in _consentdataRepository.Table
-                                                         where sw.ClientId == id.Value
-                                                         select new GetConsentData
-                                                         {
-                                                             Date = sw.Date,
-                                                             Signature = sw.Signature
-                                                         }).ToList(),
-                                       GetConsentLandLine = (from sw in _consentlandlineRepository.Table
-                                                         where sw.ClientId == id.Value
-                                                         select new GetConsentLandLine
-                                                         {
-                                                             Date = sw.Date,
-                                                             Signature = sw.Signature
-                                                         }).ToList(),
-                                       GetEquipment = (from sw in _equipmentRepository.Table
-                                                             where sw.ClientId == id.Value
-                                                             select new GetEquipment
-                                                             {
-                                                                 Name = sw.Name,
-                                                                 Attachment = sw.Attachment
-                                                             }).ToList(),
-                                       GetKeyIndicators = (from sw in _keyindicatorsRepository.Table
-                                                       where sw.ClientId == id.Value
-                                                       select new GetKeyIndicators
-                                                       {
-                                                           LivingStatus = sw.LivingStatus,
-                                                           Debture = sw.Debture
-                                                       }).ToList(),
-                                       GetPersonal = (from sw in _personalRepository.Table
-                                                           where sw.ClientId == id.Value
-                                                           select new GetPersonal
-                                                           {
-                                                               DNR = sw.DNR,
-                                                               Smoking = sw.Smoking
-                                                           }).ToList(),
-                                       GetPersonCentred = (from sw in _personcentredRepository.Table
-                                                      where sw.ClientId == id.Value
-                                                      select new GetPersonCentred
-                                                      {
-                                                          Class = sw.Class,
-                                                          ExpSupport = sw.ExpSupport
-                                                      }).ToList(),
                                        GetReview = (from sw in _reviewRepository.Table
-                                                           where sw.ClientId == id.Value
-                                                           select new GetReview
-                                                           {
-                                                               CP_PreDate = sw.CP_PreDate,
-                                                               CP_ReviewDate = sw.CP_ReviewDate
-                                                           }).ToList(),
+                                                    where sw.ClientId == id.Value
+                                                    select new GetReview
+                                                    {
+                                                        CP_PreDate = sw.CP_PreDate,
+                                                        CP_ReviewDate = sw.CP_ReviewDate
+                                                    }).ToList()
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

@@ -24,6 +24,7 @@ using iText.Layout.Element;
 using iText.Kernel.Geom;
 using OfficeOpenXml;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -117,18 +118,21 @@ namespace AwesomeCare.Admin.Controllers
                         workSheet.Cells["I" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         workSheet.Cells["J" + startRow].Value = "No";
                         workSheet.Cells["J" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-
                         int taskRow = row;
                         var tasks = rotaDywk.RotaTasks.Where(s => s.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
-                        foreach (var tk in rotaTasks)
+                        foreach (var tk in tasks)
                         {
-                            if (tasks.FirstOrDefault(s => s.RotaTaskId==tk.RotaTaskId) != null)
+                            var Id = rotaTasks.Where(s => s.RotaTaskId == tk.RotaTaskId).FirstOrDefault();
+                            if (Id.RotaTaskId > 0)
                             {
-                                workSheet.Cells["F" + taskRow].Value = tk.TaskName+" \n";
-                                workSheet.Cells["I" + taskRow].Value = "[] \n";
-                                workSheet.Cells["J" + taskRow].Value = "[] \n";
+                                workSheet.Cells["F" + taskRow].Value += Id.TaskName + " \n";
+                                workSheet.Cells["I" + taskRow].Value += "[] \n";
+                                workSheet.Cells["J" + taskRow].Value += "[] \n";
                             }
                         }
+                        workSheet.Cells["F" + taskRow].Style.WrapText = true;
+                        workSheet.Cells["I" + taskRow].Style.WrapText = true;
+                        workSheet.Cells["J" + taskRow].Style.WrapText = true;
                         workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         workSheet.Cells["D" + row++].Value = "Time In:";
                         workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
@@ -362,11 +366,13 @@ namespace AwesomeCare.Admin.Controllers
                         workSheet.Cells["I" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
                         workSheet.Cells["J" + startRow].Value = "No";
                         workSheet.Cells["J" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-
+                        var dt = new DataTable();
+                        dt.Columns.Add("new");
                         int taskRow = row;
                         var tasks = rotaDywk.RotaTasks.Where(s => s.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
                         foreach (var tk in rotaTasks)
                         {
+                            DataRow dr = dt.NewRow();
                             if (tasks.FirstOrDefault(s => s.RotaTaskId == tk.RotaTaskId) != null)
                             {
                                 workSheet.Cells["F" + taskRow].Value = tk.TaskName + " \n";
