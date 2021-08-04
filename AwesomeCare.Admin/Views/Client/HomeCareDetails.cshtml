@@ -1109,288 +1109,37 @@
 
                     <div class="tab-pane" id="careplan">
                         <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CarePlan">Create New</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </div>
                         <div class="body">
-                            <ul class="nav nav-tabs-new2">
-                                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#capacity">Capacity</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#consentcare">Consent Care</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#consentdata">Consent Data</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#consentlandline">Consent Landline</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#equipment">Equipment</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#keyindicators">Key Indicators</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personal">Personal</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personcentred">Person Centred</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#review">Review</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane" id="capacity">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Capacity">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Pointer</th>
-                                                <th>Implications</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @foreach (var item in Model.GetCapacity)
-                                            {
-                                            <tr>
-                                                <td>@Model.GetBaseRecords.Where(s=>s.BaseRecordItemId==item.Pointer).FirstOrDefault().ValueName</td>
-                                                <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Implications).FirstOrDefault().ValueName</td>
-                                            </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="consentcare">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ConsentCare">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Signature</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetConsentCare)
-                                            {
-                                                <tr>
-                                                    <td>@item.Date</td>
-                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Signature).FirstOrDefault().ValueName</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="consentdata">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ConsentData">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Signature</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetConsentData)
-                                            {
-                                                <tr>
-                                                    <td>@item.Date</td>
-                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Signature).FirstOrDefault().ValueName</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="consentlandline">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ConsentLandLine">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Signature</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetConsentLandLine)
-                                            {
-                                                <tr>
-                                                    <td>@item.Date</td>
-                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Signature).FirstOrDefault().ValueName</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="equipment">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Equipment">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Attachment</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetEquipment)
-                                            {
-                                            <tr>
-                                                <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Name).FirstOrDefault().ValueName</td>
-                                                <td>
-                                                    @if (!string.IsNullOrEmpty(item.Attachment))
-                                                    {
-                                                        <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
-                                                    }
-                                                </td>
-                                            </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="keyindicators">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="KeyIndicators">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Living Status</th>
-                                                <th>Debture</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetKeyIndicators)
-                                            {
-                                                <tr>
-                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.LivingStatus).FirstOrDefault().ValueName</td>
-                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Debture).FirstOrDefault().ValueName</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="personal">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Personal">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Smoking</th>
-                                                <th>DNR</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetPersonal)
-                                            {
-                                                <tr>
-                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Smoking).FirstOrDefault().ValueName</td>
-                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.DNR).FirstOrDefault().ValueName</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="personcentred">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonCentred">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Class</th>
-                                                <th>Exp Support</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetPersonCentred)
-                                            {
-                                                <tr>
-                                                    <td>@Model.GetBaseRecords.Where(s => s.BaseRecordItemId == item.Class).FirstOrDefault().ValueName</td>
-                                                    <td>@item.ExpSupport</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="review">
-                                    <div class="header">
-                                        <ul class="header-dropdown">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Review">Create New</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>CP Prepared Date</th>
-                                                <th>CP Review Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetReview)
-                                            {
-                                                <tr>
-                                                    <td>@item.CP_PreDate</td>
-                                                    <td>@item.CP_ReviewDate</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Prepare Date</th>
+                                        <th>Review Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetReview)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

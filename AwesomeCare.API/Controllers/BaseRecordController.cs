@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class BaseRecordController : ControllerBase
@@ -149,6 +150,19 @@ namespace AwesomeCare.API.Controllers
             return Ok(getBaseRecordItems);
         }
 
+        [HttpGet("GetBaseRecordItem", Name = "GetBaseRecordItem")]
+        [ProducesResponseType(type: typeof(List<GetBaseRecordItem>), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetBaseRecordItem()
+        {
+            var baseRecordItem = await _baseRecordItemRepository.Table.ProjectTo<GetBaseRecordItem>().ToListAsync();//_baseRecordItemRepository.GetEntity(baseRecordItemId);
+            if (baseRecordItem == null)
+                return NotFound();
+
+            List<GetBaseRecordItem> getBaseRecordItems = Mapper.Map<List<GetBaseRecordItem>>(baseRecordItem);
+            return Ok(getBaseRecordItems);
+        }
 
 
     }

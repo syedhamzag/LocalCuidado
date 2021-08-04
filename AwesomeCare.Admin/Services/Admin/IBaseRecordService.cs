@@ -19,6 +19,9 @@ namespace AwesomeCare.Admin.Services.Admin
         [Get("/BaseRecord/GetBaseRecordWithItems/{id}")]
         Task<GetBaseRecordWithItems> GetBaseRecordWithItems(int id);
 
+        [Get("/BaseRecord/GetBaseRecordItem")]
+        Task<List<GetBaseRecordItem>> GetBaseRecordItem();
+
         [Get("/BaseRecord/GetBaseRecordItemById/{baseRecordItemId}")]
         Task<GetBaseRecordItem> GetBaseRecordItemById(int baseRecordItemId);
 

@@ -37,6 +37,7 @@ using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
+using AwesomeCare.Admin.Services.Admin;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -54,13 +55,15 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IMedicationService _medicationService;
         private readonly IClientRotaTypeService _clientRotaTypeService;
         private readonly IRotaDayofWeekService _rotaDayofWeekService;
+        private readonly IBaseRecordService _baseRecordService;
 
         public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
             IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService,
-            IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger,
+            IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger, IBaseRecordService baseRecordService,
             IClientCareDetails clientCareDetails, IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) : base(fileUpload)
         {
             _dropboxClient = dropboxClient;
+            _baseRecordService = baseRecordService;
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
             _env = env;
@@ -431,6 +434,7 @@ namespace AwesomeCare.Admin.Controllers
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(5);
             result.QRCode = qrCodeImage.ToByteArray();
+            result.GetBaseRecords = await _baseRecordService.GetBaseRecordItem();
             return View(result);
         }
         #endregion
