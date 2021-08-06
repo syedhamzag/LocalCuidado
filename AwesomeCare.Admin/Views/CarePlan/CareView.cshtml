@@ -23,17 +23,14 @@
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Class</label>
                                     <baserecord asp-key="Class" asp-for="Class" asp-items="null" />
-                                    <span asp-validation-for="Class" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Focus</label>
-                                    <select asp-for="Focus" asp-items="@Model.FocusList" class="selectpicker form-control" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="Focus" class="text-danger"></span>
+                                    <select asp-for="Focus" asp-items="@Model.FocusList" readonly class="selectpicker form-control" data-live-search="true" multiple></select>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Expected Support</label>
-                                    <input type="text" asp-for="ExpSupport" class="form-control" />
-                                    <span asp-validation-for="ExpSupport" class="text-danger"></span>
+                                    <input type="text" asp-for="ExpSupport" class="form-control" readonly />
                                 </div>
                             </div>
                         </div>
@@ -48,17 +45,14 @@
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Pointer</label>
                                     <baserecord asp-key="Capacity_Pointer" asp-for="Pointer" asp-items="null" />
-                                    <span asp-validation-for="Pointer" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Implications</label>
                                     <baserecord asp-key="Capacity_Implications" asp-for="Implications" asp-items="null" />
-                                    <span asp-validation-for="Implications" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Indicators</label>
                                     <select asp-for="Indicator" asp-items="@Model.IndicatorList" class="selectpicker form-control" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="Indicator" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -71,14 +65,68 @@
                             <input type="hidden" asp-for="ClientId" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">FullName</label>
+                                    <input type="text" asp-for="FullName" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Preffered Name</label>
+                                    <input type="text" asp-for="PreferredName" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Preferred Language</label>
+                                    <baserecord asp-key="Language" asp-for="PreferredLanguage" asp-items="null" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Gender</label>
+                                    <baserecord asp-key="Gender" asp-for="Gender" asp-items="null" />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Date Of Birth</label>
+                                    <input type="text" asp-for="DateofBirth" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Religion</label>
+                                    @*<input type="text" asp-for="Religion" class="form-control" readonly />*@
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Address</label>
+                                    <input type="text" asp-for="Address" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Post Code</label>
+                                    <input type="text" asp-for="PostCode" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Nationality</label>
+                                    @*<input type="text" asp-for="Nationality" class="form-control" readonly />*@
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Telephone</label>
+                                    <input type="text" asp-for="Telephone" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Smoking</label>
                                     <baserecord asp-key="Smoking" asp-for="Smoking" asp-items="null" />
-                                    <span asp-validation-for="Smoking" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Access Code</label>
+                                    @*<input type="text" asp-for="AccessCode" class="form-control" readonly />*@
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Gender Preference</label>
+                                    @*<input type="text" asp-for="PreferredGender" class="form-control" readonly />*@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">DNR in Place</label>
                                     <baserecord asp-key="DNR" asp-for="DNR" asp-items="null" />
-                                    <span asp-validation-for="DNR" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -92,25 +140,21 @@
                             <div class="row">
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">CarePlan Prepared Date</label>
-                                    <input type="text" asp-for="CP_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="CP_PreDate" class="text-danger"></span>
+                                    <input type="text" asp-for="CP_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">CarePlan Review Date</label>
-                                    <input type="text" asp-for="CP_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="CP_ReviewDate" class="text-danger"></span>
+                                    <input type="text" asp-for="CP_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Risk Assessment Prepared Date</label>
-                                    <input type="text" asp-for="RA_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="RA_PreDate" class="text-danger"></span>
+                                    <input type="text" asp-for="RA_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Risk Assessment Review Date</label>
-                                    <input type="text" asp-for="RA_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="RA_ReviewDate" class="text-danger"></span>
+                                    <input type="text" asp-for="RA_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                                 </div>
                             </div>
                         </div>
@@ -125,42 +169,51 @@
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Living Status</label>
                                     <baserecord asp-key="LivingStatus" asp-for="LivingStatus" asp-items="null" />
-                                    <span asp-validation-for="LivingStatus" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Debture</label>
                                     <baserecord asp-key="Debture" asp-for="Debture" asp-items="null" />
-                                    <span asp-validation-for="Debture" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Method of Log</label>
                                     <baserecord asp-key="LogMethod" asp-for="LogMethod" asp-items="null" />
-                                    <span asp-validation-for="LogMethod" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">About Me</label>
-                                    <textarea type="text" asp-for="AboutMe" class="form-control"></textarea>
-                                    <span asp-validation-for="AboutMe" class="text-danger"></span>
+                                    <textarea type="text" asp-for="AboutMe" class="form-control" readonly></textarea>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Things I Like To Talk About</label>
-                                    <textarea type="text" asp-for="ThingsILike" class="form-control"></textarea>
-                                    <span asp-validation-for="ThingsILike" class="text-danger"></span>
+                                    <textarea type="text" asp-for="ThingsILike" class="form-control" readonly></textarea>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Role Of My Family</label>
-                                    <textarea type="text" asp-for="FamilyRole" class="form-control"></textarea>
-                                    <span asp-validation-for="FamilyRole" class="text-danger"></span>
+                                    <textarea type="text" asp-for="FamilyRole" class="form-control" readonly></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    
+                    @*<h4>Personality</h4>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <input type="hidden" asp-for="PersonCentredId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Personality</label>
+                                    <baserecord asp-key="Class" asp-for="Class" asp-items="null" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
 
                     <h4>Equipment</h4>
                     <div class="row">
@@ -170,43 +223,36 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Service Date</label>
-                                    <input type="text" asp-for="ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="ServiceDate" class="text-danger"></span>
+                                    <input type="text" asp-for="ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly/>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Next Service Date</label>
-                                    <input type="text" asp-for="NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="NextServiceDate" class="text-danger"></span>
+                                    <input type="text" asp-for="NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly/>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Equipment Status</label>
                                     <baserecord asp-key="Equipment_Status" asp-for="Status" asp-items="null" />
-                                    <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Name</label>
                                     <baserecord asp-key="Equipment_Name" asp-for="Name" asp-items="null" />
-                                    <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Type</label>
                                     <baserecord asp-key="Equipment_Type" asp-for="Type" asp-items="null" />
-                                    <span asp-validation-for="Type" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Location</label>
                                     <baserecord asp-key="Equipment_Location" asp-for="Location" asp-items="null" />
-                                    <span asp-validation-for="Location" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Person To Act</label>
-                                    <select class="custom-select" asp-for="PersonToAct" asp-items="Model.StaffList">
+                                    <select class="custom-select" asp-for="PersonToAct" asp-items="@Model.StaffList">
                                     </select>
-                                    <span asp-validation-for="PersonToAct" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -218,7 +264,6 @@
                                 </div>
                                 <div class="body">
                                     <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                    <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -236,19 +281,26 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <input type="text" asp-for="LandName" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Relationship</label>
+                                    <input type="text" asp-for="LandRelation" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Method of Log</label><br />
+                                    <baserecord asp-key="LogMethod" asp-for="LogMethod" asp-items="null" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date</label>
-                                    <input type="text" asp-for="LandLineDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="LandLineDate" class="text-danger"></span>
+                                    <input type="text" asp-for="LandLineDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly/>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Signature</label>
                                     <baserecord asp-key="Signature" asp-for="LandLineSignature" asp-items="null" />
-                                    <span asp-validation-for="LandLineSignature" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Method of Log</label><br />
-                                    <baserecord asp-key="LogMethod" asp-for="LandLineLogMethod" asp-items="null" />
-                                    <span asp-validation-for="LandLineLogMethod" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -266,14 +318,22 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <input type="text" asp-for="CareName" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Relationship</label>
+                                    <input type="text" asp-for="CareRelation" class="form-control" readonly />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date</label>
-                                    <input type="text" asp-for="CareDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="CareDate" class="text-danger"></span>
+                                    <input type="text" asp-for="CareDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Signature</label>
                                     <baserecord asp-key="Signature" asp-for="CareSignature" asp-items="null" />
-                                    <span asp-validation-for="CareSignature" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -289,29 +349,37 @@
                                     <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <input type="text" asp-for="DataName" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Relationship</label>
+                                    <input type="text" asp-for="DataRelation" class="form-control" readonly />
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date</label>
-                                    <input type="text" asp-for="DataDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="DataDate" class="text-danger"></span>
+                                    <input type="text" asp-for="DataDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Signature</label>
                                     <baserecord asp-key="Signature" asp-for="DataSignature" asp-items="null" />
-                                    <span asp-validation-for="DataSignature" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    @*Submit Button*@
                     <div class="row">
                         <div class="form-group col-sm-10 col-xs-12 col-md-10 col-lg-10">
-                            <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
+                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                        </div>
+                        <div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+                            <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -324,7 +392,11 @@
     <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.custom-select').attr("disabled", "disabled");
+        });
+    </script>
 }
 
 @section Scripts{
