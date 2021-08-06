@@ -24,13 +24,15 @@ namespace AwesomeCare.API.Controllers
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<PersonCentred> _PersonCentredRepository;
         private IGenericRepository<PersonCentredFocus> _focusRepository;
+        private IGenericRepository<BaseRecordItemModel> _baseRepository;
 
         public PersonCentredController(AwesomeCareDbContext dbContext, IGenericRepository<PersonCentred> PersonCentredRepository,
-            IGenericRepository<PersonCentredFocus> focusRepository)
+            IGenericRepository<PersonCentredFocus> focusRepository, IGenericRepository<BaseRecordItemModel> baseRepository)
         {
             _PersonCentredRepository = PersonCentredRepository;
             _dbContext = dbContext;
             _focusRepository = focusRepository;
+            _baseRepository = baseRepository;
         }
         #region PersonCentred
         /// <summary>
@@ -104,10 +106,13 @@ namespace AwesomeCare.API.Controllers
                                                Class = c.Class,
                                                ExpSupport = c.ExpSupport,
                                                Focus = (from com in _focusRepository.Table
+                                                        join b in _baseRepository.Table on com.BaseRecordId equals b.BaseRecordItemId 
                                                         where com.PersonCentredId == c.PersonCentredId
                                                             select new GetPersonCentredFocus
                                                             {
+                                                                
                                                                 BaseRecordId = com.BaseRecordId,
+                                                                ValueName = b.ValueName
                                                             }).ToList()
                                            }
                       ).FirstOrDefaultAsync();

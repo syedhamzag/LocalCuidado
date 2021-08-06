@@ -25,14 +25,13 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<SelectListItem> StaffList { get; set; }
         public List<SelectListItem> FocusList { get; set; }
         public List<SelectListItem> IndicatorList { get; set; }
-
+        public string ActionName { get; set; } = "Save";
         [Required]
         public int ClientId { get; set; }
-
+        public string ClientName { get; set; }
         #region Capacity
         [Required]
         public int CapacityId { get; set; }
-        [Required]
         public List<int> Indicator { get; set; }
         [Required]
         public int Pointer { get; set; }
@@ -47,6 +46,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public int CareSignature { get; set; }
         [Required]
         public DateTime CareDate { get; set; }
+        public string CareName { get; set; }
+        public string CareRelation { get; set; }
         #endregion
 
         #region ConsentData
@@ -56,6 +57,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public int DataSignature { get; set; }
         [Required]
         public DateTime DataDate { get; set; }
+        public string DataName { get; set; }
+        public string DataRelation { get; set; }
         #endregion
 
         #region ConsentLandLine
@@ -67,6 +70,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public int LandLineLogMethod { get; set; }
         [Required]
         public DateTime LandLineDate { get; set; }
+
+        public string LandName { get; set; }
+        public string LandRelation { get; set; }
         #endregion
 
         #region Equipment
@@ -111,12 +117,24 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public int Smoking { get; set; }
         [Required]
         public int DNR { get; set; }
+
+        public string FullName { get; set; }
+        public string PreferredName { get; set; }
+        public int PreferredLanguage { get; set; }
+        public int Gender { get; set; }
+        public int Religion { get; set; }
+        public int PreferredGender { get; set; }
+        public string Telephone { get; set; }
+        public string AccessCode { get; set; }
+        public string PostCode { get; set; }
+        public int Nationality { get; set; }
+        public string DateofBirth { get; set; }
+        public string Address { get; set; }
         #endregion
 
         #region PersonCentred
         [Required]
         public int PersonCentredId { get; set; }
-        [Required]
         public List<int> Focus { get; set; }
         [Required]
         public int Class { get; set; }

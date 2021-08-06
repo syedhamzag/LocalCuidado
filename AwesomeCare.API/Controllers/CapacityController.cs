@@ -24,13 +24,15 @@ namespace AwesomeCare.API.Controllers
         private AwesomeCareDbContext _dbContext;
         private IGenericRepository<Capacity> _CapacityRepository;
         private IGenericRepository<CapacityIndicator> _indicatorRepository;
+        private IGenericRepository<BaseRecordItemModel> _baseRepository;
 
         public CapacityController(AwesomeCareDbContext dbContext, IGenericRepository<Capacity> CapacityRepository,
-            IGenericRepository<CapacityIndicator> indicatorRepository)
+            IGenericRepository<CapacityIndicator> indicatorRepository, IGenericRepository<BaseRecordItemModel> baseRepository)
         {
             _CapacityRepository = CapacityRepository;
             _dbContext = dbContext;
             _indicatorRepository = indicatorRepository;
+            _baseRepository = baseRepository;
         }
         #region Capacity
         /// <summary>
@@ -104,10 +106,12 @@ namespace AwesomeCare.API.Controllers
                                                Implications = c.Implications,
                                                Pointer = c.Pointer,
                                                Indicator = (from com in _indicatorRepository.Table
+                                                            join b in _baseRepository.Table on com.BaseRecordId equals b.BaseRecordItemId
                                                             where com.CapacityId == c.CapacityId
                                                             select new GetCapacityIndicator
                                                             {
                                                                 BaseRecordId = com.BaseRecordId,
+                                                                ValueName = b.ValueName
                                                             }).ToList()
                                            }
                       ).FirstOrDefaultAsync();
