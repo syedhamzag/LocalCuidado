@@ -262,19 +262,6 @@ __pycache__/
 
 */Uploads/*
 AwesomeCare.IdentityServer/appsettings.Development.json
-AwesomeCare.IdentityServer/appsettings.Development.json
-AwesomeCare.API/Properties/launchSettings.json
-AwesomeCare.API/appsettings.json
-AwesomeCare.API/Properties/launchSettings.json
-AwesomeCare.IdentityServer/appsettings.Development.json
-AwesomeCare.IdentityServer/appsettings.json
+AwesomeCare.Admin/appsettings.Development.json
 AwesomeCare.API/appsettings.Development.json
-AwesomeCare.API/appsettings.json
-AwesomeCare.API/Properties/launchSettings.json
-AwesomeCare.IdentityServer/appsettings.Development.json
-AwesomeCare.IdentityServer/appsettings.json
-*.config
-AwesomeCare.API/web.config
-AwesomeCare.Admin/appsettings.json
-AwesomeCare.API/appsettings.json
-*.json
+AwesomeCare.Web/appsettings.Development.json
