@@ -1,5 +1,5 @@
 @model LoginViewModel
-@{ 
+@{
     Layout = "";
 }
 <!DOCTYPE html>
@@ -64,13 +64,13 @@
 
             <div class="form-wrapper">
 
-                <form asp-route-button="login"
+                <form asp-route="login"
                       method="post"
                       id="loginAuthForm"
                       class="">
                     <input type="hidden" asp-for="ReturnUrl" />
                     <partial name="_ValidationSummary" />
-                    <input type="hidden" name="_token" value="JvJuigwulPWpD2I47n6TJpwgu0DJy9ZkrDwRiZWY">
+                    @*<input type="hidden" name="_token" value="JvJuigwulPWpD2I47n6TJpwgu0DJy9ZkrDwRiZWY">*@
                     <div class="alert alert-success" id="success" style="display:none;"></div>
 
                     <div class="alert alert-warning" id="warning" style="display:none;"></div>
@@ -79,82 +79,84 @@
 
                     <div class="form-group">
                         <label for="User" class="form-label">Username</label>
-                        <input class="input-lg form-control"
-                               id="username"
-                               name="username"
-                               value=""
-                               placeholder="Enter Username"
-                               type="text"
-                               autocomplete="off"
-                               required>
+                        <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                        @*<input class="input-lg form-control"
+                            id="username"
+                            name="username"
+                            value=""
+                            placeholder="Enter Username"
+                            type="text"
+                            autocomplete="off"
+                            required>*@
                     </div>
 
                     <div class="form-group">
                         <label for="password" class="form-label">Password</label>
-                        <input class="input-lg form-control"
-                               id="password"
-                               placeholder="password"
-                               type="password"
-                               name="password"
-                               autocomplete="off"
-                               required>
+                        <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                        @*<input class="input-lg form-control"
+                            id="password"
+                            placeholder="password"
+                            type="password"
+                            name="password"
+                            autocomplete="off"
+                            required>*@
                     </div>
 
-                    <input type="hidden" name="referrer_url" value="">
-                    <input type="hidden" name="host" value="">
-                    <input type="hidden" name="auth_link" value="">
-                    <input type="hidden" name="company" value="1">
-                    <input type="hidden" id="encodedFld" name="encoded" value="false">
+                    @*<input type="hidden" name="referrer_url" value="">
+                        <input type="hidden" name="host" value="">
+                        <input type="hidden" name="auth_link" value="">
+                        <input type="hidden" name="company" value="1">
+                        <input type="hidden" id="encodedFld" name="encoded" value="false">*@
 
                     <div class="form-group">
-                        <button id="login-btn" type="submit" class="btn btn-lg btn-block stressed-btn stressed-btn-fh sign-in-btn" onclick="return preSubmit();">
+                        <button id="login-btn"  name="button" value="login" class="btn btn-lg btn-block stressed-btn stressed-btn-fh sign-in-btn">
                             Sign In
                             <i class="fa fa-angle-right fa-fw"></i>
                         </button>
                     </div>
 
-                    <input type="hidden" name="__ncforminfo" value="CvMTk_AmGEn9I6Od8h5Fatv1mVATVUIePIbROdvo9K24C3FDXXOQQ3RSz_iLsA828EbYzQsI2gtdiVtBDLj9oKMVm1yMZJqRgbEofitH7IPLB9qvKwQ7SdcFjAUlLbrPoLpdk2zaZ1xXS1103c_1yyvWp2S5_A8fBxsa117uQFQ=" />
+
                 </form>
 
                 <script type="text/javascript">
-    function preSubmit(){
+                    function preSubmit() {
 
-              if($("#encodedFld").val() == "false"){
-            $("#login-btn").attr('disabled', 'disabled');
+                        if ($("#encodedFld").val() == "false") {
+                            $("#login-btn").attr('disabled', 'disabled');
 
-            var encpass = $("#password").val();
+                            var encpass = $("#password").val();
 
-            $("#password").val(btoa(encpass));
-            $("#encodedFld").val("true");
+                            $("#password").val(btoa(encpass));
+                            $("#encodedFld").val("true");
 
-            $("#loginAuthForm").submit();
+                            $("#loginAuthForm").submit();
 
-            return false;
+                            return false;
 
-        }
-
-
-
-    }
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('password')
-            .addEventListener('keypress', function(event) {
-                if (event.keyCode == 13) {
-                    return preSubmit();
-                }
-            });
+                        }
 
 
-        document.getElementById('username')
-            .addEventListener('keypress', function(event) {
-                if (event.keyCode == 13) {
-                    return preSubmit();
-                }
-            });
+
+                    }
+
+                    document.addEventListener('DOMContentLoaded', (event) => {
+                        document.getElementById('password')
+                            .addEventListener('keypress', function (event) {
+                                if (event.keyCode == 13) {
+                                    return preSubmit();
+                                }
+                            });
 
 
-    })
+                        document.getElementById('username')
+                            .addEventListener('keypress', function (event) {
+                                if (event.keyCode == 13) {
+                                    return preSubmit();
+                                }
+                            });
+
+
+                    })
 
                 </script>
 
@@ -232,11 +234,11 @@
                            required>
                 </div>
 
-                <input type="hidden" name="referrer_url" value="">
-                <input type="hidden" name="host" value="">
-                <input type="hidden" name="auth_link" value="">
-                <input type="hidden" name="company" value="1">
-                <input type="hidden" id="encodedFld" name="encoded" value="false">
+                @*<input type="hidden" name="referrer_url" value="">
+                    <input type="hidden" name="host" value="">
+                    <input type="hidden" name="auth_link" value="">
+                    <input type="hidden" name="company" value="1">
+                    <input type="hidden" id="encodedFld" name="encoded" value="false">*@
 
                 <div class="form-group">
                     <button id="login-btn" value="login" type="submit" class="btn btn-lg btn-block stressed-btn stressed-btn-fh sign-in-btn" onclick="return preSubmit();">
@@ -249,44 +251,44 @@
             </form>
 
             <script type="text/javascript">
-    function preSubmit(){
+                function preSubmit() {
 
-              if($("#encodedFld").val() == "false"){
-            $("#login-btn").attr('disabled', 'disabled');
+                    if ($("#encodedFld").val() == "false") {
+                        $("#login-btn").attr('disabled', 'disabled');
 
-            var encpass = $("#password").val();
+                        var encpass = $("#password").val();
 
-            $("#password").val(btoa(encpass));
-            $("#encodedFld").val("true");
-            $("#login-btn").val("login");
-            $("#loginAuthForm").submit();
+                        $("#password").val(btoa(encpass));
+                        $("#encodedFld").val("true");
+                        $("#login-btn").val("login");
+                        $("#loginAuthForm").submit();
 
-            return false;
+                        return false;
 
-        }
+                    }
 
 
 
-    }
-
-    document.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('password')
-            .addEventListener('keypress', function(event) {
-                if (event.keyCode == 13) {
-                    return preSubmit();
                 }
-            });
+
+                document.addEventListener('DOMContentLoaded', (event) => {
+                    document.getElementById('password')
+                        .addEventListener('keypress', function (event) {
+                            if (event.keyCode == 13) {
+                                return preSubmit();
+                            }
+                        });
 
 
-        document.getElementById('username')
-            .addEventListener('keypress', function(event) {
-                if (event.keyCode == 13) {
-                    return preSubmit();
-                }
-            });
+                    document.getElementById('username')
+                        .addEventListener('keypress', function (event) {
+                            if (event.keyCode == 13) {
+                                return preSubmit();
+                            }
+                        });
 
 
-    })
+                })
 
             </script>
 
@@ -306,47 +308,56 @@
 
 
     <style type="text/css">
-    #loginForm{
-        border-radius: 10px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        width: 400px;
-        background: #fff;
-        overflow: scroll;
-    }
-    #loginForm header.login-form{
-        margin-bottom: 10px;
-    }
-    #loginForm div.form-wrapper {
-        height: auto;
-        padding-bottom: 0;
-    }
-    #loginForm header.login-form h1 {
-        font-size: 1.75rem;
-    }
-    .sign-in-btn{
-        font-size: 16px;
-    }
-    .form-label {
-        font-size: 13px;
-    }
-    .alert{
-        border: 0;
-        font-size: 13px;
-        padding: 5px 15px;
-    }
-    #homeContentMobile input.form-control, #homeContent input.form-control {
-        border-color: rgba(119, 119, 119, 0.39);
-    }
-    @@media (min-width: 768px){
-        #closeButton {
-            top: 10px;
-            left: 10px;
-            color: #daa6a6;
-            font-size: 21px;
-            -webkit-text-stroke: 3px #fff;
-            text-stroke: 3px #fff;
+        #loginForm {
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 400px;
+            background: #fff;
+            overflow: scroll;
         }
-    }
+
+            #loginForm header.login-form {
+                margin-bottom: 10px;
+            }
+
+            #loginForm div.form-wrapper {
+                height: auto;
+                padding-bottom: 0;
+            }
+
+            #loginForm header.login-form h1 {
+                font-size: 1.75rem;
+            }
+
+        .sign-in-btn {
+            font-size: 16px;
+        }
+
+        .form-label {
+            font-size: 13px;
+        }
+
+        .alert {
+            border: 0;
+            font-size: 13px;
+            padding: 5px 15px;
+        }
+
+        #homeContentMobile input.form-control, #homeContent input.form-control {
+            border-color: rgba(119, 119, 119, 0.39);
+        }
+
+        @@media (min-width: 768px) {
+            #closeButton {
+                top: 10px;
+                left: 10px;
+                color: #daa6a6;
+                font-size: 21px;
+                -webkit-text-stroke: 3px #fff;
+                text-stroke: 3px #fff;
+            }
+        }
+
         .modal-body {
             max-height: calc(100vh - 112px);
             overflow-y: auto;
@@ -360,7 +371,7 @@
                 <div class="modal-header no-border grey-lt5-bg clearfix bg-light">
                     <!-- Added pull-x to the following element to fix inconsistent positioning on element due to possible change in which bootstrap version powers the page -->
                     <h4 class="modal-title pull-left" id="myModalLabel"></h4>
-                    <button type="button" class="fa-2x close pull-right" data-dismiss="modal" aria-hidden="true" style="">×</button>
+                    <button type="button" class="fa-2x close pull-right" data-dismiss="modal" aria-hidden="true" style="">ï¿½</button>
                 </div>
                 <div class="modal-body">
                     Loading...
@@ -425,87 +436,87 @@
 </html>
 
 @*<div class="login-page">
-    <div class="page-header">
-        <h1>Login</h1>
-    </div>
-
-    <partial name="_ValidationSummary" />
-
-    <div class="row">
-
-        @if (Model.EnableLocalLogin)
-        {
-<div class="col-sm-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Local Login</h3>
+        <div class="page-header">
+            <h1>Login</h1>
         </div>
-        <div class="panel-body">
 
-            <form asp-route="Login">
-                <input type="hidden" asp-for="ReturnUrl" />
+        <partial name="_ValidationSummary" />
 
-                <fieldset>
-                    <div class="form-group">
-                        <label asp-for="Username"></label>
-                        <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password"></label>
-                        <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
-                    </div>
-                    @if (Model.AllowRememberLogin)
-                    {
-    <div class="form-group login-remember">
-        <label asp-for="RememberLogin">
-            <input asp-for="RememberLogin">
-            <strong>Remember My Login</strong>
-        </label>
-        <a id="forgot-password" asp-area="Identity" class="pull-right" asp-page="/Account/ForgotPassword">Forgot your password?</a>
+        <div class="row">
+
+            @if (Model.EnableLocalLogin)
+            {
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Local Login</h3>
+            </div>
+            <div class="panel-body">
+
+                <form asp-route="Login">
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label asp-for="Username"></label>
+                            <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                        </div>
+                        @if (Model.AllowRememberLogin)
+                        {
+        <div class="form-group login-remember">
+            <label asp-for="RememberLogin">
+                <input asp-for="RememberLogin">
+                <strong>Remember My Login</strong>
+            </label>
+            <a id="forgot-password" asp-area="Identity" class="pull-right" asp-page="/Account/ForgotPassword">Forgot your password?</a>
+        </div>}
+                        <div class="form-group">
+                            <button class="btn btn-primary" name="button" value="login">Login</button>
+                            <button class="btn btn-default" name="button" value="cancel">Cancel</button>
+
+                            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-default pull-right" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
     </div>}
-                    <div class="form-group">
-                        <button class="btn btn-primary" name="button" value="login">Login</button>
-                        <button class="btn btn-default" name="button" value="cancel">Cancel</button>
 
-                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-default pull-right" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-
-                    </div>
-                </fieldset>
-            </form>
+            @if (Model.VisibleExternalProviders.Any())
+            {
+    <div class="col-md-6 col-sm-6 external-providers">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">External Login</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-inline">
+                    @foreach (var provider in Model.VisibleExternalProviders)
+                    {
+    <li>
+        <a class="btn btn-default"
+           asp-controller="External"
+           asp-action="Challenge"
+           asp-route-provider="@provider.AuthenticationScheme"
+           asp-route-returnUrl="@Model.ReturnUrl">
+            @provider.DisplayName
+        </a>
+    </li>}
+                </ul>
+            </div>
         </div>
-    </div>
-</div>}
+    </div>}
 
-        @if (Model.VisibleExternalProviders.Any())
-        {
-<div class="col-md-6 col-sm-6 external-providers">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">External Login</h3>
+            @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+            {
+    <div class="alert alert-warning">
+        <strong>Invalid login request</strong>
+        There are no login schemes configured for this client.
+    </div>}
         </div>
-        <div class="panel-body">
-            <ul class="list-inline">
-                @foreach (var provider in Model.VisibleExternalProviders)
-                {
-<li>
-    <a class="btn btn-default"
-       asp-controller="External"
-       asp-action="Challenge"
-       asp-route-provider="@provider.AuthenticationScheme"
-       asp-route-returnUrl="@Model.ReturnUrl">
-        @provider.DisplayName
-    </a>
-</li>}
-            </ul>
-        </div>
-    </div>
-</div>}
-
-        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-        {
-<div class="alert alert-warning">
-    <strong>Invalid login request</strong>
-    There are no login schemes configured for this client.
-</div>}
-    </div>
-</div>*@
+    </div>*@
