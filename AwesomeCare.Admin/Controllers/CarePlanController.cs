@@ -109,7 +109,7 @@ namespace AwesomeCare.Admin.Controllers
             model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
 
             var care = await _careService.Get(clientId.Value);
-            if (care.CareId > 0)
+            if (care != null)
             {
                 model = await Get(clientId.Value);
                 model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
