@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.ConsentLandLine
         Task<HttpResponseMessage> Create([Body] PostConsentLandLine model);
 
         [Put("/ConsentLandLine/Put")]
-        Task<HttpResponseMessage> Put([Body] PutConsentLandLine model);
+        Task<HttpResponseMessage> Put([Body] PostConsentLandLine model);
     }
 }

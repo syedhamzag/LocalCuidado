@@ -11,6 +11,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
 {
     public class CreateCarePlan
     {
+        public string ActionName { get; set; } = "Save";
         public CreateCarePlan()
         {
             IndicatorList = new List<SelectListItem>();
@@ -25,7 +26,6 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<SelectListItem> StaffList { get; set; }
         public List<SelectListItem> FocusList { get; set; }
         public List<SelectListItem> IndicatorList { get; set; }
-        public string ActionName { get; set; } = "Save";
         [Required]
         public int ClientId { get; set; }
         public string ClientName { get; set; }

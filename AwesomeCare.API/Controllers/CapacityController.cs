@@ -71,13 +71,26 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutCapacity models)
+        public async Task<IActionResult> Put([FromBody] PostCapacity models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            foreach (var model in models.Indicator.ToList())
+            {
+                var entity = _dbContext.Set<CapacityIndicator>();
+                var filterentity = entity.Where(c => c.CapacityId == model.CapacityId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
+                }
+            }
+            var result = _dbContext.SaveChanges();
             var Capacity = Mapper.Map<Capacity>(models);
             await _CapacityRepository.UpdateEntity(Capacity);
             return Ok();
@@ -98,7 +111,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getCapacity = await (from c in _CapacityRepository.Table
-                                           where c.CapacityId == id
+                                           where c.ClientId == id.Value
                                            select new GetCapacity
                                            {
                                                CapacityId = c.CapacityId,

@@ -65,7 +65,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutPersonal models)
+        public async Task<IActionResult> Put([FromBody] PostPersonal models)
         {
             if (!ModelState.IsValid)
             {
@@ -92,8 +92,8 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getPersonal = await (from c in _PersonalRepository.Table
-                                           where c.PersonalId == id
-                                           select new GetPersonal
+                                     where c.ClientId == id.Value
+                                     select new GetPersonal
                                            {
                                                PersonalId = c.PersonalId,
                                                ClientId = c.ClientId,

@@ -34,7 +34,7 @@
                                         <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "CarePlan", new { clientId = item.data.ClientId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("Edit", "Index", "CarePlan", new { clientId = item.data.ClientId }, new { @class = "dropdown-item" })
                                             @Html.ActionLink("View", "CareView", "CarePlan", new { clientId = item.data.ClientId }, new { @class = "dropdown-item" })
                                         </div>
                                     </div>

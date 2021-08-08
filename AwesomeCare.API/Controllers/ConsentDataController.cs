@@ -65,7 +65,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutConsentData models)
+        public async Task<IActionResult> Put([FromBody] PostConsentData models)
         {
             if (!ModelState.IsValid)
             {
@@ -92,8 +92,8 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getConsentData = await (from c in _ConsentDataRepository.Table
-                                           where c.DataId == id
-                                           select new GetConsentData
+                                        where c.ClientId == id.Value
+                                        select new GetConsentData
                                            {
                                                DataId = c.DataId,
                                                ClientId = c.ClientId,

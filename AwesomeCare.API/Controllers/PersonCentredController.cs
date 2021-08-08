@@ -71,12 +71,27 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutPersonCentred models)
+        public async Task<IActionResult> Put([FromBody] PostPersonCentred models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            foreach (var model in models.Focus.ToList())
+            {
+                var entity = _dbContext.Set<PersonCentredFocus>();
+                var filterentity = entity.Where(c => c.PersonCentredId == model.PersonCentredId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+            var result = _dbContext.SaveChanges();
 
             var PersonCentred = Mapper.Map<PersonCentred>(models);
             await _PersonCentredRepository.UpdateEntity(PersonCentred);
@@ -98,8 +113,8 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getPersonCentred = await (from c in _PersonCentredRepository.Table
-                                           where c.PersonCentredId == id
-                                           select new GetPersonCentred
+                                          where c.ClientId == id.Value
+                                          select new GetPersonCentred
                                            {
                                                PersonCentredId = c.PersonCentredId,
                                                ClientId = c.ClientId,

@@ -79,22 +79,19 @@ namespace AwesomeCare.Admin.Controllers
             foreach (GetConsentCare item in entities)
             {
                 var report = new CreateCarePlan();
-            //    report.BloodRecordId = item.BloodRecordId;
-            //    report.Reference = item.Reference;
                 report.ClientId = item.ClientId;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-            //    report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
 
             return View(reports);
         }
 
-        public async Task<IActionResult> Index(int? clientId)
+        public async Task<IActionResult> Index(int clientId)
         {
             var client = await _clientService.GetClientDetail();
-            var model = new CreateCarePlan();
-
+            CreateCarePlan model = new CreateCarePlan();
+            model.ClientId = clientId;
             var bases1 = await _baseRecord.GetBaseRecord();
             var id1 = bases1.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
             var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
@@ -108,13 +105,12 @@ namespace AwesomeCare.Admin.Controllers
             var staffs = await _staffService.GetStaffs();
             model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
 
-            var care = await _careService.Get(clientId.Value);
+            var care = await _careService.Get(model.ClientId);
             if (care != null)
             {
-                model = await Get(clientId.Value);
+                model = Get(model.ClientId);
                 model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
                 model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-                model.ActionName = "Update";
             }
             return View(model);
         }
@@ -125,6 +121,20 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (model == null || !ModelState.IsValid)
             {
+                var client = await _clientService.GetClientDetail();
+                var bases1 = await _baseRecord.GetBaseRecord();
+                var id1 = bases1.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
+                var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
+                model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+
+                var bases2 = await _baseRecord.GetBaseRecord();
+                var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
+                var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
+                model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+
+                var staffs = await _staffService.GetStaffs();
+                model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+
                 return View(model);
             }
 
@@ -138,6 +148,8 @@ namespace AwesomeCare.Admin.Controllers
             }
             else
             {
+                if (model.Attachment != null)
+                    model.Attachment = model.Attachment;
                 model.Attachment = "No Image";
             }
 
@@ -228,65 +240,81 @@ namespace AwesomeCare.Admin.Controllers
             review.RA_PreDate = model.RA_PreDate;
             review.RA_ReviewDate = model.RA_ReviewDate;
             #endregion
+            if (care.CareId > 0)
+            {
+                var result = await _capacityService.Put(capacity);
+                var result1 = await _careService.Put(care);
+                var result2 = await _dataService.Put(data);
+                var result3 = await _landService.Put(land);
+                var result4 = await _equipmentService.Put(equip);
+                var result5 = await _keyService.Put(key);
+                var result6 = await _personalService.Put(personal);
+                var result7 = await _centredService.Put(centre);
+                var result8 = await _reviewService.Put(review);
 
-            var json = JsonConvert.SerializeObject(capacity);
-            var json1 = JsonConvert.SerializeObject(care);
-            var json2 = JsonConvert.SerializeObject(data);
-            var json3 = JsonConvert.SerializeObject(land);
-            var json4 = JsonConvert.SerializeObject(equip);
-            var json5 = JsonConvert.SerializeObject(key);
-            var json6 = JsonConvert.SerializeObject(personal);
-            var json7 = JsonConvert.SerializeObject(centre);
-            var json8 = JsonConvert.SerializeObject(review);
-            var result = await _capacityService.Create(capacity);
-            var result1 = await _careService.Create(care);
-            var result2 = await _dataService.Create(data);
-            var result3 = await _landService.Create(land);
-            var result4 = await _equipmentService.Create(equip);
-            var result5 = await _keyService.Create(key);
-            var result6 = await _personalService.Create(personal);
-            var result7 = await _centredService.Create(centre);
-            var result8 = await _reviewService.Create(review);
-            var content = result.Content.ReadAsStringAsync();
-            var content1 = result1.Content.ReadAsStringAsync();
-            var content2 = result2.Content.ReadAsStringAsync();
-            var content3 = result3.Content.ReadAsStringAsync();
-            var content4 = result4.Content.ReadAsStringAsync();
-            var content5 = result5.Content.ReadAsStringAsync();
-            var content6 = result6.Content.ReadAsStringAsync();
-            var content7 = result7.Content.ReadAsStringAsync();
-            var content8 = result8.Content.ReadAsStringAsync();
+                var content = result.Content.ReadAsStringAsync();
+                var content1 = result1.Content.ReadAsStringAsync();
+                var content2 = result2.Content.ReadAsStringAsync();
+                var content3 = result3.Content.ReadAsStringAsync();
+                var content4 = result4.Content.ReadAsStringAsync();
+                var content5 = result5.Content.ReadAsStringAsync();
+                var content6 = result6.Content.ReadAsStringAsync();
+                var content7 = result7.Content.ReadAsStringAsync();
+                var content8 = result8.Content.ReadAsStringAsync();
+            }
+            else
+            { 
+                var result = await _capacityService.Create(capacity);
+                var result1 = await _careService.Create(care);
+                var result2 = await _dataService.Create(data);
+                var result3 = await _landService.Create(land);
+                var result4 = await _equipmentService.Create(equip);
+                var result5 = await _keyService.Create(key);
+                var result6 = await _personalService.Create(personal);
+                var result7 = await _centredService.Create(centre);
+                var result8 = await _reviewService.Create(review);
 
+                var content = result.Content.ReadAsStringAsync();
+                var content1 = result1.Content.ReadAsStringAsync();
+                var content2 = result2.Content.ReadAsStringAsync();
+                var content3 = result3.Content.ReadAsStringAsync();
+                var content4 = result4.Content.ReadAsStringAsync();
+                var content5 = result5.Content.ReadAsStringAsync();
+                var content6 = result6.Content.ReadAsStringAsync();
+                var content7 = result7.Content.ReadAsStringAsync();
+                var content8 = result8.Content.ReadAsStringAsync();
+            }
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 
         public async Task<IActionResult> CareView(int clientId)
         {
-            var putEntity = await Get(clientId);
+            var client = await _clientService.GetClientDetail();
+            var putEntity = Get(clientId);
             return View(putEntity);
         }
-        public async Task<CreateCarePlan> Get(int clientId)
+        public CreateCarePlan Get(int clientId)
         {
-            var staff = await _staffService.GetStaffs();
+            var staff = _staffService.GetStaffs();
 
-            var capacity = await _capacityService.Get(clientId);
-            var care = await _careService.Get(clientId);
-            var land = await _landService.Get(clientId);
-            var data = await _dataService.Get(clientId);
-            var equip = await _equipmentService.Get(clientId);
-            var key = await _keyService.Get(clientId);
-            var personal = await _personalService.Get(clientId);
-            var centre = await _centredService.Get(clientId);
-            var review = await _reviewService.Get(clientId);
-            var client = await _clientService.GetClient(clientId);
-            var details = await _clientService.GetClientDetail();
-            var party = await _involvingparty.Get(clientId);
+            var capacity = _capacityService.Get(clientId);
+            var care = _careService.Get(clientId);
+            var land = _landService.Get(clientId);
+            var data = _dataService.Get(clientId);
+            var equip = _equipmentService.Get(clientId);
+            var key = _keyService.Get(clientId);
+            var personal = _personalService.Get(clientId);
+            var centre = _centredService.Get(clientId);
+            var review = _reviewService.Get(clientId);
+            var client = _clientService.GetClient(clientId);
+            var details = _clientService.GetClientDetail();
+            var party = _involvingparty.Get(clientId);
             var Name = "N/A";
             var Relation = "N/A";
-            if (party != null)
+            if (party.Result != null)
             {
-                Name = party.Name;
-                Relation = party.Relationship;
+                Name = party.Result.Name;
+                Relation = party.Result.Relationship;
             }
 
             var putEntity = new CreateCarePlan
@@ -295,91 +323,92 @@ namespace AwesomeCare.Admin.Controllers
                 ClientId = clientId,
 
                 #region Capacity
-                CapacityId = capacity.CapacityId,
-                Implications = capacity.Implications,
-                Pointer = capacity.Pointer,
-                IndicatorList = capacity.Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                Indicator = capacity.Indicator.Select(s => s.BaseRecordId).ToList(),
+                CapacityId = capacity.Result.CapacityId,
+                Implications = capacity.Result.Implications,
+                Pointer = capacity.Result.Pointer,
+                IndicatorList = capacity.Result.Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                Indicator = capacity.Result.Indicator.Select(s => s.BaseRecordId).ToList(),
                 #endregion
 
                 #region ConsentCare
-                CareId = care.CareId,
-                CareSignature = care.Signature,
-                CareDate = care.Date,
+                CareId = care.Result.CareId,
+                CareSignature = care.Result.Signature,
+                CareDate = care.Result.Date,
                 CareName = Name,
                 CareRelation = Relation,
                 #endregion
 
                 #region ConsentData
-                DataId = data.DataId,
-                DataSignature = data.Signature,
-                DataDate = data.Date,
+                DataId = data.Result.DataId,
+                DataSignature = data.Result.Signature,
+                DataDate = data.Result.Date,
                 DataName = Name,
                 DataRelation = Relation,
                 #endregion
 
                 #region ConsentLandLine
-                LandLineId = land.LandlineId,
-                LandLineSignature = land.Signature,
-                LandLineDate = land.Date,
-                LandLineLogMethod = land.LogMethod,
+                LandLineId = land.Result.LandlineId,
+                LandLineSignature = land.Result.Signature,
+                LandLineDate = land.Result.Date,
+                LandLineLogMethod = land.Result.LogMethod,
                 LandName = Name,
                 LandRelation = Relation,
                 #endregion
 
                 #region Equipment
-                EquipmentId = equip.EquipmentId,
-                Location = equip.Location,
-                Name = equip.Name,
-                Type = equip.Type,
-                NextServiceDate = equip.NextServiceDate,
-                ServiceDate = equip.ServiceDate,
-                Status = equip.Status,
-                PersonToAct = equip.PersonToAct,
-                Attachment = equip.Attachment,
-                StaffList = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
+                EquipmentId = equip.Result.EquipmentId,
+                Location = equip.Result.Location,
+                Name = equip.Result.Name,
+                Type = equip.Result.Type,
+                NextServiceDate = equip.Result.NextServiceDate,
+                ServiceDate = equip.Result.ServiceDate,
+                Status = equip.Result.Status,
+                PersonToAct = equip.Result.PersonToAct,
+                Attachment = equip.Result.Attachment,
+                StaffList = staff.Result.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
                 #endregion
 
                 #region KeyIndicators
-                AboutMe = key.AboutMe,
-                KeyId = key.KeyId,
-                FamilyRole = key.FamilyRole,
-                Debture = key.Debture,
-                LivingStatus = key.LivingStatus,
-                LogMethod = key.LogMethod,
-                ThingsILike = key.ThingsILike,
+                AboutMe = key.Result.AboutMe,
+                KeyId = key.Result.KeyId,
+                FamilyRole = key.Result.FamilyRole,
+                Debture = key.Result.Debture,
+                LivingStatus = key.Result.LivingStatus,
+                LogMethod = key.Result.LogMethod,
+                ThingsILike = key.Result.ThingsILike,
                 #endregion
 
                 #region Personal
-                PersonalId = personal.PersonalId,
-                Smoking = personal.Smoking,
-                DNR = personal.DNR,
-                FullName = details.Where(s => s.ClientId == clientId).Select(s => s.FullName).FirstOrDefault(),
-                PreferredLanguage = client.LanguageId,
-                Gender = client.GenderId,
-                DateofBirth = client.DateOfBirth,
-                Address = client.Address,
-                PostCode = client.PostCode,
-                Telephone = client.Telephone,
-                PreferredName = client.Firstname,
+                PersonalId = personal.Result.PersonalId,
+                Smoking = personal.Result.Smoking,
+                DNR = personal.Result.DNR,
+                FullName = details.Result.Where(s => s.ClientId == clientId).Select(s => s.FullName).FirstOrDefault(),
+                PreferredLanguage = client.Result.LanguageId,
+                Gender = client.Result.GenderId,
+                DateofBirth = client.Result.DateOfBirth,
+                Address = client.Result.Address,
+                PostCode = client.Result.PostCode,
+                Telephone = client.Result.Telephone,
+                PreferredName = client.Result.Firstname,
                 #endregion
 
                 #region Person Centred
-                PersonCentredId = centre.PersonCentredId,
-                Class = centre.Class,
-                ExpSupport = centre.ExpSupport,
-                FocusList = centre.Focus.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                Focus = centre.Focus.Select(s => s.BaseRecordId).ToList(),
+                PersonCentredId = centre.Result.PersonCentredId,
+                Class = centre.Result.Class,
+                ExpSupport = centre.Result.ExpSupport,
+                FocusList = centre.Result.Focus.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                Focus = centre.Result.Focus.Select(s => s.BaseRecordId).ToList(),
                 #endregion
 
                 #region Review
-                ReviewId = review.ReviewId,
-                CP_PreDate = review.CP_PreDate,
-                CP_ReviewDate = review.CP_ReviewDate,
-                RA_PreDate = review.RA_PreDate,
-                RA_ReviewDate = review.RA_ReviewDate,
+                ReviewId = review.Result.ReviewId,
+                CP_PreDate = review.Result.CP_PreDate,
+                CP_ReviewDate = review.Result.CP_ReviewDate,
+                RA_PreDate = review.Result.RA_PreDate,
+                RA_ReviewDate = review.Result.RA_ReviewDate,
                 #endregion
 
+                ActionName = "Update",
            
             };
             return putEntity;
