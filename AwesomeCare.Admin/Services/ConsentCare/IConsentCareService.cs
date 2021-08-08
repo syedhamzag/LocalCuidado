@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.ConsentCare
         Task<HttpResponseMessage> Create([Body] PostConsentCare model);
 
         [Put("/ConsentCare/Put")]
-        Task<HttpResponseMessage> Put([Body] PutConsentCare model);
+        Task<HttpResponseMessage> Put([Body] PostConsentCare model);
     }
 }

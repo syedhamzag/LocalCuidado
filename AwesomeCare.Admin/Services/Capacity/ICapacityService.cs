@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.Capacity
         Task<HttpResponseMessage> Create([Body] PostCapacity model);
 
         [Put("/Capacity/Put")]
-        Task<HttpResponseMessage> Put([Body] PutCapacity model);
+        Task<HttpResponseMessage> Put([Body] PostCapacity model);
     }
 }

@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.Equipment
         Task<HttpResponseMessage> Create([Body] PostEquipment model);
 
         [Put("/Equipment/Put")]
-        Task<HttpResponseMessage> Put([Body] PutEquipment model);
+        Task<HttpResponseMessage> Put([Body] PostEquipment model);
     }
 }

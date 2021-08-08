@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.Review
         Task<HttpResponseMessage> Create([Body] PostReview model);
 
         [Put("/Review/Put")]
-        Task<HttpResponseMessage> Put([Body] PutReview model);
+        Task<HttpResponseMessage> Put([Body] PostReview model);
     }
 }

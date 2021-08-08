@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.Personal
         Task<HttpResponseMessage> Create([Body] PostPersonal model);
 
         [Put("/Personal/Put")]
-        Task<HttpResponseMessage> Put([Body] PutPersonal model);
+        Task<HttpResponseMessage> Put([Body] PostPersonal model);
     }
 }

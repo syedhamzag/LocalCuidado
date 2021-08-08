@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.KeyIndicators
         Task<HttpResponseMessage> Create([Body] PostKeyIndicators model);
 
         [Put("/KeyIndicators/Put")]
-        Task<HttpResponseMessage> Put([Body] PutKeyIndicators model);
+        Task<HttpResponseMessage> Put([Body] PostKeyIndicators model);
     }
 }

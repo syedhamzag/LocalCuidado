@@ -65,7 +65,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutKeyIndicators models)
+        public async Task<IActionResult> Put([FromBody] PostKeyIndicators models)
         {
             if (!ModelState.IsValid)
             {
@@ -92,8 +92,8 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getKeyIndicators = await (from c in _KeyIndicatorsRepository.Table
-                                           where c.KeyId == id
-                                           select new GetKeyIndicators
+                                          where c.ClientId == id.Value
+                                          select new GetKeyIndicators
                                            {
                                                KeyId = c.KeyId,
                                                ClientId = c.ClientId,
