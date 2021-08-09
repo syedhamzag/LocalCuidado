@@ -899,7 +899,6 @@
                                                             {
                                                                 <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
                                                             }
-
                                                         </td>
 
                                                     </tr>
@@ -923,7 +922,7 @@
                                         <table class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Action Required</th>
+                                                    <th>Relationship</th>
                                                     <th>Attachment</th>
                                                 </tr>
                                             </thead>
@@ -932,16 +931,17 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @item.Knowledgeable
+                                                            @item.Relationship
                                                         </td>
                                                         <td>
-                                                            @item.PreviousExperience
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                            }
 
                                                         </td>
-
                                                     </tr>
                                                 }
-
                                             </tbody>
                                         </table>
                                     </div>
