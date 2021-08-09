@@ -8,8 +8,16 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
+using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
+using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
+using AwesomeCare.DataTransferObject.DTOs.StaffReference;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
+using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +39,14 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffRotaDynamicAddition> _staffDynamicAdditionRepository;
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
         private IGenericRepository<Client> _clientRepository;
+        private IGenericRepository<StaffAdlObs> _staffAdlObs;
+        private IGenericRepository<StaffSpotCheck> _staffspotcheck;
+        private IGenericRepository<StaffMedComp> _staffmedcomp;
+        private IGenericRepository<StaffKeyWorkerVoice> _staffkeyworker;
+        private IGenericRepository<StaffSurvey> _staffsurvey;
+        private IGenericRepository<StaffOneToOne> _staffonetoone;
+        private IGenericRepository<StaffSupervisionAppraisal> _staffsupervision;
+        private IGenericRepository<StaffReference> _staffreference;
         private readonly IGenericRepository<ApplicationUser> applicationUserRepository;
         private readonly IGenericRepository<StaffWorkTeam> staffWorkTeamRepository;
         private readonly IGenericRepository<ClientRota> clientRotaRepository;
@@ -46,10 +62,18 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
             IGenericRepository<StaffRating> staffRatingRepository,
             IGenericRepository<Client> clientRepository,
-             IGenericRepository<StaffWorkTeam> staffWorkTeamRepository,
-             IGenericRepository<ClientRota> clientRotaRepository,
-             IGenericRepository<ClientRotaDays> clientRotaDaysRepository,
-            IGenericRepository<ApplicationUser> applicationUserRepository)
+            IGenericRepository<StaffWorkTeam> staffWorkTeamRepository,
+            IGenericRepository<ClientRota> clientRotaRepository,
+            IGenericRepository<ClientRotaDays> clientRotaDaysRepository,
+            IGenericRepository<ApplicationUser> applicationUserRepository,
+            IGenericRepository<StaffAdlObs> staffAdlObs,
+            IGenericRepository<StaffSpotCheck> staffspotcheck,
+            IGenericRepository<StaffMedComp> staffmedcomp,
+            IGenericRepository<StaffKeyWorkerVoice> staffkeyworker,
+            IGenericRepository<StaffSurvey> staffsurvey,
+            IGenericRepository<StaffOneToOne> staffonetoone,
+            IGenericRepository<StaffSupervisionAppraisal> staffsupervision,
+            IGenericRepository<StaffReference> staffreference)
         {
             _staffInfoRepository = staffInfoRepository;
             _logger = logger;
@@ -65,6 +89,14 @@ namespace AwesomeCare.API.Controllers
             this.staffWorkTeamRepository = staffWorkTeamRepository;
             this.clientRotaRepository = clientRotaRepository;
             this.clientRotaDaysRepository = clientRotaDaysRepository;
+            _staffAdlObs = staffAdlObs;
+            _staffspotcheck = staffspotcheck;
+            _staffmedcomp = staffmedcomp;
+            _staffsurvey = staffsurvey;
+            _staffsupervision = staffsupervision;
+            _staffonetoone = staffonetoone;
+            _staffreference = staffreference;
+            _staffkeyworker = staffkeyworker;
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
@@ -295,7 +327,55 @@ namespace AwesomeCare.API.Controllers
                                                               AddLink = bitem.AddLink,
                                                               HasGoogleForm = bitem.HasGoogleForm,
                                                               ViewLink = bitem.ViewLink
-                                                          }).ToList()
+                                                          }).ToList(),
+                                    GetStaffAdlObs = (from s in _staffAdlObs.Table
+                                                      select new GetStaffAdlObs 
+                                                      {
+                                                        ActionRequired = s.ActionRequired,
+                                                        Attachment = s.Attachment
+                                                      }).ToList(),
+                                    GetStaffMedComp = (from s in _staffmedcomp.Table
+                                                      select new GetStaffMedComp
+                                                      {
+                                                          ActionRequired = s.ActionRequired,
+                                                          Attachment = s.Attachment
+                                                      }).ToList(),
+                                    GetStaffKeyWorkerVoice = (from s in _staffkeyworker.Table
+                                                      select new GetStaffKeyWorkerVoice
+                                                      {
+                                                          ActionRequired = s.ActionRequired,
+                                                          Attachment = s.Attachment
+                                                      }).ToList(),
+                                    GetStaffOneToOne = (from s in _staffonetoone.Table
+                                                      select new GetStaffOneToOne
+                                                      {
+                                                          ActionRequired = s.ActionRequired,
+                                                          Attachment = s.Attachment
+                                                      }).ToList(),
+                                    GetStaffReference = (from s in _staffreference.Table
+                                                      select new GetStaffReference
+                                                      {
+                                                          Relationship = s.Relationship,
+                                                          Attachment = s.Attachment
+                                                      }).ToList(),
+                                    GetStaffSpotCheck = (from s in _staffspotcheck.Table
+                                                      select new GetStaffSpotCheck
+                                                      {
+                                                          ActionRequired = s.ActionRequired,
+                                                          Attachment = s.Attachment
+                                                      }).ToList(),
+                                    GetStaffSupervisionAppraisal = (from s in _staffsupervision.Table
+                                                      select new GetStaffSupervisionAppraisal
+                                                      {
+                                                          ActionRequired = s.ActionRequired,
+                                                          Attachment = s.Attachment
+                                                      }).ToList(),
+                                    GetStaffSurvey = (from s in _staffsurvey.Table
+                                                      select new GetStaffSurvey
+                                                      {
+                                                          ActionRequired = s.ActionRequired,
+                                                          Attachment = s.Attachment
+                                                      }).ToList(),
                                 }).FirstOrDefault();
 
             return Ok(staffProfile);

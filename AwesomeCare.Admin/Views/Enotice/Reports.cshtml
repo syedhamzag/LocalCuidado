@@ -19,26 +19,41 @@
                 </ul>
             </div>
             <div class="body">
-                <table class="table m-b-0 datatables">
+                <table id="dataTable" class="table table-condensed table-hover table-bordered table-responsive">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Date</th>
                             <th>Heading</th>
                             <th>Note</th>
-
+                            <th>Image</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
-                        {
+                         {
+                            var length = item.data.Note.Length;
+                            var limit = 690;
                             <tr>
                                 <td>@item.index </td>
                                 <td>@item.data.Date</td>
                                 <td>@item.data.Heading</td>
-                                <td>@item.data.Note</td>
+                                <td style="white-space:normal;">
+                                    @if (length > limit)
+                                    {
+                                        @string.Concat(item.data.Note.Substring(0, limit)," . . .");
+                                    }
+                                    else
+                                    {
+                                        @item.data.Note
+                                    }
 
+
+                                </td>
+                                <td>
+                                    <img src="@item.data.Image" width="150" height="100" />
+                                </td>
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -49,7 +64,7 @@
                                     </div>
                                 </td>
                             </tr>
-                        }
+                         }
 
 
                     </tbody>
@@ -57,5 +72,26 @@
             </div>
         </div>
     </div>
+    @section VendorScripts{
+        <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+        <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+        <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#dataTable').dataTable({
+                    "columnDefs": [
+                        { "width": "800px", "targets": 3 }
+                    ]
+                });
+            });
+        </script>
+    }
+
+    @section Scripts{
+        <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+        <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    }
+
 </div>
 
