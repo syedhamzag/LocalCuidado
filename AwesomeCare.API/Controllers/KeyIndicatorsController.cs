@@ -92,11 +92,11 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getKeyIndicators = await (from c in _KeyIndicatorsRepository.Table
-                                          where c.ClientId == id.Value
+                                          where c.PersonalDetailId == id.Value
                                           select new GetKeyIndicators
                                            {
                                                KeyId = c.KeyId,
-                                               ClientId = c.ClientId,
+                                               PersonalDetailId = c.PersonalDetailId,
                                                AboutMe = c.AboutMe,
                                                FamilyRole = c.FamilyRole,
                                                Debture = c.Debture,

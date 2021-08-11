@@ -79,8 +79,8 @@ namespace AwesomeCare.Admin.Controllers
             foreach (GetConsentCare item in entities)
             {
                 var report = new CreateCarePlan();
-                report.ClientId = item.ClientId;
-                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                report.ClientId = item.PersonalDetailId;
+                report.ClientName = client.Where(s => s.ClientId == item.PersonalDetailId).Select(s => s.FullName).FirstOrDefault();
                 reports.Add(report);
             }
 
@@ -164,7 +164,7 @@ namespace AwesomeCare.Admin.Controllers
             PostReview review = new PostReview();
 
             #region Capacity
-            capacity.ClientId = model.ClientId;
+            capacity.PersonalDetailId = model.ClientId;
             capacity.CapacityId = model.CapacityId;
             capacity.Implications = model.Implications;
             capacity.Pointer = model.Pointer;
@@ -172,21 +172,21 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region ConsentCare
-            care.ClientId = model.ClientId;
+            care.PersonalDetailId = model.ClientId;
             care.CareId = model.CareId;
             care.Signature = model.CareSignature;
             care.Date = model.CareDate;
             #endregion
 
             #region ConsentData
-            data.ClientId = model.ClientId;
+            data.PersonalDetailId = model.ClientId;
             data.DataId = model.DataId;
             data.Signature = model.DataSignature;
             data.Date = model.DataDate;
             #endregion
 
             #region ConsentLandLine
-            land.ClientId = model.ClientId;
+            land.PersonalDetailId = model.ClientId;
             land.LandlineId = model.LandLineId;
             land.Signature = model.LandLineSignature;
             land.Date = model.LandLineDate;
@@ -195,7 +195,7 @@ namespace AwesomeCare.Admin.Controllers
 
             #region Equipment
             equip.EquipmentId = model.EquipmentId;
-            equip.ClientId = model.ClientId;
+            equip.PersonalDetailId = model.ClientId;
             equip.Location = model.Location;
             equip.Name = model.Name;
             equip.Type = model.Type;
@@ -207,7 +207,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region KeyIndicators
-            key.ClientId = model.ClientId;
+            key.PersonalDetailId = model.ClientId;
             key.AboutMe = model.AboutMe;
             key.KeyId = model.KeyId;
             key.FamilyRole = model.FamilyRole;
@@ -218,14 +218,14 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region Personal
-            personal.ClientId = model.ClientId;
+            personal.PersonalDetailId = model.ClientId;
             personal.PersonalId = model.PersonalId;
             personal.Smoking = model.Smoking;
             personal.DNR = model.DNR;
             #endregion
 
             #region Person Centred
-            centre.ClientId = model.ClientId;
+            centre.PersonalDetailId = model.ClientId;
             centre.PersonCentredId = model.PersonCentredId;
             centre.Class = model.Class;
             centre.ExpSupport = model.ExpSupport;
@@ -233,7 +233,7 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region Review
-            review.ClientId = model.ClientId;
+            review.PersonalDetailId = model.ClientId;
             review.ReviewId = model.ReviewId;
             review.CP_PreDate = model.CP_PreDate;
             review.CP_ReviewDate = model.CP_ReviewDate;

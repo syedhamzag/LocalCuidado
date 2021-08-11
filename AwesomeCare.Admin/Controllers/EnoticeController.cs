@@ -85,7 +85,7 @@ namespace AwesomeCare.Admin.Controllers
             if (model.Attach != null)
             {
                 string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.PublishTo);
+                string filenameA = string.Concat(folderA, "_Attachment_", model.Date);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.Image = pathA;
             }
@@ -118,7 +118,7 @@ namespace AwesomeCare.Admin.Controllers
             if (model.Attach != null)
             {
                 string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.PublishTo);
+                string filenameA = string.Concat(folderA, "_Attachment_", model.Date);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.Image = pathA;
 

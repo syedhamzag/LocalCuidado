@@ -46,7 +46,7 @@ namespace AwesomeCare.Admin.Controllers
 
             PostKeyIndicators postlog = new PostKeyIndicators();
 
-            postlog.ClientId = model.ClientId;
+            postlog.PersonalDetailId = model.ClientId;
             postlog.AboutMe = model.AboutMe;
             postlog.KeyId = model.KeyId;
             postlog.FamilyRole = model.FamilyRole;

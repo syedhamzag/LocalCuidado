@@ -92,11 +92,11 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getReview = await (from c in _ReviewRepository.Table
-                                   where c.ClientId == id.Value
+                                   where c.PersonalDetailId == id.Value
                                    select new GetReview
                                            {
                                                ReviewId = c.ReviewId,
-                                               ClientId = c.ClientId,
+                                               PersonalDetailId = c.PersonalDetailId,
                                                CP_PreDate = c.CP_PreDate,
                                                CP_ReviewDate = c.CP_ReviewDate,
                                                RA_PreDate = c.RA_PreDate,

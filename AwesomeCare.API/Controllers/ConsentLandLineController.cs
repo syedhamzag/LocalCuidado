@@ -93,11 +93,11 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getConsentLandLine = await (from c in _ConsentLandLineRepository.Table
-                                            where c.ClientId == id.Value
+                                            where c.PersonalDetailId == id.Value
                                             select new GetConsentLandLine
                                            {
                                                LandlineId = c.LandlineId,
-                                               ClientId = c.ClientId,
+                                               PersonalDetailId = c.PersonalDetailId,
                                                Date = c.Date,
                                                LogMethod = c.LogMethod,
                                                Signature = c.Signature,

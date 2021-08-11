@@ -53,6 +53,10 @@
     <Compile Remove="Migrations\20210717204827_CarePlan.Designer.cs" />
     <Compile Remove="Migrations\20210725064832_CarePlan.cs" />
     <Compile Remove="Migrations\20210725064832_CarePlan.Designer.cs" />
+    <Compile Remove="Migrations\20210811082628_CarePlan.cs" />
+    <Compile Remove="Migrations\20210811082628_CarePlan.Designer.cs" />
+    <Compile Remove="Migrations\20210811092850_PersonalDetails.cs" />
+    <Compile Remove="Migrations\20210811092850_PersonalDetails.Designer.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
   </ItemGroup>

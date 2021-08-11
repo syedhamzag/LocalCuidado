@@ -96,11 +96,11 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getEquipment = await (from c in _EquipmentRepository.Table
-                                      where c.ClientId == id.Value
+                                      where c.PersonalDetailId == id.Value
                                       select new GetEquipment
                                            {
                                                EquipmentId = c.EquipmentId,
-                                               ClientId = c.ClientId,
+                                               PersonalDetailId = c.PersonalDetailId,
                                                Location = c.Location,
                                                Type = c.Type,
                                                Name = c.Name,

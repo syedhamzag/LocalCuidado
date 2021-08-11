@@ -19,6 +19,10 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("PersonCentredFocusId")
                .IsRequired();
 
+            builder.Property(p => p.BaseRecordId)
+               .HasColumnName("BaseRecordId")
+               .IsRequired();
+
             builder.Property(p => p.PersonCentredId)
                .HasColumnName("PersonCentredId")
                .IsRequired();

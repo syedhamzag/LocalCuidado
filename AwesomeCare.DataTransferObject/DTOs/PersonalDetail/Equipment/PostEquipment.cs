@@ -6,7 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment
 {
     public class PostEquipment
     {
-        public int ClientId { get; set; }
+        public int PersonalDetailId { get; set; }
         public int EquipmentId { get; set; }
         public int Name { get; set; }
         public int Type { get; set; }

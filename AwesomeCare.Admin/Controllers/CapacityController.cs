@@ -54,7 +54,7 @@ namespace AwesomeCare.Admin.Controllers
 
             PostCapacity postlog = new PostCapacity();
 
-            postlog.ClientId = model.ClientId;
+            postlog.PersonalDetailId = model.ClientId;
             postlog.CapacityId = model.CapacityId;
             postlog.Implications = model.Implications;
             postlog.Pointer = model.Pointer;

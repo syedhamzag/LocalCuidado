@@ -19,8 +19,8 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("CapacityId")
                .IsRequired();
 
-            builder.Property(p => p.ClientId)
-               .HasColumnName("ClientId")
+            builder.Property(p => p.PersonalDetailId)
+               .HasColumnName("PersonalDetailId")
                .IsRequired();
 
             builder.Property(p => p.Pointer)

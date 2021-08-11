@@ -431,7 +431,7 @@ namespace AwesomeCare.API.Controllers
                                                                Comment = sw.Comment
                                                            }).ToList(),
                                        GetReview = (from sw in _reviewRepository.Table
-                                                    where sw.ClientId == id.Value
+                                                    where sw.PersonalDetailId == id.Value
                                                     select new GetReview
                                                     {
                                                         CP_PreDate = sw.CP_PreDate,

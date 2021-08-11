@@ -92,11 +92,11 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getConsentData = await (from c in _ConsentDataRepository.Table
-                                        where c.ClientId == id.Value
+                                        where c.PersonalDetailId == id.Value
                                         select new GetConsentData
                                            {
                                                DataId = c.DataId,
-                                               ClientId = c.ClientId,
+                                               PersonalDetailId = c.PersonalDetailId,
                                                Date = c.Date,
                                                Signature = c.Signature,
                                            }

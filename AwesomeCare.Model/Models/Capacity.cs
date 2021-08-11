@@ -12,12 +12,12 @@ namespace AwesomeCare.Model.Models
         }
 
         public int CapacityId { get; set; }
-        public int ClientId { get; set; }
+        public int PersonalDetailId { get; set; }
         public int Pointer { get; set; }
         public int Implications { get; set; }
 
         public virtual ICollection<CapacityIndicator> Indicator { get; set; }
 
-        public virtual Client Client { get; set; }
+        public virtual PersonalDetail PersonalDetail { get; set; }
     }
 }

@@ -60,7 +60,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.Attachment = "No Image";
             }
             postlog.EquipmentId = model.EquipmentId;
-            postlog.ClientId = model.ClientId;
+            postlog.PersonalDetailId = model.ClientId;
             postlog.Location = model.Location;
             postlog.Name = model.Name;
             postlog.Type = model.Type;

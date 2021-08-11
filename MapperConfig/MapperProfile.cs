@@ -224,15 +224,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientBodyTemp, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientOxygenLvl, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientBMIChart, mem => mem.Ignore())
-                .ForMember(dto => dto.Capacity, mem => mem.Ignore())
-                .ForMember(dto => dto.ConsentCare, mem => mem.Ignore())
-                .ForMember(dto => dto.ConsentData, mem => mem.Ignore())
-                .ForMember(dto => dto.ConsentLandLine, mem => mem.Ignore())
-                .ForMember(dto => dto.Equipment, mem => mem.Ignore())
-                .ForMember(dto => dto.KeyIndicators, mem => mem.Ignore())
-                .ForMember(dto => dto.Personal, mem => mem.Ignore())
-                .ForMember(dto => dto.PersonCentred, mem => mem.Ignore())
-                .ForMember(dto => dto.Review, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
@@ -324,15 +316,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientBodyTemp, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientOxygenLvl, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientBMIChart, mem => mem.Ignore())
-                .ForMember(dto => dto.Capacity, mem => mem.Ignore())
-                .ForMember(dto => dto.ConsentCare, mem => mem.Ignore())
-                .ForMember(dto => dto.ConsentData, mem => mem.Ignore())
-                .ForMember(dto => dto.ConsentLandLine, mem => mem.Ignore())
-                .ForMember(dto => dto.Equipment, mem => mem.Ignore())
-                .ForMember(dto => dto.KeyIndicators, mem => mem.Ignore())
-                .ForMember(dto => dto.Personal, mem => mem.Ignore())
-                .ForMember(dto => dto.PersonCentred, mem => mem.Ignore())
-                .ForMember(dto => dto.Review, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
@@ -2124,9 +2108,9 @@ namespace MapperConfig
 
             #region Capacity
             CreateMap<PutCapacity, Capacity>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostCapacity, Capacity>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<Capacity, GetCapacity>();
 
             CreateMap<PostCapacityIndicator, CapacityIndicator>()
@@ -2136,37 +2120,37 @@ namespace MapperConfig
 
             #region ConsentCare
             CreateMap<PutConsentCare, ConsentCare>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostConsentCare, ConsentCare>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
 
             CreateMap<ConsentCare, GetConsentCare>();
             #endregion
 
             #region ConsentData
             CreateMap<PutConsentData, ConsentData>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostConsentData, ConsentData>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
 
             CreateMap<ConsentData, GetConsentData>();
             #endregion
 
             #region ConsentLandLine
             CreateMap<PutConsentLandLine, ConsentLandLine>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostConsentLandLine, ConsentLandLine>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
 
             CreateMap<ConsentLandLine, GetConsentLandLine>();
             #endregion
 
             #region Equipment
             CreateMap<PutEquipment, Equipment>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore())
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
             CreateMap<PostEquipment, Equipment>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore())
                 .ForMember(dto => dto.Staff, mem => mem.Ignore());
 
             CreateMap<Equipment, GetEquipment>();
@@ -2174,27 +2158,27 @@ namespace MapperConfig
 
             #region KeyIndicators
             CreateMap<PutKeyIndicators, KeyIndicators>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostKeyIndicators, KeyIndicators>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
 
             CreateMap<KeyIndicators, GetKeyIndicators>();
             #endregion
 
             #region Personal
             CreateMap<PutPersonal, Personal>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostPersonal, Personal>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
 
             CreateMap<Personal, GetPersonal>();
             #endregion
 
             #region PersonCentred
             CreateMap<PutPersonCentred, PersonCentred>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostPersonCentred, PersonCentred>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
 
             CreateMap<PersonCentred, GetPersonCentred>();
 
@@ -2205,9 +2189,9 @@ namespace MapperConfig
 
             #region Review
             CreateMap<PutReview, Review>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostReview, Review>()
-                .ForMember(dto => dto.Client, mem => mem.Ignore());
+                .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
 
             CreateMap<Review, GetReview>();
             #endregion

@@ -6,7 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail.KeyIndicators
 {
     public class GetKeyIndicators
     {
-        public int ClientId { get; set; }
+        public int PersonalDetailId { get; set; }
         public int KeyId { get; set; }
         public string AboutMe { get; set; }
         public string FamilyRole { get; set; }
