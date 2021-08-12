@@ -93,6 +93,7 @@ using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Personal;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.PersonCentred;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Review;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Capacity;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail;
 
 namespace MapperConfig
 {
@@ -2141,8 +2142,11 @@ namespace MapperConfig
                 .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostConsentLandLine, ConsentLandLine>()
                 .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
-
             CreateMap<ConsentLandLine, GetConsentLandLine>();
+
+            CreateMap<PostConsentLandlineLog, ConsentLandlineLog>()
+            .ForMember(dto => dto.ConsentLandLine, mem => mem.Ignore())
+            .ForMember(dto => dto.ConsentLandlineLogId, mem => mem.Ignore());
             #endregion
 
             #region Equipment
@@ -2161,8 +2165,11 @@ namespace MapperConfig
                 .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
             CreateMap<PostKeyIndicators, KeyIndicators>()
                 .ForMember(dto => dto.PersonalDetail, mem => mem.Ignore());
-
             CreateMap<KeyIndicators, GetKeyIndicators>();
+
+            CreateMap<PostKeyIndicatorLog, KeyIndicatorLog>()
+            .ForMember(dto => dto.KeyIndicators, mem => mem.Ignore())
+            .ForMember(dto => dto.KeyIndicatorLogId, mem => mem.Ignore());
             #endregion
 
             #region Personal
@@ -2196,6 +2203,13 @@ namespace MapperConfig
             CreateMap<Review, GetReview>();
             #endregion
 
+            #region PersonalDetails
+            CreateMap<PutPersonalDetail, PersonalDetail>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostPersonalDetail, PersonalDetail>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PersonalDetail, GetPersonalDetail>();
+            #endregion
         }
     }
 }

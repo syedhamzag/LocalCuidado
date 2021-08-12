@@ -13,7 +13,7 @@ using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail
 {
-    class PutPersonalDetail
+    public class PutPersonalDetail
     {
         public PutPersonalDetail()
         {

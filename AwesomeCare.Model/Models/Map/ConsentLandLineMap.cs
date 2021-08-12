@@ -23,9 +23,9 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("PersonalDetailId")
                .IsRequired();
 
-            builder.Property(p => p.LogMethod)
-              .HasColumnName("LogMethod")
-              .IsRequired();
+            builder.Property(p => p.Name)
+                .HasColumnName("Name")
+                .IsRequired();
 
             builder.Property(p => p.Signature)
               .HasColumnName("Signature")
@@ -35,6 +35,13 @@ namespace AwesomeCare.Model.Models.Map
              .HasColumnName("Date")
              .IsRequired();
 
+            #endregion
+
+            #region Relationship
+            builder.HasMany<ConsentLandlineLog>(p => p.LogMethod)
+                .WithOne(p => p.ConsentLandLine)
+                .HasForeignKey(p => p.LandlineId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

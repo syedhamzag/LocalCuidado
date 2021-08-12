@@ -14,7 +14,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Capacity
         public int PersonalDetailId { get; set; }
         public int CapacityId { get; set; }
         public int Pointer { get; set; }
-        public int Implications { get; set; }
+        public string Implications { get; set; }
 
         public List<GetCapacityIndicator> Indicator { get; set; }
     }

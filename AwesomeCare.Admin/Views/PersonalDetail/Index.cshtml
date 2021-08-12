@@ -1,4 +1,5 @@
 ﻿@using AwesomeCare.Admin.ViewModels.CarePlan;
+@using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
 @model CreateCarePlan
 @{ ViewData["Title"] = "Create CarePlan"; }
 @section HeaderScripts{
@@ -13,26 +14,65 @@
                 <h2></h2>
             </div>
             <div class="body">
-                <form asp-route="CarePlan" method="post" enctype="multipart/form-data">
+                <form asp-route="PersonalDetail" method="post" enctype="multipart/form-data">
+
+                    <input type="hidden" asp-for="PersonalDetailId" />
+                    <input type="hidden" asp-for="ClientId" />
+
                     <h4>Person Centredness</h4>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <table class="table table-hover table-bordered" id="tblPersonCentered">
+                                <thead>
+                                    <tr>
+                                        <th>Service Date</th>
+                                        <th>Next Service Date</th>
+                                        <th>Equipment Status</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Location</th>
+                                        <th>Person To Act</th>
+                                        <th>Status Attachment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.GetEquipment.Count > 0)
+                                    {
+                                        @foreach (var equip in Model.GetEquipment)
+                                        {
+                                            <tr>
+                                                <td><baserecord asp-key="Class" asp-for="Class" asp-items="null" /></td>
+                                                <td><select asp-for="Focus" asp-items="@Model.FocusList" class="selectpicker form-control" data-live-search="true" multiple></select></td>
+                                                <td><textarea asp-for="ExpSupport" class="form-control"></textarea></td>
+                                            </tr>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td><baserecord asp-key="Class" asp-for="Class" asp-items="null" /></td>
+                                            <td><select asp-for="Focus" asp-items="@Model.FocusList" class="selectpicker form-control" data-live-search="true" multiple></select></td>
+                                            <td><textarea asp-for="ExpSupport" class="form-control"></textarea></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                             <input type="hidden" asp-for="PersonCentredId" />
-                            <input type="hidden" asp-for="ClientId" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Class</label>
-                                    <baserecord asp-key="Class" asp-for="Class" asp-items="null" />
+
                                     <span asp-validation-for="Class" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Focus</label>
-                                    <select asp-for="Focus" asp-items="@Model.FocusList" class="selectpicker form-control" data-live-search="true" multiple></select>
+
                                     <span asp-validation-for="Focus" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Expected Support</label>
-                                    <input type="text" asp-for="ExpSupport" class="form-control" />
+
                                     <span asp-validation-for="ExpSupport" class="text-danger"></span>
                                 </div>
                             </div>
@@ -43,7 +83,6 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <input type="hidden" asp-for="CapacityId" />
-                            <input type="hidden" asp-for="ClientId" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Pointer</label>
@@ -68,17 +107,28 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <input type="hidden" asp-for="PersonalId" />
-                            <input type="hidden" asp-for="ClientId" />
                             <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Smoking</label>
                                     <baserecord asp-key="Smoking" asp-for="Smoking" asp-items="null" />
                                     <span asp-validation-for="Smoking" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">DNR in Place</label>
                                     <baserecord asp-key="DNR" asp-for="DNR" asp-items="null" />
                                     <span asp-validation-for="DNR" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Religion</label>
+                                    <input type="text" asp-for="Religion" class="form-control" />
+                                    <span asp-validation-for="Religion" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Nationality</label>
+                                    <input type="text" asp-for="Nationality" asp-items="null" />
+                                    <span asp-validation-for="Nationality" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +138,6 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <input type="hidden" asp-for="ReviewId" />
-                            <input type="hidden" asp-for="ClientId" />
                             <div class="row">
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">CarePlan Prepared Date</label>
@@ -120,7 +169,6 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <input type="hidden" asp-for="KeyId" />
-                            <input type="hidden" asp-for="ClientId" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Living Status</label>
@@ -134,7 +182,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Method of Log</label>
-                                    <baserecord asp-key="LogMethod" asp-for="LogMethod" asp-items="null" />
+                                    <select asp-for="LogMethod" asp-items="@Model.KeyLogList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="LogMethod" class="text-danger"></span>
                                 </div>
                             </div>
@@ -163,7 +211,8 @@
                     </div>
 
                     <h4>Equipment</h4>
-                    @*<div class="row">
+                    <div class="row">
+
                         <table class="table table-hover table-bordered" id="tblEquipment">
                             <thead>
                                 <tr>
@@ -178,45 +227,71 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><input type="text" asp-for="ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                    <td><input type="text" asp-for="NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                    <td><baserecord asp-key="Equipment_Status" asp-for="Status" asp-items="null" /></td>
-                                    <td><baserecord asp-key="Equipment_Name" asp-for="Name" asp-items="null" /></td>
-                                    <td><baserecord asp-key="Equipment_Type" asp-for="Type" asp-items="null" /></td>
-                                    <td><baserecord asp-key="Equipment_Location" asp-for="Location" asp-items="null" /></td>
-                                    <td><select class="custom-select" asp-for="PersonToAct" asp-items="Model.StaffList"></select></td>
-                                    <td><input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
-                                </tr>
+                                @if (Model.GetEquipment.Count > 0)
+                                {
+                                    @foreach (var equip in Model.GetEquipment)
+                                    {
+                                        <tr>
+                                            <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" value="@equip.ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                            <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" value="@equip.NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                            <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault().Status" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault().Name" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault().Type" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault().Location" asp-items="null" /></td>
+                                            <td><select class="custom-select" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList"></select></td>
+                                            <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
+                                        </tr>
+
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                        <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                        <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault().Status" asp-items="null" /></td>
+                                        <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault().Name" asp-items="null" /></td>
+                                        <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault().Type" asp-items="null" /></td>
+                                        <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault().Location" asp-items="null" /></td>
+                                        <td><select class="custom-select" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList"></select></td>
+                                        <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
-                    </div>*@
+                    </div>
 
                     <h4>Consent For Landline</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <input type="hidden" asp-for="LandLineId" />
-                            <input type="hidden" asp-for="ClientId" />
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Date</label>
                                     <input type="text" asp-for="LandLineDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                                     <span asp-validation-for="LandLineDate" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Signature</label>
                                     <baserecord asp-key="Signature" asp-for="LandLineSignature" asp-items="null" />
                                     <span asp-validation-for="LandLineSignature" class="text-danger"></span>
                                 </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Method of Log</label><br />
-                                    <baserecord asp-key="LogMethod" asp-for="LandLineLogMethod" asp-items="null" />
+                                    <select asp-for="LandLineLogMethod" asp-items="@Model.LandLogList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="LandLineLogMethod" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Name</label>
+                                    <select class="custom-select" asp-for="@Model.LandName" asp-items="@Model.InvolingList"></select>
+                                    <span asp-validation-for="LandName" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +301,6 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <input type="hidden" asp-for="CareId" />
-                            <input type="hidden" asp-for="ClientId" />
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
@@ -243,6 +317,11 @@
                                     <baserecord asp-key="Signature" asp-for="CareSignature" asp-items="null" />
                                     <span asp-validation-for="CareSignature" class="text-danger"></span>
                                 </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <select class="custom-select" asp-for="@Model.CareName" asp-items="@Model.InvolingList"></select>
+                                    <span asp-validation-for="CareName" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -251,13 +330,11 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <input type="hidden" asp-for="DataId" />
-                            <input type="hidden" asp-for="ClientId" />
                             <div class="row">
                                 <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Date</label>
@@ -268,6 +345,11 @@
                                     <label class="control-label">Signature</label>
                                     <baserecord asp-key="Signature" asp-for="DataSignature" asp-items="null" />
                                     <span asp-validation-for="DataSignature" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <select class="custom-select" asp-for="@Model.DataName" asp-items="@Model.InvolingList"></select>
+                                    <span asp-validation-for="DataName" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -298,6 +380,89 @@
 @section Scripts{
     <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script>
+        $(function () {
 
+            var table = $('#tblEquipment').DataTable({
+                scrollCollapse: true,
+                select: {
+                    style: 'single'
+                },
+                searching: false, paging: false, info: false
+            });
+
+            var PersonCentered = $('#tblPersonCentered').DataTable({
+                scrollCollapse: true,
+                select: {
+                    style: 'single'
+                },
+                searching: false, paging: false, info: false
+            });
+
+            var counter = $("#EquipmentRowCount").val();
+            var counter1 = $("#PersonCenteredRowCount").val();
+
+            $('#Addrow').on('click', function () {
+                counter++;
+                var clone = $("#Equipment tr:last").clone();
+                clone.attr('id', 'row-' + counter);
+                table.rows.add(clone).draw();
+                $('#EquipmentRowCount').val(counter);
+
+            });
+            $('#Addrow2').on('click', function () {
+                counter1++;
+                var clone = $("#PersonCentered tr:last").clone();
+                clone.attr('id', 'row-' + counter1);
+                PersonCentered.rows.add(clone).draw();
+                $('#PersonCenteredRowCount').val(counter1);
+
+
+            });
+
+            $('#tblEquipment tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+            $('#tblPersonCentered tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    PersonCentered.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+            $('#Delrow').click(function () {
+                const id = table.row('.selected').id();
+                if (table.row('.selected').length > 0) {
+                    const row = table.rows('.selected').remove().draw();
+                    counter--;
+                    $('#EquipmentRowCount').val(counter);
+                }
+                else {
+                    alert("Please select row for delete !");
+                }
+            });
+            $('#Delrow2').click(function () {
+                const id = PersonCentered.row('.selected').id();
+                if (PersonCentered.row('.selected').length > 0) {
+                    const row = PersonCentered.rows('.selected').remove().draw();
+                    counter1--;
+                    $('#PersonCenteredRowCount').val(counter1);
+                }
+                else {
+                    alert("Please select row for delete !");
+                }
+            });
+        });
+
+
+    </script>
 
 }

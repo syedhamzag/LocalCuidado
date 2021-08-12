@@ -27,49 +27,49 @@ namespace AwesomeCare.Model.Models.Map
                  .HasForeignKey(p => p.ClientId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany<Capacity>(p => p.Capacity)
+            builder.HasOne(p => p.Capacity)
+                .WithOne(p => p.PersonalDetail)
+                .HasForeignKey<Capacity>(p => p.PersonalDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(p => p.ConsentCare)
+                .WithOne(p => p.PersonalDetail)
+                .HasForeignKey<ConsentCare>(p => p.PersonalDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(p => p.ConsentData)
+                .WithOne(p => p.PersonalDetail)
+                .HasForeignKey<ConsentData>(p => p.PersonalDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(p => p.ConsentLandLine)
+                .WithOne(p => p.PersonalDetail)
+                .HasForeignKey<ConsentLandLine>(p => p.PersonalDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(p => p.Equipment)
                 .WithOne(p => p.PersonalDetail)
                 .HasForeignKey(p => p.PersonalDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany<ConsentCare>(p => p.ConsentCare)
+            builder.HasOne(p => p.KeyIndicators)
+                .WithOne(p => p.PersonalDetail)
+                .HasForeignKey<KeyIndicators>(p => p.PersonalDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(p => p.Personal)
+                .WithOne(p => p.PersonalDetail)
+                .HasForeignKey<Personal>(p => p.PersonalDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(p => p.PersonCentred)
                 .WithOne(p => p.PersonalDetail)
                 .HasForeignKey(p => p.PersonalDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany<ConsentData>(p => p.ConsentData)
+            builder.HasOne(p => p.Review)
                 .WithOne(p => p.PersonalDetail)
-                .HasForeignKey(p => p.PersonalDetailId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<ConsentLandLine>(p => p.ConsentLandLine)
-                .WithOne(p => p.PersonalDetail)
-                .HasForeignKey(p => p.PersonalDetailId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<Equipment>(p => p.Equipment)
-                .WithOne(p => p.PersonalDetail)
-                .HasForeignKey(p => p.PersonalDetailId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<KeyIndicators>(p => p.KeyIndicators)
-                .WithOne(p => p.PersonalDetail)
-                .HasForeignKey(p => p.PersonalDetailId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<Personal>(p => p.Personal)
-                .WithOne(p => p.PersonalDetail)
-                .HasForeignKey(p => p.PersonalDetailId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<PersonCentred>(p => p.PersonCentred)
-                .WithOne(p => p.PersonalDetail)
-                .HasForeignKey(p => p.PersonalDetailId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasMany<Review>(p => p.Review)
-                .WithOne(p => p.PersonalDetail)
-                .HasForeignKey(p => p.PersonalDetailId)
+                .HasForeignKey<Review>(p => p.PersonalDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion

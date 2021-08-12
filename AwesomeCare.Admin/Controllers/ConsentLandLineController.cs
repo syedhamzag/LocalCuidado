@@ -51,7 +51,7 @@ namespace AwesomeCare.Admin.Controllers
             postlog.LandlineId = model.LandlineId;
             postlog.Signature = model.Signature;
             postlog.Date = model.Date;
-            postlog.LogMethod = model.LogMethod;
+            //postlog.LogMethod = model.LogMethod;
 
             var json = JsonConvert.SerializeObject(postlog);
             var result = await _ConsentLandLineService.Create(postlog);

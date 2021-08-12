@@ -28,8 +28,16 @@ namespace AwesomeCare.Model.Models.Map
                .IsRequired();
 
             builder.Property(p => p.DNR)
-             .HasColumnName("DNR")
-             .IsRequired();
+               .HasColumnName("DNR")
+               .IsRequired();
+
+            builder.Property(p => p.Religion)
+               .HasColumnName("Religion")
+               .IsRequired();
+
+            builder.Property(p => p.Nationality)
+               .HasColumnName("Nationality")
+               .IsRequired();
             #endregion
         }
     }

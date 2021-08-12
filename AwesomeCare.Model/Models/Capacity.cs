@@ -14,7 +14,7 @@ namespace AwesomeCare.Model.Models
         public int CapacityId { get; set; }
         public int PersonalDetailId { get; set; }
         public int Pointer { get; set; }
-        public int Implications { get; set; }
+        public string Implications { get; set; }
 
         public virtual ICollection<CapacityIndicator> Indicator { get; set; }
 

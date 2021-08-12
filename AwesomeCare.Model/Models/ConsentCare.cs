@@ -11,6 +11,7 @@ namespace AwesomeCare.Model.Models
         public int PersonalDetailId { get; set; }
         public int Signature { get; set; }
         public DateTime Date { get; set; }
+        public int Name { get; set; }
 
         public virtual PersonalDetail PersonalDetail { get; set; }
     }

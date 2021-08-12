@@ -52,7 +52,7 @@ namespace AwesomeCare.Admin.Controllers
             postlog.FamilyRole = model.FamilyRole;
             postlog.Debture = model.Debture;
             postlog.LivingStatus = model.LivingStatus;
-            postlog.LogMethod = model.LogMethod;
+            //postlog.LogMethod = model.LogMethod;
             postlog.ThingsILike = model.ThingsILike;
 
             var result = await _KeyIndicatorsService.Create(postlog);

@@ -138,20 +138,20 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
 
-            if (model.Attach != null)
-            {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "Attachment", model.ClientId);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
-                model.Attachment = path;
+            //if (model.Attach != null)
+            //{
+            //    string folder = "clientcomplain";
+            //    string filename = string.Concat(folder, "Attachment", model.ClientId);
+            //    string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+            //    model.Attachment = path;
 
-            }
-            else
-            {
-                if (model.Attachment != null)
-                    model.Attachment = model.Attachment;
-                model.Attachment = "No Image";
-            }
+            //}
+            //else
+            //{
+            //    if (model.Attachment != null)
+            //        model.Attachment = model.Attachment;
+            //    model.Attachment = "No Image";
+            //}
 
             PostCapacity capacity = new PostCapacity();
             PostConsentCare care = new PostConsentCare();
@@ -190,21 +190,21 @@ namespace AwesomeCare.Admin.Controllers
             land.LandlineId = model.LandLineId;
             land.Signature = model.LandLineSignature;
             land.Date = model.LandLineDate;
-            land.LogMethod = model.LandLineLogMethod;
+            land.LogMethod = model.LandLineLogMethod.Select(o => new PostConsentLandlineLog { BaseRecordId = o, LandlineId = model.LandLineId }).ToList();
             #endregion
 
-            #region Equipment
-            equip.EquipmentId = model.EquipmentId;
-            equip.PersonalDetailId = model.ClientId;
-            equip.Location = model.Location;
-            equip.Name = model.Name;
-            equip.Type = model.Type;
-            equip.NextServiceDate = model.NextServiceDate;
-            equip.ServiceDate = model.ServiceDate;
-            equip.Status = model.Status;
-            equip.PersonToAct = model.PersonToAct;
-            equip.Attachment = model.Attachment;
-            #endregion
+            //#region Equipment
+            //equip.EquipmentId = model.EquipmentId;
+            //equip.PersonalDetailId = model.ClientId;
+            //equip.Location = model.Location;
+            //equip.Name = model.Name;
+            //equip.Type = model.Type;
+            //equip.NextServiceDate = model.NextServiceDate;
+            //equip.ServiceDate = model.ServiceDate;
+            //equip.Status = model.Status;
+            //equip.PersonToAct = model.PersonToAct;
+            //equip.Attachment = model.Attachment;
+            //#endregion
 
             #region KeyIndicators
             key.PersonalDetailId = model.ClientId;
@@ -213,7 +213,7 @@ namespace AwesomeCare.Admin.Controllers
             key.FamilyRole = model.FamilyRole;
             key.Debture = model.Debture;
             key.LivingStatus = model.LivingStatus;
-            key.LogMethod = model.LogMethod;
+            key.LogMethod = model.LogMethod.Select(o => new PostKeyIndicatorLog { BaseRecordId = o, KeyId = model.KeyId }).ToList();
             key.ThingsILike = model.ThingsILike;
             #endregion
 
@@ -293,6 +293,7 @@ namespace AwesomeCare.Admin.Controllers
             var putEntity = Get(clientId);
             return View(putEntity);
         }
+
         public CreateCarePlan Get(int clientId)
         {
             var staff = _staffService.GetStaffs();
@@ -334,7 +335,7 @@ namespace AwesomeCare.Admin.Controllers
                 CareId = care.Result.CareId,
                 CareSignature = care.Result.Signature,
                 CareDate = care.Result.Date,
-                CareName = Name,
+                //CareName = Name,
                 CareRelation = Relation,
                 #endregion
 
@@ -342,7 +343,7 @@ namespace AwesomeCare.Admin.Controllers
                 DataId = data.Result.DataId,
                 DataSignature = data.Result.Signature,
                 DataDate = data.Result.Date,
-                DataName = Name,
+                //DataName = Name,
                 DataRelation = Relation,
                 #endregion
 
@@ -350,21 +351,22 @@ namespace AwesomeCare.Admin.Controllers
                 LandLineId = land.Result.LandlineId,
                 LandLineSignature = land.Result.Signature,
                 LandLineDate = land.Result.Date,
-                LandLineLogMethod = land.Result.LogMethod,
-                LandName = Name,
+                LandLogList = land.Result.LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                LandLineLogMethod = land.Result.LogMethod.Select(s => s.BaseRecordId).ToList(),
+                LandName = land.Result.Name,
                 LandRelation = Relation,
                 #endregion
 
                 #region Equipment
-                EquipmentId = equip.Result.EquipmentId,
-                Location = equip.Result.Location,
-                Name = equip.Result.Name,
-                Type = equip.Result.Type,
-                NextServiceDate = equip.Result.NextServiceDate,
-                ServiceDate = equip.Result.ServiceDate,
-                Status = equip.Result.Status,
-                PersonToAct = equip.Result.PersonToAct,
-                Attachment = equip.Result.Attachment,
+                //EquipmentId = equip.Result.EquipmentId,
+                //Location = equip.Result.Location,
+                //Name = equip.Result.Name,
+                //Type = equip.Result.Type,
+                //NextServiceDate = equip.Result.NextServiceDate,
+                //ServiceDate = equip.Result.ServiceDate,
+                //Status = equip.Result.Status,
+                //PersonToAct = equip.Result.PersonToAct,
+                //Attachment = equip.Result.Attachment,
                 StaffList = staff.Result.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
                 #endregion
 
@@ -374,7 +376,8 @@ namespace AwesomeCare.Admin.Controllers
                 FamilyRole = key.Result.FamilyRole,
                 Debture = key.Result.Debture,
                 LivingStatus = key.Result.LivingStatus,
-                LogMethod = key.Result.LogMethod,
+                KeyLogList = key.Result.LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                LogMethod = key.Result.LogMethod.Select(s => s.BaseRecordId).ToList(),
                 ThingsILike = key.Result.ThingsILike,
                 #endregion
 
@@ -414,6 +417,7 @@ namespace AwesomeCare.Admin.Controllers
             return putEntity;
 
         }
+
         //public async Task<IActionResult> Download(int clientId)
         //{
         //    var rotaTypes = await _clientRotaTypeService.Get();

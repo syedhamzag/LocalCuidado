@@ -25,7 +25,7 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
         [Required]
         public int Pointer { get; set; }
         [Required]
-        public int Implications { get; set; }
+        public string Implications { get; set; }
 
     }
 }

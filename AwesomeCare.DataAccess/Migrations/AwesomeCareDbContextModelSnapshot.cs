@@ -4376,7 +4376,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_PainChart_StaffName");
                 });
 
-
             modelBuilder.Entity("AwesomeCare.Model.Models.ProgramOfficerToAct", b =>
                 {
                     b.Property<int>("ProgramOfficerToActId")

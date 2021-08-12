@@ -86,6 +86,7 @@ using AwesomeCare.Admin.Services.KeyIndicators;
 using AwesomeCare.Admin.Services.Personal;
 using AwesomeCare.Admin.Services.PersonCentred;
 using AwesomeCare.Admin.Services.Review;
+using AwesomeCare.Admin.Services.PersonalDetail;
 
 namespace AwesomeCare.Admin
 {
@@ -824,6 +825,12 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IReviewService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("personaldetail", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPersonalDetailService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
