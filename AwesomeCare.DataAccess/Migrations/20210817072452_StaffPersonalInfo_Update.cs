@@ -144,7 +144,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 column: "StaffId",
                 principalTable: "tbl_StaffPersonalInfo",
                 principalColumn: "StaffPersonalInfoId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_tbl_Staff_KeyWorkerVoice_tbl_StaffPersonalInfo_StaffId",
@@ -152,7 +152,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 column: "StaffId",
                 principalTable: "tbl_StaffPersonalInfo",
                 principalColumn: "StaffPersonalInfoId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_tbl_Staff_MedCompObs_tbl_StaffPersonalInfo_StaffId",
@@ -160,7 +160,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 column: "StaffId",
                 principalTable: "tbl_StaffPersonalInfo",
                 principalColumn: "StaffPersonalInfoId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_tbl_Staff_OneToOne_tbl_StaffPersonalInfo_StaffId",
@@ -168,7 +168,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 column: "StaffId",
                 principalTable: "tbl_StaffPersonalInfo",
                 principalColumn: "StaffPersonalInfoId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_tbl_Staff_Reference_tbl_StaffPersonalInfo_StaffId",
@@ -176,7 +176,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 column: "StaffId",
                 principalTable: "tbl_StaffPersonalInfo",
                 principalColumn: "StaffPersonalInfoId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_tbl_Staff_SpotCheck_tbl_StaffPersonalInfo_StaffId",
@@ -184,7 +184,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 column: "StaffId",
                 principalTable: "tbl_StaffPersonalInfo",
                 principalColumn: "StaffPersonalInfoId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_tbl_Staff_SupervisionAppraisal_tbl_StaffPersonalInfo_StaffId",
@@ -192,7 +192,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 column: "StaffId",
                 principalTable: "tbl_StaffPersonalInfo",
                 principalColumn: "StaffPersonalInfoId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_tbl_Staff_Survey_tbl_StaffPersonalInfo_StaffId",
@@ -200,7 +200,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 column: "StaffId",
                 principalTable: "tbl_StaffPersonalInfo",
                 principalColumn: "StaffPersonalInfoId",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
