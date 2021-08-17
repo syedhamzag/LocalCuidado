@@ -7463,12 +7463,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ObservationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
-                        .WithMany()
-                        .HasForeignKey("StaffPersonalInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartOfficerToAct", b =>

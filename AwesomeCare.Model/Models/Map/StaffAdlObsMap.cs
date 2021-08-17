@@ -94,7 +94,7 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasOne(p => p.Staff)
                  .WithMany(p => p.StaffAdlObs)
                  .HasForeignKey(p => p.StaffId)
-                 .OnDelete(DeleteBehavior.Cascade);
+                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany<AdlObsOfficerToAct>(p => p.OfficerToAct)
                 .WithOne(p => p.AdlObs)
