@@ -8722,7 +8722,7 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffAdlObs")
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
