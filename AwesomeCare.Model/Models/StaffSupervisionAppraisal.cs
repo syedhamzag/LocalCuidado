@@ -34,6 +34,7 @@ namespace AwesomeCare.Model.Models
         public string URL { get; set; }
         public string Attachment { get; set; }
 
+        public virtual StaffPersonalInfo Staff { get; set; }
         public virtual ICollection<SupervisionOfficerToAct> OfficerToAct { get; set; }
         public virtual ICollection<SupervisionWorkteam> Workteam { get; set; }
     }

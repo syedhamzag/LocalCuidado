@@ -44,6 +44,13 @@ namespace AwesomeCare.Model.Models
             ClientOxygenLvl = new HashSet<ClientOxygenLvl>();
             ClientBMIChart = new HashSet<ClientBMIChart>();
             PersonalDetail = new HashSet<PersonalDetail>();
+            CarePlanNutrition = new HashSet<CarePlanNutrition>();
+            Balance = new HashSet<Balance>();
+            PhysicalAbility = new HashSet<PhysicalAbility>();
+            HistoryOfFall = new HashSet<HistoryOfFall>();
+            HealthAndLiving = new HashSet<HealthAndLiving>();
+            SpecialHealthCondition = new HashSet<SpecialHealthCondition>();
+            SpecialHealthAndMedication = new HashSet<SpecialHealthAndMedication>();
         }
 
         public int ClientId { get; set; }
@@ -86,6 +93,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientCareDetails> ClientCareDetails { get; set; }
         public virtual ICollection<ClientMedication> ClientMedication { get; set; }
         public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
+
+        #region Client
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }
         public virtual ICollection<ClientNutrition> ClientNutrition { get; set; }
         public virtual ICollection<ClientLogAudit> ClientLogAudit { get; set; }
@@ -94,16 +103,24 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientMgtVisit> ClientMgtVisit { get; set; }
         public virtual ICollection<ClientProgram> ClientProgram { get; set; }
         public virtual ICollection<ClientServiceWatch> ClientServiceWatch { get; set; }
+        #endregion
+
+        #region Staff
         public virtual ICollection<StaffSpotCheck> StaffSpotCheck { get; set; }
         public virtual ICollection<StaffAdlObs> StaffAdlObs { get; set; }
         public virtual ICollection<StaffMedComp> StaffMedCompObs { get; set; }
         public virtual ICollection<StaffKeyWorkerVoice> StaffKeyWorkerVoice { get; set; }
         public virtual ICollection<StaffReference> StaffReference { get; set; }
+        #endregion
 
+        #region Admin Forms
         public virtual ICollection<Enotice> Enotice { get; set; }
         public virtual ICollection<Resources> Resources { get; set; }
         public virtual ICollection<IncomingMeds> IncomingMeds { get; set; }
         public virtual ICollection<WhisttleBlower> WhisttleBlower { get; set; }
+        #endregion
+
+        #region Telehealth
         public virtual ICollection<ClientBloodPressure> ClientBloodPressure { get; set; }
         public virtual ICollection<ClientFoodIntake> ClientFoodIntake { get; set; }
         public virtual ICollection<ClientBowelMovement> ClientBowelMovement { get; set; }
@@ -117,6 +134,17 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientBodyTemp> ClientBodyTemp { get; set; }
         public virtual ICollection<ClientOxygenLvl> ClientOxygenLvl { get; set; }
         public virtual ICollection<ClientBMIChart> ClientBMIChart { get; set; }
+        #endregion
+
+        #region CarePlan
         public virtual ICollection<PersonalDetail> PersonalDetail { get; set; }
+        public virtual ICollection<CarePlanNutrition> CarePlanNutrition { get; set; }
+        public virtual ICollection<Balance> Balance { get; set; }
+        public virtual ICollection<HistoryOfFall> HistoryOfFall { get; set; }
+        public virtual ICollection<HealthAndLiving> HealthAndLiving { get; set; }
+        public virtual ICollection<PhysicalAbility> PhysicalAbility { get; set; }
+        public virtual ICollection<SpecialHealthCondition> SpecialHealthCondition { get; set; }
+        public virtual ICollection<SpecialHealthAndMedication> SpecialHealthAndMedication { get; set; }
+        #endregion
     }
 }

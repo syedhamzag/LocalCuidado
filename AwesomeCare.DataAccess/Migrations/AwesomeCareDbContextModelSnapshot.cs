@@ -4980,9 +4980,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("StaffId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnName("Status")
                         .HasColumnType("int");
@@ -5008,7 +5005,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("StaffPersonalInfoId");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("tbl_Staff_AdlObs");
                 });
@@ -5360,9 +5357,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("StaffId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnName("Status")
                         .HasColumnType("int");
@@ -5380,7 +5374,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ServicesRequiresServices");
 
-                    b.HasIndex("StaffPersonalInfoId");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("tbl_Staff_KeyWorkerVoice");
                 });
@@ -5449,9 +5443,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("StaffId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnName("Status")
                         .HasColumnType("int");
@@ -5473,7 +5464,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("StaffPersonalInfoId");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("tbl_Staff_MedCompObs");
                 });
@@ -5555,9 +5546,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("StaffImprovedInAreas")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnName("Status")
                         .HasColumnType("int");
@@ -5569,7 +5557,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("OneToOneId");
 
-                    b.HasIndex("StaffPersonalInfoId");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("tbl_Staff_OneToOne");
                 });
@@ -6062,7 +6050,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ApplicantRole");
 
-                    b.HasIndex("ConfirmedBy");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("tbl_Staff_Reference");
                 });
@@ -6464,9 +6452,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("StaffId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnName("Status")
                         .HasColumnType("int");
@@ -6480,7 +6465,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.HasIndex("StaffPersonalInfoId");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("tbl_Staff_SpotCheck");
                 });
@@ -6571,9 +6556,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("StaffId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("StaffRating")
                         .HasColumnName("StaffRating")
                         .HasColumnType("int");
@@ -6593,7 +6575,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("StaffSupervisionAppraisalId");
 
-                    b.HasIndex("StaffPersonalInfoId");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("tbl_Staff_SupervisionAppraisal");
                 });
@@ -6667,9 +6649,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("StaffId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnName("Status")
                         .HasColumnType("int");
@@ -6690,7 +6669,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("StaffSurveyId");
 
-                    b.HasIndex("StaffPersonalInfoId");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("tbl_Staff_Survey");
                 });
@@ -8746,9 +8725,11 @@ namespace AwesomeCare.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffAdlObs")
-                        .HasForeignKey("StaffPersonalInfoId");
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffBlackList", b =>
@@ -8792,9 +8773,11 @@ namespace AwesomeCare.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffKeyWorkerVoice")
-                        .HasForeignKey("StaffPersonalInfoId");
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedComp", b =>
@@ -8805,16 +8788,20 @@ namespace AwesomeCare.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffMedCompObs")
-                        .HasForeignKey("StaffPersonalInfoId");
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffOneToOne", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffOneToOne")
-                        .HasForeignKey("StaffPersonalInfoId");
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfo", b =>
@@ -8865,7 +8852,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffReference")
-                        .HasForeignKey("ConfirmedBy")
+                        .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -8972,23 +8959,29 @@ namespace AwesomeCare.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffSpotCheck")
-                        .HasForeignKey("StaffPersonalInfoId");
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffSupervisionAppraisal", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffSupervisionAppraisal")
-                        .HasForeignKey("StaffPersonalInfoId");
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffSurvey", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("StaffSurvey")
-                        .HasForeignKey("StaffPersonalInfoId");
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>

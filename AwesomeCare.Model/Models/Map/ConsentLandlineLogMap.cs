@@ -11,7 +11,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ConsentLandlineLog> builder)
         {
-            builder.ToTable("ConsentLandlineLog");
+            builder.ToTable("tbl_ConsentLandlineLog");
             builder.HasKey(k => k.ConsentLandlineLogId);
 
             #region Properties

@@ -228,25 +228,28 @@ namespace AwesomeCare.Admin.Controllers
             pdetail.Personal.PersonalId = model.PersonalId;
             pdetail.Personal.Smoking = model.Smoking;
             pdetail.Personal.DNR = model.DNR;
+            pdetail.Personal.Nationality = model.Nationality;
+            pdetail.Personal.Religion = model.Religion;
             #endregion
 
             #region Person Centred
             for (int i = 0; i < model.PersonCentreCount; i++)
             {
                 PostPersonCentred pc = new PostPersonCentred();
-
-                string ExpSupp = "ExpectedSupport";
-
-                var PersonCentredId = int.Parse(formcollection["PersonCentredId"][i]);
-                var Class = int.Parse(formcollection["Location"][i]);
-                var Focus = int.Parse(formcollection["PersonToAct"][i]);
-                var ExpectedSupport = formcollection[ExpSupp][i].ToString();
-
-                pc.PersonalDetailId = model.PersonalDetailId;
-                pc.PersonCentredId = model.PersonCentredId;
-                pc.Class = model.Class;
-                pc.ExpSupport = model.ExpSupport;
-                pc.Focus = model.Focus.Select(o => new PostPersonCentredFocus { BaseRecordId = o, PersonCentredId = model.PersonCentredId }).ToList();
+                var Class = int.Parse(formcollection["Class"][i]);
+                var Focus = formcollection["Focus"];
+                var ExpSupport = formcollection["ExpSupport"][i].ToString();
+                var ex = new List<PostPersonCentredFocus>();
+                for (int j = 0; j < Focus.Count; j++)
+                {
+                    var newtask = new PostPersonCentredFocus();
+                    newtask.BaseRecordId = int.Parse(Focus[j].ToString());
+                    newtask.PersonCentredId = 0;
+                    ex.Add(newtask);
+                }
+                pc.Class = Class;
+                pc.ExpSupport = ExpSupport;
+                pc.Focus = ex;
 
                 pcentre.Add(pc);
 
@@ -401,7 +404,8 @@ namespace AwesomeCare.Admin.Controllers
                 RA_PreDate = pdetail.Result.Review.FirstOrDefault().RA_PreDate,
                 RA_ReviewDate = pdetail.Result.Review.FirstOrDefault().RA_ReviewDate,
                 #endregion
-
+                EquipmentCount = pdetail.Result.Equipment.Count,
+                PersonCentreCount = pdetail.Result.PersonCentred.Count,
                 ActionName = "Update",
 
             };

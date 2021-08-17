@@ -15,6 +15,10 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Properties
 
+            builder.Property(p => p.PersonalDetailId)
+               .HasColumnName("PersonalDetailId")
+               .IsRequired();
+
             builder.Property(p => p.ClientId)
                .HasColumnName("ClientId")
                .IsRequired();

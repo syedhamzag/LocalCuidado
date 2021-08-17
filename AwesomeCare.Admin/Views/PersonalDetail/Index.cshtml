@@ -22,17 +22,17 @@
                     <h4>Person Centredness</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="button" id="Addrow2" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
+                                <button type="button" id="Delrow2" class="btn btn-primary pull-right">Delete</button>
+                            </div>
+                            <input type="hidden" asp-for="@Model.PersonCentreCount" value="@Model.PersonCentreCount" />
                             <table class="table table-hover table-bordered" id="tblPersonCentered">
                                 <thead>
                                     <tr>
-                                        <th>Service Date</th>
-                                        <th>Next Service Date</th>
-                                        <th>Equipment Status</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Location</th>
-                                        <th>Person To Act</th>
-                                        <th>Status Attachment</th>
+                                        <th>Class</th>
+                                        <th>Focus</th>
+                                        <th>Expected Support</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -48,34 +48,8 @@
 
                                         }
                                     }
-                                    else
-                                    {
-                                        <tr>
-                                            <td><baserecord asp-key="Class" asp-for="Class" asp-items="null" /></td>
-                                            <td><select asp-for="Focus" asp-items="@Model.FocusList" class="selectpicker form-control" data-live-search="true" multiple></select></td>
-                                            <td><textarea asp-for="ExpSupport" class="form-control"></textarea></td>
-                                        </tr>
-                                    }
                                 </tbody>
                             </table>
-                            <input type="hidden" asp-for="PersonCentredId" />
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Class</label>
-
-                                    <span asp-validation-for="Class" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Focus</label>
-
-                                    <span asp-validation-for="Focus" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Expected Support</label>
-
-                                    <span asp-validation-for="ExpSupport" class="text-danger"></span>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -127,7 +101,7 @@
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Nationality</label>
-                                    <input type="text" asp-for="Nationality" asp-items="null" />
+                                    <input type="text" asp-for="Nationality" class="form-control" />
                                     <span asp-validation-for="Nationality" class="text-danger"></span>
                                 </div>
                             </div>
@@ -212,53 +186,46 @@
 
                     <h4>Equipment</h4>
                     <div class="row">
-
-                        <table class="table table-hover table-bordered" id="tblEquipment">
-                            <thead>
-                                <tr>
-                                    <th>Service Date</th>
-                                    <th>Next Service Date</th>
-                                    <th>Equipment Status</th>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Location</th>
-                                    <th>Person To Act</th>
-                                    <th>Status Attachment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.GetEquipment.Count > 0)
-                                {
-                                    @foreach (var equip in Model.GetEquipment)
-                                    {
-                                        <tr>
-                                            <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" value="@equip.ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                            <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" value="@equip.NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                            <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault().Status" asp-items="null" /></td>
-                                            <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault().Name" asp-items="null" /></td>
-                                            <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault().Type" asp-items="null" /></td>
-                                            <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault().Location" asp-items="null" /></td>
-                                            <td><select class="custom-select" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList"></select></td>
-                                            <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
-                                        </tr>
-
-                                    }
-                                }
-                                else
-                                {
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
+                                <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
+                            </div>
+                            <input type="hidden" asp-for="@Model.EquipmentCount" value="@Model.EquipmentCount" />
+                            <table class="table table-hover table-bordered" id="tblEquipment">
+                                <thead>
                                     <tr>
-                                        <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                        <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                        <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault().Status" asp-items="null" /></td>
-                                        <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault().Name" asp-items="null" /></td>
-                                        <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault().Type" asp-items="null" /></td>
-                                        <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault().Location" asp-items="null" /></td>
-                                        <td><select class="custom-select" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList"></select></td>
-                                        <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
+                                        <th>Service Date</th>
+                                        <th>Next Service Date</th>
+                                        <th>Equipment Status</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Location</th>
+                                        <th>Person To Act</th>
+                                        <th>Status Attachment</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @if (Model.GetEquipment.Count > 0)
+                                    {
+                                        @foreach (var equip in Model.GetEquipment)
+                                        {
+                                            <tr>
+                                                <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" value="@equip.ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                                <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" value="@equip.NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                                <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault().Status" asp-items="null" /></td>
+                                                <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault().Name" asp-items="null" /></td>
+                                                <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault().Type" asp-items="null" /></td>
+                                                <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault().Location" asp-items="null" /></td>
+                                                <td><select class="custom-select" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList"></select></td>
+                                                <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
+                                            </tr>
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
                     <h4>Consent For Landline</h4>
@@ -363,6 +330,49 @@
                     </div>
 
                 </form>
+                <table class="table table-hover table-bordered" id="PersonCentered">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Focus</th>
+                            <th>Expected Support</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><baserecord asp-key="Class" asp-for="Class" asp-items="null" /></td>
+                            <td><select asp-for="Focus" asp-items="@Model.FocusList" class="selectpicker form-control" data-live-search="true" multiple></select></td>
+                            <td><textarea asp-for="ExpSupport" class="form-control"></textarea></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <table class="table table-hover table-bordered" id="Equipment">
+                    <thead>
+                        <tr>
+                            <th>Service Date</th>
+                            <th>Next Service Date</th>
+                            <th>Equipment Status</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Location</th>
+                            <th>Person To Act</th>
+                            <th>Status Attachment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault().Status" asp-items="null" /></td>
+                                <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault().Name" asp-items="null" /></td>
+                                <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault().Type" asp-items="null" /></td>
+                                <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault().Location" asp-items="null" /></td>
+                                <td><select class="custom-select" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList"></select></td>
+                                <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
+                            </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -382,7 +392,11 @@
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
     <script>
         $(function () {
-
+            var classtd = 'Yes';
+            var focustd = 'No';
+            var PersonCentredRow = new Array();
+            PersonCentredRow.push(classtd);
+            PersonCentredRow.push(focustd);
             var table = $('#tblEquipment').DataTable({
                 scrollCollapse: true,
                 select: {
@@ -399,23 +413,24 @@
                 searching: false, paging: false, info: false
             });
 
-            var counter = $("#EquipmentRowCount").val();
-            var counter1 = $("#PersonCenteredRowCount").val();
+            var counter = $("#EquipmentCount").val();
+            var counter1 = $("#PersonCentereCount").val();
 
             $('#Addrow').on('click', function () {
                 counter++;
                 var clone = $("#Equipment tr:last").clone();
                 clone.attr('id', 'row-' + counter);
                 table.rows.add(clone).draw();
-                $('#EquipmentRowCount').val(counter);
+                $('#EquipmentCount').val(counter);
 
             });
             $('#Addrow2').on('click', function () {
                 counter1++;
-                var clone = $("#PersonCentered tr:last").clone();
-                clone.attr('id', 'row-' + counter1);
-                PersonCentered.rows.add(clone).draw();
-                $('#PersonCenteredRowCount').val(counter1);
+                PersonCentered.row.add([
+                    `<baserecord asp-key="Class" asp-for="Class" asp-items="null" />`,
+                    `<select asp-for="Focus" asp-items="${PersonCentredRow}" class="selectpicker form-control" data-live-search="true" multiple></select>`,
+                    `<textarea asp-for="ExpSupport" class="form-control"></textarea>`]).draw();
+                $('#PersonCentereCount').val(counter1);
 
 
             });
@@ -443,7 +458,7 @@
                 if (table.row('.selected').length > 0) {
                     const row = table.rows('.selected').remove().draw();
                     counter--;
-                    $('#EquipmentRowCount').val(counter);
+                    $('#EquipmentCount').val(counter);
                 }
                 else {
                     alert("Please select row for delete !");
@@ -454,7 +469,7 @@
                 if (PersonCentered.row('.selected').length > 0) {
                     const row = PersonCentered.rows('.selected').remove().draw();
                     counter1--;
-                    $('#PersonCenteredRowCount').val(counter1);
+                    $('#PersonCentereCount').val(counter1);
                 }
                 else {
                     alert("Please select row for delete !");

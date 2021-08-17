@@ -89,6 +89,11 @@ namespace AwesomeCare.Model.Models.Map
 
             #region Relationship
 
+            builder.HasOne(p => p.Staff)
+                 .WithMany(p => p.StaffSurvey)
+                 .HasForeignKey(p => p.StaffId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasMany<SurveyWorkteam>(p => p.Workteam)
                 .WithOne(p => p.Survey)
                 .HasForeignKey(p => p.StaffSurveyId)

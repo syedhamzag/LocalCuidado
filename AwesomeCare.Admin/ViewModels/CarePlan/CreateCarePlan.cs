@@ -119,12 +119,12 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public string PreferredName { get; set; }
         public int PreferredLanguage { get; set; }
         public int Gender { get; set; }
-        public int Religion { get; set; }
+        public string Religion { get; set; }
         public int PreferredGender { get; set; }
         public string Telephone { get; set; }
         public string AccessCode { get; set; }
         public string PostCode { get; set; }
-        public int Nationality { get; set; }
+        public string Nationality { get; set; }
         public string DateofBirth { get; set; }
         public string Address { get; set; }
 

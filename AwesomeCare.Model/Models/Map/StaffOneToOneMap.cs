@@ -84,6 +84,10 @@ namespace AwesomeCare.Model.Models.Map
             #endregion
 
             #region Relationship
+            builder.HasOne(p => p.Staff)
+                 .WithMany(p => p.StaffOneToOne)
+                 .HasForeignKey(p => p.StaffId)
+                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany<OneToOneOfficerToAct>(p => p.OfficerToAct)
                 .WithOne(p => p.OneToOne)
