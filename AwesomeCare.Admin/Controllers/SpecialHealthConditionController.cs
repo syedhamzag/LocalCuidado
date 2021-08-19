@@ -4,6 +4,7 @@ using AwesomeCare.Admin.ViewModels.CarePlan.Health;
 using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthCondition;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -106,6 +107,7 @@ namespace AwesomeCare.Admin.Controllers
             post.SourceInformation = model.SourceInformation;
             post.Trigger = model.Trigger;
 
+            var json = JsonConvert.SerializeObject(post);
             var result = await _sphealthService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 

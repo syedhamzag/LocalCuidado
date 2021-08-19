@@ -9,22 +9,87 @@
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
             <div class="header">
-                <h2>NUTRITION REPORT</h2>
+                <h2>Nutrition Report</h2>
             </div>
             <div class="body">
-                <form asp-action="Reports" method="post">
-                    <div class="row">
-                        <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                            <label>Select Client</label>
-                            <select class="form-control" name="ClientId" asp-items="@Model.ClientList">
-                            </select>
-                        </div>
-                        <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                            <input type="submit" class="btn btn-default" style="margin-top:30px !important;" value="Find Nutrition" />
-                        </div>
-                    </div>
-                </form>
-                
+                <table class="table table-hover table-bordered" id="tblMeal">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            @foreach (var weekDay in Model.WeekDays)
+                            {
+                                <th>
+                                    <label class="form-control" style="padding-left: 25px; border: none;">@weekDay.DayofWeek</label>
+                                    <br />
+
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var MealType in Model.MealTypes)
+                        {
+                            <tr id="@MealType.RotaType">
+                                <td>
+                                    <div class="fancy-checkbox">
+                                        @{
+
+                                            <input type="hidden" asp-for="@MealType.ClientRotaTypeId" />
+                                            var MealTypeId = Model.ClientMealDays.FirstOrDefault(c => c.ClientMealTypeId == MealType.ClientRotaTypeId);
+                                            if (MealTypeId != null)
+                                            {
+                                                //display and for edit
+                                                <label><input type="checkbox" class="MealType" name="@MealType.RotaType" checked><span>@MealType.RotaType</span></label>
+                                                @Html.Hidden($"{MealType.RotaType}-NutritionId-{Model.NutritionId}", @Model.NutritionId)
+                                            }
+                                        }
+
+                                    </div>
+                                </td>
+                                @foreach (var weekDay in Model.WeekDays)
+                                {
+                                    var mealDywk = Model.ClientMealDays.FirstOrDefault(d => d.ClientMealTypeId == MealType.ClientRotaTypeId && d.MealDayofWeekId == weekDay.RotaDayofWeekId);
+                                    <td>
+                                        @if (mealDywk != null)
+                                        {
+
+                                            <input type="checkbox" class="selectDay" name="@MealType.RotaType-isChecked-@weekDay.DayofWeek" id="@MealType.RotaType-isChecked-@weekDay.DayofWeek" checked />
+                                            @Html.Hidden($"{MealType.RotaType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
+
+                                            <div class="form-group">
+                                                <label>Meal Details</label>
+                                                <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-MealDetails" id="@MealType.RotaType-@weekDay.DayofWeek-MealDetails" class="form-control" value="@mealDywk.MEALDETAILS" />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>How to Prepare</label>
+                                                <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" value="@mealDywk.HOWTOPREPARE" />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-control" style="padding-left: 25px; border: none;">Type</label>
+                                                <baserecord asp-key="Client_Meal_Type" asp-for="ClientMealDays.FirstOrDefault().TypeId" asp-items="null" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Video URL</label>
+                                                <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-SeeVideo" id="@MealType.RotaType-@weekDay.DayofWeek-SeeVideo" class="form-control" value="@mealDywk.SEEVIDEO" />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Picture</label>
+                                                <br />
+                                                <image alt="file" class="" src="@mealDywk.PICTURE" name="@MealType.RotaType-@weekDay.DayofWeek-Picture" id="@MealType.RotaType-@weekDay.DayofWeek-Picture" style="width: 100px !important; height: 100px !important;">
+
+                                            </div>
+                                        }
+                                    </td>
+
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
                 @if (Model != null)
                 {
                     @if (Model.NutritionId > 0)
@@ -46,7 +111,7 @@
                                     <td>@Model.PlannerName</td>
                                     <td>@Model.PlannerContact</td>
                                     <td>@Model.DATEFROM</td>
-                                    <td>@Model.DATETO</td> 
+                                    <td>@Model.DATETO</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -66,23 +131,23 @@
                             <tbody>
                                 @foreach (var meal in Model.ClientShopping)
                                 {
-                                <tr>
-                                    <td>@Model.ClientName</td>
-                                    <td>
-                                        @foreach (var item in ViewBag.Staff)
-                                        {
-                                            if (item.StaffPersonalInfoId == meal.STAFFId)
+                                    <tr>
+                                        <td>@Model.ClientName</td>
+                                        <td>
+                                            @foreach (var item in ViewBag.Staff)
                                             {
-                                                @item.Fullname;
+                                                if (item.StaffPersonalInfoId == meal.STAFFId)
+                                                {
+                                                    @item.Fullname;
 
+                                                }
                                             }
-                                        } 
-                                    </td>
-                                    <td>@meal.DAYOFSHOPPING</td>
-                                    <td>@meal.LocationOfPurchase</td>
-                                    <td>@meal.MeansOfPurchase</td>
-                                    <td>@meal.DATETO</td>
-                                </tr>
+                                        </td>
+                                        <td>@meal.DAYOFSHOPPING</td>
+                                        <td>@meal.LocationOfPurchase</td>
+                                        <td>@meal.MeansOfPurchase</td>
+                                        <td>@meal.DATETO</td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -102,23 +167,23 @@
                             <tbody>
                                 @foreach (var clean in Model.ClientCleaning)
                                 {
-                                <tr>
-                                    <td>@Model.ClientName</td>
-                                    <td>
-                                        @foreach (var item in ViewBag.Staff)
-                                        {
-                                            if (item.StaffPersonalInfoId == clean.STAFFId)
+                                    <tr>
+                                        <td>@Model.ClientName</td>
+                                        <td>
+                                            @foreach (var item in ViewBag.Staff)
                                             {
-                                                @item.Fullname;
+                                                if (item.StaffPersonalInfoId == clean.STAFFId)
+                                                {
+                                                    @item.Fullname;
 
+                                                }
                                             }
-                                        }
-                                    </td>
-                                    <td>@clean.DAYOFCLEANING</td>
-                                    <td>@clean.LocationOfItem</td>
-                                    <td>@clean.DescOfItem</td>
-                                    <td>@clean.DATETO</td>
-                                </tr>
+                                        </td>
+                                        <td>@clean.DAYOFCLEANING</td>
+                                        <td>@clean.LocationOfItem</td>
+                                        <td>@clean.DescOfItem</td>
+                                        <td>@clean.DATETO</td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>

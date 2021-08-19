@@ -34,7 +34,7 @@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#servicewatch">Service Watch</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#telehealth">Tele Health</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#careplan">Care Plan</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personaldetail">Personal Detail</a></li>
+
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="personalInfo">
@@ -686,27 +686,30 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <table class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>Comments</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model.GetClientBloodCoagulationRecord)
-                                            {
+                                    <div class="body">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
                                                 <tr>
-                                                    <td>
-                                                        @item.Date
-                                                    </td>
-                                                    <td>
-                                                        @item.Comment
-                                                    </td>
+                                                    <th>Date</th>
+                                                    <th>Comments</th>
                                                 </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetClientBloodCoagulationRecord)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.Date
+                                                        </td>
+                                                        <td>
+                                                            @item.Comment
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
                                 </div>
                                 <div class="tab-pane" id="bloodpressure">
                                     <div class="header">
@@ -1110,53 +1113,317 @@
 
                     <div class="tab-pane" id="careplan">
                         <div class="header">
-                            <ul class="header-dropdown">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CarePlan">Create New</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
                         </div>
                         <div class="body">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Prepare Date</th>
-                                        <th>Review Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetReview)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.CP_PreDate
-                                            </td>
-                                            <td>
-                                                @item.CP_ReviewDate
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                            <ul class="nav nav-tabs-new2">
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personaldetail">Personal Detail</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#health">Health</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#nutrition">Nutrition</a></li>
+
+
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane" id="personaldetail">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonalDetail">New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="body">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pre Date</th>
+                                                    <th>Review Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetReview)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.CP_PreDate
+                                                        </td>
+                                                        <td>
+                                                            @item.CP_ReviewDate
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="health">
+                                    <div class="header">
+                                    </div>
+                                    <div class="body">
+                                        <ul class="nav nav-tabs-new2">
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#healthliving">Health and Living</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#specialhealthmed">Special Health and Medication</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#balance">Balance</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#physicalability">Physical Ability</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#specialhealthcond">Special Health Condition</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#historyoffall">History Of Fall</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane" id="healthliving">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HealthLiving">New</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                        {
+                            <tr>
+                                <td>
+                                    @item.CP_PreDate
+                                </td>
+                                <td>
+                                    @item.CP_ReviewDate
+                                </td>
+                            </tr>
+                        }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="specialhealthmed">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthAndMedication">New</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="balance">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Balance">New</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                        {
+                            <tr>
+                                <td>
+                                    @item.CP_PreDate
+                                </td>
+                                <td>
+                                    @item.CP_ReviewDate
+                                </td>
+                            </tr>
+                        }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="physicalability">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PhysicalAbility">New</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="specialhealthcond">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthCondition">New</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="historyoffall">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HistoryOfFall">New</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="nutrition">
+                                    <div class="header">
+                                        <ul class="header-dropdown">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CarePlanNutrition">New</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="body">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Pre Date</th>
+                                                    <th>Review Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetReview)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.CP_PreDate
+                                                        </td>
+                                                        <td>
+                                                            @item.CP_ReviewDate
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="tab-pane" id="personaldetail">
-                        <div class="header">
-                            <ul class="header-dropdown">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonalDetail">New</a></li>
-                                        <li><a asp-action="CareView" asp-route-clientId="@Model.ClientId" asp-controller="PersonalDetail">View</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>

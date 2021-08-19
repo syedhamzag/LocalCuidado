@@ -1,0 +1,74 @@
+﻿@using AwesomeCare.Admin.ViewModels.CarePlan.Health;
+@model CreateHistoryOfFall
+@{
+    ViewData["Title"] = "Create HistoryOfFall";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+                <h2></h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="HistoryOfFall" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <input type="hidden" asp-for="HistoryId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Cause</label>
+                                    <input type="text" asp-for="Cause" class="form-control" />
+                                    <span asp-validation-for="Cause" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Details</label>
+                                    <textarea type="text" asp-for="Details" class="form-control"></textarea>
+                                    <span asp-validation-for="Details" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Prevention</label>
+                                    <textarea type="text" asp-for="Prevention" class="form-control"></textarea>
+                                    <span asp-validation-for="Prevention" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}

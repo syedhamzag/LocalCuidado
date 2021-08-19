@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AwesomeCare.DataAccess.Repositories;
-using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthCondition;
+using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,15 +16,14 @@ namespace AwesomeCare.API.Controllers
     [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class SpecialConditionController : ControllerBase
+    public class BalanceController : ControllerBase
     {
-        private IGenericRepository<SpecialHealthCondition> _spmedsRepository;
+        private IGenericRepository<Balance> _balanceRepository;
 
 
-        public SpecialConditionController(IGenericRepository<SpecialHealthCondition> spmedsRepository)
+        public BalanceController(IGenericRepository<Balance> balanceRepository)
         {
-            _spmedsRepository = spmedsRepository;
-
+            _balanceRepository = balanceRepository;
         }
         #region CarePlanHealth
         /// <summary>
@@ -32,12 +31,12 @@ namespace AwesomeCare.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet()]
-        [ProducesResponseType(type: typeof(List<GetSpecialHealthCondition>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(List<GetBalance>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Get()
         {
-            var getEntities = _spmedsRepository.Table.ToList();
+            var getEntities = _balanceRepository.Table.ToList();
             return Ok(getEntities);
         }
         /// <summary>
@@ -47,14 +46,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostSpecialHealthCondition postCarePlanHealth)
+        public async Task<IActionResult> Create([FromBody] PostBalance postCarePlanHealth)
         {
             if (postCarePlanHealth == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var CarePlanHealth = Mapper.Map<SpecialHealthCondition>(postCarePlanHealth);
-            await _spmedsRepository.InsertEntity(CarePlanHealth);
+            var CarePlanHealth = Mapper.Map<Balance>(postCarePlanHealth);
+            await _balanceRepository.InsertEntity(CarePlanHealth);
             return Ok();
         }
         /// <summary>
@@ -63,15 +62,15 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PostSpecialHealthCondition models)
+        public async Task<IActionResult> Put([FromBody] PostBalance models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var CarePlanHealth = Mapper.Map<SpecialHealthCondition>(models);
-            await _spmedsRepository.UpdateEntity(CarePlanHealth);
+            var CarePlanHealth = Mapper.Map<Balance>(models);
+            await _balanceRepository.UpdateEntity(CarePlanHealth);
             return Ok();
 
         }
@@ -81,7 +80,7 @@ namespace AwesomeCare.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("Get/{id}")]
-        [ProducesResponseType(type: typeof(GetSpecialHealthCondition), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(type: typeof(GetBalance), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int? id)
@@ -89,23 +88,17 @@ namespace AwesomeCare.API.Controllers
             if (!id.HasValue)
                 return BadRequest("id Parameter is required");
 
-            var getCarePlanHealth = await (from c in _spmedsRepository.Table
+            var getCarePlanHealth = await (from c in _balanceRepository.Table
                                            where c.ClientId == id.Value
-                                           select new GetSpecialHealthCondition
+                                           select new GetBalance
                                            {
-                                               ClientAction = c.ClientAction,
-                                               ClinicRecommendation = c.ClinicRecommendation,
-                                               ConditionName = c.ConditionName,
+                                               BalanceId = c.BalanceId,
+                                               Description = c.Description,
                                                ClientId = c.ClientId,
-                                               FeelingAfterIncident = c.FeelingAfterIncident,
-                                               FeelingBeforeIncident = c.FeelingBeforeIncident,
-                                               Frequency = c.Frequency,
-                                               HealthCondId = c.HealthCondId,
-                                               LifestyleSupport = c.LifestyleSupport,
-                                               LivingActivities = c.LivingActivities,
-                                               PlanningHealthCondition = c.PlanningHealthCondition,
-                                               SourceInformation = c.SourceInformation,
-                                               Trigger = c.Trigger
+                                               Mobility = c.Mobility,
+                                               Name = c.Name,
+                                               Status = c.Status
+
                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getCarePlanHealth);

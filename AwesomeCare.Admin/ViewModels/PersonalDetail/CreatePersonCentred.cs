@@ -26,5 +26,6 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
         public int Class { get; set; }
         [Required]
         public string ExpSupport { get; set; }
+        public string ClassName { get; set; }
     }
 }

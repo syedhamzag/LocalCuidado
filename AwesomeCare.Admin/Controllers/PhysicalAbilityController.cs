@@ -4,6 +4,7 @@ using AwesomeCare.Admin.ViewModels.CarePlan.Health;
 using AwesomeCare.DataTransferObject.DTOs.Health.PhysicalAbility;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +93,7 @@ namespace AwesomeCare.Admin.Controllers
             post.Name = model.Name;
             post.Status = model.Status;
 
+            var json = JsonConvert.SerializeObject(post);
             var result = await _physicalService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 

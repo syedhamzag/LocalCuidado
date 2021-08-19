@@ -5,6 +5,7 @@ using AwesomeCare.Admin.ViewModels.CarePlan.Health;
 using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,10 +94,11 @@ namespace AwesomeCare.Admin.Controllers
             post.Name = model.Name;
             post.Status = model.Status;
 
+            var json = JsonConvert.SerializeObject(post);
             var result = await _balanceService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Blood Pressure successfully registered" : "An Error Occurred" });
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Balance successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 

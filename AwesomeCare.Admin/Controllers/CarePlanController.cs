@@ -225,11 +225,11 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region Person Centred
-            centre.PersonalDetailId = model.ClientId;
-            centre.PersonCentredId = model.PersonCentredId;
-            centre.Class = model.Class;
-            centre.ExpSupport = model.ExpSupport;
-            centre.Focus = model.Focus.Select(o => new PostPersonCentredFocus { BaseRecordId = o, PersonCentredId = model.PersonCentredId }).ToList();
+            //centre.PersonalDetailId = model.ClientId;
+            //centre.PersonCentredId = model.PersonCentredId;
+            //centre.Class = model.Class;
+            //centre.ExpSupport = model.ExpSupport;
+            //centre.Focus = model.Focus.Select(o => new PostPersonCentredFocus { BaseRecordId = o, PersonCentredId = model.PersonCentredId }).ToList();
             #endregion
 
             #region Review
@@ -396,11 +396,11 @@ namespace AwesomeCare.Admin.Controllers
                 #endregion
 
                 #region Person Centred
-                PersonCentredId = centre.Result.PersonCentredId,
-                Class = centre.Result.Class,
-                ExpSupport = centre.Result.ExpSupport,
-                FocusList = centre.Result.Focus.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                Focus = centre.Result.Focus.Select(s => s.BaseRecordId).ToList(),
+                //PersonCentredId = centre.Result.PersonCentredId,
+                //Class = centre.Result.Class,
+                //ExpSupport = centre.Result.ExpSupport,
+                //FocusList = centre.Result.Focus.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                //Focus = centre.Result.Focus.Select(s => s.BaseRecordId).ToList(),
                 #endregion
 
                 #region Review

@@ -15,7 +15,7 @@ namespace AwesomeCare.Admin.Services.Nutrition
    public interface INutritionService
     {
         [Get("/Nutrition")]
-        Task<List<GetClientMealType>> Get();
+        Task<List<GetClientNutrition>> Get();
 
         [Get("/Nutrition/GetForEdit/{id}")]
         Task<List<GetClientNutrition>> GetForEdit(int id);

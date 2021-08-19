@@ -53,24 +53,30 @@ namespace AwesomeCare.Admin.Controllers
             var client = await _clientService.GetClientDetail();
             CreateCarePlan model = new CreateCarePlan();
             model.ClientId = clientId;
-            var bases1 = await _baseRecord.GetBaseRecord();
-            var id1 = bases1.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
+            var bases = await _baseRecord.GetBaseRecord();
+
+            var id1 = bases.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
             var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
             model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-            var bases2 = await _baseRecord.GetBaseRecord();
-            var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
+
+            var id2 = bases.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
             var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
             model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-            var bases3 = await _baseRecord.GetBaseRecord();
-            var id3 = bases3.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
+
+            var id3 = bases.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
             var items3 = await _baseRecord.GetBaseRecordWithItems(id3);
             model.KeyLogList = items3.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-            var bases4 = await _baseRecord.GetBaseRecord();
-            var id4 = bases4.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
+
+            var id4 = bases.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
             var items4 = await _baseRecord.GetBaseRecordWithItems(id4);
+            model.LandLogList = items4.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+
+
+            var baseClass = bases.Where(s => s.KeyName == "Class").FirstOrDefault().BaseRecordId;
+            var classItems = await _baseRecord.GetBaseRecordWithItems(baseClass);
             model.LandLogList = items4.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
             var staffs = await _staffService.GetStaffs();
@@ -116,6 +122,11 @@ namespace AwesomeCare.Admin.Controllers
                 var id4 = bases4.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
                 var items4 = await _baseRecord.GetBaseRecordWithItems(id4);
                 model.LandLogList = items4.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+
+                var bases5 = await _baseRecord.GetBaseRecord();
+                var id5 = bases5.Where(s => s.KeyName == "Class").FirstOrDefault().BaseRecordId;
+                var items5 = await _baseRecord.GetBaseRecordWithItems(id5);
+                model.TestList = items5.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
                 var staffs = await _staffService.GetStaffs();
                 model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
@@ -390,11 +401,11 @@ namespace AwesomeCare.Admin.Controllers
                 #endregion
 
                 #region Person Centred
-                PersonCentredId = pdetail.Result.PersonCentred.FirstOrDefault().PersonCentredId,
-                Class = pdetail.Result.PersonCentred.FirstOrDefault().Class,
-                ExpSupport = pdetail.Result.PersonCentred.FirstOrDefault().ExpSupport,
-                FocusList = pdetail.Result.PersonCentred.FirstOrDefault().Focus.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                Focus = pdetail.Result.PersonCentred.FirstOrDefault().Focus.Select(s => s.BaseRecordId).ToList(),
+                //PersonCentredId = pdetail.Result.PersonCentred.FirstOrDefault().PersonCentredId,
+                //Class = pdetail.Result.PersonCentred.FirstOrDefault().Class,
+                //ExpSupport = pdetail.Result.PersonCentred.FirstOrDefault().ExpSupport,
+                //FocusList = pdetail.Result.PersonCentred.FirstOrDefault().Focus.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                //Focus = pdetail.Result.PersonCentred.FirstOrDefault().Focus.Select(s => s.BaseRecordId).ToList(),
                 #endregion
 
                 #region Review

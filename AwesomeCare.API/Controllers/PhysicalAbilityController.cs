@@ -19,7 +19,7 @@ namespace AwesomeCare.API.Controllers
     public class PhysicalAbilityController : ControllerBase
     {
         private IGenericRepository<PhysicalAbility> _physicalAbilityRepository;
-
+        
 
         public PhysicalAbilityController(IGenericRepository<PhysicalAbility> physicalAbilityRepository)
         {

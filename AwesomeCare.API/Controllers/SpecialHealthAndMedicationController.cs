@@ -22,12 +22,12 @@ namespace AwesomeCare.API.Controllers
     [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class SpecialHealthController : ControllerBase
+    public class SpecialHealthAndMedicationController : ControllerBase
     {
         private IGenericRepository<SpecialHealthAndMedication> _spmedsRepository;
 
 
-        public SpecialHealthController(IGenericRepository<SpecialHealthAndMedication> spmedsRepository)
+        public SpecialHealthAndMedicationController(IGenericRepository<SpecialHealthAndMedication> spmedsRepository)
         {
             _spmedsRepository = spmedsRepository;
 

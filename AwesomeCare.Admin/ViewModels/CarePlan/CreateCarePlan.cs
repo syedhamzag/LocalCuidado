@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.PersonCentred;
 
 namespace AwesomeCare.Admin.ViewModels.CarePlan
 {
@@ -15,6 +16,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public string ActionName { get; set; } = "Save";
         public CreateCarePlan()
         {
+            TestList = new List<SelectListItem>();
             IndicatorList = new List<SelectListItem>();
             FocusList = new List<SelectListItem>();
             StaffList = new List<SelectListItem>();
@@ -22,6 +24,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             LandLogList = new List<SelectListItem>();
             KeyLogList = new List<SelectListItem>();
             InvolingList = new List<SelectListItem>();
+            ClassList = new List<SelectListItem>();
         }
 
         [DataType(DataType.Upload)]
@@ -29,12 +32,16 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public IFormFile Attach { get; set; }
 
         public List<GetEquipment> GetEquipment { get; set; }
+        public List<GetPersonCentred> GetPersonCentred { get; set; }
+
+        public List<SelectListItem> TestList { get; set; }
         public List<SelectListItem> StaffList { get; set; }
         public List<SelectListItem> FocusList { get; set; }
         public List<SelectListItem> IndicatorList { get; set; }
         public List<SelectListItem> LandLogList { get; set; }
         public List<SelectListItem> KeyLogList { get; set; }
         public List<SelectListItem> InvolingList { get; set; }
+        public List<SelectListItem> ClassList { get; set; }
 
         public string ClientName { get; set; }
         public int EquipmentCount { get; set; } = 1;
@@ -132,16 +139,6 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public string TeamLeader { get; set; }
         #endregion
 
-        #region PersonCentred
-        [Required]
-        public int PersonCentredId { get; set; }
-        public List<int> Focus { get; set; }
-        [Required]
-        public int Class { get; set; }
-        [Required]
-        public string ExpSupport { get; set; }
-        #endregion
-
         #region Review
         [Required]
         public int ReviewId { get; set; }
@@ -154,5 +151,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         [Required]
         public DateTime RA_ReviewDate { get; set; }
         #endregion
+
+        public int BSCheck { get; set; }
     }
 }
