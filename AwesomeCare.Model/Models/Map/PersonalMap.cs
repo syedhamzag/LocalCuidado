@@ -19,8 +19,8 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("PersonalId")
                .IsRequired();
 
-            builder.Property(p => p.ClientId)
-               .HasColumnName("ClientId")
+            builder.Property(p => p.PersonalDetailId)
+               .HasColumnName("PersonalDetailId")
                .IsRequired();
 
             builder.Property(p => p.Smoking)
@@ -28,8 +28,16 @@ namespace AwesomeCare.Model.Models.Map
                .IsRequired();
 
             builder.Property(p => p.DNR)
-             .HasColumnName("DNR")
-             .IsRequired();
+               .HasColumnName("DNR")
+               .IsRequired();
+
+            builder.Property(p => p.Religion)
+               .HasColumnName("Religion")
+               .IsRequired();
+
+            builder.Property(p => p.Nationality)
+               .HasColumnName("Nationality")
+               .IsRequired();
             #endregion
         }
     }

@@ -1,0 +1,184 @@
+﻿@using AwesomeCare.Admin.ViewModels.CarePlan.Health;
+@model CreateSpecialHealthAndMedication
+@{
+    ViewData["Title"] = "Create Special Health And Medication";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2></h2>
+            </div>
+            <div class="body">
+                <form asp-route="SpecialHealthAndMedication" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <input type="hidden" asp-for="SHMId" class="form-control" />
+                            <input type="hidden" asp-for="ClientId" class="form-control" />
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Date Time Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Admin Lvl</label>
+                                    <baserecord asp-key="Admin_Lvl" asp-for="AdminLvl" asp-items="null" />
+                                    <span asp-validation-for="AdminLvl" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Medication Allergy</label>
+                                    <baserecord asp-key="Medication_Allergy" asp-for="MedicationAllergy" asp-items="null" />
+                                    <span asp-validation-for="MedicationAllergy" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Left Out Medicine</label>
+                                    <baserecord asp-key="Left_Out_Medicine" asp-for="LeftoutMedicine" asp-items="null" />
+                                    <span asp-validation-for="LeftoutMedicine" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Name Form Medication</label>
+                                    <baserecord asp-key="Name_Form_Medication" asp-for="NameFormMedicaiton" asp-items="null" />
+                                    <span asp-validation-for="NameFormMedicaiton" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Who Administer</label>
+                                    <baserecord asp-key="Who_Administer" asp-for="WhoAdminister" asp-items="null" />
+                                    <span asp-validation-for="WhoAdminister" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Meds GP Order</label>
+                                    <baserecord asp-key="Meds_GP_Order" asp-for="MedsGPOrder" asp-items="null" />
+                                    <span asp-validation-for="MedsGPOrder" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Pharma MAR Chart</label>
+                                    <baserecord asp-key="Pharma_MAR_Chart" asp-for="PharmaMARChart" asp-items="null" />
+                                    <span asp-validation-for="PharmaMARChart" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Temp MAR Chart</label>
+                                    <baserecord asp-key="Temp_MAR_Chart" asp-for="TempMARChart" asp-items="null" />
+                                    <span asp-validation-for="TempMARChart" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Medkey Code </label>
+                                    <input type="text" asp-for="MedKeyCode" class="form-control" />
+                                    <span asp-validation-for="MedKeyCode" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Family Return Med</label>
+                                    <baserecord asp-key="Family_Return_Med" asp-for="FamilyReturnMed" asp-items="null" />
+                                    <span asp-validation-for="FamilyReturnMed" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Access Medication</label>
+                                    <baserecord asp-key="Access_Medication" asp-for="AccessMedication" asp-items="null" />
+                                    <span asp-validation-for="AccessMedication" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">No Med Access</label>
+                                    <baserecord asp-key="No_Med_Access" asp-for="NoMedAccess" asp-items="null" />
+                                    <span asp-validation-for="NoMedAccess" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Med Access Denial</label>
+                                    <baserecord asp-key="Med_Access_Denail" asp-for="MedAccessDenial" asp-items="null" />
+                                    <span asp-validation-for="MedAccessDenial" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Med Req</label>
+                                    <baserecord asp-key="PNR_Med_Req" asp-for="PNRMedReq" asp-items="null" />
+                                    <span asp-validation-for="PNRMedReq" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Doses</label>
+                                    <baserecord asp-key="PNR_Doses" asp-for="PNRDoses" asp-items="null" />
+                                    <span asp-validation-for="PNRDoses" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Meds Admin</label>
+                                    <baserecord asp-key="PNR_Meds_Admin" asp-for="PNRMedsAdmin" asp-items="null" />
+                                    <span asp-validation-for="PNRMedsAdmin" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Overdose Contact</label>
+                                    <baserecord asp-key="Overdose_Contact" asp-for="OverdoseContact" asp-items="null" />
+                                    <span asp-validation-for="OverdoseContact" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Meds Missing</label>
+                                    <input type="text" asp-for="PNRMedsMissing" class="form-control" />
+                                    <span asp-validation-for="PNRMedsMissing" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Medication Storage</label>
+                                    <input type="text" asp-for="MedicationStorage" class="form-control" />
+                                    <span asp-validation-for="MedicationStorage" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Special Storage</label>
+                                    <baserecord asp-key="Special_Storage" asp-for="SpecialStorage" asp-items="null" />
+                                    <span asp-validation-for="SpecialStorage" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Med List</label>
+                                    <input type="text" asp-for="PNRMedList" class="form-control" />
+                                    <span asp-validation-for="PNRMedList" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Consent</label>
+                                    <baserecord asp-key="SHAM_Consent" asp-for="Consent" asp-items="null" />
+                                    <span asp-validation-for="Consent" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Type</label>
+                                    <baserecord asp-key="SHAM_Type" asp-for="Type" asp-items="null" />
+                                    <span asp-validation-for="Type" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">By</label>
+                                    <input type="text" asp-for="By" class="form-control" />
+                                    <span asp-validation-for="By" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Family Meds</label>
+                                    <baserecord asp-key="Family_Meds" asp-for="FamilyMeds" asp-items="null" />
+                                    <span asp-validation-for="FamilyMeds" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

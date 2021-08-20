@@ -86,6 +86,16 @@ using AwesomeCare.Admin.Services.KeyIndicators;
 using AwesomeCare.Admin.Services.Personal;
 using AwesomeCare.Admin.Services.PersonCentred;
 using AwesomeCare.Admin.Services.Review;
+using AwesomeCare.Admin.Services.PersonalDetail;
+using AwesomeCare.Admin.Services.HealthAndLiving;
+using AwesomeCare.Admin.Services.SpecialHealthAndMedication;
+using AwesomeCare.Admin.Services.Balance;
+using AwesomeCare.Admin.Services.PhysicalAbility;
+using AwesomeCare.Admin.Services.SpecialHealthCondition;
+using AwesomeCare.Admin.Services.HistoryOfFall;
+using AwesomeCare.Admin.Services.CarePlanNutrition;
+using AwesomeCare.Admin.Services.PersonalHygiene;
+using AwesomeCare.Admin.Services.InfectionControl;
 
 namespace AwesomeCare.Admin
 {
@@ -824,6 +834,66 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IReviewService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("personaldetail", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPersonalDetailService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("healthliving", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IHealthAndLivingService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("specialhealthandmedication", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ISpecialHealthAndMedicationService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("balance", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IBalanceService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("physicalability", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPhysicalAbilityService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("specialhealthcondition", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ISpecialHealthConditionService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("historyoffall", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IHistoryOfFallService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("careplannutrition", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ICarePlanNutritionService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("careplanhygiene", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPersonalHygieneService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("infectioncontrol", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IInfectionControlService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

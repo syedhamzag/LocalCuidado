@@ -10,10 +10,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Capacity
         {
             Indicator = new List<PutCapacityIndicator>();
         }
-        public int ClientId { get; set; }
+        public int PersonalDetailId { get; set; }
         public int CapacityId { get; set; }
         public int Pointer { get; set; }
-        public int Implications { get; set; }
+        public string Implications { get; set; }
 
         public List<PutCapacityIndicator> Indicator { get; set; }
     }

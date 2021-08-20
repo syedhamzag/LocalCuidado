@@ -46,7 +46,7 @@ namespace AwesomeCare.Admin.Controllers
 
             PostConsentCare postlog = new PostConsentCare();
 
-            postlog.ClientId = model.ClientId;
+            postlog.PersonalDetailId = model.ClientId;
             postlog.CareId = model.CareId;
             postlog.Signature = model.Signature;
             postlog.Date = model.Date; 

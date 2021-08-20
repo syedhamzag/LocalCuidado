@@ -7,8 +7,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentData
     public class PutConsentData
     {
         public int DataId { get; set; }
-        public int ClientId { get; set; }
+        public int PersonalDetailId { get; set; }
         public int Signature { get; set; }
+        public int Name { get; set; }
         public DateTime Date { get; set; }
     }
 }

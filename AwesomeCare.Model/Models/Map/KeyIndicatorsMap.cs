@@ -19,8 +19,8 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("KeyId")
                .IsRequired();
 
-            builder.Property(p => p.ClientId)
-               .HasColumnName("ClientId")
+            builder.Property(p => p.PersonalDetailId)
+               .HasColumnName("PersonalDetailId")
                .IsRequired();
 
             builder.Property(p => p.AboutMe)
@@ -43,10 +43,13 @@ namespace AwesomeCare.Model.Models.Map
               .HasColumnName("ThingsILike")
               .IsRequired();
 
-            builder.Property(p => p.LogMethod)
-             .HasColumnName("LogMethod")
-             .IsRequired();
+            #endregion
 
+            #region Relationship
+            builder.HasMany<KeyIndicatorLog>(p => p.LogMethod)
+                .WithOne(p => p.KeyIndicators)
+                .HasForeignKey(p => p.KeyId)
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

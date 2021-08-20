@@ -43,15 +43,16 @@ namespace AwesomeCare.Model.Models
             ClientBodyTemp = new HashSet<ClientBodyTemp>();
             ClientOxygenLvl = new HashSet<ClientOxygenLvl>();
             ClientBMIChart = new HashSet<ClientBMIChart>();
-            Capacity = new HashSet<Capacity>();
-            ConsentCare = new HashSet<ConsentCare>();
-            ConsentData = new HashSet<ConsentData>();
-            ConsentLandLine = new HashSet<ConsentLandLine>();
-            Equipment = new HashSet<Equipment>();
-            KeyIndicators = new HashSet<KeyIndicators>();
-            Personal = new HashSet<Personal>();
-            PersonCentred = new HashSet<PersonCentred>();
-            Review = new HashSet<Review>();
+            PersonalDetail = new HashSet<PersonalDetail>();
+            CarePlanNutrition = new HashSet<CarePlanNutrition>();
+            Balance = new HashSet<Balance>();
+            PhysicalAbility = new HashSet<PhysicalAbility>();
+            HistoryOfFall = new HashSet<HistoryOfFall>();
+            HealthAndLiving = new HashSet<HealthAndLiving>();
+            SpecialHealthCondition = new HashSet<SpecialHealthCondition>();
+            SpecialHealthAndMedication = new HashSet<SpecialHealthAndMedication>();
+            PersonalHygiene = new HashSet<PersonalHygiene>();
+            InfectionControl = new HashSet<InfectionControl>();
         }
 
         public int ClientId { get; set; }
@@ -94,6 +95,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientCareDetails> ClientCareDetails { get; set; }
         public virtual ICollection<ClientMedication> ClientMedication { get; set; }
         public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
+
+        #region Client
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }
         public virtual ICollection<ClientNutrition> ClientNutrition { get; set; }
         public virtual ICollection<ClientLogAudit> ClientLogAudit { get; set; }
@@ -102,16 +105,24 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientMgtVisit> ClientMgtVisit { get; set; }
         public virtual ICollection<ClientProgram> ClientProgram { get; set; }
         public virtual ICollection<ClientServiceWatch> ClientServiceWatch { get; set; }
+        #endregion
+
+        #region Staff
         public virtual ICollection<StaffSpotCheck> StaffSpotCheck { get; set; }
         public virtual ICollection<StaffAdlObs> StaffAdlObs { get; set; }
         public virtual ICollection<StaffMedComp> StaffMedCompObs { get; set; }
         public virtual ICollection<StaffKeyWorkerVoice> StaffKeyWorkerVoice { get; set; }
         public virtual ICollection<StaffReference> StaffReference { get; set; }
+        #endregion
 
+        #region Admin Forms
         public virtual ICollection<Enotice> Enotice { get; set; }
         public virtual ICollection<Resources> Resources { get; set; }
         public virtual ICollection<IncomingMeds> IncomingMeds { get; set; }
         public virtual ICollection<WhisttleBlower> WhisttleBlower { get; set; }
+        #endregion
+
+        #region Telehealth
         public virtual ICollection<ClientBloodPressure> ClientBloodPressure { get; set; }
         public virtual ICollection<ClientFoodIntake> ClientFoodIntake { get; set; }
         public virtual ICollection<ClientBowelMovement> ClientBowelMovement { get; set; }
@@ -125,14 +136,19 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientBodyTemp> ClientBodyTemp { get; set; }
         public virtual ICollection<ClientOxygenLvl> ClientOxygenLvl { get; set; }
         public virtual ICollection<ClientBMIChart> ClientBMIChart { get; set; }
-        public virtual ICollection<Capacity> Capacity { get; set; }
-        public virtual ICollection<ConsentCare> ConsentCare { get; set; }
-        public virtual ICollection<ConsentData> ConsentData { get; set; }
-        public virtual ICollection<ConsentLandLine> ConsentLandLine { get; set; }
-        public virtual ICollection<Equipment> Equipment { get; set; }
-        public virtual ICollection<KeyIndicators> KeyIndicators { get; set; }
-        public virtual ICollection<Personal> Personal { get; set; }
-        public virtual ICollection<PersonCentred> PersonCentred { get; set; }
-        public virtual ICollection<Review> Review { get; set; }
+        #endregion
+
+        #region CarePlan
+        public virtual ICollection<PersonalDetail> PersonalDetail { get; set; }
+        public virtual ICollection<CarePlanNutrition> CarePlanNutrition { get; set; }
+        public virtual ICollection<Balance> Balance { get; set; }
+        public virtual ICollection<HistoryOfFall> HistoryOfFall { get; set; }
+        public virtual ICollection<HealthAndLiving> HealthAndLiving { get; set; }
+        public virtual ICollection<PhysicalAbility> PhysicalAbility { get; set; }
+        public virtual ICollection<SpecialHealthCondition> SpecialHealthCondition { get; set; }
+        public virtual ICollection<SpecialHealthAndMedication> SpecialHealthAndMedication { get; set; }
+        public virtual ICollection<PersonalHygiene> PersonalHygiene { get; set; }
+        public virtual ICollection<InfectionControl> InfectionControl { get; set; }
+        #endregion
     }
 }

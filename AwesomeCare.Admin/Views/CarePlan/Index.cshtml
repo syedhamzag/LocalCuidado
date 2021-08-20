@@ -1,4 +1,4 @@
-﻿@using AwesomeCare.Admin.ViewModels.CarePlan;
+﻿<!--@using AwesomeCare.Admin.ViewModels.CarePlan;
 @model CreateCarePlan
 @{ ViewData["Title"] = "Create CarePlan"; }
 @section HeaderScripts{
@@ -16,10 +16,9 @@
                 <form asp-route="CarePlan" method="post" enctype="multipart/form-data">
                     <h4>Person Centredness</h4>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <input type="hidden" asp-for="PersonCentredId" />
+                        <div class="col-xs-12 col-sm-12 col-md-12">-->
+                            @*<input type="hidden" asp-for="PersonCentredId" />
                             <input type="hidden" asp-for="ClientId" />
-                            <input type="hidden" asp-for="Attachment" />
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Class</label>
@@ -35,8 +34,8 @@
                                     <label class="control-label">Expected Support</label>
                                     <input type="text" asp-for="ExpSupport" class="form-control" />
                                     <span asp-validation-for="ExpSupport" class="text-danger"></span>
-                                </div>
-                            </div>
+                                </div>*@
+                            <!--</div>
                         </div>
                     </div>
 
@@ -163,69 +162,37 @@
                         </div>
                     </div>
 
-                    <h4>Equipment</h4>
-                    <div class="row">
-                        <div class="col-xs-8 col-sm-8 col-md-8">
-                            <input type="hidden" asp-for="EquipmentId" />
-                            <input type="hidden" asp-for="ClientId" />
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Service Date</label>
-                                    <input type="text" asp-for="ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="ServiceDate" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Next Service Date</label>
-                                    <input type="text" asp-for="NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                    <span asp-validation-for="NextServiceDate" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Equipment Status</label>
-                                    <baserecord asp-key="Equipment_Status" asp-for="Status" asp-items="null" />
-                                    <span asp-validation-for="Status" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Name</label>
-                                    <baserecord asp-key="Equipment_Name" asp-for="Name" asp-items="null" />
-                                    <span asp-validation-for="Name" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Type</label>
-                                    <baserecord asp-key="Equipment_Type" asp-for="Type" asp-items="null" />
-                                    <span asp-validation-for="Type" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Location</label>
-                                    <baserecord asp-key="Equipment_Location" asp-for="Location" asp-items="null" />
-                                    <span asp-validation-for="Location" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Person To Act</label>
-                                    <select class="custom-select" asp-for="PersonToAct" asp-items="Model.StaffList">
-                                    </select>
-                                    <span asp-validation-for="PersonToAct" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
+                    <h4>Equipment</h4>-->
+                    @*<div class="row">
+                        <table class="table table-hover table-bordered" id="tblEquipment">
+                            <thead>
+                                <tr>
+                                    <th>Service Date</th>
+                                    <th>Next Service Date</th>
+                                    <th>Equipment Status</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Location</th>
+                                    <th>Person To Act</th>
+                                    <th>Status Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" asp-for="ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                    <td><input type="text" asp-for="NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                    <td><baserecord asp-key="Equipment_Status" asp-for="Status" asp-items="null" /></td>
+                                    <td><baserecord asp-key="Equipment_Name" asp-for="Name" asp-items="null" /></td>
+                                    <td><baserecord asp-key="Equipment_Type" asp-for="Type" asp-items="null" /></td>
+                                    <td><baserecord asp-key="Equipment_Location" asp-for="Location" asp-items="null" /></td>
+                                    <td><select class="custom-select" asp-for="PersonToAct" asp-items="Model.StaffList"></select></td>
+                                    <td><input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>*@
 
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <div class="card">
-                                <div class="header">
-                                    <h2>Status Attachment<small></small></h2>
-                                </div>
-                                <div class="body">
-                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
-                                    <span asp-validation-for="Attach" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h4>Consent For Landline</h4>
+                    <!--<h4>Consent For Landline</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <input type="hidden" asp-for="LandLineId" />
@@ -304,10 +271,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
                     @*Submit Button*@
-                    <div class="row">
+                    <!--<div class="row">
                         <div class="form-group col-sm-10 col-xs-12 col-md-10 col-lg-10">
                             <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
                         </div>
@@ -321,8 +288,8 @@
 
 
 @section VendorScripts{
-    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script>--> <!-- JQuery Steps Plugin Js -->
+    <!--<script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 
 
@@ -333,4 +300,4 @@
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
 
 
-}
+}-->

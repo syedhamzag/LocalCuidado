@@ -28,17 +28,14 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.MEALDETAILS)
              .HasColumnName("MEALDETAILS")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.HOWTOPREPARE)
              .HasColumnName("HOWTOPREPARE")
-              .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.SEEVIDEO)
              .HasColumnName("SEEVIDEO")
-              .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.PICTURE)

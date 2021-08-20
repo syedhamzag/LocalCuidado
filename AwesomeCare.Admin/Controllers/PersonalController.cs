@@ -46,7 +46,7 @@ namespace AwesomeCare.Admin.Controllers
 
             PostPersonal postlog = new PostPersonal();
 
-            postlog.ClientId = model.ClientId;
+            postlog.PersonalDetailId = model.ClientId;
             postlog.DNR = model.DNR;
             postlog.Smoking = model.Smoking;
             postlog.PersonalId = model.PersonalId;

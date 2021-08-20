@@ -50,15 +50,22 @@ namespace AwesomeCare.Admin.Controllers
             _clientRotaTypeService = clientRotaTypeService;
             _env = env;
         }
-        public async Task<IActionResult> Reports()
+        public async Task<IActionResult> List()
         {
-            var model = new NutritionViewModel();
-            var clients = await _clientService.GetClientDetail();
-            model.ClientList = clients.Select(s=> new SelectListItem(s.FullName,s.ClientId.ToString())).ToList();
-            return View(model);
+            var entities = await _nutritionService.Get();
+
+            var client = await _clientService.GetClientDetail();
+            List<NutritionViewModel> reports = new List<NutritionViewModel>();
+            foreach (GetClientNutrition item in entities)
+            {
+                var report = new NutritionViewModel();
+                report.DATETO = item.DATETO;
+                report.DATEFROM = item.DATEFROM;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
+                reports.Add(report);
+            }
+            return View(reports);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reports(int clientId)
         {
             NutritionViewModel model = new NutritionViewModel();
@@ -67,10 +74,14 @@ namespace AwesomeCare.Admin.Controllers
             var nutrition = await _nutritionService.GetForEdit(clientId);
             List<GetStaffs> AllStaffs = await _staffService.GetStaffs();
             var Clients = await _clientService.GetClientDetail();
+            var MealTypes = await _clientRotaTypeService.Get();
+            var weekDays = await _MealDayOfWeekService.Get();
             model.ClientList = Clients.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
-
+            model.MealTypes = MealTypes;
+            model.WeekDays = weekDays;
             if (nutrition.Count > 0)
             {
+                model.ClientMealDays = nutrition.FirstOrDefault().ClientMealDays;
                 model.ClientId = clientId;
                 model.ClientName = Clients.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
                 model.NutritionId = nutrition.FirstOrDefault().NutritionId;
@@ -101,7 +112,7 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientImage = Client.PassportFilePath;
             
             var staffNames = await _staffService.GetStaffs();
-
+            model.StaffList = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             ViewBag.GetStaffs = staffNames;
 
             if (nutrition.Count > 0)
@@ -142,7 +153,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.ClientImage = Client.PassportFilePath;
                 model.MealTypes = MealTypes;
                 model.WeekDays = weekDays;
-                ViewBag.GetStaffs = staffNames;
+                model.StaffList = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
             var Nutrition = new CreateNutrition();
@@ -243,7 +254,7 @@ namespace AwesomeCare.Admin.Controllers
                 string DAYOFSHOPPINGId = "DAYOFSHOPPING";
                 string DATEFROMId = "DATEFROM";
                 string DATETOId = "DATETO";
-                string ImageId = "Image";
+                string ImageId = string.Concat("Image_",DateTime.Now.ToString());
 
                 var Staff = int.Parse(formsCollection[StaffId][i].ToString());
                 var Measure = formsCollection[MeasureId][i].ToString();

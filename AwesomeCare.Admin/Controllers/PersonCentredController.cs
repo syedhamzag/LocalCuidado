@@ -53,7 +53,7 @@ namespace AwesomeCare.Admin.Controllers
 
             PostPersonCentred postlog = new PostPersonCentred();
 
-            postlog.ClientId = model.ClientId;
+            postlog.PersonalDetailId = model.ClientId;
             postlog.PersonCentredId = model.PersonCentredId;
             postlog.Class = model.Class;
             postlog.ExpSupport = model.ExpSupport;

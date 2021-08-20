@@ -28,7 +28,7 @@ namespace AwesomeCare.Model.Models
         public string Remarks { get; set; }
         public int Status { get; set; }
     
-    public virtual Client Client { get; set; }
+        public virtual Client Client { get; set; }
         public virtual ICollection<BMIChartOfficerToAct> OfficerToAct { get; set; }
         public virtual ICollection<BMIChartStaffName> StaffName { get; set; }
         public virtual ICollection<BMIChartPhysician> Physician { get; set; }

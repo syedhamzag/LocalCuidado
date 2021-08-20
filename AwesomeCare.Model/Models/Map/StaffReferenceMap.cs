@@ -105,10 +105,10 @@ namespace AwesomeCare.Model.Models.Map
                  .WithMany(p => p.StaffReference)
                  .HasForeignKey(p => p.ApplicantRole)
                  .OnDelete(DeleteBehavior.Cascade);
-                  
+
             builder.HasOne(p => p.Staff)
                  .WithMany(p => p.StaffReference)
-                 .HasForeignKey(p => p.ConfirmedBy)
+                 .HasForeignKey(p => p.StaffId)
                  .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }

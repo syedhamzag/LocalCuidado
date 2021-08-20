@@ -19,6 +19,10 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("CapacityIndicatorId")
                .IsRequired();
 
+            builder.Property(p => p.BaseRecordId)
+                .HasColumnName("BaseRecordId")
+                .IsRequired();
+
             builder.Property(p => p.CapacityId)
                .HasColumnName("CapacityId")
                .IsRequired();

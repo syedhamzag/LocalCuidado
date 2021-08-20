@@ -46,7 +46,7 @@ namespace AwesomeCare.Admin.Controllers
 
             PostReview postlog = new PostReview();
 
-            postlog.ClientId = model.ClientId;
+            postlog.PersonalDetailId = model.ClientId;
             postlog.ReviewId = model.ReviewId;
             postlog.CP_PreDate = model.CP_PreDate;
             postlog.CP_ReviewDate = model.CP_ReviewDate;
