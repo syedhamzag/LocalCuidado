@@ -172,7 +172,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label>How to Prepare</label>
-                                                    <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" disabled="disabled"/>
+                                                    <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" disabled="disabled" />
 
                                                 </div>
                                                 <div class="form-group">
@@ -334,7 +334,7 @@
                                 {
                                     <tr id="@Shopping.ShoppingId">
                                         <td>
-                                            <baserecord asp-key="GetStaffs" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs, "StaffPersonalInfoId", "Fullname", Shopping.STAFFId))" />
+                                            <select class="selectpicker" data-live-search="true" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="Model.StaffList"></select>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().MeansOfPurchase" id="MeansOfPurchase" value="@Shopping.MeansOfPurchase" />
@@ -371,7 +371,7 @@
                             }
                             else
                             {
-                            
+
                             }
                         </tbody>
                     </table>
@@ -486,7 +486,7 @@
                                 {
                                     <tr id="@Cleaning.CleaningId">
                                         <td>
-                                            <baserecord asp-key="GetStaffs" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs, "StaffPersonalInfoId", "Fullname", @Cleaning.STAFFId))" />
+                                            <select class="selectpicker" data-live-search="true" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="Model.StaffList"></select>
                                         </td>
                                         <td>
                                             <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
@@ -533,9 +533,9 @@
                                     </tr>
                                 }
                             }
-                            else 
+                            else
                             {
-                            
+
                             }
                         </tbody>
 
@@ -602,7 +602,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <baserecord asp-key="GetStaffs" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                                <select class="custom-select" data-live-search="true" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="Model.StaffList"></select>
 
                             </td>
                             <td>
@@ -639,6 +639,7 @@
                         </tr>
                     </tbody>
                 </table>
+
                 <table class="table table-hover table-bordered table-responsive" id="Cleaning" style="display:none;">
                     <thead>
                         <tr>
@@ -719,7 +720,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <baserecord asp-key="GetStaffs" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="@(new SelectList(@ViewBag.GetStaffs,"StaffPersonalInfoId","Fullname"))" />
+                                <select class="custom-select" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="Model.StaffList"></select>
                             </td>
                             <td>
                                 <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
@@ -777,6 +778,7 @@
 @section scripts{
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
     <script>
+
         $(function () {
 
             $('#tblMeal > tbody  > tr').each(function () {
@@ -936,12 +938,12 @@
                     $('#' + Period + '-Sunday' + '-Picture').val(Image);
                 }
             }
-            
+
             $('#STAFF').on('change', function () {
                 var value = $('#STAFF').val();
                 $('#StaffId').val(value);
             });
-            
+
 
             var table = $('#tblShopping').DataTable({
                 scrollCollapse: true,
@@ -963,10 +965,11 @@
             var counter1 = $("#CleaningRowCount").val();
 
             $('#Addrow').on('click', function () {
-                counter++;              
+                counter++;
                 var clone = $("#Shopping tr:last").clone();
                 clone.attr('id', 'row-' + counter);
-                table.rows.add(clone).draw();
+                table.row.add(clone).draw();
+                getScripts();
                 $('#ShoppingRowCount').val(counter);
 
             });
@@ -975,6 +978,7 @@
                 var clone = $("#Cleaning tr:last").clone();
                 clone.attr('id', 'row-' + counter1);
                 cleaning.rows.add(clone).draw();
+                getScripts();
                 $('#CleaningRowCount').val(counter1);
 
 
@@ -1020,8 +1024,13 @@
                     alert("Please select row for delete !");
                 }
             });
+
+            function getScripts() {
+                $.getScript("../../../assets/vendor/dropify/js/dropify.min.js");
+                $.getScript("../../../assets/bundles/mainscripts.bundle.js");
+                $.getScript("../../../assets/js/pages/forms/dropify.js");
+            };
         });
-        
         
     </script>
 }

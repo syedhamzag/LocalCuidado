@@ -102,6 +102,8 @@ using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
 using AwesomeCare.DataTransferObject.DTOs.Health.PhysicalAbility;
 using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
 using AwesomeCare.DataTransferObject.DTOs.Health;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.PersonalHygiene;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.InfectionControl;
 
 namespace MapperConfig
 {
@@ -240,6 +242,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.PhysicalAbility, mem => mem.Ignore())
                 .ForMember(dto => dto.SpecialHealthAndMedication, mem => mem.Ignore())
                 .ForMember(dto => dto.SpecialHealthCondition, mem => mem.Ignore())
+                .ForMember(dto => dto.PersonalHygiene, mem => mem.Ignore())
+                .ForMember(dto => dto.InfectionControl, mem => mem.Ignore())
                 .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -281,9 +285,6 @@ namespace MapperConfig
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));
-
-
-
 
             CreateMap<Client, GetClientForEdit>()
                 .ForMember(dto => dto.ClientImage, mem => mem.Ignore())
@@ -339,6 +340,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.PhysicalAbility, mem => mem.Ignore())
                 .ForMember(dto => dto.SpecialHealthAndMedication, mem => mem.Ignore())
                 .ForMember(dto => dto.SpecialHealthCondition, mem => mem.Ignore())
+                .ForMember(dto => dto.PersonalHygiene, mem => mem.Ignore())
+                .ForMember(dto => dto.InfectionControl, mem => mem.Ignore())
                 .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore());
             #endregion
 
@@ -2308,6 +2311,24 @@ namespace MapperConfig
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<HistoryOfFall, GetHistoryOfFall>();
+            #endregion
+            
+            #region PersonalHygiene
+            CreateMap<PutPersonalHygiene, PersonalHygiene>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostPersonalHygiene, PersonalHygiene>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<PersonalHygiene, GetPersonalHygiene>();
+            #endregion
+
+            #region InfectionControl
+            CreateMap<PutInfectionControl, InfectionControl>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostInfectionControl, InfectionControl>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<InfectionControl, GetInfectionControl>();
             #endregion
         }
     }

@@ -22,7 +22,6 @@
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#education">Education</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainings">Training</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#referee">Referee</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#emergencyContact">Emergency Contact</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#spotcheck">Spot Check</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#adlobs">Adl Observation</a></li>
@@ -523,63 +522,6 @@
 
                                                 </tbody>
                                             </table>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane" id="regulatorycontact">
-                                        <h6>Regulatory Contact</h6>
-                                        <div class="table-responsive table-bordered">
-                                            <table class="table table-bordered table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Regulatory Contact</th>
-                                                        <th>Date Performed</th>
-                                                        <th>Date Due</th>
-                                                        <th>Evidence</th>
-                                                        <th>Add Form</th>
-                                                        <th>View Response</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @for (int r = 0; r < Model.RegulatoryContacts.Count; r++)
-                                                    {
-                                                        <tr>
-
-                                                            <td>
-
-                                                                @Model.RegulatoryContacts[r].RegulatoryContact
-                                                            </td>
-                                                            <td>
-                                                                @Model.RegulatoryContacts[r].DatePerformed
-                                                            </td>
-                                                            <td>
-                                                                @Model.RegulatoryContacts[r].DueDate
-                                                            </td>
-                                                            <td>
-                                                                <a asp-action="DownloadFile" asp-route-file="@Model.RegulatoryContacts[r].Evidence">Download</a>
-
-                                                            </td>
-                                                            <td>
-                                                                @if (Model.RegulatoryContacts[r].HasGoogleForm)
-                                                                {
-                                                                    <a class="btn" target="_blank" href="@Model.RegulatoryContacts[r].AddLink">Add</a>
-
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                @if (Model.RegulatoryContacts[r].HasGoogleForm)
-                                                                {
-                                                                    <a target="_blank" href="@Model.RegulatoryContacts[r].ViewLink">Response</a>
-
-                                                                }
-                                                            </td>
-                                                        </tr>
-                                                    }
-
-                                                </tbody>
-                                            </table>
-
 
                                         </div>
                                     </div>

@@ -112,7 +112,7 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientImage = Client.PassportFilePath;
             
             var staffNames = await _staffService.GetStaffs();
-
+            model.StaffList = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             ViewBag.GetStaffs = staffNames;
 
             if (nutrition.Count > 0)
@@ -153,7 +153,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.ClientImage = Client.PassportFilePath;
                 model.MealTypes = MealTypes;
                 model.WeekDays = weekDays;
-                ViewBag.GetStaffs = staffNames;
+                model.StaffList = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
             var Nutrition = new CreateNutrition();

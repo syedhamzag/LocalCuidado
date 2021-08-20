@@ -51,16 +51,19 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
+
         public async Task<IActionResult> View(int BalanceId)
         {
             var putEntity = await GetBalance(BalanceId);
             return View(putEntity);
         }
+
         public async Task<IActionResult> Edit(int BalanceId)
         {
             var putEntity = await GetBalance(BalanceId);
             return View(putEntity);
         }
+
         public async Task<CreateBalance> GetBalance(int BalanceId)
         {
             var balance = await _balanceService.Get(BalanceId);
@@ -75,6 +78,7 @@ namespace AwesomeCare.Admin.Controllers
             };
             return putEntity;
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(CreateBalance model)

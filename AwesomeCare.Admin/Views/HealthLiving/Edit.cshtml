@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.CarePlan.Health;
 @model CreateHealthAndLiving
 @{
-    ViewData["Title"] = "Create Health And Living";
+    ViewData["Title"] = "Update Health And Living";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -19,6 +19,7 @@
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="HLId" />
                             <input type="hidden" asp-for="ClientId" />
+                            <input type="hidden" asp-for="ConstraintAttachment" />
                             <div class="row">
                                 <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
                                     <label class="control-label">Wake Up</label>
@@ -223,7 +224,6 @@
                             </div>
                         </div>
 
-
                         <div class="col-xs-4 col-sm-4 col-md-4">
 
                             <div class="card">
@@ -235,6 +235,7 @@
                                     <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </form>

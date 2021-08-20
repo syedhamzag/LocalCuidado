@@ -51,6 +51,8 @@ namespace AwesomeCare.Model.Models
             HealthAndLiving = new HashSet<HealthAndLiving>();
             SpecialHealthCondition = new HashSet<SpecialHealthCondition>();
             SpecialHealthAndMedication = new HashSet<SpecialHealthAndMedication>();
+            PersonalHygiene = new HashSet<PersonalHygiene>();
+            InfectionControl = new HashSet<InfectionControl>();
         }
 
         public int ClientId { get; set; }
@@ -145,6 +147,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<PhysicalAbility> PhysicalAbility { get; set; }
         public virtual ICollection<SpecialHealthCondition> SpecialHealthCondition { get; set; }
         public virtual ICollection<SpecialHealthAndMedication> SpecialHealthAndMedication { get; set; }
+        public virtual ICollection<PersonalHygiene> PersonalHygiene { get; set; }
+        public virtual ICollection<InfectionControl> InfectionControl { get; set; }
         #endregion
     }
 }

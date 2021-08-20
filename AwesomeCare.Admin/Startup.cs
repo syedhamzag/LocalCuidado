@@ -94,6 +94,8 @@ using AwesomeCare.Admin.Services.PhysicalAbility;
 using AwesomeCare.Admin.Services.SpecialHealthCondition;
 using AwesomeCare.Admin.Services.HistoryOfFall;
 using AwesomeCare.Admin.Services.CarePlanNutrition;
+using AwesomeCare.Admin.Services.PersonalHygiene;
+using AwesomeCare.Admin.Services.InfectionControl;
 
 namespace AwesomeCare.Admin
 {
@@ -880,6 +882,18 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICarePlanNutritionService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("careplanhygiene", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPersonalHygieneService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("infectioncontrol", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IInfectionControlService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

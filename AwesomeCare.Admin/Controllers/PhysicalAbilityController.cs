@@ -50,6 +50,7 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
+
         public async Task<IActionResult> View(int PhysicalAbilityId)
         {
             var putEntity = await GetPhysicalAbility(PhysicalAbilityId);
