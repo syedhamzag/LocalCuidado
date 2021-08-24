@@ -1159,6 +1159,7 @@
                                         </table>
                                     </div>
                                 </div>
+
                                 <div class="tab-pane" id="health">
                                     <div class="header">
                                     </div>
@@ -1178,7 +1179,9 @@
                                                         <li class="dropdown">
                                                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HealthLiving">New</a></li>
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HealthLiving">Create New</a></li>
+                                                                <li><a asp-action="Edit" asp-route-clientId="@Model.ClientId" asp-controller="HealthLiving">Edit</a></li>
+                                                                <li><a asp-action="View" asp-route-clientId="@Model.ClientId" asp-controller="HealthLiving">View</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
@@ -1191,18 +1194,18 @@
                                                                 <th>Review Date</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody>s
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.CP_PreDate
-                                            </td>
-                                            <td>
-                                                @item.CP_ReviewDate
-                                            </td>
-                                        </tr>
-                                    }*@
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1213,7 +1216,9 @@
                                                         <li class="dropdown">
                                                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthAndMedication">New</a></li>
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthAndMedication">Create New</a></li>
+                                                                <li><a asp-action="Edit" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthAndMedication">Edit</a></li>
+                                                                <li><a asp-action="View" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthAndMedication">View</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
@@ -1228,16 +1233,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.CP_PreDate
-                                            </td>
-                                            <td>
-                                                @item.CP_ReviewDate
-                                            </td>
-                                        </tr>
-                                    }*@
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1248,7 +1253,9 @@
                                                         <li class="dropdown">
                                                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Balance">New</a></li>
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Balance">Create New</a></li>
+                                                                <li><a asp-action="Edit" asp-route-clientId="@Model.ClientId" asp-controller="Balance">Edit</a></li>
+                                                                <li><a asp-action="View" asp-route-clientId="@Model.ClientId" asp-controller="Balance">View</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
@@ -1283,7 +1290,9 @@
                                                         <li class="dropdown">
                                                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PhysicalAbility">New</a></li>
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PhysicalAbility">Create New</a></li>
+                                                                <li><a asp-action="Edit" asp-route-clientId="@Model.ClientId" asp-controller="PhysicalAbility">Edit</a></li>
+                                                                <li><a asp-action="View" asp-route-clientId="@Model.ClientId" asp-controller="PhysicalAbility">View</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
@@ -1298,16 +1307,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.CP_PreDate
-                                            </td>
-                                            <td>
-                                                @item.CP_ReviewDate
-                                            </td>
-                                        </tr>
-                                    }*@
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1318,7 +1327,9 @@
                                                         <li class="dropdown">
                                                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthCondition">New</a></li>
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthCondition">Create New</a></li>
+                                                                <li><a asp-action="Edit" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthCondition">Edit</a></li>
+                                                                <li><a asp-action="View" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthCondition">View</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
@@ -1333,16 +1344,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.CP_PreDate
-                                            </td>
-                                            <td>
-                                                @item.CP_ReviewDate
-                                            </td>
-                                        </tr>
-                                    }*@
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1353,7 +1364,9 @@
                                                         <li class="dropdown">
                                                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HistoryOfFall">New</a></li>
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HistoryOfFall">Create New</a></li>
+                                                                <li><a asp-action="Edit" asp-route-clientId="@Model.ClientId" asp-controller="HistoryOfFall">Edit</a></li>
+                                                                <li><a asp-action="View" asp-route-clientId="@Model.ClientId" asp-controller="HistoryOfFall">View</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
@@ -1368,16 +1381,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.CP_PreDate
-                                            </td>
-                                            <td>
-                                                @item.CP_ReviewDate
-                                            </td>
-                                        </tr>
-                                    }*@
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CP_PreDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CP_ReviewDate
+                                                                    </td>
+                                                                </tr>
+                                                            }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1385,13 +1398,16 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="tab-pane" id="nutrition">
                                     <div class="header">
                                         <ul class="header-dropdown">
                                             <li class="dropdown">
                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                 <ul class="dropdown-menu dropdown-menu-right">
-                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CarePlanNutrition">New</a></li>
+                                                    <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CarePlanNutrition">Create New</a></li>
+                                                    <li><a asp-action="Edit" asp-route-clientId="@Model.ClientId" asp-controller="CarePlanNutrition">Edit</a></li>
+                                                    <li><a asp-action="View" asp-route-clientId="@Model.ClientId" asp-controller="CarePlanNutrition">View</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
@@ -1420,9 +1436,6 @@
                                         </table>
                                     </div>
                                 </div>
-
-
-
 
                                 <div class="tab-pane" id="hygiene">
                                     <div class="header">

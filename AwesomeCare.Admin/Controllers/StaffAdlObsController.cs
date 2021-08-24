@@ -193,8 +193,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.Attach != null)
             {
+                
                 string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_TargetINR_", model.ClientId);
+                string filename = string.Concat(folder, "_TargetINR_", model.ClientId,DateTime.Now.ToString());
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
                 model.Attachment = path;
             }

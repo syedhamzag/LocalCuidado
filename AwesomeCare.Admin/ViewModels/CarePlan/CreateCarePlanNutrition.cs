@@ -9,6 +9,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
     {
         public int NutritionId { get; set; }
         public int ClientId { get; set; }
+        public string ClientName { get; set; }
         public int FoodStorage { get; set; }
         public string ServingMeal { get; set; }
         public string WhenRestock { get; set; }

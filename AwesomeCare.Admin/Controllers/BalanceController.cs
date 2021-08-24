@@ -52,21 +52,21 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
-        public async Task<IActionResult> View(int BalanceId)
+        public async Task<IActionResult> View(int balanceId)
         {
-            var putEntity = await GetBalance(BalanceId);
+            var putEntity = await GetBalance(balanceId);
             return View(putEntity);
         }
 
-        public async Task<IActionResult> Edit(int BalanceId)
+        public async Task<IActionResult> Edit(int balanceId)
         {
-            var putEntity = await GetBalance(BalanceId);
+            var putEntity = await GetBalance(balanceId);
             return View(putEntity);
         }
 
-        public async Task<CreateBalance> GetBalance(int BalanceId)
+        public async Task<CreateBalance> GetBalance(int balanceId)
         {
-            var balance = await _balanceService.Get(BalanceId);
+            var balance = await _balanceService.Get(balanceId);
             var putEntity = new CreateBalance
             {
                 Description = balance.Description,

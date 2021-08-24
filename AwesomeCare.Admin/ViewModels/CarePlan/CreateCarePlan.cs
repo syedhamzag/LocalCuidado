@@ -16,9 +16,13 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public string ActionName { get; set; } = "Save";
         public CreateCarePlan()
         {
-            TestList = new List<SelectListItem>();
+            Individuality = new List<SelectListItem>();
+            RightsAndRespect = new List<SelectListItem>();
+            Choice = new List<SelectListItem>();
+            DignityAndPrivacy = new List<SelectListItem>();
+            Partnership = new List<SelectListItem>();
             IndicatorList = new List<SelectListItem>();
-            FocusList = new List<SelectListItem>();
+            FocusList = new Dictionary<string, List<SelectListItem>>();
             StaffList = new List<SelectListItem>();
             GetEquipment = new List<GetEquipment>();
             LandLogList = new List<SelectListItem>();
@@ -34,9 +38,13 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<GetEquipment> GetEquipment { get; set; }
         public List<GetPersonCentred> GetPersonCentred { get; set; }
 
-        public List<SelectListItem> TestList { get; set; }
+        public List<SelectListItem> Individuality { get; set; }
+        public List<SelectListItem> RightsAndRespect { get; set; }
+        public List<SelectListItem> Choice { get; set; }
+        public List<SelectListItem> DignityAndPrivacy { get; set; }
+        public List<SelectListItem> Partnership { get; set; }
         public List<SelectListItem> StaffList { get; set; }
-        public List<SelectListItem> FocusList { get; set; }
+        public Dictionary<string,List<SelectListItem>> FocusList { get; set; }
         public List<SelectListItem> IndicatorList { get; set; }
         public List<SelectListItem> LandLogList { get; set; }
         public List<SelectListItem> KeyLogList { get; set; }
@@ -44,8 +52,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<SelectListItem> ClassList { get; set; }
 
         public string ClientName { get; set; }
-        public int EquipmentCount { get; set; } = 1;
-        public int PersonCentreCount { get; set; } = 1;
+        public int EquipmentCount { get; set; } = 0;
+        public int PersonCentreCount { get; set; } = 5;
 
         #region Personal Detail
         public int PersonalDetailId { get; set; }
@@ -152,6 +160,5 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public DateTime RA_ReviewDate { get; set; }
         #endregion
 
-        public int BSCheck { get; set; }
     }
 }
