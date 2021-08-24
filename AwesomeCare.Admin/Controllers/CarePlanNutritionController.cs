@@ -61,5 +61,83 @@ namespace AwesomeCare.Admin.Controllers
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New CarePlan Nutrition successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
+
+
+        public async Task<IActionResult> View(int NutritionId)
+        {
+            var putEntity = await GetNutrition(NutritionId);
+            return View(putEntity);
+        }
+
+        public async Task<IActionResult> Edit(int NutritionId)
+        {
+            var putEntity = await GetNutrition(NutritionId);
+            return View(putEntity);
+        }
+
+        public async Task<CreateCarePlanNutrition> GetNutrition(int NutritionId)
+        {
+            var nutrition = await _nutritionService.Get(NutritionId);
+            var putEntity = new CreateCarePlanNutrition
+            {
+                AvoidFood = nutrition.AvoidFood,
+                DrinkType = nutrition.DrinkType,
+                EatingDifficulty = nutrition.EatingDifficulty,
+                ClientId = nutrition.ClientId,
+                FoodIntake = nutrition.FoodIntake,
+                FoodStorage = nutrition.FoodStorage,
+                MealPreparation = nutrition.MealPreparation,
+                NutritionId = nutrition.NutritionId,
+                RiskMitigations = nutrition.RiskMitigations,
+                ServingMeal = nutrition.ServingMeal,
+                SpecialDiet = nutrition.SpecialDiet,
+                ThingsILike = nutrition.ThingsILike,
+                WhenRestock = nutrition.WhenRestock,
+                WhoRestock = nutrition.WhoRestock,
+            };
+            return putEntity;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(CreateCarePlanNutrition model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var client = await _clientService.GetClient(model.ClientId);
+                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                return View(model);
+            }
+
+            PutCarePlanNutrition put = new PutCarePlanNutrition();
+
+            put.AvoidFood = model.AvoidFood;
+            put.DrinkType = model.DrinkType;
+            put.EatingDifficulty = model.EatingDifficulty;
+            put.ClientId = model.ClientId;
+            put.FoodIntake = model.FoodIntake;
+            put.FoodStorage = model.FoodStorage;
+            put.MealPreparation = model.MealPreparation;
+            put.NutritionId = model.NutritionId;
+            put.RiskMitigations = model.RiskMitigations;
+            put.ServingMeal = model.ServingMeal;
+            put.SpecialDiet = model.SpecialDiet;
+            put.ThingsILike = model.ThingsILike;
+            put.WhenRestock = model.WhenRestock;
+            put.WhoRestock = model.WhoRestock;
+
+            var entity = await _nutritionService.Put(put);
+            SetOperationStatus(new Models.OperationStatus
+            {
+                IsSuccessful = entity.IsSuccessStatusCode,
+                Message = entity.IsSuccessStatusCode ? "Successful" : "Operation failed"
+            });
+            if (entity.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Reports");
+            }
+            return View(model);
+
+        }
     }
 }

@@ -89,29 +89,29 @@ namespace AwesomeCare.Admin.Controllers
 
         public async Task<IActionResult> Index(int clientId)
         {
-            var client = await _clientService.GetClientDetail();
+            //var client = await _clientService.GetClientDetail();
             CreateCarePlan model = new CreateCarePlan();
-            model.ClientId = clientId;
-            var bases1 = await _baseRecord.GetBaseRecord();
-            var id1 = bases1.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
-            var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
-            model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+            //model.ClientId = clientId;
+            //var bases1 = await _baseRecord.GetBaseRecord();
+            //var id1 = bases1.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
+            //var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
+            //model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
             
-            var bases2 = await _baseRecord.GetBaseRecord();
-            var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
-            var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
-            model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+            //var bases2 = await _baseRecord.GetBaseRecord();
+            //var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
+            //var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
+            //model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-            var staffs = await _staffService.GetStaffs();
-            model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+            //var staffs = await _staffService.GetStaffs();
+            //model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
 
-            var care = await _careService.Get(model.ClientId);
-            if (care != null)
-            {
-                model = Get(model.ClientId);
-                model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-                model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-            }
+            //var care = await _careService.Get(model.ClientId);
+            //if (care != null)
+            //{
+            //    model = Get(model.ClientId);
+            //    model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+            //    model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+            //}
             return View(model);
         }
 
@@ -127,10 +127,10 @@ namespace AwesomeCare.Admin.Controllers
                 var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
                 model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-                var bases2 = await _baseRecord.GetBaseRecord();
-                var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
-                var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
-                model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                //var bases2 = await _baseRecord.GetBaseRecord();
+                //var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
+                //var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
+                //model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
                 var staffs = await _staffService.GetStaffs();
                 model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();

@@ -52,18 +52,14 @@ namespace AwesomeCare.Admin.Controllers
         {
             var client = await _clientService.GetClientDetail();
             CreateCarePlan model = new CreateCarePlan();
+            model.GetPersonCentred = new List<GetPersonCentred>();
+            model.GetEquipment = new List<GetEquipment>();
             model.ClientId = clientId;
             var bases = await _baseRecord.GetBaseRecord();
 
             var id1 = bases.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
             var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
             model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-
-
-            var id2 = bases.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
-            var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
-            model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-
 
             var id3 = bases.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
             var items3 = await _baseRecord.GetBaseRecordWithItems(id3);
@@ -77,7 +73,40 @@ namespace AwesomeCare.Admin.Controllers
 
             var baseClass = bases.Where(s => s.KeyName == "Class").FirstOrDefault().BaseRecordId;
             var classItems = await _baseRecord.GetBaseRecordWithItems(baseClass);
-            model.LandLogList = items4.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+            model.ClassList = classItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+
+            foreach (var item in model.ClassList)
+            {
+                var child = bases.Where(s => s.KeyName == item.Text).FirstOrDefault().BaseRecordId;
+                var childItems = await _baseRecord.GetBaseRecordWithItems(child);
+
+                if (item.Text.ToString() == "Individuality")
+                {
+                    model.Individuality = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text,model.Individuality);
+                }
+                if (item.Text.ToString() == "RightsAndRespect")
+                {
+                    model.RightsAndRespect= childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text,model.RightsAndRespect);
+                }
+                if (item.Text.ToString() == "Choice")
+                {
+                    model.Choice = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text,model.Choice);
+                }
+                if (item.Text.ToString() == "DignityAndPrivacy")
+                {
+                    model.DignityAndPrivacy = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text,model.DignityAndPrivacy);
+                }
+                if (item.Text.ToString() == "Partnership")
+                {
+                    model.Partnership = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text,model.Partnership);
+                }
+
+            }
 
             var staffs = await _staffService.GetStaffs();
             model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
@@ -90,7 +119,6 @@ namespace AwesomeCare.Admin.Controllers
             if (pdetail != null)
             {
                 model = Get(model.ClientId);
-                model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
                 model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
             }
             return View(model);
@@ -103,30 +131,27 @@ namespace AwesomeCare.Admin.Controllers
             if (model == null || !ModelState.IsValid)
             {
                 var client = await _clientService.GetClientDetail();
-                var bases1 = await _baseRecord.GetBaseRecord();
-                var id1 = bases1.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
+                var bases = await _baseRecord.GetBaseRecord();
+                var id1 = bases.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
                 var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
                 model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-                var bases2 = await _baseRecord.GetBaseRecord();
-                var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
-                var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
-                model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-                var bases3 = await _baseRecord.GetBaseRecord();
-                var id3 = bases3.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
+                //var id2 = bases.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
+                //var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
+                //model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+
+
+                var id3 = bases.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
                 var items3 = await _baseRecord.GetBaseRecordWithItems(id3);
                 model.KeyLogList = items3.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-                var bases4 = await _baseRecord.GetBaseRecord();
-                var id4 = bases4.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
+
+                var id4 = bases.Where(s => s.KeyName == "LogMethod").FirstOrDefault().BaseRecordId;
                 var items4 = await _baseRecord.GetBaseRecordWithItems(id4);
                 model.LandLogList = items4.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
-                var bases5 = await _baseRecord.GetBaseRecord();
-                var id5 = bases5.Where(s => s.KeyName == "Class").FirstOrDefault().BaseRecordId;
-                var items5 = await _baseRecord.GetBaseRecordWithItems(id5);
-                model.TestList = items5.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+
 
                 var staffs = await _staffService.GetStaffs();
                 model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
@@ -179,6 +204,7 @@ namespace AwesomeCare.Admin.Controllers
             pdetail.ConsentLandline.PersonalDetailId = model.PersonalDetailId;
             pdetail.ConsentLandline.LandlineId = model.LandLineId;
             pdetail.ConsentLandline.Signature = model.LandLineSignature;
+            pdetail.ConsentLandline.Name = model.LandName;
             pdetail.ConsentLandline.Date = model.LandLineDate;
             pdetail.ConsentLandline.LogMethod = model.LandLineLogMethod.Select(o => new PostConsentLandlineLog { BaseRecordId = o, LandlineId = model.LandLineId }).ToList();
             #endregion
@@ -189,7 +215,6 @@ namespace AwesomeCare.Admin.Controllers
                 PostEquipment eq = new PostEquipment();
                 string ImageId = "Image";
                 var Image = formcollection.Files.GetFile(ImageId);
-                var PersonalDetailId = int.Parse(formcollection["PersonalDetailId"][i]);
                 var Location = int.Parse(formcollection["Location"][i]);
                 var Name = int.Parse(formcollection["Name"][i]);
                 var Type = int.Parse(formcollection["Type"][i]);
@@ -198,6 +223,7 @@ namespace AwesomeCare.Admin.Controllers
                 var Status = int.Parse(formcollection["Status"][i]);
                 var PersonToAct = int.Parse(formcollection["PersonToAct"][i]);
                 string path = "";
+                #region Attachment
                 if (Image != null)
                 {
                     string folder = "clientcomplain";
@@ -208,8 +234,8 @@ namespace AwesomeCare.Admin.Controllers
                 {
                     path = "No Image";
                 }
-                
-                eq.PersonalDetailId = PersonalDetailId;
+                #endregion
+
                 eq.Location = Location;
                 eq.Name = Name;
                 eq.Type = Type;
@@ -263,7 +289,6 @@ namespace AwesomeCare.Admin.Controllers
                 pc.Focus = ex;
 
                 pcentre.Add(pc);
-
             }
             #endregion
 

@@ -193,7 +193,7 @@ namespace AwesomeCare.API.Controllers
                                                                                        ValueName = b.ValueName
                                                                                    }).ToList()
                                                                   }).ToList(),
-                                         Equipment = (from c in _equipmentRepository.Table
+                                               Equipment = (from c in _equipmentRepository.Table
                                                             where c.PersonalDetailId == p.PersonalDetailId
                                                             select new GetEquipment
                                                             {
@@ -252,7 +252,6 @@ namespace AwesomeCare.API.Controllers
                                                                              where com.PersonCentredId == c.PersonCentredId
                                                                              select new GetPersonCentredFocus
                                                                              {
-
                                                                                  BaseRecordId = com.BaseRecordId,
                                                                                  ValueName = b.ValueName
                                                                              }).ToList()

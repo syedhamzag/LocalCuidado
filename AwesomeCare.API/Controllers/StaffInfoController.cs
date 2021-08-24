@@ -28,6 +28,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class StaffInfoController : ControllerBase
@@ -216,8 +217,8 @@ namespace AwesomeCare.API.Controllers
             //    .Include(c => c.Trainings)
             //    .FirstOrDefaultAsync(s => s.StaffPersonalInfoId == id);
 
-            var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
-            var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
+            //var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
+            //var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
             // var teamEntity = _dbContext.Set<StaffWorkTeam>();
             // var profile = Mapper.Map<GetStaffProfile>(staffDetails);
 
@@ -312,65 +313,57 @@ namespace AwesomeCare.API.Controllers
                                                      Training = t.Training
                                                  }).ToList(),
                                     WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
-                                    RegulatoryContacts = (from rc in st.RegulatoryContact
-                                                          join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
-                                                          join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId
-                                                          select new GetStaffRegulatoryContact
-                                                          {
-                                                              BaseRecordItemId = bitem.BaseRecordItemId,
-                                                              DatePerformed = rc.DatePerformed,
-                                                              DueDate = rc.DueDate,
-                                                              Evidence = rc.Evidence,
-                                                              RegulatoryContact = bitem.ValueName,
-                                                              StaffPersonalInfoId = rc.StaffPersonalInfoId,
-                                                              StaffRegulatoryContactId = rc.StaffRegulatoryContactId,
-                                                              AddLink = bitem.AddLink,
-                                                              HasGoogleForm = bitem.HasGoogleForm,
-                                                              ViewLink = bitem.ViewLink
-                                                          }).ToList(),
-                                    GetStaffAdlObs = (from s in _staffAdlObs.Table
-                                                      select new GetStaffAdlObs 
+                                    GetStaffAdlObs = (from adl in _staffAdlObs.Table
+                                                      where adl.StaffId == st.StaffPersonalInfoId
+                                                      select new GetStaffAdlObs
                                                       {
-                                                        ActionRequired = s.ActionRequired,
-                                                        Attachment = s.Attachment
+                                                          ActionRequired = adl.ActionRequired,
+                                                          Attachment = adl.Attachment
                                                       }).ToList(),
                                     GetStaffMedComp = (from s in _staffmedcomp.Table
-                                                      select new GetStaffMedComp
-                                                      {
-                                                          ActionRequired = s.ActionRequired,
-                                                          Attachment = s.Attachment
-                                                      }).ToList(),
-                                    GetStaffKeyWorkerVoice = (from s in _staffkeyworker.Table
-                                                      select new GetStaffKeyWorkerVoice
-                                                      {
-                                                          ActionRequired = s.ActionRequired,
-                                                          Attachment = s.Attachment
-                                                      }).ToList(),
+                                                       where s.StaffId == st.StaffPersonalInfoId
+                                                       select new GetStaffMedComp
+                                                       {
+                                                           ActionRequired = s.ActionRequired,
+                                                           Attachment = s.Attachment
+                                                       }).ToList(),
+                                    GetStaffKeyWorkerVoice = (from s in st.StaffKeyWorkerVoice
+                                                              where s.StaffId == st.StaffPersonalInfoId
+                                                              select new GetStaffKeyWorkerVoice
+                                                              {
+                                                                  ActionRequired = s.ActionRequired,
+                                                                  Attachment = s.Attachment
+                                                              }).ToList(),
                                     GetStaffOneToOne = (from s in _staffonetoone.Table
-                                                      select new GetStaffOneToOne
-                                                      {
-                                                          ActionRequired = s.ActionRequired,
-                                                          Attachment = s.Attachment
-                                                      }).ToList(),
+                                                        where s.StaffId == st.StaffPersonalInfoId
+                                                        select new GetStaffOneToOne
+                                                        {
+                                                            ActionRequired = s.ActionRequired,
+                                                            Attachment = s.Attachment
+                                                        }).ToList(),
                                     GetStaffReference = (from s in _staffreference.Table
-                                                      select new GetStaffReference
-                                                      {
-                                                          Relationship = s.Relationship,
-                                                          Attachment = s.Attachment
-                                                      }).ToList(),
+                                                         where s.StaffId == st.StaffPersonalInfoId
+                                                         select new GetStaffReference
+                                                         {
+                                                             Relationship = s.Relationship,
+                                                             Attachment = s.Attachment
+                                                         }).ToList(),
                                     GetStaffSpotCheck = (from s in _staffspotcheck.Table
-                                                      select new GetStaffSpotCheck
-                                                      {
-                                                          ActionRequired = s.ActionRequired,
-                                                          Attachment = s.Attachment
-                                                      }).ToList(),
+                                                         where s.StaffId == st.StaffPersonalInfoId
+                                                         select new GetStaffSpotCheck
+                                                         {
+                                                             ActionRequired = s.ActionRequired,
+                                                             Attachment = s.Attachment
+                                                         }).ToList(),
                                     GetStaffSupervisionAppraisal = (from s in _staffsupervision.Table
-                                                      select new GetStaffSupervisionAppraisal
-                                                      {
-                                                          ActionRequired = s.ActionRequired,
-                                                          Attachment = s.Attachment
-                                                      }).ToList(),
+                                                                    where s.StaffId == st.StaffPersonalInfoId
+                                                                    select new GetStaffSupervisionAppraisal
+                                                                    {
+                                                                        ActionRequired = s.ActionRequired,
+                                                                        Attachment = s.Attachment
+                                                                    }).ToList(),
                                     GetStaffSurvey = (from s in _staffsurvey.Table
+                                                      where s.StaffId == st.StaffPersonalInfoId
                                                       select new GetStaffSurvey
                                                       {
                                                           ActionRequired = s.ActionRequired,
