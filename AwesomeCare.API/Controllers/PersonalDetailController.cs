@@ -30,6 +30,7 @@ namespace AwesomeCare.API.Controllers
     [ApiController]
     public class PersonalDetailController : ControllerBase
     {
+        private AwesomeCareDbContext _dbContext;
         private IGenericRepository<PersonalDetail> _PersonalDetailRepository;
         private IGenericRepository<Capacity> _capacityRepository;
         private IGenericRepository<CapacityIndicator> _indicatorRepository;
@@ -51,7 +52,7 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<ConsentData> consentDataRepository, IGenericRepository<ConsentLandLine> consentLandLineRepository,IGenericRepository<Equipment> equipmentRepository,
             IGenericRepository<KeyIndicators> keyIndicatorsRepository, IGenericRepository<Personal> personalRepository, IGenericRepository<PersonCentred> personCenteredRepository, 
             IGenericRepository<Review> reviewRepository, IGenericRepository<PersonCentredFocus> focusRepository, IGenericRepository<KeyIndicatorLog> keylogRepository,
-            IGenericRepository<ConsentLandlineLog> landlogRepository)
+            IGenericRepository<ConsentLandlineLog> landlogRepository,  AwesomeCareDbContext dbContext)
         {
             _PersonalDetailRepository = PersonalDetailRepository;
             _capacityRepository = capacityRepository;
@@ -68,6 +69,7 @@ namespace AwesomeCare.API.Controllers
             _focusRepository = focusRepository;
             _landlogRepository = landlogRepository;
             _keylogRepository = keylogRepository;
+            _dbContext = dbContext;
         }
         #region PersonalDetail
         /// <summary>
@@ -112,7 +114,63 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+            foreach (var model in models.PersonCentred)
+            {
+                var entity = _dbContext.Set<PersonCentredFocus>();
+                var filterentity = entity.Where(c => c.PersonCentredId == model.Focus.FirstOrDefault().PersonCentredId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
+                }
+            }
+
+            foreach (var model in models.Capacity.Indicator)
+            {
+                var entity = _dbContext.Set<CapacityIndicator>();
+                var filterentity = entity.Where(c => c.CapacityId == model.CapacityId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            foreach (var model in models.ConsentLandline.LogMethod)
+            {
+                var entity = _dbContext.Set<ConsentLandlineLog>();
+                var filterentity = entity.Where(c => c.LandlineId == model.LandlineId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            foreach (var model in models.KeyIndicators.LogMethod)
+            {
+                var entity = _dbContext.Set<KeyIndicatorLog>();
+                var filterentity = entity.Where(c => c.KeyId == model.KeyId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
+
+                }
+            }
+
+            _dbContext.SaveChanges();
             var PersonalDetail = Mapper.Map<PersonalDetail>(models);
             await _PersonalDetailRepository.UpdateEntity(PersonalDetail);
             return Ok();
