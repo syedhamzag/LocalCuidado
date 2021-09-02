@@ -89,7 +89,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getPhysicalAbility = await (from c in _physicalAbilityRepository.Table
-                                           where c.ClientId == id.Value
+                                           where c.PhysicalId == id.Value
                                            select new GetPhysicalAbility
                                            {
                                                 ClientId = c.ClientId,

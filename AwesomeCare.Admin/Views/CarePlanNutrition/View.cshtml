@@ -1,0 +1,121 @@
+﻿@using AwesomeCare.Admin.ViewModels.CarePlan;
+@model CreateCarePlanNutrition
+@{
+    ViewData["Title"] = "Create Nutrition";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+                <h2></h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="CarePlanNutrition" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <input type="hidden" asp-for="NutritionId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Food Storage</label>
+                                    <baserecord asp-key="Food_Storage" asp-for="FoodStorage" asp-items="null" />
+                                    <span asp-validation-for="FoodStorage" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Served My Meal</label>
+                                    <input type="text" asp-for="ServingMeal" class="form-control" readonly/>
+                                    <span asp-validation-for="ServingMeal" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">When Restock</label>
+                                    <input type="text" asp-for="WhenRestock" class="form-control" readonly/>
+                                    <span asp-validation-for="WhenRestock" class="text danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Who Restocks </label>
+                                    <baserecord asp-key="Who_Restocks" asp-for="WhoRestock" asp-items="null" />
+                                    <span asp-validation-for="WhoRestock" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Special Diet</label>
+                                    <input type="text" asp-for="SpecialDiet" class="form-control" readonly/>
+                                    <span asp-validation-for="SpecialDiet" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Drink Type</label>
+                                    <input type="text" asp-for="DrinkType" class="form-control" readonly/>
+                                    <span asp-validation-for="DrinkType" class="text danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Food Avoid</label>
+                                    <input type="text" asp-for="AvoidFood" class="form-control" readonly/>
+                                    <span asp-validation-for="AvoidFood" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Things I Like To Have Around</label>
+                                    <baserecord asp-key="Things_I_Like_To_Have_Around" asp-for="ThingsILike" asp-items="null" />
+                                    <span asp-validation-for="ThingsILike" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Fruits Intake</label>
+                                    <baserecord asp-key="Fruits_Intake" asp-for="FoodIntake" asp-items="null" />
+                                    <span asp-validation-for="FoodIntake" class="text danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Meal Preparation</label>
+                                    <baserecord asp-key="Meal_Preparation" asp-for="MealPreparation" asp-items="null" />
+                                    <span asp-validation-for="MealPreparation" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Difficulties In Eating</label>
+                                    <baserecord asp-key="Difficulties_In_Eating" asp-for="EatingDifficulty" asp-items="null"/>
+                                    <span asp-validation-for="EatingDifficulty" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Risk Mitigations</label>
+                                    <input type="text" asp-for="RiskMitigations" class="form-control" readonly/>
+                                    <span asp-validation-for="RiskMitigations" class="text danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.custom-select').attr("disabled", "disabled");
+        });
+    </script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}

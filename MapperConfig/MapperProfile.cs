@@ -104,6 +104,7 @@ using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
 using AwesomeCare.DataTransferObject.DTOs.Health;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.PersonalHygiene;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
 
 namespace MapperConfig
 {
@@ -2329,6 +2330,15 @@ namespace MapperConfig
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<InfectionControl, GetInfectionControl>();
+            #endregion
+
+            #region ManagingTasks
+            CreateMap<PutManagingTasks, ManagingTasks>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostManagingTasks, ManagingTasks>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<ManagingTasks, GetManagingTasks>();
             #endregion
         }
     }

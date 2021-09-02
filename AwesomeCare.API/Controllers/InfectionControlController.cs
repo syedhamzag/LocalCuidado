@@ -89,7 +89,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getCarePlanHygiene = await (from c in _infectionRepository.Table
-                                           where c.ClientId == id.Value
+                                           where c.InfectionId == id.Value
                                            select new GetInfectionControl
                                            {
                                                ClientId = c.ClientId,

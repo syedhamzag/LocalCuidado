@@ -37,7 +37,11 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
 
         public List<GetEquipment> GetEquipment { get; set; }
         public List<GetPersonCentred> GetPersonCentred { get; set; }
-
+        public List<int> Indfocus { get; set; }
+        public List<int> Rightfocus { get; set; }
+        public List<int> Choicefocus { get; set; }
+        public List<int> Dignityfocus { get; set; }
+        public List<int> Partnerfocus { get; set; }
         public List<SelectListItem> Individuality { get; set; }
         public List<SelectListItem> RightsAndRespect { get; set; }
         public List<SelectListItem> Choice { get; set; }
@@ -159,6 +163,5 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         [Required]
         public DateTime RA_ReviewDate { get; set; }
         #endregion
-
     }
 }

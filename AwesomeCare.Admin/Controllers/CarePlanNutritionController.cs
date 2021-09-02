@@ -62,7 +62,6 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 
-
         public async Task<IActionResult> View(int NutritionId)
         {
             var putEntity = await GetNutrition(NutritionId);
@@ -138,6 +137,36 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+
+        public async Task<IActionResult> Reports()
+        {
+            var entities = await _nutritionService.Get();
+
+            var client = await _clientService.GetClientDetail();
+            List<CreateCarePlanNutrition> reports = new List<CreateCarePlanNutrition>();
+            foreach (GetCarePlanNutrition item in entities)
+            {
+                var report = new CreateCarePlanNutrition();
+
+                report.AvoidFood = item.AvoidFood;
+                report.DrinkType = item.DrinkType;
+                report.EatingDifficulty = item.EatingDifficulty;
+                report.ClientId = item.ClientId;
+                report.FoodIntake = item.FoodIntake;
+                report.FoodStorage = item.FoodStorage;
+                report.MealPreparation = item.MealPreparation;
+                report.NutritionId = item.NutritionId;
+                report.RiskMitigations = item.RiskMitigations;
+                report.ServingMeal = item.ServingMeal;
+                report.SpecialDiet = item.SpecialDiet;
+                report.ThingsILike = item.ThingsILike;
+                report.WhenRestock = item.WhenRestock;
+                report.WhoRestock = item.WhoRestock;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                reports.Add(report);
+            }
+            return View(reports);
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿@using AwesomeCare.Admin.ViewModels.CarePlan.Health;
-@model List<CreateBalance>
+﻿@using AwesomeCare.Admin.ViewModels.CarePlan;
+@model List<CreateCarePlanNutrition>
 @{
     ViewData["Title"] = "Reports";
 }
@@ -8,7 +8,7 @@
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
             <div class="header">
-                <h2>All Balance</h2>
+                <h2>All CarePlan Nutrition</h2>
             </div>
             <div class="body">
                 <table class="table m-b-0 datatables">
@@ -16,8 +16,8 @@
                         <tr>
                             <th>#</th>
                             <th>Client Name</th>
-                            <th>Mobility</th>
-                            <th>Status</th>
+                            <th>Avoid Food</th>
+                            <th>Things I Like</th>
 
                             <th></th>
                         </tr>
@@ -28,16 +28,16 @@
                             <tr>
                                 <td>@item.index </td>
                                 <td>@item.data.ClientName </td>
-                                <td>@item.data.Mobility </td>
-                                <td>@item.data.Status </td>
+                                <td>@item.data.AvoidFood </td>
+                                <td>@item.data.ThingsILike </td>
 
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "Balance", new { balanceId = item.data.BalanceId }, new { @class = "dropdown-item" })
-                                            @Html.ActionLink("View", "View", "Balance", new { balanceId = item.data.BalanceId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("Edit", "Edit", "CarePlanNutrition", new { NutritionId = item.data.NutritionId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("View", "View", "CarePlanNutrition", new { NutritionId = item.data.NutritionId }, new { @class = "dropdown-item" })
                                         </div>
                                     </div>
                                 </td>
@@ -52,7 +52,7 @@
 <script type="text/javascript">
     function Setid(e) {
         var Id = e.id;
-        $('#BalanceId').val(Id);
+        $('#CarePlanNutritionId').val(Id);
     }
 </script>
 
