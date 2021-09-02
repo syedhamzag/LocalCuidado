@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AwesomeCare.DataAccess.Repositories;
-using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,71 +16,71 @@ namespace AwesomeCare.API.Controllers
     [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class BalanceController : ControllerBase
+    public class ManagingTasksController : ControllerBase
     {
-        private IGenericRepository<Balance> _balanceRepository;
+        private IGenericRepository<ManagingTasks> _taskRepository;
 
 
-        public BalanceController(IGenericRepository<Balance> balanceRepository)
+        public ManagingTasksController(IGenericRepository<ManagingTasks> taskRepository)
         {
-            _balanceRepository = balanceRepository;
+            _taskRepository = taskRepository;
         }
-        #region CarePlanHealth
+        #region CarePlanHygiene
         /// <summary>
-        /// Get All CarePlanHealth
+        /// Get All CarePlanHygiene
         /// </summary>
         /// <returns></returns>
         [HttpGet()]
-        [ProducesResponseType(type: typeof(List<GetBalance>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(List<GetManagingTasks>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Get()
         {
-            var getEntities = _balanceRepository.Table.ToList();
+            var getEntities = _taskRepository.Table.ToList();
             return Ok(getEntities);
         }
         /// <summary>
-        /// Create CarePlanHealth
+        /// Create CarePlanHygiene
         /// </summary>
-        /// <param name="postCarePlanHealth"></param>
+        /// <param name="postCarePlanHygiene"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostBalance postCarePlanHealth)
+        public async Task<IActionResult> Create([FromBody] PostManagingTasks postCarePlanHygiene)
         {
-            if (postCarePlanHealth == null || !ModelState.IsValid)
+            if (postCarePlanHygiene == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var CarePlanHealth = Mapper.Map<Balance>(postCarePlanHealth);
-            await _balanceRepository.InsertEntity(CarePlanHealth);
+            var CarePlanHygiene = Mapper.Map<ManagingTasks>(postCarePlanHygiene);
+            await _taskRepository.InsertEntity(CarePlanHygiene);
             return Ok();
         }
         /// <summary>
-        /// Update CarePlanHealth
+        /// Update CarePlanHygiene
         /// </summary>
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PostBalance models)
+        public async Task<IActionResult> Put([FromBody] PostManagingTasks models)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var CarePlanHealth = Mapper.Map<Balance>(models);
-            await _balanceRepository.UpdateEntity(CarePlanHealth);
+            var CarePlanHygiene = Mapper.Map<ManagingTasks>(models);
+            await _taskRepository.UpdateEntity(CarePlanHygiene);
             return Ok();
 
         }
         /// <summary>
-        /// Get CarePlanHealth by ProgramId
+        /// Get CarePlanHygiene by ProgramId
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("Get/{id}")]
-        [ProducesResponseType(type: typeof(GetBalance), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(type: typeof(GetManagingTasks), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int? id)
@@ -88,20 +88,19 @@ namespace AwesomeCare.API.Controllers
             if (!id.HasValue)
                 return BadRequest("id Parameter is required");
 
-            var getCarePlanHealth = await (from c in _balanceRepository.Table
-                                           where c.BalanceId == id.Value
-                                           select new GetBalance
+            var getCarePlanHygiene = await (from c in _taskRepository.Table
+                                           where c.TaskId == id.Value
+                                           select new GetManagingTasks
                                            {
-                                               BalanceId = c.BalanceId,
-                                               Description = c.Description,
+                                               TaskId = c.TaskId,
+                                               Help = c.Help,
                                                ClientId = c.ClientId,
-                                               Mobility = c.Mobility,
-                                               Name = c.Name,
+                                               Task = c.Task,
                                                Status = c.Status
 
                                            }
                       ).FirstOrDefaultAsync();
-            return Ok(getCarePlanHealth);
+            return Ok(getCarePlanHygiene);
         }
         #endregion
     }

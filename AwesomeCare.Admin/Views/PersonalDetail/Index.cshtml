@@ -23,66 +23,84 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="row">
-                            </div>
-                            <div class="btn-group form-group col-sm-2 col-xs-12 col-md-2 col-lg-2" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Add
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" id="individual">INDIVIDUALITY</a>
-                                    <a class="dropdown-item" id="rights">RIGHTS & RESPECT</a>
-                                    <a class="dropdown-item" id="choice">CHOICE</a>
-                                    <a class="dropdown-item" id="dignity">DIGNITY & PRIVACY</a>
-                                    <a class="dropdown-item" id="partnership">PARTNERSHIP</a>
+                                <div class="btn-group form-group col-sm-10 col-xs-12 col-md-10 col-lg-10" role="group"></div>
+                                <div class="btn-group form-group col-sm-2 col-xs-12 col-md-2 col-lg-2" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Add
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item" id="btnClass1">INDIVIDUALITY</a>
+                                        <a class="dropdown-item" id="btnClass2">RIGHTS & RESPECT</a>
+                                        <a class="dropdown-item" id="btnClass3">CHOICE</a>
+                                        <a class="dropdown-item" id="btnClass4">DIGNITY & PRIVACY</a>
+                                        <a class="dropdown-item" id="btnClass5">PARTNERSHIP</a>
+                                    </div>
                                 </div>
                             </div>
-                            <input type="hidden" asp-for="@Model.PersonCentreCount" value="@Model.PersonCentreCount" />
-                            <table class="table table-hover table-bordered" id="tblPersonCentered">
-                                <thead>
-                                    <tr>
-                                        <th>Class</th>
-                                        <th>Focus</th>
-                                        <th>Expected Support</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                <input type="hidden" asp-for="@Model.PersonCentreCount" value="@Model.PersonCentreCount" />
+                                <table class="table table-hover table-bordered" id="tblPersonCentered">
+                                    <thead>
+                                        <tr>
+                                            <th>Select</th>
+                                            <th>Class</th>
+                                            <th>Focus</th>
+                                            <th>Expected Support</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
-                                   @*@if (Model.GetPersonCentred.Count > 0)
-                                    {
-                                        @foreach (var equip in Model.GetPersonCentred)
-                                        {
-                                            <tr>
-                                                <td><baserecord asp-key="Class" asp-for="@Model.GetPersonCentred.FirstOrDefault().Class" asp-items="null" /></td>
-                                                <td><baserecord asp-key="Individuality" asp-for="@Model.GetPersonCentred.FirstOrDefault().Focus" asp-items="null" /></td>
-                                                <td><textarea asp-for="@Model.GetPersonCentred.FirstOrDefault().ExpSupport" class="form-control"></textarea></td>
-                                            </tr>
+                                        @if (Model.GetPersonCentred.Count > 0)
+                                         {
+                                               @foreach (var item in Model.GetPersonCentred)
+                                               {
+                                                    <tr>
+                                                        <td>
+                                                            <div class="fancy-checkbox">
+                                                                <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked")" id="@string.Concat("isChecked")" checked /><span><small> </small></span></label>
 
-                                        }
-                                    }
-                                    else
-                                    {*@
-                                        @foreach (var item in Model.ClassList)
+                                                            </div>
+                                                        </td>
+                                                        <td>@Model.FocusList.Select(s=>s.Key).FirstOrDefault()</td>
+
+                                                        <td><select asp-for="@Model.Indfocus" asp-items="@Model.FocusList.Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                        <td><textarea asp-for="@Model.GetPersonCentred.FirstOrDefault().ExpSupport" class="form-control"></textarea></td>
+                                                    </tr>
+
+                                               }
+                                         }
+                                        else
                                         {
-                                                <tr>
-                                                    <td><select asp-for="@Model.GetPersonCentred.FirstOrDefault().Class" class="selectpicker form-control">
-                                                        <option value="@item.Value">@item.Text</option>
-                                                        </select></td>
+                                            int i = 1;
+                                            @foreach (var item in Model.ClassList)
+                                            {
+
+                                                <tr id="@string.Concat("trClass",i)" style="display:none">
                                                     <td>
-                                                        <select asp-for="@Model.GetPersonCentred.FirstOrDefault().Focus" asp-items="@Model.FocusList.Where(s=>s.Key==item.Text.ToString()).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control">
+                                                        <div class="fancy-checkbox">
+                                                            <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" /><span><small> </small></span></label>
+
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <select id="@string.Concat("Class",i)" name="@string.Concat("Class",i)" class="selectpicker form-control">
+                                                            <option value="@item.Value">@item.Text</option>
                                                         </select>
                                                     </td>
-                                                    <td><textarea asp-for="@Model.GetPersonCentred.FirstOrDefault().ExpSupport" class="form-control"></textarea></td>
+                                                    <td>
+                                                        <select id="@string.Concat("Focus",i)" name="@string.Concat("Focus",i)" asp-items="@Model.FocusList.Where(s=>s.Key==item.Text.ToString()).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple>
+                                                        </select>
+                                                    </td>
+                                                    <td><textarea id="@string.Concat("ExpSupport",i)" name="@string.Concat("ExpSupport",i)" class="form-control"></textarea></td>
                                                 </tr>
-                                           
+                                                i++;
 
+                                            }
                                         }
 
-                                    @*}*@
-
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
                     <h4>Capacity</h4>
                     <div class="row">
@@ -127,12 +145,12 @@
                             <div class="row">
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Religion</label>
-                                    <input type="text" asp-for="Religion" class="form-control" />
+                                    <input type="text" asp-for="Religion" value="@Model.Religion" class="form-control" />
                                     <span asp-validation-for="Religion" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Nationality</label>
-                                    <input type="text" asp-for="Nationality" class="form-control" />
+                                    <input type="text" asp-for="Nationality" value="@Model.Nationality" class="form-control" />
                                     <span asp-validation-for="Nationality" class="text-danger"></span>
                                 </div>
                             </div>
@@ -251,7 +269,6 @@
                                                 <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList"></select></td>
                                                 <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
                                             </tr>
-
                                         }
                                     }
                                 </tbody>
@@ -406,11 +423,46 @@
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
     <script>
         $(function () {
-            var classtd = 'Yes';
-            var focustd = 'No';
-            var PersonCentredRow = new Array();
-            PersonCentredRow.push(classtd);
-            PersonCentredRow.push(focustd);
+            $('#btnClass1').on('click', function () {
+                $('#tblPersonCentered > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "trClass1") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            $('#btnClass2').on('click', function () {
+                $('#tblPersonCentered > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "trClass2") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            $('#btnClass3').on('click', function () {
+                $('#tblPersonCentered > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "trClass3") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            $('#btnClass4').on('click', function () {
+                $('#tblPersonCentered > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "trClass4") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
+            $('#btnClass5').on('click', function () {
+                $('#tblPersonCentered > tbody  > tr').each(function () {
+                    var Id = $(this)[0].id;
+                    if (Id == "trClass5") {
+                        $('#' + Id).show(1000);
+                    }
+                });
+            });
             var table = $('#tblEquipment').DataTable({
                 scrollCollapse: true,
                 select: {
@@ -419,16 +471,8 @@
                 searching: false, paging: false, info: false
             });
 
-            var PersonCentered = $('#tblPersonCentered').DataTable({
-                scrollCollapse: true,
-                select: {
-                    style: 'single'
-                },
-                searching: false, paging: false, info: false
-            });
-
             var counter = $("#EquipmentCount").val();
-            var counter1 = $("#PersonCentereCount").val();
+
 
             $('#Addrow').on('click', function () {
                 counter++;
@@ -436,16 +480,6 @@
                 clone.attr('id', 'row-' + counter);
                 table.rows.add(clone).draw();
                 $('#EquipmentCount').val(counter);
-
-            });
-            $('#Addrow2').on('click', function () {
-                counter1++;
-                PersonCentered.row.add([
-                    `<baserecord asp-key="Class" asp-for="Class" asp-items="null" />`,
-                    `<select asp-for="Focus" asp-items="${PersonCentredRow}" class="selectpicker form-control" data-live-search="true" multiple></select>`,
-                    `<textarea asp-for="ExpSupport" class="form-control"></textarea>`]).draw();
-                $('#PersonCentereCount').val(counter1);
-
 
             });
 
@@ -458,32 +492,13 @@
                     $(this).addClass('selected');
                 }
             });
-            $('#tblPersonCentered tbody').on('click', 'tr', function () {
-                if ($(this).hasClass('selected')) {
-                    $(this).removeClass('selected');
-                }
-                else {
-                    PersonCentered.$('tr.selected').removeClass('selected');
-                    $(this).addClass('selected');
-                }
-            });
+
             $('#Delrow').click(function () {
                 const id = table.row('.selected').id();
                 if (table.row('.selected').length > 0) {
                     const row = table.rows('.selected').remove().draw();
                     counter--;
                     $('#EquipmentCount').val(counter);
-                }
-                else {
-                    alert("Please select row for delete !");
-                }
-            });
-            $('#Delrow2').click(function () {
-                const id = PersonCentered.row('.selected').id();
-                if (PersonCentered.row('.selected').length > 0) {
-                    const row = PersonCentered.rows('.selected').remove().draw();
-                    counter1--;
-                    $('#PersonCentereCount').val(counter1);
                 }
                 else {
                     alert("Please select row for delete !");
