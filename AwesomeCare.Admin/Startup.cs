@@ -97,6 +97,7 @@ using AwesomeCare.Admin.Services.CarePlanNutrition;
 using AwesomeCare.Admin.Services.PersonalHygiene;
 using AwesomeCare.Admin.Services.InfectionControl;
 using AwesomeCare.Admin.Services.ManagingTasks;
+using AwesomeCare.Admin.Services.Dashboard;
 
 namespace AwesomeCare.Admin
 {
@@ -425,7 +426,7 @@ namespace AwesomeCare.Admin
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                     "{controller=Client}/{action=HomeCare}/{id?}").RequireAuthorization(apipolicyname);
+                     "{controller=Dashboard}/{action=Dashboard}").RequireAuthorization(apipolicyname);
             });
         }
 
@@ -901,6 +902,12 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IManagingTasksService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("dashboard", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IDashboardService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

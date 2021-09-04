@@ -17,6 +17,9 @@ namespace AwesomeCare.Admin.Services.Staff
         [Get("/StaffInfo/GetStaffs")]
         Task<List<GetStaffs>> GetStaffs();
 
+        [Get("/StaffInfo/")]
+        Task<List<GetStaffPersonalInfo>> GetAsync();
+
         [Get("/StaffInfo/{id}")]
         Task<GetStaffPersonalInfo> GetStaff(int id);
 
