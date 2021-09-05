@@ -104,6 +104,7 @@ using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
 using AwesomeCare.DataTransferObject.DTOs.Health;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.PersonalHygiene;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.OfficeLocation;
 
 namespace MapperConfig
 {
@@ -2329,6 +2330,16 @@ namespace MapperConfig
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<InfectionControl, GetInfectionControl>();
+            #endregion
+
+            #region OfficeLocation
+            CreateMap<PostOfficeLocation, OfficeLocation>()
+                .ForMember(dto => dto.OfficeLocationId, mem => mem.Ignore())
+                .ForMember(dto => dto.UniqueId, mem => mem.Ignore());
+
+            CreateMap<PutOfficeLocation, OfficeLocation>();
+
+            CreateMap<OfficeLocation, GetOfficeLocation>();
             #endregion
         }
     }

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<AwesomeCare.DataTransferObject.DTOs.OfficeLocation.GetOfficeLocation>
+
+@{
+    ViewData["Title"] = "Office Locations";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="NewOffice">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactPersonFullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactPersonPhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactPersonEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Latitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Longitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactPersonFullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactPersonPhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactPersonEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Latitude)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Longitude)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { companyId = item.OfficeLocationId }) |
+                    @Html.ActionLink("Details", "Details", new { companyId = item.OfficeLocationId }) 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

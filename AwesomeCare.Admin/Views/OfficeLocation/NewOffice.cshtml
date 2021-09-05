@@ -1,0 +1,58 @@
+﻿@model AwesomeCare.DataTransferObject.DTOs.OfficeLocation.PostOfficeLocation
+
+@{
+    ViewData["Title"] = "Register New Office";
+}
+
+
+
+<h4>Register New Company</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ContactPersonFullName" class="control-label"></label>
+                <input asp-for="ContactPersonFullName" class="form-control" />
+                <span asp-validation-for="ContactPersonFullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactPersonPhoneNumber" class="control-label"></label>
+                <input asp-for="ContactPersonPhoneNumber" class="form-control" />
+                <span asp-validation-for="ContactPersonPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactPersonEmail" class="control-label"></label>
+                <input asp-for="ContactPersonEmail" type="email" class="form-control" />
+                <span asp-validation-for="ContactPersonEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Latitude" class="control-label"></label>
+                <input asp-for="Latitude" class="form-control" />
+                <span asp-validation-for="Latitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Longitude" class="control-label"></label>
+                <input asp-for="Longitude" class="form-control" />
+                <span asp-validation-for="Longitude" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <textarea asp-for="Address" class="form-control" ></textarea>
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
