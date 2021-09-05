@@ -68,7 +68,11 @@ namespace AwesomeCare.API.Controllers
 
             var entity = Mapper.Map<OfficeLocation>(model);
             var officeLocation =await officeLocationRepository.InsertEntity(entity);
-            var getEntity = Mapper.Map<GetOfficeLocation>(officeLocation);
+            var uniqueId = $"CUI/OFF/{officeLocation.OfficeLocationId.ToString("D5")}";
+            officeLocation.UniqueId = uniqueId;
+            var updated = await officeLocationRepository.UpdateEntity(officeLocation);
+
+            var getEntity = Mapper.Map<GetOfficeLocation>(updated);
 
             return CreatedAtAction(nameof(Get), new { id = getEntity.OfficeLocationId }, getEntity);
         }

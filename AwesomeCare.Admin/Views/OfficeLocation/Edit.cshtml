@@ -1,7 +1,7 @@
-﻿@model AwesomeCare.DataTransferObject.DTOs.OfficeLocation.PostOfficeLocation
+﻿@model AwesomeCare.DataTransferObject.DTOs.OfficeLocation.PutOfficeLocation
 
 @{
-    ViewData["Title"] = "Register New Office";
+    ViewData["Title"] = "Edit Office Location";
 }
 
 
@@ -10,8 +10,12 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Register">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input asp-for="OfficeLocationId" type="hidden" />
+            <input asp-for="UniqueId" type="hidden" />
+
             <div class="form-group">
                 <label asp-for="ContactPersonFullName" class="control-label"></label>
                 <input asp-for="ContactPersonFullName" class="form-control" />
@@ -39,11 +43,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
-                <textarea asp-for="Address" class="form-control" ></textarea>
+                <textarea asp-for="Address" class="form-control"></textarea>
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Register" class="btn btn-default" />
+                <input type="submit" value="Update" class="btn btn-default" />
             </div>
         </form>
     </div>

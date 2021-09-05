@@ -11,15 +11,15 @@ namespace AwesomeCare.Admin.Services.OfficeLocation
    public interface IOfficeLocationService
     {
         [Get("/OfficeLocation")]
-        Task<List<GetOfficeLocation>> Get();
+        Task<List<GetOfficeLocation>> GetAsync();
 
         [Get("/OfficeLocation/{id}")]
-        Task<GetOfficeLocation> Get(int id);
+        Task<GetOfficeLocation> GetAsync(int id);
 
         [Post("/OfficeLocation")]
-        Task<GetOfficeLocation> Post([Body] PostOfficeLocation model);
+        Task<GetOfficeLocation> PostAsync([Body] PostOfficeLocation model);
 
         [Put("/OfficeLocation")]
-        Task<HttpResponseMessage> Put([Body] PutOfficeLocation model);
+        Task<HttpResponseMessage> PutAsync([Body] PutOfficeLocation model);
     }
 }
