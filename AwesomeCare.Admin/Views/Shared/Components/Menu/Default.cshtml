@@ -15,7 +15,7 @@
                 </ul>
             </div>
             <hr>
-            <ul class="row list-unstyled">
+            @*<ul class="row list-unstyled">
                 <li class="col-4">
                     <small>Exp</small>
                     <h6></h6>
@@ -28,7 +28,7 @@
                     <small>Clients</small>
                     <h6></h6>
                 </li>
-            </ul>
+            </ul>*@
         </div>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs">
@@ -69,6 +69,7 @@
                             <a href="javascript:void(0);" class="has-arrow"><i class="icon-user"></i><span>Admin</span> </a>
                             <ul>
                                 <li><a asp-controller="Admin" asp-action="BaseRecord">BaseRecord</a></li>
+                                <li><a asp-controller="OfficeLocation" asp-action="Index">Office Location</a></li>
                                 <li><a asp-controller="Admin" asp-action="InvolvingParty">Client Involving Party</a></li>
                                 <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
                                 <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
@@ -133,7 +134,7 @@
                                 <li><a asp-controller="StaffOneToOne" asp-action="Reports">One To One</a></li>
                                 <li><a asp-controller="StaffSupervisionAppraisal" asp-action="Reports">Supervision Appraisal</a></li>
                                 <li><a asp-controller="StaffReference" asp-action="Reports">Reference</a></li>
-                                <li><a asp-controller="OfficeLocation" asp-action="Index">Office Location</a></li>
+                                
                             </ul>
                         </li>
                         <li>
