@@ -97,6 +97,7 @@ using AwesomeCare.Admin.Services.CarePlanNutrition;
 using AwesomeCare.Admin.Services.PersonalHygiene;
 using AwesomeCare.Admin.Services.InfectionControl;
 using AwesomeCare.Admin.Services.OfficeLocation;
+using AwesomeCare.Admin.Services.ManagingTasks;
 
 namespace AwesomeCare.Admin
 {
@@ -903,6 +904,11 @@ namespace AwesomeCare.Admin
             }).AddTypedClient(r => RestService.For<IOfficeLocationService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
             
+            services.AddHttpClient("managingtask", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IManagingTasksService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
 }

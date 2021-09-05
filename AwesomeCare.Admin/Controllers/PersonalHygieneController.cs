@@ -23,6 +23,35 @@ namespace AwesomeCare.Admin.Controllers
             _clientService = clientService;
         }
 
+        public async Task<IActionResult> Reports()
+        {
+            var entities = await _phygieneService.Get();
+
+            var client = await _clientService.GetClientDetail();
+            List<CreatePersonalHygiene> reports = new List<CreatePersonalHygiene>();
+            foreach (GetPersonalHygiene item in entities)
+            {
+                var report = new CreatePersonalHygiene();
+                report.HygieneId = item.HygieneId;
+                report.ClientId = item.ClientId;
+                report.Cleaning = item.Cleaning;
+                report.CleaningFreq = item.CleaningFreq;
+                report.CleaningTools = item.CleaningTools;
+                report.DesiredCleaning = item.DesiredCleaning;
+                report.DirtyLaundry = item.DirtyLaundry;
+                report.DryLaundry = item.DryLaundry;
+                report.GeneralAppliance = item.GeneralAppliance;
+                report.Ironing = item.Ironing;
+                report.LaundryGuide = item.LaundryGuide;
+                report.LaundrySupport = item.LaundrySupport;
+                report.WashingMachine = item.WashingMachine;
+                report.WhoClean = item.WhoClean;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                reports.Add(report);
+            }
+            return View(reports);
+        }
+
         public async Task<IActionResult> Index(int clientId)
         {
             var model = new CreatePersonalHygiene();
@@ -67,5 +96,84 @@ namespace AwesomeCare.Admin.Controllers
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Balance successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
+
+        public async Task<IActionResult> Edit(int hygieneId)
+        {
+            var putEntity = await GetHygiene(hygieneId);
+            return View(putEntity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(CreatePersonalHygiene model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var client = await _clientService.GetClient(model.ClientId);
+                model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                return View(model);
+            }
+
+            PutPersonalHygiene put = new PutPersonalHygiene();
+
+            put.HygieneId = model.HygieneId;
+            put.ClientId = model.ClientId;
+            put.Cleaning = model.Cleaning;
+            put.CleaningFreq = model.CleaningFreq;
+            put.CleaningTools = model.CleaningTools;
+            put.DesiredCleaning = model.DesiredCleaning;
+            put.DirtyLaundry = model.DirtyLaundry;
+            put.DryLaundry = model.DryLaundry;
+            put.GeneralAppliance = model.GeneralAppliance;
+            put.Ironing = model.Ironing;
+            put.LaundryGuide = model.LaundryGuide;
+            put.LaundrySupport = model.LaundrySupport;
+            put.WashingMachine = model.WashingMachine;
+            put.WhoClean = model.WhoClean;
+
+            var entity = await _phygieneService.Put(put);
+            SetOperationStatus(new Models.OperationStatus
+            {
+                IsSuccessful = entity.IsSuccessStatusCode,
+                Message = entity.IsSuccessStatusCode ? "Successful" : "Operation failed"
+            });
+            if (entity.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Reports");
+            }
+            return View(model);
+
+        }
+
+        public async Task<IActionResult> View(int hygieneId)
+        {
+            var putEntity = await GetHygiene(hygieneId);
+            return View(putEntity);
+        }
+
+        public async Task<CreatePersonalHygiene> GetHygiene(int hygieneId)
+        {
+            var hygiene = await _phygieneService.Get(hygieneId);
+            var putEntity = new CreatePersonalHygiene
+            {
+            HygieneId = hygiene.HygieneId,
+            ClientId = hygiene.ClientId,
+            Cleaning = hygiene.Cleaning,
+            CleaningFreq = hygiene.CleaningFreq,
+            CleaningTools = hygiene.CleaningTools,
+            DesiredCleaning = hygiene.DesiredCleaning,
+            DirtyLaundry = hygiene.DirtyLaundry,
+            DryLaundry = hygiene.DryLaundry,
+            GeneralAppliance = hygiene.GeneralAppliance,
+            Ironing = hygiene.Ironing,
+            LaundryGuide = hygiene.LaundryGuide,
+            LaundrySupport = hygiene.LaundrySupport,
+            WashingMachine = hygiene.WashingMachine,
+            WhoClean = hygiene.WhoClean,
+        };
+            return putEntity;
+        }
+
+        
     }
 }

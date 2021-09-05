@@ -90,7 +90,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getCarePlanHealth = await (from c in _spmedsRepository.Table
-                                           where c.ClientId == id.Value
+                                           where c.HealthCondId == id.Value
                                            select new GetSpecialHealthCondition
                                            {
                                                ClientAction = c.ClientAction,

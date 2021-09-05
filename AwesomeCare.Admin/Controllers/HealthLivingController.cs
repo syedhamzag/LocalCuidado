@@ -67,9 +67,9 @@ namespace AwesomeCare.Admin.Controllers
             var putEntity = await GetHealth(healthLivingId);
             return View(putEntity);
         }
-        public async Task<IActionResult> Edit(int HealthAndLivingId)
+        public async Task<IActionResult> Edit(int healthLivingId)
         {
-            var putEntity = await GetHealth(HealthAndLivingId);
+            var putEntity = await GetHealth(healthLivingId);
             return View(putEntity);
         }
         public async Task<CreateHealthAndLiving> GetHealth(int healthLivingId)
