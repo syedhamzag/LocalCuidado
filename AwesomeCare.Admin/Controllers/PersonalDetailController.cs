@@ -153,12 +153,23 @@ namespace AwesomeCare.Admin.Controllers
                     }
 
                 }
-
+                int i = 1;
                 foreach (var item in model.GetPersonCentred)
                 {
-                    model.Indfocus = item.Focus.Select(s=>s.BaseRecordId).ToList();
+                    if (i == 1)
+                        model.Focus1 = item.Focus.Select(s=>s.BaseRecordId).ToList();
+                    if (i == 2)
+                        model.Focus2 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                    if (i == 3)
+                        model.Focus3 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                    if (i == 4)
+                        model.Focus4 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                    if (i == 5)
+                        model.Focus5 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                    i++;
                 }
-
+                model.PersonCentreCount = pdetail.PersonCentred.Count;
+                model.GetEquipment = pdetail.Equipment;
                 model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
                 model.InvolingList = involve.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList();
             }
@@ -211,7 +222,7 @@ namespace AwesomeCare.Admin.Controllers
 
             List<PostEquipment> equipment = new List<PostEquipment>();
             List<PostPersonCentred> pcentre = new List<PostPersonCentred>();
-            
+
 
             #region Personal Detail
             pdetail.PersonalDetailId = model.PersonalDetailId;
@@ -252,10 +263,16 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region Equipment
-            for (int i=0; i < model.EquipmentCount; i++)
+            for (int i = 0; i < model.EquipmentCount; i++)
             {
                 PostEquipment eq = new PostEquipment();
                 string ImageId = "Image";
+                var EquipmentId = 0;
+                if (model.PersonalDetailId > 0) 
+                {
+                    EquipmentId = int.Parse(formcollection["EquipmentId"][i]);
+                }
+                
                 var Image = formcollection.Files.GetFile(ImageId);
                 var Location = int.Parse(formcollection["Location"][i]);
                 var Name = int.Parse(formcollection["Name"][i]);
@@ -264,20 +281,30 @@ namespace AwesomeCare.Admin.Controllers
                 var NextServiceDate = DateTime.Parse(formcollection["NextServiceDate"][i].ToString());
                 var Status = int.Parse(formcollection["Status"][i]);
                 var PersonToAct = int.Parse(formcollection["PersonToAct"][i]);
+                var Attachment = formcollection["Attachment"][i] != null ? formcollection["Attachment"][i] : "";
                 string path = "";
                 #region Attachment
-                if (Image != null)
+                if (Attachment != "" || Attachment != null)
                 {
-                    string folder = "clientcomplain";
-                    string filename = string.Concat(ImageId,DateTime.Now.ToString());
-                    path = await _fileUpload.UploadFile(folder, true, filename, Image.OpenReadStream());
+                    eq.Attachment = Attachment;
                 }
                 else
-                {
-                    path = "No Image";
+                { 
+                    if (Image != null)
+                    {
+                        string folder = "clientcomplain";
+                        string filename = string.Concat(ImageId,DateTime.Now.ToString());
+                        path = await _fileUpload.UploadFile(folder, true, filename, Image.OpenReadStream());
+                    }
+                    else
+                    {
+                        path = "No Image";
+                    }
+                    eq.Attachment = path;
                 }
                 #endregion
-
+                eq.EquipmentId = EquipmentId;
+                eq.PersonalDetailId = model.PersonalDetailId;
                 eq.Location = Location;
                 eq.Name = Name;
                 eq.Type = Type;
@@ -285,7 +312,6 @@ namespace AwesomeCare.Admin.Controllers
                 eq.ServiceDate = ServiceDate;
                 eq.Status = Status;
                 eq.PersonToAct = PersonToAct;
-                eq.Attachment = path;
                 equipment.Add(eq);
             }
             
@@ -312,13 +338,18 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region Person Centred
-            for (int i = 1; i < model.PersonCentreCount; i++)
+            for (int i = 1; i <= model.PersonCentreCount; i++)
             {
                 string ischeckid = $"isChecked{i}";
                 var isChecked = formcollection[ischeckid];
                 if (isChecked.Count > 0 && isChecked[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
                 { 
                     PostPersonCentred pc = new PostPersonCentred();
+                    var PersonCenteredId = 0;
+                    if (model.PersonalDetailId > 0)
+                    {
+                        PersonCenteredId = int.Parse(formcollection[$"PersonCentredId{i}"]);
+                    }
                     var Class = int.Parse(formcollection[$"Class{i}"]);
                     var Focus = formcollection[$"Focus{i}"];
                     var ExpSupport = formcollection[$"ExpSupport{i}"].ToString();
@@ -327,9 +358,11 @@ namespace AwesomeCare.Admin.Controllers
                     {
                         var newtask = new PostPersonCentredFocus();
                         newtask.BaseRecordId = int.Parse(Focus[j].ToString());
-                        newtask.PersonCentredId = 0;
+                        newtask.PersonCentredId = PersonCenteredId;
                         ex.Add(newtask);
                     }
+                    pc.PersonCentredId = PersonCenteredId;
+                    pc.PersonalDetailId = model.PersonalDetailId;
                     pc.Class = Class;
                     pc.ExpSupport = ExpSupport;
                     pc.Focus = ex;

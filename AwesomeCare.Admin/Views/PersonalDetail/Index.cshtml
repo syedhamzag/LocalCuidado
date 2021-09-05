@@ -51,21 +51,46 @@
 
                                         @if (Model.GetPersonCentred.Count > 0)
                                          {
+                                            int i = 1;
                                                @foreach (var item in Model.GetPersonCentred)
                                                {
-                                                    <tr>
-                                                        <td>
-                                                            <div class="fancy-checkbox">
-                                                                <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked")" id="@string.Concat("isChecked")" checked /><span><small> </small></span></label>
+                                                   string key = @Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString();
+                                        <tr id="@item.PersonCentredId">
+                                            <td>
+                                                <div class="fancy-checkbox">
+                                                    <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" checked /><span><small> </small></span></label>
+                                                    <input type="hidden" id="@string.Concat("PersonCentredId",i)" name="@string.Concat("PersonCentredId",i)" value="@item.PersonCentredId" />
+                                                </div>
+                                            </td>
 
-                                                            </div>
-                                                        </td>
-                                                        <td>@Model.FocusList.Select(s=>s.Key).FirstOrDefault()</td>
+                                            <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class",i)" name="@string.Concat("Class",i)" value="@item.Class" /></td>
+                                            @{
+                                                if (i == 1)
+                                                {
+                                                    <td><select asp-for="@Model.Focus1" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+                                                if (i == 2)
+                                                {
+                                                    <td><select asp-for="@Model.Focus2" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+                                                if (i == 3)
+                                                {
+                                                    <td><select asp-for="@Model.Focus3" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+                                                if (i == 4)
+                                                {
+                                                    <td><select asp-for="@Model.Focus4" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+                                                if (i == 5)
+                                                {
+                                                    <td><select asp-for="@Model.Focus5" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
 
-                                                        <td><select asp-for="@Model.Indfocus" asp-items="@Model.FocusList.Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                        <td><textarea asp-for="@Model.GetPersonCentred.FirstOrDefault().ExpSupport" class="form-control"></textarea></td>
-                                                    </tr>
-
+                                            }
+                                            @*<td><textarea asp-for="@string.Concat(item.ExpSupport,i)" class="form-control"></textarea></td>*@
+                                            <td><textarea name="@string.Concat("ExpSupport",i)" class="form-control">@item.ExpSupport</textarea></td>
+                                        </tr>
+                                                   i++;
                                                }
                                          }
                                         else
@@ -259,15 +284,15 @@
                                     {
                                         @foreach (var equip in Model.GetEquipment)
                                         {
-                                            <tr>
+                                            <tr id="@equip.EquipmentId">
                                                 <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" value="@equip.ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
                                                 <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" value="@equip.NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                                <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault().Status" asp-items="null" /></td>
-                                                <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault().Name" asp-items="null" /></td>
-                                                <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault().Type" asp-items="null" /></td>
-                                                <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault().Location" asp-items="null" /></td>
-                                                <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList"></select></td>
-                                                <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
+                                                <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Status" asp-items="null" /></td>
+                                                <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Name" asp-items="null" /></td>
+                                                <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Type" asp-items="null" /></td>
+                                                <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Location" asp-items="null" /></td>
+                                                <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).PersonToAct" asp-items="Model.StaffList"></select></td>
+                                                <td><input type="hidden" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Attachment" value="@equip.Attachment" /><input type="hidden" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).EquipmentId" /></td>
                                             </tr>
                                         }
                                     }
