@@ -2341,6 +2341,8 @@ namespace MapperConfig
             CreateMap<PutOfficeLocation, OfficeLocation>();
 
             CreateMap<OfficeLocation, GetOfficeLocation>();
+            #endregion
+
             #region ManagingTasks
             CreateMap<PutManagingTasks, ManagingTasks>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
