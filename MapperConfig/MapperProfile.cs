@@ -2333,15 +2333,7 @@ namespace MapperConfig
             CreateMap<InfectionControl, GetInfectionControl>();
             #endregion
 
-            #region OfficeLocation
-            CreateMap<PostOfficeLocation, OfficeLocation>()
-                .ForMember(dto => dto.OfficeLocationId, mem => mem.Ignore())
-                .ForMember(dto => dto.UniqueId, mem => mem.Ignore());
-
-            CreateMap<PutOfficeLocation, OfficeLocation>();
-
-            CreateMap<OfficeLocation, GetOfficeLocation>();
-            #endregion
+          
 
             #region ManagingTasks
             CreateMap<PutManagingTasks, ManagingTasks>()
