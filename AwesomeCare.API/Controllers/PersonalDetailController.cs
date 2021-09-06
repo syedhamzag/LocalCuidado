@@ -82,8 +82,9 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Get()
         {
-            var getEntities = _PersonalDetailRepository.Table.ToList();
-            return Ok(getEntities);
+            var entity = _PersonalDetailRepository.Table.ToList();
+            if (entity == null) return NotFound();
+            return Ok(entity);
         }
         /// <summary>
         /// Create PersonalDetail
