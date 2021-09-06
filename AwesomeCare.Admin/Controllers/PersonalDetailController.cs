@@ -48,6 +48,24 @@ namespace AwesomeCare.Admin.Controllers
             _personaldetailService = personaldetailService;
         }
 
+        public async Task<IActionResult> Reports()
+        {
+            var entities = await _personaldetailService.Get();
+            var staff = _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            List<CreateCarePlan> reports = new List<CreateCarePlan>();
+            foreach (GetPersonalDetail item in entities)
+            {
+                var report = new CreateCarePlan();
+                report.PersonalDetailId = item.PersonalDetailId;
+                report.ClientId = item.ClientId;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                reports.Add(report);
+            }
+            return View(reports);
+        }
+
         public async Task<IActionResult> Index(int clientId)
         {
             var client = await _clientService.GetClientDetail();
@@ -151,15 +169,27 @@ namespace AwesomeCare.Admin.Controllers
                         model.Partnership = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
                         model.FocusList.Add(item.Text, model.Partnership);
                     }
-
                 }
-
+                int i = 1;
                 foreach (var item in model.GetPersonCentred)
                 {
-                    model.Indfocus = item.Focus.Select(s=>s.BaseRecordId).ToList();
+                    if (i == 1)
+                        model.Focus1 = item.Focus.Select(s=>s.BaseRecordId).ToList();
+                    if (i == 2)
+                        model.Focus2 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                    if (i == 3)
+                        model.Focus3 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                    if (i == 4)
+                        model.Focus4 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                    if (i == 5)
+                        model.Focus5 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                    i++;
                 }
-
+                model.PersonCentreCount = pdetail.PersonCentred.Count;
+                model.GetEquipment = pdetail.Equipment;
                 model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                model.KeyLogList = items3.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                model.LandLogList = items4.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
                 model.InvolingList = involve.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList();
             }
             return View(model);
@@ -211,7 +241,7 @@ namespace AwesomeCare.Admin.Controllers
 
             List<PostEquipment> equipment = new List<PostEquipment>();
             List<PostPersonCentred> pcentre = new List<PostPersonCentred>();
-            
+
 
             #region Personal Detail
             pdetail.PersonalDetailId = model.PersonalDetailId;
@@ -252,10 +282,16 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region Equipment
-            for (int i=0; i < model.EquipmentCount; i++)
+            for (int i = 0; i < model.EquipmentCount; i++)
             {
                 PostEquipment eq = new PostEquipment();
                 string ImageId = "Image";
+                var EquipmentId = 0;
+                if (model.PersonalDetailId > 0) 
+                {
+                    EquipmentId = int.Parse(formcollection["EquipmentId"][i]);
+                }
+                
                 var Image = formcollection.Files.GetFile(ImageId);
                 var Location = int.Parse(formcollection["Location"][i]);
                 var Name = int.Parse(formcollection["Name"][i]);
@@ -264,20 +300,30 @@ namespace AwesomeCare.Admin.Controllers
                 var NextServiceDate = DateTime.Parse(formcollection["NextServiceDate"][i].ToString());
                 var Status = int.Parse(formcollection["Status"][i]);
                 var PersonToAct = int.Parse(formcollection["PersonToAct"][i]);
+                var Attachment = formcollection["Attachment"][i] != null ? formcollection["Attachment"][i] : "";
                 string path = "";
                 #region Attachment
-                if (Image != null)
+                if (Attachment != "" || Attachment != null)
                 {
-                    string folder = "clientcomplain";
-                    string filename = string.Concat(ImageId,DateTime.Now.ToString());
-                    path = await _fileUpload.UploadFile(folder, true, filename, Image.OpenReadStream());
+                    eq.Attachment = Attachment;
                 }
                 else
-                {
-                    path = "No Image";
+                { 
+                    if (Image != null)
+                    {
+                        string folder = "clientcomplain";
+                        string filename = string.Concat(ImageId,DateTime.Now.ToString());
+                        path = await _fileUpload.UploadFile(folder, true, filename, Image.OpenReadStream());
+                    }
+                    else
+                    {
+                        path = "No Image";
+                    }
+                    eq.Attachment = path;
                 }
                 #endregion
-
+                eq.EquipmentId = EquipmentId;
+                eq.PersonalDetailId = model.PersonalDetailId;
                 eq.Location = Location;
                 eq.Name = Name;
                 eq.Type = Type;
@@ -285,7 +331,6 @@ namespace AwesomeCare.Admin.Controllers
                 eq.ServiceDate = ServiceDate;
                 eq.Status = Status;
                 eq.PersonToAct = PersonToAct;
-                eq.Attachment = path;
                 equipment.Add(eq);
             }
             
@@ -312,13 +357,18 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             #region Person Centred
-            for (int i = 1; i < model.PersonCentreCount; i++)
+            for (int i = 1; i <= model.PersonCentreCount; i++)
             {
                 string ischeckid = $"isChecked{i}";
                 var isChecked = formcollection[ischeckid];
                 if (isChecked.Count > 0 && isChecked[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
                 { 
                     PostPersonCentred pc = new PostPersonCentred();
+                    var PersonCenteredId = 0;
+                    if (model.PersonalDetailId > 0)
+                    {
+                        PersonCenteredId = int.Parse(formcollection[$"PersonCentredId{i}"]);
+                    }
                     var Class = int.Parse(formcollection[$"Class{i}"]);
                     var Focus = formcollection[$"Focus{i}"];
                     var ExpSupport = formcollection[$"ExpSupport{i}"].ToString();
@@ -327,9 +377,11 @@ namespace AwesomeCare.Admin.Controllers
                     {
                         var newtask = new PostPersonCentredFocus();
                         newtask.BaseRecordId = int.Parse(Focus[j].ToString());
-                        newtask.PersonCentredId = 0;
+                        newtask.PersonCentredId = PersonCenteredId;
                         ex.Add(newtask);
                     }
+                    pc.PersonCentredId = PersonCenteredId;
+                    pc.PersonalDetailId = model.PersonalDetailId;
                     pc.Class = Class;
                     pc.ExpSupport = ExpSupport;
                     pc.Focus = ex;
@@ -369,15 +421,68 @@ namespace AwesomeCare.Admin.Controllers
 
         public async Task<IActionResult> CareView(int clientId)
         {
-            var client = await _clientService.GetClientDetail();
-            var putEntity = Get(clientId);
-            return View(putEntity);
+            CreateCarePlan model = new CreateCarePlan();
+            var bases = await _baseRecord.GetBaseRecord();
+            var baseClass = bases.Where(s => s.KeyName == "Class").FirstOrDefault().BaseRecordId;
+            var classItems = await _baseRecord.GetBaseRecordWithItems(baseClass);
+            
+
+            //var client = await _clientService.GetClientDetail();
+            model = Get(clientId);
+            model.ClassList = classItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+            foreach (var item in model.ClassList)
+            {
+                var child = bases.Where(s => s.KeyName == item.Text).FirstOrDefault().BaseRecordId;
+                var childItems = await _baseRecord.GetBaseRecordWithItems(child);
+
+                if (item.Text.ToString() == "Individuality")
+                {
+                    model.Individuality = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.Individuality);
+                }
+                if (item.Text.ToString() == "RightsAndRespect")
+                {
+                    model.RightsAndRespect = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.RightsAndRespect);
+                }
+                if (item.Text.ToString() == "Choice")
+                {
+                    model.Choice = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.Choice);
+                }
+                if (item.Text.ToString() == "DignityAndPrivacy")
+                {
+                    model.DignityAndPrivacy = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.DignityAndPrivacy);
+                }
+                if (item.Text.ToString() == "Partnership")
+                {
+                    model.Partnership = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.Partnership);
+                }
+            }
+            int i = 1;
+            foreach (var item in model.GetPersonCentred)
+            {
+                if (i == 1)
+                    model.Focus1 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                if (i == 2)
+                    model.Focus2 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                if (i == 3)
+                    model.Focus3 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                if (i == 4)
+                    model.Focus4 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                if (i == 5)
+                    model.Focus5 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                i++;
+            }
+            return View(model);
         }
 
         public CreateCarePlan Get(int clientId)
         {
             var staff = _staffService.GetStaffs();
-
+            var involve = _clientService.GetClient(clientId);
             var pdetail = _personaldetailService.Get(clientId);
             var client = _clientService.GetClient(clientId);
             var details = _clientService.GetClientDetail();
@@ -387,9 +492,10 @@ namespace AwesomeCare.Admin.Controllers
             {
                 Relation = party.Result.Relationship;
             }
+
+            var PersonalDetail = _personaldetailService.Get(clientId);
             var putEntity = new CreateCarePlan
             {
-
                 #region Personal Details
                 ClientId = clientId,
                 PersonalDetailId = pdetail.Result.PersonalDetailId,
@@ -429,17 +535,8 @@ namespace AwesomeCare.Admin.Controllers
                 LandRelation = Relation,
                 #endregion
 
-                #region 
+                #region Equipment
                 GetEquipment = pdetail.Result.Equipment,
-                //EquipmentId = pdetail.Result.Equipment.FirstOrDefault().EquipmentId,
-                //Location = pdetail.Result.Equipment.FirstOrDefault().Location,
-                //Name = pdetail.Result.Equipment.FirstOrDefault().Name,
-                //Type = pdetail.Result.Equipment.FirstOrDefault().Type,
-                //NextServiceDate = pdetail.Result.Equipment.FirstOrDefault().NextServiceDate,
-                //ServiceDate = pdetail.Result.Equipment.FirstOrDefault().ServiceDate,
-                //Status = pdetail.Result.Equipment.FirstOrDefault().Status,
-                //PersonToAct = pdetail.Result.Equipment.FirstOrDefault().PersonToAct,
-                //Attachment = pdetail.Result.Equipment.FirstOrDefault().Attachment,
                 StaffList = staff.Result.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
                 #endregion
 
@@ -476,11 +573,6 @@ namespace AwesomeCare.Admin.Controllers
 
                 #region Person Centred
                 GetPersonCentred = pdetail.Result.PersonCentred,
-                //PersonCentredId = pdetail.Result.PersonCentred.FirstOrDefault().PersonCentredId,
-                //Class = pdetail.Result.PersonCentred.FirstOrDefault().Class,
-                //ExpSupport = pdetail.Result.PersonCentred.FirstOrDefault().ExpSupport,
-                //FocusList = pdetail.Result.PersonCentred.FirstOrDefault().Focus.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                //Focus = pdetail.Result.PersonCentred.FirstOrDefault().Focus.Select(s => s.BaseRecordId).ToList(),
                 #endregion
 
                 #region Review
@@ -491,6 +583,8 @@ namespace AwesomeCare.Admin.Controllers
                 RA_ReviewDate = pdetail.Result.Review.FirstOrDefault().RA_ReviewDate,
                 #endregion
 
+                //ClassList = .Result.
+                InvolingList = involve.Result.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList(),
                 EquipmentCount = pdetail.Result.Equipment.Count,
                 PersonCentreCount = pdetail.Result.PersonCentred.Count,
                 ActionName = "Update",
