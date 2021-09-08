@@ -46,14 +46,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostManagingTasks postCarePlanHygiene)
+        public async Task<IActionResult> Create([FromBody] List<PostManagingTasks> postCarePlanHygiene)
         {
             if (postCarePlanHygiene == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var CarePlanHygiene = Mapper.Map<ManagingTasks>(postCarePlanHygiene);
-            await _taskRepository.InsertEntity(CarePlanHygiene);
+            var CarePlanHygiene = Mapper.Map<List<ManagingTasks>>(postCarePlanHygiene);
+            await _taskRepository.InsertEntities(CarePlanHygiene);
             return Ok();
         }
         /// <summary>

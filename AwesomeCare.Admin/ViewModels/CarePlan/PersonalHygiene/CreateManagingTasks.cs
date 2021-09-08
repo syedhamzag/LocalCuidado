@@ -17,5 +17,6 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene
 
         public string ClientName { get; set; }
         public int TaskCount { get; set; } = 0;
+        public int ClientId { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +47,7 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int clientId)
         {
             var model = new CreateManagingTasks();
-            model.GetManagingTasks.FirstOrDefault().ClientId = clientId;
+            model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
             return View(model);
@@ -96,21 +97,21 @@ namespace AwesomeCare.Admin.Controllers
             {
                 PostManagingTasks post = new PostManagingTasks();
                 var Task = int.Parse(formcollection["Task"][i]);
-
                 var Status = int.Parse(formcollection["Status"][i]);
-                var Help = int.Parse(formcollection["Help"][i]);
-
+                var Help = formcollection["Help"][i].ToString();
+                post.ClientId = model.ClientId;
                 post.Task = Task;
                 post.Status = Status;
-                //post.Help = Help;
+                post.Help = Help;
                 task.Add(post);
             }
 
-            //var result = await _taskService.Create(task);
-            //var content = await result.Content.ReadAsStringAsync();
+            var json = JsonConvert.SerializeObject(task);
+            var result = await _taskService.Create(task);
+            var content = await result.Content.ReadAsStringAsync();
 
-            //SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New ManagingTasks successfully registered" : "An Error Occurred" });
-            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.GetManagingTasks.FirstOrDefault().ClientId });
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New ManagingTasks successfully registered" : "An Error Occurred" });
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 
         //[HttpPost]

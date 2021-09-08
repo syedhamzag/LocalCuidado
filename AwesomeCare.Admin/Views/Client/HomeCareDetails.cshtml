@@ -1121,8 +1121,7 @@
                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#health">Health</a></li>
                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#nutrition">Nutrition</a></li>
                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hygiene">Hygiene</a></li>
-
-
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#interests">Interest And Objectives</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane" id="personaldetail">
@@ -1193,18 +1192,19 @@
                                                                 <th>Review Date</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>s
+                                                        <tbody>
+                                                            s
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.CP_PreDate
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.CP_ReviewDate
-                                                                    </td>
-                                                                </tr>
-                                                            }*@
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1230,16 +1230,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.CP_PreDate
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.CP_ReviewDate
-                                                                    </td>
-                                                                </tr>
-                                                            }*@
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1300,16 +1300,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.CP_PreDate
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.CP_ReviewDate
-                                                                    </td>
-                                                                </tr>
-                                                            }*@
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1335,16 +1335,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.CP_PreDate
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.CP_ReviewDate
-                                                                    </td>
-                                                                </tr>
-                                                            }*@
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1370,16 +1370,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.CP_PreDate
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.CP_ReviewDate
-                                                                    </td>
-                                                                </tr>
-                                                            }*@
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1431,6 +1431,7 @@
                                         <ul class="nav nav-tabs-new2">
                                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personalhygiene">Personal Hygiene</a></li>
                                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#infectioncontrol">Infection Control</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#mtask">Managing Tasks</a></li>
                                         </ul>
                                         <div class="tab-content">
                                             <div class="tab-pane" id="personalhygiene">
@@ -1440,6 +1441,124 @@
                                                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                             <ul class="dropdown-menu dropdown-menu-right">
                                                                 <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonalHygiene">New</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="infectioncontrol">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="InfectionControl">Create</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="mtask">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ManagingTasks">Create New</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="body">
+                                                    <table class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Pre Date</th>
+                                                                <th>Review Date</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @*@foreach (var item in Model.GetHealthAndLiving)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="interests">
+                                    <div class="header">
+                                    </div>
+                                    <div class="body">
+                                        <ul class="nav nav-tabs-new2">
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#intandobj">Interests And Objectives</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pets">Pets</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane" id="intandobj">
+                                                <div class="header">
+                                                    <ul class="header-dropdown">
+                                                        <li class="dropdown">
+                                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="InterestAndObjective">New</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
@@ -1468,13 +1587,13 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane" id="infectioncontrol">
+                                            <div class="tab-pane" id="pets">
                                                 <div class="header">
                                                     <ul class="header-dropdown">
                                                         <li class="dropdown">
                                                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                             <ul class="dropdown-menu dropdown-menu-right">
-                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="InfectionControl">Create</a></li>
+                                                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Pets">Create</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
@@ -1489,16 +1608,16 @@
                                                         </thead>
                                                         <tbody>
                                                             @*@foreach (var item in Model.GetHealthAndLiving)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.CP_PreDate
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.CP_ReviewDate
-                                                                    </td>
-                                                                </tr>
-                                                            }*@
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.CP_PreDate
+                                            </td>
+                                            <td>
+                                                @item.CP_ReviewDate
+                                            </td>
+                                        </tr>
+                                    }*@
                                                         </tbody>
                                                     </table>
                                                 </div>

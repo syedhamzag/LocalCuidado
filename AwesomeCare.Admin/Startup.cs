@@ -98,6 +98,8 @@ using AwesomeCare.Admin.Services.PersonalHygiene;
 using AwesomeCare.Admin.Services.InfectionControl;
 using AwesomeCare.Admin.Services.ManagingTasks;
 using AwesomeCare.Admin.Services.Dashboard;
+using AwesomeCare.Admin.Services.InterestAndObjective;
+using AwesomeCare.Admin.Services.Pets;
 
 namespace AwesomeCare.Admin
 {
@@ -908,6 +910,18 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IDashboardService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("interestandobjective", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IInterestAndObjectiveService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("pets", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPetsService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

@@ -17,9 +17,9 @@ namespace AwesomeCare.Admin.Services.ManagingTasks
         Task<GetManagingTasks> Get(int id);
 
         [Post("/ManagingTasks/Create")]
-        Task<HttpResponseMessage> Create([Body] PostManagingTasks model);
+        Task<HttpResponseMessage> Create([Body] List<PostManagingTasks> model);
 
         [Put("/ManagingTasks/Put")]
-        Task<HttpResponseMessage> Put([Body] PutManagingTasks model);
+        Task<HttpResponseMessage> Put([Body] List<PutManagingTasks> model);
     }
 }
