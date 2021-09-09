@@ -25,6 +25,7 @@
                                         <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
                                         <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
                                     </div>
+
                                     <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
 
                                     <table class="table table-hover table-bordered" id="tblMTasks">
@@ -43,7 +44,7 @@
                                                     <tr>
                                                         <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Task" asp-items="null" /></td>
                                                         <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault().Help" value="@type.Help" class="form-control" /></td>
-                                                        <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Status" asp-items="null" /></td>
+                                                        <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Status" asp-items="null" /><input type="hidden" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).TaskId" value="@type.TaskId" /></td>
                                                     </tr>
                                                 }
                                             }
@@ -71,7 +72,7 @@
                                             <tr>
                                                 <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault().Task" asp-items="null" /></td>
                                                 <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault().Help" class="form-control" /></td>
-                                                <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault().Status" asp-items="null" /></td>
+                                                <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault().Status" asp-items="null" /><input type="hidden" asp-for="@Model.GetManagingTasks.FirstOrDefault().TaskId" value="0" /></td>
                                             </tr>
                                         </tbody>
                                     </table>

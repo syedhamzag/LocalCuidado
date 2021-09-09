@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.ManagingTasks
         Task<HttpResponseMessage> Create([Body] List<PostManagingTasks> model);
 
         [Put("/ManagingTasks/Put")]
-        Task<HttpResponseMessage> Put([Body] List<PutManagingTasks> model);
+        Task<HttpResponseMessage> Put([Body] List<PostManagingTasks> model);
     }
 }

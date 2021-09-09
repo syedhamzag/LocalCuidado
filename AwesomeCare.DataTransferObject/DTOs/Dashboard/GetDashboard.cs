@@ -8,6 +8,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
 {
     public class GetDashboard
     {
+        public int ActiveUser { get; set; }
+        public int ApprovedStaff { get; set; }
         public List<GetClient> GetClients { get; set; }
         public List<GetStaffPersonalInfo> GetStaffPersonalInfos { get; set; }
         public int nId { get; set; }

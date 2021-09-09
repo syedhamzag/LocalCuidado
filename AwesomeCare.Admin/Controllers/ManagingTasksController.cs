@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
@@ -24,61 +25,18 @@ namespace AwesomeCare.Admin.Controllers
             _clientService = clientService;
         }
 
-        //public async Task<IActionResult> Reports()
-        //{
-        //    var entities = await _taskService.Get();
-
-        //    var client = await _clientService.GetClientDetail();
-        //    List<CreateManagingTasks> reports = new List<CreateManagingTasks>();
-        //    foreach (GetManagingTasks item in entities)
-        //    {
-        //        var report = new CreateManagingTasks();
-        //        report.TaskId = item.TaskId;
-        //        report.Task = item.Task;
-        //        report.Help = item.Help;
-        //        report.Status = item.Status;
-        //        report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-        //        report.Status = item.Status;
-        //        reports.Add(report);
-        //    }
-        //    return View(reports);
-        //}
-
         public async Task<IActionResult> Index(int clientId)
         {
             var model = new CreateManagingTasks();
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var mtask = await _taskService.Get();
+            model.GetManagingTasks = mtask;
+            model.TaskCount = mtask.Count();
             return View(model);
 
         }
-
-        //public async Task<IActionResult> View(int ManagingTasksId)
-        //{
-        //    var putEntity = await GetManagingTasks(ManagingTasksId);
-        //    return View(putEntity);
-        //}
-
-        //public async Task<IActionResult> Edit(int ManagingTasksId)
-        //{
-        //    var putEntity = await GetManagingTasks(ManagingTasksId);
-        //    return View(putEntity);
-        //}
-
-        //public async Task<CreateManagingTasks> GetManagingTasks(int ManagingTasksId)
-        //{
-        //    var ManagingTasks = await _taskService.Get(ManagingTasksId);
-        //    var putEntity = new CreateManagingTasks
-        //    {
-        //        Task = ManagingTasks.Task,
-        //        Help = ManagingTasks.Help,
-        //        TaskId = ManagingTasks.TaskId,
-        //        ClientId = ManagingTasks.ClientId,
-        //        Status = ManagingTasks.Status,
-        //    };
-        //    return putEntity;
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -95,56 +53,36 @@ namespace AwesomeCare.Admin.Controllers
 
             for (int i = 0; i < model.TaskCount; i++)
             {
+                
                 PostManagingTasks post = new PostManagingTasks();
+                var TaskId = int.Parse(formcollection["TaskId"][i]);
                 var Task = int.Parse(formcollection["Task"][i]);
                 var Status = int.Parse(formcollection["Status"][i]);
                 var Help = formcollection["Help"][i].ToString();
+                post.TaskId = TaskId;
                 post.ClientId = model.ClientId;
                 post.Task = Task;
                 post.Status = Status;
                 post.Help = Help;
                 task.Add(post);
             }
-
-            var json = JsonConvert.SerializeObject(task);
-            var result = await _taskService.Create(task);
-            var content = await result.Content.ReadAsStringAsync();
+            var result = new HttpResponseMessage();
+            if (task.FirstOrDefault().TaskId > 0)
+            {
+                var json = JsonConvert.SerializeObject(task);
+                result = await _taskService.Put(task);
+                var content = await result.Content.ReadAsStringAsync(); 
+            }
+            else
+            {
+                var json = JsonConvert.SerializeObject(task);
+                result = await _taskService.Create(task);
+                var content = await result.Content.ReadAsStringAsync();
+            }
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New ManagingTasks successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(CreateManagingTasks model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        var client = await _clientService.GetClient(model.ClientId);
-        //        model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
-        //        return View(model);
-        //    }
-
-        //    PutManagingTasks put = new PutManagingTasks();
-
-        //    put.TaskId = model.TaskId;
-        //    put.ClientId = model.ClientId;
-        //    put.Help = model.Help;
-        //    put.Task = model.Task;
-        //    put.Status = model.Status;
-
-        //    var entity = await _taskService.Put(put);
-        //    SetOperationStatus(new Models.OperationStatus
-        //    {
-        //        IsSuccessful = entity.IsSuccessStatusCode,
-        //        Message = entity.IsSuccessStatusCode ? "Successful" : "Operation failed"
-        //    });
-        //    if (entity.IsSuccessStatusCode)
-        //    {
-        //        return RedirectToAction("Reports");
-        //    }
-        //    return View(model);
-
-        //}
     }
 }
+

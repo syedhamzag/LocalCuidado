@@ -62,15 +62,18 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PostManagingTasks models)
+        public async Task<IActionResult> Put([FromBody] List<PutManagingTasks> puttask)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var CarePlanHygiene = Mapper.Map<ManagingTasks>(models);
-            await _taskRepository.UpdateEntity(CarePlanHygiene);
+            var CarePlanHygiene = Mapper.Map<List<ManagingTasks>>(puttask);
+            foreach (var item in CarePlanHygiene)
+            {
+                await _taskRepository.UpdateEntity(item);
+            }           
             return Ok();
 
         }
