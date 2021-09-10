@@ -4473,123 +4473,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_Incoming_Meds");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.InfectionControl", b =>
-                {
-                    b.Property<int>("InfectionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("InfectionId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Guideline")
-                        .IsRequired()
-                        .HasColumnName("Guideline")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remarks")
-                        .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TestDate")
-                        .HasColumnName("TestDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VaccStatus")
-                        .HasColumnName("VaccStatus")
-                        .HasColumnType("int");
-
-                    b.HasKey("InfectionId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_InfectionControl");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.Interest", b =>
-                {
-                    b.Property<int>("InterestId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("InterestId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CommunityActivity")
-                        .HasColumnName("CommunityActivity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EventAwarness")
-                        .HasColumnName("EventAwarness")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GoalAndObjective")
-                        .HasColumnName("GoalAndObjective")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GoalId")
-                        .HasColumnName("GoalId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InformalActivity")
-                        .HasColumnName("InformalActivity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LeisureActivity")
-                        .HasColumnName("LeisureActivity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MaintainContact")
-                        .HasColumnName("MaintainContact")
-                        .HasColumnType("int");
-
-                    b.HasKey("InterestId");
-
-                    b.HasIndex("GoalId");
-
-                    b.ToTable("tbl_Interest");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.InterestAndObjective", b =>
-                {
-                    b.Property<int>("GoalId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("GoalId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Brief")
-                        .IsRequired()
-                        .HasColumnName("Brief")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CareGoal")
-                        .IsRequired()
-                        .HasColumnName("CareGoal")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GoalId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_InterestAndObjective");
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.Investigation", b =>
                 {
                     b.Property<int>("InvestigationId")
@@ -4791,38 +4674,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("StaffPersonalInfoId");
 
                     b.ToTable("tbl_LogAudit_OfficerToAct");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ManagingTasks", b =>
-                {
-                    b.Property<int>("TaskId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ManagingTasksId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Help")
-                        .IsRequired()
-                        .HasColumnName("Help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Task")
-                        .HasColumnName("Task")
-                        .HasColumnType("int");
-
-                    b.HasKey("TaskId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_ManagingTasks");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditOfficerToAct", b =>
@@ -5237,166 +5088,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("tbl_PersonalDetail");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalHygiene", b =>
-                {
-                    b.Property<int>("HygieneId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("HygieneId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Cleaning")
-                        .HasColumnName("Cleaning")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CleaningFreq")
-                        .HasColumnName("CleaningFreq")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CleaningTools")
-                        .HasColumnName("CleaningTools")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DesiredCleaning")
-                        .HasColumnName("DesiredCleaning")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DirtyLaundry")
-                        .HasColumnName("DirtyLaundry")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DryLaundry")
-                        .HasColumnName("DryLaundry")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GeneralAppliance")
-                        .HasColumnName("GeneralAppliance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Ironing")
-                        .HasColumnName("Ironing")
-                        .HasColumnType("int");
-
-                    b.Property<string>("LaundryGuide")
-                        .IsRequired()
-                        .HasColumnName("LaundryGuide")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LaundrySupport")
-                        .IsRequired()
-                        .HasColumnName("LaundrySupport")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WashingMachine")
-                        .HasColumnName("WashingMachine")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WhoClean")
-                        .HasColumnName("WhoClean")
-                        .HasColumnType("int");
-
-                    b.HasKey("HygieneId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_PersonalHygiene");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalityTest", b =>
-                {
-                    b.Property<int>("TestId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("TestId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GoalId")
-                        .HasColumnName("GoalId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Question")
-                        .HasColumnName("Question")
-                        .HasColumnType("int");
-
-                    b.HasKey("TestId");
-
-                    b.HasIndex("GoalId");
-
-                    b.ToTable("tbl_PersonalityTest");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.Pets", b =>
-                {
-                    b.Property<int>("PetsId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("PetsId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Age")
-                        .IsRequired()
-                        .HasColumnName("Age")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Gender")
-                        .HasColumnName("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MealPattern")
-                        .IsRequired()
-                        .HasColumnName("MealPattern")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MealStorage")
-                        .HasColumnName("MealStorage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PetActivities")
-                        .IsRequired()
-                        .HasColumnName("PetActivities")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PetCare")
-                        .IsRequired()
-                        .HasColumnName("PetCare")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PetInsurance")
-                        .HasColumnName("PetInsurance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VetVisit")
-                        .HasColumnName("VetVisit")
-                        .HasColumnType("int");
-
-                    b.HasKey("PetsId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_Pets");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PhysicalAbility", b =>
@@ -9748,33 +9439,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.InfectionControl", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("InfectionControl")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.Interest", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.InterestAndObjective", "InterestAndObjective")
-                        .WithMany("Interest")
-                        .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.InterestAndObjective", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("InterestAndObjective")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.InvestigationAttachment", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.Investigation", "Investigation")
@@ -9843,15 +9507,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
                         .WithMany()
                         .HasForeignKey("StaffPersonalInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ManagingTasks", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("ManagingTasks")
-                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -10037,33 +9692,6 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("PersonalDetail")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalHygiene", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("PersonalHygiene")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalityTest", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.InterestAndObjective", "InterestAndObjective")
-                        .WithMany("PersonalityTest")
-                        .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.Pets", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("Pets")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
