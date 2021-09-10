@@ -4676,38 +4676,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_LogAudit_OfficerToAct");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.ManagingTasks", b =>
-                {
-                    b.Property<int>("TaskId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ManagingTasksId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Help")
-                        .IsRequired()
-                        .HasColumnName("Help")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Task")
-                        .HasColumnName("Task")
-                        .HasColumnType("int");
-
-                    b.HasKey("TaskId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_ManagingTasks");
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditOfficerToAct", b =>
                 {
                     b.Property<int>("MedAuditOfficerToActId")
@@ -9631,33 +9599,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.InfectionControl", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("InfectionControl")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.Interest", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.InterestAndObjective", "InterestAndObjective")
-                        .WithMany("Interest")
-                        .HasForeignKey("GoalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.InterestAndObjective", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("InterestAndObjective")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("AwesomeCare.Model.Models.InvestigationAttachment", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.Investigation", "Investigation")
@@ -9726,15 +9667,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
                         .WithMany()
                         .HasForeignKey("StaffPersonalInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ManagingTasks", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("ManagingTasks")
-                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
