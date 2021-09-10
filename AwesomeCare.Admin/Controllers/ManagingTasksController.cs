@@ -25,6 +25,38 @@ namespace AwesomeCare.Admin.Controllers
             _clientService = clientService;
         }
 
+        public async Task<IActionResult> Reports()
+        {
+            var entities = await _taskService.Get();
+
+            var client = await _clientService.GetClientDetail();
+            List<CreateManagingTasks> reports = new List<CreateManagingTasks>();
+            foreach (GetManagingTasks item in entities)
+            {
+                var report = new CreateManagingTasks();
+
+
+                if (reports.Count == 0)
+                {
+                    report.ClientId = item.ClientId;
+                    report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                    report.Status = item.Status;
+                    reports.Add(report);
+                }
+                else
+                { 
+                    if (reports.FirstOrDefault().ClientId != item.ClientId) 
+                    { 
+                        report.ClientId = item.ClientId;
+                        report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                        report.Status = item.Status;
+                        reports.Add(report);
+                    }
+                }
+            }
+            return View(reports);
+        }
+
         public async Task<IActionResult> Index(int clientId)
         {
             var model = new CreateManagingTasks();
@@ -45,8 +77,24 @@ namespace AwesomeCare.Admin.Controllers
             if (model == null || !ModelState.IsValid)
             {
                 var client = await _clientService.GetClientDetail();
+                var mtask = await _taskService.Get();
                 model.ClientName = client.Where(s => s.ClientId == model.GetManagingTasks.FirstOrDefault().ClientId).Select(s => s.FullName).FirstOrDefault();
-                return View(model);
+                
+                List<CreateManagingTasks> reports = new List<CreateManagingTasks>();
+                foreach (var item in mtask)
+                {
+                    var report = new CreateManagingTasks();
+                    report.TaskId = item.TaskId;
+                    report.ClientId = item.ClientId;
+                    report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                    report.GetManagingTasks.FirstOrDefault().Help = item.Help;
+                    report.GetManagingTasks.FirstOrDefault().ClientId = item.ClientId;
+                    report.GetManagingTasks.FirstOrDefault().Task = item.Task;
+                    report.GetManagingTasks.FirstOrDefault().Status = item.Status;
+                    report.GetManagingTasks.FirstOrDefault().TaskId = item.TaskId;
+                    reports.Add(report);
+                }
+                return View(reports);
             }
 
             List<PostManagingTasks> task = new List<PostManagingTasks>();
@@ -83,6 +131,26 @@ namespace AwesomeCare.Admin.Controllers
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New ManagingTasks successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
+
+        public async Task<IActionResult> View(int clientId)
+        {
+            CreateManagingTasks model = new CreateManagingTasks();
+            model = GetTask(clientId);
+            return View(model);
+        }
+
+        public CreateManagingTasks GetTask(int clientId)
+        {
+            var client = _clientService.GetClient(clientId);
+            var mtask =  _taskService.Get();
+
+            var putEntity = new CreateManagingTasks
+            {
+                ClientId = clientId,
+                GetManagingTasks = mtask.Result,
+            };
+            return putEntity;
+
+        }
     }
 }
-

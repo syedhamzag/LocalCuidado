@@ -34,6 +34,20 @@ using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
 using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
 using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using AwesomeCare.DataTransferObject.DTOs.Health.HealthAndLiving;
+using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
+using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
+using AwesomeCare.DataTransferObject.DTOs.Health.PhysicalAbility;
+using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthAndMedication;
+using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthCondition;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanNutrition;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.PersonalHygiene;
+using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
+using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
+using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective;
+using AwesomeCare.DataTransferObject.DTOs.Pets;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -65,15 +79,19 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             GetClientSeizure = new HashSet<GetClientSeizure>();
             GetClientWoundCare = new HashSet<GetClientWoundCare>();
 
-            GetCapacity = new HashSet<GetCapacity>();
-            GetConsentCare = new HashSet<GetConsentCare>();
-            GetConsentData = new HashSet<GetConsentData>();
-            GetConsentLandLine = new HashSet<GetConsentLandLine>();
-            GetEquipment = new HashSet<GetEquipment>();
-            GetKeyIndicators = new HashSet<GetKeyIndicators>();
-            GetPersonal = new HashSet<GetPersonal>();
-            GetPersonCentred = new HashSet<GetPersonCentred>();
+            GetHealthAndLiving = new HashSet<GetHealthAndLiving>();
+            GetBalance = new HashSet<GetBalance>();
+            GetHistoryOfFall = new HashSet<GetHistoryOfFall>();
+            GetPhysicalAbility = new HashSet<GetPhysicalAbility>();
+            GetSpecialHealthAndMedication = new HashSet<GetSpecialHealthAndMedication>();
+            GetSpecialHealthCondition = new HashSet<GetSpecialHealthCondition>();
+            GetCarePlanNutrition = new HashSet<GetCarePlanNutrition>();
+            GetInfectionControl = new HashSet<GetInfectionControl>();
+            GetManagingTasks = new HashSet<GetManagingTasks>();
+            GetPersonalHygiene = new HashSet<GetPersonalHygiene>();
+            GetInterestAndObjective = new HashSet<GetInterestAndObjective>();
             GetReview = new HashSet<GetReview>();
+            GetPets = new HashSet<GetPets>();
             GetBaseRecords = new HashSet<GetBaseRecordItem>();
         }
         public int ClientId { get; set; }
@@ -169,15 +187,24 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetClientSeizure> GetClientSeizure { get; set; }
         public virtual ICollection<GetClientWoundCare> GetClientWoundCare { get; set; }
 
-        public virtual ICollection<GetCapacity> GetCapacity { get; set; }
-        public virtual ICollection<GetConsentCare> GetConsentCare { get; set; }
-        public virtual ICollection<GetConsentData> GetConsentData { get; set; }
-        public virtual ICollection<GetConsentLandLine> GetConsentLandLine { get; set; }
-        public virtual ICollection<GetEquipment> GetEquipment { get; set; }
-        public virtual ICollection<GetKeyIndicators> GetKeyIndicators { get; set; }
-        public virtual ICollection<GetPersonal> GetPersonal { get; set; }
-        public virtual ICollection<GetPersonCentred> GetPersonCentred { get; set; }
+        public virtual ICollection<GetHealthAndLiving> GetHealthAndLiving { get; set; }
+        public virtual ICollection<GetBalance> GetBalance { get; set; }
+        public virtual ICollection<GetHistoryOfFall> GetHistoryOfFall { get; set; }
+        public virtual ICollection<GetPhysicalAbility> GetPhysicalAbility { get; set; }
+        public virtual ICollection<GetSpecialHealthAndMedication> GetSpecialHealthAndMedication { get; set; }
+        public virtual ICollection<GetSpecialHealthCondition> GetSpecialHealthCondition { get; set; }
+
+        public virtual ICollection<GetCarePlanNutrition> GetCarePlanNutrition { get; set; }
+
+        public virtual ICollection<GetInfectionControl> GetInfectionControl { get; set; }
+
         public virtual ICollection<GetReview> GetReview { get; set; }
+
+        public virtual ICollection<GetManagingTasks> GetManagingTasks { get; set; }
+        public virtual ICollection<GetPersonalHygiene> GetPersonalHygiene { get; set; }
+
+        public virtual ICollection<GetInterestAndObjective> GetInterestAndObjective { get; set; }
+        public virtual ICollection<GetPets> GetPets { get; set; }
 
         public virtual ICollection<GetBaseRecordItem> GetBaseRecords { get; set; }
     }

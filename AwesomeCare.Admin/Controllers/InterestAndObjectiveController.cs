@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
@@ -26,6 +27,23 @@ namespace AwesomeCare.Admin.Controllers
             _interestService = interestService;
         }
 
+        public async Task<IActionResult> Reports()
+        {
+            var entities = await _interestService.Get();
+            var client = await _clientService.GetClientDetail();
+
+            List<CreateInterestAndObjective> reports = new List<CreateInterestAndObjective>();
+            foreach (GetInterestAndObjective item in entities)
+            {
+                var report = new CreateInterestAndObjective();
+                report.GoalId = item.GoalId;
+                report.ClientId = item.ClientId;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                reports.Add(report);
+            }
+            return View(reports);
+        }
+
         public async Task<IActionResult> Index(int clientId)
         {
             var client = await _clientService.GetClientDetail();
@@ -34,6 +52,7 @@ namespace AwesomeCare.Admin.Controllers
             model.GetPersonalityTest = new List<GetPersonalityTest>();
             model.ClientId = clientId;
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            model = Get(clientId);
             return View(model);
         }
 
@@ -101,12 +120,52 @@ namespace AwesomeCare.Admin.Controllers
             post.Interest = obj;
             post.PersonalityTest = ptest;
 
-            var json = JsonConvert.SerializeObject(post);
-            var result = await _interestService.Create(post);
-            var content = await result.Content.ReadAsStringAsync();
+            var result = new HttpResponseMessage();
+            if (obj.FirstOrDefault().GoalId > 0)
+            {
+                var json = JsonConvert.SerializeObject(post);
+                result = await _interestService.Put(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                var json = JsonConvert.SerializeObject(post);
+                result = await _interestService.Create(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Balance successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
+        }
+
+        public async Task<IActionResult> View(int clientId)
+        {
+            CreateInterestAndObjective model = new CreateInterestAndObjective();
+            model = Get(clientId);
+            return View(model);
+        }
+
+        public CreateInterestAndObjective Get(int clientId)
+        {
+            var obj = _interestService.Get(clientId);
+            var client = _clientService.GetClient(clientId);
+
+            var putEntity = new CreateInterestAndObjective
+            {
+                #region Personal Details
+                ClientId = clientId,
+                CareGoal = obj.Result.CareGoal,
+                Brief = obj.Result.Brief,
+                #endregion
+
+                #region Lists
+                GetInterest = obj.Result.Interest,
+                GetPersonalityTest = obj.Result.PersonalityTest,
+                #endregion
+
+            };
+            return putEntity;
+
         }
 
 

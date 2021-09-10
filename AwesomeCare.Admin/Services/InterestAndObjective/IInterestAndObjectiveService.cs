@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.InterestAndObjective
         Task<HttpResponseMessage> Create([Body] PostInterestAndObjective model);
 
         [Put("/InterestAndObjective/Put")]
-        Task<HttpResponseMessage> Put([Body] PutInterestAndObjective model);
+        Task<HttpResponseMessage> Put([Body] PostInterestAndObjective model);
     }
 }

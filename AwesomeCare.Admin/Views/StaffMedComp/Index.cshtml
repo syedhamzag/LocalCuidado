@@ -41,7 +41,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Client Name</label>
-                                    <select class="custom-select" asp-for="ClientId" asp-items="Model.ClientList">
+                                    <select class="selectpicker form-control" data-live-search="true" asp-for="ClientId" asp-items="Model.ClientList">
                                     </select>
                                     <span asp-validation-for="ClientId" class="text-danger"></span>
                                 </div>

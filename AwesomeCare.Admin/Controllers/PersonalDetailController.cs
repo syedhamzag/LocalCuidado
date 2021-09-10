@@ -580,7 +580,6 @@ namespace AwesomeCare.Admin.Controllers
                 RA_ReviewDate = pdetail.Result.Review.FirstOrDefault().RA_ReviewDate,
                 #endregion
 
-                //ClassList = .Result.
                 InvolingList = involve.Result.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList(),
                 EquipmentCount = pdetail.Result.Equipment.Count,
                 PersonCentreCount = pdetail.Result.PersonCentred.Count,
