@@ -48,6 +48,18 @@ using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
 using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
 using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using AwesomeCare.DataTransferObject.DTOs.Pets;
+using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.PersonalHygiene;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanNutrition;
+using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
+using AwesomeCare.DataTransferObject.DTOs.Health.PhysicalAbility;
+using AwesomeCare.DataTransferObject.DTOs.Health.HealthAndLiving;
+using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthAndMedication;
+using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthCondition;
+using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -87,15 +99,19 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientSeizure> _seizureRepository;
         private IGenericRepository<ClientWoundCare> _woundcareRepository;
         private IGenericRepository<ClientPainChart> _painchartRepository;
-        private IGenericRepository<Capacity> _capacityRepository;
-        private IGenericRepository<ConsentCare> _consentcareRepository;
-        private IGenericRepository<ConsentData> _consentdataRepository;
-        private IGenericRepository<ConsentLandLine> _consentlandlineRepository;
-        private IGenericRepository<Equipment> _equipmentRepository;
-        private IGenericRepository<Personal> _personalRepository;
-        private IGenericRepository<KeyIndicators> _keyindicatorsRepository;
-        private IGenericRepository<PersonCentred> _personcentredRepository;
-        private IGenericRepository<Review> _reviewRepository;
+        private IGenericRepository<PersonalDetail> _personalRepository;
+        private IGenericRepository<SpecialHealthAndMedication> _spcmedRepository;
+        private IGenericRepository<SpecialHealthCondition> _speccondRepository;
+        private IGenericRepository<PhysicalAbility> _phyabRepository;
+        private IGenericRepository<Balance> _balanceRepository;
+        private IGenericRepository<HistoryOfFall> _historyRepository;
+        private IGenericRepository<HealthAndLiving> _healthlivingRepository;
+        private IGenericRepository<CarePlanNutrition> _cpnutRepository;
+        private IGenericRepository<PersonalHygiene> _phygieneRepository;
+        private IGenericRepository<InfectionControl> _infectionRepository;
+        private IGenericRepository<ManagingTasks> _mtaskRepository;
+        private IGenericRepository<InterestAndObjective> _objRepository;
+        private IGenericRepository<Pets> _petsRepository;
 
 
         private AwesomeCareDbContext _dbContext;
@@ -106,28 +122,32 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository,
             IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<ClientVoice> clientVoiceRepository,
             IGenericRepository<ClientMgtVisit> clientMgtVisitRepository, IGenericRepository<ClientProgram> clientProgramRepository,IGenericRepository<ClientServiceWatch> clientServiceWatchRepository,
-         IGenericRepository<ClientBloodCoagulationRecord> bloodcoagRepository,
-         IGenericRepository<ClientBMIChart> bmichartRepository,
-         IGenericRepository<ClientBloodPressure> bloodpressureRepository,
-         IGenericRepository<ClientBodyTemp> bodytempRepository,
-         IGenericRepository<ClientBowelMovement> bowelmovementRepository,
-         IGenericRepository<ClientEyeHealthMonitoring> eyehealthRepository,
-         IGenericRepository<ClientFoodIntake> foodintakeRepository,
-         IGenericRepository<ClientOxygenLvl> oxygenlvlRepository,
-         IGenericRepository<ClientPulseRate> pulserateRepository,
-         IGenericRepository<ClientHeartRate> heartrateRepository,
-         IGenericRepository<ClientSeizure> seizureRepository,
-         IGenericRepository<ClientWoundCare> woundcareRepository,
-         IGenericRepository<ClientPainChart> painchartRepository,
-         IGenericRepository<Capacity> capacityRepository,
-         IGenericRepository<ConsentCare> consentcareRepository,
-         IGenericRepository<ConsentData> consentdataRepository,
-         IGenericRepository<ConsentLandLine> consentlandlineRepository,
-         IGenericRepository<Equipment> equipmentRepository,
-         IGenericRepository<Personal> personalRepository,
-         IGenericRepository<KeyIndicators> keyindicatorsRepository,
-         IGenericRepository<PersonCentred> personcentredRepository,
-         IGenericRepository<Review> reviewRepository)
+            IGenericRepository<ClientBloodCoagulationRecord> bloodcoagRepository,
+            IGenericRepository<ClientBMIChart> bmichartRepository,
+            IGenericRepository<ClientBloodPressure> bloodpressureRepository,
+            IGenericRepository<ClientBodyTemp> bodytempRepository,
+            IGenericRepository<ClientBowelMovement> bowelmovementRepository,
+            IGenericRepository<ClientEyeHealthMonitoring> eyehealthRepository,
+            IGenericRepository<ClientFoodIntake> foodintakeRepository,
+            IGenericRepository<ClientOxygenLvl> oxygenlvlRepository,
+            IGenericRepository<ClientPulseRate> pulserateRepository,
+            IGenericRepository<ClientHeartRate> heartrateRepository,
+            IGenericRepository<ClientSeizure> seizureRepository,
+            IGenericRepository<ClientWoundCare> woundcareRepository,
+            IGenericRepository<ClientPainChart> painchartRepository,
+            IGenericRepository<PersonalDetail> personalRepository,
+            IGenericRepository<SpecialHealthAndMedication> spcmedRepository,
+            IGenericRepository<SpecialHealthCondition> speccondRepository,
+            IGenericRepository<PhysicalAbility> phyabRepository,
+            IGenericRepository<Balance> balanceRepository,
+            IGenericRepository<HistoryOfFall> historyRepository,
+            IGenericRepository<HealthAndLiving> healthlivingRepository,
+            IGenericRepository<CarePlanNutrition> cpnutRepository,
+            IGenericRepository<PersonalHygiene> phygieneRepository,
+            IGenericRepository<InfectionControl> infectionRepository,
+            IGenericRepository<ManagingTasks> mtaskRepository,
+            IGenericRepository<InterestAndObjective> objRepository,
+            IGenericRepository<Pets> petsRepository)
         {
             _clientRepository = clientRepository;
             _complainRepository = complainRepository;
@@ -161,15 +181,19 @@ namespace AwesomeCare.API.Controllers
             _seizureRepository = seizureRepository;
             _woundcareRepository = woundcareRepository;
             _painchartRepository = painchartRepository;
-            _capacityRepository = capacityRepository;
-            _consentcareRepository = consentcareRepository;
-            _consentdataRepository = consentdataRepository;
-            _consentlandlineRepository = consentlandlineRepository;
-            _equipmentRepository = equipmentRepository;
             _personalRepository = personalRepository;
-            _keyindicatorsRepository = keyindicatorsRepository;
-            _personcentredRepository = personcentredRepository;
-            _reviewRepository = reviewRepository;
+            _spcmedRepository = spcmedRepository;
+            _speccondRepository = speccondRepository;
+            _phyabRepository = phyabRepository;
+            _balanceRepository = balanceRepository;
+            _historyRepository = historyRepository;
+            _healthlivingRepository = healthlivingRepository;
+            _cpnutRepository = cpnutRepository;
+            _phygieneRepository = phygieneRepository;
+            _infectionRepository = infectionRepository;
+            _mtaskRepository = mtaskRepository;
+            _objRepository = objRepository;
+            _petsRepository = petsRepository;
     }
         /// <summary>
         /// Create Client
@@ -430,13 +454,95 @@ namespace AwesomeCare.API.Controllers
                                                                Date = sw.Date,
                                                                Comment = sw.Comment
                                                            }).ToList(),
-                                       GetReview = (from sw in _reviewRepository.Table
-                                                    where sw.PersonalDetailId == id.Value
+                                       GetReview = (from sw in _personalRepository.Table
+                                                    where sw.ClientId == id.Value
                                                     select new GetReview
                                                     {
-                                                        CP_PreDate = sw.CP_PreDate,
-                                                        CP_ReviewDate = sw.CP_ReviewDate
-                                                    }).ToList()
+                                                        CP_PreDate = sw.Review.CP_PreDate,
+                                                        CP_ReviewDate = sw.Review.CP_ReviewDate
+                                                    }).ToList(),
+                                       GetPets = (from sw in _petsRepository.Table
+                                                    where sw.ClientId == id.Value
+                                                    select new GetPets
+                                                    {
+                                                        Name = sw.Name,
+                                                        Age = sw.Age
+                                                    }).ToList(),
+                                       GetInterestAndObjective = (from sw in _objRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetInterestAndObjective
+                                                  {
+                                                      CareGoal = sw.CareGoal,
+                                                  }).ToList(),
+                                       GetPersonalHygiene = (from sw in _phygieneRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetPersonalHygiene
+                                                  {
+                                                      LaundrySupport = sw.LaundrySupport,
+                                                      LaundryGuide = sw.LaundryGuide
+                                                  }).ToList(),
+                                       GetInfectionControl = (from sw in _infectionRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetInfectionControl
+                                                  {
+                                                      TestDate = sw.TestDate,
+                                                      Remarks = sw.Remarks
+                                                  }).ToList(),
+                                       GetManagingTasks = (from sw in _mtaskRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetManagingTasks
+                                                  {
+                                                      Help = sw.Help,
+                                                  }).ToList(),
+                                       GetCarePlanNutrition = (from sw in _cpnutRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetCarePlanNutrition
+                                                  {
+                                                      SpecialDiet = sw.SpecialDiet,
+                                                      AvoidFood = sw.AvoidFood
+                                                  }).ToList(),
+                                       GetBalance = (from sw in _balanceRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetBalance
+                                                  {
+                                                      Name = sw.Name,
+                                                      Description = sw.Description
+                                                  }).ToList(),
+                                       GetPhysicalAbility = (from sw in _phyabRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetPhysicalAbility
+                                                  {
+                                                      Name = sw.Name,
+                                                      Description = sw.Description
+                                                  }).ToList(),
+                                       GetHealthAndLiving = (from sw in _healthlivingRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetHealthAndLiving
+                                                  {
+                                                      BriefHealth = sw.BriefHealth,
+                                                      WakeUp = sw.WakeUp
+                                                  }).ToList(),
+                                       GetSpecialHealthAndMedication = (from sw in _spcmedRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetSpecialHealthAndMedication
+                                                  {
+                                                      Date = sw.Date,
+                                                      By = sw.By
+                                                  }).ToList(),
+                                       GetSpecialHealthCondition = (from sw in _speccondRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetSpecialHealthCondition
+                                                  {
+                                                      ConditionName = sw.ConditionName,
+                                                      SourceInformation = sw.SourceInformation
+                                                  }).ToList(),
+                                       GetHistoryOfFall = (from sw in _historyRepository.Table
+                                                  where sw.ClientId == id.Value
+                                                  select new GetHistoryOfFall
+                                                  {
+                                                      Date = sw.Date,
+                                                      Cause = sw.Cause
+                                                  }).ToList(),
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

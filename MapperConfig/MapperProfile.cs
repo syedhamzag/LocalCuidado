@@ -106,6 +106,10 @@ using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.PersonalHygiene;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.InfectionControl;
 using AwesomeCare.DataTransferObject.DTOs.OfficeLocation;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
+using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective;
+using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
+using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
+using AwesomeCare.DataTransferObject.DTOs.Pets;
 
 namespace MapperConfig
 {
@@ -246,6 +250,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.SpecialHealthCondition, mem => mem.Ignore())
                 .ForMember(dto => dto.PersonalHygiene, mem => mem.Ignore())
                 .ForMember(dto => dto.InfectionControl, mem => mem.Ignore())
+                .ForMember(dto => dto.ManagingTasks, mem => mem.Ignore())
+                .ForMember(dto => dto.InterestAndObjective, mem => mem.Ignore())
+                .ForMember(dto => dto.Pets, mem => mem.Ignore())
                 .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -273,15 +280,18 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetClientSeizure, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientPainChart, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientWoundCare, mem => mem.Ignore())
-
-                .ForMember(dto => dto.GetCapacity, mem => mem.Ignore())
-                .ForMember(dto => dto.GetConsentCare, mem => mem.Ignore())
-                .ForMember(dto => dto.GetConsentData, mem => mem.Ignore())
-                .ForMember(dto => dto.GetConsentLandLine, mem => mem.Ignore())
-                .ForMember(dto => dto.GetEquipment, mem => mem.Ignore())
-                .ForMember(dto => dto.GetPersonal, mem => mem.Ignore())
-                .ForMember(dto => dto.GetKeyIndicators, mem => mem.Ignore())
-                .ForMember(dto => dto.GetPersonCentred, mem => mem.Ignore())
+                .ForMember(dto => dto.GetPets, mem => mem.Ignore())
+                .ForMember(dto => dto.GetInterestAndObjective, mem => mem.Ignore())
+                .ForMember(dto => dto.GetManagingTasks, mem => mem.Ignore())
+                .ForMember(dto => dto.GetInfectionControl, mem => mem.Ignore())
+                .ForMember(dto => dto.GetPersonalHygiene, mem => mem.Ignore())
+                .ForMember(dto => dto.GetCarePlanNutrition, mem => mem.Ignore())
+                .ForMember(dto => dto.GetBalance, mem => mem.Ignore())
+                .ForMember(dto => dto.GetPhysicalAbility, mem => mem.Ignore())
+                .ForMember(dto => dto.GetHistoryOfFall, mem => mem.Ignore())
+                .ForMember(dto => dto.GetHealthAndLiving, mem => mem.Ignore())
+                .ForMember(dto => dto.GetSpecialHealthAndMedication, mem => mem.Ignore())
+                .ForMember(dto => dto.GetSpecialHealthCondition, mem => mem.Ignore())
                 .ForMember(dto => dto.GetReview, mem => mem.Ignore())
                 .ForMember(dto => dto.GetBaseRecords, mem => mem.Ignore());
 
@@ -344,6 +354,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.SpecialHealthCondition, mem => mem.Ignore())
                 .ForMember(dto => dto.PersonalHygiene, mem => mem.Ignore())
                 .ForMember(dto => dto.InfectionControl, mem => mem.Ignore())
+                .ForMember(dto => dto.ManagingTasks, mem => mem.Ignore())
+                .ForMember(dto => dto.InterestAndObjective, mem => mem.Ignore())
+                .ForMember(dto => dto.Pets, mem => mem.Ignore())
                 .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore());
             #endregion
 
@@ -2350,6 +2363,42 @@ namespace MapperConfig
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<ManagingTasks, GetManagingTasks>();
+            #endregion
+
+            #region InterestAndObjective
+            CreateMap<PutInterestAndObjective, InterestAndObjective>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostInterestAndObjective, InterestAndObjective>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<InterestAndObjective, GetInterestAndObjective>();
+            #endregion
+
+            #region Interest
+            CreateMap<PutInterest, Interest>()
+                .ForMember(dto => dto.InterestAndObjective, mem => mem.Ignore());
+            CreateMap<PostInterest, Interest>()
+                .ForMember(dto => dto.InterestAndObjective, mem => mem.Ignore());
+
+            CreateMap<Interest, GetInterest>();
+            #endregion
+
+            #region PersonalityTest
+            CreateMap<PutPersonalityTest, PersonalityTest>()
+                .ForMember(dto => dto.InterestAndObjective, mem => mem.Ignore());
+            CreateMap<PostPersonalityTest, PersonalityTest>()
+                .ForMember(dto => dto.InterestAndObjective, mem => mem.Ignore());
+
+            CreateMap<PersonalityTest, GetPersonalityTest>();
+            #endregion
+
+            #region Pets
+            CreateMap<PutPets, Pets>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostPets, Pets>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<Pets, GetPets>();
             #endregion
         }
     }

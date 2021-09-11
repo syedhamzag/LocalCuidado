@@ -20,7 +20,6 @@
                     <input type="hidden" asp-for="ClientId" />
 
                     <h4>Person Centredness</h4>
-
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -219,10 +218,6 @@
                     <h4>Equipment</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group">
-                                <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
-                                <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
-                            </div>
                             <input type="hidden" asp-for="@Model.EquipmentCount" value="@Model.EquipmentCount" />
                             <table class="table table-hover table-bordered" id="tblEquipment">
                                 <thead>
@@ -353,13 +348,6 @@
                         </div>
                     </div>
 
-                    @*Submit Button*@
-                    <div class="row">
-                        <div class="form-group col-sm-10 col-xs-12 col-md-10 col-lg-10">
-                            <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
-                        </div>
-                    </div>
-
                 </form>
             </div>
         </div>
@@ -371,7 +359,6 @@
     <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
     <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-
     <script type="text/javascript">
         $(document).ready(function () {
             $('.custom-select').attr("disabled", "disabled");

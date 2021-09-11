@@ -23,27 +23,27 @@ namespace AwesomeCare.Model.Models.Map
                .IsRequired();
 
             builder.Property(p => p.Type)
-               .HasColumnName("Cleaning")
+               .HasColumnName("Type")
                .IsRequired();
 
             builder.Property(p => p.Guideline)
-               .HasColumnName("CleaningFreq")
+               .HasColumnName("Guideline")
                .IsRequired();
 
             builder.Property(p => p.TestDate)
-               .HasColumnName("CleaningTools")
+               .HasColumnName("TestDate")
                .IsRequired();
 
             builder.Property(p => p.VaccStatus)
-               .HasColumnName("DesiredCleaning")
+               .HasColumnName("VaccStatus")
                .IsRequired();
 
             builder.Property(p => p.Remarks)
-               .HasColumnName("DirtyLaundry")
+               .HasColumnName("Remarks")
                .IsRequired();
 
             builder.Property(p => p.Status)
-               .HasColumnName("DryLaundry")
+               .HasColumnName("Status")
                .IsRequired();
             #endregion
 

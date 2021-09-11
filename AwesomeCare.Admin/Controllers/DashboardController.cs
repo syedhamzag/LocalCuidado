@@ -1055,9 +1055,11 @@ namespace AwesomeCare.Admin.Controllers
             var startDateM = DateTime.Now.AddDays(-365).Date.ToString("yyyy-MM-dd");
             var startDateW = DateTime.Now.AddDays(-7).Date.ToString("yyyy-MM-dd");
 
+            var staffs = await _staffService.GetStaffs();
+            var serviceUsers = await _clientService.GetClients();
 
-
-
+            dashboard.ActiveUser = serviceUsers.Where(s => s.Status == "Active").Count();
+            dashboard.ApprovedStaff = staffs.Where(s => s.Status == "Approved").Count();
             dashboard.GetClients = GetClients();
             dashboard.GetStaffPersonalInfos = GetStaffs();
             dashboard.LiveTrackerM = GetTrackerMonthly(startDateM, endDate, months);

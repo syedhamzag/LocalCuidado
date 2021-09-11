@@ -46,14 +46,14 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostManagingTasks postCarePlanHygiene)
+        public async Task<IActionResult> Create([FromBody] List<PostManagingTasks> postCarePlanHygiene)
         {
             if (postCarePlanHygiene == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var CarePlanHygiene = Mapper.Map<ManagingTasks>(postCarePlanHygiene);
-            await _taskRepository.InsertEntity(CarePlanHygiene);
+            var CarePlanHygiene = Mapper.Map<List<ManagingTasks>>(postCarePlanHygiene);
+            await _taskRepository.InsertEntities(CarePlanHygiene);
             return Ok();
         }
         /// <summary>
@@ -62,15 +62,18 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PostManagingTasks models)
+        public async Task<IActionResult> Put([FromBody] List<PutManagingTasks> puttask)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var CarePlanHygiene = Mapper.Map<ManagingTasks>(models);
-            await _taskRepository.UpdateEntity(CarePlanHygiene);
+            var CarePlanHygiene = Mapper.Map<List<ManagingTasks>>(puttask);
+            foreach (var item in CarePlanHygiene)
+            {
+                await _taskRepository.UpdateEntity(item);
+            }           
             return Ok();
 
         }
@@ -89,7 +92,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("id Parameter is required");
 
             var getCarePlanHygiene = await (from c in _taskRepository.Table
-                                           where c.TaskId == id.Value
+                                           where c.ClientId == id.Value
                                            select new GetManagingTasks
                                            {
                                                TaskId = c.TaskId,

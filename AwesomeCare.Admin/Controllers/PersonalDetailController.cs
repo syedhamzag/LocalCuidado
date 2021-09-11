@@ -1,7 +1,6 @@
 ﻿using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
-using AwesomeCare.Admin.Services.ConsentCare;
 using AwesomeCare.Admin.Services.PersonalDetail;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.CarePlan;
@@ -30,7 +29,6 @@ namespace AwesomeCare.Admin.Controllers
 {
     public class PersonalDetailController : BaseController
     {
-        private IConsentCareService _careService;
         private IClientService _clientService;
         private IStaffService _staffService;
         private IBaseRecordService _baseRecord;
@@ -38,11 +36,10 @@ namespace AwesomeCare.Admin.Controllers
         private IPersonalDetailService _personaldetailService;
 
         public PersonalDetailController (IFileUpload fileUpload, IStaffService staffService, IClientService clientService,IBaseRecordService baseRecord, 
-            IConsentCareService careService, IClientInvolvingParty involvingparty, IPersonalDetailService personaldetailService) : base(fileUpload)
+            IClientInvolvingParty involvingparty, IPersonalDetailService personaldetailService) : base(fileUpload)
         {
             _staffService = staffService;
             _clientService = clientService;
-            _careService = careService;
             _baseRecord = baseRecord;
             _involvingparty = involvingparty;
             _personaldetailService = personaldetailService;
@@ -583,7 +580,6 @@ namespace AwesomeCare.Admin.Controllers
                 RA_ReviewDate = pdetail.Result.Review.FirstOrDefault().RA_ReviewDate,
                 #endregion
 
-                //ClassList = .Result.
                 InvolingList = involve.Result.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList(),
                 EquipmentCount = pdetail.Result.Equipment.Count,
                 PersonCentreCount = pdetail.Result.PersonCentred.Count,
