@@ -1,26 +1,21 @@
 ﻿using AwesomeCare.Admin.Services.Admin;
-using AwesomeCare.Admin.Services.Capacity;
+using AwesomeCare.Admin.Services.Balance;
+using AwesomeCare.Admin.Services.CarePlanNutrition;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
-using AwesomeCare.Admin.Services.ConsentCare;
-using AwesomeCare.Admin.Services.ConsentData;
-using AwesomeCare.Admin.Services.ConsentLandLine;
-using AwesomeCare.Admin.Services.Equipment;
-using AwesomeCare.Admin.Services.KeyIndicators;
-using AwesomeCare.Admin.Services.Personal;
-using AwesomeCare.Admin.Services.PersonCentred;
-using AwesomeCare.Admin.Services.Review;
+using AwesomeCare.Admin.Services.HealthAndLiving;
+using AwesomeCare.Admin.Services.HistoryOfFall;
+using AwesomeCare.Admin.Services.InfectionControl;
+using AwesomeCare.Admin.Services.InterestAndObjective;
+using AwesomeCare.Admin.Services.ManagingTasks;
+using AwesomeCare.Admin.Services.PersonalDetail;
+using AwesomeCare.Admin.Services.PersonalHygiene;
+using AwesomeCare.Admin.Services.Pets;
+using AwesomeCare.Admin.Services.PhysicalAbility;
+using AwesomeCare.Admin.Services.SpecialHealthAndMedication;
+using AwesomeCare.Admin.Services.SpecialHealthCondition;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.CarePlan;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Capacity;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentCare;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentData;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentLandline;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.KeyIndicators;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Personal;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.PersonCentred;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Review;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,355 +31,144 @@ namespace AwesomeCare.Admin.Controllers
 {
     public class CarePlanController : BaseController
     {
-        private ICapacityService _capacityService;
-        private IConsentCareService _careService;
-        private IConsentDataService _dataService;
-        private IConsentLandLineService _landService;
-        private IEquipmentService _equipmentService;
-        private IKeyIndicatorsService _keyService;
-        private IPersonalService _personalService;
-        private IPersonCentredService _centredService;
-        private IReviewService _reviewService;
+        private IPersonalDetailService _pdetailService;
+        private ICarePlanNutritionService _nutritionService;
+        private IPersonalHygieneService _phygieneService;
+        private IInfectionControlService _infectionService;
+        private IManagingTasksService _mataskService;
+        private IPetsService _petsService;
+        private IInterestAndObjectiveService _interestService;
+        private IBalanceService _balanceService;
+        private IPhysicalAbilityService _physicalService;
+        private IHistoryOfFallService _historyService;
+        private IHealthAndLivingService _hlService;
+        private ISpecialHealthAndMedicationService _shamService;
+        private ISpecialHealthConditionService _shcService;
         private IClientService _clientService;
-        private IBaseRecordService _baseService;
         private IStaffService _staffService;
         private IBaseRecordService _baseRecord;
         private IClientInvolvingParty _involvingparty;
 
-        public CarePlanController(IFileUpload fileUpload, IStaffService staffService, IClientService clientService, ICapacityService capacityService,
-            IBaseRecordService baseRecord, IConsentCareService careService, IConsentDataService dataService, IConsentLandLineService landService,
-            IEquipmentService equipmentService, IKeyIndicatorsService keyService, IPersonalService personalService, IPersonCentredService centredService,
-            IReviewService reviewService, IClientInvolvingParty involvingparty) : base(fileUpload)
+        public CarePlanController(  IFileUpload fileUpload, IStaffService staffService, IClientService clientService, IPersonalDetailService pdetailService,
+                                    IBaseRecordService baseRecord, IClientInvolvingParty involvingparty, ICarePlanNutritionService nutritionService,
+                                    IPersonalHygieneService phygieneService, IInfectionControlService infectionService, IManagingTasksService mataskService,
+                                    IPetsService petsService, IInterestAndObjectiveService interestService, IBalanceService balanceService, IPhysicalAbilityService physicalService,
+                                    IHistoryOfFallService historyService, IHealthAndLivingService hlService, ISpecialHealthAndMedicationService shamService,
+                                    ISpecialHealthConditionService shcService) : base(fileUpload)
         {
             _staffService = staffService;
             _clientService = clientService;
-            _capacityService = capacityService;
-            _careService = careService;
-            _dataService = dataService;
-            _landService = landService;
-            _equipmentService = equipmentService;
-            _keyService = keyService;
-            _personalService = personalService;
-            _centredService = centredService;
-            _reviewService = reviewService;
+            _pdetailService = pdetailService;
             _baseRecord = baseRecord;
             _involvingparty = involvingparty;
-        }
-        public async Task<IActionResult> Reports()
-        {
-            var entities = await _careService.Get();
-
-            var client = await _clientService.GetClientDetail();
-            List<CreateCarePlan> reports = new List<CreateCarePlan>();
-            foreach (GetConsentCare item in entities)
-            {
-                var report = new CreateCarePlan();
-                report.ClientId = item.PersonalDetailId;
-                report.ClientName = client.Where(s => s.ClientId == item.PersonalDetailId).Select(s => s.FullName).FirstOrDefault();
-                reports.Add(report);
-            }
-
-            return View(reports);
-        }
-
-        public async Task<IActionResult> Index(int clientId)
-        {
-            //var client = await _clientService.GetClientDetail();
-            CreateCarePlan model = new CreateCarePlan();
-            //model.ClientId = clientId;
-            //var bases1 = await _baseRecord.GetBaseRecord();
-            //var id1 = bases1.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
-            //var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
-            //model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-            
-            //var bases2 = await _baseRecord.GetBaseRecord();
-            //var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
-            //var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
-            //model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-
-            //var staffs = await _staffService.GetStaffs();
-            //model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-
-            //var care = await _careService.Get(model.ClientId);
-            //if (care != null)
-            //{
-            //    model = Get(model.ClientId);
-            //    model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-            //    model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-            //}
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(CreateCarePlan model)
-        {
-            if (model == null || !ModelState.IsValid)
-            {
-                var client = await _clientService.GetClientDetail();
-                var bases1 = await _baseRecord.GetBaseRecord();
-                var id1 = bases1.Where(s => s.KeyName == "Indicator").FirstOrDefault().BaseRecordId;
-                var items1 = await _baseRecord.GetBaseRecordWithItems(id1);
-                model.IndicatorList = items1.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-
-                //var bases2 = await _baseRecord.GetBaseRecord();
-                //var id2 = bases2.Where(s => s.KeyName == "Focus").FirstOrDefault().BaseRecordId;
-                //var items2 = await _baseRecord.GetBaseRecordWithItems(id2);
-                //model.FocusList = items2.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
-
-                var staffs = await _staffService.GetStaffs();
-                model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-
-                return View(model);
-            }
-
-            //if (model.Attach != null)
-            //{
-            //    string folder = "clientcomplain";
-            //    string filename = string.Concat(folder, "Attachment", model.ClientId);
-            //    string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
-            //    model.Attachment = path;
-
-            //}
-            //else
-            //{
-            //    if (model.Attachment != null)
-            //        model.Attachment = model.Attachment;
-            //    model.Attachment = "No Image";
-            //}
-
-            PostCapacity capacity = new PostCapacity();
-            PostConsentCare care = new PostConsentCare();
-            PostConsentData data = new PostConsentData();
-            PostConsentLandLine land = new PostConsentLandLine();
-            PostEquipment equip = new PostEquipment();
-            PostKeyIndicators key = new PostKeyIndicators();
-            PostPersonal personal = new PostPersonal();
-            PostPersonCentred centre = new PostPersonCentred();
-            PostReview review = new PostReview();
-
-            #region Capacity
-            capacity.PersonalDetailId = model.ClientId;
-            capacity.CapacityId = model.CapacityId;
-            capacity.Implications = model.Implications;
-            capacity.Pointer = model.Pointer;
-            capacity.Indicator = model.Indicator.Select(o => new PostCapacityIndicator { BaseRecordId = o, CapacityId = model.CapacityId }).ToList();
-            #endregion
-
-            #region ConsentCare
-            care.PersonalDetailId = model.ClientId;
-            care.CareId = model.CareId;
-            care.Signature = model.CareSignature;
-            care.Date = model.CareDate;
-            #endregion
-
-            #region ConsentData
-            data.PersonalDetailId = model.ClientId;
-            data.DataId = model.DataId;
-            data.Signature = model.DataSignature;
-            data.Date = model.DataDate;
-            #endregion
-
-            #region ConsentLandLine
-            land.PersonalDetailId = model.ClientId;
-            land.LandlineId = model.LandLineId;
-            land.Signature = model.LandLineSignature;
-            land.Date = model.LandLineDate;
-            land.LogMethod = model.LandLineLogMethod.Select(o => new PostConsentLandlineLog { BaseRecordId = o, LandlineId = model.LandLineId }).ToList();
-            #endregion
-
-            //#region Equipment
-            //equip.EquipmentId = model.EquipmentId;
-            //equip.PersonalDetailId = model.ClientId;
-            //equip.Location = model.Location;
-            //equip.Name = model.Name;
-            //equip.Type = model.Type;
-            //equip.NextServiceDate = model.NextServiceDate;
-            //equip.ServiceDate = model.ServiceDate;
-            //equip.Status = model.Status;
-            //equip.PersonToAct = model.PersonToAct;
-            //equip.Attachment = model.Attachment;
-            //#endregion
-
-            #region KeyIndicators
-            key.PersonalDetailId = model.ClientId;
-            key.AboutMe = model.AboutMe;
-            key.KeyId = model.KeyId;
-            key.FamilyRole = model.FamilyRole;
-            key.Debture = model.Debture;
-            key.LivingStatus = model.LivingStatus;
-            key.LogMethod = model.LogMethod.Select(o => new PostKeyIndicatorLog { BaseRecordId = o, KeyId = model.KeyId }).ToList();
-            key.ThingsILike = model.ThingsILike;
-            #endregion
-
-            #region Personal
-            personal.PersonalDetailId = model.ClientId;
-            personal.PersonalId = model.PersonalId;
-            personal.Smoking = model.Smoking;
-            personal.DNR = model.DNR;
-            #endregion
-
-            #region Person Centred
-            //centre.PersonalDetailId = model.ClientId;
-            //centre.PersonCentredId = model.PersonCentredId;
-            //centre.Class = model.Class;
-            //centre.ExpSupport = model.ExpSupport;
-            //centre.Focus = model.Focus.Select(o => new PostPersonCentredFocus { BaseRecordId = o, PersonCentredId = model.PersonCentredId }).ToList();
-            #endregion
-
-            #region Review
-            review.PersonalDetailId = model.ClientId;
-            review.ReviewId = model.ReviewId;
-            review.CP_PreDate = model.CP_PreDate;
-            review.CP_ReviewDate = model.CP_ReviewDate;
-            review.RA_PreDate = model.RA_PreDate;
-            review.RA_ReviewDate = model.RA_ReviewDate;
-            #endregion
-            if (care.CareId > 0)
-            {
-                var result = await _capacityService.Put(capacity);
-                var result1 = await _careService.Put(care);
-                var result2 = await _dataService.Put(data);
-                var result3 = await _landService.Put(land);
-                var result4 = await _equipmentService.Put(equip);
-                var result5 = await _keyService.Put(key);
-                var result6 = await _personalService.Put(personal);
-                var result7 = await _centredService.Put(centre);
-                var result8 = await _reviewService.Put(review);
-
-                var content = result.Content.ReadAsStringAsync();
-                var content1 = result1.Content.ReadAsStringAsync();
-                var content2 = result2.Content.ReadAsStringAsync();
-                var content3 = result3.Content.ReadAsStringAsync();
-                var content4 = result4.Content.ReadAsStringAsync();
-                var content5 = result5.Content.ReadAsStringAsync();
-                var content6 = result6.Content.ReadAsStringAsync();
-                var content7 = result7.Content.ReadAsStringAsync();
-                var content8 = result8.Content.ReadAsStringAsync();
-            }
-            else
-            { 
-                var result = await _capacityService.Create(capacity);
-                var result1 = await _careService.Create(care);
-                var result2 = await _dataService.Create(data);
-                var result3 = await _landService.Create(land);
-                var result4 = await _equipmentService.Create(equip);
-                var result5 = await _keyService.Create(key);
-                var result6 = await _personalService.Create(personal);
-                var result7 = await _centredService.Create(centre);
-                var result8 = await _reviewService.Create(review);
-
-                var content = result.Content.ReadAsStringAsync();
-                var content1 = result1.Content.ReadAsStringAsync();
-                var content2 = result2.Content.ReadAsStringAsync();
-                var content3 = result3.Content.ReadAsStringAsync();
-                var content4 = result4.Content.ReadAsStringAsync();
-                var content5 = result5.Content.ReadAsStringAsync();
-                var content6 = result6.Content.ReadAsStringAsync();
-                var content7 = result7.Content.ReadAsStringAsync();
-                var content8 = result8.Content.ReadAsStringAsync();
-            }
-            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
-        }
-
+            _nutritionService = nutritionService;
+            _phygieneService = phygieneService;
+            _infectionService = infectionService;
+            _mataskService = mataskService;
+            _petsService = petsService;
+            _interestService = interestService;
+            _balanceService = balanceService;
+            _physicalService = physicalService;
+            _historyService = historyService;
+            _hlService = hlService;
+            _shamService = shamService;
+            _shcService = shcService;
+    }
+        
         public async Task<IActionResult> CareView(int clientId)
         {
-            var client = await _clientService.GetClientDetail();
-            var putEntity = Get(clientId);
-            return View(putEntity);
-        }
+            var bases = await _baseRecord.GetBaseRecord();
+            var baseClass = bases.Where(s => s.KeyName == "Class").FirstOrDefault().BaseRecordId;
+            var classItems = await _baseRecord.GetBaseRecordWithItems(baseClass);
 
-        public CreateCarePlan Get(int clientId)
-        {
             var staff = _staffService.GetStaffs();
-
-            var capacity = _capacityService.Get(clientId);
-            var care = _careService.Get(clientId);
-            var land = _landService.Get(clientId);
-            var data = _dataService.Get(clientId);
-            var equip = _equipmentService.Get(clientId);
-            var key = _keyService.Get(clientId);
-            var personal = _personalService.Get(clientId);
-            var centre = _centredService.Get(clientId);
-            var review = _reviewService.Get(clientId);
+            var involve = _clientService.GetClient(clientId);
             var client = _clientService.GetClient(clientId);
             var details = _clientService.GetClientDetail();
             var party = _involvingparty.Get(clientId);
-            var Name = "N/A";
             var Relation = "N/A";
             if (party.Result != null)
             {
-                Name = party.Result.Name;
                 Relation = party.Result.Relationship;
             }
 
-            var putEntity = new CreateCarePlan
-            {
+            var pdetail = _pdetailService.Get(clientId);
+            var nutrition = await _nutritionService.Get();
+            var infection = await _infectionService.Get();
+            var mtask = _mataskService.Get();
+            var hygiene = await _phygieneService.Get();
+            var obj = _interestService.Get(clientId);
+            var pets = await _petsService.Get();
+            var balance = await _balanceService.Get();
+            var physical = await _physicalService.Get();
+            var hl = await _hlService.Get();
+            var history = await _historyService.Get();
+            var sham = await _shamService.Get();
+            var shc = await _shcService.Get();
 
+            var putEntity = new CreateCarePlanView()
+            {
+                #region PERSONAL DETAILS
+
+                #region Personal Details
                 ClientId = clientId,
+                PersonalDetailId = pdetail.Result.PersonalDetailId,
+                #endregion
 
                 #region Capacity
-                CapacityId = capacity.Result.CapacityId,
-                Implications = capacity.Result.Implications,
-                Pointer = capacity.Result.Pointer,
-                IndicatorList = capacity.Result.Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                Indicator = capacity.Result.Indicator.Select(s => s.BaseRecordId).ToList(),
+                CapacityId = pdetail.Result.Capacity.FirstOrDefault().CapacityId,
+                Implications = pdetail.Result.Capacity.FirstOrDefault().Implications,
+                Pointer = pdetail.Result.Capacity.FirstOrDefault().Pointer,
+                IndicatorList = pdetail.Result.Capacity.FirstOrDefault().Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                Indicator = pdetail.Result.Capacity.FirstOrDefault().Indicator.Select(s => s.BaseRecordId).ToList(),
                 #endregion
 
                 #region ConsentCare
-                CareId = care.Result.CareId,
-                CareSignature = care.Result.Signature,
-                CareDate = care.Result.Date,
-                //CareName = Name,
+                CareId = pdetail.Result.ConsentCare.FirstOrDefault().CareId,
+                CareSignature = pdetail.Result.ConsentCare.FirstOrDefault().Signature,
+                CareDate = pdetail.Result.ConsentCare.FirstOrDefault().Date,
+                CareName = pdetail.Result.ConsentCare.FirstOrDefault().Name,
                 CareRelation = Relation,
                 #endregion
 
                 #region ConsentData
-                DataId = data.Result.DataId,
-                DataSignature = data.Result.Signature,
-                DataDate = data.Result.Date,
-                //DataName = Name,
+                DataId = pdetail.Result.ConsentData.FirstOrDefault().DataId,
+                DataSignature = pdetail.Result.ConsentData.FirstOrDefault().Signature,
+                DataDate = pdetail.Result.ConsentData.FirstOrDefault().Date,
+                DataName = pdetail.Result.ConsentData.FirstOrDefault().Name,
                 DataRelation = Relation,
                 #endregion
 
                 #region ConsentLandLine
-                LandLineId = land.Result.LandlineId,
-                LandLineSignature = land.Result.Signature,
-                LandLineDate = land.Result.Date,
-                LandLogList = land.Result.LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                LandLineLogMethod = land.Result.LogMethod.Select(s => s.BaseRecordId).ToList(),
-                LandName = land.Result.Name,
+                LandLineId = pdetail.Result.ConsentLandline.FirstOrDefault().LandlineId,
+                LandLineSignature = pdetail.Result.ConsentLandline.FirstOrDefault().Signature,
+                LandLineDate = pdetail.Result.ConsentLandline.FirstOrDefault().Date,
+                LandLogList = pdetail.Result.ConsentLandline.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                LandLineLogMethod = pdetail.Result.ConsentLandline.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList(),
+                LandName = pdetail.Result.ConsentLandline.FirstOrDefault().Name,
                 LandRelation = Relation,
                 #endregion
 
                 #region Equipment
-                //EquipmentId = equip.Result.EquipmentId,
-                //Location = equip.Result.Location,
-                //Name = equip.Result.Name,
-                //Type = equip.Result.Type,
-                //NextServiceDate = equip.Result.NextServiceDate,
-                //ServiceDate = equip.Result.ServiceDate,
-                //Status = equip.Result.Status,
-                //PersonToAct = equip.Result.PersonToAct,
-                //Attachment = equip.Result.Attachment,
+                GetEquipment = pdetail.Result.Equipment,
                 StaffList = staff.Result.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
                 #endregion
 
                 #region KeyIndicators
-                AboutMe = key.Result.AboutMe,
-                KeyId = key.Result.KeyId,
-                FamilyRole = key.Result.FamilyRole,
-                Debture = key.Result.Debture,
-                LivingStatus = key.Result.LivingStatus,
-                KeyLogList = key.Result.LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                LogMethod = key.Result.LogMethod.Select(s => s.BaseRecordId).ToList(),
-                ThingsILike = key.Result.ThingsILike,
+                AboutMe = pdetail.Result.KeyIndicators.FirstOrDefault().AboutMe,
+                KeyId = pdetail.Result.KeyIndicators.FirstOrDefault().KeyId,
+                FamilyRole = pdetail.Result.KeyIndicators.FirstOrDefault().FamilyRole,
+                Debture = pdetail.Result.KeyIndicators.FirstOrDefault().Debture,
+                LivingStatus = pdetail.Result.KeyIndicators.FirstOrDefault().LivingStatus,
+                KeyLogList = pdetail.Result.KeyIndicators.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                LogMethod = pdetail.Result.KeyIndicators.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList(),
+                ThingsILike = pdetail.Result.KeyIndicators.FirstOrDefault().ThingsILike,
                 #endregion
 
                 #region Personal
-                PersonalId = personal.Result.PersonalId,
-                Smoking = personal.Result.Smoking,
-                DNR = personal.Result.DNR,
+                PersonalId = pdetail.Result.Personal.FirstOrDefault().PersonalId,
+                Smoking = pdetail.Result.Personal.FirstOrDefault().Smoking,
+                DNR = pdetail.Result.Personal.FirstOrDefault().DNR,
                 FullName = details.Result.Where(s => s.ClientId == clientId).Select(s => s.FullName).FirstOrDefault(),
                 PreferredLanguage = client.Result.LanguageId,
                 Gender = client.Result.GenderId,
@@ -393,151 +177,221 @@ namespace AwesomeCare.Admin.Controllers
                 PostCode = client.Result.PostCode,
                 Telephone = client.Result.Telephone,
                 PreferredName = client.Result.Firstname,
+                AccessCode = client.Result.KeySafe,
+                PreferredGender = client.Result.ChoiceOfStaffId,
+                KeyWorker = client.Result.Keyworker,
+                TeamLeader = client.Result.TeamLeader,
+                Religion = pdetail.Result.Personal.FirstOrDefault().Religion,
+                Nationality = pdetail.Result.Personal.FirstOrDefault().Nationality,
                 #endregion
 
                 #region Person Centred
-                //PersonCentredId = centre.Result.PersonCentredId,
-                //Class = centre.Result.Class,
-                //ExpSupport = centre.Result.ExpSupport,
-                //FocusList = centre.Result.Focus.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                //Focus = centre.Result.Focus.Select(s => s.BaseRecordId).ToList(),
+                GetPersonCentred = pdetail.Result.PersonCentred,
                 #endregion
 
                 #region Review
-                ReviewId = review.Result.ReviewId,
-                CP_PreDate = review.Result.CP_PreDate,
-                CP_ReviewDate = review.Result.CP_ReviewDate,
-                RA_PreDate = review.Result.RA_PreDate,
-                RA_ReviewDate = review.Result.RA_ReviewDate,
+                ReviewId = pdetail.Result.Review.FirstOrDefault().ReviewId,
+                CP_PreDate = pdetail.Result.Review.FirstOrDefault().CP_PreDate,
+                CP_ReviewDate = pdetail.Result.Review.FirstOrDefault().CP_ReviewDate,
+                RA_PreDate = pdetail.Result.Review.FirstOrDefault().RA_PreDate,
+                RA_ReviewDate = pdetail.Result.Review.FirstOrDefault().RA_ReviewDate,
                 #endregion
 
-                ActionName = "Update",
-           
+                InvolingList = involve.Result.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList(),
+                EquipmentCount = pdetail.Result.Equipment.Count,
+                PersonCentreCount = pdetail.Result.PersonCentred.Count,
+
+                #endregion
+
+                #region NUTRITION
+                Nutrition_AvoidFood = nutrition.FirstOrDefault().AvoidFood,
+                Nutrition_DrinkType = nutrition.FirstOrDefault().DrinkType, 
+                Nutrition_EatingDifficulty = nutrition.FirstOrDefault().EatingDifficulty,
+                Nutrition_FoodIntake = nutrition.FirstOrDefault().FoodIntake,
+                Nutrition_FoodStorage = nutrition.FirstOrDefault().FoodStorage,
+                Nutrition_MealPreparation = nutrition.FirstOrDefault().MealPreparation,
+                NutritionId = nutrition.FirstOrDefault().NutritionId,
+                Nutrition_RiskMitigations = nutrition.FirstOrDefault().RiskMitigations,
+                Nutrition_ServingMeal = nutrition.FirstOrDefault().ServingMeal,
+                Nutrition_SpecialDiet = nutrition.FirstOrDefault().SpecialDiet,
+                Nutrition_ThingsILike = nutrition.FirstOrDefault().ThingsILike,
+                Nutrition_WhenRestock = nutrition.FirstOrDefault().WhenRestock,
+                Nutrition_WhoRestock = nutrition.FirstOrDefault().WhoRestock,
+                #endregion
+
+                #region HYGIENE
+
+                #region Infection Control
+                Infection_Guideline = infection.FirstOrDefault().Guideline,
+                InfectionId = infection.FirstOrDefault().InfectionId,
+                Infection_Remarks = infection.FirstOrDefault().Remarks,
+                Infection_Status = infection.FirstOrDefault().Status,
+                Infection_TestDate = infection.FirstOrDefault().TestDate,
+                Infection_Type = infection.FirstOrDefault().Type,
+                Infection_VaccStatus = infection.FirstOrDefault().VaccStatus,
+                #endregion
+
+                #region Managing Tasks
+                GetManagingTasks = mtask.Result,
+                #endregion
+
+                #region Personal Hygiene
+                HygieneId = hygiene.FirstOrDefault().HygieneId,
+                Hygiene_Cleaning = hygiene.FirstOrDefault().Cleaning,
+                Hygiene_CleaningFreq = hygiene.FirstOrDefault().CleaningFreq,
+                Hygiene_CleaningTools = hygiene.FirstOrDefault().CleaningTools,
+                Hygiene_DesiredCleaning = hygiene.FirstOrDefault().DesiredCleaning,
+                Hygiene_DirtyLaundry = hygiene.FirstOrDefault().DirtyLaundry,
+                Hygiene_DryLaundry = hygiene.FirstOrDefault().DryLaundry,
+                Hygiene_GeneralAppliance = hygiene.FirstOrDefault().GeneralAppliance,
+                Hygiene_Ironing = hygiene.FirstOrDefault().Ironing,
+                Hygiene_LaundryGuide = hygiene.FirstOrDefault().LaundryGuide,
+                Hygiene_LaundrySupport = hygiene.FirstOrDefault().LaundrySupport,
+                Hygiene_WashingMachine = hygiene.FirstOrDefault().WashingMachine,
+                Hygiene_WhoClean = hygiene.FirstOrDefault().WhoClean,
+                #endregion
+
+                #endregion
+
+                #region INTEREST AND OBJECTIVE
+                #region Interest
+                Interest_CareGoal = obj.Result.CareGoal,
+                Interest_Brief = obj.Result.Brief,
+
+                #region Lists
+                GetInterest = obj.Result.Interest,
+                GetPersonalityTest = obj.Result.PersonalityTest,
+                #endregion
+                #endregion
+
+                #region Pets
+                Pet_Age = pets.FirstOrDefault().Age,
+                Pet_Type = pets.FirstOrDefault().Type,
+                PetsId = pets.FirstOrDefault().PetsId,
+                Pet_Name = pets.FirstOrDefault().Name,
+                Pet_Gender = pets.FirstOrDefault().Gender,
+                PetActivities = pets.FirstOrDefault().PetActivities,
+                PetCare = pets.FirstOrDefault().PetCare,
+                Pet_MealPattern = pets.FirstOrDefault().MealPattern,
+                PetInsurance = pets.FirstOrDefault().PetInsurance,
+                Pet_MealStorage = pets.FirstOrDefault().MealStorage,
+                Pet_VetVisit = pets.FirstOrDefault().VetVisit,
+                #endregion
+                #endregion
+
+                #region HEALTH
+
+                #region Balance
+                Balance_Description = balance.FirstOrDefault().Description,
+                Balance_Mobility = balance.FirstOrDefault().Mobility,
+                BalanceId = balance.FirstOrDefault().BalanceId,
+                Balance_Name = balance.FirstOrDefault().Name,
+                Balance_Status = balance.FirstOrDefault().Status,
+                #endregion
+
+                #region Physical Ability
+                Physical_Description = physical.FirstOrDefault().Description,
+                Physical_Mobility = physical.FirstOrDefault().Mobility,
+                PhysicalId = physical.FirstOrDefault().PhysicalId,
+                Physical_Name = physical.FirstOrDefault().Name,
+                Physical_Status = physical.FirstOrDefault().Status,
+                #endregion
+
+                #region Health And Living
+                HL_AbilityToRead = hl.FirstOrDefault().AbilityToRead,
+                HL_AlcoholicDrink = hl.FirstOrDefault().AlcoholicDrink,
+                HL_AllowChats = hl.FirstOrDefault().AllowChats,
+                HL_BriefHealth = hl.FirstOrDefault().BriefHealth,
+                HL_CareSupport = hl.FirstOrDefault().CareSupport,
+                HL_ConstraintAttachment = hl.FirstOrDefault().ConstraintAttachment,
+                HL_ConstraintDetails = hl.FirstOrDefault().ConstraintDetails,
+                HL_ConstraintRequired = hl.FirstOrDefault().ConstraintRequired,
+                HL_ContinenceIssue = hl.FirstOrDefault().ContinenceIssue,
+                HL_ContinenceNeeds = hl.FirstOrDefault().ContinenceNeeds,
+                HL_ContinenceSource = hl.FirstOrDefault().ContinenceSource,
+                HL_DehydrationRisk = hl.FirstOrDefault().DehydrationRisk,
+                HL_EatingWithStaff = hl.FirstOrDefault().EatingWithStaff,
+                HL_Email = hl.FirstOrDefault().Email,
+                HL_FamilyUpdate = hl.FirstOrDefault().FamilyUpdate,
+                HL_FinanceManagement = hl.FirstOrDefault().FinanceManagement,
+                HLId = hl.FirstOrDefault().HLId,
+                HL_LaundaryRequired = hl.FirstOrDefault().LaundaryRequired,
+                HL_LetterOpening = hl.FirstOrDefault().LetterOpening,
+                HL_LifeStyle = hl.FirstOrDefault().LifeStyle,
+                HL_MeansOfComm = hl.FirstOrDefault().MeansOfComm,
+                HL_MovingAndHandling = hl.FirstOrDefault().MovingAndHandling,
+                HL_NeighbourInvolment = hl.FirstOrDefault().NeighbourInvolment,
+                HL_ObserveHealth = hl.FirstOrDefault().ObserveHealth,
+                HL_PostalService = hl.FirstOrDefault().PostalService,
+                HL_PressureSore = hl.FirstOrDefault().PressureSore,
+                HL_ShoppingRequired = hl.FirstOrDefault().ShoppingRequired,
+                HL_Smoking = hl.FirstOrDefault().Smoking,
+                HL_SpecialCaution = hl.FirstOrDefault().SpecialCaution,
+                HL_SpecialCleaning = hl.FirstOrDefault().SpecialCleaning,
+                HL_SupportToBed = hl.FirstOrDefault().SupportToBed,
+                HL_TeaChocolateCoffee = hl.FirstOrDefault().TeaChocolateCoffee,
+                HL_TextFontSize = hl.FirstOrDefault().TextFontSize,
+                HL_TVandMusic = hl.FirstOrDefault().TVandMusic,
+                HL_VideoCallRequired = hl.FirstOrDefault().VideoCallRequired,
+                HL_WakeUp = hl.FirstOrDefault().WakeUp,
+                #endregion
+
+                #region SHAM
+                SHAM_AccessMedication = sham.FirstOrDefault().AccessMedication,
+                SHAM_AdminLvl = sham.FirstOrDefault().AdminLvl,
+                SHAM_By = sham.FirstOrDefault().By,
+                SHAM_Consent = sham.FirstOrDefault().Consent,
+                SHAM_Date = sham.FirstOrDefault().Date,
+                SHAM_FamilyMeds = sham.FirstOrDefault().FamilyMeds,
+                SHAM_MedKeyCode = sham.FirstOrDefault().MedKeyCode,
+                SHAM_MedicationAllergy = sham.FirstOrDefault().MedicationAllergy,
+                SHMId = sham.FirstOrDefault().SHMId,
+                SHAM_LeftoutMedicine = sham.FirstOrDefault().LeftoutMedicine,
+                SHAM_MedAccessDenial = sham.FirstOrDefault().MedAccessDenial,
+                SHAM_MedicationStorage = sham.FirstOrDefault().MedicationStorage,
+                SHAM_NameFormMedicaiton = sham.FirstOrDefault().NameFormMedicaiton,
+                SHAM_PharmaMARChart = sham.FirstOrDefault().PharmaMARChart,
+                SHAM_PNRDoses = sham.FirstOrDefault().PNRDoses,
+                SHAM_PNRMedsMissing = sham.FirstOrDefault().PNRMedsMissing,
+                SHAM_SpecialStorage = sham.FirstOrDefault().SpecialStorage,
+                SHAM_NoMedAccess = sham.FirstOrDefault().NoMedAccess,
+                SHAM_MedsGPOrder = sham.FirstOrDefault().MedsGPOrder,
+                SHAM_WhoAdminister = sham.FirstOrDefault().WhoAdminister,
+                SHAM_PNRMedsAdmin = sham.FirstOrDefault().PNRMedsAdmin,
+                SHAM_PNRMedList = sham.FirstOrDefault().PNRMedList,
+                SHAM_OverdoseContact = sham.FirstOrDefault().OverdoseContact,
+                SHAM_TempMARChart = sham.FirstOrDefault().TempMARChart,
+                SHAM_FamilyReturnMed = sham.FirstOrDefault().FamilyReturnMed,
+                SHAM_PNRMedReq = sham.FirstOrDefault().PNRMedReq,
+                SHAM_Type = sham.FirstOrDefault().Type,
+                #endregion
+
+                #region SHC
+                SHC_ClientAction = shc.FirstOrDefault().ClientAction,
+                SHC_ClinicRecommendation = shc.FirstOrDefault().ClinicRecommendation,
+                SHC_ConditionName = shc.FirstOrDefault().ConditionName,
+                SHC_FeelingAfterIncident = shc.FirstOrDefault().FeelingAfterIncident,
+                SHC_LivingActivities = shc.FirstOrDefault().LivingActivities,
+                SHC_FeelingBeforeIncident = shc.FirstOrDefault().FeelingBeforeIncident,
+                SHC_Frequency = shc.FirstOrDefault().Frequency,
+                HealthCondId = shc.FirstOrDefault().HealthCondId,
+                SHC_LifestyleSupport = shc.FirstOrDefault().LifestyleSupport,
+                SHC_PlanningHealthCondition = shc.FirstOrDefault().PlanningHealthCondition,
+                SHC_SourceInformation = shc.FirstOrDefault().SourceInformation,
+                SHC_Trigger = shc.FirstOrDefault().Trigger,
+                #endregion
+
+                #region History Of Fall
+                HistoryId = history.FirstOrDefault().HistoryId,
+                History_Cause = history.FirstOrDefault().Cause,
+                History_Date = history.FirstOrDefault().Date,
+                History_Details = history.FirstOrDefault().Details,
+                History_Prevention = history.FirstOrDefault().Prevention,
+                #endregion
+
+                #endregion
             };
-            return putEntity;
-
+            return View(putEntity);
         }
-
-        //public async Task<IActionResult> Download(int clientId)
-        //{
-        //    var rotaTypes = await _clientRotaTypeService.Get();
-        //    var clientRotas = await _clientRotaService.GetForEdit(clientId);
-        //    var rotaTasks = await _rotaTaskService.Get();
-        //    var client = await _clientService.GetClientDetail();
-        //    List<string> list = client.Select(s => s.FullName).ToList();
-        //    var stream = new MemoryStream();
-        //    int row = 2;
-
-        //    using (var package = new ExcelPackage(stream))
-        //    {
-        //        var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-        //        workSheet.Column(4).Width = 30;
-        //        workSheet.Column(5).Width = 12.8;
-        //        workSheet.Column(7).Width = 16;
-        //        workSheet.Column(9).Width = 9.4;
-
-        //        workSheet.Cells["D1:J1"].Merge = true;
-        //        workSheet.Cells["D1"].Value = "AWESOME HEALTHCARE SOLUTIONS LOG BOOK (Client Name:" + client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName + ") (ID:" + client.Where(s => s.ClientId == clientId).FirstOrDefault().ClientId + ")";
-        //        workSheet.Cells["D1"].Style.Font.Bold = true;
-        //        workSheet.Cells["D1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-        //        row++;
-
-        //        foreach (var rotaType in rotaTypes)
-        //        {
-        //            int startRow = row++;
-        //            var rotaDywk = clientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == 1);
-        //            if (rotaDywk != null)
-        //            {
-        //                workSheet.Cells["C" + startRow].Value = rotaType.RotaType;
-        //                workSheet.Cells["C" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + startRow].Value = "Date";
-        //                workSheet.Cells["D" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells[string.Concat("F", startRow, ":H", startRow)].Merge = true;
-        //                workSheet.Cells["F" + startRow].Value = "Please select 'Yes' for care delivered:";
-        //                workSheet.Cells["F" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["I" + startRow].Value = "Yes";
-        //                workSheet.Cells["I" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["J" + startRow].Value = "No";
-        //                workSheet.Cells["J" + startRow].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                int taskRow = row;
-        //                var tasks = rotaDywk.RotaTasks.Where(s => s.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
-        //                foreach (var tk in tasks)
-        //                {
-        //                    var Id = rotaTasks.Where(s => s.RotaTaskId == tk.RotaTaskId).FirstOrDefault();
-        //                    if (Id.RotaTaskId > 0)
-        //                    {
-        //                        workSheet.Cells["F" + taskRow].Value += Id.TaskName + " \n";
-        //                        workSheet.Cells["I" + taskRow].Value += "[] \n";
-        //                        workSheet.Cells["J" + taskRow].Value += "[] \n";
-        //                    }
-        //                }
-        //                workSheet.Cells["F" + taskRow].Style.WrapText = true;
-        //                workSheet.Cells["I" + taskRow].Style.WrapText = true;
-        //                workSheet.Cells["J" + taskRow].Style.WrapText = true;
-        //                workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + row++].Value = "Time In:";
-        //                workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + row++].Value = "Time Out:";
-        //                workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + row++].Value = "Duration";
-        //                workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + row++].Value = "Carer 1: Full Name";
-        //                workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + row++].Value = "Signature:";
-        //                workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + row++].Value = "Carer 2: Full Name Signature:";
-        //                workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + row++].Value = "Signature:";
-
-        //                workSheet.Cells["F" + taskRow + ":H" + (row - 1)].Merge = true;
-        //                workSheet.Cells["F" + taskRow].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-        //                workSheet.Cells["F" + taskRow + ":H" + (row - 1)].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["I" + taskRow + ":I" + (row - 1)].Merge = true;
-        //                workSheet.Cells["I" + taskRow].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-        //                workSheet.Cells["I" + taskRow + ":I" + (row - 1)].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["J" + taskRow + ":J" + (row - 1)].Merge = true;
-        //                workSheet.Cells["J" + taskRow].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-        //                workSheet.Cells["J" + taskRow + ":J" + (row - 1)].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-
-        //                workSheet.Cells["D" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["D" + row].Value = "Bowel Movement: \n Oral Care: ";
-        //                workSheet.Cells["D" + row].Style.WrapText = true;
-        //                workSheet.Cells["D" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-        //                workSheet.Cells["E" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["E" + row].Value = " [] Yes \t [] No \n [] Yes \t [] No";
-        //                workSheet.Cells["E" + row].Style.WrapText = true;
-        //                workSheet.Cells["E" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-
-        //                workSheet.Cells["F" + row].Value = "Food and Fluid Prepared";
-        //                workSheet.Cells["F" + row].Style.WrapText = true;
-        //                workSheet.Cells["F" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-        //                workSheet.Cells["G" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["G" + row].Value = "\n";
-        //                workSheet.Cells["H" + row].Value = " [] 1/4 \n [] 2/4 \n [] 3/4 \n [] Full";
-        //                workSheet.Cells["H" + row].Style.WrapText = true;
-        //                workSheet.Cells["H" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-        //                workSheet.Cells["H" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["I" + row].Value = "Handover to next Carers ";
-        //                workSheet.Cells["I" + row].Style.WrapText = true;
-        //                workSheet.Cells["I" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Top;
-        //                workSheet.Cells["I" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-        //                workSheet.Cells["J" + row].Value = "\n";
-        //                workSheet.Cells["J" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
-
-        //                workSheet.Cells["E" + startRow + ":E" + row].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-        //                workSheet.Cells["C" + startRow + ":C" + row].Merge = true;
-        //                workSheet.Cells["C" + startRow + ":C" + row].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
-        //                workSheet.Cells["C" + startRow + ":C" + row].Style.TextRotation = 90;
-        //                workSheet.Cells["C" + startRow + ":J" + row].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thick);
-        //                row++;
-        //            }
-        //        }
-
-        //        package.Save();
-        //    }
-        //    stream.Position = 0;
-        //    string excelName = $"EmptyLog-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-        //    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
-        //}
     }
 }

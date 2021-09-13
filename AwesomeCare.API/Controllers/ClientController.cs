@@ -63,7 +63,6 @@ using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
@@ -542,7 +541,7 @@ namespace AwesomeCare.API.Controllers
                                                   {
                                                       Date = sw.Date,
                                                       Cause = sw.Cause
-                                                  }).ToList(),
+                                                  }).ToList()
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

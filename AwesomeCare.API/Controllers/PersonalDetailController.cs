@@ -25,7 +25,6 @@ using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Review;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class PersonalDetailController : ControllerBase
