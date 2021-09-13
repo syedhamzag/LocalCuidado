@@ -152,7 +152,7 @@ namespace AwesomeCare.Admin.Controllers
                 if (model == null || !ModelState.IsValid)
                 {
                     //model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
-                   
+
                     return View(model);
                 }
 
@@ -379,9 +379,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.ClientImage != null)
             {
-                string folder = $"ClientPassport/{model.Telephone}";
+              //  string folder = $"ClientPassport/{model.Telephone}";
                 string filename = string.Concat(model.Firstname, "_", model.Surname, Path.GetExtension(model.ClientImage.FileName));
-                await this.HttpContext.Request.UpdateDropboxFileAsync(_dropboxClient, model.ClientImage, folder, filename);
+               // await this.HttpContext.Request.UpdateDropboxFileAsync(_dropboxClient, model.ClientImage, folder, filename);
+                var clientProfilePicture = await _fileUpload.UploadFile("ClientPassport", true, filename, model.ClientImage.OpenReadStream());
+                model.PassportFilePath = clientProfilePicture;
             }
 
 
