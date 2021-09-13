@@ -16,6 +16,7 @@ using AwesomeCare.Admin.Services.SpecialHealthAndMedication;
 using AwesomeCare.Admin.Services.SpecialHealthCondition;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.CarePlan;
+using AwesomeCare.DataTransferObject.DTOs.PersonalDetail;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -73,8 +74,8 @@ namespace AwesomeCare.Admin.Controllers
             _hlService = hlService;
             _shamService = shamService;
             _shcService = shcService;
-    }
-        
+        }
+
         public async Task<IActionResult> CareView(int clientId)
         {
             var bases = await _baseRecord.GetBaseRecord();
@@ -106,7 +107,7 @@ namespace AwesomeCare.Admin.Controllers
             var sham = await _shamService.Get();
             var shc = await _shcService.Get();
 
-            var putEntity = new CreateCarePlanView()
+            var model = new CreateCarePlanView()
             {
                 #region PERSONAL DETAILS
 
@@ -205,7 +206,7 @@ namespace AwesomeCare.Admin.Controllers
 
                 #region NUTRITION
                 Nutrition_AvoidFood = nutrition.FirstOrDefault().AvoidFood,
-                Nutrition_DrinkType = nutrition.FirstOrDefault().DrinkType, 
+                Nutrition_DrinkType = nutrition.FirstOrDefault().DrinkType,
                 Nutrition_EatingDifficulty = nutrition.FirstOrDefault().EatingDifficulty,
                 Nutrition_FoodIntake = nutrition.FirstOrDefault().FoodIntake,
                 Nutrition_FoodStorage = nutrition.FirstOrDefault().FoodStorage,
@@ -254,6 +255,7 @@ namespace AwesomeCare.Admin.Controllers
                 #endregion
 
                 #region INTEREST AND OBJECTIVE
+
                 #region Interest
                 Interest_CareGoal = obj.Result.CareGoal,
                 Interest_Brief = obj.Result.Brief,
@@ -262,6 +264,7 @@ namespace AwesomeCare.Admin.Controllers
                 GetInterest = obj.Result.Interest,
                 GetPersonalityTest = obj.Result.PersonalityTest,
                 #endregion
+
                 #endregion
 
                 #region Pets
@@ -390,8 +393,79 @@ namespace AwesomeCare.Admin.Controllers
                 #endregion
 
                 #endregion
+
             };
-            return View(putEntity);
+
+            #region ClassList
+            model.ClassList = classItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+            foreach (var item in model.ClassList)
+            {
+                var child = bases.Where(s => s.KeyName == item.Text).FirstOrDefault().BaseRecordId;
+                var childItems = await _baseRecord.GetBaseRecordWithItems(child);
+
+                if (item.Text.ToString() == "Individuality")
+                {
+                    model.Individuality = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.Individuality);
+                }
+                if (item.Text.ToString() == "RightsAndRespect")
+                {
+                    model.RightsAndRespect = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.RightsAndRespect);
+                }
+                if (item.Text.ToString() == "Choice")
+                {
+                    model.Choice = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.Choice);
+                }
+                if (item.Text.ToString() == "DignityAndPrivacy")
+                {
+                    model.DignityAndPrivacy = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.DignityAndPrivacy);
+                }
+                if (item.Text.ToString() == "Partnership")
+                {
+                    model.Partnership = childItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
+                    model.FocusList.Add(item.Text, model.Partnership);
+                }
+            }
+            int i = 1;
+
+            foreach (var item in model.GetPersonCentred)
+            {
+                if (i == 1)
+                    model.Focus1 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                if (i == 2)
+                    model.Focus2 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                if (i == 3)
+                    model.Focus3 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                if (i == 4)
+                    model.Focus4 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                if (i == 5)
+                    model.Focus5 = item.Focus.Select(s => s.BaseRecordId).ToList();
+                i++;
+            }
+            #endregion
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Reports()
+        {
+            var entities = await _pdetailService.Get();
+            var staff = _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            List<CreateCarePlanView> reports = new List<CreateCarePlanView>();
+            foreach (GetPersonalDetail item in entities)
+            {
+                var report = new CreateCarePlanView();
+                report.PersonalDetailId = item.PersonalDetailId;
+                report.ClientId = item.ClientId;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                reports.Add(report);
+            }
+            return View(reports);
         }
     }
 }
