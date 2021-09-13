@@ -42,6 +42,7 @@ using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.Enums;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -1074,7 +1075,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var currentMonth = DateTime.Now.Date.ToString("MM");
             var getStaff = _staffService.GetAsync();
-            var staffs = getStaff.Result.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth).ToList();
+            var staffs = getStaff.Result.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth && s.Status==StaffRegistrationEnum.Approved).ToList();
             return staffs;
 
         }
@@ -1082,7 +1083,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var currentMonth = DateTime.Now.Date.ToString("MM");
             var getClients = _clientService.GetClients();
-            var clients = getClients.Result.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth).ToList();
+            var clients = getClients.Result.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth && s.Status == "Active").ToList();
             return clients;
         }
         private Dictionary<string, List<Status>> GetTrackerMonthly(string startDate, string endDate, List<string> _months)

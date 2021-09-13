@@ -411,6 +411,7 @@
                     }
                 });
             });
+
             var table = $('#tblEquipment').DataTable({
                 scrollCollapse: true,
                 select: {
@@ -418,10 +419,7 @@
                 },
                 searching: false, paging: false, info: false
             });
-
             var counter = $("#EquipmentCount").val();
-
-
             $('#Addrow').on('click', function () {
                 counter++;
                 var clone = $("#Equipment tr:last").clone();
@@ -430,7 +428,6 @@
                 $('#EquipmentCount').val(counter);
 
             });
-
             $('#tblEquipment tbody').on('click', 'tr', function () {
                 if ($(this).hasClass('selected')) {
                     $(this).removeClass('selected');
@@ -440,7 +437,6 @@
                     $(this).addClass('selected');
                 }
             });
-
             $('#Delrow').click(function () {
                 const id = table.row('.selected').id();
                 if (table.row('.selected').length > 0) {
@@ -452,6 +448,8 @@
                     alert("Please select row for delete !");
                 }
             });
+
+
         });
     </script>
 }

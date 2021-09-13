@@ -587,7 +587,6 @@ namespace AwesomeCare.Admin.Controllers
 
             };
             return putEntity;
-
         }
     }
 }
