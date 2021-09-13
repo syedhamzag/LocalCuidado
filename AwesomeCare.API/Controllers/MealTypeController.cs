@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class MealTypeController : ControllerBase

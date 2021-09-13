@@ -22,7 +22,6 @@ using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class NutritionController : ControllerBase
