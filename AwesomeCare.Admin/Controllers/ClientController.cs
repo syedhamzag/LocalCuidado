@@ -382,7 +382,7 @@ namespace AwesomeCare.Admin.Controllers
               //  string folder = $"ClientPassport/{model.Telephone}";
                 string filename = string.Concat(model.Firstname, "_", model.Surname, Path.GetExtension(model.ClientImage.FileName));
                // await this.HttpContext.Request.UpdateDropboxFileAsync(_dropboxClient, model.ClientImage, folder, filename);
-                var clientProfilePicture = await _fileUpload.UploadFile("ClientPassport", true, filename, model.ClientImage.OpenReadStream());
+                var clientProfilePicture = await _fileUpload.UploadFile("clientpassport", true, filename, model.ClientImage.OpenReadStream());
                 model.PassportFilePath = clientProfilePicture;
             }
 
