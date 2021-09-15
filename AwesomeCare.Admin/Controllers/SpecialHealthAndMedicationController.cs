@@ -1,4 +1,5 @@
-﻿using AwesomeCare.Admin.Services.Client;
+﻿using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.SpecialHealthAndMedication;
 using AwesomeCare.Admin.ViewModels.CarePlan.Health;
 using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthAndMedication;
@@ -15,11 +16,14 @@ namespace AwesomeCare.Admin.Controllers
     {
         private ISpecialHealthAndMedicationService _spmedsService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
 
-        public SpecialHealthAndMedicationController(ISpecialHealthAndMedicationService spmedsService, IFileUpload fileUpload, IClientService clientService) : base(fileUpload)
+        public SpecialHealthAndMedicationController(ISpecialHealthAndMedicationService spmedsService, IFileUpload fileUpload, IClientService clientService,
+            IBaseRecordService baseService) : base(fileUpload)
         {
             _spmedsService = spmedsService;
             _clientService = clientService;
+            _baseService = baseService;
         }
 
         public async Task<IActionResult> Reports()
@@ -32,9 +36,9 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateSpecialHealthAndMedication();
                 report.SHMId = item.SHMId;
-                report.MedicationAllergy = item.MedicationAllergy;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.MedKeyCode = item.MedKeyCode;
+                report.WhoAdminName = _baseService.GetBaseRecordItemById(item.WhoAdminister).Result.ValueName;
+                report.MedicationAllergyName = _baseService.GetBaseRecordItemById(item.MedicationAllergy).Result.ValueName;
                 reports.Add(report);
             }
             return View(reports);

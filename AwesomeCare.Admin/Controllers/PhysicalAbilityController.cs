@@ -1,4 +1,5 @@
-﻿using AwesomeCare.Admin.Services.Client;
+﻿using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.PhysicalAbility;
 using AwesomeCare.Admin.ViewModels.CarePlan.Health;
 using AwesomeCare.DataTransferObject.DTOs.Health.PhysicalAbility;
@@ -16,11 +17,13 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IPhysicalAbilityService _physicalService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
 
-        public PhysicalAbilityController(IPhysicalAbilityService physicalService, IFileUpload fileUpload, IClientService clientService) : base(fileUpload)
+        public PhysicalAbilityController(IPhysicalAbilityService physicalService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService) : base(fileUpload)
         {
             _physicalService = physicalService;
             _clientService = clientService;
+            _baseService = baseService;
         }
 
         public async Task<IActionResult> Reports()
@@ -33,9 +36,9 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreatePhysicalAbility();
                 report.PhysicalId = item.PhysicalId;
-                report.Description = item.Description;
+                report.MobilityName = _baseService.GetBaseRecordItemById(item.Mobility).Result.ValueName;
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.Status = item.Status;
                 reports.Add(report);
             }
             return View(reports);

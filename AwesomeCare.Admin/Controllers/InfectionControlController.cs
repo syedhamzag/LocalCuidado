@@ -1,4 +1,5 @@
-﻿using AwesomeCare.Admin.Services.Client;
+﻿using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.InfectionControl;
 using AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.InfectionControl;
@@ -16,11 +17,13 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IInfectionControlService _infectionService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
 
-        public InfectionControlController(IInfectionControlService infectionService, IFileUpload fileUpload, IClientService clientService) : base(fileUpload)
+        public InfectionControlController(IInfectionControlService infectionService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService) : base(fileUpload)
         {
             _infectionService = infectionService;
             _clientService = clientService;
+            _baseService = baseService;
         }
 
         public async Task<IActionResult> Reports()
@@ -33,15 +36,9 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateInfectionControl();
                 report.ClientId = item.ClientId;
-                report.Guideline = item.Guideline;
-                report.InfectionId = item.InfectionId;
-                report.Remarks = item.Remarks;
-                report.Status = item.Status;
-                report.TestDate = item.TestDate;
-                report.Type = item.Type;
-                report.VaccStatus = item.VaccStatus;
+                report.VaccName = _baseService.GetBaseRecordItemById(item.VaccStatus).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
-                report.Status = item.Status;
+                report.InfectionName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);
             }
             return View(reports);

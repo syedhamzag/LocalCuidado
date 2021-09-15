@@ -17,10 +17,8 @@
                 <form asp-route="InfectionControl" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
-
                             <input type="hidden" asp-for="InfectionId" />
                             <input type="hidden" asp-for="ClientId" />
-
                             <div class="row">
                                 <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
                                     <label class="control-label">Infection Type</label>
@@ -32,9 +30,7 @@
                                     <baserecord asp-key="Vaccination_Status" asp-for="VaccStatus" asp-items="null" />
                                     <span asp-validation-for="VaccStatus" class="text-danger"></span>
                                 </div>
-
                             </div>
-
                             <div class="row">
                                 <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
                                     <label class="control-label">Test Date</label>
@@ -47,7 +43,6 @@
                                     <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Government Guideline</label>
@@ -55,7 +50,6 @@
                                     <span asp-validation-for="Guideline" class="text-danger"></span>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Remarks</label>

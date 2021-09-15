@@ -284,9 +284,11 @@ namespace AwesomeCare.Admin.Controllers
                 PostEquipment eq = new PostEquipment();
                 string ImageId = "Image";
                 var EquipmentId = 0;
+                var Attachment = "";
                 if (model.PersonalDetailId > 0) 
                 {
                     EquipmentId = int.Parse(formcollection["EquipmentId"][i]);
+                    Attachment = formcollection["Attachment"][i] != null ? formcollection["Attachment"][i] : "";
                 }
                 
                 var Image = formcollection.Files.GetFile(ImageId);
@@ -297,7 +299,6 @@ namespace AwesomeCare.Admin.Controllers
                 var NextServiceDate = DateTime.Parse(formcollection["NextServiceDate"][i].ToString());
                 var Status = int.Parse(formcollection["Status"][i]);
                 var PersonToAct = int.Parse(formcollection["PersonToAct"][i]);
-                var Attachment = formcollection["Attachment"][i] != null ? formcollection["Attachment"][i] : "";
                 string path = "";
                 #region Attachment
                 if (Attachment != "" || Attachment != null)

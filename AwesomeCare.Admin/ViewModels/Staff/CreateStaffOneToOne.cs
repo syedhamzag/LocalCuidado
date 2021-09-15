@@ -23,7 +23,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
 
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public string ActiveTab { get; set; } = "onetoone";
-        public string ClientName { get; set; }
+        public string StaffName { get; set; }
         public string StatusName { get; set; }
         public string Reference { get; set; }
         [Required]

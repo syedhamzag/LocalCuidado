@@ -36,5 +36,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
         public int Type { get; set; }
         public string By { get; set; }
         public DateTime Date { get; set; }
+
+        public string MedicationAllergyName { get; set; }
+        public string WhoAdminName { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using AwesomeCare.Admin.Services.CarePlanNutrition;
+﻿using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.Admin.Services.CarePlanNutrition;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.ViewModels.CarePlan;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanNutrition;
@@ -15,11 +16,13 @@ namespace AwesomeCare.Admin.Controllers
     {
         private ICarePlanNutritionService _nutritionService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
 
-        public CarePlanNutritionController(IFileUpload fileUpload, ICarePlanNutritionService nutritionService, IClientService clientService) : base(fileUpload)
+        public CarePlanNutritionController(IFileUpload fileUpload, ICarePlanNutritionService nutritionService, IClientService clientService, IBaseRecordService baseService) : base(fileUpload)
         {
             _nutritionService = nutritionService;
             _clientService = clientService;
+            _baseService = baseService;
         }
 
         public async Task<IActionResult> Index(int clientId)
@@ -150,19 +153,8 @@ namespace AwesomeCare.Admin.Controllers
                 var report = new CreateCarePlanNutrition();
 
                 report.AvoidFood = item.AvoidFood;
-                report.DrinkType = item.DrinkType;
-                report.EatingDifficulty = item.EatingDifficulty;
-                report.ClientId = item.ClientId;
-                report.FoodIntake = item.FoodIntake;
-                report.FoodStorage = item.FoodStorage;
-                report.MealPreparation = item.MealPreparation;
+                report.ThingsILikeName = _baseService.GetBaseRecordItemById(item.ThingsILike).Result.ValueName;
                 report.NutritionId = item.NutritionId;
-                report.RiskMitigations = item.RiskMitigations;
-                report.ServingMeal = item.ServingMeal;
-                report.SpecialDiet = item.SpecialDiet;
-                report.ThingsILike = item.ThingsILike;
-                report.WhenRestock = item.WhenRestock;
-                report.WhoRestock = item.WhoRestock;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 reports.Add(report);
             }

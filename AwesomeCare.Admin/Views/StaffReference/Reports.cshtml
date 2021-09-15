@@ -15,6 +15,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Staff Name</th>
                             <th>Refree</th>
                             <th>Date</th>
                             <th>Status</th>
@@ -25,27 +26,28 @@
                     <tbody>
                         @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
                         {
-                            <tr>
-                                <td>@item.index </td>
-                                <td>@item.data.RefreeName</td>
-                                <td>@item.data.Date</td>
-                                <td>@item.data.StatusName</td>
+                        <tr>
+                            <td>@item.index </td>
+                            <td>@item.data.StaffName</td>
+                            <td>@item.data.RefreeName</td>
+                            <td>@item.data.Date</td>
+                            <td>@item.data.StatusName</td>
 
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @Html.ActionLink("Edit", "Edit", "StaffReference", new { refId = item.data.StaffReferenceId }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("View", "View", "StaffReference", new { refId = item.data.StaffReferenceId }, new { @class = "dropdown-item" })
+                                        <button type="button" class="dropdown-item" id="@item.data.StaffReferenceId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
+                                            Email
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "StaffReference", new { refId = item.data.StaffReferenceId }, new { @class = "dropdown-item" })
-                                            @Html.ActionLink("View", "View", "StaffReference", new { refId = item.data.StaffReferenceId }, new { @class = "dropdown-item" })
-                                            <button type="button" class="dropdown-item" id="@item.data.StaffReferenceId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
-                                                Email
-                                            </button>
-                                            @Html.ActionLink("Download", "Download", "StaffReference", new { refId = item.data.StaffReferenceId }, new { @class = "dropdown-item" })
-                                        </div>
+                                        @Html.ActionLink("Download", "Download", "StaffReference", new { refId = item.data.StaffReferenceId }, new { @class = "dropdown-item" })
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         }
 
 

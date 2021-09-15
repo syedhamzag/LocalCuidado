@@ -42,7 +42,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">WorkTeam</label>
-                                    <select asp-for="WorkTeam" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="WorkTeam" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="WorkTeam" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                             </div>

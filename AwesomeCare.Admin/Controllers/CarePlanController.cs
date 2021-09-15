@@ -82,10 +82,10 @@ namespace AwesomeCare.Admin.Controllers
             var baseClass = bases.Where(s => s.KeyName == "Class").FirstOrDefault().BaseRecordId;
             var classItems = await _baseRecord.GetBaseRecordWithItems(baseClass);
 
-            var staff = _staffService.GetStaffs();
-            var involve = _clientService.GetClient(clientId);
-            var client = _clientService.GetClient(clientId);
-            var details = _clientService.GetClientDetail();
+            var staff = await _staffService.GetStaffs();
+            var involve = await _clientService.GetClient(clientId);
+            var client = await _clientService.GetClient(clientId);
+            var details = await _clientService.GetClientDetail();
             var party = _involvingparty.Get(clientId);
             var Relation = "N/A";
             if (party.Result != null)
@@ -93,12 +93,12 @@ namespace AwesomeCare.Admin.Controllers
                 Relation = party.Result.Relationship;
             }
 
-            var pdetail = _pdetailService.Get(clientId);
+            var pdetail = await _pdetailService.Get(clientId);
             var nutrition = await _nutritionService.Get();
             var infection = await _infectionService.Get();
-            var mtask = _mataskService.Get();
+            var mtask = await _mataskService.Get();
             var hygiene = await _phygieneService.Get();
-            var obj = _interestService.Get(clientId);
+            var obj = await _interestService.Get(clientId);
             var pets = await _petsService.Get();
             var balance = await _balanceService.Get();
             var physical = await _physicalService.Get();
@@ -107,294 +107,261 @@ namespace AwesomeCare.Admin.Controllers
             var sham = await _shamService.Get();
             var shc = await _shcService.Get();
 
-            var model = new CreateCarePlanView()
+            var model = new CreateCarePlanView();
+
+            #region PERSONAL DETAILS
+            if (pdetail != null) 
             {
-                #region PERSONAL DETAILS
+                model.ClientId = clientId;
+                model.PersonalDetailId = pdetail.PersonalDetailId;
+                model.CapacityId = pdetail.Capacity.FirstOrDefault().CapacityId;
+                model.Implications = pdetail.Capacity.FirstOrDefault().Implications;
+                model.Pointer = pdetail.Capacity.FirstOrDefault().Pointer;
+                model.IndicatorList = pdetail.Capacity.FirstOrDefault().Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList();
+                model.Indicator = pdetail.Capacity.FirstOrDefault().Indicator.Select(s => s.BaseRecordId).ToList();
+                model.CareId = pdetail.ConsentCare.FirstOrDefault().CareId;
+                model.CareSignature = pdetail.ConsentCare.FirstOrDefault().Signature;
+                model.CareDate = pdetail.ConsentCare.FirstOrDefault().Date;
+                model.CareName = pdetail.ConsentCare.FirstOrDefault().Name;
+                model.CareRelation = Relation;
+                model.DataId = pdetail.ConsentData.FirstOrDefault().DataId;
+                model.DataSignature = pdetail.ConsentData.FirstOrDefault().Signature;
+                model.DataDate = pdetail.ConsentData.FirstOrDefault().Date;
+                model.DataName = pdetail.ConsentData.FirstOrDefault().Name;
+                model.DataRelation = Relation;
+                model.LandLineId = pdetail.ConsentLandline.FirstOrDefault().LandlineId;
+                model.LandLineSignature = pdetail.ConsentLandline.FirstOrDefault().Signature;
+                model.LandLineDate = pdetail.ConsentLandline.FirstOrDefault().Date;
+                model.LandLogList = pdetail.ConsentLandline.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList();
+                model.LandLineLogMethod = pdetail.ConsentLandline.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList();
+                model.LandName = pdetail.ConsentLandline.FirstOrDefault().Name;
+                model.LandRelation = Relation;
+                model.GetEquipment = pdetail.Equipment;
+                model.StaffList = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                model.AboutMe = pdetail.KeyIndicators.FirstOrDefault().AboutMe;
+                model.KeyId = pdetail.KeyIndicators.FirstOrDefault().KeyId;
+                model.FamilyRole = pdetail.KeyIndicators.FirstOrDefault().FamilyRole;
+                model.Debture = pdetail.KeyIndicators.FirstOrDefault().Debture;
+                model.LivingStatus = pdetail.KeyIndicators.FirstOrDefault().LivingStatus;
+                model.KeyLogList = pdetail.KeyIndicators.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList();
+                model.LogMethod = pdetail.KeyIndicators.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList();
+                model.ThingsILike = pdetail.KeyIndicators.FirstOrDefault().ThingsILike;
+                model.PersonalId = pdetail.Personal.FirstOrDefault().PersonalId;
+                model.Smoking = pdetail.Personal.FirstOrDefault().Smoking;
+                model.DNR = pdetail.Personal.FirstOrDefault().DNR;
+                model.FullName = details.Where(s => s.ClientId == clientId).Select(s => s.FullName).FirstOrDefault();
+                model.PreferredLanguage = client.LanguageId;
+                model.Gender = client.GenderId;
+                model.DateofBirth = client.DateOfBirth;
+                model.Address = client.Address;
+                model.PostCode = client.PostCode;
+                model.Telephone = client.Telephone;
+                model.PreferredName = client.Firstname;
+                model.AccessCode = client.KeySafe;
+                model.PreferredGender = client.ChoiceOfStaffId;
+                model.KeyWorker = client.Keyworker;
+                model.TeamLeader = client.TeamLeader;
+                model.Religion = pdetail.Personal.FirstOrDefault().Religion;
+                model.Nationality = pdetail.Personal.FirstOrDefault().Nationality;
+                model.GetPersonCentred = pdetail.PersonCentred;
+                model.ReviewId = pdetail.Review.FirstOrDefault().ReviewId;
+                model.CP_PreDate = pdetail.Review.FirstOrDefault().CP_PreDate;
+                model.CP_ReviewDate = pdetail.Review.FirstOrDefault().CP_ReviewDate;
+                model.RA_PreDate = pdetail.Review.FirstOrDefault().RA_PreDate;
+                model.RA_ReviewDate = pdetail.Review.FirstOrDefault().RA_ReviewDate;
+                model.InvolingList = involve.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList();
+                model.EquipmentCount = pdetail.Equipment.Count;
+                model.PersonCentreCount = pdetail.PersonCentred.Count;
+            }
+            #endregion
 
-                #region Personal Details
-                ClientId = clientId,
-                PersonalDetailId = pdetail.Result.PersonalDetailId,
-                #endregion
+            #region NUTRITION
+            if (nutrition.Count > 0)
+            {
+                model.Nutrition_AvoidFood = nutrition.Where(s=>s.ClientId==clientId).FirstOrDefault().AvoidFood;
+                model.Nutrition_DrinkType = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().DrinkType;
+                model.Nutrition_EatingDifficulty = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().EatingDifficulty;
+                model.Nutrition_FoodIntake = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().FoodIntake;
+                model.Nutrition_FoodStorage = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().FoodStorage;
+                model.Nutrition_MealPreparation = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().MealPreparation;
+                model.NutritionId = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().NutritionId;
+                model.Nutrition_RiskMitigations = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().RiskMitigations;
+                model.Nutrition_ServingMeal = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().ServingMeal;
+                model.Nutrition_SpecialDiet = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().SpecialDiet;
+                model.Nutrition_ThingsILike = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().ThingsILike;
+                model.Nutrition_WhenRestock = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().WhenRestock;
+                model.Nutrition_WhoRestock = nutrition.Where(s => s.ClientId == clientId).FirstOrDefault().WhoRestock;
+            }
+            #endregion
 
-                #region Capacity
-                CapacityId = pdetail.Result.Capacity.FirstOrDefault().CapacityId,
-                Implications = pdetail.Result.Capacity.FirstOrDefault().Implications,
-                Pointer = pdetail.Result.Capacity.FirstOrDefault().Pointer,
-                IndicatorList = pdetail.Result.Capacity.FirstOrDefault().Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                Indicator = pdetail.Result.Capacity.FirstOrDefault().Indicator.Select(s => s.BaseRecordId).ToList(),
-                #endregion
+            #region HYGIENE
+            if (infection.Count > 0)
+            { 
+                model.Infection_Guideline = infection.Where(s => s.ClientId == clientId).FirstOrDefault().Guideline;
+                model.InfectionId = infection.Where(s => s.ClientId == clientId).FirstOrDefault().InfectionId;
+                model.Infection_Remarks = infection.Where(s => s.ClientId == clientId).FirstOrDefault().Remarks;
+                model.Infection_Status = infection.Where(s => s.ClientId == clientId).FirstOrDefault().Status;
+                model.Infection_TestDate = infection.Where(s => s.ClientId == clientId).FirstOrDefault().TestDate;
+                model.Infection_Type = infection.Where(s => s.ClientId == clientId).FirstOrDefault().Type;
+                model.Infection_VaccStatus = infection.Where(s => s.ClientId == clientId).FirstOrDefault().VaccStatus;
+            }
+            if (mtask.Count > 0)
+                model.GetManagingTasks = mtask.Where(s=>s.ClientId==clientId).ToList();
 
-                #region ConsentCare
-                CareId = pdetail.Result.ConsentCare.FirstOrDefault().CareId,
-                CareSignature = pdetail.Result.ConsentCare.FirstOrDefault().Signature,
-                CareDate = pdetail.Result.ConsentCare.FirstOrDefault().Date,
-                CareName = pdetail.Result.ConsentCare.FirstOrDefault().Name,
-                CareRelation = Relation,
-                #endregion
+            if (hygiene.Count > 0)
+            { 
+                model.HygieneId = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().HygieneId;
+                model.Hygiene_Cleaning = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().Cleaning;
+                model.Hygiene_CleaningFreq = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().CleaningFreq;
+                model.Hygiene_CleaningTools = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().CleaningTools;
+                model.Hygiene_DesiredCleaning = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().DesiredCleaning;
+                model.Hygiene_DirtyLaundry = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().DirtyLaundry;
+                model.Hygiene_DryLaundry = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().DryLaundry;
+                model.Hygiene_GeneralAppliance = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().GeneralAppliance;
+                model.Hygiene_Ironing = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().Ironing;
+                model.Hygiene_LaundryGuide = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().LaundryGuide;
+                model.Hygiene_LaundrySupport = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().LaundrySupport;
+                model.Hygiene_WashingMachine = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().WashingMachine;
+                model.Hygiene_WhoClean = hygiene.Where(s => s.ClientId == clientId).FirstOrDefault().WhoClean;
+            }
 
-                #region ConsentData
-                DataId = pdetail.Result.ConsentData.FirstOrDefault().DataId,
-                DataSignature = pdetail.Result.ConsentData.FirstOrDefault().Signature,
-                DataDate = pdetail.Result.ConsentData.FirstOrDefault().Date,
-                DataName = pdetail.Result.ConsentData.FirstOrDefault().Name,
-                DataRelation = Relation,
-                #endregion
+            #endregion
 
-                #region ConsentLandLine
-                LandLineId = pdetail.Result.ConsentLandline.FirstOrDefault().LandlineId,
-                LandLineSignature = pdetail.Result.ConsentLandline.FirstOrDefault().Signature,
-                LandLineDate = pdetail.Result.ConsentLandline.FirstOrDefault().Date,
-                LandLogList = pdetail.Result.ConsentLandline.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                LandLineLogMethod = pdetail.Result.ConsentLandline.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList(),
-                LandName = pdetail.Result.ConsentLandline.FirstOrDefault().Name,
-                LandRelation = Relation,
-                #endregion
+            #region INTEREST AND OBJECTIVE
+            if (obj != null)
+            { 
+                model.Interest_CareGoal = obj.CareGoal;
+                model.Interest_Brief = obj.Brief;
+                model.GetInterest = obj.Interest;
+                model.GetPersonalityTest = obj.PersonalityTest;
+            }
 
-                #region Equipment
-                GetEquipment = pdetail.Result.Equipment,
-                StaffList = staff.Result.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
-                #endregion
+            if (pets.Count > 0)
+            { 
+                model.Pet_Age = pets.Where(s => s.ClientId == clientId).FirstOrDefault().Age;
+                model.Pet_Type = pets.Where(s => s.ClientId == clientId).FirstOrDefault().Type;
+                model.PetsId = pets.Where(s => s.ClientId == clientId).FirstOrDefault().PetsId;
+                model.Pet_Name = pets.Where(s => s.ClientId == clientId).FirstOrDefault().Name;
+                model.Pet_Gender = pets.Where(s => s.ClientId == clientId).FirstOrDefault().Gender;
+                model.PetActivities = pets.Where(s => s.ClientId == clientId).FirstOrDefault().PetActivities;
+                model.PetCare = pets.Where(s => s.ClientId == clientId).FirstOrDefault().PetCare;
+                model.Pet_MealPattern = pets.Where(s => s.ClientId == clientId).FirstOrDefault().MealPattern;
+                model.PetInsurance = pets.Where(s => s.ClientId == clientId).FirstOrDefault().PetInsurance;
+                model.Pet_MealStorage = pets.Where(s => s.ClientId == clientId).FirstOrDefault().MealStorage;
+                model.Pet_VetVisit = pets.Where(s => s.ClientId == clientId).FirstOrDefault().VetVisit;
+            }
+            #endregion
 
-                #region KeyIndicators
-                AboutMe = pdetail.Result.KeyIndicators.FirstOrDefault().AboutMe,
-                KeyId = pdetail.Result.KeyIndicators.FirstOrDefault().KeyId,
-                FamilyRole = pdetail.Result.KeyIndicators.FirstOrDefault().FamilyRole,
-                Debture = pdetail.Result.KeyIndicators.FirstOrDefault().Debture,
-                LivingStatus = pdetail.Result.KeyIndicators.FirstOrDefault().LivingStatus,
-                KeyLogList = pdetail.Result.KeyIndicators.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                LogMethod = pdetail.Result.KeyIndicators.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList(),
-                ThingsILike = pdetail.Result.KeyIndicators.FirstOrDefault().ThingsILike,
-                #endregion
-
-                #region Personal
-                PersonalId = pdetail.Result.Personal.FirstOrDefault().PersonalId,
-                Smoking = pdetail.Result.Personal.FirstOrDefault().Smoking,
-                DNR = pdetail.Result.Personal.FirstOrDefault().DNR,
-                FullName = details.Result.Where(s => s.ClientId == clientId).Select(s => s.FullName).FirstOrDefault(),
-                PreferredLanguage = client.Result.LanguageId,
-                Gender = client.Result.GenderId,
-                DateofBirth = client.Result.DateOfBirth,
-                Address = client.Result.Address,
-                PostCode = client.Result.PostCode,
-                Telephone = client.Result.Telephone,
-                PreferredName = client.Result.Firstname,
-                AccessCode = client.Result.KeySafe,
-                PreferredGender = client.Result.ChoiceOfStaffId,
-                KeyWorker = client.Result.Keyworker,
-                TeamLeader = client.Result.TeamLeader,
-                Religion = pdetail.Result.Personal.FirstOrDefault().Religion,
-                Nationality = pdetail.Result.Personal.FirstOrDefault().Nationality,
-                #endregion
-
-                #region Person Centred
-                GetPersonCentred = pdetail.Result.PersonCentred,
-                #endregion
-
-                #region Review
-                ReviewId = pdetail.Result.Review.FirstOrDefault().ReviewId,
-                CP_PreDate = pdetail.Result.Review.FirstOrDefault().CP_PreDate,
-                CP_ReviewDate = pdetail.Result.Review.FirstOrDefault().CP_ReviewDate,
-                RA_PreDate = pdetail.Result.Review.FirstOrDefault().RA_PreDate,
-                RA_ReviewDate = pdetail.Result.Review.FirstOrDefault().RA_ReviewDate,
-                #endregion
-
-                InvolingList = involve.Result.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList(),
-                EquipmentCount = pdetail.Result.Equipment.Count,
-                PersonCentreCount = pdetail.Result.PersonCentred.Count,
-
-                #endregion
-
-                #region NUTRITION
-                Nutrition_AvoidFood = nutrition.FirstOrDefault().AvoidFood,
-                Nutrition_DrinkType = nutrition.FirstOrDefault().DrinkType,
-                Nutrition_EatingDifficulty = nutrition.FirstOrDefault().EatingDifficulty,
-                Nutrition_FoodIntake = nutrition.FirstOrDefault().FoodIntake,
-                Nutrition_FoodStorage = nutrition.FirstOrDefault().FoodStorage,
-                Nutrition_MealPreparation = nutrition.FirstOrDefault().MealPreparation,
-                NutritionId = nutrition.FirstOrDefault().NutritionId,
-                Nutrition_RiskMitigations = nutrition.FirstOrDefault().RiskMitigations,
-                Nutrition_ServingMeal = nutrition.FirstOrDefault().ServingMeal,
-                Nutrition_SpecialDiet = nutrition.FirstOrDefault().SpecialDiet,
-                Nutrition_ThingsILike = nutrition.FirstOrDefault().ThingsILike,
-                Nutrition_WhenRestock = nutrition.FirstOrDefault().WhenRestock,
-                Nutrition_WhoRestock = nutrition.FirstOrDefault().WhoRestock,
-                #endregion
-
-                #region HYGIENE
-
-                #region Infection Control
-                Infection_Guideline = infection.FirstOrDefault().Guideline,
-                InfectionId = infection.FirstOrDefault().InfectionId,
-                Infection_Remarks = infection.FirstOrDefault().Remarks,
-                Infection_Status = infection.FirstOrDefault().Status,
-                Infection_TestDate = infection.FirstOrDefault().TestDate,
-                Infection_Type = infection.FirstOrDefault().Type,
-                Infection_VaccStatus = infection.FirstOrDefault().VaccStatus,
-                #endregion
-
-                #region Managing Tasks
-                GetManagingTasks = mtask.Result,
-                #endregion
-
-                #region Personal Hygiene
-                HygieneId = hygiene.FirstOrDefault().HygieneId,
-                Hygiene_Cleaning = hygiene.FirstOrDefault().Cleaning,
-                Hygiene_CleaningFreq = hygiene.FirstOrDefault().CleaningFreq,
-                Hygiene_CleaningTools = hygiene.FirstOrDefault().CleaningTools,
-                Hygiene_DesiredCleaning = hygiene.FirstOrDefault().DesiredCleaning,
-                Hygiene_DirtyLaundry = hygiene.FirstOrDefault().DirtyLaundry,
-                Hygiene_DryLaundry = hygiene.FirstOrDefault().DryLaundry,
-                Hygiene_GeneralAppliance = hygiene.FirstOrDefault().GeneralAppliance,
-                Hygiene_Ironing = hygiene.FirstOrDefault().Ironing,
-                Hygiene_LaundryGuide = hygiene.FirstOrDefault().LaundryGuide,
-                Hygiene_LaundrySupport = hygiene.FirstOrDefault().LaundrySupport,
-                Hygiene_WashingMachine = hygiene.FirstOrDefault().WashingMachine,
-                Hygiene_WhoClean = hygiene.FirstOrDefault().WhoClean,
-                #endregion
-
-                #endregion
-
-                #region INTEREST AND OBJECTIVE
-
-                #region Interest
-                Interest_CareGoal = obj.Result.CareGoal,
-                Interest_Brief = obj.Result.Brief,
-
-                #region Lists
-                GetInterest = obj.Result.Interest,
-                GetPersonalityTest = obj.Result.PersonalityTest,
-                #endregion
-
-                #endregion
-
-                #region Pets
-                Pet_Age = pets.FirstOrDefault().Age,
-                Pet_Type = pets.FirstOrDefault().Type,
-                PetsId = pets.FirstOrDefault().PetsId,
-                Pet_Name = pets.FirstOrDefault().Name,
-                Pet_Gender = pets.FirstOrDefault().Gender,
-                PetActivities = pets.FirstOrDefault().PetActivities,
-                PetCare = pets.FirstOrDefault().PetCare,
-                Pet_MealPattern = pets.FirstOrDefault().MealPattern,
-                PetInsurance = pets.FirstOrDefault().PetInsurance,
-                Pet_MealStorage = pets.FirstOrDefault().MealStorage,
-                Pet_VetVisit = pets.FirstOrDefault().VetVisit,
-                #endregion
-                #endregion
-
-                #region HEALTH
-
-                #region Balance
-                Balance_Description = balance.FirstOrDefault().Description,
-                Balance_Mobility = balance.FirstOrDefault().Mobility,
-                BalanceId = balance.FirstOrDefault().BalanceId,
-                Balance_Name = balance.FirstOrDefault().Name,
-                Balance_Status = balance.FirstOrDefault().Status,
-                #endregion
-
-                #region Physical Ability
-                Physical_Description = physical.FirstOrDefault().Description,
-                Physical_Mobility = physical.FirstOrDefault().Mobility,
-                PhysicalId = physical.FirstOrDefault().PhysicalId,
-                Physical_Name = physical.FirstOrDefault().Name,
-                Physical_Status = physical.FirstOrDefault().Status,
-                #endregion
-
-                #region Health And Living
-                HL_AbilityToRead = hl.FirstOrDefault().AbilityToRead,
-                HL_AlcoholicDrink = hl.FirstOrDefault().AlcoholicDrink,
-                HL_AllowChats = hl.FirstOrDefault().AllowChats,
-                HL_BriefHealth = hl.FirstOrDefault().BriefHealth,
-                HL_CareSupport = hl.FirstOrDefault().CareSupport,
-                HL_ConstraintAttachment = hl.FirstOrDefault().ConstraintAttachment,
-                HL_ConstraintDetails = hl.FirstOrDefault().ConstraintDetails,
-                HL_ConstraintRequired = hl.FirstOrDefault().ConstraintRequired,
-                HL_ContinenceIssue = hl.FirstOrDefault().ContinenceIssue,
-                HL_ContinenceNeeds = hl.FirstOrDefault().ContinenceNeeds,
-                HL_ContinenceSource = hl.FirstOrDefault().ContinenceSource,
-                HL_DehydrationRisk = hl.FirstOrDefault().DehydrationRisk,
-                HL_EatingWithStaff = hl.FirstOrDefault().EatingWithStaff,
-                HL_Email = hl.FirstOrDefault().Email,
-                HL_FamilyUpdate = hl.FirstOrDefault().FamilyUpdate,
-                HL_FinanceManagement = hl.FirstOrDefault().FinanceManagement,
-                HLId = hl.FirstOrDefault().HLId,
-                HL_LaundaryRequired = hl.FirstOrDefault().LaundaryRequired,
-                HL_LetterOpening = hl.FirstOrDefault().LetterOpening,
-                HL_LifeStyle = hl.FirstOrDefault().LifeStyle,
-                HL_MeansOfComm = hl.FirstOrDefault().MeansOfComm,
-                HL_MovingAndHandling = hl.FirstOrDefault().MovingAndHandling,
-                HL_NeighbourInvolment = hl.FirstOrDefault().NeighbourInvolment,
-                HL_ObserveHealth = hl.FirstOrDefault().ObserveHealth,
-                HL_PostalService = hl.FirstOrDefault().PostalService,
-                HL_PressureSore = hl.FirstOrDefault().PressureSore,
-                HL_ShoppingRequired = hl.FirstOrDefault().ShoppingRequired,
-                HL_Smoking = hl.FirstOrDefault().Smoking,
-                HL_SpecialCaution = hl.FirstOrDefault().SpecialCaution,
-                HL_SpecialCleaning = hl.FirstOrDefault().SpecialCleaning,
-                HL_SupportToBed = hl.FirstOrDefault().SupportToBed,
-                HL_TeaChocolateCoffee = hl.FirstOrDefault().TeaChocolateCoffee,
-                HL_TextFontSize = hl.FirstOrDefault().TextFontSize,
-                HL_TVandMusic = hl.FirstOrDefault().TVandMusic,
-                HL_VideoCallRequired = hl.FirstOrDefault().VideoCallRequired,
-                HL_WakeUp = hl.FirstOrDefault().WakeUp,
-                #endregion
-
-                #region SHAM
-                SHAM_AccessMedication = sham.FirstOrDefault().AccessMedication,
-                SHAM_AdminLvl = sham.FirstOrDefault().AdminLvl,
-                SHAM_By = sham.FirstOrDefault().By,
-                SHAM_Consent = sham.FirstOrDefault().Consent,
-                SHAM_Date = sham.FirstOrDefault().Date,
-                SHAM_FamilyMeds = sham.FirstOrDefault().FamilyMeds,
-                SHAM_MedKeyCode = sham.FirstOrDefault().MedKeyCode,
-                SHAM_MedicationAllergy = sham.FirstOrDefault().MedicationAllergy,
-                SHMId = sham.FirstOrDefault().SHMId,
-                SHAM_LeftoutMedicine = sham.FirstOrDefault().LeftoutMedicine,
-                SHAM_MedAccessDenial = sham.FirstOrDefault().MedAccessDenial,
-                SHAM_MedicationStorage = sham.FirstOrDefault().MedicationStorage,
-                SHAM_NameFormMedicaiton = sham.FirstOrDefault().NameFormMedicaiton,
-                SHAM_PharmaMARChart = sham.FirstOrDefault().PharmaMARChart,
-                SHAM_PNRDoses = sham.FirstOrDefault().PNRDoses,
-                SHAM_PNRMedsMissing = sham.FirstOrDefault().PNRMedsMissing,
-                SHAM_SpecialStorage = sham.FirstOrDefault().SpecialStorage,
-                SHAM_NoMedAccess = sham.FirstOrDefault().NoMedAccess,
-                SHAM_MedsGPOrder = sham.FirstOrDefault().MedsGPOrder,
-                SHAM_WhoAdminister = sham.FirstOrDefault().WhoAdminister,
-                SHAM_PNRMedsAdmin = sham.FirstOrDefault().PNRMedsAdmin,
-                SHAM_PNRMedList = sham.FirstOrDefault().PNRMedList,
-                SHAM_OverdoseContact = sham.FirstOrDefault().OverdoseContact,
-                SHAM_TempMARChart = sham.FirstOrDefault().TempMARChart,
-                SHAM_FamilyReturnMed = sham.FirstOrDefault().FamilyReturnMed,
-                SHAM_PNRMedReq = sham.FirstOrDefault().PNRMedReq,
-                SHAM_Type = sham.FirstOrDefault().Type,
-                #endregion
-
-                #region SHC
-                SHC_ClientAction = shc.FirstOrDefault().ClientAction,
-                SHC_ClinicRecommendation = shc.FirstOrDefault().ClinicRecommendation,
-                SHC_ConditionName = shc.FirstOrDefault().ConditionName,
-                SHC_FeelingAfterIncident = shc.FirstOrDefault().FeelingAfterIncident,
-                SHC_LivingActivities = shc.FirstOrDefault().LivingActivities,
-                SHC_FeelingBeforeIncident = shc.FirstOrDefault().FeelingBeforeIncident,
-                SHC_Frequency = shc.FirstOrDefault().Frequency,
-                HealthCondId = shc.FirstOrDefault().HealthCondId,
-                SHC_LifestyleSupport = shc.FirstOrDefault().LifestyleSupport,
-                SHC_PlanningHealthCondition = shc.FirstOrDefault().PlanningHealthCondition,
-                SHC_SourceInformation = shc.FirstOrDefault().SourceInformation,
-                SHC_Trigger = shc.FirstOrDefault().Trigger,
-                #endregion
-
-                #region History Of Fall
-                HistoryId = history.FirstOrDefault().HistoryId,
-                History_Cause = history.FirstOrDefault().Cause,
-                History_Date = history.FirstOrDefault().Date,
-                History_Details = history.FirstOrDefault().Details,
-                History_Prevention = history.FirstOrDefault().Prevention,
-                #endregion
-
-                #endregion
-
-            };
+            #region HEALTH
+            if (balance.Count > 0) 
+            { 
+                model.Balance_Description = balance.Where(s => s.ClientId == clientId).FirstOrDefault().Description;
+                model.Balance_Mobility = balance.Where(s => s.ClientId == clientId).FirstOrDefault().Mobility;
+                model.BalanceId = balance.Where(s => s.ClientId == clientId).FirstOrDefault().BalanceId;
+                model.Balance_Name = balance.Where(s => s.ClientId == clientId).FirstOrDefault().Name;
+                model.Balance_Status = balance.Where(s => s.ClientId == clientId).FirstOrDefault().Status;
+            }
+            if (physical.Count > 0) 
+            { 
+                model.Physical_Description = physical.Where(s => s.ClientId == clientId).FirstOrDefault().Description;
+                model.Physical_Mobility = physical.Where(s => s.ClientId == clientId).FirstOrDefault().Mobility;
+                model.PhysicalId = physical.Where(s => s.ClientId == clientId).FirstOrDefault().PhysicalId;
+                model.Physical_Name = physical.Where(s => s.ClientId == clientId).FirstOrDefault().Name;
+                model.Physical_Status = physical.Where(s => s.ClientId == clientId).FirstOrDefault().Status;
+            }
+            if (hl.Count > 0) 
+            { 
+                model.HL_AbilityToRead = hl.Where(s => s.ClientId == clientId).FirstOrDefault().AbilityToRead;
+                model.HL_AlcoholicDrink = hl.Where(s => s.ClientId == clientId).FirstOrDefault().AlcoholicDrink;
+                model.HL_AllowChats = hl.Where(s => s.ClientId == clientId).FirstOrDefault().AllowChats;
+                model.HL_BriefHealth = hl.Where(s => s.ClientId == clientId).FirstOrDefault().BriefHealth;
+                model.HL_CareSupport = hl.Where(s => s.ClientId == clientId).FirstOrDefault().CareSupport;
+                model.HL_ConstraintAttachment = hl.Where(s => s.ClientId == clientId).FirstOrDefault().ConstraintAttachment;
+                model.HL_ConstraintDetails = hl.Where(s => s.ClientId == clientId).FirstOrDefault().ConstraintDetails;
+                model.HL_ConstraintRequired = hl.Where(s => s.ClientId == clientId).FirstOrDefault().ConstraintRequired;
+                model.HL_ContinenceIssue = hl.Where(s => s.ClientId == clientId).FirstOrDefault().ContinenceIssue;
+                model.HL_ContinenceNeeds = hl.Where(s => s.ClientId == clientId).FirstOrDefault().ContinenceNeeds;
+                model.HL_ContinenceSource = hl.Where(s => s.ClientId == clientId).FirstOrDefault().ContinenceSource;
+                model.HL_DehydrationRisk = hl.Where(s => s.ClientId == clientId).FirstOrDefault().DehydrationRisk;
+                model.HL_EatingWithStaff = hl.Where(s => s.ClientId == clientId).FirstOrDefault().EatingWithStaff;
+                model.HL_Email = hl.Where(s => s.ClientId == clientId).FirstOrDefault().Email;
+                model.HL_FamilyUpdate = hl.Where(s => s.ClientId == clientId).FirstOrDefault().FamilyUpdate;
+                model.HL_FinanceManagement = hl.Where(s => s.ClientId == clientId).FirstOrDefault().FinanceManagement;
+                model.HLId = hl.Where(s => s.ClientId == clientId).FirstOrDefault().HLId;
+                model.HL_LaundaryRequired = hl.Where(s => s.ClientId == clientId).FirstOrDefault().LaundaryRequired;
+                model.HL_LetterOpening = hl.Where(s => s.ClientId == clientId).FirstOrDefault().LetterOpening;
+                model.HL_LifeStyle = hl.Where(s => s.ClientId == clientId).FirstOrDefault().LifeStyle;
+                model.HL_MeansOfComm = hl.Where(s => s.ClientId == clientId).FirstOrDefault().MeansOfComm;
+                model.HL_MovingAndHandling = hl.Where(s => s.ClientId == clientId).FirstOrDefault().MovingAndHandling;
+                model.HL_NeighbourInvolment = hl.Where(s => s.ClientId == clientId).FirstOrDefault().NeighbourInvolment;
+                model.HL_ObserveHealth = hl.Where(s => s.ClientId == clientId).FirstOrDefault().ObserveHealth;
+                model.HL_PostalService = hl.Where(s => s.ClientId == clientId).FirstOrDefault().PostalService;
+                model.HL_PressureSore = hl.Where(s => s.ClientId == clientId).FirstOrDefault().PressureSore;
+                model.HL_ShoppingRequired = hl.Where(s => s.ClientId == clientId).FirstOrDefault().ShoppingRequired;
+                model.HL_Smoking = hl.Where(s => s.ClientId == clientId).FirstOrDefault().Smoking;
+                model.HL_SpecialCaution = hl.Where(s => s.ClientId == clientId).FirstOrDefault().SpecialCaution;
+                model.HL_SpecialCleaning = hl.Where(s => s.ClientId == clientId).FirstOrDefault().SpecialCleaning;
+                model.HL_SupportToBed = hl.Where(s => s.ClientId == clientId).FirstOrDefault().SupportToBed;
+                model.HL_TeaChocolateCoffee = hl.Where(s => s.ClientId == clientId).FirstOrDefault().TeaChocolateCoffee;
+                model.HL_TextFontSize = hl.Where(s => s.ClientId == clientId).FirstOrDefault().TextFontSize;
+                model.HL_TVandMusic = hl.Where(s => s.ClientId == clientId).FirstOrDefault().TVandMusic;
+                model.HL_VideoCallRequired = hl.Where(s => s.ClientId == clientId).FirstOrDefault().VideoCallRequired;
+                model.HL_WakeUp = hl.Where(s => s.ClientId == clientId).FirstOrDefault().WakeUp;
+            }
+            if (sham.Count > 0) 
+            { 
+                model.SHAM_AccessMedication = sham.Where(s => s.ClientId == clientId).FirstOrDefault().AccessMedication;
+                model.SHAM_AdminLvl = sham.Where(s => s.ClientId == clientId).FirstOrDefault().AdminLvl;
+                model.SHAM_By = sham.Where(s => s.ClientId == clientId).FirstOrDefault().By;
+                model.SHAM_Consent = sham.Where(s => s.ClientId == clientId).FirstOrDefault().Consent;
+                model.SHAM_Date = sham.Where(s => s.ClientId == clientId).FirstOrDefault().Date;
+                model.SHAM_FamilyMeds = sham.Where(s => s.ClientId == clientId).FirstOrDefault().FamilyMeds;
+                model.SHAM_MedKeyCode = sham.Where(s => s.ClientId == clientId).FirstOrDefault().MedKeyCode;
+                model.SHAM_MedicationAllergy = sham.Where(s => s.ClientId == clientId).FirstOrDefault().MedicationAllergy;
+                model.SHMId = sham.Where(s => s.ClientId == clientId).FirstOrDefault().SHMId;
+                model.SHAM_LeftoutMedicine = sham.Where(s => s.ClientId == clientId).FirstOrDefault().LeftoutMedicine;
+                model.SHAM_MedAccessDenial = sham.Where(s => s.ClientId == clientId).FirstOrDefault().MedAccessDenial;
+                model.SHAM_MedicationStorage = sham.Where(s => s.ClientId == clientId).FirstOrDefault().MedicationStorage;
+                model.SHAM_NameFormMedicaiton = sham.Where(s => s.ClientId == clientId).FirstOrDefault().NameFormMedicaiton;
+                model.SHAM_PharmaMARChart = sham.Where(s => s.ClientId == clientId).FirstOrDefault().PharmaMARChart;
+                model.SHAM_PNRDoses = sham.Where(s => s.ClientId == clientId).FirstOrDefault().PNRDoses;
+                model.SHAM_PNRMedsMissing = sham.Where(s => s.ClientId == clientId).FirstOrDefault().PNRMedsMissing;
+                model.SHAM_SpecialStorage = sham.Where(s => s.ClientId == clientId).FirstOrDefault().SpecialStorage;
+                model.SHAM_NoMedAccess = sham.Where(s => s.ClientId == clientId).FirstOrDefault().NoMedAccess;
+                model.SHAM_MedsGPOrder = sham.Where(s => s.ClientId == clientId).FirstOrDefault().MedsGPOrder;
+                model.SHAM_WhoAdminister = sham.Where(s => s.ClientId == clientId).FirstOrDefault().WhoAdminister;
+                model.SHAM_PNRMedsAdmin = sham.Where(s => s.ClientId == clientId).FirstOrDefault().PNRMedsAdmin;
+                model.SHAM_PNRMedList = sham.Where(s => s.ClientId == clientId).FirstOrDefault().PNRMedList;
+                model.SHAM_OverdoseContact = sham.Where(s => s.ClientId == clientId).FirstOrDefault().OverdoseContact;
+                model.SHAM_TempMARChart = sham.Where(s => s.ClientId == clientId).FirstOrDefault().TempMARChart;
+                model.SHAM_FamilyReturnMed = sham.Where(s => s.ClientId == clientId).FirstOrDefault().FamilyReturnMed;
+                model.SHAM_PNRMedReq = sham.Where(s => s.ClientId == clientId).FirstOrDefault().PNRMedReq;
+                model.SHAM_Type = sham.Where(s => s.ClientId == clientId).FirstOrDefault().Type;
+            }
+            if (shc.Count > 0) 
+            { 
+                model.SHC_ClientAction = shc.Where(s => s.ClientId == clientId).FirstOrDefault().ClientAction;
+                model.SHC_ClinicRecommendation = shc.Where(s => s.ClientId == clientId).FirstOrDefault().ClinicRecommendation;
+                model.SHC_ConditionName = shc.Where(s => s.ClientId == clientId).FirstOrDefault().ConditionName;
+                model.SHC_FeelingAfterIncident = shc.Where(s => s.ClientId == clientId).FirstOrDefault().FeelingAfterIncident;
+                model.SHC_LivingActivities = shc.Where(s => s.ClientId == clientId).FirstOrDefault().LivingActivities;
+                model.SHC_FeelingBeforeIncident = shc.Where(s => s.ClientId == clientId).FirstOrDefault().FeelingBeforeIncident;
+                model.SHC_Frequency = shc.Where(s => s.ClientId == clientId).FirstOrDefault().Frequency;
+                model.HealthCondId = shc.Where(s => s.ClientId == clientId).FirstOrDefault().HealthCondId;
+                model.SHC_LifestyleSupport = shc.Where(s => s.ClientId == clientId).FirstOrDefault().LifestyleSupport;
+                model.SHC_PlanningHealthCondition = shc.Where(s => s.ClientId == clientId).FirstOrDefault().PlanningHealthCondition;
+                model.SHC_SourceInformation = shc.Where(s => s.ClientId == clientId).FirstOrDefault().SourceInformation;
+                model.SHC_Trigger = shc.Where(s => s.ClientId == clientId).FirstOrDefault().Trigger;
+            }
+            if (history.Count > 0) 
+            { 
+                model.HistoryId = history.Where(s => s.ClientId == clientId).FirstOrDefault().HistoryId;
+                model.History_Cause = history.Where(s => s.ClientId == clientId).FirstOrDefault().Cause;
+                model.History_Date = history.Where(s => s.ClientId == clientId).FirstOrDefault().Date;
+                model.History_Details = history.Where(s => s.ClientId == clientId).FirstOrDefault().Details;
+                model.History_Prevention = history.Where(s => s.ClientId == clientId).FirstOrDefault().Prevention;
+            }
+            #endregion
 
             #region ClassList
             model.ClassList = classItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
@@ -430,7 +397,6 @@ namespace AwesomeCare.Admin.Controllers
                 }
             }
             int i = 1;
-
             foreach (var item in model.GetPersonCentred)
             {
                 if (i == 1)

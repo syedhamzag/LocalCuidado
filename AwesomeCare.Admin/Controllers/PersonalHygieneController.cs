@@ -1,4 +1,5 @@
-﻿using AwesomeCare.Admin.Services.Client;
+﻿using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.PersonalHygiene;
 using AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.PersonalHygiene;
@@ -16,11 +17,13 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IPersonalHygieneService _phygieneService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
 
-        public PersonalHygieneController(IPersonalHygieneService phygieneService, IFileUpload fileUpload, IClientService clientService) : base(fileUpload)
+        public PersonalHygieneController(IPersonalHygieneService phygieneService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService ) : base(fileUpload)
         {
             _phygieneService = phygieneService;
             _clientService = clientService;
+            _baseService = baseService;
         }
 
         public async Task<IActionResult> Reports()
@@ -33,19 +36,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreatePersonalHygiene();
                 report.HygieneId = item.HygieneId;
-                report.ClientId = item.ClientId;
-                report.Cleaning = item.Cleaning;
-                report.CleaningFreq = item.CleaningFreq;
-                report.CleaningTools = item.CleaningTools;
-                report.DesiredCleaning = item.DesiredCleaning;
-                report.DirtyLaundry = item.DirtyLaundry;
-                report.DryLaundry = item.DryLaundry;
-                report.GeneralAppliance = item.GeneralAppliance;
-                report.Ironing = item.Ironing;
-                report.LaundryGuide = item.LaundryGuide;
-                report.LaundrySupport = item.LaundrySupport;
-                report.WashingMachine = item.WashingMachine;
-                report.WhoClean = item.WhoClean;
+                report.WhoCleanName = _baseService.GetBaseRecordItemById(item.WhoClean).Result.ValueName;
+                report.CleanFreqName = _baseService.GetBaseRecordItemById(item.CleaningFreq).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 reports.Add(report);
             }

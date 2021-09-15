@@ -54,5 +54,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
         public int AlcoholicDrink { get; set; }
         public int TVandMusic { get; set; }
         public string SpecialCaution { get; set; }
+
+        public string EmailName { get; set; }
     }
 }

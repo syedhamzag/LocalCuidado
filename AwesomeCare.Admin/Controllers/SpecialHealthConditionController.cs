@@ -34,6 +34,7 @@ namespace AwesomeCare.Admin.Controllers
                 var report = new CreateSpecialHealthCondition();
                 report.HealthCondId = item.HealthCondId;
                 report.ClientAction = item.ClientAction;
+                report.ConditionName = item.ConditionName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.LivingActivities = item.LivingActivities;
                 reports.Add(report);

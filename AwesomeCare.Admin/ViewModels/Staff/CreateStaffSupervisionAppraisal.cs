@@ -75,5 +75,6 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [Required]
         public string URL { get; set; }
         public string Attachment { get; set; }
+        public string StaffName { get; set; }
     }
 }

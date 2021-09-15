@@ -39,22 +39,16 @@ namespace AwesomeCare.Admin.Controllers
         private IBaseRecordService _baseService;
         private IStaffService _staffService;
         private readonly IEmailService _emailService;
-        private readonly IWebHostEnvironment _env;
-        private ILogger<ClientController> _logger;
-        private readonly IMemoryCache _cache;
 
         public ClientBMIChartController(IClientBMIChartService clientBMIChartService, IFileUpload fileUpload, 
-            IClientService clientService, IStaffService staffService, IWebHostEnvironment env, 
-            ILogger<ClientController> logger, IMemoryCache cache,  IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
+            IClientService clientService, IStaffService staffService, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
         {
             _clientBMIChartService = clientBMIChartService;
             _clientService = clientService;
             _staffService = staffService;
             _emailService = emailService;
             _baseService = baseService;
-            _env = env;
-            _logger = logger;
-            _cache = cache;
+
         }
 
         public async Task<IActionResult> Reports()

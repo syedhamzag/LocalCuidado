@@ -22,5 +22,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public int MealPreparation { get; set; }
         public int EatingDifficulty { get; set; }
         public string RiskMitigations { get; set; }
+
+        public string ThingsILikeName { get; set; }
     }
 }
