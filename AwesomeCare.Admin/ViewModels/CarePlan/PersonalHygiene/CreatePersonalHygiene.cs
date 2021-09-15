@@ -22,5 +22,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene
         public int Ironing { get; set; }
         public string LaundryGuide { get; set; }
         public string LaundrySupport { get; set; }
+
+        public string WhoCleanName { get; set; }
+        public string CleanFreqName { get; set; }
     }
 }

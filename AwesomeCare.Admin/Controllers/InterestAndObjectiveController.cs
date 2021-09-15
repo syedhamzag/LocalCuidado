@@ -47,12 +47,16 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int clientId)
         {
             var client = await _clientService.GetClientDetail();
+            var interest = await _interestService.Get(clientId);
             var model = new CreateInterestAndObjective();
             model.GetInterest = new List<GetInterest>();
             model.GetPersonalityTest = new List<GetPersonalityTest>();
             model.ClientId = clientId;
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            if (interest != null) 
+            { 
             model = Get(clientId);
+            }
             return View(model);
         }
 

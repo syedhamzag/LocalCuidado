@@ -26,36 +26,41 @@ using iText.Layout.Element;
 using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
+using AwesomeCare.Admin.Services.Admin;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class StaffOneToOneController : BaseController
     {
         private IStaffOneToOneService _StaffOneToOneService;
-        private IClientService _clientService;
         private IStaffService _staffService;
         private readonly IEmailService _emailService;
-        private readonly IWebHostEnvironment _env;
-        private ILogger<ClientController> _logger;
-        private readonly IMemoryCache _cache;
+        private IBaseRecordService _baseService;
 
         public StaffOneToOneController(IStaffOneToOneService StaffOneToOneService, IFileUpload fileUpload,
-            IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
-            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService) : base(fileUpload)
+             IStaffService staffService, IBaseRecordService baseService, IEmailService emailService) : base(fileUpload)
         {
             _StaffOneToOneService = StaffOneToOneService;
-            _clientService = clientService;
             _staffService = staffService;
             _emailService = emailService;
-            _env = env;
-            _logger = logger;
-            _cache = cache;
+            _baseService = baseService;
         }
 
         public async Task<IActionResult> Reports()
         {
             var entities = await _StaffOneToOneService.Get();
-            return View(entities);
+
+            var staff = await _staffService.GetStaffs();
+            List<CreateStaffOneToOne> reports = new List<CreateStaffOneToOne>();
+            foreach (GetStaffOneToOne item in entities)
+            {
+                var report = new CreateStaffOneToOne();
+                report.OneToOneId = item.OneToOneId;
+                report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffId).Select(s => s.Fullname).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                reports.Add(report);
+            }
+            return View(reports);
         }
 
         public async Task<IActionResult> Index(int? staffId)

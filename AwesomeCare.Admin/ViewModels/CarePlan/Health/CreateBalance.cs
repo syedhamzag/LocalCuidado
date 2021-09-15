@@ -14,5 +14,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
         public string Description { get; set; }
         public int Mobility { get; set; }
         public int Status { get; set; }
+
+        public string MobilityName { get; set; }
+        public string StatusName { get; set; }
     }
 }

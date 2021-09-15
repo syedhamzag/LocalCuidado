@@ -20,5 +20,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.InterestObjective
         public int PetInsurance { get; set; }
         public string PetCare { get; set; }
         public string MealPattern { get; set; }
+
+        public string TypeName { get; set; }
     }
 }

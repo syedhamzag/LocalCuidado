@@ -1,5 +1,5 @@
-﻿@using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs  ;
-@model List<GetStaffAdlObs>
+﻿@using AwesomeCare.Admin.ViewModels.Staff
+@model List<CreateStaffAdlObs>
 @{
     ViewData["Title"] = "Reports";
 }
@@ -15,9 +15,9 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>URL</th>
+                            <th>Staff Name</th>
                             <th>Due Date</th>
-                            <th>Remarks</th>
+                            <th>Status</th>
 
                             <th></th>
                         </tr>
@@ -27,9 +27,9 @@
                         {
                             <tr>
                                 <td>@item.index </td>
-                                <td>@item.data.URL</td>
+                                <td>@item.data.StaffName</td>
                                 <td>@item.data.NextCheckDate</td>
-                                <td>@item.data.Remarks</td>
+                                <td>@item.data.StatusName</td>
 
                                 <td>
                                     <div class="btn-group" role="group">

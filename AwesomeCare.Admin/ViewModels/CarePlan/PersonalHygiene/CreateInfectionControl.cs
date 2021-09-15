@@ -17,5 +17,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene
         public int Status { get; set; }
 
         public string ClientName { get; set; }
+
+        public string InfectionName { get; set; }
+        public string VaccName { get; set; }
     }
 }

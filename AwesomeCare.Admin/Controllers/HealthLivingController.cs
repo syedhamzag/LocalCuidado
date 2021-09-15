@@ -23,15 +23,13 @@ namespace AwesomeCare.Admin.Controllers
         private IHealthAndLivingService _healthAndLivingService;
         private IClientService _clientService;
         private IBaseRecordService _baseService;
-        private readonly IEmailService _emailService;
 
         public HealthLivingController(IHealthAndLivingService healthLivingService, IFileUpload fileUpload, IClientService clientService,
-            IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
+                                      IBaseRecordService baseService) : base(fileUpload)
         {
             _healthAndLivingService = healthLivingService;
             _clientService = clientService;
             _baseService = baseService;
-            _emailService = emailService;
         }
 
         public async Task<IActionResult> Reports()
@@ -45,6 +43,7 @@ namespace AwesomeCare.Admin.Controllers
                 var report = new CreateHealthAndLiving();
                 report.HLId = item.HLId;
                 report.ContinenceSource = item.ContinenceSource;
+                report.EmailName = _baseService.GetBaseRecordItemById(item.Email).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.AbilityToReadName = _baseService.GetBaseRecordItemById(item.AbilityToRead).Result.ValueName;
                 reports.Add(report);

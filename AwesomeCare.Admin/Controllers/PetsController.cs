@@ -1,4 +1,5 @@
-﻿using AwesomeCare.Admin.Services.Client;
+﻿using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.Pets;
 using AwesomeCare.Admin.ViewModels.CarePlan.InterestObjective;
 using AwesomeCare.DataTransferObject.DTOs.Pets;
@@ -16,11 +17,13 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IPetsService _petsService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
 
-        public PetsController(IPetsService petsService, IFileUpload fileUpload, IClientService clientService) : base(fileUpload)
+        public PetsController(IPetsService petsService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService ) : base(fileUpload)
         {
             _petsService = petsService;
             _clientService = clientService;
+            _baseService = baseService;
         }
 
         public async Task<IActionResult> Reports()
@@ -35,7 +38,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.PetsId = item.PetsId;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.Name = item.Name;
-                report.Type = item.Type;
+                report.TypeName = _baseService.GetBaseRecordItemById(item.Type).Result.ValueName;
                 reports.Add(report);
             }
             return View(reports);

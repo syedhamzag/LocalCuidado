@@ -27,36 +27,40 @@ using iText.Layout.Element;
 using AwesomeCare.Model.Models;
 using iText.Kernel.Geom;
 using iText.Html2pdf;
+using AwesomeCare.Admin.Services.Admin;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class StaffSupervisionAppraisalController : BaseController
     {
         private IStaffSupervisionAppraisalService _StaffSupervisionAppraisalService;
-        private IClientService _clientService;
+        private IBaseRecordService _baseService;
         private IStaffService _staffService;
         private readonly IEmailService _emailService;
-        private readonly IWebHostEnvironment _env;
-        private ILogger<ClientController> _logger;
-        private readonly IMemoryCache _cache;
 
         public StaffSupervisionAppraisalController(IStaffSupervisionAppraisalService StaffSupervisionAppraisalService, IFileUpload fileUpload,
-            IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
-            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService) : base(fileUpload)
+            IClientService clientService, IStaffService staffService, IBaseRecordService baseService, IEmailService emailService) : base(fileUpload)
         {
             _StaffSupervisionAppraisalService = StaffSupervisionAppraisalService;
-            _clientService = clientService;
+            _baseService = baseService;
             _staffService = staffService;
             _emailService = emailService;
-            _env = env;
-            _logger = logger;
-            _cache = cache;
         }
 
         public async Task<IActionResult> Reports()
         {
             var entities = await _StaffSupervisionAppraisalService.Get();
-            return View(entities);
+            var staff = await _staffService.GetStaffs();
+            List<CreateStaffSupervisionAppraisal> reports = new List<CreateStaffSupervisionAppraisal>();
+            foreach (GetStaffSupervisionAppraisal item in entities)
+            {
+                var report = new CreateStaffSupervisionAppraisal();
+                report.StaffSupervisionAppraisalId = item.StaffSupervisionAppraisalId;
+                report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffId).Select(s => s.Fullname).FirstOrDefault();
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                reports.Add(report);
+            }
+            return View(reports);
         }
 
         public async Task<IActionResult> Index(int? staffId)

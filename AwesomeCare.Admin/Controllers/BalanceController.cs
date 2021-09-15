@@ -17,11 +17,13 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IBalanceService _balanceService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
 
-        public BalanceController(IBalanceService balanceService, IFileUpload fileUpload, IClientService clientService ) : base(fileUpload)
+        public BalanceController(IBalanceService balanceService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService) : base(fileUpload)
         {
             _balanceService = balanceService;
             _clientService = clientService;
+            _baseService = baseService;
         }
 
         public async Task<IActionResult> Reports()
@@ -34,8 +36,9 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateBalance();
                 report.BalanceId = item.BalanceId;
-                report.Description = item.Description;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
+                report.MobilityName = _baseService.GetBaseRecordItemById(item.Mobility).Result.ValueName;
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 report.Status = item.Status;
                 reports.Add(report);
             }

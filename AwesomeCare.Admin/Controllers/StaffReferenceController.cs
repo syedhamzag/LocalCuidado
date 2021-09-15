@@ -54,12 +54,13 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _StaffReferenceService.Get();
+            var staff = await _staffService.GetStaffs();
             List<CreateStaffReference> reports = new List<CreateStaffReference>();
             foreach (GetStaffReference item in entities)
             {
                 var report = new CreateStaffReference();
                 report.StaffReferenceId = item.StaffReferenceId;
-                report.Reference = item.Reference;
+                report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffId).Select(s => s.Fullname).FirstOrDefault();
                 report.Date = item.Date;
                 report.RefreeName = item.RefreeName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;

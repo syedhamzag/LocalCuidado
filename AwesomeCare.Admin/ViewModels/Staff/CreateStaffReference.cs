@@ -71,5 +71,6 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public int ConfirmedBy { get; set; }
         [Required]
         public int Status { get; set; }
+        public string StaffName { get; set; }
     }
 }
