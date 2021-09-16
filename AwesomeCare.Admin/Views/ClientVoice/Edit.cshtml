@@ -56,14 +56,14 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff name, whom you think best support you.</label>
-                                    <select asp-for="StaffBestSupport" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="StaffBestSupport" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="StaffBestSupport" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff you have concerns with dont support you enough</label>
-                                    <select asp-for="StaffPoorSupport" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="StaffPoorSupport" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="StaffPoorSupport" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -80,7 +80,7 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Name of Officer to Act</label>
-                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Name of Caller</label>
-                                    <select asp-for="NameOfCaller" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="NameOfCaller" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="NameOfCaller" class="text-danger"></span>
                                 </div>
                             </div>
@@ -176,7 +176,7 @@
                                     <h2>Attachment Image<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <input type="file" asp-for="Attach" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>
@@ -185,7 +185,7 @@
                                     <h2>Evidence Image<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <input type="file" asp-for="Evidence" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <input type="file" asp-for="Evidence" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="Evidence" class="text-danger"></span>
                                 </div>
                             </div>

@@ -187,7 +187,7 @@
                                                 <div class="form-group">
                                                     <label>Picture</label>
                                                     <br />
-                                                    <input type="file" class="dropify" name="@MealType.RotaType-@weekDay.DayofWeek-Picture" id="@MealType.RotaType-@weekDay.DayofWeek-Picture" disabled="disabled" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;">
+                                                    <input type="file" class="dropify" name="@MealType.RotaType-@weekDay.DayofWeek-Picture" id="@MealType.RotaType-@weekDay.DayofWeek-Picture" disabled="disabled" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx" style="width: 100px !important;">
 
                                                 </div>
 
@@ -633,7 +633,7 @@
                                 <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                             </td>
                             <td>
-                                <input type="file" class="dropify" asp-for="@Model.ClientShopping.FirstOrDefault().Image" id="Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                <input type="file" class="dropify" asp-for="@Model.ClientShopping.FirstOrDefault().Image" id="Image" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx" style="width: 100px !important;" />
                             </td>
 
                         </tr>
@@ -759,10 +759,10 @@
                                 <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DATETO" id="DATETO" value="" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                             </td>
                             <td>
-                                <input type="file" class="dropify" asp-for="@Model.ClientCleaning.FirstOrDefault().WhereToKeep" id="ClientCleaning.WhereToKeep" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                <input type="file" class="dropify" asp-for="@Model.ClientCleaning.FirstOrDefault().WhereToKeep" id="ClientCleaning.WhereToKeep" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx" style="width: 100px !important;" />
                             </td>
                             <td>
-                                <input type="file" class="dropify" asp-for="@Model.ClientCleaning.FirstOrDefault().Image" id="ClientCleaning.Image" data-allowed-file-extensions="png jpg jpeg" style="width: 100px !important;" />
+                                <input type="file" class="dropify" asp-for="@Model.ClientCleaning.FirstOrDefault().Image" id="ClientCleaning.Image" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx" style="width: 100px !important;" />
                             </td>
                         </tr>
                     </tbody>
