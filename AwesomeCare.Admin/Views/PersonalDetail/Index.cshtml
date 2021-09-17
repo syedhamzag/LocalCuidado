@@ -425,7 +425,7 @@
                                 <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault().Type" asp-items="null" /></td>
                                 <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault().Location" asp-items="null" /></td>
                                 <td><baserecord asp-key="GetStaff" asp-for="@Model.GetEquipment.FirstOrDefault().PersonToAct" asp-items="Model.StaffList" /></td>
-                                <td><input type="file" id="Image" name="Image" class="dropify" data-allowed-file-extensions="png jpg jpeg"></td>
+                                <td><input type="file" id="Image" name="Image" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx"></td>
                             </tr>
                     </tbody>
                 </table>

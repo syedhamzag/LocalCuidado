@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff Best Support</label>
-                                    <select asp-for="StaffBestSupport" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="StaffBestSupport" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="StaffBestSupport" class="text-danger"></span>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer to Take Action</label>
-                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                             </div>
@@ -151,7 +151,7 @@
                                     <h2>Evidence of Action Taken<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <input type="file" asp-for="Evidence" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <input type="file" asp-for="Evidence" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="Evidence" class="text-danger"></span>
                                 </div>
                             </div>
@@ -160,7 +160,7 @@
                                     <h2>Attachment Image<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <input type="file" asp-for="Attach" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <input type="file" asp-for="Attach" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>

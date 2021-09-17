@@ -46,7 +46,7 @@
                     </div>
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label class="control-label">OFFICER TO ACT</label>
-                        <select asp-for="OfficerToAct" asp-items="@Model.STAFFINVOLVED" class="selectpicker" data-live-search="true" multiple></select>
+                        <select asp-for="OfficerToAct" asp-items="@Model.STAFFINVOLVED" class="selectpicker form-control" data-live-search="true" multiple></select>
                         <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                         <label class="control-label">STAFF</label>
-                        <select asp-for="StaffName" asp-items="@Model.STAFFINVOLVED" class="selectpicker" data-live-search="true" multiple></select>
+                        <select asp-for="StaffName" asp-items="@Model.STAFFINVOLVED" class="selectpicker form-control" data-live-search="true" multiple></select>
                         <span asp-validation-for="StaffName" class="text-danger"></span>
                     </div>
                 </div>

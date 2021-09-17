@@ -36,6 +36,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateInfectionControl();
                 report.ClientId = item.ClientId;
+                report.InfectionId = item.InfectionId;
                 report.VaccName = _baseService.GetBaseRecordItemById(item.VaccStatus).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.InfectionName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
@@ -78,7 +79,7 @@ namespace AwesomeCare.Admin.Controllers
             TestDate = infection.TestDate,
             Type = infection.Type,
             VaccStatus = infection.VaccStatus,
-        };
+            };
             return putEntity;
         }
 

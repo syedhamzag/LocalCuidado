@@ -44,17 +44,17 @@
                             <div class="row">
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Officer To Act</label>
-                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="OfficerToAct" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Staff Name</label>
-                                    <select asp-for="StaffName" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="StaffName" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="StaffName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                     <label class="control-label">Physician Name</label>
-                                    <select asp-for="Physician" asp-items="@Model.OfficerToActList" class="selectpicker" data-live-search="true" multiple></select>
+                                    <select asp-for="Physician" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
                                     <span asp-validation-for="Physician" class="text-danger"></span>
                                 </div>
                             </div>
@@ -115,7 +115,7 @@
                                     <h2>Chart Attachment<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <input type="file" asp-for="ChartAttachment" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <input type="file" asp-for="ChartAttachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="ChartAttachment" class="text-danger"></span>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
                                     <h2>SeeChart Attachment<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <input type="file" asp-for="SeeChartAttachment" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <input type="file" asp-for="SeeChartAttachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="SeeChartAttachment" class="text-danger"></span>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
                                     <h2>Target Pulse Attachment<small></small></h2>
                                 </div>
                                 <div class="body">
-                                    <input type="file" asp-for="TargetPulseAttachment" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                                    <input type="file" asp-for="TargetPulseAttachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="TargetPulseAttachment" class="text-danger"></span>
                                 </div>
                             </div>
