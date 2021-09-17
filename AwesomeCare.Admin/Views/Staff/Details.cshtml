@@ -1,4 +1,5 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
+@using System.IO; 
 @model StaffDetails;
 
 @{
@@ -599,7 +600,7 @@
                                                         <td>
                                                             @if (!string.IsNullOrEmpty(item.Attachment))
                                                             {
-                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                                <a asp-action="@string.Concat("DownloadFile", System.IO.Path.GetExtension(item.Attachment))" asp-route-file="@item.Attachment">Download</a>
                                                             }
 
                                                         </td>

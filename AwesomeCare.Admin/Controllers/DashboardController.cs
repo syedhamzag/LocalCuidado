@@ -43,6 +43,7 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.Enums;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -129,7 +130,8 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Dashboard()
         {
             var dashboard = await _dashboardService.Get();
-
+            var endDate = DateTime.Now.ToString("yyyy-MM-dd");
+            bool isStopDateValid = DateTime.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
             #region variables
             int TeleNormal = 0;
             int TeleObservation = 0;
@@ -181,13 +183,15 @@ namespace AwesomeCare.Admin.Controllers
             var spot = await _staffSpotCheckService.Get();
             var super = await _staffSupervisionService.Get();
             var survey = await _staffSurveyService.Get();
+            var getStaff = await _staffService.GetAsync();
+            var getClient = await _clientService.GetClients();
             #endregion
 
             var Client = new List<Status>();
             #region LogAudit
-            var log_pending = log.Where(j => j.Status == pId).Count();
-            var log_closed = log.Where(j => j.Status == cId).Count();
-            var log_late = log.Where(j => j.Status == lId).Count();
+            var log_pending = log.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var log_closed = log.Where(j =>  j.Status == cId).Count();
+            var log_late = log.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += log_pending;
             clientClosed += log_closed;
             clientLate += log_late;
@@ -210,9 +214,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.LogAudit = LogAudit;
             #endregion
             #region MedAudit
-            var med_pending = med.Where(j => j.Status == pId).Count();
+            var med_pending = med.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var med_closed = med.Where(j => j.Status == cId).Count();
-            var med_late = med.Where(j => j.Status == lId).Count();
+            var med_late = med.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += med_pending;
             clientClosed += med_closed;
             clientLate += med_late;
@@ -235,9 +239,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.MedAudit = MedAudit;
             #endregion
             #region CompAudit
-            var Comp_pending = complain.Where(j => j.StatusId == pId).Count();
+            var Comp_pending = complain.Where(j => j.StatusId == pId && (j.DUEDATE.Year >= stopDate.Year && j.DUEDATE.Month >= stopDate.Month && j.DUEDATE.Day > stopDate.Day)).Count();
             var Comp_closed = complain.Where(j => j.StatusId == cId).Count();
-            var Comp_late = complain.Where(j => j.StatusId == lId).Count();
+            var Comp_late = complain.Where(j => j.StatusId == pId && (j.DUEDATE.Year <= stopDate.Year && j.DUEDATE.Month <= stopDate.Month && j.DUEDATE.Day < stopDate.Day)).Count();
             clientPending += Comp_pending;
             clientClosed += Comp_closed;
             clientLate += Comp_late;
@@ -260,9 +264,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.Complain = Comp;
             #endregion
             #region Voice
-            var voice_pending = voice.Where(j => j.Status == pId).Count();
+            var voice_pending = voice.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var voice_closed = voice.Where(j => j.Status == cId).Count();
-            var voice_late = voice.Where(j => j.Status == lId).Count();
+            var voice_late = voice.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += voice_pending;
             clientClosed += voice_closed;
             clientLate += voice_late;
@@ -285,9 +289,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.Voice = Voice;
             #endregion
             #region Program
-            var prog_pending = prog.Where(j => j.Status == pId).Count();
+            var prog_pending = prog.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var prog_closed = prog.Where(j => j.Status == cId).Count();
-            var prog_late = prog.Where(j => j.Status == lId).Count();
+            var prog_late = prog.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += prog_pending;
             clientClosed += prog_closed;
             clientLate += prog_late;
@@ -310,9 +314,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.Program = Program;
             #endregion
             #region Watch
-            var watch_pending = watch.Where(j => j.Status == pId).Count();
+            var watch_pending = watch.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var watch_closed = watch.Where(j => j.Status == cId).Count();
-            var watch_late = watch.Where(j => j.Status == lId).Count();
+            var watch_late = watch.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += watch_pending;
             clientClosed += watch_closed;
             clientLate += watch_late;
@@ -335,9 +339,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.ServiceWatch = Watch;
             #endregion
             #region MgtVisit
-            var mgt_pending = mgt.Where(j => j.Status == pId).Count();
+            var mgt_pending = mgt.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var mgt_closed = mgt.Where(j => j.Status == cId).Count();
-            var mgt_late = mgt.Where(j => j.Status == lId).Count();
+            var mgt_late = mgt.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += mgt_pending;
             clientClosed += mgt_closed;
             clientLate += mgt_late;
@@ -380,9 +384,9 @@ namespace AwesomeCare.Admin.Controllers
 
             var Staff = new List<Status>();
             #region AdlObs
-            var obs_pending = adl.Where(j => j.Status == pId).Count();
+            var obs_pending = adl.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var obs_closed = adl.Where(j => j.Status == cId).Count();
-            var obs_late = adl.Where(j => j.Status == lId).Count();
+            var obs_late = adl.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += obs_pending;
             staffClosed += obs_closed;
             staffLate += obs_late;
@@ -405,9 +409,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.AdlObs = AdlObs;
             #endregion
             #region KeyWorker
-            var key_pending = key.Where(j => j.Status == pId).Count();
+            var key_pending = key.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var key_closed = key.Where(j => j.Status == cId).Count();
-            var key_late = key.Where(j => j.Status == lId).Count();
+            var key_late = key.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += key_pending;
             staffClosed += key_closed;
             staffLate += key_late;
@@ -430,9 +434,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.KeyWorker = KeyWorker;
             #endregion
             #region MedComp
-            var md_pending = comp.Where(j => j.Status == pId).Count();
+            var md_pending = comp.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var md_closed = comp.Where(j => j.Status == cId).Count();
-            var md_late = comp.Where(j => j.Status == lId).Count();
+            var md_late = comp.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += md_pending;
             staffClosed += md_closed;
             staffLate += md_late;
@@ -455,9 +459,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.MedComp = MedComp;
             #endregion
             #region One
-            var one_pending = one.Where(j => j.Status == pId).Count();
+            var one_pending = one.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var one_closed = one.Where(j => j.Status == cId).Count();
-            var one_late = one.Where(j => j.Status == lId).Count();
+            var one_late = one.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += one_pending;
             staffClosed += one_closed;
             staffLate += one_late;
@@ -505,9 +509,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.Reference = Ref;
             #endregion
             #region Spot
-            var spot_pending = spot.Where(j => j.Status == pId).Count();
+            var spot_pending = spot.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var spot_closed = spot.Where(j => j.Status == cId).Count();
-            var spot_late = spot.Where(j => j.Status == lId).Count();
+            var spot_late = spot.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += spot_pending;
             staffClosed += spot_closed;
             staffLate += spot_late;
@@ -530,9 +534,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.SpotCheck = Spot;
             #endregion
             #region Super
-            var sup_pending = super.Where(j => j.Status == pId).Count();
+            var sup_pending = super.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var sup_closed = super.Where(j => j.Status == cId).Count();
-            var sup_late = super.Where(j => j.Status == lId).Count();
+            var sup_late = super.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += sup_pending;
             staffClosed += sup_closed;
             staffLate += sup_late;
@@ -555,9 +559,9 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.Supervision = Super;
             #endregion
             #region Survey
-            var sur_pending = survey.Where(j => j.Status == pId).Count();
+            var sur_pending = survey.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var sur_closed = survey.Where(j => j.Status == cId).Count();
-            var sur_late = survey.Where(j => j.Status == lId).Count();
+            var sur_late = survey.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += sur_pending;
             staffClosed += sur_closed;
             staffLate += sur_late;
@@ -1052,41 +1056,38 @@ namespace AwesomeCare.Admin.Controllers
             }
             days.Reverse();
             months.Reverse();
-            var endDate = DateTime.Now.ToString("yyyy-MM-dd");
+            
             var startDateM = DateTime.Now.AddDays(-365).Date.ToString("yyyy-MM-dd");
             var startDateW = DateTime.Now.AddDays(-7).Date.ToString("yyyy-MM-dd");
-
+            var rotaAdmins = await _rotaTaskService.LiveRota(startDateM, endDate);
             var staffs = await _staffService.GetStaffs();
             var serviceUsers = await _clientService.GetClients();
 
             dashboard.ActiveUser = serviceUsers.Where(s => s.Status == "Active").Count();
             dashboard.ApprovedStaff = staffs.Where(s => s.Status == "Approved").Count();
-            dashboard.GetClients = GetClients();
-            dashboard.GetStaffPersonalInfos = GetStaffs();
-            dashboard.LiveTrackerM = GetTrackerMonthly(startDateM, endDate, months);
-            dashboard.LiveTrackerW = GetTrackerWeekly(startDateW, endDate, days);
-            dashboard.LiveTrackerD = GetTrackerDaily(endDate, types);
+            dashboard.GetClients = GetClients(getClient);
+            dashboard.GetStaffPersonalInfos = GetStaffs(getStaff);
+            dashboard.LiveTrackerM = GetTrackerMonthly(startDateM, endDate, months, rotaAdmins);
+            dashboard.LiveTrackerW = GetTrackerWeekly(startDateW, endDate, days, rotaAdmins);
+            dashboard.LiveTrackerD = GetTrackerDaily(endDate, types, rotaAdmins);
             dashboard.Months = months.Distinct().ToList();
             dashboard.Days = days.Distinct().ToList();
             dashboard.Types = types.Distinct().ToList();
             return View(dashboard);
         }
-        private List<GetStaffPersonalInfo> GetStaffs()
+        private List<GetStaffPersonalInfo> GetStaffs(List<GetStaffPersonalInfo> getStaffs)
         {
             var currentMonth = DateTime.Now.Date.ToString("MM");
-            var getStaff = _staffService.GetAsync();
-            var staffs = getStaff.Result.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth && s.Status==StaffRegistrationEnum.Approved).ToList();
+            var staffs = getStaffs.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth && s.Status==StaffRegistrationEnum.Approved).ToList();
             return staffs;
-
         }
-        private List<GetClient> GetClients()
+        private List<GetClient> GetClients(List<GetClient> getClients)
         {
             var currentMonth = DateTime.Now.Date.ToString("MM");
-            var getClients = _clientService.GetClients();
-            var clients = getClients.Result.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth && s.Status == "Active").ToList();
+            var clients = getClients.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth && s.Status == "Active").ToList();
             return clients;
         }
-        private Dictionary<string, List<Status>> GetTrackerMonthly(string startDate, string endDate, List<string> _months)
+        private Dictionary<string, List<Status>> GetTrackerMonthly(string sdate, string edate, List<string> _months, List<LiveTracker> rotaAdmins)
         {
             var liveTrack = new Dictionary<string, List<Status>>();
             List<Status> missed = new List<Status>();
@@ -1101,10 +1102,15 @@ namespace AwesomeCare.Admin.Controllers
             var latestatus = new List<Status>();
             var missedstatus = new List<Status>();
             var months = _months;
+            
+            string format = "yyyy-MM-dd";
+            bool isStartDateValid = DateTime.TryParseExact(sdate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime startDate);
+            bool isStopDateValid = DateTime.TryParseExact(edate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
+            var rotaAdmin = rotaAdmins.Where(s => s.RotaDate >= startDate && s.RotaDate <= stopDate).ToList();
 
             var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
-            var rotaAdmin = _rotaTaskService.LiveRota(startDate, endDate);
-            var groupedRota = (from rt in rotaAdmin.Result
+            
+            var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
                                select new GroupLiveRota
                                {
@@ -1187,7 +1193,7 @@ namespace AwesomeCare.Admin.Controllers
             liveTrack.Add("MISSED", missedstatus);
             return (liveTrack);
         }
-        private Dictionary<string, List<Status>> GetTrackerWeekly(string startDate, string endDate, List<string> _days)
+        private Dictionary<string, List<Status>> GetTrackerWeekly(string sdate, string edate, List<string> _days, List<LiveTracker> rotaAdmins)
         {
             var liveTrack = new Dictionary<string, List<Status>>();
             List<Status> missed = new List<Status>();
@@ -1203,9 +1209,14 @@ namespace AwesomeCare.Admin.Controllers
             var day = new List<string>();
             var days = _days;
 
+            string format = "yyyy-MM-dd";
+            bool isStartDateValid = DateTime.TryParseExact(sdate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime startDate);
+            bool isStopDateValid = DateTime.TryParseExact(edate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
+            var rotaAdmin = rotaAdmins.Where(s => s.RotaDate >= startDate && s.RotaDate <= stopDate).ToList();
+
             var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
-            var rotaAdmin = _rotaTaskService.LiveRota(startDate, endDate);
-            var groupedRota = (from rt in rotaAdmin.Result
+
+            var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
                                select new GroupLiveRota
                                {
@@ -1287,7 +1298,7 @@ namespace AwesomeCare.Admin.Controllers
             liveTrack.Add("MISSED", missedstatus);
             return (liveTrack);
         }
-        private Dictionary<string, List<Status>> GetTrackerDaily(string endDate, List<string> _types)
+        private Dictionary<string, List<Status>> GetTrackerDaily(string edate, List<string> _types, List<LiveTracker> rotaAdmins)
         {
             var liveTrack = new Dictionary<string, List<Status>>();
             List<Status> missed = new List<Status>();
@@ -1303,9 +1314,13 @@ namespace AwesomeCare.Admin.Controllers
             var type = new List<string>();
             var types = _types;
 
+            string format = "yyyy-MM-dd";
+            bool isStopDateValid = DateTime.TryParseExact(edate, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
+            var rotaAdmin = rotaAdmins.Where(s => s.RotaDate >= stopDate && s.RotaDate <= stopDate).ToList();
+
             var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
-            var rotaAdmin = _rotaTaskService.LiveRota(endDate, endDate);
-            var groupedRota = (from rt in rotaAdmin.Result
+
+            var groupedRota = (from rt in rotaAdmin
                                group rt by rt.Staff into rtGrp
                                select new GroupLiveRota
                                {

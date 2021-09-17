@@ -110,6 +110,7 @@ using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.Pets;
+using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
 
 namespace MapperConfig
 {
@@ -2399,6 +2400,21 @@ namespace MapperConfig
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<Pets, GetPets>();
+            #endregion
+
+            #region TaskBoard
+            CreateMap<PutTaskBoard, TaskBoard>();
+            CreateMap<PostTaskBoard, TaskBoard>();
+            CreateMap<TaskBoard, GetTaskBoard>();
+
+            CreateMap<PutTaskBoardAssignedTo, TaskBoardAssignedTo>()
+                .ForMember(dto => dto.TaskBoard, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<PostTaskBoardAssignedTo, TaskBoardAssignedTo>()
+                .ForMember(dto => dto.TaskBoard, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<TaskBoardAssignedTo, GetTaskBoardAssignedTo>()
+                .ForMember(dto => dto.StaffName, mem => mem.Ignore());
             #endregion
         }
     }
