@@ -24,6 +24,7 @@
                     <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalInfo">Personal Info</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#involvingparties">Involving Parties</a></li>
                     @*<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#caredetails">Care Details</a></li>*@
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hospitalexit">Hospital Exit</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#logaudit">Log Audit</a></li>
@@ -323,7 +324,46 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="tab-pane" id="hospitalexit">
+                        <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HospitalExit">Create</a></li>
 
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Reference</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetHospitalExit)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Reference
+                                            </td>
+                                            <td>
+                                                @item.Date
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
                     <div class="tab-pane" id="regulatorycontact">
                         <table class="table table-bordered table-hover">
                             <thead>
@@ -710,7 +750,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="tab-pane" id="bloodpressure">
                                     <div class="header">
@@ -1618,7 +1658,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
