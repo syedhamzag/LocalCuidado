@@ -24,6 +24,7 @@
                     <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalInfo">Personal Info</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#involvingparties">Involving Parties</a></li>
                     @*<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#caredetails">Care Details</a></li>*@
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hospitalentry">Hospital Entry</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#logaudit">Log Audit</a></li>
@@ -324,6 +325,49 @@
                         </table>
                     </div>
 
+                    <div class="tab-pane" id="hospitalentry">
+                        <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HospitalEntry">Create</a></li>
+
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Reference</th>
+                                        <th>Attachment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetHospitalEntry)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Reference
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Attachment))
+                                                {
+                                                    <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                }
+
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div class="tab-pane" id="regulatorycontact">
                         <table class="table table-bordered table-hover">
                             <thead>
@@ -710,7 +754,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="tab-pane" id="bloodpressure">
                                     <div class="header">
@@ -1618,7 +1662,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>

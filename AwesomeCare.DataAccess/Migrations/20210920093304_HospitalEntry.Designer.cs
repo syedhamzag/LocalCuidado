@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210920093304_HospitalEntry")]
+    partial class HospitalEntry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4444,10 +4446,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("CauseofAdmission")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ConditionOfAdmission")
                         .HasColumnName("ConditionOfAdmission")
                         .HasColumnType("int");
@@ -4513,8 +4511,6 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("HospitalEntryId");
-
-                    b.HasIndex("ClientId");
 
                     b.ToTable("tbl_HospitalEntry");
                 });
@@ -9925,15 +9921,6 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("HistoryOfFall")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntry", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("HospitalEntry")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

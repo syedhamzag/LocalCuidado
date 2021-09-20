@@ -60,9 +60,11 @@ using AwesomeCare.DataTransferObject.DTOs.Health.HealthAndLiving;
 using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthAndMedication;
 using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthCondition;
 using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
+using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
@@ -111,6 +113,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ManagingTasks> _mtaskRepository;
         private IGenericRepository<InterestAndObjective> _objRepository;
         private IGenericRepository<Pets> _petsRepository;
+        private IGenericRepository<HospitalEntry> _hospitalEntryRepository;
 
 
         private AwesomeCareDbContext _dbContext;
@@ -146,7 +149,7 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<InfectionControl> infectionRepository,
             IGenericRepository<ManagingTasks> mtaskRepository,
             IGenericRepository<InterestAndObjective> objRepository,
-            IGenericRepository<Pets> petsRepository)
+            IGenericRepository<Pets> petsRepository, IGenericRepository<HospitalEntry> hospitalEntryRepository)
         {
             _clientRepository = clientRepository;
             _complainRepository = complainRepository;
@@ -193,6 +196,7 @@ namespace AwesomeCare.API.Controllers
             _mtaskRepository = mtaskRepository;
             _objRepository = objRepository;
             _petsRepository = petsRepository;
+            _hospitalEntryRepository = hospitalEntryRepository;
     }
         /// <summary>
         /// Create Client
@@ -541,7 +545,17 @@ namespace AwesomeCare.API.Controllers
                                                   {
                                                       Date = sw.Date,
                                                       Cause = sw.Cause
-                                                  }).ToList()
+                                                  }).ToList(),
+                                       GetHospitalEntry = (from sw in _hospitalEntryRepository.Table
+                                                           where sw.ClientId == id.Value
+                                                           select new GetHospitalEntry
+                                                           {
+                                                               HospitalEntryId = sw.HospitalEntryId,
+                                                               ClientId = sw.ClientId,
+                                                               Date = sw.Date,
+                                                               Reference = sw.Reference,
+                                                               Attachment = sw.Attachment,
+                                                           }).ToList()
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

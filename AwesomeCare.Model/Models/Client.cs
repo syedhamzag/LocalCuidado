@@ -56,6 +56,7 @@ namespace AwesomeCare.Model.Models
             ManagingTasks = new HashSet<ManagingTasks>();
             InterestAndObjective = new HashSet<InterestAndObjective>();
             Pets = new HashSet<Pets>();
+            HospitalEntry = new HashSet<HospitalEntry>();
         }
 
         public int ClientId { get; set; }
@@ -98,6 +99,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientCareDetails> ClientCareDetails { get; set; }
         public virtual ICollection<ClientMedication> ClientMedication { get; set; }
         public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
+        public virtual ICollection<HospitalEntry> HospitalEntry { get; set; }
 
         #region Client
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }
