@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AwesomeCare.Admin.Models;
+using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
@@ -41,6 +42,7 @@ namespace AwesomeCare.Admin.Controllers
         private IRotaDayofWeekService _rotaDayofWeekService;
         private IClientService _clientService;
         private IStaffWorkTeamService staffWorkTeamService;
+        private IBaseRecordService _baseService;
         private readonly IRotaTaskService rotaTaskService;
         const string profilePixFolder = "staffprofilepix";
         const string drivingFolder = "drivinglicense";
@@ -62,7 +64,7 @@ namespace AwesomeCare.Admin.Controllers
             IFileUpload fileUpload,
             IStaffCommunication staffCommunication,
             IClientRotaTypeService clientRotaTypeService,
-            IRotaTaskService rotaTaskService,
+            IRotaTaskService rotaTaskService, IBaseRecordService baseService,
             IStaffWorkTeamService staffWorkTeamService) : base(fileUpload)
         {
             _staffService = staffService;
@@ -75,6 +77,7 @@ namespace AwesomeCare.Admin.Controllers
             _clientService = clientService;
             this.staffWorkTeamService = staffWorkTeamService;
             this.rotaTaskService = rotaTaskService;
+            _baseService = baseService;
         }
         public async Task<IActionResult> Index()
         {
@@ -95,6 +98,16 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Details(int staffId)
         {
             var profile = await _staffService.Profile(staffId);
+            foreach (var item in profile.GetStaffPersonalityTest)
+            {
+                var answer = _baseService.GetBaseRecordItemById(item.Answer).Result.ValueName;
+                item.AnswerName = answer;
+                var question = _baseService.GetBaseRecordItemById(item.Question).Result.ValueName;
+                item.QuestionName = question;
+            }
+            
+            profile.GetStaffPersonalityTest.Where(s => s.AnswerName == "" && s.QuestionName=="");
+
             profile.Statuses.ForEach(s =>
             {
                 if (s.Value == profile.Status.ToString() || s.Text == profile.Status.ToString())
