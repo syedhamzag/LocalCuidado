@@ -12,6 +12,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
 using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
 using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
+using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffReference;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
@@ -368,6 +369,13 @@ namespace AwesomeCare.API.Controllers
                                                           ActionRequired = s.ActionRequired,
                                                           Attachment = s.Attachment
                                                       }).ToList(),
+                                    GetStaffPersonalityTest = (from s in st.StaffPersonalityTest
+                                                               where s.StaffPersonalInfoId == st.StaffPersonalInfoId
+                                                               select new GetStaffPersonalityTest
+                                                               {
+                                                                   Question = s.Question,
+                                                                   Answer = s.Answer
+                                                               }).ToList(),
                                 }).FirstOrDefault();
 
             return Ok(staffProfile);

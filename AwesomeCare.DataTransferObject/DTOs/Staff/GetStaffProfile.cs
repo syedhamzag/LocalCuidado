@@ -15,6 +15,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
 using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
+using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
@@ -35,6 +36,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             GetStaffSupervisionAppraisal = new List<GetStaffSupervisionAppraisal>();
             GetStaffOneToOne = new List<GetStaffOneToOne>();
             GetStaffReference = new List<GetStaffReference>();
+            GetStaffPersonalityTest = new List<GetStaffPersonalityTest>();
 
         }
         public List<GetStaffEducation> Education { get; set; }
@@ -50,6 +52,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetStaffSupervisionAppraisal> GetStaffSupervisionAppraisal { get; set; }
         public List<GetStaffOneToOne> GetStaffOneToOne { get; set; }
         public List<GetStaffReference> GetStaffReference { get; set; }
+        public List<GetStaffPersonalityTest> GetStaffPersonalityTest { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]
