@@ -49,7 +49,6 @@ using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective;
 using AwesomeCare.DataTransferObject.DTOs.Pets;
 using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
-using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -96,7 +95,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             GetPets = new HashSet<GetPets>();
             GetBaseRecords = new HashSet<GetBaseRecordItem>();
             GetHospitalEntry = new HashSet<GetHospitalEntry>();
-            GetHospitalExit = new HashSet<GetHospitalExit>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -213,7 +211,5 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetHospitalEntry> GetHospitalEntry { get; set; }
 
         public virtual ICollection<GetBaseRecordItem> GetBaseRecords { get; set; }
-
-        public virtual ICollection<GetHospitalExit> GetHospitalExit { get; set; }
     }
 }
