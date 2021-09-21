@@ -126,13 +126,16 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Email(int logId, string sender,string password, string recipient, string Smtp)
         {
+            List<string> rcpt = new List<string>();
             var LogAudit = await _clientlogAuditService.Get(logId);
             var json = JsonConvert.SerializeObject(LogAudit);
             byte[] byte1 = GeneratePdf(json);
-            System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), "ClientLogAudit.pdf");
+            string filename = "ClientLogAudit.pdf";
+            System.Net.Mail.Attachment att = new System.Net.Mail.Attachment(new MemoryStream(byte1), filename);
             string subject = "ClientLogAudit";
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
+            await _emailService.SendAsync(rcpt, subject, body, byte1, filename, "pdf", true);
             return RedirectToAction("Reports");
         }
         public async Task<IActionResult> Download(int logId)

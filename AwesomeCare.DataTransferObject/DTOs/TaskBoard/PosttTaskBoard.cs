@@ -11,12 +11,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.TaskBoard
             AssignedTo = new List<PostTaskBoardAssignedTo>();
         }
         public int TaskId { get; set; }
-        public int TaskName { get; set; }
+        public string TaskName { get; set; }
         public int AssignedBy { get; set; }
-        public int TaskImage { get; set; }
-        public int Attachment { get; set; }
-        public int CompletionDate { get; set; }
-        public int Note { get; set; }
+        public string TaskImage { get; set; }
+        public string Attachment { get; set; }
+        public DateTime CompletionDate { get; set; }
+        public string Note { get; set; }
         public int Status { get; set; }
 
 

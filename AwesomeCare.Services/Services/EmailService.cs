@@ -85,7 +85,7 @@ namespace AwesomeCare.Services.Services
             {
                 SmtpClient smtp = new SmtpClient();
                 smtp.EnableSsl = true;
-                smtp.Host = Smtp;
+                smtp.Host = "smtp.mycuidado.co.uk";
                 smtp.Port = 587;
                 smtp.UseDefaultCredentials = true;
                 smtp.Credentials = new NetworkCredential(sender, password);
