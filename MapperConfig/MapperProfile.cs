@@ -112,6 +112,8 @@ using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.Pets;
 using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
 using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
+using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
+using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 
 namespace MapperConfig
 {
@@ -256,7 +258,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.InterestAndObjective, mem => mem.Ignore())
                 .ForMember(dto => dto.Pets, mem => mem.Ignore())
                 .ForMember(dto => dto.HospitalEntry, mem => mem.Ignore())
-                .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore());
+                .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore())
+                .ForMember(dto => dto.HospitalExit, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
@@ -297,7 +300,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetSpecialHealthCondition, mem => mem.Ignore())
                 .ForMember(dto => dto.GetReview, mem => mem.Ignore())
                 .ForMember(dto => dto.GetHospitalEntry, mem => mem.Ignore())
-                .ForMember(dto => dto.GetBaseRecords, mem => mem.Ignore());
+                .ForMember(dto => dto.GetBaseRecords, mem => mem.Ignore())
+                .ForMember(dto => dto.GetHospitalExit, mem => mem.Ignore());
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));
@@ -362,7 +366,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.InterestAndObjective, mem => mem.Ignore())
                 .ForMember(dto => dto.Pets, mem => mem.Ignore())
                 .ForMember(dto => dto.HospitalEntry, mem => mem.Ignore())
-                .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore());
+                .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore())
+                .ForMember(dto => dto.HospitalExit, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
@@ -680,7 +685,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientVoice, mem => mem.Ignore())
                 .ForMember(dto => dto.Equipment, mem => mem.Ignore())
                 .ForMember(dto => dto.HospitalEntryPersonToTakeAction, mem => mem.Ignore())
-                .ForMember(dto => dto.HospitalEntryStaffInvolved, mem => mem.Ignore());
+                .ForMember(dto => dto.HospitalEntryStaffInvolved, mem => mem.Ignore())
+                .ForMember(dto => dto.HospitalExitOfficerToTakeAction, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalityTest, mem => mem.Ignore());
 
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
@@ -718,7 +725,9 @@ namespace MapperConfig
                .ForMember(dto => dto.StaffReference, mem => mem.Ignore())
                .ForMember(dto => dto.Equipment, mem => mem.Ignore())
                .ForMember(dto => dto.HospitalEntryPersonToTakeAction, mem => mem.Ignore())
-                .ForMember(dto => dto.HospitalEntryStaffInvolved, mem => mem.Ignore());
+                .ForMember(dto => dto.HospitalEntryStaffInvolved, mem => mem.Ignore())
+                .ForMember(dto => dto.HospitalExitOfficerToTakeAction, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalityTest, mem => mem.Ignore());
 
             CreateMap<PutStaffEducation, StaffEducation>()
                   .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -763,7 +772,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffReference, mem => mem.Ignore())
                 .ForMember(dto => dto.Equipment, mem => mem.Ignore())
                 .ForMember(dto => dto.HospitalEntryPersonToTakeAction, mem => mem.Ignore())
-                .ForMember(dto => dto.HospitalEntryStaffInvolved, mem => mem.Ignore());
+                .ForMember(dto => dto.HospitalEntryStaffInvolved, mem => mem.Ignore())
+                .ForMember(dto => dto.HospitalExitOfficerToTakeAction, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalityTest, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffProfile>()
                 .ForMember(dto => dto.GetStaffSpotCheck, mem => mem.Ignore())
@@ -774,6 +785,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetStaffSupervisionAppraisal, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffOneToOne, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffReference, mem => mem.Ignore())
+                .ForMember(dto => dto.GetStaffPersonalityTest, mem => mem.Ignore())
                 .ForMember(dto => dto.RegulatoryContacts, mem => mem.MapFrom(src => src.RegulatoryContact))
                  .ForMember(dto => dto.Status, mem => mem.MapFrom(src => Enum.GetName(typeof(StaffRegistrationEnum), src.Status)));
 
@@ -2415,6 +2427,32 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffName, mem => mem.Ignore());
             #endregion
 
+            #region HospitalExit
+            CreateMap<PutHospitalExit, HospitalExit>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostHospitalExit, HospitalExit>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<HospitalExit, GetHospitalExit>();
+
+            CreateMap<PutHospitalExitOfficerToTakeAction, HospitalExitOfficerToTakeAction>()
+                .ForMember(dto => dto.HospitalExit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<PostHospitalExitOfficerToTakeAction, HospitalExitOfficerToTakeAction>()
+                .ForMember(dto => dto.HospitalExit, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<HospitalExitOfficerToTakeAction, GetHospitalExitOfficerToTakeAction>()
+                .ForMember(dto => dto.StaffName, mem => mem.Ignore());
+            #endregion
+
+            #region StaffPersonalityTest
+            CreateMap<PutStaffPersonalityTest, StaffPersonalityTest>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<PostStaffPersonalityTest, StaffPersonalityTest>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<StaffPersonalityTest, GetStaffPersonalityTest>()
+                .ForMember(dto => dto.QuestionName, mem => mem.Ignore())
+                .ForMember(dto => dto.AnswerName, mem => mem.Ignore());
+            #endregion
         }
     }
 }

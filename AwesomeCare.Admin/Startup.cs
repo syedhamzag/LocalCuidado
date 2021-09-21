@@ -103,6 +103,7 @@ using AwesomeCare.Admin.Services.InterestAndObjective;
 using AwesomeCare.Admin.Services.Pets;
 using AwesomeCare.Admin.Services.TaskBoard;
 using AwesomeCare.Admin.Services.HospitalEntry;
+using AwesomeCare.Admin.Services.HospitalExit;
 
 namespace AwesomeCare.Admin
 {
@@ -943,6 +944,18 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IHospitalEntryService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("hospitalexit", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IHospitalExitServices>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffpersonalitytest", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffPersonalityTest>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

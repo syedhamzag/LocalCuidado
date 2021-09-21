@@ -155,6 +155,8 @@ namespace AwesomeCare.Admin.Controllers
             var cId = dashboard.cId;
             var lId = dashboard.lId;
 
+            var getStaff = await _staffService.GetAsync();
+            var getClient = await _clientService.GetClients();
             var log = await _clientLogAuditService.Get();
             var med = await _clientMedAuditService.Get();
             var complain = await _clientComplainService.Get();
@@ -183,8 +185,7 @@ namespace AwesomeCare.Admin.Controllers
             var spot = await _staffSpotCheckService.Get();
             var super = await _staffSupervisionService.Get();
             var survey = await _staffSurveyService.Get();
-            var getStaff = await _staffService.GetAsync();
-            var getClient = await _clientService.GetClients();
+            
             #endregion
 
             var Client = new List<Status>();
@@ -1060,11 +1061,10 @@ namespace AwesomeCare.Admin.Controllers
             var startDateM = DateTime.Now.AddDays(-365).Date.ToString("yyyy-MM-dd");
             var startDateW = DateTime.Now.AddDays(-7).Date.ToString("yyyy-MM-dd");
             var rotaAdmins = await _rotaTaskService.LiveRota(startDateM, endDate);
-            var staffs = await _staffService.GetStaffs();
-            var serviceUsers = await _clientService.GetClients();
 
-            dashboard.ActiveUser = serviceUsers.Where(s => s.Status == "Active").Count();
-            dashboard.ApprovedStaff = staffs.Where(s => s.Status == "Approved").Count();
+
+            dashboard.ActiveUser = getClient.Where(s => s.Status == "Active").Count();
+            dashboard.ApprovedStaff = getStaff.Where(s => s.Status == StaffRegistrationEnum.Approved).Count();
             dashboard.GetClients = GetClients(getClient);
             dashboard.GetStaffPersonalInfos = GetStaffs(getStaff);
             dashboard.LiveTrackerM = GetTrackerMonthly(startDateM, endDate, months, rotaAdmins);

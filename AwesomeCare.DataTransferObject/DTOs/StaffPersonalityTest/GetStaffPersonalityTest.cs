@@ -10,5 +10,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest
         public int StaffPersonalInfoId { get; set; }
         public int Question { get; set; }
         public int Answer { get; set; }
+        public string QuestionName { get; set; }
+        public string AnswerName { get; set; }
     }
 }

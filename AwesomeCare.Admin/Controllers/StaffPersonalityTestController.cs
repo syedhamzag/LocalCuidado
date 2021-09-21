@@ -34,12 +34,28 @@ namespace AwesomeCare.Admin.Controllers
             List<CreateStaffPersonalityTest> reports = new List<CreateStaffPersonalityTest>();
             foreach (GetStaffPersonalityTest item in entities)
             {
+
                 var report = new CreateStaffPersonalityTest();
-                report.StaffPersonalInfoId = item.StaffPersonalInfoId;
-                report.StaffName = staffs.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
-                report.QuestionName = _baseService.GetBaseRecordItemById(item.Question).Result.ValueName;
-                report.AnswerName = _baseService.GetBaseRecordItemById(item.Answer).Result.ValueName;
-                reports.Add(report);
+                if (reports.Count == 0)
+                {
+                    report.StaffPersonalInfoId = item.StaffPersonalInfoId;
+                    report.StaffName = staffs.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
+                    report.QuestionName = _baseService.GetBaseRecordItemById(item.Question).Result.ValueName;
+                    report.AnswerName = _baseService.GetBaseRecordItemById(item.Answer).Result.ValueName;
+                    reports.Add(report);
+                }
+                else
+                {
+                    if (reports.FirstOrDefault().StaffPersonalInfoId != item.StaffPersonalInfoId)
+                    {
+                        report.StaffPersonalInfoId = item.StaffPersonalInfoId;
+                        report.StaffName = staffs.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
+                        report.QuestionName = _baseService.GetBaseRecordItemById(item.Question).Result.ValueName;
+                        report.AnswerName = _baseService.GetBaseRecordItemById(item.Answer).Result.ValueName;
+                        reports.Add(report);
+                    }
+                }
+                
             }
             return View(reports);
         }
