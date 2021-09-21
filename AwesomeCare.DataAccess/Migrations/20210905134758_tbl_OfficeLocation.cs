@@ -25,6 +25,7 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_tbl_OfficeLocation", x => x.OfficeLocationId);
                 });
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

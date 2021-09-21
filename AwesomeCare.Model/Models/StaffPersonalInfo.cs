@@ -36,6 +36,8 @@ namespace AwesomeCare.Model.Models
             StaffSupervisionAppraisal = new HashSet<StaffSupervisionAppraisal>();
             StaffReference = new HashSet<StaffReference>();
             Equipment = new HashSet<Equipment>();
+            HospitalEntryPersonToTakeAction = new HashSet<HospitalEntryPersonToTakeAction>();
+            HospitalEntryStaffInvolved = new HashSet<HospitalEntryStaffInvolved>();
             HospitalExitOfficerToTakeAction = new HashSet<HospitalExitOfficerToTakeAction>();
         }
 
@@ -121,6 +123,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffReference> StaffReference { get; set; }
         public virtual ICollection<Equipment> Equipment { get; set; }
 
+        public virtual ICollection<HospitalEntryStaffInvolved> HospitalEntryStaffInvolved { get; set; }
+        public virtual ICollection<HospitalEntryPersonToTakeAction> HospitalEntryPersonToTakeAction { get; set; }
         public virtual ICollection<HospitalExitOfficerToTakeAction> HospitalExitOfficerToTakeAction { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }

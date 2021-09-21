@@ -48,6 +48,7 @@ using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective;
 using AwesomeCare.DataTransferObject.DTOs.Pets;
+using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
 using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
@@ -94,6 +95,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             GetReview = new HashSet<GetReview>();
             GetPets = new HashSet<GetPets>();
             GetBaseRecords = new HashSet<GetBaseRecordItem>();
+            GetHospitalEntry = new HashSet<GetHospitalEntry>();
             GetHospitalExit = new HashSet<GetHospitalExit>();
         }
         public int ClientId { get; set; }
@@ -207,8 +209,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
 
         public virtual ICollection<GetInterestAndObjective> GetInterestAndObjective { get; set; }
         public virtual ICollection<GetPets> GetPets { get; set; }
-        public virtual ICollection<GetHospitalExit> GetHospitalExit { get; set; }
+
+        public virtual ICollection<GetHospitalEntry> GetHospitalEntry { get; set; }
 
         public virtual ICollection<GetBaseRecordItem> GetBaseRecords { get; set; }
+
+        public virtual ICollection<GetHospitalExit> GetHospitalExit { get; set; }
     }
 }

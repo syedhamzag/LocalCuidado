@@ -4427,81 +4427,67 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_HistoryOfFall");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntry", b =>
                 {
-                    b.Property<int>("HospitalExitId")
+                    b.Property<int>("HospitalEntryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AreContinentProductNeedAndAvailable")
-                        .HasColumnName("AreContinentProductNeedAndAvailable")
-                        .HasColumnType("int");
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AreEqipmentNeededAvailable")
-                        .HasColumnName("AreEqipmentNeededAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AreLocalSupportOrProgramNeeded")
-                        .HasColumnName("AreLocalSupportOrProgramNeeded")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AreStaffTrainnedOnEquipmentNeeded")
-                        .HasColumnName("AreStaffTrainnedOnEquipmentNeeded")
-                        .HasColumnType("int");
+                    b.Property<string>("CauseofAdmission")
+                        .IsRequired()
+                        .HasColumnName("CauseofAdmission")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ConditionOnDischarge")
-                        .HasColumnName("ConditionOnDischarge")
+                    b.Property<int>("ConditionOfAdmission")
+                        .HasColumnName("ConditionOfAdmission")
                         .HasColumnType("int");
-
-                    b.Property<string>("ContactIncaseOfReAdmission")
-                        .IsRequired()
-                        .HasColumnName("ContactIncaseOfReAdmission")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnName("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IsCarePlanUpdated")
-                        .HasColumnName("IsCarePlanUpdated")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IsGrosSriesAvaible")
-                        .HasColumnName("IsGrosSriesAvaible")
+                    b.Property<int>("IsFamilyInformed")
+                        .HasColumnName("IsFamilyInformed")
                         .HasColumnType("int");
 
                     b.Property<int>("IsHomeCleaned")
                         .HasColumnName("IsHomeCleaned")
                         .HasColumnType("int");
 
-                    b.Property<int>("IsMedicationAvaialable")
-                        .HasColumnName("IsMedicationAvaialable")
+                    b.Property<DateTime>("LastDateofAdmission")
+                        .HasColumnName("LastDateofAdmission")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MeansOfTransport")
+                        .HasColumnName("MeansOfTransport")
                         .HasColumnType("int");
 
-                    b.Property<int>("IsServiceUseronRota")
-                        .HasColumnName("IsServiceUseronRota")
+                    b.Property<int>("NameParamedicStaff")
+                        .HasColumnName("NameParamedicStaff")
                         .HasColumnType("int");
 
-                    b.Property<int>("ModeOfMeansOfTrasportBackHome")
-                        .HasColumnName("ModeOfMeansOfTrasportBackHome")
+                    b.Property<int>("ParamicStaffTeamNo")
+                        .HasColumnName("ParamicStaffTeamNo")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfStaffRequiredOnDischarge")
-                        .HasColumnName("NumberOfStaffRequiredOnDischarge")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("PossibleDateReturn")
+                        .HasColumnName("PossibleDateReturn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PurposeofAdmission")
                         .IsRequired()
                         .HasColumnName("PurposeofAdmission")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ReablementRequired")
-                        .HasColumnName("ReablementRequired")
-                        .HasColumnType("int");
 
                     b.Property<string>("Reference")
                         .IsRequired()
@@ -4526,50 +4512,206 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("URLLINK")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("WhichSupportIsNeeded")
-                        .IsRequired()
-                        .HasColumnName("WhichSupportIsNeeded")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("isLittleCashAvailableForServiceUser")
-                        .HasColumnName("isLittleCashAvailableForServiceUser")
-                        .HasColumnType("int");
-
-                    b.Property<int>("isRotaTeamInformed")
-                        .HasColumnName("isRotaTeamInformed")
-                        .HasColumnType("int");
-
-                    b.HasKey("HospitalExitId");
+                    b.HasKey("HospitalEntryId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_HospitalExit");
+                    b.ToTable("tbl_HospitalEntry");
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExitOfficerToTakeAction", b =>
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryPersonToTakeAction", b =>
                 {
-                    b.Property<int>("HospitalExitOfficerToTakeActionId")
+                    b.Property<int>("HospitalEntryPersonToTakeActionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HospitalExitOfficerToTakeActionId")
+                        .HasColumnName("HospitalEntryPersonToTakeActionId")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("HospitalExitId")
-                        .HasColumnName("HospitalExitId")
+                    b.Property<int>("HospitalEntryId")
+                        .HasColumnName("HospitalEntryId")
                         .HasColumnType("int");
 
                     b.Property<int>("StaffPersonalInfoId")
                         .HasColumnName("StaffPersonalInfoId")
                         .HasColumnType("int");
 
-                    b.HasKey("HospitalExitOfficerToTakeActionId");
+                    b.HasKey("HospitalEntryPersonToTakeActionId");
 
-                    b.HasIndex("HospitalExitId");
+                    b.HasIndex("HospitalEntryId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_HospitalExitOfficerToTakeAction");
+                    b.ToTable("tbl_HospitalEntryPersonToTakeAction");
                 });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryStaffInvolved", b =>
+                {
+                    b.Property<int>("HospitalEntryStaffInvolvedId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HospitalEntryStaffInvolvedId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("HospitalEntryId")
+                        .HasColumnName("HospitalEntryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HospitalEntryStaffInvolvedId");
+
+                    b.HasIndex("HospitalEntryId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_HospitalEntryStaffInvolved");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
+            {
+                b.Property<int>("HospitalExitId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<int>("AreContinentProductNeedAndAvailable")
+                    .HasColumnName("AreContinentProductNeedAndAvailable")
+                    .HasColumnType("int");
+
+                b.Property<int>("AreEqipmentNeededAvailable")
+                    .HasColumnName("AreEqipmentNeededAvailable")
+                    .HasColumnType("int");
+
+                b.Property<int>("AreLocalSupportOrProgramNeeded")
+                    .HasColumnName("AreLocalSupportOrProgramNeeded")
+                    .HasColumnType("int");
+
+                b.Property<int>("AreStaffTrainnedOnEquipmentNeeded")
+                    .HasColumnName("AreStaffTrainnedOnEquipmentNeeded")
+                    .HasColumnType("int");
+
+                b.Property<int>("ClientId")
+                    .HasColumnType("int");
+
+                b.Property<int>("ConditionOnDischarge")
+                    .HasColumnName("ConditionOnDischarge")
+                    .HasColumnType("int");
+
+                b.Property<string>("ContactIncaseOfReAdmission")
+                    .IsRequired()
+                    .HasColumnName("ContactIncaseOfReAdmission")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<DateTime>("Date")
+                    .HasColumnName("Date")
+                    .HasColumnType("datetime2");
+
+                b.Property<int>("IsCarePlanUpdated")
+                    .HasColumnName("IsCarePlanUpdated")
+                    .HasColumnType("int");
+
+                b.Property<int>("IsGrosSriesAvaible")
+                    .HasColumnName("IsGrosSriesAvaible")
+                    .HasColumnType("int");
+
+                b.Property<int>("IsHomeCleaned")
+                    .HasColumnName("IsHomeCleaned")
+                    .HasColumnType("int");
+
+                b.Property<int>("IsMedicationAvaialable")
+                    .HasColumnName("IsMedicationAvaialable")
+                    .HasColumnType("int");
+
+                b.Property<int>("IsServiceUseronRota")
+                    .HasColumnName("IsServiceUseronRota")
+                    .HasColumnType("int");
+
+                b.Property<int>("ModeOfMeansOfTrasportBackHome")
+                    .HasColumnName("ModeOfMeansOfTrasportBackHome")
+                    .HasColumnType("int");
+
+                b.Property<int>("NumberOfStaffRequiredOnDischarge")
+                    .HasColumnName("NumberOfStaffRequiredOnDischarge")
+                    .HasColumnType("int");
+
+                b.Property<string>("PurposeofAdmission")
+                    .IsRequired()
+                    .HasColumnName("PurposeofAdmission")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<int>("ReablementRequired")
+                    .HasColumnName("ReablementRequired")
+                    .HasColumnType("int");
+
+                b.Property<string>("Reference")
+                    .IsRequired()
+                    .HasColumnName("Reference")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Remark")
+                    .IsRequired()
+                    .HasColumnName("Remark")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<int>("Status")
+                    .HasColumnName("Status")
+                    .HasColumnType("int");
+
+                b.Property<DateTime>("Time")
+                    .HasColumnName("Time")
+                    .HasColumnType("datetime2");
+
+                b.Property<string>("URLLINK")
+                    .IsRequired()
+                    .HasColumnName("URLLINK")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("WhichSupportIsNeeded")
+                    .IsRequired()
+                    .HasColumnName("WhichSupportIsNeeded")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<int>("isLittleCashAvailableForServiceUser")
+                    .HasColumnName("isLittleCashAvailableForServiceUser")
+                    .HasColumnType("int");
+
+                b.Property<int>("isRotaTeamInformed")
+                    .HasColumnName("isRotaTeamInformed")
+                    .HasColumnType("int");
+
+                b.HasKey("HospitalExitId");
+
+                b.HasIndex("ClientId");
+
+                b.ToTable("tbl_HospitalExit");
+            });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExitOfficerToTakeAction", b =>
+            {
+                b.Property<int>("HospitalExitOfficerToTakeActionId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("HospitalExitOfficerToTakeActionId")
+                    .HasColumnType("int")
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                b.Property<int>("HospitalExitId")
+                    .HasColumnName("HospitalExitId")
+                    .HasColumnType("int");
+
+                b.Property<int>("StaffPersonalInfoId")
+                    .HasColumnName("StaffPersonalInfoId")
+                    .HasColumnType("int");
+
+                b.HasKey("HospitalExitOfficerToTakeActionId");
+
+                b.HasIndex("HospitalExitId");
+
+                b.HasIndex("StaffPersonalInfoId");
+
+                b.ToTable("tbl_HospitalExitOfficerToTakeAction");
+            });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.IncomingMeds", b =>
                 {
@@ -9932,29 +10074,68 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntry", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("HospitalExit")
+                        .WithMany("HospitalEntry")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExitOfficerToTakeAction", b =>
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryPersonToTakeAction", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.HospitalExit", "HospitalExit")
-                        .WithMany("OfficerToTakeAction")
-                        .HasForeignKey("HospitalExitId")
+                    b.HasOne("AwesomeCare.Model.Models.HospitalEntry", "HospitalEntry")
+                        .WithMany("PersonToTakeAction")
+                        .HasForeignKey("HospitalEntryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
-                        .WithMany("HospitalExitOfficerToTakeAction")
+                        .WithMany("HospitalEntryPersonToTakeAction")
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryStaffInvolved", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.HospitalEntry", "HospitalEntry")
+                        .WithMany("StaffInvolved")
+                        .HasForeignKey("HospitalEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("HospitalEntryStaffInvolved")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                    .WithMany("HospitalExit")
+                    .HasForeignKey("ClientId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExitOfficerToTakeAction", b =>
+            {
+                b.HasOne("AwesomeCare.Model.Models.HospitalExit", "HospitalExit")
+                    .WithMany("OfficerToTakeAction")
+                    .HasForeignKey("HospitalExitId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                    .WithMany("HospitalExitOfficerToTakeAction")
+                    .HasForeignKey("StaffPersonalInfoId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.IncomingMeds", b =>
                 {
