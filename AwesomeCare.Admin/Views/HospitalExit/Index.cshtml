@@ -1,0 +1,197 @@
+﻿@using AwesomeCare.Admin.ViewModels.Untowards;
+@model CreateHospitalExit
+@{
+    ViewData["Title"] = "Create Hospital Exit";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+                <h2>Client: @if (Model.ClientName != null)
+                {@Model.ClientName;
+            }</h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="HospitalExit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <input type="hidden" asp-for="HospitalExitId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reference</label>
+                                    <input type="text" asp-for="Reference" class="form-control" />
+                                    <span asp-validation-for="Reference" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Time</label>
+                                    <input type="text" asp-for="Time" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Time" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">URL LINK</label>
+                                    <input type="text" asp-for="URLLINK" class="form-control" />
+                                    <span asp-validation-for="URLLINK" class="text-danger"></span>
+
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Which Support Is Needed</label>
+                                    <input type="text" asp-for="WhichSupportIsNeeded" class="form-control" />
+                                    <span asp-validation-for="WhichSupportIsNeeded" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Contact Incase Of Re Admission</label>
+                                    <input type="text" asp-for="ContactIncaseOfReAdmission" class="form-control" />
+                                    <span asp-validation-for="ContactIncaseOfReAdmission" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Condition On Discharge</label>
+                                    <baserecord asp-key="Condition_On_Discharge" asp-for="ConditionOnDischarge" asp-items="null" />
+                                    <span asp-validation-for="ConditionOnDischarge" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Number Of Staff Required On Discharge</label>
+                                    <baserecord asp-key="Number_Of_Staff_Required_On_Discharge" asp-for="NumberOfStaffRequiredOnDischarge" asp-items="null" />
+                                    <span asp-validation-for="NumberOfStaffRequiredOnDischarge" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Status</label>
+                                    <baserecord asp-key="Hospital_Exit_Status" asp-for="Status" asp-items="null" />
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Is GrosSries Avaible</label>
+                                    <baserecord asp-key="Is_GrosSries_Avaible" asp-for="IsGrosSriesAvaible" asp-items="null" />
+                                    <span asp-validation-for="IsGrosSriesAvaible" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Is Home Cleaned</label>
+                                    <baserecord asp-key="Is_Home_Cleaned" asp-for="IsHomeCleaned" asp-items="null" />
+                                    <span asp-validation-for="IsHomeCleaned" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Is Medication Avaialable</label>
+                                    <baserecord asp-key="Is_Medication_Avaialable" asp-for="IsMedicationAvaialable" asp-items="null" />
+                                    <span asp-validation-for="IsMedicationAvaialable" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Is Service User on Rota</label>
+                                    <baserecord asp-key="Is_Service_User_on_Rota" asp-for="IsServiceUseronRota" asp-items="null" />
+                                    <span asp-validation-for="IsServiceUseronRota" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">is RotaTeam Informed</label>
+                                    <baserecord asp-key="is_Rota_Team_Informed" asp-for="isRotaTeamInformed" asp-items="null" />
+                                    <span asp-validation-for="isRotaTeamInformed" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">is Little Cash Available For Service User</label>
+                                    <baserecord asp-key="is_Little_Cash_Available_For_Service_User" asp-for="isLittleCashAvailableForServiceUser" asp-items="null" />
+                                    <span asp-validation-for="isLittleCashAvailableForServiceUser" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Mode Of Means Of Trasport Back Home</label>
+                                    <baserecord asp-key="Mode_Of_Means_Of_Trasport_Back_Home" asp-for="ModeOfMeansOfTrasportBackHome" asp-items="null" />
+                                    <span asp-validation-for="ModeOfMeansOfTrasportBackHome" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Are Eqipment Needed Available</label>
+                                    <baserecord asp-key="Are_Eqipment_Needed_Available" asp-for="AreEqipmentNeededAvailable" asp-items="null" />
+                                    <span asp-validation-for="AreEqipmentNeededAvailable" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Are Staff Trainned On Equipment Needed</label>
+                                    <baserecord asp-key="Are_Staff_Trainned_On_Equipment_Needed" asp-for="AreStaffTrainnedOnEquipmentNeeded" asp-items="null" />
+                                    <span asp-validation-for="AreStaffTrainnedOnEquipmentNeeded" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Are Continent Product Need</label>
+                                    <baserecord asp-key="Are_Continent_Product_Need_And_Available" asp-for="AreContinentProductNeedAndAvailable" asp-items="null" />
+                                    <span asp-validation-for="AreContinentProductNeedAndAvailable" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Are Local Support Needed</label>
+                                    <baserecord asp-key="Are_Local_Support_Or_Program_Needed" asp-for="AreLocalSupportOrProgramNeeded" asp-items="null" />
+                                    <span asp-validation-for="AreLocalSupportOrProgramNeeded" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Is Care Plan Updated</label>
+                                    <baserecord asp-key="Is_Care_Plan_Updated" asp-for="IsCarePlanUpdated" asp-items="null" />
+                                    <span asp-validation-for="IsCarePlanUpdated" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Reablement Required</label>
+                                    <baserecord asp-key="Reablement_Required" asp-for="ReablementRequired" asp-items="null" />
+                                    <span asp-validation-for="ReablementRequired" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Purpose of Admission</label>
+                                    <input type="text" asp-for="PurposeofAdmission" class="form-control" />
+                                    <span asp-validation-for="PurposeofAdmission" class="text-danger"></span>
+                                </div>
+                                
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Officer to Take Action</label>
+                                    <select asp-for="OfficerToTakeAction" asp-items="@Model.StaffList" class="selectpicker form-control" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="OfficerToTakeAction" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Remarks</label>
+                                    <input type="text" asp-for="Remark" class="form-control" />
+                                    <span asp-validation-for="Remark" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}
