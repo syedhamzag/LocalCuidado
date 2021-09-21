@@ -23,7 +23,7 @@
                 <ul class="nav nav-tabs-new2">
                     <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalInfo">Personal Info</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#involvingparties">Involving Parties</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hospitalexit">Hospital Exit</a></li>
+                    @*<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#caredetails">Care Details</a></li>*@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#hospitalentry">Hospital Entry</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#complaintregister">Complaint Register</a></li>
@@ -302,23 +302,24 @@
                             <tbody>
                                 @foreach (var item in Model.InvolvingParties)
                                 {
-                    <tr>
-                        <td>
-                            @item.Name
-                        </td>
-                        <td>
-                            @item.Address
-                        </td>
-                        <td>
-                            @item.Email
-                        </td>
-                        <td>
-                            @item.Telephone
-                        </td>
-                        <td>
-                            @item.Relationship
-                        </td>
-                    </tr>}
+                                    <tr>
+                                        <td>
+                                            @item.Name
+                                        </td>
+                                        <td>
+                                            @item.Address
+                                        </td>
+                                        <td>
+                                            @item.Email
+                                        </td>
+                                        <td>
+                                            @item.Telephone
+                                        </td>
+                                        <td>
+                                            @item.Relationship
+                                        </td>
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -348,61 +349,24 @@
                                 <tbody>
                                     @foreach (var item in Model.GetHospitalEntry)
                                     {
-                        <tr>
-                            <td>
-                                @item.Reference
-                            </td>
-                            <td>
-                                @if (!string.IsNullOrEmpty(item.Attachment))
-                                {
-                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>}
+                                        <tr>
+                                            <td>
+                                                @item.Reference
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Attachment))
+                                                {
+                                                    <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                }
 
-                            </td>
+                                            </td>
 
-                        </tr>}
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="hospitalexit">
-                        <div class="header">
-                            <ul class="header-dropdown">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HospitalExit">Create</a></li>
-
-
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="body">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Reference</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetHospitalExit)
-                                    {
-                        <tr>
-                            <td>
-                                @item.Reference
-                            </td>
-                            <td>
-                                @item.Date
-                            </td>
-
-                        </tr>}
+                                        </tr>
+                                    }
 
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                     <div class="tab-pane" id="regulatorycontact">
                         <table class="table table-bordered table-hover">
@@ -417,34 +381,36 @@
                             <tbody>
                                 @foreach (var item in Model.RegulatoryContact)
                                 {
-                    <tr>
-                        <td>
-                            @item.RegulatoryContact
-                        </td>
-                        <td>
-                            @if (item.DatePerformed.HasValue)
-                            {
-                                var datePerformed = item.DatePerformed.Value.ToString("MMM. dd, yyyy");
-                @datePerformed;
-            }
+                                    <tr>
+                                        <td>
+                                            @item.RegulatoryContact
+                                        </td>
+                                        <td>
+                                            @if (item.DatePerformed.HasValue)
+                                            {
+                                                var datePerformed = item.DatePerformed.Value.ToString("MMM. dd, yyyy");
+                                                @datePerformed;
+                                            }
 
-                        </td>
-                        <td>
-                            @if (item.DueDate.HasValue)
-                            {
-                                var dueDate = item.DueDate.Value.ToString("MMM. dd, yyyy");
-                @dueDate;
-            }
+                                        </td>
+                                        <td>
+                                            @if (item.DueDate.HasValue)
+                                            {
+                                                var dueDate = item.DueDate.Value.ToString("MMM. dd, yyyy");
+                                                @dueDate;
+                                            }
 
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.Evidence))
-                            {
-                <a asp-action="DownloadFile" asp-route-file="@item.Evidence">Download</a>}
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Evidence))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.Evidence">Download</a>
+                                            }
 
-                        </td>
+                                        </td>
 
-                    </tr>}
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -473,18 +439,20 @@
                             <tbody>
                                 @foreach (var item in Model.GetClientComplain)
                                 {
-                    <tr>
-                        <td>
-                            @item.COMPLAINANTCONTACT
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.EvidenceFilePath))
-                            {
-                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceFilePath">Download</a>}
+                                    <tr>
+                                        <td>
+                                            @item.COMPLAINANTCONTACT
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.EvidenceFilePath))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceFilePath">Download</a>
+                                            }
 
-                        </td>
+                                        </td>
 
-                    </tr>}
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -511,18 +479,20 @@
                             <tbody>
                                 @foreach (var item in Model.GetClientLogAudit)
                                 {
-                    <tr>
-                        <td>
-                            @item.ActionRecommended
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
-                            {
-                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>}
+                                    <tr>
+                                        <td>
+                                            @item.ActionRecommended
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>
+                                            }
 
-                        </td>
+                                        </td>
 
-                    </tr>}
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -551,18 +521,20 @@
                             <tbody>
                                 @foreach (var item in Model.GetClientMedAudit)
                                 {
-                    <tr>
-                        <td>
-                            @item.ActionRecommended
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
-                            {
-                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>}
+                                    <tr>
+                                        <td>
+                                            @item.ActionRecommended
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>
+                                            }
 
-                        </td>
+                                        </td>
 
-                    </tr>}
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -589,18 +561,20 @@
                             <tbody>
                                 @foreach (var item in Model.GetClientVoice)
                                 {
-                    <tr>
-                        <td>
-                            @item.ActionRequired
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.Attachment))
-                            {
-                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>}
+                                    <tr>
+                                        <td>
+                                            @item.ActionRequired
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                            }
 
-                        </td>
+                                        </td>
 
-                    </tr>}
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -627,18 +601,20 @@
                             <tbody>
                                 @foreach (var item in Model.GetClientMgtVisit)
                                 {
-                    <tr>
-                        <td>
-                            @item.ActionRequired
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.Attachment))
-                            {
-                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>}
+                                    <tr>
+                                        <td>
+                                            @item.ActionRequired
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                            }
 
-                        </td>
+                                        </td>
 
-                    </tr>}
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -665,18 +641,20 @@
                             <tbody>
                                 @foreach (var item in Model.GetClientProgram)
                                 {
-                    <tr>
-                        <td>
-                            @item.ActionRequired
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.Attachment))
-                            {
-                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>}
+                                    <tr>
+                                        <td>
+                                            @item.ActionRequired
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                            }
 
-                        </td>
+                                        </td>
 
-                    </tr>}
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -703,18 +681,20 @@
                             <tbody>
                                 @foreach (var item in Model.GetClientServiceWatch)
                                 {
-                    <tr>
-                        <td>
-                            @item.ActionRequired
-                        </td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(item.Attachment))
-                            {
-                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>}
+                                    <tr>
+                                        <td>
+                                            @item.ActionRequired
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                            {
+                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                            }
 
-                        </td>
+                                        </td>
 
-                    </tr>}
+                                    </tr>
+                                }
 
                             </tbody>
                         </table>
@@ -762,14 +742,15 @@
                                             <tbody>
                                                 @foreach (var item in Model.GetClientBloodCoagulationRecord)
                                                 {
-                                    <tr>
-                                        <td>
-                                            @item.Date
-                                        </td>
-                                        <td>
-                                            @item.Comment
-                                        </td>
-                                    </tr>}
+                                                    <tr>
+                                                        <td>
+                                                            @item.Date
+                                                        </td>
+                                                        <td>
+                                                            @item.Comment
+                                                        </td>
+                                                    </tr>
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -796,14 +777,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientBloodPressure)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -828,14 +810,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientBMIChart)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -860,14 +843,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientBodyTemp)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -892,14 +876,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientBowelMovement)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -924,14 +909,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientEyeHealthMonitoring)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -956,14 +942,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientFoodIntake)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -988,14 +975,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientHeartRate)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1020,14 +1008,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientOxygenLvl)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1052,14 +1041,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientPainChart)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1084,14 +1074,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientPulseRate)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1116,14 +1107,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientSeizure)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Remarks
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Remarks
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1148,14 +1140,15 @@
                                         <tbody>
                                             @foreach (var item in Model.GetClientWoundCare)
                                             {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Comment
-                                    </td>
-                                </tr>}
+                                                <tr>
+                                                    <td>
+                                                        @item.Date
+                                                    </td>
+                                                    <td>
+                                                        @item.Comment
+                                                    </td>
+                                                </tr>
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -1197,14 +1190,15 @@
                                             <tbody>
                                                 @foreach (var item in Model.GetReview)
                                                 {
-                                    <tr>
-                                        <td>
-                                            @item.CP_PreDate
-                                        </td>
-                                        <td>
-                                            @item.CP_ReviewDate
-                                        </td>
-                                    </tr>}
+                                                    <tr>
+                                                        <td>
+                                                            @item.CP_PreDate
+                                                        </td>
+                                                        <td>
+                                                            @item.CP_ReviewDate
+                                                        </td>
+                                                    </tr>
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -1245,14 +1239,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetHealthAndLiving)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.BriefHealth
-                                                    </td>
-                                                    <td>
-                                                        @item.WakeUp
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.BriefHealth
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.WakeUp
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1279,14 +1274,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetSpecialHealthAndMedication)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.Date
-                                                    </td>
-                                                    <td>
-                                                        @item.By
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.Date
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.By
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1313,14 +1309,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetBalance)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.Name
-                                                    </td>
-                                                    <td>
-                                                        @item.Description
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Description
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1347,14 +1344,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetPhysicalAbility)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.Name
-                                                    </td>
-                                                    <td>
-                                                        @item.Description
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Description
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1381,14 +1379,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetSpecialHealthCondition)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.ConditionName
-                                                    </td>
-                                                    <td>
-                                                        @item.SourceInformation
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.ConditionName
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.SourceInformation
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1415,14 +1414,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetHistoryOfFall)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.Date
-                                                    </td>
-                                                    <td>
-                                                        @item.Cause
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.Date
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Cause
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1453,14 +1453,15 @@
                                             <tbody>
                                                 @foreach (var item in Model.GetCarePlanNutrition)
                                                 {
-                                    <tr>
-                                        <td>
-                                            @item.SpecialDiet
-                                        </td>
-                                        <td>
-                                            @item.AvoidFood
-                                        </td>
-                                    </tr>}
+                                                    <tr>
+                                                        <td>
+                                                            @item.SpecialDiet
+                                                        </td>
+                                                        <td>
+                                                            @item.AvoidFood
+                                                        </td>
+                                                    </tr>
+                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -1498,14 +1499,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetPersonalHygiene)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.LaundrySupport
-                                                    </td>
-                                                    <td>
-                                                        @item.LaundryGuide
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.LaundrySupport
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.LaundryGuide
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1532,14 +1534,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetInfectionControl)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.TestDate
-                                                    </td>
-                                                    <td>
-                                                        @item.Remarks
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.TestDate
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Remarks
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1565,11 +1568,12 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetManagingTasks)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.Help
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.Help
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1608,11 +1612,12 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetInterestAndObjective)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.CareGoal
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.CareGoal
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1639,14 +1644,15 @@
                                                         <tbody>
                                                             @foreach (var item in Model.GetPets)
                                                             {
-                                                <tr>
-                                                    <td>
-                                                        @item.Name
-                                                    </td>
-                                                    <td>
-                                                        @item.Age
-                                                    </td>
-                                                </tr>}
+                                                                <tr>
+                                                                    <td>
+                                                                        @item.Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.Age
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
