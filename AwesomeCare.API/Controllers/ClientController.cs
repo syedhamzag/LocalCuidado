@@ -62,6 +62,7 @@ using AwesomeCare.DataTransferObject.DTOs.Health.SpecialHealthCondition;
 using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
 using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
 using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -116,6 +117,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Pets> _petsRepository;
         private IGenericRepository<HospitalEntry> _hospitalEntryRepository;
         private IGenericRepository<HospitalExit> _hospitalExitRepository;
+        private IGenericRepository<HomeRiskAssessment> _homeRiskAssessRepository;
 
 
         private AwesomeCareDbContext _dbContext;
@@ -151,7 +153,7 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<InfectionControl> infectionRepository,
             IGenericRepository<ManagingTasks> mtaskRepository,
             IGenericRepository<InterestAndObjective> objRepository,
-            IGenericRepository<Pets> petsRepository, IGenericRepository<HospitalEntry> hospitalEntryRepository, IGenericRepository<HospitalExit> hospitalExitRepository)
+            IGenericRepository<Pets> petsRepository, IGenericRepository<HospitalEntry> hospitalEntryRepository, IGenericRepository<HospitalExit> hospitalExitRepository, IGenericRepository<HomeRiskAssessment> homeRiskAssessRepository)
         {
             _clientRepository = clientRepository;
             _complainRepository = complainRepository;
@@ -200,6 +202,7 @@ namespace AwesomeCare.API.Controllers
             _petsRepository = petsRepository;
             _hospitalEntryRepository = hospitalEntryRepository;
             _hospitalExitRepository = hospitalExitRepository;
+            _homeRiskAssessRepository = homeRiskAssessRepository;
         }
         /// <summary>
         /// Create Client
@@ -565,7 +568,14 @@ namespace AwesomeCare.API.Controllers
                                                           {
                                                               Date = sw.Date,
                                                               Reference = sw.Reference
-                                                          }).ToList()
+                                                          }).ToList(),
+                                       GetHomeRiskAssessment = (from h in _homeRiskAssessRepository.Table
+                                                                where h.ClientId == id.Value
+                                                                select new GetHomeRiskAssessment
+                                                                {
+                                                                    Heading = h.Heading
+                                                                }).ToList()
+                                       
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

@@ -114,6 +114,7 @@ using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
 using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
 using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
 using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 
 namespace MapperConfig
 {
@@ -259,7 +260,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.Pets, mem => mem.Ignore())
                 .ForMember(dto => dto.HospitalEntry, mem => mem.Ignore())
                 .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore())
-                .ForMember(dto => dto.HospitalExit, mem => mem.Ignore());
+                .ForMember(dto => dto.HospitalExit, mem => mem.Ignore())
+                .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
@@ -301,7 +303,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetReview, mem => mem.Ignore())
                 .ForMember(dto => dto.GetHospitalEntry, mem => mem.Ignore())
                 .ForMember(dto => dto.GetBaseRecords, mem => mem.Ignore())
-                .ForMember(dto => dto.GetHospitalExit, mem => mem.Ignore());
+                .ForMember(dto => dto.GetHospitalExit, mem => mem.Ignore())
+                .ForMember(dto => dto.GetHomeRiskAssessment, mem => mem.Ignore());
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));
@@ -367,7 +370,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.Pets, mem => mem.Ignore())
                 .ForMember(dto => dto.HospitalEntry, mem => mem.Ignore())
                 .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore())
-                .ForMember(dto => dto.HospitalExit, mem => mem.Ignore());
+                .ForMember(dto => dto.HospitalExit, mem => mem.Ignore())
+                 .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
@@ -2452,6 +2456,25 @@ namespace MapperConfig
             CreateMap<StaffPersonalityTest, GetStaffPersonalityTest>()
                 .ForMember(dto => dto.QuestionName, mem => mem.Ignore())
                 .ForMember(dto => dto.AnswerName, mem => mem.Ignore());
+            #endregion
+
+            #region HomeRiskAssessment
+            CreateMap<PutHomeRiskAssessment, HomeRiskAssessment>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                 .ForMember(dto => dto.HomeRiskAssessmentTask, mem => mem.Ignore());
+            CreateMap<PostHomeRiskAssessment, HomeRiskAssessment>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                 .ForMember(dto => dto.HomeRiskAssessmentTask, mem => mem.Ignore());
+            CreateMap<HomeRiskAssessment, GetHomeRiskAssessment>()
+                 .ForMember(dto => dto.GetHomeRiskAssessmentTask, mem => mem.Ignore());
+
+            CreateMap<PostHomeRiskAssessmentTask, HomeRiskAssessmentTask>()
+                .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore());
+            CreateMap<PutHomeRiskAssessmentTask, HomeRiskAssessmentTask>()
+                .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore());
+            CreateMap<HomeRiskAssessmentTask, GetHomeRiskAssessmentTask>()
+                .ForMember(dto => dto.AnswerName, mem => mem.Ignore())
+                .ForMember(dto => dto.TitleName, mem => mem.Ignore());
             #endregion
         }
     }
