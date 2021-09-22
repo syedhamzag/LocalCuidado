@@ -957,6 +957,12 @@ namespace AwesomeCare.Admin
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffPersonalityTest>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("homeriskassessment", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IHomeRiskAssessmentService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
 }

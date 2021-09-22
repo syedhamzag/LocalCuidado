@@ -1,0 +1,56 @@
+﻿@using AwesomeCare.Admin.ViewModels.CarePlan.HomeRiskAssessment;
+
+@model CreateHomeRiskAssessment
+
+<div class="col-lg-12">
+    <div class="accordion" id="accordion">
+            <div>
+                <div class="card-header">
+                    
+                </div>
+
+                <div class="card-body">
+                    <input type="hidden" asp-for="@Model.ClientId" />
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                        <label>Heading</label>
+                        <input type="text" class="form-control" asp-for="@Model.Heading" />
+                    </div>
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Title</th>
+                                <th>Answer</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" asp-for="@Model.Tasks.FirstOrDefault().IsSelected" />
+                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().HomeRiskAssessmentId" />
+                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().HomeRiskAssessmentTaskId" />
+                                </td>
+                                <td>
+                                    <baserecord asp-key="Home_Risk_Assessment_Title" asp-for="@Model.Tasks.FirstOrDefault().Title" asp-items="null" />
+                                    <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <baserecord asp-key="Home_Risk_Assessment_Answer" asp-for="@Model.Tasks.FirstOrDefault().Answer" asp-items="null" />
+                                    <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
+                                </td>
+                                <td>
+                                    <input asp-for="@Model.Tasks.FirstOrDefault().Comment" type="text" class="form-control" />
+                                    <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    </div>
+
+
+
+</div>
