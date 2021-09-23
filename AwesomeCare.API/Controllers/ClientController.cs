@@ -25,14 +25,6 @@ using AwesomeCare.DataTransferObject.DTOs.ClientVoice;
 using AwesomeCare.DataTransferObject.DTOs.ClientMgtVisit;
 using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
 using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Capacity;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentData;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.PersonCentred;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentCare;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.ConsentLandline;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.KeyIndicators;
-using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Personal;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Review;
 using AwesomeCare.DataTransferObject.DTOs.ClientBloodCoagulationRecord;
 using AwesomeCare.DataTransferObject.DTOs.ClientBMIChart;
@@ -47,7 +39,6 @@ using AwesomeCare.DataTransferObject.DTOs.ClientPainChart;
 using AwesomeCare.DataTransferObject.DTOs.ClientPulseRate;
 using AwesomeCare.DataTransferObject.DTOs.ClientSeizure;
 using AwesomeCare.DataTransferObject.DTOs.ClientWoundCare;
-using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.Pets;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.PersonalHygiene;
@@ -72,137 +63,29 @@ namespace AwesomeCare.API.Controllers
     public class ClientController : ControllerBase
     {
         private IGenericRepository<Client> _clientRepository;
-        private IGenericRepository<ClientInvolvingParty> _clientInvolvingPartRepository;
-        private IGenericRepository<ClientComplainRegister> _complainRepository;
         private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
         private IGenericRepository<BaseRecordModel> _baseRecordRepository;
         private IGenericRepository<ClientMedication> _clientMedicationRepository;
-        private IGenericRepository<ClientMedicationDay> _clientMedicationDayRepository;
-        private IGenericRepository<ClientMedicationPeriod> _clientMedicationPeriodRepository;
         private IGenericRepository<RotaDayofWeek> _rotaDayOfWeekRepository;
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
-        private IGenericRepository<ClientLogAudit> _clientLogAuditRepository;
-        private IGenericRepository<ClientMedAudit> _clientMedAuditRepository;
-        private IGenericRepository<ClientVoice> _clientVoiceRepository;
-        private IGenericRepository<ClientMgtVisit> _clientMgtVisitRepository;
-        private IGenericRepository<ClientProgram> _clientProgramRepository;
-        private IGenericRepository<ClientServiceWatch> _clientServiceWatchRepository;
         private IGenericRepository<Medication> _medicationRepository;
         private IGenericRepository<MedicationManufacturer> _medicationManufacturerRepository;
-        private IGenericRepository<ClientBloodCoagulationRecord> _bloodcoagRepository;
-        private IGenericRepository<ClientBMIChart> _bmichartRepository;
-        private IGenericRepository<ClientBloodPressure> _bloodpressureRepository;
-        private IGenericRepository<ClientBodyTemp> _bodytempRepository;
-        private IGenericRepository<ClientBowelMovement> _bowelmovementRepository;
-        private IGenericRepository<ClientEyeHealthMonitoring> _eyehealthRepository;
-        private IGenericRepository<ClientFoodIntake> _foodintakeRepository;
-        private IGenericRepository<ClientOxygenLvl> _oxygenlvlRepository;
-        private IGenericRepository<ClientPulseRate> _pulserateRepository;
-        private IGenericRepository<ClientHeartRate> _heartrateRepository;
-        private IGenericRepository<ClientSeizure> _seizureRepository;
-        private IGenericRepository<ClientWoundCare> _woundcareRepository;
-        private IGenericRepository<ClientPainChart> _painchartRepository;
-        private IGenericRepository<PersonalDetail> _personalRepository;
-        private IGenericRepository<SpecialHealthAndMedication> _spcmedRepository;
-        private IGenericRepository<SpecialHealthCondition> _speccondRepository;
-        private IGenericRepository<PhysicalAbility> _phyabRepository;
-        private IGenericRepository<Balance> _balanceRepository;
-        private IGenericRepository<HistoryOfFall> _historyRepository;
-        private IGenericRepository<HealthAndLiving> _healthlivingRepository;
-        private IGenericRepository<CarePlanNutrition> _cpnutRepository;
-        private IGenericRepository<PersonalHygiene> _phygieneRepository;
-        private IGenericRepository<InfectionControl> _infectionRepository;
-        private IGenericRepository<ManagingTasks> _mtaskRepository;
-        private IGenericRepository<InterestAndObjective> _objRepository;
-        private IGenericRepository<Pets> _petsRepository;
-        private IGenericRepository<HospitalEntry> _hospitalEntryRepository;
-        private IGenericRepository<HospitalExit> _hospitalExitRepository;
-        private IGenericRepository<HomeRiskAssessment> _homeRiskAssessRepository;
 
 
         private AwesomeCareDbContext _dbContext;
-        public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<ClientMedicationPeriod> clientMedicationPeriodRepository,
-            IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<ClientMedicationDay> clientMedicationDayRepository,
-            IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<ClientComplainRegister> complainRepository,
-            IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<ClientInvolvingParty> clientInvolvingPartRepository,
-            IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository,
-            IGenericRepository<ClientLogAudit> clientLogAuditRepository, IGenericRepository<ClientMedAudit> clientMedAuditRepository, IGenericRepository<ClientVoice> clientVoiceRepository,
-            IGenericRepository<ClientMgtVisit> clientMgtVisitRepository, IGenericRepository<ClientProgram> clientProgramRepository,IGenericRepository<ClientServiceWatch> clientServiceWatchRepository,
-            IGenericRepository<ClientBloodCoagulationRecord> bloodcoagRepository,
-            IGenericRepository<ClientBMIChart> bmichartRepository,
-            IGenericRepository<ClientBloodPressure> bloodpressureRepository,
-            IGenericRepository<ClientBodyTemp> bodytempRepository,
-            IGenericRepository<ClientBowelMovement> bowelmovementRepository,
-            IGenericRepository<ClientEyeHealthMonitoring> eyehealthRepository,
-            IGenericRepository<ClientFoodIntake> foodintakeRepository,
-            IGenericRepository<ClientOxygenLvl> oxygenlvlRepository,
-            IGenericRepository<ClientPulseRate> pulserateRepository,
-            IGenericRepository<ClientHeartRate> heartrateRepository,
-            IGenericRepository<ClientSeizure> seizureRepository,
-            IGenericRepository<ClientWoundCare> woundcareRepository,
-            IGenericRepository<ClientPainChart> painchartRepository,
-            IGenericRepository<PersonalDetail> personalRepository,
-            IGenericRepository<SpecialHealthAndMedication> spcmedRepository,
-            IGenericRepository<SpecialHealthCondition> speccondRepository,
-            IGenericRepository<PhysicalAbility> phyabRepository,
-            IGenericRepository<Balance> balanceRepository,
-            IGenericRepository<HistoryOfFall> historyRepository,
-            IGenericRepository<HealthAndLiving> healthlivingRepository,
-            IGenericRepository<CarePlanNutrition> cpnutRepository,
-            IGenericRepository<PersonalHygiene> phygieneRepository,
-            IGenericRepository<InfectionControl> infectionRepository,
-            IGenericRepository<ManagingTasks> mtaskRepository,
-            IGenericRepository<InterestAndObjective> objRepository,
-            IGenericRepository<Pets> petsRepository, IGenericRepository<HospitalEntry> hospitalEntryRepository, IGenericRepository<HospitalExit> hospitalExitRepository, IGenericRepository<HomeRiskAssessment> homeRiskAssessRepository)
+        public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<ClientMedication> clientMedicationRepository,
+            IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, 
+            IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository)
         {
             _clientRepository = clientRepository;
-            _complainRepository = complainRepository;
             _baseRecordItemRepository = baseRecordItemRepository;
             _baseRecordRepository = baseRecordRepository;
             _dbContext = dbContext;
             _clientMedicationRepository = clientMedicationRepository;
-            _clientMedicationDayRepository = clientMedicationDayRepository;
-            _clientMedicationPeriodRepository = clientMedicationPeriodRepository;
             _rotaDayOfWeekRepository = rotaDayOfWeekRepository;
             _clientRotaTypeRepository = clientRotaTypeRepository;
             _medicationRepository = medicationRepository;
             _medicationManufacturerRepository = medicationManufacturerRepository;
-            _clientLogAuditRepository = clientLogAuditRepository;
-            _clientMedAuditRepository = clientMedAuditRepository;
-            _clientVoiceRepository = clientVoiceRepository;
-            _clientMgtVisitRepository = clientMgtVisitRepository;
-            _clientProgramRepository = clientProgramRepository;
-            _clientServiceWatchRepository = clientServiceWatchRepository;
-            _clientInvolvingPartRepository = clientInvolvingPartRepository;
-            _bloodcoagRepository = bloodcoagRepository;
-            _bmichartRepository = bmichartRepository;
-            _bloodpressureRepository = bloodpressureRepository;
-            _bodytempRepository = bodytempRepository;
-            _bowelmovementRepository = bowelmovementRepository;
-            _eyehealthRepository = eyehealthRepository;
-            _foodintakeRepository = foodintakeRepository;
-            _oxygenlvlRepository = oxygenlvlRepository;
-            _pulserateRepository = pulserateRepository;
-            _heartrateRepository = heartrateRepository;
-            _seizureRepository = seizureRepository;
-            _woundcareRepository = woundcareRepository;
-            _painchartRepository = painchartRepository;
-            _personalRepository = personalRepository;
-            _spcmedRepository = spcmedRepository;
-            _speccondRepository = speccondRepository;
-            _phyabRepository = phyabRepository;
-            _balanceRepository = balanceRepository;
-            _historyRepository = historyRepository;
-            _healthlivingRepository = healthlivingRepository;
-            _cpnutRepository = cpnutRepository;
-            _phygieneRepository = phygieneRepository;
-            _infectionRepository = infectionRepository;
-            _mtaskRepository = mtaskRepository;
-            _objRepository = objRepository;
-            _petsRepository = petsRepository;
-            _hospitalEntryRepository = hospitalEntryRepository;
-            _hospitalExitRepository = hospitalExitRepository;
-            _homeRiskAssessRepository = homeRiskAssessRepository;
         }
         /// <summary>
         /// Create Client
@@ -310,50 +193,43 @@ namespace AwesomeCare.API.Controllers
                                                                Relationship = inv.Relationship,
                                                                Telephone = inv.Telephone
                                                            }).ToList(),
-                                       GetClientComplain = (from com in _complainRepository.Table
-                                                            where com.ClientId == id.Value
+                                       GetClientComplain = (from com in client.ComplainRegister
                                                             select new GetClientComplainRegister
                                                            {
                                                                 COMPLAINANTCONTACT = com.COMPLAINANTCONTACT,
                                                                 EvidenceFilePath = com.EvidenceFilePath
                                                            }).ToList(),
-                                       GetClientLogAudit = (from log in _clientLogAuditRepository.Table
-                                                            where log.ClientId == id.Value
+                                       GetClientLogAudit = (from log in client.ClientLogAudit
                                                             select new GetClientLogAudit
                                                             {
                                                                 ActionRecommended = log.ActionRecommended,
                                                                 EvidenceOfActionTaken = log.EvidenceOfActionTaken
                                                             }).ToList(),
-                                       GetClientMedAudit = (from med in _clientMedAuditRepository.Table
-                                                            where med.ClientId == id.Value
+                                       GetClientMedAudit = (from med in client.ClientMedAudit
                                                             select new GetClientMedAudit
                                                             {
                                                                 ActionRecommended = med.ActionRecommended,
                                                                 EvidenceOfActionTaken = med.EvidenceOfActionTaken
                                                             }).ToList(),
-                                       GetClientVoice =     (from v in _clientVoiceRepository.Table
-                                                            where v.ClientId == id.Value
+                                       GetClientVoice =     (from v in client.ClientVoice
                                                             select new GetClientVoice
                                                             {
                                                                 ActionRequired = v.ActionRequired,
                                                                 Attachment = v.Attachment
                                                             }).ToList(),
-                                       GetClientMgtVisit = (from mg in _clientMgtVisitRepository.Table
-                                                         where mg.ClientId == id.Value
+                                       GetClientMgtVisit = (from mg in client.ClientMgtVisit
                                                          select new GetClientMgtVisit
                                                          {
                                                              ActionRequired = mg.ActionRequired,
                                                              Attachment = mg.Attachment
                                                          }).ToList(),
-                                       GetClientProgram = (from cp in _clientProgramRepository.Table
-                                                         where cp.ClientId == id.Value
+                                       GetClientProgram = (from cp in client.ClientProgram
                                                          select new GetClientProgram
                                                          {
                                                              ActionRequired = cp.ActionRequired,
                                                              Attachment = cp.Attachment
                                                          }).ToList(),
-                                       GetClientServiceWatch = (from sw in _clientServiceWatchRepository.Table
-                                                         where sw.ClientId == id.Value
+                                       GetClientServiceWatch = (from sw in client.ClientServiceWatch
                                                          select new GetClientServiceWatch
                                                          {
                                                              ActionRequired = sw.ActionRequired,
@@ -372,188 +248,161 @@ namespace AwesomeCare.API.Controllers
                                                                 Evidence = reg.Evidence,
                                                                 RegulatoryContact = baseRecordItem.ValueName
                                                             }).ToList(),
-                                       GetClientBloodCoagulationRecord = (from sw in _bloodcoagRepository.Table
-                                                                where sw.ClientId == id.Value
+                                       GetClientBloodCoagulationRecord = (from sw in client.ClientBloodCoagulationRecord
                                                                 select new GetClientBloodCoagulationRecord
                                                                 {
                                                                     Date = sw.Date,
                                                                     Comment = sw.Comment
                                                                 }).ToList(),
-                                       GetClientBloodPressure= (from sw in _bloodpressureRepository.Table
-                                                                          where sw.ClientId == id.Value
+                                       GetClientBloodPressure= (from sw in client.ClientBloodPressure
                                                                           select new GetClientBloodPressure
                                                                           {
                                                                               Date = sw.Date,
                                                                               Comment = sw.Comment
                                                                           }).ToList(),
-                                       GetClientBMIChart= (from sw in _bmichartRepository.Table
-                                                                 where sw.ClientId == id.Value
+                                       GetClientBMIChart= (from sw in client.ClientBMIChart
                                                                  select new GetClientBMIChart
                                                                  {
                                                                      Date = sw.Date,
                                                                      Comment = sw.Comment
                                                                  }).ToList(),
-                                       GetClientBodyTemp = (from sw in _bodytempRepository.Table
-                                                            where sw.ClientId == id.Value
+                                       GetClientBodyTemp = (from sw in client.ClientBodyTemp
                                                             select new GetClientBodyTemp
                                                             {
                                                                 Date = sw.Date,
                                                                 Comment = sw.Comment
                                                             }).ToList(),
-                                       GetClientBowelMovement = (from sw in _bowelmovementRepository.Table
-                                                            where sw.ClientId == id.Value
+                                       GetClientBowelMovement = (from sw in client.ClientBowelMovement
                                                             select new GetClientBowelMovement
                                                             {
                                                                 Date = sw.Date,
                                                                 Comment = sw.Comment
                                                             }).ToList(),
-                                       GetClientEyeHealthMonitoring = (from sw in _eyehealthRepository.Table
-                                                                 where sw.ClientId == id.Value
+                                       GetClientEyeHealthMonitoring = (from sw in client.ClientEyeHealthMonitoring
                                                                  select new GetClientEyeHealthMonitoring
                                                                  {
                                                                      Date = sw.Date,
                                                                      Comment = sw.Comment
                                                                  }).ToList(),
-                                       GetClientFoodIntake= (from sw in _foodintakeRepository.Table
-                                                                       where sw.ClientId == id.Value
+                                       GetClientFoodIntake= (from sw in client.ClientFoodIntake
                                                                        select new GetClientFoodIntake
                                                                        {
                                                                            Date = sw.Date,
                                                                            Comment = sw.Comment
                                                                        }).ToList(),
-                                       GetClientHeartRate = (from sw in _heartrateRepository.Table
-                                                              where sw.ClientId == id.Value
+                                       GetClientHeartRate = (from sw in client.ClientHeartRate
                                                               select new GetClientHeartRate
                                                               {
                                                                   Date = sw.Date,
                                                                   Comment = sw.Comment
                                                               }).ToList(),
-                                       GetClientOxygenLvl = (from sw in _oxygenlvlRepository.Table
-                                                             where sw.ClientId == id.Value
+                                       GetClientOxygenLvl = (from sw in client.ClientOxygenLvl
                                                              select new GetClientOxygenLvl
                                                              {
                                                                  Date = sw.Date,
                                                                  Comment = sw.Comment
                                                              }).ToList(),
-                                       GetClientPainChart = (from sw in _painchartRepository.Table
-                                                             where sw.ClientId == id.Value
+                                       GetClientPainChart = (from sw in client.ClientPainChart
                                                              select new GetClientPainChart
                                                              {
                                                                  Date = sw.Date,
                                                                  Comment = sw.Comment
                                                              }).ToList(),
-                                       GetClientPulseRate = (from sw in _pulserateRepository.Table
-                                                             where sw.ClientId == id.Value
+                                       GetClientPulseRate = (from sw in client.ClientPulseRate
                                                              select new GetClientPulseRate
                                                              {
                                                                  Date = sw.Date,
                                                                  Comment = sw.Comment
                                                              }).ToList(),
-                                       GetClientSeizure = (from sw in _seizureRepository.Table
-                                                             where sw.ClientId == id.Value
+                                       GetClientSeizure = (from sw in client.ClientSeizure
                                                              select new GetClientSeizure
                                                              {
                                                                  Date = sw.Date,
                                                                  Remarks = sw.Remarks
                                                              }).ToList(),
-                                       GetClientWoundCare = (from sw in _woundcareRepository.Table
-                                                           where sw.ClientId == id.Value
+                                       GetClientWoundCare = (from sw in client.ClientWoundCare
                                                            select new GetClientWoundCare
                                                            {
                                                                Date = sw.Date,
                                                                Comment = sw.Comment
                                                            }).ToList(),
-                                       GetReview = (from sw in _personalRepository.Table
-                                                    where sw.ClientId == id.Value
+                                       GetReview = (from sw in client.PersonalDetail
                                                     select new GetReview
                                                     {
                                                         CP_PreDate = sw.Review.CP_PreDate,
                                                         CP_ReviewDate = sw.Review.CP_ReviewDate
                                                     }).ToList(),
-                                       GetPets = (from sw in _petsRepository.Table
-                                                    where sw.ClientId == id.Value
+                                       GetPets = (from sw in client.Pets
                                                     select new GetPets
                                                     {
                                                         Name = sw.Name,
                                                         Age = sw.Age
                                                     }).ToList(),
-                                       GetInterestAndObjective = (from sw in _objRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetInterestAndObjective = (from sw in client.InterestAndObjective
                                                   select new GetInterestAndObjective
                                                   {
                                                       CareGoal = sw.CareGoal,
                                                   }).ToList(),
-                                       GetPersonalHygiene = (from sw in _phygieneRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetPersonalHygiene = (from sw in client.PersonalHygiene
                                                   select new GetPersonalHygiene
                                                   {
                                                       LaundrySupport = sw.LaundrySupport,
                                                       LaundryGuide = sw.LaundryGuide
                                                   }).ToList(),
-                                       GetInfectionControl = (from sw in _infectionRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetInfectionControl = (from sw in client.InfectionControl
                                                   select new GetInfectionControl
                                                   {
                                                       TestDate = sw.TestDate,
                                                       Remarks = sw.Remarks
                                                   }).ToList(),
-                                       GetManagingTasks = (from sw in _mtaskRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetManagingTasks = (from sw in client.ManagingTasks
                                                   select new GetManagingTasks
                                                   {
                                                       Help = sw.Help,
                                                   }).ToList(),
-                                       GetCarePlanNutrition = (from sw in _cpnutRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetCarePlanNutrition = (from sw in client.CarePlanNutrition
                                                   select new GetCarePlanNutrition
                                                   {
                                                       SpecialDiet = sw.SpecialDiet,
                                                       AvoidFood = sw.AvoidFood
                                                   }).ToList(),
-                                       GetBalance = (from sw in _balanceRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetBalance = (from sw in client.Balance
                                                   select new GetBalance
                                                   {
                                                       Name = sw.Name,
                                                       Description = sw.Description
                                                   }).ToList(),
-                                       GetPhysicalAbility = (from sw in _phyabRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetPhysicalAbility = (from sw in client.PhysicalAbility
                                                   select new GetPhysicalAbility
                                                   {
                                                       Name = sw.Name,
                                                       Description = sw.Description
                                                   }).ToList(),
-                                       GetHealthAndLiving = (from sw in _healthlivingRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetHealthAndLiving = (from sw in client.HealthAndLiving
                                                   select new GetHealthAndLiving
                                                   {
                                                       BriefHealth = sw.BriefHealth,
                                                       WakeUp = sw.WakeUp
                                                   }).ToList(),
-                                       GetSpecialHealthAndMedication = (from sw in _spcmedRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetSpecialHealthAndMedication = (from sw in client.SpecialHealthAndMedication
                                                   select new GetSpecialHealthAndMedication
                                                   {
                                                       Date = sw.Date,
                                                       By = sw.By
                                                   }).ToList(),
-                                       GetSpecialHealthCondition = (from sw in _speccondRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetSpecialHealthCondition = (from sw in client.SpecialHealthCondition
                                                   select new GetSpecialHealthCondition
                                                   {
                                                       ConditionName = sw.ConditionName,
                                                       SourceInformation = sw.SourceInformation
                                                   }).ToList(),
-                                       GetHistoryOfFall = (from sw in _historyRepository.Table
-                                                  where sw.ClientId == id.Value
+                                       GetHistoryOfFall = (from sw in client.HistoryOfFall
                                                   select new GetHistoryOfFall
                                                   {
                                                       Date = sw.Date,
                                                       Cause = sw.Cause
                                                   }).ToList(),
-                                       GetHospitalEntry = (from sw in _hospitalEntryRepository.Table
-                                                           where sw.ClientId == id.Value
+                                       GetHospitalEntry = (from sw in client.HospitalEntry
                                                            select new GetHospitalEntry
                                                            {
                                                                HospitalEntryId = sw.HospitalEntryId,
@@ -562,15 +411,13 @@ namespace AwesomeCare.API.Controllers
                                                                Reference = sw.Reference,
                                                                Attachment = sw.Attachment,
                                                            }).ToList(),
-                                       GetHospitalExit = (from sw in _hospitalExitRepository.Table
-                                                          where sw.ClientId == id.Value
+                                       GetHospitalExit = (from sw in client.HospitalExit
                                                           select new GetHospitalExit
                                                           {
                                                               Date = sw.Date,
                                                               Reference = sw.Reference
                                                           }).ToList(),
-                                       GetHomeRiskAssessment = (from h in _homeRiskAssessRepository.Table
-                                                                where h.ClientId == id.Value
+                                       GetHomeRiskAssessment = (from h in client.HomeRiskAssessment
                                                                 select new GetHomeRiskAssessment
                                                                 {
                                                                     Heading = h.Heading
