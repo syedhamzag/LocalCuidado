@@ -62,12 +62,12 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(int staffId)
         {
             var model = new CreateStaffPersonalityTest();
-            var ptest = await _personalityTestService.Get(staffId);
-            if (ptest != null)
+            model.StaffPersonalInfoId = staffId;
+            var staff = await _staffService.Profile(staffId);
+            if (staff.GetStaffPersonalityTest.Count > 0)
             {
-                model.StaffPersonalInfoId = ptest.FirstOrDefault().StaffPersonalInfoId;
-                model.GetStaffPersonalityTest = ptest;
-                model.PersonalityCount = ptest.Count();
+                model.GetStaffPersonalityTest = staff.GetStaffPersonalityTest;
+                model.PersonalityCount = staff.GetStaffPersonalityTest.Count();
             }
             return View(model);
 
@@ -118,7 +118,7 @@ namespace AwesomeCare.Admin.Controllers
             }
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode != false ? "New Personality Test successfully registered" : "An Error Occurred" });
-            return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Details", "Staff");
 
         }
     }

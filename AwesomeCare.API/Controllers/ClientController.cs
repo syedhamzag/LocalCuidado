@@ -332,11 +332,21 @@ namespace AwesomeCare.API.Controllers
                                                         CP_PreDate = sw.Review.CP_PreDate,
                                                         CP_ReviewDate = sw.Review.CP_ReviewDate
                                                     }).ToList(),
-                                       GetPets = (from sw in client.Pets
+                                       GetPets = (from c in client.Pets
                                                     select new GetPets
                                                     {
-                                                        Name = sw.Name,
-                                                        Age = sw.Age
+                                                        PetsId = c.PetsId,
+                                                        Age = c.Age,
+                                                        ClientId = c.ClientId,
+                                                        Gender = c.Gender,
+                                                        Name = c.Name,
+                                                        MealPattern = c.MealPattern,
+                                                        MealStorage = c.MealStorage,
+                                                        PetCare = c.PetCare,
+                                                        PetInsurance = c.PetInsurance,
+                                                        Type = c.Type,
+                                                        PetActivities = c.PetActivities,
+                                                        VetVisit = c.VetVisit
                                                     }).ToList(),
                                        GetInterestAndObjective = (from sw in client.InterestAndObjective
                                                   select new GetInterestAndObjective
@@ -384,23 +394,64 @@ namespace AwesomeCare.API.Controllers
                                                       BriefHealth = sw.BriefHealth,
                                                       WakeUp = sw.WakeUp
                                                   }).ToList(),
-                                       GetSpecialHealthAndMedication = (from sw in client.SpecialHealthAndMedication
+                                       GetSpecialHealthAndMedication = (from s in client.SpecialHealthAndMedication
                                                   select new GetSpecialHealthAndMedication
                                                   {
-                                                      Date = sw.Date,
-                                                      By = sw.By
+                                                      Date = s.Date,
+                                                      By = s.By,
+                                                      AccessMedication = s.AccessMedication,
+                                                      AdminLvl = s.AdminLvl,
+                                                      ClientId = s.ClientId,
+                                                      Consent = s.Consent,
+                                                      FamilyMeds = s.FamilyMeds,
+                                                      FamilyReturnMed = s.FamilyReturnMed,
+                                                      LeftoutMedicine = s.LeftoutMedicine,
+                                                      MedAccessDenial = s.MedAccessDenial,
+                                                      MedicationAllergy = s.MedicationAllergy,
+                                                      MedicationStorage = s.MedicationStorage,
+                                                      MedKeyCode = s.MedKeyCode,
+                                                      MedsGPOrder = s.MedsGPOrder,
+                                                      NameFormMedicaiton = s.NameFormMedicaiton,
+                                                      NoMedAccess = s.NoMedAccess,
+                                                      OverdoseContact = s.OverdoseContact,
+                                                      PharmaMARChart = s.PharmaMARChart,
+                                                      PNRDoses = s.PNRDoses,
+                                                      PNRMedList = s.PNRMedList,
+                                                      PNRMedReq = s.PNRMedReq,
+                                                      PNRMedsAdmin = s.PNRMedsAdmin,
+                                                      PNRMedsMissing = s.PNRMedsMissing,
+                                                      SHMId = s.SHMId,
+                                                      SpecialStorage = s.SpecialStorage,
+                                                      TempMARChart = s.TempMARChart,
+                                                      Type = s.Type,
+                                                      WhoAdminister = s.WhoAdminister
                                                   }).ToList(),
-                                       GetSpecialHealthCondition = (from sw in client.SpecialHealthCondition
+                                       GetSpecialHealthCondition = (from s in client.SpecialHealthCondition
                                                   select new GetSpecialHealthCondition
                                                   {
-                                                      ConditionName = sw.ConditionName,
-                                                      SourceInformation = sw.SourceInformation
+                                                      ConditionName = s.ConditionName,
+                                                      SourceInformation = s.SourceInformation,
+                                                      ClientAction = s.ClientAction,
+                                                      ClientId = s.ClientId,
+                                                      ClinicRecommendation = s.ClinicRecommendation,
+                                                      FeelingAfterIncident = s.FeelingAfterIncident,
+                                                      FeelingBeforeIncident = s.FeelingBeforeIncident,
+                                                      Frequency = s.Frequency,
+                                                      HealthCondId = s.HealthCondId,
+                                                      LifestyleSupport = s.LifestyleSupport,
+                                                      LivingActivities = s.LivingActivities,
+                                                      PlanningHealthCondition = s.PlanningHealthCondition,
+                                                      Trigger = s.Trigger
                                                   }).ToList(),
                                        GetHistoryOfFall = (from sw in client.HistoryOfFall
                                                   select new GetHistoryOfFall
                                                   {
                                                       Date = sw.Date,
-                                                      Cause = sw.Cause
+                                                      Cause = sw.Cause,
+                                                      Details = sw.Details,
+                                                      HistoryId = sw.HistoryId,
+                                                      Prevention = sw.Prevention,
+                                                      ClientId = sw.ClientId
                                                   }).ToList(),
                                        GetHospitalEntry = (from sw in client.HospitalEntry
                                                            select new GetHospitalEntry
