@@ -118,7 +118,7 @@ namespace AwesomeCare.Admin.Controllers
             }
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode != false ? "New Personality Test successfully registered" : "An Error Occurred" });
-            return RedirectToAction("Details", "Staff");
+            return RedirectToAction("Details", "Staff", new { staffId = model.StaffPersonalInfoId });
 
         }
     }
