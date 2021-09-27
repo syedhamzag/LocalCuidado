@@ -11,13 +11,10 @@
 
                 <div class="card-body">
                     <input type="hidden" asp-for="@Model.ClientId" />
-                    <div class="form-group col-lg-6 col-md-6 col-sm-6">
-                        <label>Heading</label>
-                        <input type="text" class="form-control" asp-for="@Model.Heading" />
-                    </div>
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th></th>
                                 <th>Title</th>
                                 <th>Answer</th>
@@ -25,6 +22,8 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (var item in Model.HeadingList)
+                            {
                             <tr>
                                 <td>
                                     <input type="checkbox" asp-for="@Model.Tasks.FirstOrDefault().IsSelected" />
@@ -32,7 +31,10 @@
                                     <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().HomeRiskAssessmentTaskId" />
                                 </td>
                                 <td>
-                                    <baserecord asp-key="Home_Risk_Assessment_Title" asp-for="@Model.Tasks.FirstOrDefault().Title" asp-items="null" />
+                                    <input type="text" class="form-control" asp-for="@Model.Heading" value="@item.Text" />
+                                </td>
+                                <td>
+                                    <baserecord asp-key="@item.Text" asp-for="@Model.Tasks.FirstOrDefault().Title" asp-items="null" />
                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
                                 </td>
                                 <td>
@@ -43,8 +45,9 @@
                                     <input asp-for="@Model.Tasks.FirstOrDefault().Comment" type="text" class="form-control" />
                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
                                 </td>
-
                             </tr>
+                                
+                            }
                         </tbody>
                     </table>
                 </div>

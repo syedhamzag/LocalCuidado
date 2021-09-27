@@ -9,6 +9,8 @@ using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.CarePlanNutrition;
 using AwesomeCare.Services.Services;
+using AwesomeCare.Admin.Services.Admin;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -16,11 +18,13 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IHomeRiskAssessmentService _clientHomeRiskAssessment;
         private IClientService _clientService;
+        private IBaseRecordService _baseRecord;
 
-        public HomeRiskAssessmentController(IHomeRiskAssessmentService clientHomeRiskAssessment, IFileUpload fileUpload, IClientService clientService) :base(fileUpload)
+        public HomeRiskAssessmentController(IHomeRiskAssessmentService clientHomeRiskAssessment, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseRecord) :base(fileUpload)
         {
             _clientHomeRiskAssessment = clientHomeRiskAssessment;
             _clientService = clientService;
+            _baseRecord = baseRecord;
         }
         public async Task<IActionResult> Reports()
         {
@@ -44,6 +48,10 @@ namespace AwesomeCare.Admin.Controllers
             var model = new CreateHomeRiskAssessment();
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
+            var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
+            var filterBaseRecord = baseRecord.Where(s => s.KeyName == "Home_Risk_Assessment_Heading").Select(s=>s.BaseRecordItems).FirstOrDefault();
+            model.baseRecordList = filterBaseRecord.ToList();
+            model.HeadingList = filterBaseRecord.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
             return View(model);
 
@@ -59,13 +67,18 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(CreateHomeRiskAssessment create)
         {
 
-            PostHomeRiskAssessment post = new PostHomeRiskAssessment();
+            List<PostHomeRiskAssessment> posts = new List<PostHomeRiskAssessment>();
+            foreach (var item in create.HeadingList)
+            {
+                PostHomeRiskAssessment post = new PostHomeRiskAssessment();
+                post.ClientId = create.ClientId;
+                post.Heading = item.Text;
+                post.PostHomeRiskAssessmentTask = create.Tasks.Select(s => new PostHomeRiskAssessmentTask { Answer = s.Answer, Comment = s.Comment, Title = s.Title }).ToList();
+                posts.Add(post);
+            }
+            
 
-            post.ClientId = create.ClientId;
-            post.Heading = create.Heading;
-            post.PostHomeRiskAssessmentTask = create.Tasks.Select(s => new PostHomeRiskAssessmentTask { Answer = s.Answer, Comment = s.Comment, Title = s.Title}).ToList();
-
-            var result = await _clientHomeRiskAssessment.Create(post);
+            var result = await _clientHomeRiskAssessment.Create(posts);
             var content = await result.Content.ReadAsStringAsync();
             if (!result.IsSuccessStatusCode)
             {

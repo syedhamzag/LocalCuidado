@@ -17,7 +17,7 @@ namespace AwesomeCare.Admin.Services.CarePlanNutrition
         Task<GetHomeRiskAssessment> Get(int id);
 
         [Post("/HomeRiskAssessment/Create")]
-        Task<HttpResponseMessage> Create([Body] PostHomeRiskAssessment model);
+        Task<HttpResponseMessage> Create([Body] List<PostHomeRiskAssessment> model);
 
         [Put("/HomeRiskAssessment/Put")]
         Task<HttpResponseMessage> Put([Body] PutHomeRiskAssessment model);
