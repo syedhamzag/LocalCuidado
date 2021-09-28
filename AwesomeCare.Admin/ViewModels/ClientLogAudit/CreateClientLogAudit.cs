@@ -17,12 +17,12 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
             OFFICERTOACT = new List<SelectListItem>();       
         }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
 
         public IFormFile Evidence { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile Attach { get; set; }
         public string ClientName { get; set; }
         public string StatusName { get; set; }

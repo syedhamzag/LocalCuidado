@@ -47,11 +47,11 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile HL_Attach { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile Equipment_Attach { get; set; }
 
         #region PersonalDetail

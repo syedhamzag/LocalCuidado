@@ -111,7 +111,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 PostPersonalityTest test = new PostPersonalityTest();
                 var Question = int.Parse(formcollection["Question"][i]);
-                var Answr = int.Parse(formcollection["Answer"]);
+                var Answr = int.Parse(formcollection["Answer"][i]);
 
                 test.Question = Question;
                 test.Answer = Answr;
@@ -165,6 +165,7 @@ namespace AwesomeCare.Admin.Controllers
                 #region Lists
                 GetInterest = obj.Result.Interest,
                 GetPersonalityTest = obj.Result.PersonalityTest,
+                PersonalityCount = obj.Result.PersonalityTest.Count
                 #endregion
 
             };

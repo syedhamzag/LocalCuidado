@@ -23,7 +23,7 @@ namespace AwesomeCare.Admin.ViewModels.IncidentReport
 
         [Display(Name = "Attachment, if any")]
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile UploadAttachment { get; set; }
     }

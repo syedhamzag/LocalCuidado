@@ -19,7 +19,7 @@ namespace AwesomeCare.Admin.ViewModels.Resources
         }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile Attach { get; set; }
 
         public ICollection<SelectListItem> ClientList { get; set; }
