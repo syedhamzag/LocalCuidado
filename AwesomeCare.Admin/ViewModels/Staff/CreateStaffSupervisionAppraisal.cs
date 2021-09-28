@@ -19,7 +19,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile Attach { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> WorkteamList { get; set; }

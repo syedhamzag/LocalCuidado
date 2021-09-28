@@ -21,13 +21,13 @@ namespace AwesomeCare.Admin.ViewModels.Client
             ClientList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile StatusAttachment { get; set; }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile SeizureTypeAttachment { get; set; }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile SeizureLengthAttachment { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> PhysicianList { get; set; }

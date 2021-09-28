@@ -25,7 +25,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public int ComplainId { get; set; }
         public int ClientId { get; set; }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile Evidence { get; set; }
         #region DropDowns
         public ICollection<SelectListItem> STAFFINVOLVED { get; set; }

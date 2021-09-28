@@ -20,10 +20,10 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
 
         }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile Attach { get; set; }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile Evidence { get; set; }
         #region DropDowns
         public ICollection<SelectListItem> OfficerToActList { get; set; }

@@ -17,7 +17,7 @@ namespace AwesomeCare.Admin.ViewModels.PersonalDetail
         }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        [MaxFileSize(Lenght = 11)]
         public IFormFile Attach { get; set; }
 
         public ICollection<SelectListItem> StaffList { get; set; }
