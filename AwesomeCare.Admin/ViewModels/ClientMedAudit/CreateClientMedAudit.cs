@@ -18,10 +18,10 @@ namespace AwesomeCare.Admin.ViewModels.ClientMedAudit
             AuditorList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Evidence { get; set; }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Attach { get; set; }
         #region DropDowns
         public ICollection<SelectListItem> OFFICERTOACTList { get; set; }

@@ -16,11 +16,11 @@ namespace AwesomeCare.Admin.ViewModels.TaskBoard
             StaffList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Image { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Attach { get; set; }
 
         public int TaskId { get; set; }

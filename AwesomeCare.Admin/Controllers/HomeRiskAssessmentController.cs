@@ -11,6 +11,8 @@ using AwesomeCare.Admin.Services.CarePlanNutrition;
 using AwesomeCare.Services.Services;
 using AwesomeCare.Admin.Services.Admin;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -43,64 +45,117 @@ namespace AwesomeCare.Admin.Controllers
             return View(reports);
         }
 
-        public async Task<IActionResult> Index(int clientId)
+        public async Task<IActionResult> Index(int clientId, int homeRiskId, string heading)
         {
-            var model = new CreateHomeRiskAssessment();
+            var model = new CreateHomeRiskAssessment();                     
             model.ClientId = clientId;
+            model.HomeRiskAssessmentId = homeRiskId;
+            model.Heading = heading;
+            if (homeRiskId > 0)
+            {
+                var task = await _clientHomeRiskAssessment.Get(homeRiskId);
+                model.TaskCount = task.GetHomeRiskAssessmentTask.Count;
+                model.Tasks = task.GetHomeRiskAssessmentTask;
+            }
             var client = await _clientService.GetClientDetail();
-            var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
-            var filterBaseRecord = baseRecord.Where(s => s.KeyName == "Home_Risk_Assessment_Heading").Select(s=>s.BaseRecordItems).FirstOrDefault();
-            model.baseRecordList = filterBaseRecord.ToList();
-            model.HeadingList = filterBaseRecord.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
             return View(model);
 
         }
-        public async Task<IActionResult> View(int homeId)
-        {
-            var model = await GetHomeRisk(homeId);
-            return View(model);
+        //public async Task<IActionResult> View(int homeId)
+        //{
+        //    var model = await GetHomeRisk(homeId);
+        //    return View(model);
 
+        //}
+        public async Task<IActionResult> ListHeading(int clientId)
+        {
+            var model = new CreateHomeRiskAssessment();
+            model.ClientId = clientId;
+            
+            var client = await _clientService.GetClientDetail();
+            var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
+            var filterBaseRecord = baseRecord.Where(s => s.KeyName == "Home_Risk_Assessment_Heading").Select(s => s.BaseRecordItems).FirstOrDefault();
+            model.baseRecordList = filterBaseRecord.ToList();
+            model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            List<GetHomeRiskAssessment> home = await _clientHomeRiskAssessment.GetByClient(clientId);
+            if (home.Count > 0)
+            {
+                    model.HomeRiskAssessmentId = home.FirstOrDefault().HomeRiskAssessmentId;
+                    model.HeadingList = home.Select(s => new SelectListItem(s.Heading, s.HomeRiskAssessmentId.ToString())).ToList();
+            }
+            return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(CreateHomeRiskAssessment create)
+        public async Task<IActionResult> CreateHeading(CreateHomeRiskAssessment model)
         {
+            var heading = await _baseRecord.GetBaseRecordItemById(model.HeadingId);
+            PostHomeRiskAssessment post = new PostHomeRiskAssessment();
+            post.HomeRiskAssessmentId = model.HomeRiskAssessmentId;
+            post.ClientId = model.ClientId;
+            post.Heading = heading.ValueName;
 
-            List<PostHomeRiskAssessment> posts = new List<PostHomeRiskAssessment>();
-            foreach (var item in create.HeadingList)
+            var result = new HttpResponseMessage();
+            if (post.HomeRiskAssessmentId > 0)
             {
-                PostHomeRiskAssessment post = new PostHomeRiskAssessment();
-                post.ClientId = create.ClientId;
-                post.Heading = item.Text;
-                post.PostHomeRiskAssessmentTask = create.Tasks.Select(s => new PostHomeRiskAssessmentTask { Answer = s.Answer, Comment = s.Comment, Title = s.Title }).ToList();
-                posts.Add(post);
+                result = await _clientHomeRiskAssessment.Put(post);
+                var content = await result.Content.ReadAsStringAsync();
             }
-            
-
-            var result = await _clientHomeRiskAssessment.Create(posts);
-            var content = await result.Content.ReadAsStringAsync();
-            if (!result.IsSuccessStatusCode)
+            else
             {
-                return View("HomeCareDetails", create);
+                result = await _clientHomeRiskAssessment.Create(post);
+                var content = await result.Content.ReadAsStringAsync();
             }
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "HomeRiskAssessment successfully added to Client" : "An Error Occurred" });
 
-            return RedirectToAction("HomeCareDetails", new { clientId = create.ClientId });
+            return RedirectToAction("ListHeading", new { clientId = model.ClientId });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CreateHomeRiskAssessment model, IFormCollection formcollection)
+        {
+            List<PostHomeRiskAssessmentTask> tasks = new List<PostHomeRiskAssessmentTask>();
+            for (int i = 0; i < model.TaskCount; i++)
+            {
+                PostHomeRiskAssessmentTask task = new PostHomeRiskAssessmentTask();
+                var TaskId = int.Parse(formcollection["HomeRiskAssessmentTaskId"][i]);                
+                var Title = int.Parse(formcollection["Title"][i]);
+                var Answer = int.Parse(formcollection["Answer"][i]);
+                var Comment = formcollection["Comment"][i];
+                task.HomeRiskAssessmentId = model.HomeRiskAssessmentId;
+                task.HomeRiskAssessmentTaskId = TaskId;
+                task.Title = Title;
+                task.Answer = Answer;
+                task.Comment = Comment;
+                tasks.Add(task);
+            }
+            PostHomeRiskAssessment post = new PostHomeRiskAssessment();
+            post.HomeRiskAssessmentId = model.HomeRiskAssessmentId;
+            post.ClientId = model.ClientId;
+            post.Heading = model.Heading;
+            post.PostHomeRiskAssessmentTask = tasks;
+
+            var result = await _clientHomeRiskAssessment.Put(post);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "HomeRiskAssessment successfully added to Client" : "An Error Occurred" });
+
+            return RedirectToAction("HomeCareDetails","Client", new { clientId = model.ClientId });
         }
 
-        public async Task<GetHomeRiskAssessment> GetHomeRisk(int homeRiskId)
-        {
-            var home = await _clientHomeRiskAssessment.Get(homeRiskId);
-            var putEntity = new GetHomeRiskAssessment
-            {
-                HomeRiskAssessmentId = home.HomeRiskAssessmentId,
-                ClientId = home.ClientId,
-                Heading = home.Heading,
-                GetHomeRiskAssessmentTask = home.GetHomeRiskAssessmentTask
-            };
-            return putEntity;
-        }
+        //public async Task<GetHomeRiskAssessment> GetHomeRisk(int homeRiskId)
+        //{
+        //    var home = await _clientHomeRiskAssessment.Get(homeRiskId);
+        //    var putEntity = new GetHomeRiskAssessment
+        //    {
+        //        HomeRiskAssessmentId = home.HomeRiskAssessmentId,
+        //        ClientId = home.ClientId,
+        //        Heading = home.Heading,
+        //        GetHomeRiskAssessmentTask = home.GetHomeRiskAssessmentTask
+        //    };
+        //    return putEntity;
+        //}
 
 
     }

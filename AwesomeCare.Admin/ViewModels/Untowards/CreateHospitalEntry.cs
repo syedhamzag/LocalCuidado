@@ -17,7 +17,7 @@ namespace AwesomeCare.Admin.ViewModels.Untowards
         }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Attach { get; set; }
         public int HospitalEntryId { get; set; }
         public int ClientId { get; set; }

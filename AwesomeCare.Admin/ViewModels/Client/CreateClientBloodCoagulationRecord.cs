@@ -21,7 +21,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
             ClientList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile TargetINRAttachment { get; set; }
         public ICollection<SelectListItem> OfficerToActList { get; set; }
         public ICollection<SelectListItem> StaffNameList { get; set; }

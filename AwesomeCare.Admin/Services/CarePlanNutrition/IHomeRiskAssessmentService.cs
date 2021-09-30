@@ -10,16 +10,20 @@ namespace AwesomeCare.Admin.Services.CarePlanNutrition
 {
     public interface IHomeRiskAssessmentService
     {
+        
         [Get("/HomeRiskAssessment")]
         Task<List<GetHomeRiskAssessment>> Get();
 
         [Get("/HomeRiskAssessment/Get/{id}")]
         Task<GetHomeRiskAssessment> Get(int id);
 
+        [Get("/HomeRiskAssessment/GetByClient/{id}")]
+        Task<List<GetHomeRiskAssessment>> GetByClient(int id);
+
         [Post("/HomeRiskAssessment/Create")]
-        Task<HttpResponseMessage> Create([Body] List<PostHomeRiskAssessment> model);
+        Task<HttpResponseMessage> Create([Body] PostHomeRiskAssessment model);
 
         [Put("/HomeRiskAssessment/Put")]
-        Task<HttpResponseMessage> Put([Body] PutHomeRiskAssessment model);
+        Task<HttpResponseMessage> Put([Body] PostHomeRiskAssessment model);
     }
 }

@@ -18,7 +18,7 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
             PersonList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Attach { get; set; }
 
         #region DropDowns
