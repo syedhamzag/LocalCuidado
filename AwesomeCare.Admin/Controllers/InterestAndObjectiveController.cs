@@ -55,7 +55,7 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
             if (interest != null) 
             { 
-            model = Get(clientId);
+                model = Get(clientId);
             }
             return View(model);
         }
@@ -70,6 +70,8 @@ namespace AwesomeCare.Admin.Controllers
                 model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
                 return View(model);
             }
+
+
             PostInterestAndObjective post = new PostInterestAndObjective();
 
             post.GoalId = model.GoalId;
@@ -77,7 +79,7 @@ namespace AwesomeCare.Admin.Controllers
             post.CareGoal = model.CareGoal;
             post.Brief = model.Brief;
 
-            List<PostInterest> obj = new List<PostInterest>();
+            List<PostInterest> obj1 = new List<PostInterest>();
             List<PostPersonalityTest> ptest = new List<PostPersonalityTest>();
 
             #region Interest
@@ -85,14 +87,12 @@ namespace AwesomeCare.Admin.Controllers
             for (int i = 0; i < model.InterestCount; i++)
             {
                 PostInterest eq = new PostInterest();
-
                 var Leisure = int.Parse(formcollection["LeisureActivity"][i]);
                 var Informal = int.Parse(formcollection["InformalActivity"][i]);
                 var Contact = int.Parse(formcollection["MaintainContact"][i]);
                 var Community = int.Parse(formcollection["CommunityActivity"][i]);
                 var Event = int.Parse(formcollection["EventAwarness"][i]);
                 var Objective = int.Parse(formcollection["GoalAndObjective"][i]);
-                var Brief = formcollection["Brief"][i].ToString();
 
                 eq.GoalId = model.GoalId;
                 eq.LeisureActivity = Leisure;
@@ -102,7 +102,7 @@ namespace AwesomeCare.Admin.Controllers
                 eq.EventAwarness = Event;
                 eq.GoalAndObjective = Objective;
 
-                obj.Add(eq);
+                obj1.Add(eq);
             }
             #endregion
 
@@ -110,9 +110,17 @@ namespace AwesomeCare.Admin.Controllers
             for (int i = 0; i < model.PersonalityCount; i++)
             {
                 PostPersonalityTest test = new PostPersonalityTest();
+
+                var TestId = 0;
+                if (model.GoalId > 0)
+                {
+                    TestId = int.Parse(formcollection["TestId"][i]);
+                }
+
                 var Question = int.Parse(formcollection["Question"][i]);
                 var Answr = int.Parse(formcollection["Answer"][i]);
 
+                test.TestId = TestId;
                 test.Question = Question;
                 test.Answer = Answr;
                 test.GoalId = model.GoalId;
@@ -121,11 +129,11 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-            post.Interest = obj;
+            post.Interest = obj1;
             post.PersonalityTest = ptest;
 
             var result = new HttpResponseMessage();
-            if (obj.FirstOrDefault().GoalId > 0)
+            if (obj1.FirstOrDefault().GoalId > 0)
             {
                 var json = JsonConvert.SerializeObject(post);
                 result = await _interestService.Put(post);
@@ -151,12 +159,13 @@ namespace AwesomeCare.Admin.Controllers
 
         public CreateInterestAndObjective Get(int clientId)
         {
-            var obj = _interestService.Get(clientId);
+            var obj =  _interestService.Get(clientId);
             var client = _clientService.GetClient(clientId);
 
             var putEntity = new CreateInterestAndObjective
             {
                 #region Personal Details
+                GoalId = obj.Result.GoalId,
                 ClientId = clientId,
                 CareGoal = obj.Result.CareGoal,
                 Brief = obj.Result.Brief,
@@ -165,7 +174,8 @@ namespace AwesomeCare.Admin.Controllers
                 #region Lists
                 GetInterest = obj.Result.Interest,
                 GetPersonalityTest = obj.Result.PersonalityTest,
-                PersonalityCount = obj.Result.PersonalityTest.Count
+                PersonalityCount = obj.Result.PersonalityTest.Count,
+                InterestCount = obj.Result.Interest.Count,
                 #endregion
 
             };

@@ -32,7 +32,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Attach { get; set; }
 
         public List<GetEquipment> GetEquipment { get; set; }

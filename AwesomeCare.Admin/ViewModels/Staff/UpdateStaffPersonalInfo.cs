@@ -20,42 +20,42 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public List<SelectListItem> WorkTeams { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile ProfilePixFile { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile DrivingLicenseFile { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile RightToWorkFile { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile DbsFile { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile NiFile { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile SelfPyeFile { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile CoverLetterFile { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg", ".pdf" })]
         public IFormFile CvFile { get; set; }
 

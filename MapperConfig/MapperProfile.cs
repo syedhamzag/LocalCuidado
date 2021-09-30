@@ -2461,10 +2461,10 @@ namespace MapperConfig
             #region HomeRiskAssessment
             CreateMap<PutHomeRiskAssessment, HomeRiskAssessment>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
-                 .ForMember(dto => dto.HomeRiskAssessmentTask, mem => mem.Ignore());
+                 .ForMember(dto => dto.HomeRiskAssessmentTask, mem => mem.MapFrom(src => src.PutHomeRiskAssessmentTask));
             CreateMap<PostHomeRiskAssessment, HomeRiskAssessment>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore())
-                 .ForMember(dto => dto.HomeRiskAssessmentTask, mem => mem.Ignore());
+                 .ForMember(dto => dto.HomeRiskAssessmentTask, mem => mem.MapFrom(src => src.PostHomeRiskAssessmentTask));
             CreateMap<HomeRiskAssessment, GetHomeRiskAssessment>()
                  .ForMember(dto => dto.GetHomeRiskAssessmentTask, mem => mem.Ignore());
 

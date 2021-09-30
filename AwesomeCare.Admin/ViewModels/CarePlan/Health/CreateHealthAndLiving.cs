@@ -11,7 +11,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
     public class CreateHealthAndLiving
     {
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Attach { get; set; }
 
         public string ActiveTab { get; set; } = "careplan";

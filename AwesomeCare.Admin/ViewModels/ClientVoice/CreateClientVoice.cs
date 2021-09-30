@@ -24,10 +24,10 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
             PoorSupportList = new List<SelectListItem>();
         }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Attach { get; set; }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 11)]
+        
         public IFormFile Evidence { get; set; }
         #region DropDowns
 
