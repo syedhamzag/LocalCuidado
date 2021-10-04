@@ -1,5 +1,6 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
     {
         public int ActiveUser { get; set; }
         public int ApprovedStaff { get; set; }
+
+        public List<Status> StaffRatingCount { get; set; }
+
+        public Dictionary<string, List<GetStaffRating>> StaffRating { get; set; }
         public List<GetClient> GetClients { get; set; }
         public List<GetStaffPersonalInfo> GetStaffPersonalInfos { get; set; }
         public int nId { get; set; }

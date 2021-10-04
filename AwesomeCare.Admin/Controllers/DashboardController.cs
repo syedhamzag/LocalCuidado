@@ -44,6 +44,7 @@ using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.DataTransferObject.DTOs.Rotering;
+using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -185,7 +186,8 @@ namespace AwesomeCare.Admin.Controllers
             var spot = await _staffSpotCheckService.Get();
             var super = await _staffSupervisionService.Get();
             var survey = await _staffSurveyService.Get();
-            
+            var rating = await _staffService.GetClientFeedback();
+
             #endregion
 
             var Client = new List<Status>();
@@ -1065,6 +1067,8 @@ namespace AwesomeCare.Admin.Controllers
 
             dashboard.ActiveUser = getClient.Where(s => s.Status == "Active").Count();
             dashboard.ApprovedStaff = getStaff.Where(s => s.Status == StaffRegistrationEnum.Approved).Count();
+            dashboard.StaffRatingCount = GetStaffRatingCount(rating);
+            dashboard.StaffRating = GetStaffRating(rating);
             dashboard.GetClients = GetClients(getClient);
             dashboard.GetStaffPersonalInfos = GetStaffs(getStaff);
             dashboard.LiveTrackerM = GetTrackerMonthly(startDateM, endDate, months, rotaAdmins);
@@ -1074,6 +1078,60 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.Days = days.Distinct().ToList();
             dashboard.Types = types.Distinct().ToList();
             return View(dashboard);
+        }
+        private List<Status> GetStaffRatingCount(List<GetStaffRating> getStaffs)
+        {
+            var fivestar = getStaffs.Where(s => s.Rating == 5).Count();
+            var fourstar = getStaffs.Where(s => s.Rating == 4).Count();
+            var threestar = getStaffs.Where(s => s.Rating == 3).Count();
+            var twostar = getStaffs.Where(s => s.Rating == 2).Count();
+            var onestar = getStaffs.Where(s => s.Rating == 1).Count();
+
+            var staffRating = new List<Status>();
+            staffRating.Add(new Status
+            {
+                Key = "5 Star Rating",
+                Value = fivestar
+            });
+            staffRating.Add(new Status
+            {
+                Key = "4 Star Rating",
+                Value = fourstar
+            });
+            staffRating.Add(new Status
+            {
+                Key = "3 Star Rating",
+                Value = threestar
+            });
+            staffRating.Add(new Status
+            {
+                Key = "2 Star Rating",
+                Value = twostar
+            });
+            staffRating.Add(new Status
+            {
+                Key = "1 Star Rating",
+                Value = onestar
+            });
+
+            return staffRating;
+        }
+        private Dictionary<string, List<GetStaffRating>> GetStaffRating(List<GetStaffRating> getStaffs)
+        {
+            Dictionary<string, List<GetStaffRating>> staffRating = new Dictionary<string, List<GetStaffRating>>();
+            var fivestar = getStaffs.Where(s => s.Rating == 5).ToList();
+            var fourstar = getStaffs.Where(s => s.Rating == 4).ToList();
+            var threestar = getStaffs.Where(s => s.Rating == 3).ToList();
+            var twostar = getStaffs.Where(s => s.Rating == 2).ToList();
+            var onestar = getStaffs.Where(s => s.Rating == 1).ToList();
+
+            staffRating.Add("5-Star", fivestar);
+            staffRating.Add("4-Star", fourstar);
+            staffRating.Add("3-Star", threestar);
+            staffRating.Add("2-Star", twostar);
+            staffRating.Add("1-Star", onestar);
+
+            return staffRating;
         }
         private List<GetStaffPersonalInfo> GetStaffs(List<GetStaffPersonalInfo> getStaffs)
         {

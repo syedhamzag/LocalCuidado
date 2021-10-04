@@ -33,6 +33,7 @@
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#supervision">Supervision</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reference">Reference</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personalitytest">Personality Test</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#infection">Infection Control</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane show active" id="personalinfo">
@@ -916,6 +917,39 @@
                                                         </td>
                                                         <td>
                                                             @item.AnswerName
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane" id="infection">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffInfectionControl">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Question</th>
+                                                    <th>Answer</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffInfectionControl)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.TestDate
+                                                        </td>
+                                                        <td>
+                                                            @item.Guideline
                                                         </td>
                                                     </tr>
                                                 }

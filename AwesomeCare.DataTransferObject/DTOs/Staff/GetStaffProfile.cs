@@ -1,10 +1,6 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
 using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
 using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
-using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
-using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
-using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
-using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
 using AwesomeCare.DataTransferObject.DTOs.StaffReference;
 using AwesomeCare.DataTransferObject.Enums;
 using System;
@@ -16,6 +12,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
 using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
 using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
+using AwesomeCare.DataTransferObject.DTOs.Staff.InfectionControl;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
@@ -37,6 +34,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             GetStaffOneToOne = new List<GetStaffOneToOne>();
             GetStaffReference = new List<GetStaffReference>();
             GetStaffPersonalityTest = new List<GetStaffPersonalityTest>();
+            GetStaffInfectionControl = new List<GetStaffInfectionControl>();
 
         }
         public List<GetStaffEducation> Education { get; set; }
@@ -53,6 +51,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetStaffOneToOne> GetStaffOneToOne { get; set; }
         public List<GetStaffReference> GetStaffReference { get; set; }
         public List<GetStaffPersonalityTest> GetStaffPersonalityTest { get; set; }
+        public List<GetStaffInfectionControl> GetStaffInfectionControl { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]

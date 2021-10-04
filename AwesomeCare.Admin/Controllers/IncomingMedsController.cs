@@ -84,15 +84,28 @@ namespace AwesomeCare.Admin.Controllers
             }
             #region Attachment
             if (model.Attach != null) //If model is null post image
-            { 
-            string folderA = "clientcomplain";
-            string filenameA = string.Concat(folderA, "_Attachment_", model.UserName);
-            string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-            model.MedsImage = pathA;
+            {
+                string extention = System.IO.Path.GetExtension(model.Image.FileName);
+                string folderA = "clientcomplain";
+                string filenameA = string.Concat(folderA, "_MedsImage_", extention);
+                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
+                model.MedsImage = pathA;
             }
             else
             {
                 model.MedsImage = "No Image";
+            }
+            if (model.Image != null)
+            {
+                string extention = System.IO.Path.GetExtension(model.Image.FileName);
+                string folder = "clientcomplain";
+                string filename = string.Concat(folder, "_MarChartImage_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream());
+                model.ChartImage = path;
+            }
+            else
+            {
+                model.ChartImage = "No Image";
             }
             #endregion
 
@@ -116,13 +129,25 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
             #region Evidence
-            if (model.Attach != null)
+            if (model.Attach != null) //If model is null post image
             {
+                string extention = System.IO.Path.GetExtension(model.Image.FileName);
                 string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.UserName);
+                string filenameA = string.Concat(folderA, "_MedsImage_", extention);
                 string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
                 model.MedsImage = pathA;
-
+            }
+            else
+            {
+                model.ChartImage = model.ChartImage;
+            }
+            if (model.Image != null)
+            {
+                string extention = System.IO.Path.GetExtension(model.Image.FileName);
+                string folder = "clientcomplain";
+                string filename = string.Concat(folder, "_MarChartImage_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream());
+                model.ChartImage = path;
             }
             else
             {

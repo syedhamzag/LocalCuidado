@@ -104,6 +104,7 @@ using AwesomeCare.Admin.Services.Pets;
 using AwesomeCare.Admin.Services.TaskBoard;
 using AwesomeCare.Admin.Services.HospitalEntry;
 using AwesomeCare.Admin.Services.HospitalExit;
+using AwesomeCare.Admin.Services.DutyOnCall;
 
 namespace AwesomeCare.Admin
 {
@@ -962,6 +963,18 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IHomeRiskAssessmentService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffinfectioncontrol", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffInfectionControlService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("dutyoncallt", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IDutyOnCallService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

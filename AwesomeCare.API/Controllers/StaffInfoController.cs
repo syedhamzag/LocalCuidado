@@ -767,6 +767,32 @@ namespace AwesomeCare.API.Controllers
             return Ok(feedbacks);
         }
         /// <summary>
+        /// Get Client Feedbacks All Staffs
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("ClientFeedback")]
+        [ProducesResponseType(type: typeof(List<GetStaffRating>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClientFeedback()
+        {
+            var feedbacks = await (from fb in _staffRatingRepository.Table
+                                   join st in _staffInfoRepository.Table on fb.StaffPersonalInfoId equals st.StaffPersonalInfoId
+                                   join cl in _clientRepository.Table on fb.ClientId equals cl.ClientId
+                                   select new GetStaffRating
+                                   {
+                                       StaffPersonalInfoId = fb.StaffPersonalInfoId,
+                                       Client = cl.Firstname + " " + cl.Middlename + " " + cl.Surname,
+                                       ClientId = fb.ClientId,
+                                       Comment = fb.Comment,
+                                       CommentDate = fb.CommentDate,
+                                       Rating = fb.Rating,
+                                       Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
+                                       StaffRatingId = fb.StaffRatingId
+                                   }
+                            ).ToListAsync();
+            return Ok(feedbacks);
+        }
+        /// <summary>
         /// Post Client Feeedback for a staff
         /// </summary>
         /// <param name="model"></param>

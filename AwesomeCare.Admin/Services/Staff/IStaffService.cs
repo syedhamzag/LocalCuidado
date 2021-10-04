@@ -54,6 +54,9 @@ namespace AwesomeCare.Admin.Services.Staff
         [Get("/StaffInfo/ClientFeedback/{staffPersonalInfoId}")]
         Task<List<GetStaffRating>> GetClientFeedback(int? staffPersonalInfoId);
 
+        [Get("/StaffInfo/ClientFeedback")]
+        Task<List<GetStaffRating>> GetClientFeedback();
+
         [Post("/StaffInfo/ClientFeedback")]
         Task<HttpResponseMessage> PostClientFeedback([Body]PostStaffRating model);
         #endregion
