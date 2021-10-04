@@ -15,7 +15,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Staff Name</th>
+                            <th>Staff</th>
+                            <th>Test Date</th>
                             <th>Vaccination Status</th>
                             <th>Status</th>
 
@@ -25,23 +26,24 @@
                     <tbody>
                         @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
                         {
-                            <tr>
-                                <td>@item.index </td>
-                                <td>@item.data.StaffName </td>
-                                <td>@item.data.VaccName </td>
-                                <td>@item.data.InfectionName </td>
+                        <tr>
+                            <td>@item.index </td>
+                            <td>@item.data.StaffName </td>
+                            <td>@item.data.TestDate</td>
+                            <td>@item.data.VaccName </td>
+                            <td>@item.data.InfectionName </td>
 
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "StaffInfectionControl", new { InfectionControlId = item.data.InfectionId }, new { @class = "dropdown-item" })
-                                            @Html.ActionLink("View", "View", "StaffInfectionControl", new { InfectionControlId = item.data.InfectionId }, new { @class = "dropdown-item" })
-                                        </div>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @Html.ActionLink("Edit", "Edit", "StaffInfectionControl", new { InfectionControlId = item.data.InfectionId }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("View", "View", "StaffInfectionControl", new { InfectionControlId = item.data.InfectionId }, new { @class = "dropdown-item" })
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

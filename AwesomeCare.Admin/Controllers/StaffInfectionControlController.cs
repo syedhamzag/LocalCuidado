@@ -36,6 +36,7 @@ namespace AwesomeCare.Admin.Controllers
                 var report = new CreateStaffInfectionControl();
                 report.StaffPersonalInfoId = item.StaffPersonalInfoId;
                 report.InfectionId = item.InfectionId;
+                report.TestDate = item.TestDate;
                 report.VaccName = _baseService.GetBaseRecordItemById(item.VaccStatus).Result.ValueName;
                 report.StaffName = staffs.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).Select(s => s.Fullname).FirstOrDefault();
                 report.InfectionName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;

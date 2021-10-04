@@ -15,8 +15,10 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Deadline</th>
                             <th>Client</th>
+                            <th>Date</th>
+                            <th>Deadline</th>
+
                             <th>Status</th>
 
                             <th></th>
@@ -25,27 +27,29 @@
                     <tbody>
                         @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
                         {
-                            <tr>
-                                <td>@item.index </td>
-                                <td>@item.data.Deadline</td>
-                                <td>@item.data.ClientName</td>
-                                <td>@item.data.StatusName</td>
+                        <tr>
+                            <td>@item.index </td>
+                            <td>@item.data.ClientName</td>
+                            <td>@item.data.Date</td>
+                            <td>@item.data.Deadline</td>
 
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <td>@item.data.StatusName</td>
+
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @Html.ActionLink("Edit", "Edit", "ClientPulseRate", new { PulseRateId = item.data.PulseRateId }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("View", "View", "ClientPulseRate", new { pulseId = item.data.PulseRateId }, new { @class = "dropdown-item" })
+                                        <button type="button" class="dropdown-item" id="@item.data.PulseRateId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
+                                            Email
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Edit", "Edit", "ClientPulseRate", new { PulseRateId = item.data.PulseRateId }, new { @class = "dropdown-item" })
-                                            @Html.ActionLink("View", "View", "ClientPulseRate", new { pulseId = item.data.PulseRateId }, new { @class = "dropdown-item" })
-                                            <button type="button" class="dropdown-item" id="@item.data.PulseRateId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
-                                                Email
-                                            </button>
-                                            @Html.ActionLink("Download", "Download", "ClientPulseRate", new { pulseId = item.data.PulseRateId }, new { @class = "dropdown-item" })
-                                        </div>
+                                        @Html.ActionLink("Download", "Download", "ClientPulseRate", new { pulseId = item.data.PulseRateId }, new { @class = "dropdown-item" })
                                     </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                        </tr>
                         }
 
 
