@@ -67,7 +67,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateClientBloodCoagulationRecord();
                 report.BloodRecordId = item.BloodRecordId;
-                report.Reference = item.Reference;
+                report.StartDate = item.StartDate;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;

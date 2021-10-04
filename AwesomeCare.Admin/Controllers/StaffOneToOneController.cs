@@ -56,6 +56,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateStaffOneToOne();
                 report.OneToOneId = item.OneToOneId;
+                report.Date = item.Date;
+                report.NextCheckDate = item.NextCheckDate;
                 report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffId).Select(s => s.Fullname).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);

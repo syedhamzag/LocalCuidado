@@ -65,6 +65,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateStaffSpotCheck();
                 report.SpotCheckId = item.SpotCheckId;
+                report.Date = item.Date;
+                report.NextCheckDate = item.NextCheckDate;
                 report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffId).Select(s => s.Fullname).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 reports.Add(report);

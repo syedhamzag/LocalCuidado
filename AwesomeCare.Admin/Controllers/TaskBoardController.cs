@@ -50,6 +50,36 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
+        public async Task<IActionResult> View(int taskId)
+        {
+            var putEntity = await GetInfectionControl(taskId);
+            return View(putEntity);
+        }
+
+        public async Task<IActionResult> Edit(int taskId)
+        {
+            var putEntity = await GetInfectionControl(taskId);
+            return View(putEntity);
+        }
+
+        public async Task<CreateTaskBoard> GetInfectionControl(int taskId)
+        {
+            var staffs = await _staffService.GetStaffs();
+            var model = await _taskService.Get(taskId);
+            var putEntity = new CreateTaskBoard
+            {
+            AssignedBy = model.AssignedBy,
+            AssignedTo = model.AssignedTo.Select(o => o.StaffPersonalInfoId).ToList(),
+            Status = model.Status,
+            Attachment = model.Attachment,
+            CompletionDate = model.CompletionDate,
+            Note = model.Note,
+            TaskImage = model.TaskImage,
+            TaskName = model.TaskName,
+            StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
+        };
+            return putEntity;
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(CreateTaskBoard model)
@@ -105,7 +135,65 @@ namespace AwesomeCare.Admin.Controllers
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Task Board successfully registered" : "An Error Occurred" });
-            return RedirectToAction("Dashboard", "Dashboard");
+            return RedirectToAction("Reports", "TaskBoard");
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(CreateTaskBoard model)
+        {
+            if (model == null || !ModelState.IsValid)
+            {
+                var staffs = await _staffService.GetStaffs();
+                model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                return View(model);
+            }
+            PutTaskBoard postlog = new PutTaskBoard();
+
+            #region Evidence
+            if (model.Image != null)
+            {
+                string extention = model.AssignedBy + System.IO.Path.GetExtension(model.Image.FileName);
+                string folder = "taskboard";
+                string filename = string.Concat(folder, "_TaskImage_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream());
+                model.TaskImage = path;
+            }
+            else
+            {
+                model.TaskImage = model.TaskImage;
+            }
+            if (model.Attach != null)
+            {
+                string extention = model.AssignedBy + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "taskboard";
+                string filename = string.Concat(folder, "_Attach_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
+            }
+            else
+            {
+                model.Attachment = model.TaskImage;
+            }
+            #endregion
+            postlog.TaskId = model.TaskId;
+            postlog.AssignedBy = model.AssignedBy;
+            postlog.AssignedTo = model.AssignedTo.Select(o => new PutTaskBoardAssignedTo { StaffPersonalInfoId = o, TaskBoardId = model.TaskId }).ToList();
+            postlog.Status = model.Status;
+            postlog.Attachment = model.Attachment;
+            postlog.CompletionDate = model.CompletionDate;
+            postlog.Note = model.Note;
+            postlog.Status = model.Status;
+            postlog.TaskImage = model.TaskImage;
+            postlog.TaskName = model.TaskName;
+
+
+
+            var result = await _taskService.Put(postlog);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Task Board successfully registered" : "An Error Occurred" });
+            return RedirectToAction("Reports", "TaskBoard");
 
         }
     }

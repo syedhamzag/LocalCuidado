@@ -56,7 +56,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateComplainRegister();
                 report.ComplainId = item.ComplainId;
-                report.Reference = item.Reference;
+                report.DATERECIEVED = item.DATERECIEVED;
                 report.DUEDATE = item.DUEDATE;
                 report.CONCERNSRAISED = item.CONCERNSRAISED;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;

@@ -68,7 +68,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateClientLogAudit();
                 report.LogAuditId = item.LogAuditId;
-                report.Reference = item.Reference;
+                report.Date = item.Date;
                 report.NextDueDate = item.NextDueDate;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;

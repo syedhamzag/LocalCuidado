@@ -36,6 +36,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateDutyOnCall();
                 report.ClientId = item.ClientId;
+                report.DateOfCall = item.DateOfCall;
                 report.DateOfIncident = item.DateOfIncident;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();

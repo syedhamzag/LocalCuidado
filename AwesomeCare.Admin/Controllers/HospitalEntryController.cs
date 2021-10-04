@@ -38,7 +38,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateHospitalEntry();
                 report.HospitalEntryId = item.HospitalEntryId;
-                report.Reference = item.Reference;
+                report.LastDateofAdmission = item.LastDateofAdmission;
                 report.Date = item.Date;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;

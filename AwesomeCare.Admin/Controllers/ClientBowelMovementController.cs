@@ -67,7 +67,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateClientBowelMovement();
                 report.BowelMovementId = item.BowelMovementId;
-                report.Reference = item.Reference;
+                report.Date = item.Date;
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;

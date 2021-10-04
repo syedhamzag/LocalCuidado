@@ -63,7 +63,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateClientVoice();
                 report.VoiceId = item.VoiceId;
-                report.Reference = item.Reference;
+                report.Date = item.Date;
                 report.NextCheckDate = item.NextCheckDate;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
