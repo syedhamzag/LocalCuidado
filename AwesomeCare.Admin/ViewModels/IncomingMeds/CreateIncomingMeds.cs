@@ -19,8 +19,10 @@ namespace AwesomeCare.Admin.ViewModels.IncomingMeds
         }
 
         [DataType(DataType.Upload)]
-        
         public IFormFile Attach { get; set; }
+        
+        [DataType(DataType.Upload)]
+        public IFormFile Image { get; set; }
 
         public ICollection<SelectListItem> ClientList { get; set; }
         public int IncomingMedsId { get; set; }
@@ -32,11 +34,10 @@ namespace AwesomeCare.Admin.ViewModels.IncomingMeds
         public string StaffName { get; set; }
         [Required]
         public string StartDate { get; set; }
-        [Required]
-        public string ChartImage { get; set; }
+        public string Remarks { get; set; }
         [Required]
         public int Status { get; set; }
-
+        public string ChartImage { get; set; }
         public string MedsImage { get; set; }
     }
 }

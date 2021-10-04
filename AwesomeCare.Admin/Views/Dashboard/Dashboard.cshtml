@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div id="top_counter2" class="carousel vert slide" data-ride="carousel" data-interval="2100">
+                        <div id="top_counter2" class="carousel vert slide" data-ride="carousel" data-interval="2300">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
                                     <div class="icon"><i class="fa fa-user-md"></i> </div>
@@ -35,25 +35,63 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 col-md-6">
-                <div class="card top_counter">
+            <div class="col-lg-6 col-md-6">
+                <div class="card">
+                    <div class="header">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ratingModal">
+                            Show Details
+                        </button>
+                    </div>
                     <div class="body">
-                        <div id="top_counter3" class="carousel vert slide" data-ride="carousel" data-interval="2300">
+                        <div id="top_counter3" class="carousel vert slide" data-ride="carousel" data-interval="2100">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <div class="icon"><i class="fa fa-eye"></i> </div>
+                                    <div class="icon"><i class="fa fa-smile-o"></i> </div>
                                     <div class="content">
-                                        <div class="text">Total Visit</div>
-                                        <h5 class="number"></h5>
+                                        <div class="text">Top Rated Staffs</div>
+                                        <div class="row">
+                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
+                                                <img src="../assets/images/5star.jpg" height="40" />
+                                            </div>
+                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "5 Star Rating").FirstOrDefault().Value</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
+                                                <img src="../assets/images/4star.jpg" height="40" />
+                                            </div>
+                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "4 Star Rating").FirstOrDefault().Value</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
+                                                <img src="../assets/images/3star.jpg" height="40" />
+                                            </div>
+                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "3 Star Rating").FirstOrDefault().Value</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
+                                                <img src="../assets/images/2star.jpg" height="40" />
+                                            </div>
+                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "2 Star Rating").FirstOrDefault().Value</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
+                                                <img src="../assets/images/1star.jpg" height="40" />
+                                            </div>
+                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "1 Star Rating").FirstOrDefault().Value</h4>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <hr>
-                        <div class="icon"><i class="fa fa-university"></i> </div>
-                        <div class="content">
-                            <div class="text">Revenue</div>
-                            <h5 class="number"></h5>
                         </div>
                     </div>
                 </div>
@@ -68,14 +106,26 @@
                         </div>
                     </div>
                 </div>
-
-            </div>
-            <div class="col-lg-6 col-md-6">
                 <div class="card top_counter">
                     <div class="body">
-                        <div class="icon"><i class="fa fa-smile-o"></i> </div>
+                        <div id="top_counter3" class="carousel vert slide" data-ride="carousel" data-interval="2300">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="icon"><i class="fa fa-eye"></i> </div>
+                                    <div class="content">
+                                        <div class="text">Total Visit</div>
+                                        <h5 class="number"></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card top_counter">
+                    <div class="body">
+                        <div class="icon"><i class="fa fa-university"></i> </div>
                         <div class="content">
-                            <div class="text">Top Rated Staffs</div>
+                            <div class="text">Revenue</div>
                             <h5 class="number"></h5>
                         </div>
                     </div>
@@ -323,7 +373,7 @@
                 <div class="row padding-25">
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/LogAudit.png" class="" width="20" height="20" />
                             <br /><span>Log Audit</span>
 
                         </div>
@@ -331,7 +381,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/MedAudit.png" class="" width="20" height="20" />
                             <br /><span>Med Audit</span>
 
                         </div>
@@ -339,7 +389,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/Complain.png" class="" width="20" height="20" />
                             <br /><span>Complain</span>
 
                         </div>
@@ -347,7 +397,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Body.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/Voice.png" class="" width="20" height="20" />
                             <br /><span>Voice</span>
 
                         </div>
@@ -357,7 +407,7 @@
                 <div class="row padding-25">
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/ManagementVisit.png" class="" width="20" height="20" />
                             <br /><span>Mgt Visit</span>
 
                         </div>
@@ -365,7 +415,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/Program.png" class="" width="20" height="20" />
                             <br /><span>Program</span>
 
                         </div>
@@ -373,7 +423,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/ServiceWatch.png" class="" width="20" height="20" />
                             <br /><span>Service Watch</span>
 
                         </div>
@@ -404,7 +454,7 @@
                 <div class="row padding-25">
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/AdlObservation.png" class="" width="20" height="20" />
                             <br /><span>Adl Obs</span>
 
                         </div>
@@ -412,7 +462,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/KeyworkerVoice.png" class="" width="20" height="20" />
                             <br /><span>Key Worker</span>
 
                         </div>
@@ -420,7 +470,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/CompMedObs.png" class="" width="20" height="20" />
                             <br /><span>Med Comp</span>
 
                         </div>
@@ -428,7 +478,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Body.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/OnetoOne.png" class="" width="20" height="20" />
                             <br /><span>One To One</span>
 
                         </div>
@@ -438,7 +488,7 @@
                 <div class="row padding-25">
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/Reference.png" class="" width="20" height="20" />
                             <br /><span>Reference</span>
 
                         </div>
@@ -446,7 +496,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/SpotCheck.png" class="" width="20" height="20" />
                             <br /><span>Spot Check</span>
 
                         </div>
@@ -454,7 +504,7 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/Supervision.png" class="" width="20" height="20" />
                             <br /><span>Supervision</span>
 
                         </div>
@@ -462,13 +512,143 @@
                     </div>
                     <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            @*<img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="50" height="50" />*@
+                            <img src="../assets/images/TeleHealthIcon/Survey.png" class="" width="20" height="20" />
                             <br /><span>Survey</span>
 
                         </div>
                         <canvas id="Sur"></canvas>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Staff Rating</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    
+                        <div class="header">
+                            <ul class="header-dropdown nav nav-tabs-new2">
+                                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#Star5">5-Star</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star4">4-Star</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star3">3-Star</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star2">2-Star</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star1">1-Star</a></li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="tab-content">
+                                <div class="tab-pane" id="Star5">
+                                    <table class="table m-b-0 datatables">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value)
+                                            {
+                                                <tr>
+                                                    <td>@table.Staff</td>
+                                                    <td>@table.Rating</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="Star4">
+                                    <table class="table m-b-0 datatables">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value)
+                                            {
+                                                <tr>
+                                                    <td>@table.Staff</td>
+                                                    <td>@table.Rating</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="Star3">
+                                    <table class="table m-b-0 datatables">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value)
+                                            {
+                                                <tr>
+                                                    <td>@table.Staff</td>
+                                                    <td>@table.Rating</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="Star2">
+                                    <table class="table m-b-0 datatables">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value)
+                                            {
+                                                <tr>
+                                                    <td>@table.Staff</td>
+                                                    <td>@table.Rating</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="Star1">
+                                    <table class="table m-b-0 datatables">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value)
+                                            {
+                                                <tr>
+                                                    <td>@table.Staff</td>
+                                                    <td>@table.Rating</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

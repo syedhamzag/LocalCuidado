@@ -114,7 +114,7 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            bool isEntityRegistered = _HomeRiskAssessmentRepository.Table.Any(r => r.Heading.Equals(model.Heading));
+            bool isEntityRegistered = _HomeRiskAssessmentRepository.Table.Any(r => r.Heading.Equals(model.Heading) && r.ClientId.Equals(model.ClientId));
             if (isEntityRegistered)
             {
                 return BadRequest($"Home Risk Assessment {model.Heading} already exist");

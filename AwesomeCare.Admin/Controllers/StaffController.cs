@@ -84,8 +84,25 @@ namespace AwesomeCare.Admin.Controllers
             try
             {
                 var staffs = await _staffService.GetStaffs();
+                var approved = staffs.Where(s => s.Status == "Approved").OrderBy(s => s.StaffPersonalInfoId).ToList();
 
-                return View(staffs);
+                return View(approved);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Index");
+                throw;
+            }
+
+        }
+        public async Task<IActionResult> OtherStaff()
+        {
+            try
+            {
+                var staffs = await _staffService.GetStaffs();
+                var approved = staffs.Where(s => s.Status != "Approved").OrderBy(s => s.StaffPersonalInfoId).ToList();
+
+                return View(approved);
             }
             catch (Exception ex)
             {

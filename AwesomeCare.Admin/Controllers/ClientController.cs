@@ -79,10 +79,15 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> HomeCare()
         {
             var result = await _clientService.GetClients();
-            return View(result);
+            var active = result.Where(s => s.Status == "Active").OrderBy(s=>s.ClientId).ToList();
+            return View(active);
         }
-
-
+        public async Task<IActionResult> HomeCareOther()
+        {
+            var result = await _clientService.GetClients();
+            var active = result.Where(s => s.Status != "Active").OrderBy(s => s.ClientId).ToList();
+            return View(active);
+        }
         #region Registration
 
 
@@ -421,7 +426,6 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCareDetails", new { clientId = model.ClientId });
         }
         #endregion
-
 
         #region Details
         public async Task<IActionResult> HomeCareDetails(int? clientId)

@@ -1,0 +1,205 @@
+﻿@using AwesomeCare.Admin.ViewModels.DutyOnCall;
+@model CreateDutyOnCall
+@{
+    ViewData["Title"] = "Create Duty On Call";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+            </div>
+            <div class="body">
+                <form asp-controller="DutyOnCall" asp-action="Index" method="post">
+                    <input type="hidden" asp-for="DutyOnCallId" />
+                    <input type="hidden" asp-for="ClientId" />
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label asp-for="Subject" class="control-label"></label>
+                                <input type="text" class="form-control" asp-for="Subject">
+
+                                <span asp-validation-for="Subject" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Person Responsible</label>
+                                <select asp-for="PersonResponsible" asp-items="Model.Staffs" class="selectpicker form-control" data-live-search="true" multiple></select>
+                                <span asp-validation-for="PersonResponsible" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Date Of Call</label>
+                                <input type="text" data-provide="datepicker" asp-for="DateOfCall" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+
+                                <span asp-validation-for="DateOfCall" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Person Responsible</label>
+                                <select asp-for="PersonToAct" asp-items="Model.Staffs" class="selectpicker form-control" data-live-search="true" multiple></select>
+                                <span asp-validation-for="PersonToAct" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Time of Call</label>
+                                <input type="text" class="form-control" asp-for="TimeOfCall" data-provide="timepicker" data-minute-step="5">
+                                <span asp-validation-for="TimeOfCall" class="text-danger"></span>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Status</label>
+                                <baserecord asp-key="DutyOnCall_Status" asp-for="Status" asp-items="null" />
+                                <span asp-validation-for="Status" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Priority</label>
+                                <baserecord asp-key="Priority" asp-for="Priority" asp-items="null" />
+                                <span asp-validation-for="Priority" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Ref No.</label>
+                                <input type="text" class="form-control" asp-for="RefNo" />
+                                <span asp-validation-for="RefNo" class="text-danger"></span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Type Of Duty Call</label>
+                                <baserecord asp-key="Priority" asp-for="TypeOfDutyCall" asp-items="null" />
+                                <span asp-validation-for="TypeOfDutyCall" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Date Of Incident</label>
+                                <input type="text" data-provide="datepicker" asp-for="DateOfIncident" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                <span asp-validation-for="DateOfIncident" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Staff Black listed</label>
+                                <baserecord asp-key="Staff_Blacklisted" asp-for="StaffBlacklisted" asp-items="null" />
+
+                                <span asp-validation-for="StaffBlacklisted" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Notify Staff Involved</label>
+                                <baserecord asp-key="Notify_StaffInvolved" asp-for="NotifyStaffInvolved" asp-items="null" />
+                                <span asp-validation-for="NotifyStaffInvolved" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    @*Hatib new work*@
+                <div class="row">
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label">Type Of Incident</label>
+                            <baserecord asp-key="Priority" asp-for="TypeOfIncident" asp-items="null" />
+                            <span asp-validation-for="TypeOfIncident" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Notify Person</label>
+                            <baserecord asp-key="Notify_Person" asp-for="NotifyPerson" asp-items="null" />
+                            <span asp-validation-for="NotifyPerson" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label">Telephone To Call</label>
+                            <baserecord asp-key="Priority" asp-for="TelephoneToCall" asp-items="null" />
+                            <span asp-validation-for="TelephoneToCall" class="text-danger"></span>
+                        </div>
+                       
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="control-label">Position Of Reporting</label>
+                            <baserecord asp-key="Priority" asp-for="PositionOfReporting" asp-items="null" />
+                            <span asp-validation-for="PositionOfReporting" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Details Of Incident</label>
+                                <textarea type="text" class="form-control" asp-for="DetailsOfIncident"></textarea>
+
+                                <span asp-validation-for="DetailsOfIncident" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Action Taken</label>
+                                <textarea type="text" class="form-control" asp-for="ActionTaken"></textarea>
+                                <span asp-validation-for="ActionTaken" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Client Initial</label>
+                                <textarea type="text" class="form-control" asp-for="ClientInitial"></textarea>
+
+                                <span asp-validation-for="ClientInitial" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Details Required </label>
+                                <textarea type="text" class="form-control" asp-for="DetailsRequired"></textarea>
+                                <span asp-validation-for="DetailsRequired" class="text-danger"></span>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Remarks</label>
+                                <textarea type="text" class="form-control" asp-for="Remarks"></textarea>
+                                <span asp-validation-for="Remarks" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label">Reported By.</label>
+                                <textarea type="text" class="form-control" asp-for="ReportedBy"></textarea>
+                                <span asp-validation-for="ReportedBy" class="text-danger"></span>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <button id="btnSubmit" type="submit" class="btn btn-primary float-right">Submit</button>
+
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
