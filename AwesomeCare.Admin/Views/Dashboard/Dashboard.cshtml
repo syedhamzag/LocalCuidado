@@ -38,7 +38,7 @@
             <div class="col-lg-6 col-md-6">
                 <div class="card">
                     <div class="header">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ratingModal">
+                        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#ratingModal">
                             Show Details
                         </button>
                     </div>
@@ -51,42 +51,42 @@
                                         <div class="text">Top Rated Staffs</div>
                                         <div class="row">
                                             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/5star.jpg" height="40" />
+                                                <img src="../assets/images/5star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "5 Star Rating").FirstOrDefault().Value</h4>
+                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "5 Star Rating").FirstOrDefault().Value</div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/4star.jpg" height="40" />
+                                                <img src="../assets/images/4star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "4 Star Rating").FirstOrDefault().Value</h4>
+                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "4 Star Rating").FirstOrDefault().Value</div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/3star.jpg" height="40" />
+                                                <img src="../assets/images/3star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "3 Star Rating").FirstOrDefault().Value</h4>
+                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "3 Star Rating").FirstOrDefault().Value</div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/2star.jpg" height="40" />
+                                                <img src="../assets/images/2star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "2 Star Rating").FirstOrDefault().Value</h4>
+                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "2 Star Rating").FirstOrDefault().Value</div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/1star.jpg" height="40" />
+                                                <img src="../assets/images/1star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <h4 class="number" style="padding-top:10px;">@Model.StaffRatingCount.Where(s => s.Key == "1 Star Rating").FirstOrDefault().Value</h4>
+                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "1 Star Rating").FirstOrDefault().Value</div>
                                             </div>
                                         </div>
                                     </div>

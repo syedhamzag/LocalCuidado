@@ -3,6 +3,7 @@ using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class DutyOnCallController : ControllerBase
@@ -81,7 +83,20 @@ namespace AwesomeCare.API.Controllers
 
                 }
             }
+            foreach (var model in models.PersonResponsible.ToList())
+            {
+                var entity = _dbContext.Set<DutyOnCallPersonResponsible>();
+                var filterentity = entity.Where(c => c.DutyOnCallId == model.DutyOnCallId).ToList();
+                if (filterentity != null)
+                {
+                    foreach (var item in filterentity)
+                    {
+                        _dbContext.Entry(item).State = EntityState.Deleted;
+                    }
 
+                }
+            }
+            _dbContext.SaveChanges();
             var DutyOnCall = Mapper.Map<DutyOnCall>(models);
             await _DutyOnCallRepository.UpdateEntity(DutyOnCall);
             return Ok();

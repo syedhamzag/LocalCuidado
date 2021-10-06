@@ -19,7 +19,7 @@ namespace AwesomeCare.Admin.Services.DutyOnCall
         [Post("/DutyOnCall/Create")]
         Task<HttpResponseMessage> Create([Body] PostDutyOnCall model);
 
-        [Put("/DutyOnCall")]
+        [Put("/DutyOnCall/Put")]
         Task<HttpResponseMessage> Put([Body] PutDutyOnCall model);
     }
 }

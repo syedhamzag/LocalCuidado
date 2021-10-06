@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.DutyOnCall;
 @model CreateDutyOnCall
 @{
-    ViewData["Title"] = "Create Duty On Call";
+    ViewData["Title"] = "Update Duty On Call";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -14,7 +14,7 @@
 
             </div>
             <div class="body">
-                <form asp-controller="DutyOnCall" asp-action="Index" method="post" enctype="multipart/form-data">
+                <form asp-controller="DutyOnCall" asp-action="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <input type="hidden" asp-for="DutyOnCallId" />
@@ -216,7 +216,6 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

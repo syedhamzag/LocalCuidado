@@ -1,10 +1,12 @@
 ﻿using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.DutyOnCall;
+using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.DutyOnCall;
 using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,13 +19,15 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IDutyOnCallService _dutyoncallService;
         private IClientService _clientService;
+        private IStaffService _staffService;
         private IBaseRecordService _baseService;
 
-        public DutyOnCallController(IDutyOnCallService dutyoncallService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService) : base(fileUpload)
+        public DutyOnCallController(IDutyOnCallService dutyoncallService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService, IStaffService staffService) : base(fileUpload)
         {
             _dutyoncallService = dutyoncallService;
             _clientService = clientService;
             _baseService = baseService;
+            _staffService = staffService;
         }
 
         public async Task<IActionResult> Reports()
@@ -35,10 +39,14 @@ namespace AwesomeCare.Admin.Controllers
             foreach (GetDutyOnCall item in entities)
             {
                 var report = new CreateDutyOnCall();
+                report.DutyOnCallId = item.DutyOnCallId;
+                report.Attachment = item.Attachment;
+                report.RefNo = item.RefNo;
                 report.ClientId = item.ClientId;
                 report.DateOfCall = item.DateOfCall;
                 report.DateOfIncident = item.DateOfIncident;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.PriorityName = _baseService.GetBaseRecordItemById(item.Priority).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 reports.Add(report);
             }
@@ -49,8 +57,11 @@ namespace AwesomeCare.Admin.Controllers
         {
             var model = new CreateDutyOnCall();
             model.ClientId = clientId;
+            
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var staff = await _staffService.GetStaffs();
+            model.Staffs = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             return View(model);
         }
 
@@ -65,10 +76,11 @@ namespace AwesomeCare.Admin.Controllers
             var putEntity = await GetDutyOnCall(DutyOnCallId);
             return View(putEntity);
         }
-
         public async Task<CreateDutyOnCall> GetDutyOnCall(int DutyOnCallId)
         {
             var i = await _dutyoncallService.Get(DutyOnCallId);
+            var staff = await _staffService.GetStaffs();
+            
             var putEntity = new CreateDutyOnCall
             {
                 ClientId = i.ClientId,
@@ -95,9 +107,9 @@ namespace AwesomeCare.Admin.Controllers
                 TelephoneToCall = i.TelephoneToCall,
                 TimeOfCall = i.TimeOfCall,
                 TypeOfDutyCall = i.TypeOfDutyCall,
-                TypeOfIncident = i.TypeOfIncident
-
-            };
+                TypeOfIncident = i.TypeOfIncident,
+                Staffs = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
+        };
             return putEntity;
         }
 
@@ -108,12 +120,25 @@ namespace AwesomeCare.Admin.Controllers
             if (model == null || !ModelState.IsValid)
             {
                 var client = await _clientService.GetClientDetail();
-                model.ClientName = client.Where(s => s.ClientId == model.ClientId).Select(s => s.FullName).FirstOrDefault();
+                model.ClientName = client.Where(s => s.ClientId == model.ClientId).FirstOrDefault().FullName;
+                var staff = await _staffService.GetStaffs();
+                model.Staffs = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
 
             PostDutyOnCall duty = new PostDutyOnCall();
-
+            if (model.Attach != null)
+            {
+                string extention = model.RefNo + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "dutyoncall";
+                string filename = string.Concat(folder, "_Attach_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
+            }
+            else
+            {
+                model.Attachment = "No Image";
+            }
             duty.ClientId = model.ClientId;
             duty.Remarks = model.Remarks;
             duty.Status = model.Status;
@@ -156,11 +181,24 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var client = await _clientService.GetClient(model.ClientId);
                 model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                var staff = await _staffService.GetStaffs();
+                model.Staffs = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
 
             PutDutyOnCall duty = new PutDutyOnCall();
-
+            if (model.Attach != null)
+            {
+                string extention = model.RefNo + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "dutyoncall";
+                string filename = string.Concat(folder, "_Attach_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
+            }
+            else
+            {
+                model.Attachment = model.Attachment;
+            }
             duty.ClientId = model.ClientId;
             duty.Remarks = model.Remarks;
             duty.Status = model.Status;
