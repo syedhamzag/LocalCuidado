@@ -309,10 +309,12 @@ namespace AwesomeCare.Admin.Controllers
 
             foreach (var c in items)
             {
-                string folder = $"ClientRegulatoryContact/{createClient.Telephone}";
+                string folder = "ClientRegulatoryContact".ToLower();
                 string filename = string.Concat(c.RegulatoryContact.Replace(" ", ""), "_", createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
-                string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
-                _logger.LogInformation("Uploaded file to Dropbox: {0}", path);
+               // string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
+                string path = await _fileUpload.UploadFile(folder, true, filename, c.EvidenceFile.OpenReadStream());
+
+                _logger.LogInformation("Uploaded file to Azure Blob Storage: {0}", path);
                 c.Evidence = path;
             }
 
@@ -397,7 +399,7 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _clientService.PutClient(putClient, model.ClientId);
             // var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new OperationStatus { IsSuccessful = result >= 1 ? true : false, Message = result >= 1 ? "Client Personal Information successfully updated" : "An Error Occurred" });
+            SetOperationStatus(new OperationStatus { IsSuccessful = result >= 1, Message = result >= 1 ? "Client Personal Information successfully updated" : "An Error Occurred" });
             if (result < 1)
             {
                 // model.DeleteFileFromDisk(_env);
@@ -418,7 +420,7 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _clientInvolvingPartyService.Put(putClient);
 
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "Client Involving Party successfully updated" : "An Error Occurred" });
-            if (result.IsSuccessStatusCode == false)
+            if (!result.IsSuccessStatusCode )
             {
                 // model.DeleteFileFromDisk(_env);
                 return View("EditRegistration", model);

@@ -8,6 +8,7 @@ using AwesomeCare.API.AppSettings;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.Model.Models;
+using AwesomeCare.Services.Services;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -242,7 +243,7 @@ namespace AwesomeCare.API
             });
             #endregion
 
-
+            services.AddScoped<IFileUpload, FileUpload>();
             //  services.AddOData();
         }
 
