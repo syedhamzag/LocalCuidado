@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Person Responsible</label>
-                                        <select asp-for="PersonToAct" asp-items="Model.Staffs" class="selectpicker form-control" data-live-search="true" multiple></select>
+                                        <select asp-for="PersonToAct" asp-items="Model.Staffs" class="selectpicker form-control" data-live-search="true"></select>
                                         <span asp-validation-for="PersonToAct" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -127,7 +127,11 @@
                                         <baserecord asp-key="DutyOnCall_TelephoneToCall" asp-for="TelephoneToCall" asp-items="null" />
                                         <span asp-validation-for="TelephoneToCall" class="text-danger"></span>
                                     </div>
-
+                                    <div class="form-group">
+                                        <label class="control-label">Notification Status</label>
+                                        <baserecord asp-key="DutyOnCall_NotificationStatus" asp-for="NotificationStatus" asp-items="null" />
+                                        <span asp-validation-for="NotificationStatus" class="text-danger"></span>
+                                    </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">

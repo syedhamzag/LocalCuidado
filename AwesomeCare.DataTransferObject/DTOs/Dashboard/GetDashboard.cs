@@ -1,4 +1,5 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using System;
@@ -9,6 +10,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
 {
     public class GetDashboard
     {
+        public List<OnCall> OnCall { get; set; }
         public int ActiveUser { get; set; }
         public int ApprovedStaff { get; set; }
 

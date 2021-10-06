@@ -13,6 +13,9 @@ namespace AwesomeCare.Admin.Services.DutyOnCall
         [Get("/DutyOnCall")]
         Task<List<GetDutyOnCall>> Get();
 
+        [Get("/DutyOnCall/GetWithPersonToAct")]
+        Task<List<GetDutyOnCall>> GetWithPersonToAct();
+
         [Get("/DutyOnCall/Get/{id}")]
         Task<GetDutyOnCall> Get(int id);
 

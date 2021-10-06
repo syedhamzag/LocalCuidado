@@ -78,6 +78,10 @@ namespace AwesomeCare.Model.Models.Map
              .HasColumnName("StaffBlacklisted")
              .IsRequired();
 
+            builder.Property(p => p.NotificationStatus)
+             .HasColumnName("NotificationStatus")
+             .IsRequired();
+
             builder.Property(p => p.Status)
              .HasColumnName("Status")
              .IsRequired();

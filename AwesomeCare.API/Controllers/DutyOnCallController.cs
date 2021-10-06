@@ -45,7 +45,63 @@ namespace AwesomeCare.API.Controllers
             var getEntities = _DutyOnCallRepository.Table.ToList();
             return Ok(getEntities);
         }
+        [HttpGet()]
+        [Route("[action]")]
+        [ProducesResponseType(type: typeof(List<GetDutyOnCall>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetWithPersonToAct()
+        {
+            var getentity = (from c in _DutyOnCallRepository.Table
+                                  select new GetDutyOnCall
+                                  {
+                                      DutyOnCallId = c.DutyOnCallId,
+                                      ActionTaken = c.ActionTaken,
+                                      ClientId = c.ClientId,
+                                      ClientInitial = c.ClientInitial,
+                                      DateOfCall = c.DateOfCall,
+                                      DateOfIncident = c.DateOfIncident,
+                                      DetailsOfIncident = c.DetailsOfIncident,
+                                      DetailsRequired = c.DetailsRequired,
+                                      NotifyPerson = c.NotifyPerson,
+                                      NotifyStaffInvolved = c.NotifyStaffInvolved,
+                                      PositionOfReporting = c.PositionOfReporting,
+                                      Priority = c.Priority,
+                                      RefNo = c.RefNo,
+                                      Remarks = c.Remarks,
+                                      ReportedBy = c.ReportedBy,
+                                      StaffBlacklisted = c.StaffBlacklisted,
+                                      Subject = c.Subject,
+                                      TelephoneToCall = c.TelephoneToCall,
+                                      TimeOfCall = c.TimeOfCall,
+                                      TypeOfDutyCall = c.TypeOfDutyCall,
+                                      TypeOfIncident = c.TypeOfIncident,
+                                      Status = c.Status,
+                                      NotificationStatus = c.NotificationStatus,
+                                      Attachment = c.Attachment,
 
+                                      PersonToAct = (from com in _DutyOnCallStaffRepository.Table
+                                                     join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                     where com.DutyOnCallId == c.DutyOnCallId
+                                                     select new GetDutyOnCallPersonToAct
+                                                     {
+                                                         StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                         StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                     }).ToList(),
+                                      PersonResponsible = (from com in _DutyOnCallPersonRepository.Table
+                                                           join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                           where com.DutyOnCallId == c.DutyOnCallId
+                                                           select new GetDutyOnCallPersonResponsible
+                                                           {
+                                                               StaffPersonalInfoId = com.StaffPersonalInfoId,
+                                                               StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
+
+                                                           }).ToList()
+                                  }
+                      ).ToList();
+            return Ok(getentity);
+        }
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Create([FromBody] PostDutyOnCall post)
@@ -138,6 +194,7 @@ namespace AwesomeCare.API.Controllers
                                        TypeOfDutyCall = c.TypeOfDutyCall,
                                        TypeOfIncident = c.TypeOfIncident,
                                        Status = c.Status,
+                                       NotificationStatus = c.NotificationStatus,
                                        Attachment = c.Attachment,
                                        
                                        PersonToAct = (from com in _DutyOnCallStaffRepository.Table
