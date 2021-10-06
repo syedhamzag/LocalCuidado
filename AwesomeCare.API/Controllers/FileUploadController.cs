@@ -14,7 +14,6 @@ namespace AwesomeCare.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class FileUploadController : ControllerBase
     {
         private readonly ILogger<FileUploadController> logger;
