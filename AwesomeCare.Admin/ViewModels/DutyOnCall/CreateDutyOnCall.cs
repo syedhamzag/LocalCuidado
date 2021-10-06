@@ -48,10 +48,10 @@ namespace AwesomeCare.Admin.ViewModels.DutyOnCall
         public int TelephoneToCall { get; set; }
         public int PositionOfReporting { get; set; }
 
-        
-        
-        
-        
+
+        public int NotificationStatus { get; set; }
+
+
         public string DetailsRequired { get; set; }
         
         
@@ -64,7 +64,7 @@ namespace AwesomeCare.Admin.ViewModels.DutyOnCall
         public string StatusName { get; set; }
         public string ClientName { get; set; }
         public string PriorityName { get; set; }
-
+        public string NotificationStatusName { get; set; }
 
 
     }

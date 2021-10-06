@@ -45,6 +45,8 @@ using AwesomeCare.DataTransferObject.DTOs.Client;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
+using AwesomeCare.Admin.Services.DutyOnCall;
+using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -82,6 +84,9 @@ namespace AwesomeCare.Admin.Controllers
         private IStaffSurveyService _staffSurveyService;
         private IStaffService _staffService;
         private IClientService _clientService;
+        private IDutyOnCallService _oncallService;
+        private IDutyOnCallService _oncallPersonService;
+        private IBaseRecordService _baseService;
 
         public DashboardController(IDashboardService dashboardService, IFileUpload fileUpload, IRotaTaskService rotaTaskService,
             IClientLogAuditService clientLogAuditService, IClientMedAuditService clientMedAuditService, IComplainService clientComplainService,
@@ -93,7 +98,7 @@ namespace AwesomeCare.Admin.Controllers
         IClientSeizureService clientSeizureService, IClientWoundCareService clientWoundService, IStaffAdlObsService staffAdlObsService,
         IStaffKeyWorkerVoiceService staffKeyWorkerService, IStaffMedCompService staffMedCompService, IStaffOneToOneService staffOneToOneService,
         IStaffReferenceService staffReferenceService, IStaffSpotCheckService staffSpotCheckService, IStaffSupervisionAppraisalService staffSupervisionService,
-        IStaffSurveyService staffSurveyService, IStaffService staffService, IClientService clientService) : base(fileUpload)
+        IStaffSurveyService staffSurveyService, IStaffService staffService, IClientService clientService, IDutyOnCallService oncallService, IBaseRecordService baseService) : base(fileUpload)
         {
             _dashboardService = dashboardService;
             _rotaTaskService = rotaTaskService;
@@ -127,6 +132,8 @@ namespace AwesomeCare.Admin.Controllers
             _staffSurveyService = staffSurveyService;
             _staffService = staffService;
             _clientService = clientService;
+            _oncallService = oncallService;
+            _baseService = baseService;
         }
         public async Task<IActionResult> Dashboard()
         {
@@ -187,7 +194,7 @@ namespace AwesomeCare.Admin.Controllers
             var super = await _staffSupervisionService.Get();
             var survey = await _staffSurveyService.Get();
             var rating = await _staffService.GetClientFeedback();
-
+            var oncall = await _oncallService.GetWithPersonToAct();
             #endregion
 
             var Client = new List<Status>();
@@ -1070,6 +1077,7 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.StaffRatingCount = GetStaffRatingCount(rating);
             dashboard.StaffRating = GetStaffRating(rating);
             dashboard.GetClients = GetClients(getClient);
+            dashboard.OnCall = GetOnCall(oncall, getClient, getStaff);
             dashboard.GetStaffPersonalInfos = GetStaffs(getStaff);
             dashboard.LiveTrackerM = GetTrackerMonthly(startDateM, endDate, months, rotaAdmins);
             dashboard.LiveTrackerW = GetTrackerWeekly(startDateW, endDate, days, rotaAdmins);
@@ -1079,6 +1087,24 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.Types = types.Distinct().ToList();
             return View(dashboard);
         }
+
+        private List<OnCall> GetOnCall(List<GetDutyOnCall> oncall, List<GetClient> client, List<GetStaffPersonalInfo> staff)
+        {
+            List<OnCall> reports = new List<OnCall>();
+            foreach (GetDutyOnCall item in oncall)
+            {
+                var report = new OnCall();
+                report.Date = item.DateOfCall;
+                report.Concern = item.Subject;
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.NotificationStatusName = _baseService.GetBaseRecordItemById(item.NotificationStatus).Result.ValueName;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.Firstname +" "+ s.Middlename +" "+ s.Surname).FirstOrDefault();
+                report.StaffName = item.PersonToAct.FirstOrDefault().StaffName;
+                reports.Add(report);
+            }
+            return reports;
+        }
+
         private List<Status> GetStaffRatingCount(List<GetStaffRating> getStaffs)
         {
             var fivestar = getStaffs.Where(s => s.Rating == 5).Count();

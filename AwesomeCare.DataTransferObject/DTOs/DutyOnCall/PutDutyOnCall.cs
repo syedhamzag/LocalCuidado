@@ -29,6 +29,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.DutyOnCall
         public string DetailsRequired { get; set; }
         public int Priority { get; set; }
         public int Status { get; set; }
+        public int NotificationStatus { get; set; }
         public string Remarks { get; set; }
         public bool NotifyPerson { get; set; }
         public bool StaffBlacklisted { get; set; }

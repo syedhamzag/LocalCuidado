@@ -42,11 +42,13 @@ namespace AwesomeCare.Admin.Controllers
                 report.DutyOnCallId = item.DutyOnCallId;
                 report.Attachment = item.Attachment;
                 report.RefNo = item.RefNo;
+                report.Subject = item.Subject;
                 report.ClientId = item.ClientId;
                 report.DateOfCall = item.DateOfCall;
                 report.DateOfIncident = item.DateOfIncident;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
                 report.PriorityName = _baseService.GetBaseRecordItemById(item.Priority).Result.ValueName;
+                report.NotificationStatusName = _baseService.GetBaseRecordItemById(item.NotificationStatus).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 reports.Add(report);
             }
@@ -85,6 +87,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 ClientId = i.ClientId,
                 Remarks = i.Remarks,
+                NotificationStatus = i.NotificationStatus,
                 Status = i.Status,
                 ActionTaken = i.ActionTaken,
                 Attachment = i.Attachment,
@@ -142,6 +145,7 @@ namespace AwesomeCare.Admin.Controllers
             duty.ClientId = model.ClientId;
             duty.Remarks = model.Remarks;
             duty.Status = model.Status;
+            duty.NotificationStatus = model.NotificationStatus;
             duty.ActionTaken = model.ActionTaken;
             duty.Attachment = model.Attachment;
             duty.ClientInitial = model.ClientInitial;
@@ -202,6 +206,7 @@ namespace AwesomeCare.Admin.Controllers
             duty.ClientId = model.ClientId;
             duty.Remarks = model.Remarks;
             duty.Status = model.Status;
+            duty.NotificationStatus = model.NotificationStatus;
             duty.ActionTaken = model.ActionTaken;
             duty.Attachment = model.Attachment;
             duty.ClientInitial = model.ClientInitial;
