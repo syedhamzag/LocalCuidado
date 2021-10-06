@@ -97,7 +97,7 @@ namespace AwesomeCare.API.Controllers
 
                 }
             }
-
+            _dbContext.SaveChanges();
             var ClientLogAudit = Mapper.Map<ClientLogAudit>(models);
             await _clientLogAuditRepository.UpdateEntity(ClientLogAudit);
             return Ok();

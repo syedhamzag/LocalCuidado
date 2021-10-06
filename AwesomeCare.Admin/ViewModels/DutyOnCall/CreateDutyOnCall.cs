@@ -1,7 +1,9 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,10 +13,18 @@ namespace AwesomeCare.Admin.ViewModels.DutyOnCall
     {
         public CreateDutyOnCall()
         {
+            ListItems = new List<SelectListItem> {
+                new SelectListItem("Yes","true"),
+                new SelectListItem("No","false")
+            };
             Staffs = new List<SelectListItem>();
         }
+
+        [DataType(DataType.Upload)]
+        public IFormFile Attach { get; set; }
+
         public List<SelectListItem> Staffs { get; set; }
-        
+        public List<SelectListItem> ListItems { get; set; }
         
         
         public int DutyOnCallId { get; set; }
@@ -37,6 +47,7 @@ namespace AwesomeCare.Admin.ViewModels.DutyOnCall
         public string ReportedBy { get; set; }
         public int TelephoneToCall { get; set; }
         public int PositionOfReporting { get; set; }
+
         
         
         
@@ -52,8 +63,9 @@ namespace AwesomeCare.Admin.ViewModels.DutyOnCall
 
         public string StatusName { get; set; }
         public string ClientName { get; set; }
+        public string PriorityName { get; set; }
 
-        
-        
+
+
     }
 }

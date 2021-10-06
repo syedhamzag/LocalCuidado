@@ -227,7 +227,7 @@ namespace AwesomeCare.Admin.Controllers
             if (model.Evidence != null)
             {
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
-                string folder = "clientcomplain";
+                string folder = "clientlogaudit";
                 string filename = string.Concat(folder, "_Evidence_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
                 model.EvidenceOfActionTaken = path;
@@ -239,7 +239,7 @@ namespace AwesomeCare.Admin.Controllers
             if (model.Attach != null)
             {
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
-                string folder = "clientcomplain";
+                string folder = "clientlogaudit";
                 string filename = string.Concat(folder, "_Attach_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
                 model.EvidenceFilePath = path;
@@ -301,8 +301,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Evidence
             if (model.Evidence != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_Evidence_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
+                string folder = "clientlogaudit";
+                string filename = string.Concat(folder, "_Evidence_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
                 model.EvidenceOfActionTaken = path;
             }
@@ -312,11 +313,11 @@ namespace AwesomeCare.Admin.Controllers
             }
             if (model.Attach != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.EvidenceFilePath = pathA;
-
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "clientlogaudit";
+                string filename = string.Concat(folder, "_Attach_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.EvidenceFilePath = path;
             }
             else
             {
