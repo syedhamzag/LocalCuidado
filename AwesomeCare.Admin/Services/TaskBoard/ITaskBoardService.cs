@@ -13,6 +13,9 @@ namespace AwesomeCare.Admin.Services.TaskBoard
         [Get("/TaskBoard")]
         Task<List<GetTaskBoard>> Get();
 
+        [Get("/TaskBoard/GetWithStaff")]
+        Task<List<GetTaskBoard>> GetWithStaff();
+
         [Get("/TaskBoard/Get/{id}")]
         Task<GetTaskBoard> Get(int id);
 
