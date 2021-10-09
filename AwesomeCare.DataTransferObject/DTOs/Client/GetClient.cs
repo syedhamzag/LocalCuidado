@@ -51,6 +51,7 @@ using AwesomeCare.DataTransferObject.DTOs.Pets;
 using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
 using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
+using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -99,6 +100,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             GetHospitalEntry = new HashSet<GetHospitalEntry>();
             GetHospitalExit = new HashSet<GetHospitalExit>();
             GetHomeRiskAssessment = new HashSet<GetHomeRiskAssessment>();
+            GetDutyOnCall = new HashSet<GetDutyOnCall>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -217,5 +219,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetBaseRecordItem> GetBaseRecords { get; set; }
         public virtual ICollection<GetHospitalExit> GetHospitalExit { get; set; }
         public virtual ICollection<GetHomeRiskAssessment> GetHomeRiskAssessment { get; set; }
+        public virtual ICollection<GetDutyOnCall> GetDutyOnCall { get; set; }
     }
 }

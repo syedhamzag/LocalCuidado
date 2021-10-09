@@ -343,12 +343,31 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Reference</th>
+                                        <th>Date</th>
+                                        <th>RefNo</th>
+                                        <th>Subject</th>
                                         <th>Attachment</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @foreach (var item in Model.GetDutyOnCall)
+                                    {
+                                    <tr>
+                                        <td>@item.DateOfCall</td>
+                                        <td>
+                                            @item.RefNo
+                                        </td>
+                                        <td>@item.Subject</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                            {
+                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
+                                            }
 
+                                        </td>
+
+                                    </tr>
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -384,7 +403,7 @@
                                             <td>
                                                 @if (!string.IsNullOrEmpty(item.Attachment))
                                                 {
-                                                    <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                    <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                                 }
 
                                             </td>
@@ -514,7 +533,7 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.EvidenceFilePath))
                                             {
-                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceFilePath">Download</a>
+                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.EvidenceFilePath" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                             }
 
                                         </td>
@@ -554,7 +573,7 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
                                             {
-                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>
+                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.EvidenceOfActionTaken" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                             }
 
                                         </td>
@@ -596,7 +615,7 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
                                             {
-                                                <a asp-action="DownloadFile" asp-route-file="@item.EvidenceOfActionTaken">Download</a>
+                                            <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.EvidenceOfActionTaken" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                             }
 
                                         </td>
@@ -636,7 +655,7 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.Attachment))
                                             {
-                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                             }
 
                                         </td>
@@ -676,7 +695,7 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.Attachment))
                                             {
-                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                             }
 
                                         </td>
@@ -716,7 +735,7 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.Attachment))
                                             {
-                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                             }
 
                                         </td>
@@ -756,7 +775,7 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.Attachment))
                                             {
-                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                             }
 
                                         </td>
@@ -1782,4 +1801,9 @@
 
         });
     }
+    $('.showfile-btn').on('click', function () {
+        const showBtn = $(this);
+        const Id = showBtn.data('id');
+        window.open(Id);
+    });
 </script>

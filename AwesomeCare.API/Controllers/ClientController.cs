@@ -54,6 +54,7 @@ using AwesomeCare.DataTransferObject.DTOs.Health.HistoryOfFall;
 using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
 using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
+using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -472,8 +473,17 @@ namespace AwesomeCare.API.Controllers
                                                                 select new GetHomeRiskAssessment
                                                                 {
                                                                     Heading = h.Heading
-                                                                }).ToList()
+                                                                }).ToList(),
                                        
+                                       GetDutyOnCall = (from d in client.DutyOnCall
+                                                        select new GetDutyOnCall
+                                                        { 
+                                                            Attachment = d.Attachment,
+                                                            Subject = d.Subject,
+                                                            RefNo = d.RefNo,
+                                                            DateOfCall = d.DateOfCall
+                                                        
+                                                        }).ToList()
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

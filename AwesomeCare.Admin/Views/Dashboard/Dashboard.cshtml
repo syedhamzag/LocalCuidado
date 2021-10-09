@@ -3,6 +3,13 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
+@section HeaderScripts{
+
+    <link href="~/assets/css/main.css" rel="stylesheet" />
+    <link href="~/assets/css/color_skins.css" rel="stylesheet" />
+    <link href="~/assets/vendor/nestable/jquery-nestable.css" rel="stylesheet" />
+}
+
 <div class="row clearfix">
     <div class="col-lg-6 col-md-12">
         <div class="row clearfix">
@@ -139,20 +146,20 @@
             <div class="header">
                 <h3>ADL Tracker</h3>
                 <ul class="header-dropdown nav nav-tabs-new2">
-                    <li class="nav-item"><a class="tab_btn nav-link active show" data-toggle="tab" href="#Daily">D</a></li>
+                    <li class="nav-item"><a class="tab_btn nav-link" data-toggle="tab" href="#Daily">D</a></li>
                     <li class="nav-item"><a class="tab_btn nav-link" data-toggle="tab" href="#Weekly">W</a></li>
-                    <li class="nav-item"><a class="tab_btn nav-link" data-toggle="tab" href="#Monthly">M</a></li>
+                    <li class="nav-item"><a class="tab_btn nav-link active show" data-toggle="tab" href="#Monthly">M</a></li>
                 </ul>
             </div>
             <div class="body">
                 <div class="tab-content">
-                    <div class="tab-pane show active" id="Daily">
+                    <div class="tab-pane" id="Daily">
                         <canvas id="AdlDaily" style="height:500px;"></canvas>
                     </div>
                     <div class="tab-pane" id="Weekly">
                         <canvas id="AdlWeekly" style="height:500px;"></canvas>
                     </div>
-                    <div class="tab-pane" id="Monthly">
+                    <div class="tab-pane show active" id="Monthly">
                         <canvas id="AdlTracker" style="height:500px;"></canvas>
                     </div>
                 </div>
@@ -160,7 +167,127 @@
         </div>
     </div>
 </div>
+<div class="row clearfix taskboard">
+    <div class="col-lg-4 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Task Created</h2>
+                <ul class="header-dropdown">
+                </ul>
+            </div>
+            <div class="body taskboard">
+                <div class="dd" data-plugin="nestable">
+                    <ol class="dd-list">
+                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Created").Value)
+                        {
+                            <li class="dd-item" data-id="@item.TaskId">
+                                <div class="dd-handle">#L @item.TaskId</div>
+                                <div class="dd-content p-15">
+                                    <h5>@item.TaskName</h5>
+                                    <p>@item.Note</p>
+                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
+                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
+                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+                                        @foreach (var staff in item.AssignedTo)
+                                        {
+                                            <li><img src="@Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId).ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" data-original-title="Avatar"></li>
+                                        }
+                                    </ul>
+                                    <hr>
+                                    <div class="action">
+                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
+                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="icon-trash"></i></button>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-lg-4 col-md-12">
+        <div class="card progress_task">
+            <div class="header">
+                <h2>Task In Progress</h2>
+            </div>
+            <div class="body taskboard">
+                <div class="dd" data-plugin="nestable">
+                    <ol class="dd-list">
+                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "InProgress").Value)
+                        {
+                            <li class="dd-item" data-id="@item.TaskId">
+                                <div class="dd-handle">#L @item.TaskId</div>
+                                <div class="dd-content p-15">
+                                    <h5>@item.TaskName</h5>
+                                    <p>@item.Note</p>
+                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
+                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
+                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+                                        @foreach (var staff in item.AssignedTo)
+                                        {
+                                            <li><img src="@Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId).ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" data-original-title="Avatar"></li>
+                                        }
+                                    </ul>
+                                    <hr>
+                                    <div class="action">
+                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
+                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="icon-trash"></i></button>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-12">
+        <div class="card completed_task">
+            <div class="header">
+                <h2>Task Completed</h2>
+            </div>
+            <div class="body taskboard">
+                <div class="dd" data-plugin="nestable">
+                    <ol class="dd-list">
+                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Completed").Value)
+                        {
+                            <li class="dd-item" data-id="@item.TaskId">
+                                <div class="dd-handle">#L @item.TaskId</div>
+                                <div class="dd-content p-15">
+                                    <h5>@item.TaskName</h5>
+                                    <p>@item.Note.</p>
+                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
+                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
+                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+
+                                        @foreach (var staff in item.AssignedTo)
+                                        {
+                                            <li><img src="@Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId).ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" data-original-title="Avatar"></li>
+                                        }
+                                    </ul>
+                                    <hr>
+                                    <div class="action">
+                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
+                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="icon-trash"></i></button>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row clearfix">
     <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
@@ -242,15 +369,15 @@
                             <tbody>
                                 @foreach (var item in Model.OnCall)
                                 {
-                                <tr>
+                                    <tr>
 
-                                    <td>@item.Date.ToString("yyyy/mm/dd")</td>
-                                    <td>@item.StaffName</td>
-                                    <td>@item.ClientName</td>
-                                    <td>@item.Concern</td>
-                                    <td>@item.NotificationStatusName</td>
-                                    <td>@item.StatusName</td>
-                                </tr>
+                                        <td>@item.Date.ToString("yyyy/MM/dd")</td>
+                                        <td>@item.StaffName</td>
+                                        <td>@item.ClientName</td>
+                                        <td>@item.Concern</td>
+                                        <td>@item.NotificationStatusName</td>
+                                        <td>@item.StatusName</td>
+                                    </tr>
 
                                 }
                             </tbody>
@@ -566,116 +693,116 @@
             </div>
             <div class="modal-body">
                 <div class="card">
-                    
-                        <div class="header">
-                            <ul class="header-dropdown nav nav-tabs-new2">
-                                <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#Star5">5-Star</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star4">4-Star</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star3">3-Star</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star2">2-Star</a></li>
-                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star1">1-Star</a></li>
-                            </ul>
-                        </div>
-                        <div class="body">
-                            <div class="tab-content">
-                                <div class="tab-pane" id="Star5">
-                                    <table class="table m-b-0 datatables">
-                                        <thead class="thead-dark">
+
+                    <div class="header">
+                        <ul class="header-dropdown nav nav-tabs-new2">
+                            <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#Star5">5-Star</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star4">4-Star</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star3">3-Star</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star2">2-Star</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star1">1-Star</a></li>
+                        </ul>
+                    </div>
+                    <div class="body">
+                        <div class="tab-content">
+                            <div class="tab-pane" id="Star5">
+                                <table class="table m-b-0 datatables">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value)
+                                        {
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Rating</th>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value)
-                                            {
-                                                <tr>
-                                                    <td>@table.Staff</td>
-                                                    <td>@table.Rating</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="Star4">
-                                    <table class="table m-b-0 datatables">
-                                        <thead class="thead-dark">
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="Star4">
+                                <table class="table m-b-0 datatables">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value)
+                                        {
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Rating</th>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value)
-                                            {
-                                                <tr>
-                                                    <td>@table.Staff</td>
-                                                    <td>@table.Rating</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="Star3">
-                                    <table class="table m-b-0 datatables">
-                                        <thead class="thead-dark">
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="Star3">
+                                <table class="table m-b-0 datatables">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value)
+                                        {
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Rating</th>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value)
-                                            {
-                                                <tr>
-                                                    <td>@table.Staff</td>
-                                                    <td>@table.Rating</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="Star2">
-                                    <table class="table m-b-0 datatables">
-                                        <thead class="thead-dark">
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="Star2">
+                                <table class="table m-b-0 datatables">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value)
+                                        {
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Rating</th>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value)
-                                            {
-                                                <tr>
-                                                    <td>@table.Staff</td>
-                                                    <td>@table.Rating</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane" id="Star1">
-                                    <table class="table m-b-0 datatables">
-                                        <thead class="thead-dark">
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="Star1">
+                                <table class="table m-b-0 datatables">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value)
+                                        {
                                             <tr>
-                                                <th>Name</th>
-                                                <th>Rating</th>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var table in Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value)
-                                            {
-                                                <tr>
-                                                    <td>@table.Staff</td>
-                                                    <td>@table.Rating</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    
+                    </div>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -1490,4 +1617,5 @@
             lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
         });
     </script>
+    <script src="~/assets/vendor/nestable/jquery.nestable.js"></script>
 }

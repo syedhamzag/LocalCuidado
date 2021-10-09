@@ -2,6 +2,7 @@
 using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
+using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +12,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
     public class GetDashboard
     {
         public List<OnCall> OnCall { get; set; }
+
+        public Dictionary<string, List<GetTaskBoard>> GetTaskBoard { get; set; }
         public int ActiveUser { get; set; }
         public int ApprovedStaff { get; set; }
 
@@ -19,6 +22,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
         public Dictionary<string, List<GetStaffRating>> StaffRating { get; set; }
         public List<GetClient> GetClients { get; set; }
         public List<GetStaffPersonalInfo> GetStaffPersonalInfos { get; set; }
+        public List<GetStaffPersonalInfo> GetAllStaff { get; set; }
         public int nId { get; set; }
         public int oId { get; set; }
         public int aId { get; set; }

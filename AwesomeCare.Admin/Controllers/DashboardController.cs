@@ -47,11 +47,15 @@ using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.Admin.Services.DutyOnCall;
 using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
+using AwesomeCare.Admin.Services.TaskBoard;
+using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
+using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class DashboardController : BaseController
     {
+        #region declare Service
         private IDashboardService _dashboardService;
         private IRotaTaskService _rotaTaskService;
         private IClientLogAuditService _clientLogAuditService;
@@ -85,8 +89,9 @@ namespace AwesomeCare.Admin.Controllers
         private IStaffService _staffService;
         private IClientService _clientService;
         private IDutyOnCallService _oncallService;
-        private IDutyOnCallService _oncallPersonService;
         private IBaseRecordService _baseService;
+        private ITaskBoardService _taskService;
+        #endregion
 
         public DashboardController(IDashboardService dashboardService, IFileUpload fileUpload, IRotaTaskService rotaTaskService,
             IClientLogAuditService clientLogAuditService, IClientMedAuditService clientMedAuditService, IComplainService clientComplainService,
@@ -98,8 +103,9 @@ namespace AwesomeCare.Admin.Controllers
         IClientSeizureService clientSeizureService, IClientWoundCareService clientWoundService, IStaffAdlObsService staffAdlObsService,
         IStaffKeyWorkerVoiceService staffKeyWorkerService, IStaffMedCompService staffMedCompService, IStaffOneToOneService staffOneToOneService,
         IStaffReferenceService staffReferenceService, IStaffSpotCheckService staffSpotCheckService, IStaffSupervisionAppraisalService staffSupervisionService,
-        IStaffSurveyService staffSurveyService, IStaffService staffService, IClientService clientService, IDutyOnCallService oncallService, IBaseRecordService baseService) : base(fileUpload)
+        IStaffSurveyService staffSurveyService, IStaffService staffService, IClientService clientService, IDutyOnCallService oncallService, IBaseRecordService baseService, ITaskBoardService taskService) : base(fileUpload)
         {
+            #region Services
             _dashboardService = dashboardService;
             _rotaTaskService = rotaTaskService;
             _clientLogAuditService = clientLogAuditService;
@@ -134,6 +140,8 @@ namespace AwesomeCare.Admin.Controllers
             _clientService = clientService;
             _oncallService = oncallService;
             _baseService = baseService;
+            _taskService = taskService;
+            #endregion
         }
         public async Task<IActionResult> Dashboard()
         {
@@ -195,6 +203,8 @@ namespace AwesomeCare.Admin.Controllers
             var survey = await _staffSurveyService.Get();
             var rating = await _staffService.GetClientFeedback();
             var oncall = await _oncallService.GetWithPersonToAct();
+            var task = await _taskService.GetWithStaff();
+            var baserecordItem = await _baseService.GetBaseRecordsWithItems();
             #endregion
 
             var Client = new List<Status>();
@@ -1071,7 +1081,9 @@ namespace AwesomeCare.Admin.Controllers
             var startDateW = DateTime.Now.AddDays(-7).Date.ToString("yyyy-MM-dd");
             var rotaAdmins = await _rotaTaskService.LiveRota(startDateM, endDate);
 
-
+            var taskitem = baserecordItem.Where(s => s.KeyName == "Task_Board_Status").FirstOrDefault();
+            dashboard.GetAllStaff = getStaff;
+            dashboard.GetTaskBoard = GetTaskBoard(task, taskitem);
             dashboard.ActiveUser = getClient.Where(s => s.Status == "Active").Count();
             dashboard.ApprovedStaff = getStaff.Where(s => s.Status == StaffRegistrationEnum.Approved).Count();
             dashboard.StaffRatingCount = GetStaffRatingCount(rating);
@@ -1086,6 +1098,21 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.Days = days.Distinct().ToList();
             dashboard.Types = types.Distinct().ToList();
             return View(dashboard);
+        }
+
+        private Dictionary<string,List<GetTaskBoard>> GetTaskBoard(List<GetTaskBoard> task, GetBaseRecordWithItems getBases)
+        {
+            int creId = getBases.BaseRecordItems.Where(s => s.ValueName == "Created").FirstOrDefault().BaseRecordItemId;
+            int progId = getBases.BaseRecordItems.Where(s => s.ValueName == "In Progress").FirstOrDefault().BaseRecordItemId;
+            int comId = getBases.BaseRecordItems.Where(s => s.ValueName == "Completed").FirstOrDefault().BaseRecordItemId;
+            var _task = new Dictionary<string, List<GetTaskBoard>>();
+            var created = task.Where(s => s.Status == creId).ToList();
+            var inprogress = task.Where(s => s.Status == progId).ToList();
+            var completed = task.Where(s => s.Status == comId).ToList();
+            _task.Add("Created",created);
+            _task.Add("InProgress", inprogress);
+            _task.Add("Completed", completed);
+            return _task;
         }
 
         private List<OnCall> GetOnCall(List<GetDutyOnCall> oncall, List<GetClient> client, List<GetStaffPersonalInfo> staff)

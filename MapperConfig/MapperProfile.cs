@@ -307,7 +307,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetHospitalEntry, mem => mem.Ignore())
                 .ForMember(dto => dto.GetBaseRecords, mem => mem.Ignore())
                 .ForMember(dto => dto.GetHospitalExit, mem => mem.Ignore())
-                .ForMember(dto => dto.GetHomeRiskAssessment, mem => mem.Ignore());
+                .ForMember(dto => dto.GetHomeRiskAssessment, mem => mem.Ignore())
+                .ForMember(dto => dto.GetDutyOnCall, mem => mem.Ignore());
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));
