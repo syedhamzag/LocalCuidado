@@ -24,5 +24,8 @@ namespace AwesomeCare.Admin.Services.TaskBoard
 
         [Put("/TaskBoard/Put")]
         Task<HttpResponseMessage> Put([Body] PutTaskBoard model);
+
+        [Delete("/TaskBoard/Delete")]
+        Task<HttpResponseMessage> Delete([Body] List<GetTaskBoard> model);
     }
 }

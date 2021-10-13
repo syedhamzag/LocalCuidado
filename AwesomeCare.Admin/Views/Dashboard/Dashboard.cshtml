@@ -42,6 +42,8 @@
                     </div>
                 </div>
             </div>
+            </div>
+        <div class="row clearfix">
             <div class="col-lg-6 col-md-6">
                 <div class="card">
                     <div class="header">
@@ -105,23 +107,23 @@
             </div>
             <div class="col-lg-6 col-md-6">
                 <div class="card top_counter">
-                    <div class="body">
+                    <div class="">
                         <div class="icon"><i class="fa fa-thumbs-o-up"></i> </div>
                         <div class="content">
                             <div class="text">Service Watch</div>
-                            <h5 class="number"></h5>
+                            <h5 class="number">5</h5>
                         </div>
                     </div>
                 </div>
                 <div class="card top_counter">
-                    <div class="body">
+                    <div class="">
                         <div id="top_counter3" class="carousel vert slide" data-ride="carousel" data-interval="2300">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
                                     <div class="icon"><i class="fa fa-eye"></i> </div>
                                     <div class="content">
                                         <div class="text">Total Visit</div>
-                                        <h5 class="number"></h5>
+                                        <h5 class="number">8</h5>
                                     </div>
                                 </div>
                             </div>
@@ -129,15 +131,14 @@
                     </div>
                 </div>
                 <div class="card top_counter">
-                    <div class="body">
+                    <div class="">
                         <div class="icon"><i class="fa fa-university"></i> </div>
                         <div class="content">
                             <div class="text">Revenue</div>
-                            <h5 class="number"></h5>
+                            <h5 class="number">11</h5>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -167,13 +168,23 @@
         </div>
     </div>
 </div>
+<div class="row clearfix">
+    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-12">
+
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+        
+    </div>
+</div>
 <div class="row clearfix taskboard">
+    
     <div class="col-lg-4 col-md-12">
         <div class="card planned_task">
             <div class="header">
                 <h2>Task Created</h2>
-                <ul class="header-dropdown">
-                </ul>
+                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-toggle="modal" data-target="#deleteModal">
+                    <i class="icon-trash"></i>
+                </button>
             </div>
             <div class="body taskboard">
                 <div class="dd" data-plugin="nestable">
@@ -181,7 +192,14 @@
                         @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Created").Value)
                         {
                             <li class="dd-item" data-id="@item.TaskId">
-                                <div class="dd-handle">#L @item.TaskId</div>
+                                <div class="dd-handle">
+                                    <div class="fancy-checkbox">
+                                        <label>
+                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
+                                            <span>#L @item.TaskId</span>
+                                        </label>
+                                    </div>
+                                </div>
                                 <div class="dd-content p-15">
                                     <h5>@item.TaskName</h5>
                                     <p>@item.Note</p>
@@ -198,7 +216,6 @@
                                         <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
-                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="icon-trash"></i></button>
                                     </div>
                                 </div>
                             </li>
@@ -213,6 +230,9 @@
         <div class="card progress_task">
             <div class="header">
                 <h2>Task In Progress</h2>
+                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-toggle="modal" data-target="#deleteModal">
+                    <i class="icon-trash"></i>
+                </button>
             </div>
             <div class="body taskboard">
                 <div class="dd" data-plugin="nestable">
@@ -220,7 +240,14 @@
                         @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "InProgress").Value)
                         {
                             <li class="dd-item" data-id="@item.TaskId">
-                                <div class="dd-handle">#L @item.TaskId</div>
+                                <div class="dd-handle">
+                                    <div class="fancy-checkbox">
+                                        <label>
+                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
+                                            <span>#L @item.TaskId</span>
+                                        </label>
+                                    </div>
+                                </div>
                                 <div class="dd-content p-15">
                                     <h5>@item.TaskName</h5>
                                     <p>@item.Note</p>
@@ -237,7 +264,6 @@
                                         <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
-                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="icon-trash"></i></button>
                                     </div>
                                 </div>
                             </li>
@@ -252,6 +278,9 @@
         <div class="card completed_task">
             <div class="header">
                 <h2>Task Completed</h2>
+                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-toggle="modal" data-target="#deleteModal">
+                    <i class="icon-trash"></i>
+                </button>
             </div>
             <div class="body taskboard">
                 <div class="dd" data-plugin="nestable">
@@ -259,7 +288,15 @@
                         @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Completed").Value)
                         {
                             <li class="dd-item" data-id="@item.TaskId">
-                                <div class="dd-handle">#L @item.TaskId</div>
+
+                                <div class="dd-handle">
+                                    <div class="fancy-checkbox">
+                                        <label>
+                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
+                                            <span>#L @item.TaskId</span>
+                                        </label>
+                                    </div>
+                                </div>
                                 <div class="dd-content p-15">
                                     <h5>@item.TaskName</h5>
                                     <p>@item.Note.</p>
@@ -302,7 +339,7 @@
             </div>
             <div class="body">
                 <div class="tab-content">
-                    <div class="tab-pane" id="Client">
+                    <div class="tab-pane show active" id="Client">
                         <table class="table m-b-0 datatables">
                             <thead class="thead-dark">
                                 <tr>
@@ -351,13 +388,14 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane show active" id="Special">
+                    <div class="tab-pane" id="Special">
 
                     </div>
                     <div class="tab-pane" id="oncall">
                         <table class="table m-b-0 datatables">
                             <thead class="thead-dark">
                                 <tr>
+                                    <th></th>
                                     <th>Date</th>
                                     <th>Officer</th>
                                     <th>Client</th>
@@ -369,16 +407,19 @@
                             <tbody>
                                 @foreach (var item in Model.OnCall)
                                 {
-                                    <tr>
+                                    
+                                        <tr>
 
-                                        <td>@item.Date.ToString("yyyy/MM/dd")</td>
-                                        <td>@item.StaffName</td>
-                                        <td>@item.ClientName</td>
-                                        <td>@item.Concern</td>
-                                        <td>@item.NotificationStatusName</td>
-                                        <td>@item.StatusName</td>
-                                    </tr>
+                                            <td><a href="/DutyOnCall/Edit?DutyOnCallId=@item.DutyOnCallId" title="Edit"><i class="icon-note"></i></a></td>
+                                            <td>@item.Date.ToString("yyyy/MM/dd") </td>
+                                            <td style="white-space:normal;">@item.StaffName</td>
+                                            <td style="white-space:normal;">@item.ClientName</td>
+                                            <td style="white-space:normal;">@item.Concern</td>
+                                            <td>@item.NotificationStatusName</td>
+                                            <td>@item.StatusName</td>
 
+                                        </tr>
+                                    
                                 }
                             </tbody>
                         </table>
@@ -682,6 +723,43 @@
     </div>
 </div>
 <!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="deleteForm" asp-controller="TaskBoard" asp-action="Delete" method="post">
+                <div class="modal-body">
+                    <div class="card">
+
+                        <div class="header">
+                        </div>
+                        <div class="body">
+                            <p>Are you sure want to delete these task?</p>
+
+                            <select class="form-control" id="Ids" name="Ids" multiple></select>
+                            <div class="form-group">
+                                <label>Please enter pin code</label>
+                                <input type="password" class="form-control" name="pin" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -815,8 +893,34 @@
     <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
     <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+    <script src="~/js/Notification.js"></script>
     <script type="text/javascript">
+        
+        function setId(e) {
+            const chk = $(e);
+            const Id = chk.data('id');
+
+            if ($(chk).prop('checked') == true) {
+                $('#Ids').append('<option selected value="'+Id+'">#L'+Id+'</option>');
+            }
+
+        }
         $(function () {
+            $('#deleteForm').submit(function () {
+
+                const id = $('#Ids').val();
+                const pin = $('#pin').val();
+                console.log(id);
+                console.log(pin);
+                if (id.length == 0 || id == "" || id == null || pin == "" || pin == null || pin == undefined) {
+                shownotification("Please select at least one Task", "error");
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
+
             var length = $('#parent').children().length;
             for (i = length; i > 1; i--) {
                 var child = $('#parent').children()[i - 1];

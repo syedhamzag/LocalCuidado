@@ -1089,7 +1089,7 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.StaffRatingCount = GetStaffRatingCount(rating);
             dashboard.StaffRating = GetStaffRating(rating);
             dashboard.GetClients = GetClients(getClient);
-            dashboard.OnCall = GetOnCall(oncall, getClient, getStaff);
+            dashboard.OnCall = GetOnCall(oncall, getClient);
             dashboard.GetStaffPersonalInfos = GetStaffs(getStaff);
             dashboard.LiveTrackerM = GetTrackerMonthly(startDateM, endDate, months, rotaAdmins);
             dashboard.LiveTrackerW = GetTrackerWeekly(startDateW, endDate, days, rotaAdmins);
@@ -1115,12 +1115,13 @@ namespace AwesomeCare.Admin.Controllers
             return _task;
         }
 
-        private List<OnCall> GetOnCall(List<GetDutyOnCall> oncall, List<GetClient> client, List<GetStaffPersonalInfo> staff)
+        private List<OnCall> GetOnCall(List<GetDutyOnCall> oncall, List<GetClient> client)
         {
             List<OnCall> reports = new List<OnCall>();
             foreach (GetDutyOnCall item in oncall)
             {
                 var report = new OnCall();
+                report.DutyOnCallId = item.DutyOnCallId;
                 report.Date = item.DateOfCall;
                 report.Concern = item.Subject;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
