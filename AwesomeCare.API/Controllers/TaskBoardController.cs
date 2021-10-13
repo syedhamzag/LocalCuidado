@@ -149,6 +149,26 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getTaskBoard);
         }
+        [HttpDelete]
+        [Route("[action]")]
+        public async Task<IActionResult> Delete([FromBody] List<GetTaskBoard> model)
+        {
+            var entity = _dbContext.Set<TaskBoard>();
+            foreach (var item in model)
+            {
+                var filterentity = entity.Where(c => c.TaskId == item.TaskId).FirstOrDefault();
+                if (filterentity != null)
+                {
+                    filterentity.Status = 16;
+                    _dbContext.Entry(filterentity).State = EntityState.Modified;
+
+                }
+            }
+            _dbContext.SaveChanges();
+            await _TaskBoardRepository.GetEntities();
+            return Ok();
+
+        }
         #endregion
     }
 }

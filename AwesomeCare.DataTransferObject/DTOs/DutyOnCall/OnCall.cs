@@ -6,6 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.DutyOnCall
 {
     public class OnCall
     {
+        public int DutyOnCallId { get; set; }
         public DateTime Date { get; set; }
         public string Concern { get; set; }
         public string StatusName { get; set; }

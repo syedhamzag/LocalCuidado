@@ -196,5 +196,26 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("Reports", "TaskBoard");
 
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string pin, List<int> Ids)
+        {
+            if (pin == "2252")
+            {
+                List<GetTaskBoard> model = new List<GetTaskBoard>();
+                foreach (var item in Ids)
+                {
+                    GetTaskBoard getTask = new GetTaskBoard();
+                    getTask.TaskId = item;
+                    model.Add(getTask);
+                }
+                var result = await _taskService.Delete(model);
+                var content = await result.Content.ReadAsStringAsync();
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "Task Board successfully deleted" : "An Error Occurred" });
+                return RedirectToAction("Dashboard", "Dashboard");
+            }
+
+            return RedirectToAction("Reports");
+        }
     }
 }
