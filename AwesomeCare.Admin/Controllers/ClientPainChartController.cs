@@ -71,6 +71,9 @@ namespace AwesomeCare.Admin.Controllers
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.StatusAttach = item.StatusAttach;
+                report.LocationAttach = item.LocationAttach;
+                report.TypeAttach = item.TypeAttach;
                 reports.Add(report);
             }
 
@@ -211,8 +214,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.StatusAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_StatusAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
+                string folder = "clientpainchart";
+                string filename = string.Concat(folder, "_StatusAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
                 model.StatusAttach = path;
             }
@@ -223,8 +227,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.TypeAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_TypeAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.TypeAttachment.FileName);
+                string folder = "clientpainchart";
+                string filename = string.Concat(folder, "_TypeAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream());
                 model.TypeAttach = path;
             }
@@ -235,8 +240,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.LocationAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_LocationAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.LocationAttachment.FileName);
+                string folder = "clientpainchart";
+                string filename = string.Concat(folder, "_LocationAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.LocationAttachment.OpenReadStream());
                 model.LocationAttach = path;
             }
@@ -289,8 +295,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Status Attachment
             if (model.StatusAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_StatusAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
+                string folder = "clientpainchart";
+                string filename = string.Concat(folder, "_StatusAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
                 model.StatusAttach = path;
             }
@@ -301,10 +308,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.TypeAttachment != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Type_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.TypeAttachment.OpenReadStream());
-                model.TypeAttach = pathA;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.TypeAttachment.FileName);
+                string folder = "clientpainchart";
+                string filename = string.Concat(folder, "_TypeAttachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream());
+                model.TypeAttach = path;
             }
             else
             {
@@ -313,10 +321,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.LocationAttachment != null)
             {
-                string folderB = "clientcomplain";
-                string filenameB = string.Concat(folderB, "_Location_", model.ClientId);
-                string pathB = await _fileUpload.UploadFile(folderB, true, filenameB, model.LocationAttachment.OpenReadStream());
-                model.LocationAttach = pathB;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.LocationAttachment.FileName);
+                string folder = "clientpainchart";
+                string filename = string.Concat(folder, "_LocationAttachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.LocationAttachment.OpenReadStream());
+                model.LocationAttach = path;
             }
             else
             {

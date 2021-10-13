@@ -72,6 +72,8 @@ namespace AwesomeCare.Admin.Controllers
                 report.NextDueDate = item.NextDueDate;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.EvidenceOfActionTaken = item.EvidenceOfActionTaken;
+                report.EvidenceFilePath = item.EvidenceFilePath;
                 reports.Add(report);
             }
             return View(reports);

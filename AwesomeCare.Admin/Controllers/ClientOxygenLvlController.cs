@@ -71,6 +71,8 @@ namespace AwesomeCare.Admin.Controllers
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.TargetOxygenAttach = item.TargetOxygenAttach;
+                report.SeeChartAttach = item.SeeChartAttach;
                 reports.Add(report);
             }
 
@@ -207,8 +209,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.SeeChartAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_SeeChartAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
+                string folder = "clientoxygenlevel";
+                string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
                 model.SeeChartAttach = path;
             }
@@ -219,8 +222,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.TargetOxygenAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_TargetOxygenAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetOxygenAttachment.FileName);
+                string folder = "clientoxygenlevel";
+                string filename = string.Concat(folder, "_TargetOxygenAttachment_",extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetOxygenAttachment.OpenReadStream());
                 model.TargetOxygenAttach = path;
             }
@@ -272,7 +276,8 @@ namespace AwesomeCare.Admin.Controllers
             #region Status Attachment
             if (model.SeeChartAttachment != null)
             {
-                string folder = "clientcomplain";
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
+                string folder = "clientoxygenlevel";
                 string filename = string.Concat(folder, "_SeeChartAttachment_", model.ClientId);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
                 model.SeeChartAttach = path;
@@ -284,10 +289,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.TargetOxygenAttachment != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_TargetOxygen_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.TargetOxygenAttachment.OpenReadStream());
-                model.TargetOxygenAttach = pathA;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetOxygenAttachment.FileName);
+                string folder = "clientoxygenlevel";
+                string filename = string.Concat(folder, "_TargetOxygen_", model.ClientId);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetOxygenAttachment.OpenReadStream());
+                model.TargetOxygenAttach = path;
             }
             else
             {

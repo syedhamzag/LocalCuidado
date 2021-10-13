@@ -71,6 +71,9 @@ namespace AwesomeCare.Admin.Controllers
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.ToolUsedAttach = item.ToolUsedAttach;
+                report.MethodUsedAttach = item.MethodUsedAttach;
+                report.StatusAttach = item.StatusAttach;
                 reports.Add(report);
             }
 
@@ -215,8 +218,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.StatusAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_StatusAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
+                string folder = "clienteyehealth";
+                string filename = string.Concat(folder, "_StatusAttachment_",extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
                 model.StatusAttach = path;
             }
@@ -227,8 +231,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.ToolUsedAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_ToolUsedAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.ToolUsedAttachment.FileName);
+                string folder = "clienteyehealth";
+                string filename = string.Concat(folder, "_ToolUsedAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.ToolUsedAttachment.OpenReadStream());
                 model.ToolUsedAttach = path;
             }
@@ -239,8 +244,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.MethodUsedAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_MethodUsedAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.MethodUsedAttachment.FileName);
+                string folder = "clienteyehealth";
+                string filename = string.Concat(folder, "_MethodUsedAttachment_",extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.MethodUsedAttachment.OpenReadStream());
                 model.MethodUsedAttach = path;
             }
@@ -295,8 +301,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Status Attachment
             if (model.StatusAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_Status_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
+                string folder = "clienteyehealth";
+                string filename = string.Concat(folder, "_StatusAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
                 model.StatusAttach = path;
             }
@@ -307,10 +314,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.ToolUsedAttachment != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_ToolUsed_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.ToolUsedAttachment.OpenReadStream());
-                model.ToolUsedAttach = pathA;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.ToolUsedAttachment.FileName);
+                string folder = "clienteyehealth";
+                string filename = string.Concat(folder, "_ToolUsedAttachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ToolUsedAttachment.OpenReadStream());
+                model.ToolUsedAttach = path;
             }
             else
             {
@@ -319,10 +327,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.MethodUsedAttachment != null)
             {
-                string folderB = "clientcomplain";
-                string filenameB = string.Concat(folderB, "_MethodUsed_", model.ClientId);
-                string pathB = await _fileUpload.UploadFile(folderB, true, filenameB, model.MethodUsedAttachment.OpenReadStream());
-                model.MethodUsedAttach = pathB;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.MethodUsedAttachment.FileName);
+                string folder = "clienteyehealth";
+                string filename = string.Concat(folder, "_MethodUsedAttachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.MethodUsedAttachment.OpenReadStream());
+                model.MethodUsedAttach = path;
             }
             else
             {

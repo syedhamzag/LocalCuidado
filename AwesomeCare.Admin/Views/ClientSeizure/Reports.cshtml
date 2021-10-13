@@ -20,35 +20,48 @@
                             <th>Deadline</th>
 
                             <th>Status</th>
-
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
                         {
-                        <tr>
-                            <td>@item.index </td>
-                            <td>@item.data.ClientName</td>
-                            <td>@item.data.Date</td>
-                            <td>@item.data.Deadline</td>
-                            <td>@item.data.StatusName</td>
-
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                        @Html.ActionLink("Edit", "Edit", "ClientSeizure", new { SeizureId = item.data.SeizureId }, new { @class = "dropdown-item" })
-                                        @Html.ActionLink("View", "View", "ClientSeizure", new { SeizId = item.data.SeizureId }, new { @class = "dropdown-item" })
-                                        <button type="button" class="dropdown-item" id="@item.data.SeizureId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
-                                            Email
+                            <tr>
+                                <td>@item.index </td>
+                                <td>@item.data.ClientName</td>
+                                <td>@item.data.Date</td>
+                                <td>@item.data.Deadline</td>
+                                <td>@item.data.StatusName</td>
+                                <td>
+                                    @if (item.data.StatusAttach != "No Image")
+                                    {
+                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.data.StatusAttach" style="margin-left:5px;"><i class="fa fa-file"></i></a>
+                                    }
+                                    @if (item.data.SeizureTypeAttach != "No Image")
+                                    {
+                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.data.SeizureTypeAttach" style="margin-left:5px;"><i class="fa fa-file"></i></a>
+                                    }
+                                    @if (item.data.SeizureLengthAttach != "No Image")
+                                    {
+                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.data.SeizureLength" style="margin-left:5px;"><i class="fa fa-file"></i></a>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         </button>
-                                        @Html.ActionLink("Download", "Download", "ClientSeizure", new { SeizId = item.data.SeizureId }, new { @class = "dropdown-item" })
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Edit", "Edit", "ClientSeizure", new { SeizureId = item.data.SeizureId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("View", "View", "ClientSeizure", new { SeizId = item.data.SeizureId }, new { @class = "dropdown-item" })
+                                            <button type="button" class="dropdown-item" id="@item.data.SeizureId" data-toggle="modal" data-target="#EmailModal" onclick="Setid(this)">
+                                                Email
+                                            </button>
+                                            @Html.ActionLink("Download", "Download", "ClientSeizure", new { SeizId = item.data.SeizureId }, new { @class = "dropdown-item" })
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         }
 
 
@@ -99,11 +112,25 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    function Setid(e)
-    {
-        var Id = e.id;
-        $('#SeizureId').val(Id);
-    }
-</script>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script>
+        $('.datatables').on('click', '.showfile-btn', function () {
+            const showBtn = $(this);
+            const Id = showBtn.data('id');
+            window.open(Id);
+        });
+        function Setid(e) {
+            var Id = e.id;
+            $('#SeizureId').val(Id);
+        }
+    </script>
+}
 

@@ -69,6 +69,8 @@ namespace AwesomeCare.Admin.Controllers
                 report.NextCheckDate = item.NextCheckDate;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.Attachment = item.Attachment;
+                report.EvidenceOfActionTaken = item.EvidenceOfActionTaken;
                 reports.Add(report);
             }
             return View(reports);
@@ -215,8 +217,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Evidence
             if (model.Evidence != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_Evidence_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
+                string folder = "clientmgtvisit";
+                string filename = string.Concat(folder, "_Evidence_",extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
                 model.EvidenceOfActionTaken = path;
             }
@@ -228,8 +231,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.Attach != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_Attach_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "clientmgtvisit";
+                string filename = string.Concat(folder, "_Attach_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
                 model.Attachment = path;
             }
@@ -285,11 +289,24 @@ namespace AwesomeCare.Admin.Controllers
             #region Evidence
             if (model.Attach != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
+                string folder = "clientmgtvisit";
+                string filename = string.Concat(folder, "_Evidence_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
 
+            }
+            else
+            {
+                model.Attachment = model.Attachment;
+            }
+            if (model.Attach != null)
+            {
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "clientmgtvisit";
+                string filename = string.Concat(folder, "_Attach_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
             }
             else
             {
@@ -297,7 +314,7 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-                PutClientMgtVisit put = new PutClientMgtVisit();
+            PutClientMgtVisit put = new PutClientMgtVisit();
                 put.VisitId = model.VisitId;
                 put.Reference = model.Reference;
                 put.ClientId = model.ClientId;

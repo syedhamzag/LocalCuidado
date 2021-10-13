@@ -433,7 +433,7 @@ namespace AwesomeCare.Admin
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                     "{controller=Dashboard}/{action=Dashboard}").RequireAuthorization(apipolicyname);
+                     "{controller=Client}/{action=HomeCare}").RequireAuthorization(apipolicyname);
             });
         }
 
