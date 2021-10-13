@@ -53,11 +53,13 @@
                                 <td>
                                     <div class="btn-group" role="group">
                                         <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             @Html.ActionLink("Nutrition", "Index", "Nutrition", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
-                                            @Html.ActionLink("Rotering", "Index", "Rotering", new { client = client.data.ClientId }, new { @class = "dropdown-item" })
+                                            @*@Html.ActionLink("Rotering", "Index", "Rotering", new { client = client.data.ClientId }, new { @class = "dropdown-item" })*@
+                                            <button type="button" id="btnRotering" class="dropdown-item" data-toggle="modal" data-target="#RoteringModal" data-id="@client.data.ClientId">
+                                                Rotering
+                                            </button>
                                             @Html.ActionLink("Details", "HomeCareDetails", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
                                             @Html.ActionLink("Edit", "EditRegistration", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
                                             <a class="dropdown-item" asp-route-clientId="@client.data.ClientId" asp-action="Medications">Medications</a>
@@ -75,4 +77,69 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="RoteringModal" tabindex="-1" role="dialog" aria-labelledby="RoteringModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="RoteringForm" asp-controller="Rotering" asp-action="Index" method="post">
+                <div class="modal-body">
+                    <div class="card">
 
+                        <div class="header">
+                        </div>
+                        <div class="body">
+                            <div class="form-group">
+                                <input type="hidden" id="clientId" name="client" value="0" />
+                                <label>Please enter pin code</label>
+                                <input type="password" class="form-control" name="pin" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+    <script src="~/js/Notification.js"></script>
+    <script type="text/javascript">
+        $('.datatables').on('click', '#btnRotering', function () {
+            const Btn = $(this);
+            const Id = Btn.data('id');
+            $('#clientId').val(Id);
+        });
+        $('#RoteringForm').submit(function () {
+            const id = $('#clientId').val();
+            const pin = $('#pin').val();
+            alert(id);
+            console.log(pin);
+            if (pin != undefined) {
+                shownotification("Please enter your pin code", "error");
+                return false;
+            }
+            else
+            {
+                if (id > 0)
+                {
+                    return true;
+                }                    
+
+                
+            }
+        });
+    </script>
+        }
