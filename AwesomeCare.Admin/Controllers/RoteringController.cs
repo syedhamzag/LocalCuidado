@@ -48,9 +48,12 @@ namespace AwesomeCare.Admin.Controllers
             _clientRotaService = clientRotaService;
             this.logger = logger;
         }
-        public async Task<IActionResult> Index(int client)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(int client, string pin)
         {
-
+            if (pin != "3107")
+                return RedirectToAction("HomeCare", "Client"); 
             RoteringViewModel model = new RoteringViewModel();
             model.ClientId = client;
             var rotaTypes = await _clientRotaTypeService.Get();
@@ -77,7 +80,7 @@ namespace AwesomeCare.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(RoteringViewModel model, IFormCollection formsCollection)
+        public async Task<IActionResult> _Index(RoteringViewModel model, IFormCollection formsCollection)
         {
 
             List<GetClientRotaType> rotaTypes = HttpContext.Session.Get<List<GetClientRotaType>>("rotaTypes");

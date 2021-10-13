@@ -912,12 +912,21 @@
                 const pin = $('#pin').val();
                 console.log(id);
                 console.log(pin);
-                if (id.length == 0 || id == "" || id == null || pin == "" || pin == null || pin == undefined) {
+                if (id.length == 0) {
                 shownotification("Please select at least one Task", "error");
                     return false;
                 }
                 else {
-                    return true;
+                    if (pin == undefined) {
+
+                        return true;
+                    }
+                    else
+                    {
+                        shownotification("Please enter pin code", "error");
+                        return false;
+                    }
+                    
                 }
             });
 
