@@ -65,6 +65,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.SeeChartAttach = item.SeeChartAttach;
                 reports.Add(report);
             }
             return View(reports);
@@ -200,8 +201,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.SeeChartAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_SeeChart_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
+                string folder = "clientbmi";
+                string filename = string.Concat(folder, "_SeeChart_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
                 model.SeeChartAttach = path;
             }
@@ -252,8 +254,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Status Attachment
             if (model.SeeChartAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_SeeChartAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
+                string folder = "clientbmi";
+                string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
                 model.SeeChartAttach = path;
             }

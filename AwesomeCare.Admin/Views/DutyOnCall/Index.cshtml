@@ -52,7 +52,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <label class="control-label">Time of Call</label>
-                                        <input type="text" class="form-control" asp-for="TimeOfCall" data-provide="timepicker" data-minute-step="5">
+                                        <input type="text" class="form-control" asp-for="TimeOfCall" data-provide="timepicker" data-minute-step="5" onchange="getRefNo()">
                                         <span asp-validation-for="TimeOfCall" class="text-danger"></span>
 
                                     </div>
@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Ref No.</label>
-                                        <input type="text" class="form-control" asp-for="RefNo" />
+                                        <input type="text" class="form-control" asp-for="RefNo" readonly />
                                         <span asp-validation-for="RefNo" class="text-danger"></span>
 
                                     </div>
@@ -234,4 +234,10 @@
 @section Scripts{
     <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script type="text/javascript">
+        function getRefNo() {
+            var refNo = @string.Concat(DateTime.Now.ToString("yyyy"), DateTime.Now.ToString("MM"), DateTime.Now.ToString("dd"), DateTime.Now.ToString("mm"), DateTime.Now.ToString("ss"));
+            $('#RefNo').val(refNo);
+        };
+    </script>
 }

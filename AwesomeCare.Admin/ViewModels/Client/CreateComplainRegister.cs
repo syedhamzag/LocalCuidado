@@ -36,7 +36,6 @@ namespace AwesomeCare.Admin.ViewModels.Client
 
         #region Tabs
         public string ActiveTab { get; set; } = "complaintregister";
-        // public string[] Tabs { get; set; } = new string[] { "" };
         #endregion
         public string ClientName { get; set; }
         public string StatusName { get; set; }

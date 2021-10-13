@@ -71,6 +71,9 @@ namespace AwesomeCare.Admin.Controllers
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.SeizureTypeAttach = item.SeizureTypeAttach;
+                report.SeizureLengthAttach = item.SeizureLengthAttach;
+                report.StatusAttach = item.StatusAttach;
                 reports.Add(report);
             }
 
@@ -211,8 +214,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.StatusAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_StatusAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
+                string folder = "clientseizure";
+                string filename = string.Concat(folder, "_Attachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
                 model.StatusAttach = path;
             }
@@ -223,8 +227,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.SeizureTypeAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_SeizureTypeAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeizureTypeAttachment.FileName);
+                string folder = "clientseizure";
+                string filename = string.Concat(folder, "_Attachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureTypeAttachment.OpenReadStream());
                 model.SeizureTypeAttach = path;
             }
@@ -235,8 +240,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.SeizureLengthAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_SeizureLengthAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeizureLengthAttachment.FileName);
+                string folder = "clientseizure";
+                string filename = string.Concat(folder, "_Attachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureLengthAttachment.OpenReadStream());
                 model.SeizureLengthAttach = path;
             }
@@ -289,8 +295,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Status Attachment
             if (model.StatusAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_Evidence_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
+                string folder = "clientseizure";
+                string filename = string.Concat(folder, "_Attachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
                 model.StatusAttach = path;
             }
@@ -301,10 +308,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.SeizureTypeAttachment != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_SeizureType_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.SeizureTypeAttachment.OpenReadStream());
-                model.SeizureTypeAttach = pathA;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeizureTypeAttachment.FileName);
+                string folder = "clientseizure";
+                string filename = string.Concat(folder, "_Attachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureTypeAttachment.OpenReadStream());
+                model.SeizureTypeAttach = path;
             }
             else
             {
@@ -313,18 +321,19 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.SeizureLengthAttachment != null)
             {
-                string folderB = "clientcomplain";
-                string filenameB = string.Concat(folderB, "_SeizureLength_", model.ClientId);
-                string pathB = await _fileUpload.UploadFile(folderB, true, filenameB, model.SeizureLengthAttachment.OpenReadStream());
-                model.SeizureLengthAttach = pathB;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeizureLengthAttachment.FileName);
+                string folder = "clientseizure";
+                string filename = string.Concat(folder, "_Attachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureLengthAttachment.OpenReadStream());
+                model.SeizureLengthAttach = path;
             }
             else
             {
-                model.StatusAttach = model.StatusAttach;
+                model.SeizureLengthAttach = model.SeizureLengthAttach;
             }
             #endregion
 
-                PutClientSeizure put = new PutClientSeizure();
+            PutClientSeizure put = new PutClientSeizure();
                 put.SeizureId = model.SeizureId;
                 put.ClientId = model.ClientId;
                 put.Reference = model.Reference;

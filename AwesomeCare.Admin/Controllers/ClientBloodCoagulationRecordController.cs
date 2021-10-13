@@ -71,6 +71,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.TargetINRAttach = item.TargetINRAttach;
                 reports.Add(report);
             }
             
@@ -217,8 +218,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.TargetINRAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_TargetINR_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetINRAttachment.FileName);
+                string folder = "clientbloodcoag";
+                string filename = string.Concat(folder, "_TargetINR_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetINRAttachment.OpenReadStream());
                 model.TargetINRAttach = path;
             }
@@ -272,8 +274,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Status Attachment
             if (model.TargetINRAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_TargetINR_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetINRAttachment.FileName);
+                string folder = "clientbloodcoag";
+                string filename = string.Concat(folder, "_TargetINR_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetINRAttachment.OpenReadStream());
                 model.TargetINRAttach = path;
             }

@@ -61,6 +61,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.CONCERNSRAISED = item.CONCERNSRAISED;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.StatusId).Result.ValueName;
+                report.EvidenceFilePath = item.EvidenceFilePath;
                 reports.Add(report);
             }
             return View(reports);
@@ -132,10 +133,10 @@ namespace AwesomeCare.Admin.Controllers
                 #region Evidence
                 if (model.Evidence != null)
                 {
+                    string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                     string folder = "clientcomplain";
-                    string filename = string.Concat(folder, "_", model.IRFNUMBER);
+                    string filename = string.Concat(folder, "_Evidence_", extention);
                     string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
-
                     model.EvidenceFilePath = path;
 
                 }
@@ -229,10 +230,10 @@ namespace AwesomeCare.Admin.Controllers
             #region Evidence
             if (model.Evidence != null)
             {
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_", model.IRFNUMBER);
+                string filename = string.Concat(folder, "_Evidence_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
-
                 model.EvidenceFilePath = path;
             }
             else

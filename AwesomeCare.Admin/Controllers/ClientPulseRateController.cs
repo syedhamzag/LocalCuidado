@@ -71,6 +71,9 @@ namespace AwesomeCare.Admin.Controllers
                 report.Deadline = item.Deadline;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.FullName).FirstOrDefault();
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.TargetPulseAttach = item.TargetPulseAttach;
+                report.SeeChartAttach = item.SeeChartAttach;
+                report.Chart = item.Chart;
                 reports.Add(report);
             }
 
@@ -209,8 +212,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.SeeChartAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_SeeChartAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
+                string folder = "clientpulserate";
+                string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
                 model.SeeChartAttach = path;
             }
@@ -221,8 +225,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.ChartAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_ChartAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.ChartAttachment.FileName);
+                string folder = "clientpulserate";
+                string filename = string.Concat(folder, "_ChartAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.ChartAttachment.OpenReadStream());
                 model.Chart = path;
             }
@@ -233,8 +238,9 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.TargetPulseAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_TargetPulseAttachment_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetPulseAttachment.FileName);
+                string folder = "clientpulserate";
+                string filename = string.Concat(folder, "_TargetPulseAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetPulseAttachment.OpenReadStream());
                 model.TargetPulseAttach = path;
             }
@@ -286,8 +292,9 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.SeeChartAttachment != null)
             {
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_SeeChart_", model.ClientId);
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
+                string folder = "clientpulserate";
+                string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
                 model.SeeChartAttach = path;
             }
@@ -298,10 +305,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.ChartAttachment != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Chart_", model.ClientId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.ChartAttachment.OpenReadStream());
-                model.Chart = pathA;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.ChartAttachment.FileName);
+                string folder = "clientpulserate";
+                string filename = string.Concat(folder, "_ChartAttachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ChartAttachment.OpenReadStream());
+                model.Chart = path;
             }
             else
             {
@@ -310,10 +318,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.TargetPulseAttachment != null)
             {
-                string folderB = "clientcomplain";
-                string filenameB = string.Concat(folderB, "_TargetPulse_", model.ClientId);
-                string pathB = await _fileUpload.UploadFile(folderB, true, filenameB, model.TargetPulseAttachment.OpenReadStream());
-                model.TargetPulseAttach = pathB;
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetPulseAttachment.FileName);
+                string folder = "clientpulserate";
+                string filename = string.Concat(folder, "_TargetPulseAttachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetPulseAttachment.OpenReadStream());
+                model.TargetPulseAttach = path;
             }
             else
             {

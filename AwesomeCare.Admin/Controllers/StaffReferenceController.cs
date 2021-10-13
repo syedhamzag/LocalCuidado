@@ -64,6 +64,7 @@ namespace AwesomeCare.Admin.Controllers
                 report.Date = item.Date;
                 report.RefreeName = item.RefreeName;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.Attachment = item.Attachment;
                 reports.Add(report);
             }
             return View(reports);
@@ -207,10 +208,11 @@ namespace AwesomeCare.Admin.Controllers
             #region Attachment
             if (model.Attach != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.StaffId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
+                string extention = model.StaffId + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "staffreference";
+                string filename = string.Concat(folder, "_Attachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
             }
             else
             {
@@ -242,10 +244,11 @@ namespace AwesomeCare.Admin.Controllers
             #region Evidence
             if (model.Attach != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.StaffId);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Attachment = pathA;
+                string extention = model.StaffId + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "staffreference";
+                string filename = string.Concat(folder, "_Attachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
 
             }
             else
