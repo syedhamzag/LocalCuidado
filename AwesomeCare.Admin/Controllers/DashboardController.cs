@@ -1151,8 +1151,8 @@ namespace AwesomeCare.Admin.Controllers
                 report.ConcernNote = item.ConcernNote;
                 report.ActionRequired = item.ActionRequired;
                 report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
-                report.ManagerInvolved = item.GetManagerInvolved.ToList();
-                report.StaffInvolved = item.GetStaffInvolved.ToList();
+                report.ManagerInvolved = item.ManagerInvolved.ToList();
+                report.StaffInvolved = item.StaffInvolved.ToList();
                 reports.Add(report);
             }
             return reports;

@@ -8,8 +8,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.TrackingConcernNote
     {
         public PutTrackingConcernNote()
         {
-            PutStaffInvolved = new List<PutTrackingConcernStaff>();
-            PutManagerInvolved = new List<PutTrackingConcernManager>();
+            StaffInvolved = new List<PutTrackingConcernStaff>();
+            ManagerInvolved = new List<PutTrackingConcernManager>();
         }
 
         public int Ref { get; set; }
@@ -24,7 +24,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.TrackingConcernNote
         public string Remarks { get; set; }
         public string Attachment { get; set; }
 
-        public virtual List<PutTrackingConcernStaff> PutStaffInvolved { get; set; }
-        public virtual List<PutTrackingConcernManager> PutManagerInvolved { get; set; }
+        public virtual List<PutTrackingConcernStaff> StaffInvolved { get; set; }
+        public virtual List<PutTrackingConcernManager> ManagerInvolved { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.TrackingConcernNote;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class TrackingConcernNoteController : ControllerBase
@@ -65,7 +67,7 @@ namespace AwesomeCare.API.Controllers
                                  Status = c.Status,
                                  Attachment = c.Attachment,
 
-                                 GetManagerInvolved = (from com in _trackingConcernNoteManagerRepository.Table
+                                 ManagerInvolved = (from com in _trackingConcernNoteManagerRepository.Table
                                                 join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
                                                 where com.TrackingConcernNoteId == c.Ref
                                                 select new GetTrackingConcernManager
@@ -74,7 +76,7 @@ namespace AwesomeCare.API.Controllers
                                                     StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
 
                                                 }).ToList(),
-                                 GetStaffInvolved = (from com in _trackingConcernNoteStaffRepository.Table
+                                 StaffInvolved = (from com in _trackingConcernNoteStaffRepository.Table
                                                       join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
                                                       where com.TrackingConcernNoteId == c.Ref
                                                       select new GetTrackingConcernStaff
@@ -111,7 +113,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            foreach (var model in models.PutManagerInvolved.ToList())
+            foreach (var model in models.ManagerInvolved.ToList())
             {
                 var entity = _dbContext.Set<TrackingConcernManager>();
                 var filterentity = entity.Where(c => c.TrackingConcernNoteId == model.TrackingConcernNoteId).ToList();
@@ -124,7 +126,7 @@ namespace AwesomeCare.API.Controllers
 
                 }
             }
-            foreach (var model in models.PutStaffInvolved.ToList())
+            foreach (var model in models.StaffInvolved.ToList())
             {
                 var entity = _dbContext.Set<TrackingConcernStaff>();
                 var filterentity = entity.Where(c => c.TrackingConcernNoteId == model.TrackingConcernNoteId).ToList();
@@ -169,7 +171,7 @@ namespace AwesomeCare.API.Controllers
                                        Status = c.Status,
                                        Attachment = c.Attachment,
 
-                                       GetManagerInvolved = (from com in _trackingConcernNoteManagerRepository.Table
+                                       ManagerInvolved = (from com in _trackingConcernNoteManagerRepository.Table
                                                              join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
                                                              where com.TrackingConcernNoteId == c.Ref
                                                              select new GetTrackingConcernManager
@@ -178,7 +180,7 @@ namespace AwesomeCare.API.Controllers
                                                                  StaffName = string.Concat(staff.FirstName, " ", staff.MiddleName, " ", staff.LastName)
 
                                                              }).ToList(),
-                                       GetStaffInvolved = (from com in _trackingConcernNoteStaffRepository.Table
+                                       StaffInvolved = (from com in _trackingConcernNoteStaffRepository.Table
                                                            join staff in _staffRepository.Table on com.StaffPersonalInfoId equals staff.StaffPersonalInfoId
                                                            where com.TrackingConcernNoteId == c.Ref
                                                            select new GetTrackingConcernStaff

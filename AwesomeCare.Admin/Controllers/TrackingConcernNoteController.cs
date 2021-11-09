@@ -127,8 +127,8 @@ namespace AwesomeCare.Admin.Controllers
             track.Remarks = model.Remarks;
             track.Status = model.Status;
             track.Attachment = model.Attachment;
-            track.PostManagerInvolved = model.Manager.Select(s => new PostTrackingConcernManager { StaffPersonalInfoId = s, TrackingConcernNoteId = model.Ref }).ToList();
-            track.PostStaffInvolved = model.Staff.Select(s => new PostTrackingConcernStaff { StaffPersonalInfoId = s, TrackingConcernNoteId = model.Ref }).ToList();
+            track.ManagerInvolved = model.Manager.Select(s => new PostTrackingConcernManager { StaffPersonalInfoId = s, TrackingConcernNoteId = model.Ref }).ToList();
+            track.StaffInvolved = model.Staff.Select(s => new PostTrackingConcernStaff { StaffPersonalInfoId = s, TrackingConcernNoteId = model.Ref }).ToList();
 
 
             var json = JsonConvert.SerializeObject(track);
@@ -174,8 +174,8 @@ namespace AwesomeCare.Admin.Controllers
             track.Remarks = model.Remarks;
             track.Status = model.Status;
             track.Attachment = model.Attachment;
-            track.PutManagerInvolved = model.Manager.Select(s => new PutTrackingConcernManager { StaffPersonalInfoId = s, TrackingConcernNoteId = model.Ref }).ToList();
-            track.PutStaffInvolved = model.Staff.Select(s => new PutTrackingConcernStaff { StaffPersonalInfoId = s, TrackingConcernNoteId = model.Ref }).ToList();
+            track.ManagerInvolved = model.Manager.Select(s => new PutTrackingConcernManager { StaffPersonalInfoId = s, TrackingConcernNoteId = model.Ref }).ToList();
+            track.StaffInvolved = model.Staff.Select(s => new PutTrackingConcernStaff { StaffPersonalInfoId = s, TrackingConcernNoteId = model.Ref }).ToList();
 
             var entity = await _trackingConcernNoteService.Put(track);
             SetOperationStatus(new Models.OperationStatus
