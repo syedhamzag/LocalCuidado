@@ -105,6 +105,7 @@ using AwesomeCare.Admin.Services.TaskBoard;
 using AwesomeCare.Admin.Services.HospitalEntry;
 using AwesomeCare.Admin.Services.HospitalExit;
 using AwesomeCare.Admin.Services.DutyOnCall;
+using AwesomeCare.Admin.Services.TrackingConcernNote;
 
 namespace AwesomeCare.Admin
 {
@@ -975,6 +976,12 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IDutyOnCallService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("trackingconcernnote", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ITrackingConcernNote>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
