@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class DutyOnCallController : ControllerBase

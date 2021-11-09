@@ -50,6 +50,8 @@ using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.Admin.Services.TaskBoard;
 using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
 using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using AwesomeCare.Admin.Services.TrackingConcernNote;
+using AwesomeCare.DataTransferObject.DTOs.TrackingConcernNote;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -91,6 +93,7 @@ namespace AwesomeCare.Admin.Controllers
         private IDutyOnCallService _oncallService;
         private IBaseRecordService _baseService;
         private ITaskBoardService _taskService;
+        private ITrackingConcernNote _concernNote;
         #endregion
 
         public DashboardController(IDashboardService dashboardService, IFileUpload fileUpload, IRotaTaskService rotaTaskService,
@@ -103,7 +106,8 @@ namespace AwesomeCare.Admin.Controllers
         IClientSeizureService clientSeizureService, IClientWoundCareService clientWoundService, IStaffAdlObsService staffAdlObsService,
         IStaffKeyWorkerVoiceService staffKeyWorkerService, IStaffMedCompService staffMedCompService, IStaffOneToOneService staffOneToOneService,
         IStaffReferenceService staffReferenceService, IStaffSpotCheckService staffSpotCheckService, IStaffSupervisionAppraisalService staffSupervisionService,
-        IStaffSurveyService staffSurveyService, IStaffService staffService, IClientService clientService, IDutyOnCallService oncallService, IBaseRecordService baseService, ITaskBoardService taskService) : base(fileUpload)
+        IStaffSurveyService staffSurveyService, IStaffService staffService, IClientService clientService, IDutyOnCallService oncallService, IBaseRecordService baseService, ITaskBoardService taskService,
+        ITrackingConcernNote concernNote) : base(fileUpload)
         {
             #region Services
             _dashboardService = dashboardService;
@@ -141,6 +145,7 @@ namespace AwesomeCare.Admin.Controllers
             _oncallService = oncallService;
             _baseService = baseService;
             _taskService = taskService;
+            _concernNote = concernNote;
             #endregion
         }
         public async Task<IActionResult> Dashboard()
@@ -204,6 +209,7 @@ namespace AwesomeCare.Admin.Controllers
             var rating = await _staffService.GetClientFeedback();
             var oncall = await _oncallService.GetWithPersonToAct();
             var task = await _taskService.GetWithStaff();
+            var concern = await _concernNote.GetWithChild();
             var baserecordItem = await _baseService.GetBaseRecordsWithItems();
             #endregion
 
@@ -1090,6 +1096,7 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.StaffRating = GetStaffRating(rating);
             dashboard.GetClients = GetClients(getClient);
             dashboard.OnCall = GetOnCall(oncall, getClient);
+            dashboard.concernNotes = GetConcernNotes(concern);
             dashboard.GetStaffPersonalInfos = GetStaffs(getStaff);
             dashboard.LiveTrackerM = GetTrackerMonthly(startDateM, endDate, months, rotaAdmins);
             dashboard.LiveTrackerW = GetTrackerWeekly(startDateW, endDate, days, rotaAdmins);
@@ -1128,6 +1135,24 @@ namespace AwesomeCare.Admin.Controllers
                 report.NotificationStatusName = _baseService.GetBaseRecordItemById(item.NotificationStatus).Result.ValueName;
                 report.ClientName = client.Where(s => s.ClientId == item.ClientId).Select(s => s.Firstname +" "+ s.Middlename +" "+ s.Surname).FirstOrDefault();
                 report.StaffName = item.PersonToAct.FirstOrDefault().StaffName;
+                reports.Add(report);
+            }
+            return reports;
+        }
+        private List<ConcernNotes> GetConcernNotes(List<GetTrackingConcernNote> concern)
+        {
+            List<ConcernNotes> reports = new List<ConcernNotes>();
+            foreach (GetTrackingConcernNote item in concern)
+            {
+                var report = new ConcernNotes();
+                report.Ref = item.Ref;
+                report.DateOfIncident = item.DateOfIncident;
+                report.ExpectedDeadline = item.ExpectedDeadline;
+                report.ConcernNote = item.ConcernNote;
+                report.ActionRequired = item.ActionRequired;
+                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.ManagerInvolved = item.ManagerInvolved.ToList();
+                report.StaffInvolved = item.StaffInvolved.ToList();
                 reports.Add(report);
             }
             return reports;

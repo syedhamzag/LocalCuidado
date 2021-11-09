@@ -3,6 +3,7 @@ using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
+using AwesomeCare.DataTransferObject.DTOs.TrackingConcernNote;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +14,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
     {
         public List<OnCall> OnCall { get; set; }
 
+        public List<ConcernNotes> concernNotes { get; set; }
         public Dictionary<string, List<GetTaskBoard>> GetTaskBoard { get; set; }
         public int ActiveUser { get; set; }
         public int ApprovedStaff { get; set; }

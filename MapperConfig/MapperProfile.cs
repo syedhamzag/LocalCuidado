@@ -117,6 +117,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.Staff.InfectionControl;
 using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
+using AwesomeCare.DataTransferObject.DTOs.TrackingConcernNote;
 
 namespace MapperConfig
 {
@@ -2518,6 +2519,30 @@ namespace MapperConfig
                 .ForMember(dto => dto.DutyOnCall, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
             CreateMap<DutyOnCallPersonResponsible, GetDutyOnCallPersonResponsible>()
+                .ForMember(dto => dto.StaffName, mem => mem.Ignore());
+            #endregion
+
+            #region TrackingConcernNote
+            CreateMap<PutTrackingConcernNote, TrackingConcernNote>();
+            CreateMap<PostTrackingConcernNote, TrackingConcernNote>();
+            CreateMap<TrackingConcernNote, GetTrackingConcernNote>();
+
+            CreateMap<PutTrackingConcernManager, TrackingConcernManager>()
+                .ForMember(dto => dto.TrackingConcernNote, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<PostTrackingConcernManager, TrackingConcernManager>()
+                .ForMember(dto => dto.TrackingConcernNote, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<TrackingConcernManager, GetTrackingConcernManager>()
+                .ForMember(dto => dto.StaffName, mem => mem.Ignore());
+
+            CreateMap<PutTrackingConcernStaff, TrackingConcernStaff>()
+                .ForMember(dto => dto.TrackingConcernNote, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<PostTrackingConcernStaff, TrackingConcernStaff>()
+                .ForMember(dto => dto.TrackingConcernNote, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<TrackingConcernStaff, GetTrackingConcernStaff>()
                 .ForMember(dto => dto.StaffName, mem => mem.Ignore());
             #endregion
         }
