@@ -407,24 +407,58 @@
                             <tbody>
                                 @foreach (var item in Model.OnCall)
                                 {
-                                    
-                                        <tr>
 
-                                            <td><a href="/DutyOnCall/Edit?DutyOnCallId=@item.DutyOnCallId" title="Edit"><i class="icon-note"></i></a></td>
-                                            <td>@item.Date.ToString("yyyy/MM/dd") </td>
-                                            <td style="white-space:normal;">@item.StaffName</td>
-                                            <td style="white-space:normal;">@item.ClientName</td>
-                                            <td style="white-space:normal;">@item.Concern</td>
-                                            <td>@item.NotificationStatusName</td>
-                                            <td>@item.StatusName</td>
+                                    <tr>
 
-                                        </tr>
-                                    
+                                        <td><a href="/DutyOnCall/Edit?DutyOnCallId=@item.DutyOnCallId" title="Edit"><i class="icon-note"></i></a></td>
+                                        <td>@item.Date.ToString("yyyy/MM/dd") </td>
+                                        <td style="white-space:normal;">@item.StaffName</td>
+                                        <td style="white-space:normal;">@item.ClientName</td>
+                                        <td style="white-space:normal;">@item.Concern</td>
+                                        <td>@item.NotificationStatusName</td>
+                                        <td>@item.StatusName</td>
+
+                                    </tr>
+
                                 }
                             </tbody>
                         </table>
                     </div>
+                    <div class="tab-pane" id="concern">
+                        <table class="table m-b-0 datatables">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th></th>
+                                    <th>Ref</th>
+                                    <th>Date of Incident</th>
+                                    <th>Deadline</th>
+                                    <th>Staff</th>
+                                    <th>Manager</th>
+                                    <th>Concern</th>
+                                    <th>Action Required</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.concernNotes)
+                                {
 
+                                    <tr>
+
+                                        <td><a href="/DutyOnCall/Edit?DutyOnCallId=@item.Ref" title="Edit"><i class="icon-note"></i></a></td>
+                                        <td>@item.DateOfIncident.ToString("yyyy/MM/dd") </td>
+                                        <td style="white-space:normal;">@item.GetStaffInvolved</td>
+                                        <td style="white-space:normal;">@item.GetManagerInvolved</td>
+                                        <td style="white-space:normal;">@item.ConcernNote</td>
+                                        <td>@item.ActionRequired</td>
+                                        <td>@item.StatusName</td>
+
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
