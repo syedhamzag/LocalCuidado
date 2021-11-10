@@ -316,6 +316,7 @@ namespace MapperConfig
 
             CreateMap<Client, GetClientForEdit>()
                 .ForMember(dto => dto.ClientImage, mem => mem.Ignore())
+                .ForMember(dto => dto.InvolvingPartyCount, mem => mem.Ignore())
                 .ForMember(dto => dto.InvolvingParties, mem => mem.MapFrom(src => src.InvolvingParties))
                 .ForMember(dto => dto.RegulatoryContact, mem => mem.MapFrom(src => src.RegulatoryContact));
             // .ForMember(dto=>dto.)

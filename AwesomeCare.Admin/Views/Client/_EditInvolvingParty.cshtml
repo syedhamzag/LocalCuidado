@@ -5,11 +5,15 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 <h5>Involving Parties</h5>
-<input type="hidden" asp-for="@Model.InvolvingParties.FirstOrDefault().ClientId" />
-<table class="table table-bordered table-hover">
+<input type="hidden" asp-for="@Model.ClientId" />
+<div class="form-group">
+    <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
+    <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
+</div>
+<input type="hidden" asp-for="@Model.InvolvingPartyCount" />
+<table class="table table-bordered table-hover" id="InvolvingParty">
     <thead>
         <tr>
-            <th></th>
             <th></th>
             <th>NAME</th>
             <th>ADDRESS</th>
@@ -23,10 +27,8 @@
         {
             <tr>
                 <td>
-                    @*<input type="checkbox" asp-for="@Model.ElementAt(r).IsSelected" />*@
-                </td>
-                <td>
                     @*@Model.ElementAt(r).ItemName*@
+                    <input type="hidden" asp-for="@Model.InvolvingParties.ElementAt(r).ClientInvolvingPartyId" />
                     <input type="hidden" asp-for="@Model.InvolvingParties.ElementAt(r).ClientInvolvingPartyItemId" />
                     @*<input type="hidden" asp-for="@Model.ElementAt(r).ItemName" />*@
 
@@ -38,6 +40,46 @@
                 <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Relationship" type="text" class="form-control" /></td>
             </tr>
         }
-       
+
+    </tbody>
+</table>
+<table class="table table-bordered table-hover" id="Involving" style="display:none;">
+    <thead>
+        <tr>
+            <th></th>
+            <th>NAME</th>
+            <th>ADDRESS</th>
+            <th>EMAIL</th>
+            <th>TELEPHONE</th>
+            <th>RELATIONSHIP</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+
+
+
+
+                <input type="hidden" id="ClientInvolvingPartyItemId" name="ClientInvolvingPartyItemId" value="0" />
+
+                <select class="form-control" id="itemIdcmb">
+                    <option value="1">Social Worker</option>
+                    <option value="2">GP (General Practional)</option>
+                    <option value="3">NOK (Next of Kin)</option>
+                    <option value="5">FAMILY</option>
+                    <option value="6">DISTRICT NURSE</option>
+                    <option value="7">PHARMACY</option>
+                </select>
+
+                <input type="hidden" id="ClientInvolvingPartyItemId" name="ClientInvolvingPartyId" value="0" />
+            </td>
+            <td><input asp-for="@Model.InvolvingParties.FirstOrDefault().Name" type="text" class="form-control" value="" /></td>
+            <td><input asp-for="@Model.InvolvingParties.FirstOrDefault().Address" type="text" class="form-control" value="" /></td>
+            <td><input asp-for="@Model.InvolvingParties.FirstOrDefault().Email" type="text" class="form-control" value="" /></td>
+            <td><input asp-for="@Model.InvolvingParties.FirstOrDefault().Telephone" type="text" class="form-control" value="" /></td>
+            <td><input asp-for="@Model.InvolvingParties.FirstOrDefault().Relationship" type="text" class="form-control" value="" /></td>
+        </tr>
+
     </tbody>
 </table>
