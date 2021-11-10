@@ -6,6 +6,7 @@ using AutoMapper;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -83,9 +84,8 @@ namespace AwesomeCare.API.Controllers
             return Ok(getClientInvParty);
         }
 
-
         [HttpPut()]
-        [Route("action")]
+        [Route("[action]")]
         public async Task<IActionResult> Put([FromBody] List<PutClientInvolvingParty> model)
         {
 
@@ -95,13 +95,18 @@ namespace AwesomeCare.API.Controllers
             }
             foreach (var item in model)
             {
-                var entity = await _clientInvolvingPartyRepository.GetEntity(item.ClientInvolvingPartyItemId);
+                var entity = await _clientInvolvingPartyRepository.GetEntity(item.ClientInvolvingPartyId);
                 if (entity == null)
-                    return NotFound();
+                {
+                    var createInvolvingParty = Mapper.Map(item, entity);
+                    await _clientInvolvingPartyRepository.InsertEntity(createInvolvingParty);
 
-                var clientInvolvingParty = Mapper.Map(model, entity);
-                await _clientInvolvingPartyRepository.UpdateEntity(clientInvolvingParty);
-
+                }
+                else
+                {
+                    var clientInvolvingParty = Mapper.Map(item, entity);
+                    await _clientInvolvingPartyRepository.UpdateEntity(clientInvolvingParty);
+                }                
             }        
             return Ok();
 

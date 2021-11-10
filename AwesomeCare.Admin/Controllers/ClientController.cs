@@ -44,7 +44,7 @@ namespace AwesomeCare.Admin.Controllers
     public class ClientController : BaseController
     {
         private readonly IClientService _clientService;
-        private readonly IClientInvolvingParty _clientInvolvingPartyService;
+        private IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
         private readonly IClientCareDetails _clientCareDetails;
         private readonly IWebHostEnvironment _env;
@@ -370,6 +370,7 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> EditRegistration(int? clientId)
         {
             var result = await _clientService.GetClientForEdit(clientId.Value);
+            result.InvolvingPartyCount = result.InvolvingParties.Count;
             return View(result);
         }
 
@@ -409,19 +410,42 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _EditInvolvingParties(GetClientForEdit model)
+        public async Task<IActionResult> _EditInvolvingParties(GetClientForEdit model, IFormCollection formcollection)
         {
 
             if (model == null || !ModelState.IsValid)
             {
                 return View("EditRegistration", model);
             }
-            var putClient = Mapper.Map<List<PutClientInvolvingParty>>(model.InvolvingParties);
-            var result = await _clientInvolvingPartyService.Put(putClient);
+            List<PutClientInvolvingParty> puts = new List<PutClientInvolvingParty>();
+            for (int i = 0; i < model.InvolvingPartyCount; i++)
+            {
+                PutClientInvolvingParty put = new PutClientInvolvingParty();
+                var item = int.Parse(formcollection["ClientInvolvingPartyItemId"][i]);
+                var party = int.Parse(formcollection["ClientInvolvingPartyId"][i]);
+                var tel = formcollection["Telephone"][i];
+                var address = formcollection["Address"][i];
+                var email = formcollection["Email"][i];
+                var name = formcollection["Name"][i];
+                var relation = formcollection["Relationship"][i];
+                put.ClientInvolvingPartyId = party;
+                put.ClientId = model.ClientId;
+                put.Address = address;
+                put.Email = email;
+                put.Name = name;
+                put.Relationship = relation;
+                put.Telephone = tel;
+                put.ClientInvolvingPartyItemId = item;
+                puts.Add(put);
+            }
+            var json = JsonConvert.SerializeObject(puts);
+            var result = await _clientInvolvingPartyService.Put(puts);
+            var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "Client Involving Party successfully updated" : "An Error Occurred" });
             if (!result.IsSuccessStatusCode )
             {
+                model.InvolvingParties = Mapper.Map<List<GetClientInvolvingPartyForEdit>>(puts);
                 // model.DeleteFileFromDisk(_env);
                 return View("EditRegistration", model);
             }

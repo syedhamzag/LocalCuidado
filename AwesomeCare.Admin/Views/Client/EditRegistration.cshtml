@@ -80,9 +80,59 @@
     <script src="../assets/js/pages/forms/form-wizard.js"></script>
     <script src="../assets/js/pages/forms/dropify.js"></script>
     <script>
-        $(document).ready(function () {
+        $(function () {
+            var table = $('#InvolvingParty').DataTable({
+                scrollCollapse: true,
+                select: {
+                    style: 'single'
+                },
+                searching: false, paging: false, info: false
+            });
 
-        })
+            var counter = $("#InvolvingPartyCount").val();
+
+            $('#Addrow').on('click', function () {
+                counter++;
+                var clone = $("#Involving tr:last").clone();
+                clone.attr('id', 'row-' + counter);
+                table.rows.add(clone).draw();
+                $('#InvolvingPartyCount').val(counter);
+
+                $("#InvolvingParty tbody tr select").on("change", function () {
+                    var value = $(this).val();
+                    var txt = $(this).parent().children().first();
+                    console.log(txt);
+                    alert(txt.val(value));
+                    //$(txt).val(value);
+
+                });
+
+            });
+
+            $('#InvolvingParty tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+
+            $('#Delrow').click(function () {
+                const id = table.row('.selected').id();
+                if (table.row('.selected').length > 0) {
+                    const row = table.rows('.selected').remove().draw();
+                    counter--;
+                    $('#InvolvingPartyCount').val(counter);
+                }
+                else {
+                    alert("Please select row for delete !");
+                }
+            });
+
+            
+        });    
     </script>
 }
 
