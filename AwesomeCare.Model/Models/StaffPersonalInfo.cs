@@ -41,6 +41,10 @@ namespace AwesomeCare.Model.Models
             HospitalExitOfficerToTakeAction = new HashSet<HospitalExitOfficerToTakeAction>();
             StaffPersonalityTest = new HashSet<StaffPersonalityTest>();
             StaffInfectionControl = new HashSet<StaffInfectionControl>();
+            StaffCompetenceTest = new HashSet<StaffCompetenceTest>();
+            StaffInterview = new HashSet<StaffInterview>();
+            StaffHealth = new HashSet<StaffHealth>();
+            StaffShadowing = new HashSet<StaffShadowing>();
         }
 
         public int StaffPersonalInfoId { get; set; }
@@ -129,6 +133,10 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<HospitalEntryPersonToTakeAction> HospitalEntryPersonToTakeAction { get; set; }
         public virtual ICollection<HospitalExitOfficerToTakeAction> HospitalExitOfficerToTakeAction { get; set; }
         public virtual ICollection<StaffPersonalityTest> StaffPersonalityTest { get; set; }
+        public virtual ICollection<StaffCompetenceTest> StaffCompetenceTest { get; set; }
+        public virtual ICollection<StaffInterview> StaffInterview { get; set; }
+        public virtual ICollection<StaffHealth> StaffHealth { get; set; }
+        public virtual ICollection<StaffShadowing> StaffShadowing { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
