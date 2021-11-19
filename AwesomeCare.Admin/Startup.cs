@@ -106,6 +106,10 @@ using AwesomeCare.Admin.Services.HospitalEntry;
 using AwesomeCare.Admin.Services.HospitalExit;
 using AwesomeCare.Admin.Services.DutyOnCall;
 using AwesomeCare.Admin.Services.TrackingConcernNote;
+using AwesomeCare.Admin.Services.StaffCompetenceTest;
+using AwesomeCare.Admin.Services.StaffHealth;
+using AwesomeCare.Admin.Services.StaffInterview;
+using AwesomeCare.Admin.Services.StaffShadowing;
 
 namespace AwesomeCare.Admin
 {
@@ -982,6 +986,30 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ITrackingConcernNote>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("competencetest", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffCompetenceTestService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffhealth", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffHealthService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffinterview", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffInterviewService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffshadowing", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffShadowingService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }

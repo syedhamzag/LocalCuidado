@@ -13,6 +13,10 @@ using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
 using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.Staff.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
+using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
+using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
+using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
@@ -35,8 +39,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             GetStaffReference = new List<GetStaffReference>();
             GetStaffPersonalityTest = new List<GetStaffPersonalityTest>();
             GetStaffInfectionControl = new List<GetStaffInfectionControl>();
+            GetStaffCompetenceTest = new List<GetStaffCompetenceTest>();
+            GetStaffHealth = new List<GetStaffHealth>();
+            GetStaffInterview  = new List<GetStaffInterview>();
+            GetStaffShadowing = new List<GetStaffShadowing>();
 
-        }
+    }
         public List<GetStaffEducation> Education { get; set; }
         public List<GetStaffTraining> Trainings { get; set; }
         public List<GetStaffReferee> References { get; set; }
@@ -52,6 +60,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetStaffReference> GetStaffReference { get; set; }
         public List<GetStaffPersonalityTest> GetStaffPersonalityTest { get; set; }
         public List<GetStaffInfectionControl> GetStaffInfectionControl { get; set; }
+        public List<GetStaffCompetenceTest> GetStaffCompetenceTest { get; set; }
+        public List<GetStaffHealth> GetStaffHealth { get; set; }
+        public List<GetStaffInterview> GetStaffInterview{ get; set; }
+        public List<GetStaffShadowing> GetStaffShadowing { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]

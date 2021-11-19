@@ -143,20 +143,5 @@ namespace AwesomeCare.Admin.Controllers
 
             return RedirectToAction("HomeCareDetails","Client", new { clientId = model.ClientId });
         }
-
-        //public async Task<GetHomeRiskAssessment> GetHomeRisk(int homeRiskId)
-        //{
-        //    var home = await _clientHomeRiskAssessment.Get(homeRiskId);
-        //    var putEntity = new GetHomeRiskAssessment
-        //    {
-        //        HomeRiskAssessmentId = home.HomeRiskAssessmentId,
-        //        ClientId = home.ClientId,
-        //        Heading = home.Heading,
-        //        GetHomeRiskAssessmentTask = home.GetHomeRiskAssessmentTask
-        //    };
-        //    return putEntity;
-        //}
-
-
     }
 }

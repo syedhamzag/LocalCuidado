@@ -9,6 +9,9 @@ using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
+using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
+using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
+using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
 using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
 using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
@@ -16,6 +19,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffReference;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
 using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
@@ -340,6 +344,31 @@ namespace AwesomeCare.API.Controllers
                                                                    Question = s.Question,
                                                                    Answer = s.Answer
                                                                }).ToList(),
+                                    GetStaffCompetenceTest = (from s in st.StaffCompetenceTest
+                                                              select new GetStaffCompetenceTest
+                                                              {
+                                                                  StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                                  Heading = s.Heading
+                                                              }).ToList(),
+                                    GetStaffHealth = (from s in st.StaffHealth
+                                                      select new GetStaffHealth
+                                                      {
+                                                          StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                          Heading = s.Heading
+                                                      }).ToList(),
+                                    GetStaffInterview = (from s in st.StaffInterview
+                                                         select new GetStaffInterview
+                                                         {
+                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                             Heading = s.Heading
+                                                         }).ToList(),
+                                    GetStaffShadowing = (from s in st.StaffShadowing
+                                                         select new GetStaffShadowing
+                                                         {
+                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                             Heading = s.Heading
+                                                         }).ToList(),
+
                                 }).FirstOrDefault();
 
             return Ok(staffProfile);
