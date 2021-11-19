@@ -1,8 +1,8 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
 
-@model CreateStaffShadowing
+@model CreateStaffCompetenceTest
 @{
-    ViewData["Title"] = "Staff Shadowing Task";
+    ViewData["Title"] = "Staff CompetenceTest Task";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -18,7 +18,7 @@
             <div class="card-body">
                 <form asp-action="Create" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
-                    <input type="hidden" asp-for="@Model.StaffShadowingId" />
+                    <input type="hidden" asp-for="@Model.StaffCompetenceTestId" />
                     <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
                     <div class="row">
                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
@@ -52,24 +52,24 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).StaffShadowingTaskId" />
-                                                    <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Title" asp-items="null" />
+                                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffCompetenceTestTaskId==item.StaffCompetenceTestTaskId).StaffCompetenceTestTaskId" />
+                                                    <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffCompetenceTestTaskId==item.StaffCompetenceTestTaskId).Title" asp-items="null" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <baserecord asp-key="Staff_Shadowing_Answer" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Answer" asp-items="null" />
+                                                    <baserecord asp-key="Staff_CompetenceTest_Answer" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffCompetenceTestTaskId==item.StaffCompetenceTestTaskId).Answer" asp-items="null" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Comment" type="text" class="form-control" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffCompetenceTestTaskId==item.StaffCompetenceTestTaskId).Comment" type="text" class="form-control" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Point" type="text" class="form-control" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffCompetenceTestTaskId==item.StaffCompetenceTestTaskId).Point" type="text" class="form-control" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Point" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Score" type="text" class="form-control" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffCompetenceTestTaskId==item.StaffCompetenceTestTaskId).Score" type="text" class="form-control" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Score" class="text-danger"></span>
                                                 </td>
                                             </tr>
@@ -118,12 +118,12 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().StaffShadowingTaskId" value="0" />
+                                <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().StaffCompetenceTestTaskId" value="0" />
                                 <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault().Title" asp-items="null" />
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
                             </td>
                             <td>
-                                <baserecord asp-key="Staff_Shadowing_Answer" asp-for="@Model.Tasks.FirstOrDefault().Answer" asp-items="null" />
+                                <baserecord asp-key="Staff_CompetenceTest_Answer" asp-for="@Model.Tasks.FirstOrDefault().Answer" asp-items="null" />
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
                             </td>
                             <td>
@@ -209,4 +209,5 @@
         });
     </script>
 }
+
 

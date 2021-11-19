@@ -1,8 +1,8 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
 
-@model CreateStaffShadowing
+@model CreateStaffInterview
 @{
-    ViewData["Title"] = "Staff Shadowing Task";
+    ViewData["Title"] = "Staff Interview Task";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -18,7 +18,7 @@
             <div class="card-body">
                 <form asp-action="Create" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
-                    <input type="hidden" asp-for="@Model.StaffShadowingId" />
+                    <input type="hidden" asp-for="@Model.StaffInterviewId" />
                     <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
                     <div class="row">
                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
@@ -52,24 +52,24 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).StaffShadowingTaskId" />
-                                                    <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Title" asp-items="null" />
+                                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).StaffInterviewTaskId" />
+                                                    <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Title" asp-items="null" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <baserecord asp-key="Staff_Shadowing_Answer" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Answer" asp-items="null" />
+                                                    <baserecord asp-key="Staff_Interview_Answer" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Answer" asp-items="null" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Comment" type="text" class="form-control" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Comment" type="text" class="form-control" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Point" type="text" class="form-control" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Point" type="text" class="form-control" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Point" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffShadowingTaskId==item.StaffShadowingTaskId).Score" type="text" class="form-control" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Score" type="text" class="form-control" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Score" class="text-danger"></span>
                                                 </td>
                                             </tr>
@@ -118,12 +118,12 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().StaffShadowingTaskId" value="0" />
+                                <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().StaffInterviewTaskId" value="0" />
                                 <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault().Title" asp-items="null" />
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
                             </td>
                             <td>
-                                <baserecord asp-key="Staff_Shadowing_Answer" asp-for="@Model.Tasks.FirstOrDefault().Answer" asp-items="null" />
+                                <baserecord asp-key="Staff_Interview_Answer" asp-for="@Model.Tasks.FirstOrDefault().Answer" asp-items="null" />
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
                             </td>
                             <td>
@@ -209,4 +209,5 @@
         });
     </script>
 }
+
 

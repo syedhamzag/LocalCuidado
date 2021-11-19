@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Services.StaffHealth
 {
-    interface IStaffHealthService
+    public interface IStaffHealthService
     {
         [Get("/StaffHealth")]
         Task<List<GetStaffHealth>> Get();
