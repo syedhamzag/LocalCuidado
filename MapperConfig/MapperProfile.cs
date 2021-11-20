@@ -122,6 +122,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
 using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
+using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 
 namespace MapperConfig
 {
@@ -707,7 +708,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffCompetenceTest, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHealth, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffInterview, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
+                .ForMember(dto => dto.PerformanceIndicator, mem => mem.Ignore());
 
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
@@ -752,7 +754,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffCompetenceTest, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHealth, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffInterview, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
+                .ForMember(dto => dto.PerformanceIndicator, mem => mem.Ignore());
 
             CreateMap<PutStaffEducation, StaffEducation>()
                   .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -804,7 +807,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffCompetenceTest, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHealth, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffInterview, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
+                .ForMember(dto => dto.PerformanceIndicator, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffProfile>()
                 .ForMember(dto => dto.GetStaffSpotCheck, mem => mem.Ignore())
@@ -822,7 +826,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetStaffCompetenceTest, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffHealth, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffInterview, mem => mem.Ignore())
-                .ForMember(dto => dto.GetStaffShadowing, mem => mem.Ignore());
+                .ForMember(dto => dto.GetStaffShadowing, mem => mem.Ignore())
+                .ForMember(dto => dto.GetPerformanceIndicator, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffs>()
                 .ForMember(dto => dto.Fullname, mem => mem.MapFrom(src => string.Concat(src.FirstName, " ", src.MiddleName, " ", src.LastName)))
@@ -2640,6 +2645,19 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore());
             CreateMap<StaffShadowingTask, GetStaffShadowingTask>()
                 .ForMember(dto => dto.AnswerName, mem => mem.Ignore())
+                .ForMember(dto => dto.TitleName, mem => mem.Ignore());
+            #endregion
+
+            #region PerformanceIndicator
+            CreateMap<PostPerformanceIndicator, PerformanceIndicator>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                 .ForMember(dto => dto.PerformanceIndicatorTask, mem => mem.MapFrom(src => src.PostPerformanceIndicatorTask));
+            CreateMap<PerformanceIndicator, GetPerformanceIndicator>()
+                 .ForMember(dto => dto.GetPerformanceIndicatorTask, mem => mem.Ignore());
+
+            CreateMap<PostPerformanceIndicatorTask, PerformanceIndicatorTask>()
+                .ForMember(dto => dto.PerformanceIndicator, mem => mem.Ignore());
+            CreateMap<PerformanceIndicatorTask, GetPerformanceIndicatorTask>()
                 .ForMember(dto => dto.TitleName, mem => mem.Ignore());
             #endregion
         }

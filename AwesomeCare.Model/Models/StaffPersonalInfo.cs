@@ -45,6 +45,7 @@ namespace AwesomeCare.Model.Models
             StaffInterview = new HashSet<StaffInterview>();
             StaffHealth = new HashSet<StaffHealth>();
             StaffShadowing = new HashSet<StaffShadowing>();
+            PerformanceIndicator = new HashSet<PerformanceIndicator>();
         }
 
         public int StaffPersonalInfoId { get; set; }
@@ -137,6 +138,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffInterview> StaffInterview { get; set; }
         public virtual ICollection<StaffHealth> StaffHealth { get; set; }
         public virtual ICollection<StaffShadowing> StaffShadowing { get; set; }
+        public virtual ICollection<PerformanceIndicator> PerformanceIndicator { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }

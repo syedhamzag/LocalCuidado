@@ -169,11 +169,14 @@
     </div>
 </div>
 <div class="row clearfix">
-    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-12">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <canvas id="OnCall" style="height:500px;"></canvas>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 
     </div>
-    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-        
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
     </div>
 </div>
 <div class="row clearfix taskboard">
@@ -463,7 +466,7 @@
                                         }
                                 </td>
                                 <td style="white-space:normal;">@item.ConcernNote</td>
-                                <td>@item.ActionRequired</td>
+                                <td style="white-space:normal;">@item.ActionRequired</td>
                                 <td>@item.StatusName</td>
 
                                 </tr>
@@ -942,7 +945,7 @@
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
     <script src="~/js/Notification.js"></script>
     <script type="text/javascript">
-        
+
         function setId(e) {
             const chk = $(e);
             const Id = chk.data('id');
@@ -973,7 +976,7 @@
                         shownotification("Please enter pin code", "error");
                         return false;
                     }
-                    
+
                 }
             });
 
@@ -1016,56 +1019,7 @@
                     $(child).toggle();
                 }
             });
-            const config = {
-                type: 'bar',
-                data: data,
-                options: {
-                    indexAxis: 'y',
-                    // Elements options apply to all of the options unless overridden in a dataset
-                    // In this case, we are setting the border of each horizontal bar to be 2px wide
-                    elements: {
-                        bar: {
-                            borderWidth: 2,
-                        }
-                    },
-                    responsive: true,
-                    scales: {
-                        x: {
-                            stacked: true,
-                        },
-                        y: {
-                            stacked: true
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Chart.js Horizontal Bar Chart'
-                        }
-                    }
-                },
-            };
-            const labels = [];
-            const data = {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Dataset 1',
-                        data: Utils.numbers(NUMBER_CFG),
-                        borderColor: Utils.CHART_COLORS.red,
-                        backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
-                    },
-                    {
-                        label: 'Dataset 2',
-                        data: Utils.numbers(NUMBER_CFG),
-                        borderColor: Utils.CHART_COLORS.blue,
-                        backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
-                    }
-                ]
-            };
+            
             var Color = [
                 'rgba(40, 167, 69, 1)',
                 'rgba(255, 193, 7, 1)',
@@ -1373,6 +1327,63 @@
                     data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ClientMatrix.Select(s => s.Value).ToList()))
                 }]
             };
+
+            var chartOnCall = "OnCall";
+            var ctxoncall = document.getElementById(chartOnCall).getContext('2d');
+
+            var oncalldata = {
+                labels: [""],
+                datasets: [
+                    {
+                        label: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s=>s.Key=="Pending").FirstOrDefault().Key)),
+                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s=>s.Key=="Pending").FirstOrDefault().Value)),
+                        backgroundColor: 'rgba(255, 193, 7, 1)',
+                        bordercolor: 'rgba(255, 193, 7, 1)',
+                        borderWidth: 0,
+                    },
+                    {
+                        label: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s=>s.Key=="Closed").FirstOrDefault().Key)),
+                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s=>s.Key=="Closed").FirstOrDefault().Value)),
+                        backgroundColor: 'rgba(40, 167, 69, 1)',
+                        bordercolor: 'rgba(40, 167, 69, 1)',
+                        borderWidth: 0,
+                    }
+
+                ]
+            };
+            var Chart_OnCall = new Chart(ctxoncall, {
+                options: {
+                    indexAxis: 'y',
+                    // Elements options apply to all of the options unless overridden in a dataset
+                    // In this case, we are setting the border of each horizontal bar to be 2px wide
+                    elements: {
+                        bar: {
+                            borderWidth: 2,
+                        }
+                    },
+                    responsive: true,
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'On Call'
+                        }
+                    }
+                },
+                data: oncalldata,
+                type: 'bar'
+
+            });
             var log = {
                 labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LogAudit.Select(s => s.Key).ToList())),
                 datasets: [{
@@ -1819,6 +1830,8 @@
                 type: 'pie'
 
             });
+
+
 });
 
         var table = $('.datatables').DataTable({

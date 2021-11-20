@@ -33,6 +33,7 @@ namespace AwesomeCare.API.Controllers
 
             var labels = await _clientBaserecordRepository.Table.Where(s => s.BaseRecord.KeyName == "Tele_Health_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToListAsync();
             var label = await _clientBaserecordRepository.Table.Where(s => s.BaseRecord.KeyName == "Staff_Communication_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToListAsync();
+            var oncalllabels = await _clientBaserecordRepository.Table.Where(s => s.BaseRecord.KeyName == "DutyOnCall_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToListAsync();
 
             dashboard.nId = labels.FirstOrDefault(s => s.ValueName == "Normal").BaseRecordItemId;
             dashboard.oId = labels.FirstOrDefault(s => s.ValueName == "Under Observation").BaseRecordItemId;
@@ -42,7 +43,8 @@ namespace AwesomeCare.API.Controllers
             dashboard.pId = label.FirstOrDefault(s => s.ValueName == "Pending").BaseRecordItemId;
             dashboard.cId = label.FirstOrDefault(s => s.ValueName == "Closed").BaseRecordItemId;
             dashboard.lId = label.FirstOrDefault(s => s.ValueName == "Late").BaseRecordItemId;
-
+            dashboard.oncallP = oncalllabels.FirstOrDefault(s => s.ValueName == "Pending").BaseRecordItemId;
+            dashboard.oncallC = oncalllabels.FirstOrDefault(s => s.ValueName == "Closed").BaseRecordItemId;
             return Ok(dashboard);
         }
     }
