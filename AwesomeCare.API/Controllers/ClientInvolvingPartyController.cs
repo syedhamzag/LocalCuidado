@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -16,10 +18,12 @@ namespace AwesomeCare.API.Controllers
     [ApiController]
     public class ClientInvolvingPartyController : ControllerBase
     {
+        private AwesomeCareDbContext _dbContext;
         private IGenericRepository<ClientInvolvingParty> _clientInvolvingPartyRepository;
-        public ClientInvolvingPartyController(IGenericRepository<ClientInvolvingParty> clientInvolvingPartyRepository)
+        public ClientInvolvingPartyController(IGenericRepository<ClientInvolvingParty> clientInvolvingPartyRepository, AwesomeCareDbContext dbContext)
         {
             _clientInvolvingPartyRepository = clientInvolvingPartyRepository;
+            _dbContext = dbContext;
         }
 
         //[HttpPost]
@@ -84,16 +88,31 @@ namespace AwesomeCare.API.Controllers
             return Ok(getClientInvParty);
         }
 
+        [AllowAnonymous]
         [HttpPut()]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] List<PutClientInvolvingParty> model)
+        public async Task<IActionResult> Put([FromBody] List<PutClientInvolvingParty> models)
         {
 
-            if (model == null || !ModelState.IsValid)
+            if (models == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            foreach (var item in model)
+            var dbentity = _dbContext.Set<ClientInvolvingParty>();
+            var entities = dbentity.Where(s => s.ClientId == models.FirstOrDefault().ClientId).ToList();
+            foreach (var entity in entities)
+            {
+
+                //check if Meal in db is part of the Meals in Model if not mark as Deleted
+                var current = models.Select(s=>s).Where(s => s.ClientInvolvingPartyId == entity.ClientInvolvingPartyId).FirstOrDefault();
+                if (current == null)
+                {
+                    _dbContext.Entry(entity).State = EntityState.Deleted;
+                }
+            }
+            var result = _dbContext.SaveChanges();
+
+            foreach (var item in models)
             {
                 var entity = await _clientInvolvingPartyRepository.GetEntity(item.ClientInvolvingPartyId);
                 if (entity == null)
