@@ -35,7 +35,12 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
 
         public int oncallP { get; set; }
         public int oncallC { get; set; }
+
+        public int ConcernIdP { get; set; }
+        public int ConcernIdC { get; set; }
+
         public List<Status> OnCallGraph { get; set; }
+        public List<Status> concernNoteGraph { get; set; }
         public List<Status> TeleHealth { get; set; }
         public List<Status> BloodCoag { get; set; }
         public List<Status> Pressure { get; set; }
