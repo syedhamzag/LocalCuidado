@@ -7,6 +7,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
+using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
 using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
@@ -364,6 +365,12 @@ namespace AwesomeCare.API.Controllers
                                                          }).ToList(),
                                     GetStaffShadowing = (from s in st.StaffShadowing
                                                          select new GetStaffShadowing
+                                                         {
+                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                             Heading = s.Heading
+                                                         }).ToList(),
+                                    GetPerformanceIndicator = (from s in st.PerformanceIndicator
+                                                         select new GetPerformanceIndicator
                                                          {
                                                              StaffPersonalInfoId = s.StaffPersonalInfoId,
                                                              Heading = s.Heading

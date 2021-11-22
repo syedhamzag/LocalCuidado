@@ -170,10 +170,26 @@
 </div>
 <div class="row clearfix">
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-        <canvas id="OnCall" style="height:500px;"></canvas>
+        <div class="card">
+            <div class="header">
+                On Call 
+            </div>
+            <div class="body">
+                <canvas id="ChartOnCall" style="height:150px;"></canvas>
+            </div>
+        </div>
+        
     </div>
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
+        <div class="card">
+            <div class="header">
+                Performance Indicator
+            </div>
+            <div class="body">
+                <canvas id="ChartPerformance" style="height:100px;"></canvas>
+            </div>
+        </div>
+        
     </div>
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 
@@ -944,6 +960,7 @@
     <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
     <script src="~/js/Notification.js"></script>
+    <script src="~/js/StackedChart.js"></script>
     <script type="text/javascript">
 
         function setId(e) {
@@ -1019,7 +1036,7 @@
                     $(child).toggle();
                 }
             });
-            
+
             var Color = [
                 'rgba(40, 167, 69, 1)',
                 'rgba(255, 193, 7, 1)',
@@ -1328,62 +1345,69 @@
                 }]
             };
 
-            var chartOnCall = "OnCall";
-            var ctxoncall = document.getElementById(chartOnCall).getContext('2d');
+            oncalloptions = {
+                indexAxis: 'y',
+                responsive: true,
+                scales: {
+                    xAxes: [
+                        {
+                            display: false,
+                            stacked: true,
 
+                        }],
+                    yAxes: [
+                        {
+                            display: false,
+                            stacked: true,
+
+                        }
+                    ]
+                },
+            };
+            var chartOnCall = "ChartOnCall";
+            var ctxoncall = document.getElementById(chartOnCall).getContext('2d');
             var oncalldata = {
-                labels: [""],
+                labels: [''],
                 datasets: [
                     {
-                        label: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s=>s.Key=="Pending").FirstOrDefault().Key)),
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s=>s.Key=="Pending").FirstOrDefault().Value)),
-                        backgroundColor: 'rgba(255, 193, 7, 1)',
-                        bordercolor: 'rgba(255, 193, 7, 1)',
-                        borderWidth: 0,
+                        label: "Pending",
+                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s => s.Key == "Pending").FirstOrDefault().Value))],
+                        backgroundColor: 'rgba(255, 193, 7, 1)'
                     },
                     {
-                        label: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s=>s.Key=="Closed").FirstOrDefault().Key)),
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s=>s.Key=="Closed").FirstOrDefault().Value)),
-                        backgroundColor: 'rgba(40, 167, 69, 1)',
-                        bordercolor: 'rgba(40, 167, 69, 1)',
-                        borderWidth: 0,
+                        label: "Closed",
+                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value))],
+                        backgroundColor: 'rgba(40, 167, 69, 1)'
                     }
-
                 ]
             };
             var Chart_OnCall = new Chart(ctxoncall, {
+                data: oncalldata,
+                type: 'bar',
                 options: {
                     indexAxis: 'y',
-                    // Elements options apply to all of the options unless overridden in a dataset
-                    // In this case, we are setting the border of each horizontal bar to be 2px wide
-                    elements: {
-                        bar: {
-                            borderWidth: 2,
-                        }
-                    },
                     responsive: true,
                     scales: {
-                        x: {
-                            stacked: true,
-                        },
-                        y: {
-                            stacked: true
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'On Call'
-                        }
-                    }
-                },
-                data: oncalldata,
-                type: 'bar'
+                        x: [
+                            {
+                                display: false,
+                                stacked: true,
 
+                            }],
+                        y: [
+                            {
+                                display: false,
+                                stacked: true,
+
+                            }
+                        ]
+                    }
+                }
             });
+
+
+
+
             var log = {
                 labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LogAudit.Select(s => s.Key).ToList())),
                 datasets: [{

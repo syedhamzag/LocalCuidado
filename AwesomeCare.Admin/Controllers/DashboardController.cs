@@ -179,6 +179,9 @@ namespace AwesomeCare.Admin.Controllers
             var oncallIdP = dashboard.oncallP;
             var oncallIdC = dashboard.oncallC;
 
+            var ConcernIdP = dashboard.ConcernIdP;
+            var ConcernIdC = dashboard.ConcernIdC;
+
             var getStaff = await _staffService.GetAsync();
             var getClient = await _clientService.GetClients();
             var log = await _clientLogAuditService.Get();
@@ -215,9 +218,9 @@ namespace AwesomeCare.Admin.Controllers
             var concern = await _concernNote.GetWithChild();
             var baserecordItem = await _baseService.GetBaseRecordsWithItems();
             #endregion
-            var Oncall = new List<Status>();
             var Client = new List<Status>();
-
+            
+            var Oncall = new List<Status>();
             var oncallpending = oncall.Where(s => s.Status == oncallIdP).Count();
             var oncallclosed = oncall.Where(s => s.Status == oncallIdC).Count();
             Oncall.Add(new Status
@@ -231,6 +234,21 @@ namespace AwesomeCare.Admin.Controllers
                 Value = oncallclosed
             });
             dashboard.OnCallGraph = Oncall;
+            
+            var Concern = new List<Status>();
+            var Concernpending = concern.Where(s => s.Status == ConcernIdP).Count();
+            var Concernclosed = oncall.Where(s => s.Status == ConcernIdC).Count();
+            Oncall.Add(new Status
+            {
+                Key = "Pending",
+                Value = Concernpending
+            });
+            Oncall.Add(new Status
+            {
+                Key = "Closed",
+                Value = Concernclosed
+            });
+            dashboard.concernNoteGraph = Concern;
             #region LogAudit
             var log_pending = log.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var log_closed = log.Where(j =>  j.Status == cId).Count();

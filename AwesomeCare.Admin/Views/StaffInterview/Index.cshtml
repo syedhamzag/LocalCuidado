@@ -65,11 +65,11 @@
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Point" type="text" class="form-control" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Point" type="text" class="form-control" onchange="Calc()" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Point" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Score" type="text" class="form-control" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffInterviewTaskId==item.StaffInterviewTaskId).Score" type="text" class="form-control" onchange="Calc()" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Score" class="text-danger"></span>
                                                 </td>
                                             </tr>
@@ -127,15 +127,15 @@
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
                             </td>
                             <td>
-                                <input asp-for="@Model.Tasks.FirstOrDefault().Comment" type="text" class="form-control" value="0" />
+                                <input asp-for="@Model.Tasks.FirstOrDefault().Comment" type="text" class="form-control" value="" />
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
                             </td>
                             <td>
-                                <input asp-for="@Model.Tasks.FirstOrDefault().Point" type="text" class="form-control" value="10" />
+                                <input asp-for="@Model.Tasks.FirstOrDefault().Point" type="text" class="form-control" value="10" onchange="Calc()" />
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Point" class="text-danger"></span>
                             </td>
                             <td>
-                                <input asp-for="@Model.Tasks.FirstOrDefault().Score" type="text" class="form-control" value="0" />
+                                <input asp-for="@Model.Tasks.FirstOrDefault().Score" type="text" class="form-control" value="0" onchange="Calc()" />
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Score" class="text-danger"></span>
                             </td>
                         </tr>
@@ -155,9 +155,27 @@
     <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
     <script>
+        function Calc() {
+            var Point = 0;
+            var Score = 0;
+            $("#tbl_Task tbody tr").each(function () {
+                Point += parseFloat($(this).find("td:eq(3) input[type='text']").val());
+                Score += parseFloat($(this).find("td:eq(4) input[type='text']").val());
+            });
+            $('#sumPoint').val();
+            $('#sumScore').val();
+            $('#sumPoint').val(Point);
+            $('#sumScore').val(Score);
+        }
+        $('#Point').on('change', function () {
+            Calc();
+        });
+        $('#Score').on('change', function () {
+            Calc();
+        });
         $(function () {
 
-            $(document).ready(function () {
+            function Calc() {
                 var Point = 0;
                 var Score = 0;
                 $("#tbl_Task tbody tr").each(function () {
@@ -168,6 +186,9 @@
                 $('#sumScore').val();
                 $('#sumPoint').val(Point);
                 $('#sumScore').val(Score);
+            }
+            $(document).ready(function () {
+                Calc();
             });
 
             var table = $('#tbl_Task').DataTable({
@@ -184,6 +205,7 @@
                 clone.attr('id', 'row-' + counter);
                 table.rows.add(clone).draw();
                 $('#TaskCount').val(counter);
+                Calc();
 
             });
             $('#tbl_Task tbody').on('click', 'tr', function () {

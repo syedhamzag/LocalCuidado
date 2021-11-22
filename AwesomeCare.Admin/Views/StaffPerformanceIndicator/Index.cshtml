@@ -1,8 +1,8 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
 
-@model CreateStaffHealth
+@model CreatePerformanceIndicator
 @{
-    ViewData["Title"] = "Staff Health Task";
+    ViewData["Title"] = "Staff Performance IndicatorTask";
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -18,7 +18,7 @@
             <div class="card-body">
                 <form asp-action="Create" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
-                    <input type="hidden" asp-for="@Model.StaffHealthId" />
+                    <input type="hidden" asp-for="@Model.PerformanceIndicatorId" />
                     <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
                     <div class="row">
                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
@@ -39,9 +39,6 @@
                                 <thead>
                                     <tr>
                                         <th>Title</th>
-                                        <th>Answer</th>
-                                        <th>Comment</th>
-                                        <th>Point</th>
                                         <th>Score</th>
                                     </tr>
                                 </thead>
@@ -52,24 +49,12 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffHealthTaskId==item.StaffHealthTaskId).StaffHealthTaskId" />
-                                                    <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffHealthTaskId==item.StaffHealthTaskId).Title" asp-items="null" />
+                                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.PerformanceIndicatorTaskId==item.PerformanceIndicatorTaskId).PerformanceIndicatorTaskId" />
+                                                    <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault(s=>s.PerformanceIndicatorTaskId==item.PerformanceIndicatorTaskId).Title" asp-items="null" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
                                                 </td>
                                                 <td>
-                                                    <baserecord asp-key="Staff_Health_Answer" asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffHealthTaskId==item.StaffHealthTaskId).Answer" asp-items="null" />
-                                                    <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
-                                                </td>
-                                                <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffHealthTaskId==item.StaffHealthTaskId).Comment" type="text" class="form-control" />
-                                                    <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
-                                                </td>
-                                                <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffHealthTaskId==item.StaffHealthTaskId).Point" type="text" class="form-control" onchange="Calc()" />
-                                                    <span asp-validation-for="@Model.Tasks.FirstOrDefault().Point" class="text-danger"></span>
-                                                </td>
-                                                <td>
-                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.StaffHealthTaskId==item.StaffHealthTaskId).Score" type="text" class="form-control" onchange="Calc()" />
+                                                    <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.PerformanceIndicatorTaskId==item.PerformanceIndicatorTaskId).Score" type="text" class="form-control" onchange="Calc()" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Score" class="text-danger"></span>
                                                 </td>
                                             </tr>
@@ -86,9 +71,7 @@
 
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="sumPoint" />
-                            </div>
+
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <div class="form-group">
@@ -109,30 +92,15 @@
                     <thead>
                         <tr>
                             <th> Title </th>
-                            <th> Answer </th>
-                            <th>Comment</th>
-                            <th>Point</th>
                             <th>Score</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().StaffHealthTaskId" value="0" />
+                                <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault().PerformanceIndicatorTaskId" value="0" />
                                 <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault().Title" asp-items="null" />
                                 <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <baserecord asp-key="Staff_Health_Answer" asp-for="@Model.Tasks.FirstOrDefault().Answer" asp-items="null" />
-                                <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="@Model.Tasks.FirstOrDefault().Comment" type="text" class="form-control" value="" />
-                                <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
-                            </td>
-                            <td>
-                                <input asp-for="@Model.Tasks.FirstOrDefault().Point" type="text" class="form-control" value="10" onchange="Calc()" />
-                                <span asp-validation-for="@Model.Tasks.FirstOrDefault().Point" class="text-danger"></span>
                             </td>
                             <td>
                                 <input asp-for="@Model.Tasks.FirstOrDefault().Score" type="text" class="form-control" value="0" onchange="Calc()" />
@@ -156,35 +124,29 @@
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
     <script>
         function Calc() {
-            var Point = 0;
+
             var Score = 0;
             $("#tbl_Task tbody tr").each(function () {
-                Point += parseFloat($(this).find("td:eq(3) input[type='text']").val());
-                Score += parseFloat($(this).find("td:eq(4) input[type='text']").val());
+
+                Score += parseFloat($(this).find("td:eq(1) input[type='text']").val());
             });
-            $('#sumPoint').val();
+
             $('#sumScore').val();
-            $('#sumPoint').val(Point);
+
             $('#sumScore').val(Score);
         }
-        $('#Point').on('change', function () {
-            Calc();
-        });
         $('#Score').on('change', function () {
             Calc();
         });
         $(function () {
 
-            function Calc() {
-                var Point = 0;
+            function Calc()
+            {
                 var Score = 0;
                 $("#tbl_Task tbody tr").each(function () {
-                    Point += parseFloat($(this).find("td:eq(3) input[type='text']").val());
-                    Score += parseFloat($(this).find("td:eq(4) input[type='text']").val());
+                    Score += parseFloat($(this).find("td:eq(1) input[type='text']").val());
                 });
-                $('#sumPoint').val();
                 $('#sumScore').val();
-                $('#sumPoint').val(Point);
                 $('#sumScore').val(Score);
             }
             $(document).ready(function () {
