@@ -178,9 +178,11 @@ namespace AwesomeCare.Admin.Controllers
 
             var oncallIdP = dashboard.oncallP;
             var oncallIdC = dashboard.oncallC;
+            var oncallIdO = dashboard.oncallO;
 
             var ConcernIdP = dashboard.ConcernIdP;
             var ConcernIdC = dashboard.ConcernIdC;
+            var ConcernIdO = dashboard.ConcernIdO;
 
             var getStaff = await _staffService.GetAsync();
             var getClient = await _clientService.GetClients();
@@ -223,6 +225,7 @@ namespace AwesomeCare.Admin.Controllers
             var Oncall = new List<Status>();
             var oncallpending = oncall.Where(s => s.Status == oncallIdP).Count();
             var oncallclosed = oncall.Where(s => s.Status == oncallIdC).Count();
+            var oncallopen = oncall.Where(s => s.Status == oncallIdO).Count();
             Oncall.Add(new Status
             {
                 Key = "Pending",
@@ -233,20 +236,31 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Closed",
                 Value = oncallclosed
             });
+            Oncall.Add(new Status
+            {
+                Key = "Open",
+                Value = oncallopen
+            });
             dashboard.OnCallGraph = Oncall;
             
             var Concern = new List<Status>();
             var Concernpending = concern.Where(s => s.Status == ConcernIdP).Count();
-            var Concernclosed = oncall.Where(s => s.Status == ConcernIdC).Count();
-            Oncall.Add(new Status
+            var Concernclosed = concern.Where(s => s.Status == ConcernIdC).Count();
+            var Concernopen = concern.Where(s => s.Status == ConcernIdO).Count();
+            Concern.Add(new Status
             {
                 Key = "Pending",
                 Value = Concernpending
             });
-            Oncall.Add(new Status
+            Concern.Add(new Status
             {
                 Key = "Closed",
                 Value = Concernclosed
+            });
+            Concern.Add(new Status
+            {
+                Key = "Open",
+                Value = Concernopen
             });
             dashboard.concernNoteGraph = Concern;
             #region LogAudit

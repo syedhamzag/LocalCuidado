@@ -38,6 +38,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreatePerformanceIndicator();
                 report.PerformanceIndicatorId = item.PerformanceIndicatorId;
+                report.StaffPersonalInfoId = item.StaffPersonalInfoId;
                 report.Heading = item.Heading;
                 report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
                 reports.Add(report);
