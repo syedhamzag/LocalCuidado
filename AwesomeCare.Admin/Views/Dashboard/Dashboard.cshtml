@@ -169,7 +169,7 @@
     </div>
 </div>
 <div class="row clearfix">
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <div class="card">
             <div class="header">
                 On Call 
@@ -180,20 +180,18 @@
         </div>
         
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <div class="card">
             <div class="header">
-                Performance Indicator
+                Tracking Concern
             </div>
             <div class="body">
-                <canvas id="ChartPerformance" style="height:100px;"></canvas>
+                <canvas id="ChartConcern" style="height:150px;"></canvas>
             </div>
         </div>
         
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 
-    </div>
 </div>
 <div class="row clearfix taskboard">
     
@@ -1344,30 +1342,50 @@
                     data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ClientMatrix.Select(s => s.Value).ToList()))
                 }]
             };
-
-            oncalloptions = {
-                indexAxis: 'y',
-                responsive: true,
-                scales: {
-                    xAxes: [
-                        {
-                            display: false,
-                            stacked: true,
-
-                        }],
-                    yAxes: [
-                        {
-                            display: false,
-                            stacked: true,
-
-                        }
-                    ]
-                },
+            var chartconcern = "ChartConcern";
+            var ctxconcern = document.getElementById(chartconcern).getContext('2d');
+            var concerndata = {
+                labels: ['Concern'],
+                datasets: [
+                    {
+                        label: "Pending",
+                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.concernNoteGraph.Where(s => s.Key == "Pending").FirstOrDefault().Value))],
+                        backgroundColor: 'rgba(255, 193, 7, 1)'
+                    },
+                    {
+                        label: "Closed",
+                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.concernNoteGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value))],
+                        backgroundColor: 'rgba(40, 167, 69, 1)'
+                    },
+                    {
+                        label: "Open",
+                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.concernNoteGraph.Where(s => s.Key == "Open").FirstOrDefault().Value))],
+                        backgroundColor: 'rgba(220, 53, 69, 1)'
+                    }
+                ]
             };
+            var Chart_Concern = new Chart(ctxconcern, {
+                data: concerndata,
+                type: 'bar',
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    scales: {
+                        x:  {
+                                stacked: true,
+
+                            },
+                        y:  {
+                                stacked: true,
+
+                            }
+                    },
+                }
+            });
             var chartOnCall = "ChartOnCall";
             var ctxoncall = document.getElementById(chartOnCall).getContext('2d');
             var oncalldata = {
-                labels: [''],
+                labels: ['OnCall'],
                 datasets: [
                     {
                         label: "Pending",
@@ -1378,6 +1396,11 @@
                         label: "Closed",
                         data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value))],
                         backgroundColor: 'rgba(40, 167, 69, 1)'
+                    },
+                    {
+                        label: "Open",
+                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s => s.Key == "Open").FirstOrDefault().Value))],
+                        backgroundColor: 'rgba(220, 53, 69, 1)'
                     }
                 ]
             };
@@ -1388,19 +1411,14 @@
                     indexAxis: 'y',
                     responsive: true,
                     scales: {
-                        x: [
-                            {
-                                display: false,
+                        x:  {
                                 stacked: true,
 
-                            }],
-                        y: [
-                            {
-                                display: false,
+                            },
+                        y:  {
                                 stacked: true,
 
                             }
-                        ]
                     }
                 }
             });
@@ -1648,8 +1666,10 @@
             }
             };
             var hidelabel = {
+                plugins: {
                 legend: {
                     display: false //This will do the task
+                    }
                 }
                 };
             var TrackerM = new Chart(ctxTrackM, {
