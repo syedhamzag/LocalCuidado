@@ -155,13 +155,13 @@
             <div class="body">
                 <div class="tab-content">
                     <div class="tab-pane" id="Daily">
-                        <canvas id="AdlDaily" style="height:500px;"></canvas>
+                        <canvas id="AdlDaily" style="height:280px !important;"></canvas>
                     </div>
                     <div class="tab-pane" id="Weekly">
-                        <canvas id="AdlWeekly" style="height:500px;"></canvas>
+                        <canvas id="AdlWeekly" style="height:280px !important;"></canvas>
                     </div>
                     <div class="tab-pane show active" id="Monthly">
-                        <canvas id="AdlTracker" style="height:500px;"></canvas>
+                        <canvas id="AdlTracker" style="height:280px !important;"></canvas>
                     </div>
                 </div>
             </div>
@@ -1671,20 +1671,27 @@
                     display: false //This will do the task
                     }
                 }
-                };
+            };
+            var trackerOptions = {
+                maintainAspectRatio: false,
+
+            };
             var TrackerM = new Chart(ctxTrackM, {
                 data: trackM,
-                type: 'line'
+                type: 'line',
+                options: trackerOptions
 
             });
             var TrackerW = new Chart(ctxTrackW, {
                 data: trackW,
-                type: 'line'
+                type: 'line',
+                options: trackerOptions
 
             });
             var TrackerD = new Chart(ctxTrackD, {
                 data: trackD,
-                type: 'line'
+                type: 'line',
+                options: trackerOptions
 
             });
             var Staff = new Chart(ctxStaff, {

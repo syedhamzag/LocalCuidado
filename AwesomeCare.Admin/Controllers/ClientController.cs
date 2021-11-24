@@ -80,6 +80,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var result = await _clientService.GetClients();
             var active = result.Where(s => s.Status == "Active").OrderBy(s=>s.ClientId).ToList();
+            
             return View(active);
         }
         public async Task<IActionResult> HomeCareOther()
@@ -419,7 +420,7 @@ namespace AwesomeCare.Admin.Controllers
             for (int i = 0; i < model.InvolvingPartyCount; i++)
             {
                 PutClientInvolvingParty put = new PutClientInvolvingParty();
-                var item = int.Parse(formcollection["ClientInvolvingPartyItemId"][i]);
+                var item = int.Parse(formcollection["itemIdcmb"][i]);
                 var party = int.Parse(formcollection["ClientInvolvingPartyId"][i]);
                 var tel = formcollection["Telephone"][i];
                 var address = formcollection["Address"][i];
