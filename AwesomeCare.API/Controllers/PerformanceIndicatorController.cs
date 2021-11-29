@@ -17,12 +17,12 @@ namespace AwesomeCare.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class StaffPerformanceIndicatorController : ControllerBase
+    public class PerformanceIndicatorController : ControllerBase
     {
         private IGenericRepository<PerformanceIndicator> _PerformanceIndicatorRepository;
-        private ILogger<StaffPerformanceIndicatorController> _logger;
+        private ILogger<PerformanceIndicatorController> _logger;
         private AwesomeCareDbContext _dbContext;
-        public StaffPerformanceIndicatorController(AwesomeCareDbContext dbContext, IGenericRepository<PerformanceIndicator> PerformanceIndicatorRepository, ILogger<StaffPerformanceIndicatorController> logger)
+        public PerformanceIndicatorController(AwesomeCareDbContext dbContext, IGenericRepository<PerformanceIndicator> PerformanceIndicatorRepository, ILogger<PerformanceIndicatorController> logger)
         {
             _PerformanceIndicatorRepository = PerformanceIndicatorRepository;
             _logger = logger;
@@ -46,7 +46,6 @@ namespace AwesomeCare.API.Controllers
                                    select new GetPerformanceIndicator
                                    {
                                        Deleted = h.Deleted,
-                                       StaffPersonalInfoId = h.StaffPersonalInfoId,
                                        Heading = h.Heading,
                                        PerformanceIndicatorId = h.PerformanceIndicatorId,
                                        GetPerformanceIndicatorTask = (from t in h.PerformanceIndicatorTask
@@ -60,46 +59,29 @@ namespace AwesomeCare.API.Controllers
 
             return Ok(getEntity);
         }
-        [HttpGet("GetByStaffPersonalInfo/{id}")]
-        [ProducesResponseType(type: typeof(List<GetPerformanceIndicator>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetByStaffPersonalInfo(int? id)
-        {
-            if (!id.HasValue)
-            {
-                return BadRequest("Parameter id is required");
-            }
-
-            var getEntity = await (from h in _PerformanceIndicatorRepository.Table
-                                   where h.StaffPersonalInfoId == id && !h.Deleted
-                                   select new GetPerformanceIndicator
-                                   {
-                                       Deleted = h.Deleted,
-                                       StaffPersonalInfoId = h.StaffPersonalInfoId,
-                                       Heading = h.Heading,
-                                       PerformanceIndicatorId = h.PerformanceIndicatorId,
-                                       GetPerformanceIndicatorTask = (from t in h.PerformanceIndicatorTask
-                                                                select new GetPerformanceIndicatorTask
-                                                                {
-                                                                    PerformanceIndicatorTaskId = t.PerformanceIndicatorTaskId,
-                                                                    Title = t.Title,
-                                                                    Score = t.Score
-                                                                }).ToList()
-                                   }).ToListAsync();
-
-            return Ok(getEntity);
-        }
-
         [HttpGet()]
         [ProducesResponseType(type: typeof(List<GetPerformanceIndicator>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var getEntities = _PerformanceIndicatorRepository.Table.Where(c => !c.Deleted).ProjectTo<GetPerformanceIndicator>().ToList();
-            return Ok(getEntities);
+            var getEntity = await (from h in _PerformanceIndicatorRepository.Table
+                                  where !h.Deleted
+                                  select new GetPerformanceIndicator
+                                  {
+                                      Deleted = h.Deleted,
+                                      Heading = h.Heading,
+                                      PerformanceIndicatorId = h.PerformanceIndicatorId,
+                                      GetPerformanceIndicatorTask = (from t in h.PerformanceIndicatorTask
+                                                                     select new GetPerformanceIndicatorTask
+                                                                     {
+                                                                         PerformanceIndicatorTaskId = t.PerformanceIndicatorTaskId,
+                                                                         Title = t.Title,
+                                                                         Score = t.Score,
+                                                                     }).ToList()
+                                  }).FirstOrDefaultAsync();
+
+            return Ok(getEntity);
         }
         [HttpPost]
         [Route("[action]")]
@@ -109,10 +91,10 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            bool isEntityRegistered = _PerformanceIndicatorRepository.Table.Any(r => r.Heading.Equals(model.Heading) && r.StaffPersonalInfoId.Equals(model.StaffPersonalInfoId));
+            bool isEntityRegistered = _PerformanceIndicatorRepository.Table.Any(r => r.Heading.Equals(model.Heading));
             if (isEntityRegistered)
             {
-                return BadRequest($"Staff Performance Indicator {model.Heading} already exist");
+                return BadRequest($"Performance Indicator {model.Heading} already exist");
             }
             var postEntity = Mapper.Map<PerformanceIndicator>(model);
             await _PerformanceIndicatorRepository.InsertEntity(postEntity);

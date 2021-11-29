@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AwesomeCare.Admin.ViewModels.Staff
+namespace AwesomeCare.Admin.ViewModels.PerformanceIndicator
 {
     public class CreatePerformanceIndicator
     {
@@ -19,8 +19,6 @@ namespace AwesomeCare.Admin.ViewModels.Staff
 
         public List<SelectListItem> HeadingList { get; set; }
         public int PerformanceIndicatorId { get; set; }
-        public int StaffPersonalInfoId { get; set; }
-        public string StaffName { get; set; }
 
         public string Heading { get; set; }
         public int HeadingId { get; set; }

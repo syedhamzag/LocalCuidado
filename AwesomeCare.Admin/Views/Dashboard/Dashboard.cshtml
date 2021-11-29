@@ -63,7 +63,7 @@
                                                 <img src="../assets/images/5star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "5 Star Rating").FirstOrDefault().Value</div>
+                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value.Count</div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -71,7 +71,7 @@
                                                 <img src="../assets/images/4star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "4 Star Rating").FirstOrDefault().Value</div>
+                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value.Count</div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -79,7 +79,7 @@
                                                 <img src="../assets/images/3star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "3 Star Rating").FirstOrDefault().Value</div>
+                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value.Count</div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -87,7 +87,7 @@
                                                 <img src="../assets/images/2star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "2 Star Rating").FirstOrDefault().Value</div>
+                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value.Count</div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -95,7 +95,7 @@
                                                 <img src="../assets/images/1star.jpg" height="20" />
                                             </div>
                                             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRatingCount.Where(s => s.Key == "1 Star Rating").FirstOrDefault().Value</div>
+                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value.Count</div>
                                             </div>
                                         </div>
                                     </div>
@@ -343,7 +343,7 @@
     </div>
 </div>
 <div class="row clearfix">
-    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
         <div class="card">
             <div class="header">
                 <h3>General Task</h3>
@@ -443,17 +443,17 @@
                         </table>
                     </div>
                     <div class="tab-pane" id="concern">
-                        <table class="table m-b-0 datatables">
+                        <table class="table m-b-0 datatables table-responsive">
                             <thead class="thead-dark">
                                 <tr>
                                     <th></th>
                                     <th>Ref</th>
-                                    <th>Date of Incident</th>
+                                    <th>Date</th>
                                     <th>Deadline</th>
                                     <th>Staff</th>
                                     <th>Manager</th>
                                     <th>Concern</th>
-                                    <th>Action Required</th>
+                                    <th>Action</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -493,15 +493,15 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
         <div class="card">
             <div class="header">
                 <div class="row">
-                    <div class="form-group col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                    <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <h3>Tele Health</h3>
                     </div>
 
-                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <a href="javascript:void(0);" id="showmore">Show / Less</a>
                     </div>
                 </div>
@@ -509,41 +509,41 @@
             <div class="body" id="parent">
                 <div class="row">
                     <div class="chart-container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <canvas id="Tele" style="height:500px;"></canvas>
+                        <canvas id="Tele" style="height:250px; width:50%;"></canvas>
                     </div>
                 </div>
                 <div class="row padding-25">
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="20" height="20" /> <br />
-                            <span>Blood Coagulation</span>
+                            <span class="text">Blood Coag</span>
                         </div>
                         <canvas id="Coag"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="20" height="20" /> <br />
                             <span>Blood Pressure</span>
                         </div>
                         <canvas id="Pressure"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Body.png" class="" width="20" height="20" /> <br />
-                            <span>Body Temperature</span>
+                            <span>Body Temp</span>
                         </div>
                         <canvas id="BodyTemp"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Bowel.png" class="" width="20" height="20" /> <br />
-                            <span>Bowel Movement</span>
+                            <span>Bowel</span>
                         </div>
                         <canvas id="Bowel"></canvas>
                     </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="20" height="20" /> <br />
                             <span>BMI</span>
@@ -551,52 +551,53 @@
                         </div>
                         <canvas id="BMI"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Eye.png" class="" width="20" height="20" /> <br />
-                            <span>Eye Health</span>
+                            <span>Eye</span>
                         </div>
                         <canvas id="Eye"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Food.png" class="" width="20" height="20" /> <br />
-                            <span>Food Intake</span>
+                            <span>Food</span>
                         </div>
                         <canvas id="Food"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Heart.png" class="" width="20" height="20" /> <br />
-                            <span>Heart Rate</span>
+                            <span>Heart</span>
                         </div>
                         <canvas id="Heart"></canvas>
                     </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Oxygen.png" class="" width="20" height="20" /> <br />
                             <span>Oxygen</span>
                         </div>
                         <canvas id="Oxygen"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Pain.png" class="" width="20" height="20" /> <br />
                             <span>Pain Monitor</span>
                         </div>
                         <canvas id="Pain"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Pulse.png" class="" width="20" height="20" /> <br />
                             <span>Pulse Rate</span>
                         </div>
                         <canvas id="Pulse"></canvas>
                     </div>
-
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Wound.png" class="" width="20" height="20" /> <br />
                             <span>Wound Care</span>
@@ -605,7 +606,7 @@
                     </div>
                 </div>
                 <div class="row padding-25">
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Seizure.png" class="" width="20" height="20" /> <br />
                             <span>Seizure Monitor</span>
@@ -618,11 +619,11 @@
         <div class="card">
             <div class="header">
                 <div class="row">
-                    <div class="form-group col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                    <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <h3>Client Metrics</h3>
                     </div>
 
-                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <a href="javascript:void(0);" id="clientshow">Show / Less</a>
                     </div>
                 </div>
@@ -630,11 +631,11 @@
             <div class="body" id="clientParent">
                 <div class="row">
                     <div class="chart-container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <canvas id="ClientMetrics" style="height:500px;"></canvas>
+                        <canvas id="ClientMetrics" style="height: 250px; width: 50%;"></canvas>
                     </div>
                 </div>
                 <div class="row padding-25">
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/LogAudit.png" class="" width="20" height="20" />
                             <br /><span>Log Audit</span>
@@ -642,7 +643,7 @@
                         </div>
                         <canvas id="LogAudit"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/MedAudit.png" class="" width="20" height="20" />
                             <br /><span>Med Audit</span>
@@ -650,41 +651,7 @@
                         </div>
                         <canvas id="MedAudit"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Complain.png" class="" width="20" height="20" />
-                            <br /><span>Complain</span>
-
-                        </div>
-                        <canvas id="Complain"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Voice.png" class="" width="20" height="20" />
-                            <br /><span>Voice</span>
-
-                        </div>
-                        <canvas id="Voice"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/ManagementVisit.png" class="" width="20" height="20" />
-                            <br /><span>Mgt Visit</span>
-
-                        </div>
-                        <canvas id="MgtVisit"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Program.png" class="" width="20" height="20" />
-                            <br /><span>Program</span>
-
-                        </div>
-                        <canvas id="Program"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/ServiceWatch.png" class="" width="20" height="20" />
                             <br /><span>Service Watch</span>
@@ -693,16 +660,53 @@
                         <canvas id="ServiceWatch"></canvas>
                     </div>
                 </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/ManagementVisit.png" class="" width="20" height="20" />
+                            <br /><span>Mgt Visit</span>
+
+                        </div>
+                        <canvas id="MgtVisit"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Program.png" class="" width="20" height="20" />
+                            <br /><span>Program</span>
+
+                        </div>
+                        <canvas id="Program"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Complain.png" class="" width="20" height="20" />
+                            <br /><span>Complain</span>
+
+                        </div>
+                        <canvas id="Complain"></canvas>
+                    </div>                    
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Voice.png" class="" width="20" height="20" />
+                            <br /><span>Voice</span>
+
+                        </div>
+                        <canvas id="Voice"></canvas>
+                    </div>
+                </div>
+
             </div>
         </div>
         <div class="card">
             <div class="header">
                 <div class="row">
-                    <div class="form-group col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                    <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <h3>Staff Metrics</h3>
                     </div>
 
-                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <a href="javascript:void(0);" id="staffshow">Show / Less</a>
                     </div>
                 </div>
@@ -711,19 +715,19 @@
 
                 <div class="row">
                     <div class="chart-container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <canvas id="StaffMetrics" style="height:500px;"></canvas>
+                        <canvas id="StaffMetrics" style="height: 250px; width: 50%;"></canvas>
                     </div>
                 </div>
                 <div class="row padding-25">
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/AdlObservation.png" class="" width="20" height="20" />
-                            <br /><span>Adl Obs</span>
+                            <img src="../assets/images/TeleHealthIcon/Supervision.png" class="" width="20" height="20" />
+                            <br /><span>Super Vision</span>
 
                         </div>
-                        <canvas id="Adl"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <canvas id="Sup"></canvas>
+                    </div>                   
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/KeyworkerVoice.png" class="" width="20" height="20" />
                             <br /><span>Key Worker</span>
@@ -731,7 +735,7 @@
                         </div>
                         <canvas id="Key"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/CompMedObs.png" class="" width="20" height="20" />
                             <br /><span>Med Comp</span>
@@ -739,7 +743,9 @@
                         </div>
                         <canvas id="Med"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/OnetoOne.png" class="" width="20" height="20" />
                             <br /><span>One To One</span>
@@ -747,9 +753,7 @@
                         </div>
                         <canvas id="One"></canvas>
                     </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Reference.png" class="" width="20" height="20" />
                             <br /><span>Reference</span>
@@ -757,7 +761,7 @@
                         </div>
                         <canvas id="Ref"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/SpotCheck.png" class="" width="20" height="20" />
                             <br /><span>Spot Check</span>
@@ -765,15 +769,17 @@
                         </div>
                         <canvas id="Spot"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Supervision.png" class="" width="20" height="20" />
-                            <br /><span>Supervision</span>
+                            <img src="../assets/images/TeleHealthIcon/AdlObservation.png" class="" width="20" height="20" />
+                            <br /><span>Adl Obs</span>
 
                         </div>
-                        <canvas id="Sup"></canvas>
+                        <canvas id="Adl"></canvas>
                     </div>
-                    <div class="chart-container col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <div class="form-group align-center">
                             <img src="../assets/images/TeleHealthIcon/Survey.png" class="" width="20" height="20" />
                             <br /><span>Survey</span>
@@ -847,7 +853,7 @@
                     </div>
                     <div class="body">
                         <div class="tab-content">
-                            <div class="tab-pane" id="Star5">
+                            <div class="tab-pane show active" id="Star5">
                                 <table class="table m-b-0 datatables">
                                     <thead class="thead-dark">
                                         <tr>

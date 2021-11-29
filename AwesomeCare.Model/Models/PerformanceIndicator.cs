@@ -11,7 +11,6 @@ namespace AwesomeCare.Model.Models
             PerformanceIndicatorTask = new HashSet<PerformanceIndicatorTask>();
         }
         public int PerformanceIndicatorId { get; set; }
-        public int StaffPersonalInfoId { get; set; }
         public string Heading { get; set; }
 
         public DateTime Date { get; set; }
@@ -21,7 +20,6 @@ namespace AwesomeCare.Model.Models
         public int Rating { get; set; }
         public string Remarks { get; set; }
 
-        public virtual StaffPersonalInfo StaffPersonalInfo { get; set; }
         public virtual ICollection<PerformanceIndicatorTask> PerformanceIndicatorTask { get; set; }
     }
 }

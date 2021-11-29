@@ -1,4 +1,4 @@
-﻿@using AwesomeCare.Admin.ViewModels.Staff;
+﻿@using AwesomeCare.Admin.ViewModels.PerformanceIndicator;
 
 @model CreatePerformanceIndicator
 @{
@@ -17,7 +17,6 @@
 
             <div class="card-body">
                 <form asp-action="Create" method="post" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
                     <input type="hidden" asp-for="@Model.PerformanceIndicatorId" />
                     <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
                     <div class="row">

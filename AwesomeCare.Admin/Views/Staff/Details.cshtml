@@ -38,7 +38,7 @@
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#health">Health</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#interview">Interview</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#shadowing">Shadowing</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#performanceindicator">Performance Indicator</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#staffholiday">Holidays</a></li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane show active" id="personalinfo">
@@ -1083,13 +1083,13 @@
                                         </table>
                                     </div>
                                     
-                                    <div class="tab-pane" id="performanceindicator">
+                                    <div class="tab-pane" id="staffholiday">
                                         <div class="header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                                     <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="ListHeading" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffPerformanceIndicator">Create</a></li>
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffHoliday">Create</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -1097,18 +1097,11 @@
                                         <table class="table table-bordered table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Heading</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model.GetPerformanceIndicator)
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @item.Heading
-                                                        </td>
-                                                    </tr>
-                                                }
+
                                             </tbody>
                                         </table>
                                     </div>

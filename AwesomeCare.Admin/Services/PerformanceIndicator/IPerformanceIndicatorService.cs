@@ -8,21 +8,18 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Services.PerformanceIndicator
 {
-    public interface IStaffPerformanceIndicatorService
+    public interface IPerformanceIndicatorService
     {
-        [Get("/StaffPerformanceIndicator")]
+        [Get("/PerformanceIndicator")]
         Task<List<GetPerformanceIndicator>> Get();
 
-        [Get("/StaffPerformanceIndicator/Get/{id}")]
+        [Get("/PerformanceIndicator/Get/{id}")]
         Task<GetPerformanceIndicator> Get(int id);
 
-        [Get("/StaffPerformanceIndicator/GetByStaffPersonalInfo/{id}")]
-        Task<List<GetPerformanceIndicator>> GetByStaffPersonalInfo(int id);
-
-        [Post("/StaffPerformanceIndicator/Create")]
+        [Post("/PerformanceIndicator/Create")]
         Task<HttpResponseMessage> Create([Body] PostPerformanceIndicator model);
 
-        [Put("/StaffPerformanceIndicator/Put")]
+        [Put("/PerformanceIndicator/Put")]
         Task<HttpResponseMessage> Put([Body] PostPerformanceIndicator model);
     }
 }

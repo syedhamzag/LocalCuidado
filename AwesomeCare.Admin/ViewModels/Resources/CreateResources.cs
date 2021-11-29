@@ -38,5 +38,7 @@ namespace AwesomeCare.Admin.ViewModels.Resources
         public string Video { get; set; }
 
         public string Image { get; set; }
+
+        public string ClientName { get; set; }
     }
 }

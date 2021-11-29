@@ -1,4 +1,4 @@
-﻿@using AwesomeCare.Admin.ViewModels.Staff;
+﻿@using AwesomeCare.Admin.ViewModels.PerformanceIndicator;
 
 @model CreatePerformanceIndicator
 @{
@@ -16,13 +16,12 @@
             </div>
             <div class="body clearfix">
                 <form asp-action="ListHeading" method="post" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
                     <input type="hidden" asp-for="PerformanceIndicatorId" />
                     <div class="row">
                         <div class="col-sm-4 col-xs-12 col-md-4 col-lg-4">
                             <div class="form-group">
                                 <label class="control-label">Heading</label>
-                                <baserecord asp-key="Staff_PerformanceIndicator_Heading" asp-items="null" asp-for="HeadingId" class="form-control" />
+                                <baserecord asp-key="Performance_Indicator_Heading" asp-items="null" asp-for="HeadingId" class="form-control" />
                                 <span asp-validation-for="HeadingId" class="text-danger"></span>
                             </div>
                         </div>
@@ -86,7 +85,7 @@
                                     @item.Text
                                 </td>
                                 <td>
-                                    <a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-route-heading="@item.Text" asp-route-PerformanceIndicatorId="@item.Value" class="btn btn-success btn-sm">Tasks</a>
+                                    <a asp-action="Index" asp-route-heading="@item.Text" asp-route-PerformanceIndicatorId="@item.Value" class="btn btn-success btn-sm">Tasks</a>
                                 </td>
                             </tr>
                         }

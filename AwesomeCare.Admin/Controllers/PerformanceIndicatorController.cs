@@ -1,8 +1,7 @@
 ﻿using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.PerformanceIndicator;
-using AwesomeCare.Admin.Services.Staff;
-using AwesomeCare.Admin.ViewModels.Staff;
+using AwesomeCare.Admin.ViewModels.PerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Http;
@@ -16,40 +15,34 @@ using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
 {
-    public class StaffPerformanceIndicatorController : BaseController
+    public class PerformanceIndicatorController : BaseController
     {
-        private IStaffPerformanceIndicatorService _PerformanceIndicator;
-        private IStaffService _staffService;
+        private IPerformanceIndicatorService _PerformanceIndicator;
         private IBaseRecordService _baseRecord;
 
-        public StaffPerformanceIndicatorController(IStaffPerformanceIndicatorService PerformanceIndicator, IFileUpload fileUpload, IStaffService staffService, IBaseRecordService baseRecord) : base(fileUpload)
+        public PerformanceIndicatorController(IPerformanceIndicatorService PerformanceIndicator, IFileUpload fileUpload, IBaseRecordService baseRecord) : base(fileUpload)
         {
             _PerformanceIndicator = PerformanceIndicator;
-            _staffService = staffService;
             _baseRecord = baseRecord;
         }
         public async Task<IActionResult> Reports()
         {
             var entities = await _PerformanceIndicator.Get();
 
-            var staff = await _staffService.GetStaffs();
             List<CreatePerformanceIndicator> reports = new List<CreatePerformanceIndicator>();
             foreach (GetPerformanceIndicator item in entities)
             {
                 var report = new CreatePerformanceIndicator();
                 report.PerformanceIndicatorId = item.PerformanceIndicatorId;
-                report.StaffPersonalInfoId = item.StaffPersonalInfoId;
                 report.Heading = item.Heading;
-                report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
                 reports.Add(report);
             }
             return View(reports);
         }
 
-        public async Task<IActionResult> Index(int staffId, int PerformanceIndicatorId, string heading)
+        public async Task<IActionResult> Index(int PerformanceIndicatorId, string heading)
         {
             var model = new CreatePerformanceIndicator();
-            model.StaffPersonalInfoId = staffId;
             model.PerformanceIndicatorId = PerformanceIndicatorId;
             model.Heading = heading;
             if (PerformanceIndicatorId > 0)
@@ -58,8 +51,6 @@ namespace AwesomeCare.Admin.Controllers
                 model.TaskCount = task.GetPerformanceIndicatorTask.Count;
                 model.Tasks = task.GetPerformanceIndicatorTask;
             }
-            var staff = await _staffService.GetStaffs();
-            model.StaffName = staff.Where(s => s.StaffPersonalInfoId == staffId).FirstOrDefault().Fullname;
             return View(model);
 
         }
@@ -69,17 +60,13 @@ namespace AwesomeCare.Admin.Controllers
         //    return View(model);
 
         //}
-        public async Task<IActionResult> ListHeading(int staffId)
+        public async Task<IActionResult> ListHeading()
         {
             var model = new CreatePerformanceIndicator();
-            model.StaffPersonalInfoId = staffId;
-
-            var staff = await _staffService.GetStaffs();
             var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
-            var filterBaseRecord = baseRecord.Where(s => s.KeyName == "Staff_Shadowing_Heading").Select(s => s.BaseRecordItems).FirstOrDefault();
+            var filterBaseRecord = baseRecord.Where(s => s.KeyName == "Performance_Indicator_Heading").Select(s => s.BaseRecordItems).FirstOrDefault();
             model.baseRecordList = filterBaseRecord.ToList();
-            model.StaffName = staff.Where(s => s.StaffPersonalInfoId == staffId).FirstOrDefault().Fullname;
-            List<GetPerformanceIndicator> pi = await _PerformanceIndicator.GetByStaffPersonalInfo(staffId);
+            List<GetPerformanceIndicator> pi = await _PerformanceIndicator.Get();
             if (pi.Count > 0)
             {
                 model.PerformanceIndicatorId = pi.FirstOrDefault().PerformanceIndicatorId;
@@ -102,7 +89,6 @@ namespace AwesomeCare.Admin.Controllers
             var heading = await _baseRecord.GetBaseRecordItemById(model.HeadingId);
             PostPerformanceIndicator post = new PostPerformanceIndicator();
             post.PerformanceIndicatorId = model.PerformanceIndicatorId;
-            post.StaffPersonalInfoId = model.StaffPersonalInfoId;
             post.Heading = heading.ValueName;
             post.Date = model.Date;
             post.DueDate = model.DueDate;
@@ -122,7 +108,7 @@ namespace AwesomeCare.Admin.Controllers
             }
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "PerformanceIndicator successfully added to staff" : "An Error Occurred" });
 
-            return RedirectToAction("ListHeading", new { staffId = model.StaffPersonalInfoId });
+            return RedirectToAction("Index", new { PerformanceIndicatorId = post.PerformanceIndicatorId, heading = post.Heading });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -146,7 +132,6 @@ namespace AwesomeCare.Admin.Controllers
             }
             PostPerformanceIndicator post = new PostPerformanceIndicator();
             post.PerformanceIndicatorId = model.PerformanceIndicatorId;
-            post.StaffPersonalInfoId = model.StaffPersonalInfoId;
             post.Heading = model.Heading;
             post.PostPerformanceIndicatorTask = tasks;
 
@@ -155,7 +140,7 @@ namespace AwesomeCare.Admin.Controllers
 
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "PerformanceIndicator successfully added to staff" : "An Error Occurred" });
 
-            return RedirectToAction("ListHeading", new { staffId = model.StaffPersonalInfoId });
+            return RedirectToAction("Index", new { PerformanceIndicatorId = post.PerformanceIndicatorId, heading = post.Heading });
         }
     }
 }

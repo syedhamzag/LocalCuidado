@@ -14,9 +14,6 @@ namespace AwesomeCare.Model.Models.Map
             builder.HasKey(k => k.PerformanceIndicatorId);
 
             #region Properties
-            builder.Property(p => p.StaffPersonalInfoId)
-               .HasColumnName("StaffPersonalInfoId")
-               .IsRequired();
 
             builder.Property(p => p.Heading)
                .HasColumnName("Heading")
@@ -41,11 +38,6 @@ namespace AwesomeCare.Model.Models.Map
             #endregion
 
             #region Relationship
-            builder.HasOne(p => p.StaffPersonalInfo)
-                 .WithMany(p => p.PerformanceIndicator)
-                 .HasForeignKey(p => p.StaffPersonalInfoId)
-                 .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasMany<PerformanceIndicatorTask>(p => p.PerformanceIndicatorTask)
                 .WithOne(p => p.PerformanceIndicator)
                 .HasForeignKey(p => p.PerformanceIndicatorId)

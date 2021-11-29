@@ -43,7 +43,20 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _ResourcesService.Get();
-            return View(entities);
+
+            var client = await _clientService.GetClientDetail();
+            List<CreateResources> reports = new List<CreateResources>();
+            foreach (GetResources item in entities)
+            {
+                var report = new CreateResources();
+                report.ResourcesId = item.ResourcesId;
+                report.Date = item.Date;
+                report.Heading = item.Heading;
+                report.Note = item.Note;
+                report.Image = item.Image;
+                reports.Add(report);
+            }
+            return View(reports);
         }
 
         public async Task<IActionResult> Index()
@@ -85,10 +98,11 @@ namespace AwesomeCare.Admin.Controllers
             }
             if (model.Attach != null)
             { 
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.Date.ToString());
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Image = pathA;
+                string extention = model.PublishTo + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "resources";
+                string filename = string.Concat(folder, "_Image_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Image = path;
             }
             else
             {
@@ -116,10 +130,11 @@ namespace AwesomeCare.Admin.Controllers
             #region Evidence
             if (model.Attach != null)
             {
-                string folderA = "clientcomplain";
-                string filenameA = string.Concat(folderA, "_Attachment_", model.Date.ToString());
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
-                model.Image = pathA;
+                string extention = model.PublishTo + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "resources";
+                string filename = string.Concat(folder, "_Image_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Image = path;
 
             }
             else

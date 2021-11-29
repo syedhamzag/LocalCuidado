@@ -221,7 +221,7 @@ namespace AwesomeCare.Admin.Controllers
             var baserecordItem = await _baseService.GetBaseRecordsWithItems();
             #endregion
             var Client = new List<Status>();
-            
+            #region Oncall
             var Oncall = new List<Status>();
             var oncallpending = oncall.Where(s => s.Status == oncallIdP).Count();
             var oncallclosed = oncall.Where(s => s.Status == oncallIdC).Count();
@@ -242,7 +242,8 @@ namespace AwesomeCare.Admin.Controllers
                 Value = oncallopen
             });
             dashboard.OnCallGraph = Oncall;
-            
+            #endregion
+            #region Concern
             var Concern = new List<Status>();
             var Concernpending = concern.Where(s => s.Status == ConcernIdP).Count();
             var Concernclosed = concern.Where(s => s.Status == ConcernIdC).Count();
@@ -263,6 +264,7 @@ namespace AwesomeCare.Admin.Controllers
                 Value = Concernopen
             });
             dashboard.concernNoteGraph = Concern;
+            #endregion
             #region LogAudit
             var log_pending = log.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
             var log_closed = log.Where(j =>  j.Status == cId).Count();
@@ -1141,7 +1143,6 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.GetTaskBoard = GetTaskBoard(task, taskitem);
             dashboard.ActiveUser = getClient.Where(s => s.Status == "Active").Count();
             dashboard.ApprovedStaff = getStaff.Where(s => s.Status == StaffRegistrationEnum.Approved).Count();
-            dashboard.StaffRatingCount = GetStaffRatingCount(rating);
             dashboard.StaffRating = GetStaffRating(rating);
             dashboard.GetClients = GetClients(getClient);
             dashboard.OnCall = GetOnCall(oncall, getClient);
@@ -1206,53 +1207,28 @@ namespace AwesomeCare.Admin.Controllers
             }
             return reports;
         }
-
-        private List<Status> GetStaffRatingCount(List<GetStaffRating> getStaffs)
-        {
-            var fivestar = getStaffs.Where(s => s.Rating == 5).Count();
-            var fourstar = getStaffs.Where(s => s.Rating == 4).Count();
-            var threestar = getStaffs.Where(s => s.Rating == 3).Count();
-            var twostar = getStaffs.Where(s => s.Rating == 2).Count();
-            var onestar = getStaffs.Where(s => s.Rating == 1).Count();
-
-            var staffRating = new List<Status>();
-            staffRating.Add(new Status
-            {
-                Key = "5 Star Rating",
-                Value = fivestar
-            });
-            staffRating.Add(new Status
-            {
-                Key = "4 Star Rating",
-                Value = fourstar
-            });
-            staffRating.Add(new Status
-            {
-                Key = "3 Star Rating",
-                Value = threestar
-            });
-            staffRating.Add(new Status
-            {
-                Key = "2 Star Rating",
-                Value = twostar
-            });
-            staffRating.Add(new Status
-            {
-                Key = "1 Star Rating",
-                Value = onestar
-            });
-
-            return staffRating;
-        }
-        private Dictionary<string, List<GetStaffRating>> GetStaffRating(List<GetStaffRating> getStaffs)
+        private Dictionary<string, List<GetStaffRating>> GetStaffRating(List<GetStaffRating> StaffRating)
         {
             Dictionary<string, List<GetStaffRating>> staffRating = new Dictionary<string, List<GetStaffRating>>();
-            var fivestar = getStaffs.Where(s => s.Rating == 5).ToList();
-            var fourstar = getStaffs.Where(s => s.Rating == 4).ToList();
-            var threestar = getStaffs.Where(s => s.Rating == 3).ToList();
-            var twostar = getStaffs.Where(s => s.Rating == 2).ToList();
-            var onestar = getStaffs.Where(s => s.Rating == 1).ToList();
-
+            List<GetStaffRating> ratings = new List<GetStaffRating>();
+            var Ids = StaffRating.Select(s => s.StaffPersonalInfoId).Distinct();
+            foreach (var item in Ids)
+            {
+                if (ratings.Count == 0 || ratings.Any(s => s.StaffPersonalInfoId != item))
+                {
+                    string staffName = StaffRating.Where(s => s.StaffPersonalInfoId == item).FirstOrDefault().Staff;
+                    var count = StaffRating.Where(s => s.StaffPersonalInfoId == item).Count();
+                    var _rating = StaffRating.Where(s => s.StaffPersonalInfoId == item).Select(s => s.Rating).Sum();
+                    int newrating = _rating / count;
+                    ratings.Add(new GetStaffRating { Staff = staffName, StaffPersonalInfoId = item, Rating = newrating });
+                }                
+            }
+            var fivestar = ratings.Where(s => s.Rating == 5).ToList();
+            var fourstar =  ratings.Where(s => s.Rating == 4).ToList();
+            var threestar = ratings.Where(s => s.Rating == 3).ToList();
+            var twostar =   ratings.Where(s => s.Rating == 2).ToList();
+            var onestar =   ratings.Where(s => s.Rating == 1).ToList();
+            
             staffRating.Add("5-Star", fivestar);
             staffRating.Add("4-Star", fourstar);
             staffRating.Add("3-Star", threestar);
