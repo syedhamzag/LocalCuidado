@@ -11,7 +11,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator
             GetPerformanceIndicatorTask = new List<GetPerformanceIndicatorTask>();
         }
         public int PerformanceIndicatorId { get; set; }
-        public int StaffPersonalInfoId { get; set; }
         public string Heading { get; set; }
 
         public DateTime Date { get; set; }

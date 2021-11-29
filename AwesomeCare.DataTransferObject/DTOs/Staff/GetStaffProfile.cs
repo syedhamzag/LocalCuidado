@@ -44,7 +44,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             GetStaffHealth = new List<GetStaffHealth>();
             GetStaffInterview  = new List<GetStaffInterview>();
             GetStaffShadowing = new List<GetStaffShadowing>();
-            GetPerformanceIndicator = new List<GetPerformanceIndicator>();
 
     }
         public List<GetStaffEducation> Education { get; set; }
@@ -66,7 +65,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetStaffHealth> GetStaffHealth { get; set; }
         public List<GetStaffInterview> GetStaffInterview{ get; set; }
         public List<GetStaffShadowing> GetStaffShadowing { get; set; }
-        public List<GetPerformanceIndicator> GetPerformanceIndicator { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]

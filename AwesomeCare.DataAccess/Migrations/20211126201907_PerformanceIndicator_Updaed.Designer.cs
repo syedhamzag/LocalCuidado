@@ -4,14 +4,16 @@ using AwesomeCare.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
-    partial class AwesomeCareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211126201907_PerformanceIndicator_Updaed")]
+    partial class PerformanceIndicator_Updaed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1589,42 +1591,6 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("tbl_Client_ComplainRegister");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientDailyTask", b =>
-                {
-                    b.Property<int>("DailyTaskId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AmendmentDate")
-                        .HasColumnName("AmendmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Attachment")
-                        .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DailyTaskName")
-                        .IsRequired()
-                        .HasColumnName("DailyTaskName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("DailyTaskId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_ClientDailyTask");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", b =>
@@ -10308,15 +10274,6 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("ComplainRegister")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientDailyTask", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("ClientDailyTask")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

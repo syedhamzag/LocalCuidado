@@ -19,8 +19,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
         public int ActiveUser { get; set; }
         public int ApprovedStaff { get; set; }
 
-        public List<Status> StaffRatingCount { get; set; }
-
         public Dictionary<string, List<GetStaffRating>> StaffRating { get; set; }
         public List<GetClient> GetClients { get; set; }
         public List<GetStaffPersonalInfo> GetStaffPersonalInfos { get; set; }
@@ -86,5 +84,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
         public string Key { get; set; }
         public int Value { get; set; }
 
+    }
+    public class StaffRating
+    {
+        public int StaffPersonalInfoId { get; set; }
+        public string Staff { get; set; }
+        public int Rating { get; set; }
     }
 }
