@@ -1,4 +1,6 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
+﻿using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
@@ -32,6 +34,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             KeyLogList = new List<SelectListItem>();
             InvolingList = new List<SelectListItem>();
             ClassList = new List<SelectListItem>();
+            HeadingList = new List<SelectListItem>();
+            Tasks = new List<GetHomeRiskAssessmentTask>();
+            baseRecordList = new List<GetBaseRecordItem>();
             #endregion
 
             #region ManagingTasks
@@ -378,6 +383,20 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public string SHC_LifestyleSupport { get; set; }
         public string SHC_PlanningHealthCondition { get; set; }
         #endregion
+
+
+        #endregion
+
+        #region Home Risk Assessment
+        public List<SelectListItem> HeadingList { get; set; }
+        public int HomeRiskAssessmentId { get; set; }
+
+        public int HeadingId { get; set; }
+        public string Heading { get; set; }
+        public int TaskCountHRA { get; set; }
+
+        public List<GetBaseRecordItem> baseRecordList { get; set; }
+        public List<GetHomeRiskAssessmentTask> Tasks { get; set; }
         #endregion
     }
 }

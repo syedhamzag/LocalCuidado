@@ -468,6 +468,10 @@ namespace AwesomeCare.Admin.Controllers
             result.GetBaseRecords = await _baseRecordService.GetBaseRecordItem();
             return View(result);
         }
+        //public List<GetClient> GetCarePlan(int clientId)
+        //{
+        //    var client = _clientService.GetClientCarePlan(clientId);
+        //}
         #endregion
 
         #region Medication

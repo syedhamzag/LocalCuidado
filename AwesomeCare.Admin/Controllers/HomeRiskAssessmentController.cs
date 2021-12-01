@@ -62,12 +62,23 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-        //public async Task<IActionResult> View(int homeId)
-        //{
-        //    var model = await GetHomeRisk(homeId);
-        //    return View(model);
+        public async Task<IActionResult> View(int clientId, int homeRiskId, string heading)
+        {
+            var model = new CreateHomeRiskAssessment();
+            model.ClientId = clientId;
+            model.HomeRiskAssessmentId = homeRiskId;
+            model.Heading = heading;
+            if (homeRiskId > 0)
+            {
+                var task = await _clientHomeRiskAssessment.Get(homeRiskId);
+                model.TaskCount = task.GetHomeRiskAssessmentTask.Count;
+                model.Tasks = task.GetHomeRiskAssessmentTask;
+            }
+            var client = await _clientService.GetClientDetail();
+            model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            return View(model);
 
-        //}
+        }
         public async Task<IActionResult> ListHeading(int clientId)
         {
             var model = new CreateHomeRiskAssessment();

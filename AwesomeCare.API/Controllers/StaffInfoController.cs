@@ -10,6 +10,7 @@ using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Staff.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.Staff.StaffHoliday;
 using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
 using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
@@ -35,7 +36,6 @@ using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class StaffInfoController : ControllerBase
@@ -376,6 +376,11 @@ namespace AwesomeCare.API.Controllers
                                                              StaffPersonalInfoId = s.StaffPersonalInfoId,
                                                              Heading = s.Heading
                                                          }).ToList(),
+                                    GetStaffHoliday = (from sh in st.StaffHoliday
+                                                       select new GetStaffHoliday
+                                                       {
+                                                            StartDate = sh.StartDate
+                                                       }).ToList(),
 
                                 }).FirstOrDefault();
 

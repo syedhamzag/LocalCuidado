@@ -34,7 +34,7 @@
                                 </thead>
                                 <tbody>
 
-                                    @if (Model.GetPersonCentred.Count > 0)
+                                    @if (Model.GetPersonCentred != null)
                                     {
                                         int i = 1;
                                         @foreach (var item in Model.GetPersonCentred)
@@ -1260,7 +1260,52 @@
                             </div>
                         </div>
                     </div>
+                    <h4>Home Risk Assessment</h4>
+                    <div class="row">
+                        <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>Home Risk Assessment Headings</h2>
 
+                                </div>
+                                <div class="body">
+                                    <table class="table table-bordered table-hover" id="homeRisk">
+                                        <thead>
+                                            <tr>
+                                                <th>Heading</th>
+                                                <th>Task</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.HeadingList)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Text
+                                                    </td>
+                                                    <td>
+                                                        <a asp-controller="HomeRiskAssessment" asp-action="View" asp-route-clientId="@Model.ClientId" asp-route-heading="@item.Text" asp-route-homeRiskId="@item.Value" class="btn btn-success btn-sm">Tasks</a>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

@@ -55,10 +55,10 @@ using AwesomeCare.DataTransferObject.DTOs.HospitalEntry;
 using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
+using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 
 namespace AwesomeCare.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
@@ -124,14 +124,13 @@ namespace AwesomeCare.API.Controllers
 
 
         }
-
         /// <summary>
         /// Get Client by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("GetClient/{id}")]
-        [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetClient(int? id)
@@ -249,241 +248,248 @@ namespace AwesomeCare.API.Controllers
                                                                 Evidence = reg.Evidence,
                                                                 RegulatoryContact = baseRecordItem.ValueName
                                                             }).ToList(),
-                                       GetClientBloodCoagulationRecord = (from sw in client.ClientBloodCoagulationRecord
+                                       GetClientBloodCoagulationRecord = (from coag in client.ClientBloodCoagulationRecord
                                                                 select new GetClientBloodCoagulationRecord
                                                                 {
-                                                                    Date = sw.Date,
-                                                                    Comment = sw.Comment
+                                                                    Date = coag.Date,
+                                                                    Comment = coag.Comment
                                                                 }).ToList(),
-                                       GetClientBloodPressure= (from sw in client.ClientBloodPressure
+                                       GetClientBloodPressure= (from pres in client.ClientBloodPressure
                                                                           select new GetClientBloodPressure
                                                                           {
-                                                                              Date = sw.Date,
-                                                                              Comment = sw.Comment
+                                                                              Date = pres.Date,
+                                                                              Comment = pres.Comment
                                                                           }).ToList(),
-                                       GetClientBMIChart= (from sw in client.ClientBMIChart
+                                       GetClientBMIChart= (from bmi in client.ClientBMIChart
                                                                  select new GetClientBMIChart
                                                                  {
-                                                                     Date = sw.Date,
-                                                                     Comment = sw.Comment
+                                                                     Date = bmi.Date,
+                                                                     Comment = bmi.Comment
                                                                  }).ToList(),
-                                       GetClientBodyTemp = (from sw in client.ClientBodyTemp
+                                       GetClientBodyTemp = (from temp in client.ClientBodyTemp
                                                             select new GetClientBodyTemp
                                                             {
-                                                                Date = sw.Date,
-                                                                Comment = sw.Comment
+                                                                Date = temp.Date,
+                                                                Comment = temp.Comment
                                                             }).ToList(),
-                                       GetClientBowelMovement = (from sw in client.ClientBowelMovement
+                                       GetClientBowelMovement = (from bowel in client.ClientBowelMovement
                                                             select new GetClientBowelMovement
                                                             {
-                                                                Date = sw.Date,
-                                                                Comment = sw.Comment
+                                                                Date = bowel.Date,
+                                                                Comment = bowel.Comment
                                                             }).ToList(),
-                                       GetClientEyeHealthMonitoring = (from sw in client.ClientEyeHealthMonitoring
+                                       GetClientEyeHealthMonitoring = (from eye in client.ClientEyeHealthMonitoring
                                                                  select new GetClientEyeHealthMonitoring
                                                                  {
-                                                                     Date = sw.Date,
-                                                                     Comment = sw.Comment
+                                                                     Date = eye.Date,
+                                                                     Comment = eye.Comment
                                                                  }).ToList(),
-                                       GetClientFoodIntake= (from sw in client.ClientFoodIntake
+                                       GetClientFoodIntake= (from food in client.ClientFoodIntake
                                                                        select new GetClientFoodIntake
                                                                        {
-                                                                           Date = sw.Date,
-                                                                           Comment = sw.Comment
+                                                                           Date = food.Date,
+                                                                           Comment = food.Comment
                                                                        }).ToList(),
-                                       GetClientHeartRate = (from sw in client.ClientHeartRate
+                                       GetClientHeartRate = (from heart in client.ClientHeartRate
                                                               select new GetClientHeartRate
                                                               {
-                                                                  Date = sw.Date,
-                                                                  Comment = sw.Comment
+                                                                  Date = heart.Date,
+                                                                  Comment = heart.Comment
                                                               }).ToList(),
-                                       GetClientOxygenLvl = (from sw in client.ClientOxygenLvl
+                                       GetClientOxygenLvl = (from lvl in client.ClientOxygenLvl
                                                              select new GetClientOxygenLvl
                                                              {
-                                                                 Date = sw.Date,
-                                                                 Comment = sw.Comment
+                                                                 Date = lvl.Date,
+                                                                 Comment = lvl.Comment
                                                              }).ToList(),
-                                       GetClientPainChart = (from sw in client.ClientPainChart
+                                       GetClientPainChart = (from pain in client.ClientPainChart
                                                              select new GetClientPainChart
                                                              {
-                                                                 Date = sw.Date,
-                                                                 Comment = sw.Comment
+                                                                 Date = pain.Date,
+                                                                 Comment = pain.Comment
                                                              }).ToList(),
-                                       GetClientPulseRate = (from sw in client.ClientPulseRate
+                                       GetClientPulseRate = (from pulse in client.ClientPulseRate
                                                              select new GetClientPulseRate
                                                              {
-                                                                 Date = sw.Date,
-                                                                 Comment = sw.Comment
+                                                                 Date = pulse.Date,
+                                                                 Comment = pulse.Comment
                                                              }).ToList(),
-                                       GetClientSeizure = (from sw in client.ClientSeizure
+                                       GetClientSeizure = (from seiz in client.ClientSeizure
                                                              select new GetClientSeizure
                                                              {
-                                                                 Date = sw.Date,
-                                                                 Remarks = sw.Remarks
+                                                                 Date = seiz.Date,
+                                                                 Remarks = seiz.Remarks
                                                              }).ToList(),
-                                       GetClientWoundCare = (from sw in client.ClientWoundCare
+                                       GetClientWoundCare = (from wc in client.ClientWoundCare
                                                            select new GetClientWoundCare
                                                            {
-                                                               Date = sw.Date,
-                                                               Comment = sw.Comment
+                                                               Date = wc.Date,
+                                                               Comment = wc.Comment
                                                            }).ToList(),
-                                       GetReview = (from sw in client.PersonalDetail
-                                                    select new GetReview
-                                                    {
-                                                        CP_PreDate = sw.Review.CP_PreDate,
-                                                        CP_ReviewDate = sw.Review.CP_ReviewDate
-                                                    }).ToList(),
-                                       GetPets = (from c in client.Pets
-                                                    select new GetPets
-                                                    {
-                                                        PetsId = c.PetsId,
-                                                        Age = c.Age,
-                                                        ClientId = c.ClientId,
-                                                        Gender = c.Gender,
-                                                        Name = c.Name,
-                                                        MealPattern = c.MealPattern,
-                                                        MealStorage = c.MealStorage,
-                                                        PetCare = c.PetCare,
-                                                        PetInsurance = c.PetInsurance,
-                                                        Type = c.Type,
-                                                        PetActivities = c.PetActivities,
-                                                        VetVisit = c.VetVisit
-                                                    }).ToList(),
-                                       GetInterestAndObjective = (from sw in client.InterestAndObjective
-                                                  select new GetInterestAndObjective
-                                                  {
-                                                      CareGoal = sw.CareGoal,
-                                                  }).ToList(),
-                                       GetPersonalHygiene = (from sw in client.PersonalHygiene
-                                                  select new GetPersonalHygiene
-                                                  {
-                                                      LaundrySupport = sw.LaundrySupport,
-                                                      LaundryGuide = sw.LaundryGuide
-                                                  }).ToList(),
-                                       GetInfectionControl = (from sw in client.InfectionControl
-                                                  select new GetInfectionControl
-                                                  {
-                                                      TestDate = sw.TestDate,
-                                                      Remarks = sw.Remarks
-                                                  }).ToList(),
-                                       GetManagingTasks = (from sw in client.ManagingTasks
-                                                  select new GetManagingTasks
-                                                  {
-                                                      Help = sw.Help,
-                                                  }).ToList(),
-                                       GetCarePlanNutrition = (from sw in client.CarePlanNutrition
-                                                  select new GetCarePlanNutrition
-                                                  {
-                                                      SpecialDiet = sw.SpecialDiet,
-                                                      AvoidFood = sw.AvoidFood
-                                                  }).ToList(),
-                                       GetBalance = (from sw in client.Balance
-                                                  select new GetBalance
-                                                  {
-                                                      Name = sw.Name,
-                                                      Description = sw.Description
-                                                  }).ToList(),
-                                       GetPhysicalAbility = (from sw in client.PhysicalAbility
-                                                  select new GetPhysicalAbility
-                                                  {
-                                                      Name = sw.Name,
-                                                      Description = sw.Description
-                                                  }).ToList(),
-                                       GetHealthAndLiving = (from sw in client.HealthAndLiving
-                                                  select new GetHealthAndLiving
-                                                  {
-                                                      BriefHealth = sw.BriefHealth,
-                                                      WakeUp = sw.WakeUp
-                                                  }).ToList(),
-                                       GetSpecialHealthAndMedication = (from s in client.SpecialHealthAndMedication
-                                                  select new GetSpecialHealthAndMedication
-                                                  {
-                                                      Date = s.Date,
-                                                      By = s.By,
-                                                      AccessMedication = s.AccessMedication,
-                                                      AdminLvl = s.AdminLvl,
-                                                      ClientId = s.ClientId,
-                                                      Consent = s.Consent,
-                                                      FamilyMeds = s.FamilyMeds,
-                                                      FamilyReturnMed = s.FamilyReturnMed,
-                                                      LeftoutMedicine = s.LeftoutMedicine,
-                                                      MedAccessDenial = s.MedAccessDenial,
-                                                      MedicationAllergy = s.MedicationAllergy,
-                                                      MedicationStorage = s.MedicationStorage,
-                                                      MedKeyCode = s.MedKeyCode,
-                                                      MedsGPOrder = s.MedsGPOrder,
-                                                      NameFormMedicaiton = s.NameFormMedicaiton,
-                                                      NoMedAccess = s.NoMedAccess,
-                                                      OverdoseContact = s.OverdoseContact,
-                                                      PharmaMARChart = s.PharmaMARChart,
-                                                      PNRDoses = s.PNRDoses,
-                                                      PNRMedList = s.PNRMedList,
-                                                      PNRMedReq = s.PNRMedReq,
-                                                      PNRMedsAdmin = s.PNRMedsAdmin,
-                                                      PNRMedsMissing = s.PNRMedsMissing,
-                                                      SHMId = s.SHMId,
-                                                      SpecialStorage = s.SpecialStorage,
-                                                      TempMARChart = s.TempMARChart,
-                                                      Type = s.Type,
-                                                      WhoAdminister = s.WhoAdminister
-                                                  }).ToList(),
-                                       GetSpecialHealthCondition = (from s in client.SpecialHealthCondition
-                                                  select new GetSpecialHealthCondition
-                                                  {
-                                                      ConditionName = s.ConditionName,
-                                                      SourceInformation = s.SourceInformation,
-                                                      ClientAction = s.ClientAction,
-                                                      ClientId = s.ClientId,
-                                                      ClinicRecommendation = s.ClinicRecommendation,
-                                                      FeelingAfterIncident = s.FeelingAfterIncident,
-                                                      FeelingBeforeIncident = s.FeelingBeforeIncident,
-                                                      Frequency = s.Frequency,
-                                                      HealthCondId = s.HealthCondId,
-                                                      LifestyleSupport = s.LifestyleSupport,
-                                                      LivingActivities = s.LivingActivities,
-                                                      PlanningHealthCondition = s.PlanningHealthCondition,
-                                                      Trigger = s.Trigger
-                                                  }).ToList(),
-                                       GetHistoryOfFall = (from sw in client.HistoryOfFall
-                                                  select new GetHistoryOfFall
-                                                  {
-                                                      Date = sw.Date,
-                                                      Cause = sw.Cause,
-                                                      Details = sw.Details,
-                                                      HistoryId = sw.HistoryId,
-                                                      Prevention = sw.Prevention,
-                                                      ClientId = sw.ClientId
-                                                  }).ToList(),
-                                       GetHospitalEntry = (from sw in client.HospitalEntry
+                                       //GetReview = (from rew in client.PersonalDetail
+                                       //             select new GetReview
+                                       //             {
+                                       //                 CP_PreDate = rew.Review.CP_PreDate,
+                                       //                 CP_ReviewDate = rew.Review.CP_ReviewDate
+                                       //             }).ToList(),
+                                       //GetPets = (from pet in client.Pets
+                                       //             select new GetPets
+                                       //             {
+                                       //                 PetsId = pet.PetsId,
+                                       //                 Age = pet.Age,
+                                       //                 ClientId = pet.ClientId,
+                                       //                 Gender = pet.Gender,
+                                       //                 Name = pet.Name,
+                                       //                 MealPattern = pet.MealPattern,
+                                       //                 MealStorage = pet.MealStorage,
+                                       //                 PetCare = pet.PetCare,
+                                       //                 PetInsurance = pet.PetInsurance,
+                                       //                 Type = pet.Type,
+                                       //                 PetActivities = pet.PetActivities,
+                                       //                 VetVisit = pet.VetVisit
+                                       //             }).ToList(),
+                                       //GetInterestAndObjective = (from iao in client.InterestAndObjective
+                                       //           select new GetInterestAndObjective
+                                       //           {
+                                       //               CareGoal = iao.CareGoal,
+                                       //           }).ToList(),
+                                       //GetPersonalHygiene = (from ph in client.PersonalHygiene
+                                       //           select new GetPersonalHygiene
+                                       //           {
+                                       //               LaundrySupport = ph.LaundrySupport,
+                                       //               LaundryGuide = ph.LaundryGuide
+                                       //           }).ToList(),
+                                       //GetInfectionControl = (from ic in client.InfectionControl
+                                       //           select new GetInfectionControl
+                                       //           {
+                                       //               TestDate = ic.TestDate,
+                                       //               Remarks = ic.Remarks
+                                       //           }).ToList(),
+                                       //GetManagingTasks = (from mt in client.ManagingTasks
+                                       //           select new GetManagingTasks
+                                       //           {
+                                       //               Help = mt.Help,
+                                       //           }).ToList(),
+                                       //GetCarePlanNutrition = (from cpn in client.CarePlanNutrition
+                                       //           select new GetCarePlanNutrition
+                                       //           {
+                                       //               SpecialDiet = cpn.SpecialDiet,
+                                       //               AvoidFood = cpn.AvoidFood
+                                       //           }).ToList(),
+                                       //GetBalance = (from bln in client.Balance
+                                       //           select new GetBalance
+                                       //           {
+                                       //               Name = bln.Name,
+                                       //               Description = bln.Description
+                                       //           }).ToList(),
+                                       //GetPhysicalAbility = (from pab in client.PhysicalAbility
+                                       //           select new GetPhysicalAbility
+                                       //           {
+                                       //               Name = pab.Name,
+                                       //               Description = pab.Description
+                                       //           }).ToList(),
+                                       //GetHealthAndLiving = (from hal in client.HealthAndLiving
+                                       //           select new GetHealthAndLiving
+                                       //           {
+                                       //               BriefHealth = hal.BriefHealth,
+                                       //               WakeUp = hal.WakeUp
+                                       //           }).ToList(),
+                                       //GetSpecialHealthAndMedication = (from sham in client.SpecialHealthAndMedication
+                                       //           select new GetSpecialHealthAndMedication
+                                       //           {
+                                       //               Date = sham.Date,
+                                       //               By = sham.By,
+                                       //               AccessMedication = sham.AccessMedication,
+                                       //               AdminLvl = sham.AdminLvl,
+                                       //               ClientId = sham.ClientId,
+                                       //               Consent = sham.Consent,
+                                       //               FamilyMeds = sham.FamilyMeds,
+                                       //               FamilyReturnMed = sham.FamilyReturnMed,
+                                       //               LeftoutMedicine = sham.LeftoutMedicine,
+                                       //               MedAccessDenial = sham.MedAccessDenial,
+                                       //               MedicationAllergy = sham.MedicationAllergy,
+                                       //               MedicationStorage = sham.MedicationStorage,
+                                       //               MedKeyCode = sham.MedKeyCode,
+                                       //               MedsGPOrder = sham.MedsGPOrder,
+                                       //               NameFormMedicaiton = sham.NameFormMedicaiton,
+                                       //               NoMedAccess = sham.NoMedAccess,
+                                       //               OverdoseContact = sham.OverdoseContact,
+                                       //               PharmaMARChart = sham.PharmaMARChart,
+                                       //               PNRDoses = sham.PNRDoses,
+                                       //               PNRMedList = sham.PNRMedList,
+                                       //               PNRMedReq = sham.PNRMedReq,
+                                       //               PNRMedsAdmin = sham.PNRMedsAdmin,
+                                       //               PNRMedsMissing = sham.PNRMedsMissing,
+                                       //               SHMId = sham.SHMId,
+                                       //               SpecialStorage = sham.SpecialStorage,
+                                       //               TempMARChart = sham.TempMARChart,
+                                       //               Type = sham.Type,
+                                       //               WhoAdminister = sham.WhoAdminister
+                                       //           }).ToList(),
+                                       //GetSpecialHealthCondition = (from shc in client.SpecialHealthCondition
+                                       //           select new GetSpecialHealthCondition
+                                       //           {
+                                       //               ConditionName = shc.ConditionName,
+                                       //               SourceInformation = shc.SourceInformation,
+                                       //               ClientAction = shc.ClientAction,
+                                       //               ClientId = shc.ClientId,
+                                       //               ClinicRecommendation = shc.ClinicRecommendation,
+                                       //               FeelingAfterIncident = shc.FeelingAfterIncident,
+                                       //               FeelingBeforeIncident = shc.FeelingBeforeIncident,
+                                       //               Frequency = shc.Frequency,
+                                       //               HealthCondId = shc.HealthCondId,
+                                       //               LifestyleSupport = shc.LifestyleSupport,
+                                       //               LivingActivities = shc.LivingActivities,
+                                       //               PlanningHealthCondition = shc.PlanningHealthCondition,
+                                       //               Trigger = shc.Trigger
+                                       //           }).ToList(),
+                                       //GetHistoryOfFall = (from hof in client.HistoryOfFall
+                                       //           select new GetHistoryOfFall
+                                       //           {
+                                       //               Date = hof.Date,
+                                       //               Cause = hof.Cause,
+                                       //               Details = hof.Details,
+                                       //               HistoryId = hof.HistoryId,
+                                       //               Prevention = hof.Prevention,
+                                       //               ClientId = hof.ClientId
+                                       //           }).ToList(),
+                                       GetHospitalEntry = (from hen in client.HospitalEntry
                                                            select new GetHospitalEntry
                                                            {
-                                                               HospitalEntryId = sw.HospitalEntryId,
-                                                               ClientId = sw.ClientId,
-                                                               Date = sw.Date,
-                                                               Reference = sw.Reference,
-                                                               Attachment = sw.Attachment,
+                                                               HospitalEntryId = hen.HospitalEntryId,
+                                                               ClientId = hen.ClientId,
+                                                               Date = hen.Date,
+                                                               Reference = hen.Reference,
+                                                               Attachment = hen.Attachment,
                                                            }).ToList(),
-                                       GetHospitalExit = (from sw in client.HospitalExit
+                                       GetHospitalExit = (from hex in client.HospitalExit
                                                           select new GetHospitalExit
                                                           {
-                                                              Date = sw.Date,
-                                                              Reference = sw.Reference
+                                                              Date = hex.Date,
+                                                              Reference = hex.Reference
                                                           }).ToList(),
-                                       GetHomeRiskAssessment = (from h in client.HomeRiskAssessment
-                                                                select new GetHomeRiskAssessment
-                                                                {
-                                                                    Heading = h.Heading
-                                                                }).ToList(),
+                                       //GetHomeRiskAssessment = (from hra in client.HomeRiskAssessment
+                                       //                         select new GetHomeRiskAssessment
+                                       //                         {
+                                       //                             Heading = hra.Heading
+                                       //                         }).ToList(),
                                        
-                                       GetDutyOnCall = (from d in client.DutyOnCall
+                                       GetDutyOnCall = (from doc in client.DutyOnCall
                                                         select new GetDutyOnCall
                                                         { 
-                                                            Attachment = d.Attachment,
-                                                            Subject = d.Subject,
-                                                            RefNo = d.RefNo,
-                                                            DateOfCall = d.DateOfCall
+                                                            Attachment = doc.Attachment,
+                                                            Subject = doc.Subject,
+                                                            RefNo = doc.RefNo,
+                                                            DateOfCall = doc.DateOfCall
                                                         
-                                                        }).ToList()
+                                                        }).ToList(),
+                                       GetClientDailyTask = (from cdt in  client.ClientDailyTask
+                                                             select new GetClientDailyTask
+                                                             {
+                                                                Date = cdt.Date,
+                                                                AmendmentDate = cdt.AmendmentDate
+                                                             }).ToList()
+                                       
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

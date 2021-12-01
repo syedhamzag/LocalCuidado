@@ -16,6 +16,7 @@ using AwesomeCare.Admin.Services.SpecialHealthAndMedication;
 using AwesomeCare.Admin.Services.SpecialHealthCondition;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.CarePlan;
+using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Http;
@@ -49,13 +50,14 @@ namespace AwesomeCare.Admin.Controllers
         private IStaffService _staffService;
         private IBaseRecordService _baseRecord;
         private IClientInvolvingParty _involvingparty;
+        private IHomeRiskAssessmentService _clientHomeRiskAssessment;
 
         public CarePlanController(  IFileUpload fileUpload, IStaffService staffService, IClientService clientService, IPersonalDetailService pdetailService,
                                     IBaseRecordService baseRecord, IClientInvolvingParty involvingparty, ICarePlanNutritionService nutritionService,
                                     IPersonalHygieneService phygieneService, IInfectionControlService infectionService, IManagingTasksService mataskService,
                                     IPetsService petsService, IInterestAndObjectiveService interestService, IBalanceService balanceService, IPhysicalAbilityService physicalService,
                                     IHistoryOfFallService historyService, IHealthAndLivingService hlService, ISpecialHealthAndMedicationService shamService,
-                                    ISpecialHealthConditionService shcService) : base(fileUpload)
+                                    ISpecialHealthConditionService shcService, IHomeRiskAssessmentService clientHomeRiskAssessment) : base(fileUpload)
         {
             _staffService = staffService;
             _clientService = clientService;
@@ -74,6 +76,7 @@ namespace AwesomeCare.Admin.Controllers
             _hlService = hlService;
             _shamService = shamService;
             _shcService = shcService;
+            _clientHomeRiskAssessment = clientHomeRiskAssessment;
         }
 
         public async Task<IActionResult> CareView(int clientId)
@@ -106,9 +109,18 @@ namespace AwesomeCare.Admin.Controllers
             var history = await _historyService.Get();
             var sham = await _shamService.Get();
             var shc = await _shcService.Get();
-
+            List<GetHomeRiskAssessment> home = await _clientHomeRiskAssessment.GetByClient(clientId);
             var model = new CreateCarePlanView();
-
+            model.ClientId = clientId;
+            var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
+            var filterBaseRecord = baseRecord.Where(s => s.KeyName == "Home_Risk_Assessment_Heading").Select(s => s.BaseRecordItems).FirstOrDefault();
+            model.baseRecordList = filterBaseRecord.ToList();
+            
+            if (home.Count > 0)
+            {
+                model.HomeRiskAssessmentId = home.FirstOrDefault().HomeRiskAssessmentId;
+                model.HeadingList = home.Select(s => new SelectListItem(s.Heading, s.HomeRiskAssessmentId.ToString())).ToList();
+            }
             #region PERSONAL DETAILS
             if (pdetail != null) 
             {
@@ -429,7 +441,9 @@ namespace AwesomeCare.Admin.Controllers
                 }
             }
             int i = 1;
-            foreach (var item in model.GetPersonCentred)
+            if(model.GetPersonCentred != null)
+            { 
+                foreach (var item in model.GetPersonCentred)
             {
                 if (i == 1)
                     model.Focus1 = item.Focus.Select(s => s.BaseRecordId).ToList();
@@ -442,6 +456,7 @@ namespace AwesomeCare.Admin.Controllers
                 if (i == 5)
                     model.Focus5 = item.Focus.Select(s => s.BaseRecordId).ToList();
                 i++;
+            }
             }
             #endregion
 
