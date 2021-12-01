@@ -234,7 +234,7 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _clientBMIChartService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New BMI Chart successfully registered" : "An Error Occurred" });
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New BMI Chart successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
 
         }

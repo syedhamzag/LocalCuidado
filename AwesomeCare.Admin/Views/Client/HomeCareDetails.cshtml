@@ -36,7 +36,7 @@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#program">Program</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#servicewatch">Service Watch</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#telehealth">Tele Health</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#careplan">Care Plan</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#careplan" onclick="getCarePlan(@Model.ClientId)">Care Plan</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#dailytask">Daily Task</a></li>
 
                 </ul>
@@ -1269,7 +1269,7 @@
                                         </ul>
                                     </div>
                                     <div class="body">
-                                        <table class="table table-bordered table-hover">
+                                        <table class="table table-bordered table-hover" id="GetReview">
                                             <thead>
                                                 <tr>
                                                     <th>Prepare Date</th>
@@ -1277,17 +1277,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model.GetReview)
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @item.CP_PreDate
-                                                        </td>
-                                                        <td>
-                                                            @item.CP_ReviewDate
-                                                        </td>
-                                                    </tr>
-                                                }
                                             </tbody>
                                         </table>
                                     </div>
@@ -1318,7 +1307,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetHealthAndLiving">
                                                         <thead>
                                                             <tr>
                                                                 <th>Health Brief</th>
@@ -1326,17 +1315,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetHealthAndLiving)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.BriefHealth
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.WakeUp
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1353,7 +1332,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetSpecialHealthAndMedication">
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
@@ -1361,17 +1340,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetSpecialHealthAndMedication)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.Date
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.By
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1388,7 +1357,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetBalance">
                                                         <thead>
                                                             <tr>
                                                                 <th>Name</th>
@@ -1396,17 +1365,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetBalance)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.Name
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.Description
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1423,7 +1382,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetPhysicalAbility">
                                                         <thead>
                                                             <tr>
                                                                 <th>Name</th>
@@ -1431,17 +1390,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetPhysicalAbility)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.Name
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.Description
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1458,7 +1407,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetSpecialHealthCondition">
                                                         <thead>
                                                             <tr>
                                                                 <th>Name Of Condition</th>
@@ -1466,17 +1415,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetSpecialHealthCondition)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.ConditionName
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.SourceInformation
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1493,7 +1432,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetHistoryOfFall">
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
@@ -1501,17 +1440,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetHistoryOfFall)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.Date
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.Cause
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1532,7 +1461,7 @@
                                         </ul>
                                     </div>
                                     <div class="body">
-                                        <table class="table table-bordered table-hover">
+                                        <table class="table table-bordered table-hover" id="GetCarePlanNutrition">
                                             <thead>
                                                 <tr>
                                                     <th>Special Diet</th>
@@ -1540,17 +1469,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model.GetCarePlanNutrition)
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @item.SpecialDiet
-                                                        </td>
-                                                        <td>
-                                                            @item.AvoidFood
-                                                        </td>
-                                                    </tr>
-                                                }
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -1578,7 +1497,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetPersonalHygiene">
                                                         <thead>
                                                             <tr>
                                                                 <th>Practical Laundry Support</th>
@@ -1586,17 +1505,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetPersonalHygiene)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.LaundrySupport
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.LaundryGuide
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1613,7 +1522,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetInfectionControl">
                                                         <thead>
                                                             <tr>
                                                                 <th>Test Date</th>
@@ -1621,17 +1530,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetInfectionControl)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.TestDate
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.Remarks
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1648,21 +1547,14 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetManagingTasks">
                                                         <thead>
                                                             <tr>
                                                                 <th>Help Required</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetManagingTasks)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.Help
-                                                                    </td>
-                                                                </tr>
-                                                            }
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1692,21 +1584,13 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetInterestAndObjective">
                                                         <thead>
                                                             <tr>
                                                                 <th>Goal/Objective of Care</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetInterestAndObjective)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.CareGoal
-                                                                    </td>
-                                                                </tr>
-                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1723,7 +1607,7 @@
                                                     </ul>
                                                 </div>
                                                 <div class="body">
-                                                    <table class="table table-bordered table-hover">
+                                                    <table class="table table-bordered table-hover" id="GetPets">
                                                         <thead>
                                                             <tr>
                                                                 <th>Name</th>
@@ -1731,17 +1615,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach (var item in Model.GetPets)
-                                                            {
-                                                                <tr>
-                                                                    <td>
-                                                                        @item.Name
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.Age
-                                                                    </td>
-                                                                </tr>
-                                                            }
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1762,21 +1635,14 @@
                                         </ul>
                                     </div>
                                     <div class="body">
-                                        <table class="table table-bordered table-hover">
+                                        <table class="table table-bordered table-hover" id="GetHomeRiskAssessment">
                                             <thead>
                                                 <tr>
                                                     <th>Heading</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach (var item in Model.GetHomeRiskAssessment)
-                                                {
-                                                    <tr>
-                                                        <td>
-                                                            @item.Heading
-                                                        </td>
-                                                    </tr>
-                                                }
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -1802,21 +1668,22 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
+                                        <th>Amendment Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-@*                                    @foreach (var item in Model.GetHospitalExit)
+                                    @foreach (var item in Model.GetClientDailyTask)
                                     {
                                         <tr>
                                             <td>
-                                                @item.Reference
+                                                @item.Date
                                             </td>
                                             <td>
-                                                @item.Date
+                                                @item.AmendmentDate
                                             </td>
 
                                         </tr>
-                                    }*@
+                                    }
 
                                 </tbody>
                             </table>
@@ -1830,7 +1697,23 @@
 </div>
 <script src="../../../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
 <script>
-    
+    function getCarePlan(clientId)
+    {
+        if (Id !== "" || Id > 0) {
+            $.ajax({
+                type: 'POST',
+                url: '/Client/GetCarePlan',
+                data: { "clientId": clientId },
+                success: function (response) {
+                    response
+                    
+                },
+                error: function () {
+                  
+                }
+            });
+        }
+    }
     var url_string = window.location.href;
     var url = new URL(url_string);
     var ActiveTab = url.searchParams.get("ActiveTab");

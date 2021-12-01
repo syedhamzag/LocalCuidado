@@ -60,6 +60,17 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public int EquipmentCount { get; set; } = 0;
         public int PersonCentreCount { get; set; } = 5;
 
+        //Equipment
+        public int EquipmentId { get; set; }
+        public int Name { get; set; }
+        public int Type { get; set; }
+        public int Location { get; set; }
+        public DateTime ServiceDate { get; set; }
+        public DateTime NextServiceDate { get; set; }
+        public string Attachment { get; set; }
+        public int Status { get; set; }
+        public int PersonToAct { get; set; }
+
         #region Personal Detail
         public int PersonalDetailId { get; set; }
         public int ClientId { get; set; }

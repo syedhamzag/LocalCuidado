@@ -112,6 +112,7 @@ using AwesomeCare.Admin.Services.StaffInterview;
 using AwesomeCare.Admin.Services.StaffShadowing;
 using AwesomeCare.Admin.Services.PerformanceIndicator;
 using AwesomeCare.Admin.Services.ClientDailyTask;
+using AwesomeCare.Admin.Services.StaffHoliday;
 
 namespace AwesomeCare.Admin
 {
@@ -1024,6 +1025,12 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientDailyTaskService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("staffholiday", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IStaffHolidayService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
