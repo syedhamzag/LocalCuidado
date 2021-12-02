@@ -28,6 +28,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
             ComplainRegisters = new List<CreateComplainRegister>();
         }
         public int ClientId { get; set; }
+        [Required]
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght =1)]
         [AllowedExtensions(new string[] { ".png", ".jpg" , ".jpeg" })]

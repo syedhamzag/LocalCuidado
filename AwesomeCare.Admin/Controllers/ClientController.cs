@@ -171,21 +171,9 @@ namespace AwesomeCare.Admin.Controllers
                 model.PassportFilePath = path;
                 #endregion
 
-                #region Involving Parties
-                var involvingParties = InvolvingParty(model);
-                model.InvolvingParties = involvingParties;
-                #endregion
-
-                #region Regulatory Contact
-                var regulatoryContact = await RegulatoryContact(model);
-                model.RegulatoryContacts = regulatoryContact;
-                #endregion
+               
 
                 var postClient = Mapper.Map<PostClient>(model);
-                #region CareDetails
-                var careDetails = CareDetails(model);
-                postClient.CareDetails = careDetails;
-                #endregion
                 var json = JsonConvert.SerializeObject(postClient);
                 var result = await _clientService.PostClient(postClient);
 
@@ -419,9 +407,12 @@ namespace AwesomeCare.Admin.Controllers
             List<PutClientInvolvingParty> puts = new List<PutClientInvolvingParty>();
             for (int i = 0; i < model.InvolvingPartyCount; i++)
             {
+                
                 PutClientInvolvingParty put = new PutClientInvolvingParty();
-                var item = int.Parse(formcollection["itemIdcmb"][i]);
-                var party = int.Parse(formcollection["ClientInvolvingPartyId"][i]);
+
+                int item = int.Parse(formcollection["ClientInvolvingPartyItemId"][i]);
+                int party = int.Parse(formcollection["ClientInvolvingPartyId"][i]);
+
                 var tel = formcollection["Telephone"][i];
                 var address = formcollection["Address"][i];
                 var email = formcollection["Email"][i];

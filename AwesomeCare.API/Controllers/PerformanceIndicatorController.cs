@@ -4,6 +4,7 @@ using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +60,7 @@ namespace AwesomeCare.API.Controllers
 
             return Ok(getEntity);
         }
+        [AllowAnonymous]
         [HttpGet()]
         [ProducesResponseType(type: typeof(List<GetPerformanceIndicator>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -79,7 +81,7 @@ namespace AwesomeCare.API.Controllers
                                                                          Title = t.Title,
                                                                          Score = t.Score,
                                                                      }).ToList()
-                                  }).FirstOrDefaultAsync();
+                                  }).ToListAsync();
 
             return Ok(getEntity);
         }
