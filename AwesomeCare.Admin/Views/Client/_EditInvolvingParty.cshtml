@@ -57,7 +57,7 @@
     <tbody>
         <tr>
             <td>
-                <select class="form-control" id="itemIdcmb" name="itemIdcmb">
+                <select class="form-control" id="itemIdcmb" name="itemIdcmb" onchange="getId(this)">
                     <option value="1">Social Worker</option>
                     <option value="2">GP (General Practional)</option>
                     <option value="3">NOK (Next of Kin)</option>
@@ -65,8 +65,8 @@
                     <option value="6">DISTRICT NURSE</option>
                     <option value="7">PHARMACY</option>
                 </select>
-
-                <input type="hidden" id="ClientInvolvingPartyItemId" name="ClientInvolvingPartyId" value="0" />
+                <input type="hidden" id="ClientInvolvingPartyItemId" name="ClientInvolvingPartyItemId" value="0" />
+                <input type="hidden" id="ClientInvolvingPartyId" name="ClientInvolvingPartyId" value="0" />
             </td>
             <td><input asp-for="@Model.InvolvingParties.FirstOrDefault().Name" type="text" class="form-control" value="" /></td>
             <td><input asp-for="@Model.InvolvingParties.FirstOrDefault().Address" type="text" class="form-control" value="" /></td>

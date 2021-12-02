@@ -80,7 +80,14 @@
     <script src="../assets/js/pages/forms/form-wizard.js"></script>
     <script src="../assets/js/pages/forms/dropify.js"></script>
     <script>
+        function getId(e) {
+            var value = e.value;
+            $('#itemIdcmb').siblings().first().val(value);
+        };
         $(function () {
+
+            
+
             var table = $('#InvolvingParty').DataTable({
                 scrollCollapse: true,
                 select: {
