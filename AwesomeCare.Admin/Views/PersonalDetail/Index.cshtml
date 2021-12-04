@@ -285,14 +285,14 @@
                                         @foreach (var equip in Model.GetEquipment)
                                         {
                                             <tr id="@equip.EquipmentId">
-                                                <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" value="@equip.ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                                <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" value="@equip.ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /><input type="hidden" asp-for="EquipmentId" value="@equip.EquipmentId" /> </td>
                                                 <td><input type="text" asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" value="@equip.NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
                                                 <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Status" asp-items="null" /></td>
                                                 <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Name" asp-items="null" /></td>
                                                 <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Type" asp-items="null" /></td>
                                                 <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Location" asp-items="null" /></td>
                                                 <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).PersonToAct" asp-items="Model.StaffList"></select></td>
-                                                <td><input type="hidden" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Attachment" value="@equip.Attachment" /><input type="hidden" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).EquipmentId" /></td>
+                                                <td><input type="hidden" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Attachment" value="@equip.Attachment" /></td>
                                             </tr>
                                         }
                                     }
@@ -418,14 +418,14 @@
                     </thead>
                     <tbody>
                             <tr>
-                                <td><input type="text" asp-for="ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                <td><input type="text" asp-for="ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /><input type="hidden" asp-for="EquipmentId" value="0" /> </td>
                                 <td><input type="text" asp-for="NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
                                 <td><baserecord asp-key="Equipment_Status" asp-for="Status" asp-items="null" /></td>
                                 <td><baserecord asp-key="Equipment_Name" asp-for="Name" asp-items="null" /></td>
                                 <td><baserecord asp-key="Equipment_Type" asp-for="Type" asp-items="null" /></td>
                                 <td><baserecord asp-key="Equipment_Location" asp-for="Location" asp-items="null" /></td>
                                 <td><baserecord asp-key="GetStaff" asp-for="PersonToAct" asp-items="Model.StaffList" /></td>
-                                <td><input type="file" id="Image" name="Image" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx"></td>
+                                <td><input type="file" id="Image" name="Image" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx"><input type="hidden" asp-for="Attachment" value="" /></td>
                             </tr>
                     </tbody>
                 </table>
@@ -447,6 +447,10 @@
     <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
     <script>
+        function getId(e) {
+            var value = e.value;
+            $('#itemIdcmb').siblings().first().val(value);
+        };
         $(function () {
             $('#btnClass1').on('click', function () {
                 $('#tblPersonCentered > tbody  > tr').each(function () {

@@ -10,11 +10,37 @@
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
             <div class="header">
-                <h2></h2>
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>@Model.ClientName</h2>
+                            </div>
+                            <div class="body">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="card">
+                            <div class="header">
+                            </div>
+                            <div class="body">
+                                <img alt="clientimage" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="card">
+                            <div class="header">
+                            </div>
+                            <div class="body">
+                                <img alt="clientimage" src="@Model.PassportFilePath" height="150" width="150">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="body">
-                <form asp-route="CarePlan" method="post" enctype="multipart/form-data">
-
                     <input type="hidden" asp-for="PersonalDetailId" />
                     <input type="hidden" asp-for="ClientId" />
 
@@ -193,21 +219,21 @@
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">About Me</label>
-                                    <textarea type="text" readonly asp-for="AboutMe" class="form-control"></textarea>
+                                    <p style="text-align:justify;">@Model.AboutMe</p>
                                     <span asp-validation-for="AboutMe" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Things I Like To Talk About</label>
-                                    <textarea type="text" readonly asp-for="ThingsILike" class="form-control"></textarea>
+                                    <p style="text-align:justify;">@Model.ThingsILike</p>
                                     <span asp-validation-for="ThingsILike" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Role Of My Family</label>
-                                    <textarea type="text" readonly asp-for="FamilyRole" class="form-control"></textarea>
+                                    <p style="text-align:justify;">@Model.FamilyRole</p>
                                     <span asp-validation-for="FamilyRole" class="text-danger"></span>
                                 </div>
                             </div>
@@ -252,7 +278,46 @@
                             </table>
                         </div>
                     </div>
+                    <h4>Involving Parties</h4>
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
 
+                                        <th>NAME</th>
+                                        <th>ADDRESS</th>
+                                        <th>EMAIL</th>
+                                        <th>TELEPHONE</th>
+                                        <th>RELATIONSHIP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetInvolvingParty)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Name
+                                            </td>
+                                            <td>
+                                                @item.Address
+                                            </td>
+                                            <td>
+                                                @item.Email
+                                            </td>
+                                            <td>
+                                                @item.Telephone
+                                            </td>
+                                            <td>
+                                                @item.Relationship
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <h4>Consent For Landline</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -655,7 +720,7 @@
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Description</label>
-                                <textarea type="text" asp-for="Balance_Description" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.Balance_Description</p>
                                 <span asp-validation-for="Balance_Description" class="text-danger"></span>
                             </div>
                         </div>
@@ -684,7 +749,7 @@
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Description</label>
-                                <textarea type="text" asp-for="Physical_Description" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.Physical_Description</p>
                                 <span asp-validation-for="Physical_Description" class="text-danger"></span>
                             </div>
                         </div>
@@ -708,14 +773,14 @@
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Details</label>
-                                <textarea type="text" asp-for="History_Details" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.History_Details</p>
                                 <span asp-validation-for="History_Details" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Prevention</label>
-                                <textarea type="text" asp-for="History_Prevention" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.History_Prevention</p>
                                 <span asp-validation-for="History_Prevention" class="text-danger"></span>
                             </div>
                         </div>
@@ -897,56 +962,56 @@
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Feelings Before Incident</label>
-                                <textarea type="text" asp-for="SHC_FeelingBeforeIncident" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.SHC_FeelingBeforeIncident</p>
                                 <span asp-validation-for="SHC_FeelingBeforeIncident" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Feelings After Incident</label>
-                                <textarea type="text" asp-for="SHC_FeelingAfterIncident" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.SHC_FeelingAfterIncident</p>
                                 <span asp-validation-for="SHC_FeelingAfterIncident" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Are There Risk Involved in Daily Living Activities</label>
-                                <textarea type="text" asp-for="SHC_LivingActivities" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.SHC_LivingActivities</p>
                                 <span asp-validation-for="SHC_LivingActivities" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Trigger</label>
-                                <textarea type="text" asp-for="SHC_Trigger" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.SHC_Trigger</p>
                                 <span asp-validation-for="SHC_Trigger" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Client Action</label>
-                                <textarea type="text" asp-for="SHC_ClientAction" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.SHC_ClientAction</p>
                                 <span asp-validation-for="SHC_ClientAction" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Medication Or Clinic Recommendation</label>
-                                <textarea type="text" asp-for="SHC_ClinicRecommendation" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.SHC_ClinicRecommendation</p>
                                 <span asp-validation-for="SHC_ClinicRecommendation" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">What LifeStyle Support Is Required</label>
-                                <textarea type="text" asp-for="SHC_LifestyleSupport" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.SHC_LifestyleSupport</p>
                                 <span asp-validation-for="SHC_LifestyleSupport" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                 <label class="control-label">Care assessment and Person Centred Planning for Health Condition/s</label>
-                                <textarea type="text" asp-for="SHC_PlanningHealthCondition" class="form-control" readonly></textarea>
+                                <p style="text-align:justify;">@Model.SHC_PlanningHealthCondition</p>
                                 <span asp-validation-for="SHC_PlanningHealthCondition" class="text-danger"></span>
                             </div>
                         </div>
@@ -1017,14 +1082,14 @@
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">General Washing Instructions</label>
-                                    <textarea type="text" asp-for="Hygiene_LaundryGuide" class="form-control" readonly></textarea>
+                                    <p style="text-align:justify;">@Model.Hygiene_LaundryGuide</p>
                                     <span asp-validation-for="Hygiene_LaundryGuide" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Practical Support For Laundry</label>
-                                    <textarea type="text" asp-for="Hygiene_LaundrySupport" class="form-control" readonly></textarea>
+                                    <p style="text-align:justify;">@Model.Hygiene_LaundrySupport</p>
                                     <span asp-validation-for="Hygiene_LaundrySupport" class="text-danger"></span>
                                 </div>
                             </div>
@@ -1092,14 +1157,14 @@
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Government Guideline</label>
-                                    <textarea type="text" asp-for="Infection_Guideline" class="form-control" readonly></textarea>
+                                    <p style="text-align:justify;">@Model.Infection_Guideline</p>
                                     <span asp-validation-for="Infection_Guideline" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Remarks</label>
-                                    <textarea type="text" asp-for="Infection_Remarks" class="form-control" readonly></textarea>
+                                    <p style="text-align:justify;">@Model.Infection_Remarks</p>
                                     <span asp-validation-for="Infection_Remarks" class="text-danger"></span>
                                 </div>
                             </div>
@@ -1110,7 +1175,7 @@
                     <div class="row">
                         <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                             <label class="control-label">Brief</label>
-                            <textarea type="text" asp-for="Interest_Brief" class="form-control" readonly></textarea>
+                            <p style="text-align:justify;">@Model.Interest_Brief</p>
                             <span asp-validation-for="Interest_Brief" class="text-danger"></span>
                         </div>
                     </div>
@@ -1157,7 +1222,7 @@
 
                     <h4>GOAL AND OBJECTIVE OF CARE</h4>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <textarea type="text" asp-for="Interest_CareGoal" class="form-control" readonly></textarea>
+                        <p style="text-align:justify;">@Model.Interest_CareGoal</p>
                         <span asp-validation-for="Interest_CareGoal" class="text-danger"></span>
                     </div>
 
@@ -1240,21 +1305,21 @@
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Pet Activities</label>
-                                    <textarea type="text" asp-for="PetActivities" class="form-control" readonly></textarea>
+                                    <p style="text-align:justify;">@Model.PetActivities</p>
                                     <span asp-validation-for="PetActivities" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Pet Care</label>
-                                    <textarea type="text" asp-for="PetCare" class="form-control" readonly></textarea>
+                                    <p style="text-align:justify;">@Model.PetCare</p>
                                     <span asp-validation-for="PetCare" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Meal Pattern</label>
-                                    <textarea type="text" asp-for="Pet_MealPattern" class="form-control" readonly></textarea>
+                                    <p style="text-align:justify;">@Model.Pet_MealPattern</p>
                                     <span asp-validation-for="Pet_MealPattern" class="text-danger"></span>
                                 </div>
                             </div>
@@ -1273,40 +1338,55 @@
                                         <thead>
                                             <tr>
                                                 <th>Heading</th>
-                                                <th>Task</th>
+                                                <th>Tasks</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach (var item in Model.HeadingList)
-                                            {
+                                             {
                                                 <tr>
                                                     <td>
                                                         @item.Text
                                                     </td>
                                                     <td>
-                                                        <a asp-controller="HomeRiskAssessment" asp-action="View" asp-route-clientId="@Model.ClientId" asp-route-heading="@item.Text" asp-route-homeRiskId="@item.Value" class="btn btn-success btn-sm">Tasks</a>
+                                                        @if (Model.Tasks.Count > 0)
+                                                        {
+
+                                                            @foreach (var task in Model.Tasks)
+                                                            {
+                                                                if (task.HomeRiskAssessmentId.ToString() == item.Value)
+                                                                {
+                                                                    <table>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Title</th>
+                                                                                <th>Answer</th>
+                                                                                <th>Comment</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>@task.TitleName</td>
+                                                                                <td>@task.AnswerName</td>
+                                                                                <td>@task.Comment</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                }
+                                                            }
+
+                                                        }
                                                     </td>
                                                 </tr>
-                                            }
 
+
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-
-                                </div>
-                                <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-
-                                </div>
-                                <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
     </div>

@@ -24,11 +24,16 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<HomeRiskAssessment> _HomeRiskAssessmentRepository;
         private ILogger<HomeRiskAssessmentController> _logger;
         private AwesomeCareDbContext _dbContext;
-        public HomeRiskAssessmentController(AwesomeCareDbContext dbContext, IGenericRepository<HomeRiskAssessment> HomeRiskAssessmentRepository, ILogger<HomeRiskAssessmentController> logger)
+        private IGenericRepository<BaseRecordItemModel> _baseRecordItemRepository;
+        private IGenericRepository<BaseRecordModel> _baseRecordRepository;
+        public HomeRiskAssessmentController(AwesomeCareDbContext dbContext, IGenericRepository<HomeRiskAssessment> HomeRiskAssessmentRepository, 
+            ILogger<HomeRiskAssessmentController> logger, IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository)
         {
             _HomeRiskAssessmentRepository = HomeRiskAssessmentRepository;
             _logger = logger;
             _dbContext = dbContext;
+            _baseRecordRepository = baseRecordRepository;
+            _baseRecordItemRepository = baseRecordItemRepository;
         }
 
         [HttpGet("Get/{id}")]
@@ -84,12 +89,19 @@ namespace AwesomeCare.API.Controllers
                                        Heading = h.Heading,
                                        HomeRiskAssessmentId = h.HomeRiskAssessmentId,
                                        GetHomeRiskAssessmentTask = (from t in h.HomeRiskAssessmentTask
+                                                                    join titleItem in _baseRecordItemRepository.Table on t.Title equals titleItem.BaseRecordItemId
+                                                                    join ansItem in _baseRecordItemRepository.Table on t.Answer equals ansItem.BaseRecordItemId
+                                                                    join titleRec in _baseRecordRepository.Table on titleItem.BaseRecordId equals titleRec.BaseRecordId
+                                                                    join ansRec in _baseRecordRepository.Table on ansItem.BaseRecordId equals ansRec.BaseRecordId
                                                                     select new GetHomeRiskAssessmentTask
                                                                     {
+                                                                        HomeRiskAssessmentId = t.HomeRiskAssessmentId,
                                                                         HomeRiskAssessmentTaskId = t.HomeRiskAssessmentTaskId,
                                                                         Answer = t.Answer,
                                                                         Comment = t.Comment,
                                                                         Title = t.Title,
+                                                                        TitleName = titleItem.ValueName,
+                                                                        AnswerName = ansItem.ValueName
                                                                     }).ToList()
                                    }).ToListAsync();
 

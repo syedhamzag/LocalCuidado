@@ -283,11 +283,10 @@ namespace AwesomeCare.Admin.Controllers
             {
                 PostEquipment eq = new PostEquipment();
                 string ImageId = "Image";
-                var EquipmentId = 0;
-                var Attachment = "";
+                var EquipmentId = int.Parse(formcollection["EquipmentId"][i]);
+                string Attachment = "";
                 if (model.PersonalDetailId > 0) 
                 {
-                    EquipmentId = int.Parse(formcollection["EquipmentId"][i]);
                     Attachment = formcollection["Attachment"][i] != null ? formcollection["Attachment"][i] : "";
                 }
                 
@@ -301,7 +300,7 @@ namespace AwesomeCare.Admin.Controllers
                 var PersonToAct = int.Parse(formcollection["PersonToAct"][i]);
                 string path = "";
                 #region Attachment
-                if (Attachment != "" || Attachment != null)
+                if (!string.IsNullOrWhiteSpace(Attachment))
                 {
                     eq.Attachment = Attachment;
                 }
