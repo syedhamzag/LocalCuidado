@@ -451,7 +451,7 @@ namespace AwesomeCare.Admin.Controllers
                 return NotFound();
             }
 
-            var result = await _clientService.GetClient(clientId.Value);
+            GetClient result = await _clientService.GetClient(clientId.Value);
             QRCodeData qrCodeData = _qRCodeGenerator.CreateQrCode(result.UniqueId, QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(5);

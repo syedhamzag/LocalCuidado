@@ -26,10 +26,13 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [Required]
         [MaxLength(50)]
         public string Surname { get; set; }
+        [MaxLength(50)]
+        public string PreferredName { get; set; }
         [Required]
         [MaxLength(50)]
         [EmailAddress]
         public string Email { get; set; }
+
 
         [Required]
         [MaxLength(250)]
@@ -108,6 +111,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [Required]
         [Display(Name = "Number of Staff")]
         public int NumberOfStaff { get; set; }
+        [MaxLength(250)]
+        public string Latitude { get; set; }
+        [MaxLength(250)]
+        public string Longitude { get; set; }
         public string PassportFilePath { get; set; }
 
 

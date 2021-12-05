@@ -59,6 +59,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
@@ -181,6 +182,7 @@ namespace AwesomeCare.API.Controllers
                                        Latitude = client.Latitude,
                                        Longitude = client.Longitude,
                                        Address = client.Address,
+                                       PreferredName = client.PreferredName,
                                        InvolvingParties = (from inv in client.InvolvingParties
                                                            select new GetClientInvolvingPartyForEdit
                                                            {

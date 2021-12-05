@@ -19,6 +19,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string Firstname { get; set; }
         public string Middlename { get; set; }
         public string Surname { get; set; }
+        public string PreferredName { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
         public string Latitude { get; set; }

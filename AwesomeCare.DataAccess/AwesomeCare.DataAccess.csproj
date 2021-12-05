@@ -61,6 +61,8 @@
     <Compile Remove="Migrations\20210919062726_TaskBoads.Designer.cs" />
     <Compile Remove="Migrations\20210919064308_TaskBoardUpdated.cs" />
     <Compile Remove="Migrations\20210919064308_TaskBoardUpdated.Designer.cs" />
+    <Compile Remove="Migrations\20211205200736_Client_PreferredName_Add_Column.cs" />
+    <Compile Remove="Migrations\20211205200736_Client_PreferredName_Add_Column.Designer.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
   </ItemGroup>
