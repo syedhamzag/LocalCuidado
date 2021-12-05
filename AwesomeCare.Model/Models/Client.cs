@@ -67,6 +67,7 @@ namespace AwesomeCare.Model.Models
         public string Firstname { get; set; }
         public string Middlename { get; set; }
         public string Surname { get; set; }
+        public string PreferredName { get; set; }
         public string Email { get; set; }
         public string About { get; set; }
         public string Hobbies { get; set; }

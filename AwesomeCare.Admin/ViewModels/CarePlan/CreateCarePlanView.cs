@@ -2,6 +2,8 @@
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
+using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
+using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
@@ -39,6 +41,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             Tasks = new List<GetHomeRiskAssessmentTask>();
             baseRecordList = new List<GetBaseRecordItem>();
             GetInvolvingParty = new List<GetClientInvolvingParty>();
+            ServiceWatch = new List<GetClientServiceWatch>();
+            Program = new List<GetClientProgram>();
+
             #endregion
 
             #region ManagingTasks
@@ -404,5 +409,13 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<GetBaseRecordItem> baseRecordList { get; set; }
         public List<GetHomeRiskAssessmentTask> Tasks { get; set; }
         #endregion
+
+        #region Daily Task
+        public string DailyTaskName { get; set; }
+        public DateTime DailyTaskDate { get; set; }
+        public DateTime DailyTaskAmendmentDate { get; set; }
+        #endregion
+        public List<GetClientServiceWatch> ServiceWatch { get; set; }
+        public List<GetClientProgram> Program { get; set; }
     }
 }

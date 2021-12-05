@@ -33,6 +33,12 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(50)
                .IsRequired();
 
+            builder.Property(p => p.PreferredName)
+               .HasColumnName("PreferredName")
+               .HasMaxLength(50)
+               .IsRequired(false);
+
+
             builder.Property(p => p.Email)
                .HasColumnName("Email")
                .HasMaxLength(50)

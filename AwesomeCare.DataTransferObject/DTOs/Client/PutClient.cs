@@ -14,6 +14,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [Required]
         [MaxLength(50)]
         public string Surname { get; set; }
+        [MaxLength(50)]
+        public string PreferredName { get; set; }
         [Required]
         [MaxLength(50)]
         [EmailAddress]
@@ -97,8 +99,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [MaxLength(250)]
         public string Address { get; set; }
 
+        [MaxLength(250)]
         public string Latitude { get; set; }
-
+        [MaxLength(250)]
         public string Longitude { get; set; }
     }
 }

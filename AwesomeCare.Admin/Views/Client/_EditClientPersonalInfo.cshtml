@@ -116,6 +116,30 @@
             </div>
 
         </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label asp-for="Latitude" class="control-label"></label>
+                    <input type="text" class="form-control" asp-for="Latitude">
+                    <span asp-validation-for="Latitude" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label asp-for="Longitude" class="control-label"></label>
+                    <input type="text" class="form-control" asp-for="Longitude">
+                    <span asp-validation-for="Longitude" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <label asp-for="PreferredName" class="control-label"></label>
+                    <input type="text" class="form-control" asp-for="PreferredName">
+                    <span asp-validation-for="PreferredName" class="text-danger"></span>
+                </div>
+            </div>
+
+        </div>
     </div>
     <div class="col-xs-4 col-sm-4 col-md-4">
         <div class="card">
@@ -266,16 +290,9 @@
     </div>
 
     <div class="col-xs-4 col-sm-4 col-md-4">
-        <div class="form-group">
-            <label asp-for="Latitude" class="control-label"></label>
-            <input class="form-control" asp-for="Latitude"/>
-        </div>
     </div>
 
     <div class="col-xs-4 col-sm-4 col-md-4">
-        <div class="form-group">
-            <label asp-for="Longitude" class="control-label"></label>
-            <input class="form-control" asp-for="Longitude"/>
-        </div>
+
     </div>
 </div>
