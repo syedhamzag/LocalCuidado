@@ -1,6 +1,7 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
+using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
@@ -37,6 +38,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             HeadingList = new List<SelectListItem>();
             Tasks = new List<GetHomeRiskAssessmentTask>();
             baseRecordList = new List<GetBaseRecordItem>();
+            GetInvolvingParty = new List<GetClientInvolvingParty>();
             #endregion
 
             #region ManagingTasks
@@ -59,6 +61,10 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         
         public IFormFile Equipment_Attach { get; set; }
 
+        public byte[] QRCode { get; set; }
+        public string PassportFilePath { get; set; }
+
+        public List<GetClientInvolvingParty> GetInvolvingParty { get; set; }
         #region PersonalDetail
         public List<GetEquipment> GetEquipment { get; set; }
         public List<GetPersonCentred> GetPersonCentred { get; set; }

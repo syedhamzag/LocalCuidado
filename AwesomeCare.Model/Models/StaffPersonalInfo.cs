@@ -46,6 +46,7 @@ namespace AwesomeCare.Model.Models
             StaffHealth = new HashSet<StaffHealth>();
             StaffShadowing = new HashSet<StaffShadowing>();
             StaffHoliday = new HashSet<StaffHoliday>();
+            SetupStaffHoliday = new HashSet<SetupStaffHoliday>();
         }
 
         public int StaffPersonalInfoId { get; set; }
@@ -144,6 +145,7 @@ namespace AwesomeCare.Model.Models
 
         public virtual ICollection<StaffInfectionControl> StaffInfectionControl { get; set; }
         public virtual ICollection<StaffHoliday> StaffHoliday { get; set; }
+        public virtual ICollection<SetupStaffHoliday> SetupStaffHoliday { get; set; }
 
     }
 }

@@ -1032,6 +1032,12 @@ namespace AwesomeCare.Admin
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffHolidayService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("setupstaffholiday", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ISetupStaffHolidayService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
 }
