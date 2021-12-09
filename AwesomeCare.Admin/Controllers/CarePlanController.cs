@@ -500,19 +500,23 @@ namespace AwesomeCare.Admin.Controllers
             Bitmap qrCodeImage = qrCode.GetGraphic(5);
             model.QRCode = qrCodeImage.ToByteArray();
             model.PassportFilePath = client.PassportFilePath;
-            model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+            model.ClientName = client.PreferredName;
             model.ClientId = clientId;
+            model.IdNumber = client.IdNumber;
             model.GetInvolvingParty = party.Where(s => s.ClientId == clientId).ToList(); 
             var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
             var filterBaseRecord = baseRecord.Where(s => s.KeyName == "Home_Risk_Assessment_Heading").Select(s => s.BaseRecordItems).FirstOrDefault();
             model.baseRecordList = filterBaseRecord.ToList();
-
+            
+            #region Home Risk
             if (home.Count > 0)
             {
-                model.HomeRiskAssessmentId = home.FirstOrDefault().HomeRiskAssessmentId;
+                model.TaskCountHRA = home.Count();
+                model.GetHomeRiskAssessments = home.ToList();
                 model.HeadingList = home.Select(s => new SelectListItem(s.Heading, s.HomeRiskAssessmentId.ToString())).ToList();
-                model.Tasks = home.Select(s => s.GetHomeRiskAssessmentTask).FirstOrDefault().ToList();
             }
+            #endregion
+            
             #region PERSONAL DETAILS
             if (pdetail != null)
             {
@@ -672,11 +676,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 if (balance.Where(s => s.ClientId == clientId).Count() > 0)
                 {
-                    model.Balance_Description = balance.Where(s => s.ClientId == clientId).FirstOrDefault().Description;
-                    model.Balance_Mobility = balance.Where(s => s.ClientId == clientId).FirstOrDefault().Mobility;
-                    model.BalanceId = balance.Where(s => s.ClientId == clientId).FirstOrDefault().BalanceId;
-                    model.Balance_Name = balance.Where(s => s.ClientId == clientId).FirstOrDefault().Name;
-                    model.Balance_Status = balance.Where(s => s.ClientId == clientId).FirstOrDefault().Status;
+                    model.GetBalance = balance.Where(s => s.ClientId == clientId).ToList();
                 }
             }
             if (physical.Count > 0)
@@ -830,7 +830,7 @@ namespace AwesomeCare.Admin.Controllers
                 }
             }
             int i = 1;
-            if (model.GetPersonCentred != null)
+            if (model.GetPersonCentred.Count > 0)
             {
                 foreach (var item in model.GetPersonCentred)
                 {
