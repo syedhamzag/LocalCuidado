@@ -126,6 +126,8 @@ using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 using AwesomeCare.DataTransferObject.DTOs.Staff.StaffHoliday;
 using AwesomeCare.DataTransferObject.DTOs.SetupStaffHoliday;
+using AwesomeCare.DataTransferObject.DTOs.StaffTeamLead;
+using AwesomeCare.DataTransferObject.DTOs.StaffTeamLeadTasks;
 
 namespace MapperConfig
 {
@@ -274,7 +276,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.HospitalExit, mem => mem.Ignore())
                 .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore())
                 .ForMember(dto => dto.DutyOnCall, mem => mem.Ignore())
-                .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore());
+                .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
@@ -389,7 +392,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.HospitalExit, mem => mem.Ignore())
                  .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore())
                  .ForMember(dto => dto.DutyOnCall, mem => mem.Ignore())
-                 .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore());
+                 .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore())
+                 .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
@@ -716,7 +720,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffInterview, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHoliday, mem => mem.Ignore())
-                .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore());
+                .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
 
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
@@ -763,7 +768,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffInterview, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHoliday, mem => mem.Ignore())
-                .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore());
+                .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
 
             CreateMap<PutStaffEducation, StaffEducation>()
                   .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -817,7 +823,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffInterview, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHoliday, mem => mem.Ignore())
-                .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore());
+                .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffProfile>()
                 .ForMember(dto => dto.GetStaffSpotCheck, mem => mem.Ignore())
@@ -2694,6 +2701,27 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
 
             CreateMap<SetupStaffHoliday, GetSetupStaffHoliday>();
+            #endregion
+
+            #region StaffTeamLead
+            CreateMap<PutStaffTeamLead, StaffTeamLead>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTeamLeadTasks, mem => mem.MapFrom(src => src.PutStaffTeamLeadTasks));
+            CreateMap<PostStaffTeamLead, StaffTeamLead>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTeamLeadTasks, mem => mem.MapFrom(src => src.PostStaffTeamLeadTasks));
+            CreateMap<StaffTeamLead, GetStaffTeamLead>()
+                .ForMember(dto => dto.GetStaffTeamLeadTasks, mem => mem.Ignore());
+            #endregion
+
+            #region StaffTeamLeadTasks
+            CreateMap<PutStaffTeamLeadTasks, StaffTeamLeadTasks>()
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
+            CreateMap<PostStaffTeamLeadTasks, StaffTeamLeadTasks>()
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
+            CreateMap<StaffTeamLeadTasks, GetStaffTeamLeadTasks>();
             #endregion
         }
     }

@@ -61,6 +61,7 @@ namespace AwesomeCare.Model.Models
             HomeRiskAssessment = new HashSet<HomeRiskAssessment>();
             DutyOnCall = new HashSet<DutyOnCall>();
             ClientDailyTask = new HashSet<ClientDailyTask>();
+            StaffTeamLead = new HashSet<StaffTeamLead>();
         }
 
         public int ClientId { get; set; }
@@ -107,6 +108,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<HospitalEntry> HospitalEntry { get; set; }
         public virtual ICollection<HospitalExit> HospitalExit { get; set; }
         public virtual ICollection<ClientDailyTask> ClientDailyTask { get; set; }
+        public virtual ICollection<StaffTeamLead> StaffTeamLead { get; set; }
 
         #region Client
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }
