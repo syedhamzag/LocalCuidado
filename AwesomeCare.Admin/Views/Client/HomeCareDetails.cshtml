@@ -1651,7 +1651,8 @@
                             </div>
                         </div>
                     </div>
-                     <div class="tab-pane" id="dailytask">
+                     
+                    <div class="tab-pane" id="dailytask">
                         <div class="header">
                             <ul class="header-dropdown">
                                 <li class="dropdown">
@@ -1670,6 +1671,7 @@
                                     <tr>
                                         <th>Date</th>
                                         <th>Amendment Date</th>
+                                        <th>Task</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1682,7 +1684,9 @@
                                             <td>
                                                 @item.AmendmentDate
                                             </td>
-
+                                            <td style="text-align:justify; white-space:normal;">
+                                                @item.DailyTaskName
+                                            </td>
                                         </tr>
                                     }
 

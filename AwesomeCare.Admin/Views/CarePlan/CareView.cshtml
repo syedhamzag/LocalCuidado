@@ -11,7 +11,7 @@
         <div class="card planned_task">
             <div class="header">
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                         <div class="card">
                             <div class="header">
                             </div>
@@ -20,16 +20,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
                         <div class="card">
                             <div class="header">
-                                <h2>@Model.PreferredName</h2>
+                                <h2 style="text-align:center;">Care Plan & Risk Assessment Board</h2>
                             </div>
                             <div class="body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <h2>Preferred Name: @Model.PreferredName</h2>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <h2>ID Number: @Model.IdNumber</h2>
+                                    </div>
+                                </div>
+                                
+
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                         <div class="card">
                             <div class="header">
                             </div>
@@ -41,8 +51,431 @@
                 </div>
             </div>
             <div class="body">
-                <input type="hidden" asp-for="PersonalDetailId" />
-                <input type="hidden" asp-for="ClientId" />
+                <h4>Person Centredness</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <input type="hidden" asp-for="@Model.PersonCentreCount" value="@Model.PersonCentreCount" />
+                        @if (Model.GetPersonCentred.Count > 0)
+                        {
+                            int i = 1;
+                            <table class="table table-hover table-bordered" id="tblPersonCentered">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Class</th>
+                                        <th>Focus</th>
+                                        <th>Expected Support</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.GetPersonCentred)
+                                    {
+                                        string key = @Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString();
+                                        <tr id="@item.PersonCentredId">
+                                            <td>
+                                                <div class="fancy-checkbox">
+                                                    <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" checked /><span><small> </small></span></label>
+                                                    <input type="hidden" id="@string.Concat("PersonCentredId",i)" name="@string.Concat("PersonCentredId",i)" value="@item.PersonCentredId" />
+                                                </div>
+                                            </td>
+
+                                            <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class",i)" name="@string.Concat("Class",i)" value="@item.Class" /></td>
+                                            @{
+                                                if (i == 1)
+                                                {
+                                                    <td><select asp-for="@Model.Focus1" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+                                                if (i == 2)
+                                                {
+                                                    <td><select asp-for="@Model.Focus2" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+                                                if (i == 3)
+                                                {
+                                                    <td><select asp-for="@Model.Focus3" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+                                                if (i == 4)
+                                                {
+                                                    <td><select asp-for="@Model.Focus4" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+                                                if (i == 5)
+                                                {
+                                                    <td><select asp-for="@Model.Focus5" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                }
+
+                                            }
+                                            <td><textarea name="@string.Concat("ExpSupport",i)" class="form-control">@item.ExpSupport</textarea></td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+
+                    </div>
+                </div>
+                <hr />
+                <h4>Capacity</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.CapacityId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Pointer</label>
+                                    <baserecord asp-key="Capacity_Pointer" asp-for="Pointer" asp-items="null" />
+                                    <span asp-validation-for="Pointer" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Implications</label>
+                                    <baserecord asp-key="Capacity_Implications" asp-for="Implications" asp-items="null" />
+                                    <span asp-validation-for="Implications" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Indicators</label>
+                                    <select asp-for="Indicator" asp-items="@Model.IndicatorList" class="selectpicker form-control" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="Indicator" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr />
+                <h4>Personal</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.PersonalId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Smoking</label>
+                                    <baserecord asp-key="Smoking" asp-for="Smoking" asp-items="null" />
+                                    <span asp-validation-for="Smoking" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">DNR in Place</label>
+                                    <baserecord asp-key="DNR" asp-for="DNR" asp-items="null" />
+                                    <span asp-validation-for="DNR" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Religion</label>
+                                    <input type="text" readonly asp-for="Religion" value="@Model.Religion" class="form-control" />
+                                    <span asp-validation-for="Religion" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Nationality</label>
+                                    <input type="text" readonly asp-for="Nationality" value="@Model.Nationality" class="form-control" />
+                                    <span asp-validation-for="Nationality" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr />
+                <h4>Review</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.ReviewId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">CarePlan Prepared Date</label>
+                                    <input type="text" readonly asp-for="CP_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="CP_PreDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">CarePlan Review Date</label>
+                                    <input type="text" readonly asp-for="CP_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="CP_ReviewDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Risk Assessment Prepared Date</label>
+                                    <input type="text" readonly asp-for="RA_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="RA_PreDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Risk Assessment Review Date</label>
+                                    <input type="text" readonly asp-for="RA_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="RA_ReviewDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr />
+                <h4>Key Indicators</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.KeyId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Living Status</label>
+                                    <baserecord asp-key="LivingStatus" asp-for="LivingStatus" asp-items="null" />
+                                    <span asp-validation-for="LivingStatus" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Debture</label>
+                                    <baserecord asp-key="Debture" asp-for="Debture" asp-items="null" />
+                                    <span asp-validation-for="Debture" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Method of Log</label>
+                                    <select asp-for="LogMethod" asp-items="@Model.KeyLogList" class="selectpicker form-control" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="LogMethod" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">About Me</label>
+                                    <p style="text-align:justify;">@Model.AboutMe</p>
+                                    <span asp-validation-for="AboutMe" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Things I Like To Talk About</label>
+                                    <p style="text-align:justify;">@Model.ThingsILike</p>
+                                    <span asp-validation-for="ThingsILike" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Role Of My Family</label>
+                                    <p style="text-align:justify;">@Model.FamilyRole</p>
+                                    <span asp-validation-for="FamilyRole" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr />
+                <h4>Equipment</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <input type="hidden" asp-for="@Model.EquipmentCount" value="@Model.EquipmentCount" />
+                        @if (Model.GetEquipment.Count > 0)
+                        {
+                            <table class="table table-hover table-bordered" id="tblEquipment">
+                                <thead>
+                                    <tr>
+                                        <th>Service Date</th>
+                                        <th>Next Service Date</th>
+                                        <th>Equipment Status</th>
+                                        <th>Name</th>
+                                        <th>Type</th>
+                                        <th>Location</th>
+                                        <th>Person To Act</th>
+                                        <th>Status Attachment</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var equip in Model.GetEquipment)
+                                    {
+                                        <tr id="@equip.EquipmentId">
+                                            <td><input type="text" readonly asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" value="@equip.ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                            <td><input type="text" readonly asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" value="@equip.NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
+                                            <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Status" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Name" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Type" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Location" asp-items="null" /></td>
+                                            <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).PersonToAct" asp-items="Model.StaffList"></select></td>
+                                            <td><img src="@equip.Attachment" height="100" width="100" /><input type="hidden" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).EquipmentId" /></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+
+                    </div>
+                </div>
+                <hr />
+                <h4>Consent For Landline</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.LandLineId > 0)
+                        {
+                            <div class="row">
+                                <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Date</label>
+                                    <input type="text" readonly asp-for="LandLineDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="LandLineDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Signature</label>
+                                    <baserecord asp-key="Signature" asp-for="LandLineSignature" asp-items="null" />
+                                    <span asp-validation-for="LandLineSignature" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Method of Log</label><br />
+                                    <select asp-for="LandLineLogMethod" asp-items="@Model.LandLogList" class="selectpicker form-control" data-live-search="true" multiple></select>
+                                    <span asp-validation-for="LandLineLogMethod" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Name</label>
+                                    <select class="selectpicker form-control" asp-for="@Model.LandName" asp-items="@Model.InvolingList"></select>
+                                    <span asp-validation-for="LandName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @*<h4>Involving Parties</h4>
+        <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th>NAME</th>
+                            <th>ADDRESS</th>
+                            <th>EMAIL</th>
+                            <th>TELEPHONE</th>
+                            <th>RELATIONSHIP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.GetInvolvingParty)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>
+                                    @item.Address
+                                </td>
+                                <td>
+                                    @item.Email
+                                </td>
+                                <td>
+                                    @item.Telephone
+                                </td>
+                                <td>
+                                    @item.Relationship
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>*@
+                <hr />
+                <h4>Consent For Care</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.CareId > 0)
+                        {
+                            <div class="row">
+                                <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Date</label>
+                                    <input type="text" readonly asp-for="CareDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="CareDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Signature</label>
+                                    <baserecord asp-key="Signature" asp-for="CareSignature" asp-items="null" />
+                                    <span asp-validation-for="CareSignature" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <select class="selectpicker form-control" data-live-search="true" asp-for="@Model.CareName" asp-items="@Model.InvolingList"></select>
+                                    <span asp-validation-for="CareName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @*<h4>Involving Parties</h4>
+        <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+
+                            <th>NAME</th>
+                            <th>ADDRESS</th>
+                            <th>EMAIL</th>
+                            <th>TELEPHONE</th>
+                            <th>RELATIONSHIP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.GetInvolvingParty)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Name
+                                </td>
+                                <td>
+                                    @item.Address
+                                </td>
+                                <td>
+                                    @item.Email
+                                </td>
+                                <td>
+                                    @item.Telephone
+                                </td>
+                                <td>
+                                    @item.Relationship
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>*@
+                <hr />
+                <h4>Consent For Data</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.DataId > 0)
+                        {
+                            <div class="row">
+                                <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Date</label>
+                                    <input type="text" readonly asp-for="DataDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="DataDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Signature</label>
+                                    <baserecord asp-key="Signature" asp-for="DataSignature" asp-items="null" />
+                                    <span asp-validation-for="DataSignature" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <select asp-for="@Model.DataName" asp-items="@Model.InvolingList" class="selectpicker form-control"></select>
+                                    <span asp-validation-for="DataName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <hr />
                 <h4>Involving Parties</h4>
                 <div class="row">
                     <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
@@ -83,1248 +516,961 @@
                         </table>
                     </div>
                 </div>
-                <h4>Person Centredness</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                        <input type="hidden" asp-for="@Model.PersonCentreCount" value="@Model.PersonCentreCount" />
-                        <table class="table table-hover table-bordered" id="tblPersonCentered">
-                            <thead>
-                                <tr>
-                                    <th>Select</th>
-                                    <th>Class</th>
-                                    <th>Focus</th>
-                                    <th>Expected Support</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @if (Model.GetPersonCentred != null)
-                                {
-                                    int i = 1;
-                                    @foreach (var item in Model.GetPersonCentred)
-                                    {
-                                        string key = @Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString();
-                                        <tr id="@item.PersonCentredId">
-                                            <td>
-                                                <div class="fancy-checkbox">
-                                                    <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" checked /><span><small> </small></span></label>
-                                                    <input type="hidden" id="@string.Concat("PersonCentredId",i)" name="@string.Concat("PersonCentredId",i)" value="@item.PersonCentredId" />
-                                                </div>
-                                            </td>
-
-                                            <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class",i)" name="@string.Concat("Class",i)" value="@item.Class" /></td>
-                                            @{
-                                                if (i == 1)
-                                                {
-                                                    <td><select asp-for="@Model.Focus1" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                }
-                                                if (i == 2)
-                                                {
-                                                    <td><select asp-for="@Model.Focus2" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                }
-                                                if (i == 3)
-                                                {
-                                                    <td><select asp-for="@Model.Focus3" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                }
-                                                if (i == 4)
-                                                {
-                                                    <td><select asp-for="@Model.Focus4" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                }
-                                                if (i == 5)
-                                                {
-                                                    <td><select asp-for="@Model.Focus5" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                }
-
-                                            }
-                                            <td><textarea name="@string.Concat("ExpSupport",i)" class="form-control">@item.ExpSupport</textarea></td>
-                                        </tr>
-                                        i++;
-                                    }
-                                }
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <h4>Capacity</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="CapacityId" />
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Pointer</label>
-                                <baserecord asp-key="Capacity_Pointer" asp-for="Pointer" asp-items="null" />
-                                <span asp-validation-for="Pointer" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Implications</label>
-                                <baserecord asp-key="Capacity_Implications" asp-for="Implications" asp-items="null" />
-                                <span asp-validation-for="Implications" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Indicators</label>
-                                <select asp-for="Indicator" asp-items="@Model.IndicatorList" class="selectpicker form-control" data-live-search="true" multiple></select>
-                                <span asp-validation-for="Indicator" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h4>Personal</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="PersonalId" />
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Smoking</label>
-                                <baserecord asp-key="Smoking" asp-for="Smoking" asp-items="null" />
-                                <span asp-validation-for="Smoking" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">DNR in Place</label>
-                                <baserecord asp-key="DNR" asp-for="DNR" asp-items="null" />
-                                <span asp-validation-for="DNR" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Religion</label>
-                                <input type="text" readonly asp-for="Religion" value="@Model.Religion" class="form-control" />
-                                <span asp-validation-for="Religion" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Nationality</label>
-                                <input type="text" readonly asp-for="Nationality" value="@Model.Nationality" class="form-control" />
-                                <span asp-validation-for="Nationality" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h4>Review</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="ReviewId" />
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">CarePlan Prepared Date</label>
-                                <input type="text" readonly asp-for="CP_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                <span asp-validation-for="CP_PreDate" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">CarePlan Review Date</label>
-                                <input type="text" readonly asp-for="CP_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                <span asp-validation-for="CP_ReviewDate" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Risk Assessment Prepared Date</label>
-                                <input type="text" readonly asp-for="RA_PreDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                <span asp-validation-for="RA_PreDate" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Risk Assessment Review Date</label>
-                                <input type="text" readonly asp-for="RA_ReviewDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                <span asp-validation-for="RA_ReviewDate" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h4>Key Indicators</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="KeyId" />
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Living Status</label>
-                                <baserecord asp-key="LivingStatus" asp-for="LivingStatus" asp-items="null" />
-                                <span asp-validation-for="LivingStatus" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Debture</label>
-                                <baserecord asp-key="Debture" asp-for="Debture" asp-items="null" />
-                                <span asp-validation-for="Debture" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Method of Log</label>
-                                <select asp-for="LogMethod" asp-items="@Model.KeyLogList" class="selectpicker form-control" data-live-search="true" multiple></select>
-                                <span asp-validation-for="LogMethod" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">About Me</label>
-                                <p style="text-align:justify;">@Model.AboutMe</p>
-                                <span asp-validation-for="AboutMe" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">Things I Like To Talk About</label>
-                                <p style="text-align:justify;">@Model.ThingsILike</p>
-                                <span asp-validation-for="ThingsILike" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">Role Of My Family</label>
-                                <p style="text-align:justify;">@Model.FamilyRole</p>
-                                <span asp-validation-for="FamilyRole" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h4>Equipment</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <input type="hidden" asp-for="@Model.EquipmentCount" value="@Model.EquipmentCount" />
-                        <table class="table table-hover table-bordered" id="tblEquipment">
-                            <thead>
-                                <tr>
-                                    <th>Service Date</th>
-                                    <th>Next Service Date</th>
-                                    <th>Equipment Status</th>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Location</th>
-                                    <th>Person To Act</th>
-                                    <th>Status Attachment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.GetEquipment.Count > 0)
-                                {
-                                    @foreach (var equip in Model.GetEquipment)
-                                    {
-                                        <tr id="@equip.EquipmentId">
-                                            <td><input type="text" readonly asp-for="@Model.GetEquipment.FirstOrDefault().ServiceDate" value="@equip.ServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                            <td><input type="text" readonly asp-for="@Model.GetEquipment.FirstOrDefault().NextServiceDate" value="@equip.NextServiceDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" /></td>
-                                            <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Status" asp-items="null" /></td>
-                                            <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Name" asp-items="null" /></td>
-                                            <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Type" asp-items="null" /></td>
-                                            <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Location" asp-items="null" /></td>
-                                            <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).PersonToAct" asp-items="Model.StaffList"></select></td>
-                                            <td><img src="@equip.Attachment" height="100" width="100" /><input type="hidden" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).EquipmentId" /></td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <h4>Consent For Landline</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="LandLineId" />
-                        <div class="row">
-                            <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Date</label>
-                                <input type="text" readonly asp-for="LandLineDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                <span asp-validation-for="LandLineDate" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Signature</label>
-                                <baserecord asp-key="Signature" asp-for="LandLineSignature" asp-items="null" />
-                                <span asp-validation-for="LandLineSignature" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Method of Log</label><br />
-                                <select asp-for="LandLineLogMethod" asp-items="@Model.LandLogList" class="selectpicker form-control" data-live-search="true" multiple></select>
-                                <span asp-validation-for="LandLineLogMethod" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
-                                <label class="control-label">Name</label>
-                                <select class="selectpicker form-control" asp-for="@Model.LandName" asp-items="@Model.InvolingList"></select>
-                                <span asp-validation-for="LandName" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h4>Consent For Care</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="CareId" />
-                        <div class="row">
-                            <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Date</label>
-                                <input type="text" readonly asp-for="CareDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                <span asp-validation-for="CareDate" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Signature</label>
-                                <baserecord asp-key="Signature" asp-for="CareSignature" asp-items="null" />
-                                <span asp-validation-for="CareSignature" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Name</label>
-                                <select class="selectpicker form-control" data-live-search="true" asp-for="@Model.CareName" asp-items="@Model.InvolingList"></select>
-                                <span asp-validation-for="CareName" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h4>Consent For Data</h4>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="DataId" />
-                        <div class="row">
-                            <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <h6 style="text-align:justify;">I hereby give my consent that Awesome Healthcare Solutions can use my landline for the purpose of staff login and out where applicable, to monitor and track compliance of staff. The use of the landline will be for the sole purpose of staff logs.</h6><br />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Date</label>
-                                <input type="text" readonly asp-for="DataDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                <span asp-validation-for="DataDate" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Signature</label>
-                                <baserecord asp-key="Signature" asp-for="DataSignature" asp-items="null" />
-                                <span asp-validation-for="DataSignature" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Name</label>
-                                <select asp-for="@Model.DataName" asp-items="@Model.InvolingList" class="selectpicker form-control"></select>
-                                <span asp-validation-for="DataName" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <hr />
                 <h4>Nutrition</h4>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <input type="hidden" asp-for="NutritionId" />
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Food Storage</label>
-                            <baserecord asp-key="Food_Storage" asp-for="Nutrition_FoodStorage" asp-items="null" />
-                            <span asp-validation-for="Nutrition_FoodStorage" class="text danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Served My Meal</label>
-                            <input type="text" asp-for="Nutrition_ServingMeal" class="form-control" readonly />
-                            <span asp-validation-for="Nutrition_ServingMeal" class="text danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">When Restock</label>
-                            <input type="text" asp-for="Nutrition_WhenRestock" class="form-control" readonly />
-                            <span asp-validation-for="Nutrition_WhenRestock" class="text danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Who Restocks </label>
-                            <baserecord asp-key="Who_Restocks" asp-for="Nutrition_WhoRestock" asp-items="null" />
-                            <span asp-validation-for="Nutrition_WhoRestock" class="text danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Special Diet</label>
-                            <input type="text" asp-for="Nutrition_SpecialDiet" class="form-control" readonly />
-                            <span asp-validation-for="Nutrition_SpecialDiet" class="text danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Drink Type</label>
-                            <input type="text" asp-for="Nutrition_DrinkType" class="form-control" readonly />
-                            <span asp-validation-for="Nutrition_DrinkType" class="text danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Food Avoid</label>
-                            <input type="text" asp-for="Nutrition_AvoidFood" class="form-control" readonly />
-                            <span asp-validation-for="Nutrition_AvoidFood" class="text danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Things I Like To Have Around</label>
-                            <baserecord asp-key="Things_I_Like_To_Have_Around" asp-for="Nutrition_ThingsILike" asp-items="null" />
-                            <span asp-validation-for="Nutrition_ThingsILike" class="text danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Fruits Intake</label>
-                            <baserecord asp-key="Fruits_Intake" asp-for="Nutrition_FoodIntake" asp-items="null" />
-                            <span asp-validation-for="Nutrition_FoodIntake" class="text danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Meal Preparation</label>
-                            <baserecord asp-key="Meal_Preparation" asp-for="Nutrition_MealPreparation" asp-items="null" />
-                            <span asp-validation-for="Nutrition_MealPreparation" class="text danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Difficulties In Eating</label>
-                            <baserecord asp-key="Difficulties_In_Eating" asp-for="Nutrition_EatingDifficulty" asp-items="null" />
-                            <span asp-validation-for="Nutrition_EatingDifficulty" class="text danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Risk Mitigations</label>
-                            <input type="text" asp-for="Nutrition_RiskMitigations" class="form-control" readonly />
-                            <span asp-validation-for="Nutrition_RiskMitigations" class="text danger"></span>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.NutritionId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Food Storage</label>
+                                    <baserecord asp-key="Food_Storage" asp-for="Nutrition_FoodStorage" asp-items="null" />
+                                    <span asp-validation-for="Nutrition_FoodStorage" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Served My Meal</label>
+                                    <input type="text" asp-for="Nutrition_ServingMeal" class="form-control" readonly />
+                                    <span asp-validation-for="Nutrition_ServingMeal" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">When Restock</label>
+                                    <input type="text" asp-for="Nutrition_WhenRestock" class="form-control" readonly />
+                                    <span asp-validation-for="Nutrition_WhenRestock" class="text danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Who Restocks </label>
+                                    <baserecord asp-key="Who_Restocks" asp-for="Nutrition_WhoRestock" asp-items="null" />
+                                    <span asp-validation-for="Nutrition_WhoRestock" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Special Diet</label>
+                                    <input type="text" asp-for="Nutrition_SpecialDiet" class="form-control" readonly />
+                                    <span asp-validation-for="Nutrition_SpecialDiet" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Drink Type</label>
+                                    <input type="text" asp-for="Nutrition_DrinkType" class="form-control" readonly />
+                                    <span asp-validation-for="Nutrition_DrinkType" class="text danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Food Avoid</label>
+                                    <input type="text" asp-for="Nutrition_AvoidFood" class="form-control" readonly />
+                                    <span asp-validation-for="Nutrition_AvoidFood" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Things I Like To Have Around</label>
+                                    <baserecord asp-key="Things_I_Like_To_Have_Around" asp-for="Nutrition_ThingsILike" asp-items="null" />
+                                    <span asp-validation-for="Nutrition_ThingsILike" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Fruits Intake</label>
+                                    <baserecord asp-key="Fruits_Intake" asp-for="Nutrition_FoodIntake" asp-items="null" />
+                                    <span asp-validation-for="Nutrition_FoodIntake" class="text danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Meal Preparation</label>
+                                    <baserecord asp-key="Meal_Preparation" asp-for="Nutrition_MealPreparation" asp-items="null" />
+                                    <span asp-validation-for="Nutrition_MealPreparation" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Difficulties In Eating</label>
+                                    <baserecord asp-key="Difficulties_In_Eating" asp-for="Nutrition_EatingDifficulty" asp-items="null" />
+                                    <span asp-validation-for="Nutrition_EatingDifficulty" class="text danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Risk Mitigations</label>
+                                    <input type="text" asp-for="Nutrition_RiskMitigations" class="form-control" readonly />
+                                    <span asp-validation-for="Nutrition_RiskMitigations" class="text danger"></span>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>Health And Living</h4>
                 <div class="row">
-                    <div class="col-xs-8 col-sm-8 col-md-8">
-                        <input type="hidden" asp-for="HLId" />
-                        <input type="hidden" asp-for="ClientId" />
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Wake Up</label>
-                                <input type="text" asp-for="HL_WakeUp" class="form-control" readonly />
-                                <span asp-validation-for="HL_WakeUp" class="text-danger"></span>
+                    @if (Model.HLId > 0)
+                    {
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Wake Up</label>
+                                    <input type="text" asp-for="HL_WakeUp" class="form-control" readonly />
+                                    <span asp-validation-for="HL_WakeUp" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Care Support</label>
+                                    <input type="text" asp-for="HL_CareSupport" class="form-control" readonly />
+                                    <span asp-validation-for="HL_CareSupport" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Moving And Handling</label>
+                                    <input type="text" asp-for="HL_MovingAndHandling" class="form-control" readonly />
+                                    <span asp-validation-for="HL_MovingAndHandling" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Care Support</label>
-                                <input type="text" asp-for="HL_CareSupport" class="form-control" readonly />
-                                <span asp-validation-for="HL_CareSupport" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Support To Bed</label>
+                                    <input type="text" asp-for="HL_SupportToBed" class="form-control" readonly />
+                                    <span asp-validation-for="HL_SupportToBed" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Dehydration Risk</label>
+                                    <baserecord asp-key="Dehydration_Risk" asp-for="HL_DehydrationRisk" asp-items="null" />
+                                    <span asp-validation-for="HL_DehydrationRisk" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Life Style</label>
+                                    <baserecord asp-key="Life_Style" asp-for="HL_LifeStyle" asp-items="null" />
+                                    <span asp-validation-for="HL_LifeStyle" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Moving And Handling</label>
-                                <input type="text" asp-for="HL_MovingAndHandling" class="form-control" readonly />
-                                <span asp-validation-for="HL_MovingAndHandling" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Pressure Sore</label>
+                                    <baserecord asp-key="Pressure_Sore" asp-for="HL_PressureSore" asp-items="null" />
+                                    <span asp-validation-for="HL_PressureSore" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Continence Issue</label>
+                                    <baserecord asp-key="Continence_Issue" asp-for="HL_ContinenceIssue" asp-items="null" />
+                                    <span asp-validation-for="HL_ContinenceIssue" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Continence Needs</label>
+                                    <input type="text" asp-for="HL_ContinenceNeeds" class="form-control" readonly />
+                                    <span asp-validation-for="HL_ContinenceNeeds" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Support To Bed</label>
-                                <input type="text" asp-for="HL_SupportToBed" class="form-control" readonly />
-                                <span asp-validation-for="HL_SupportToBed" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Continence Source</label>
+                                    <input type="text" asp-for="HL_ContinenceSource" class="form-control" readonly />
+                                    <span asp-validation-for="HL_ContinenceSource" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Contraint Required</label>
+                                    <baserecord asp-key="Contraint_Required" asp-for="HL_ConstraintRequired" asp-items="null" />
+                                    <span asp-validation-for="HL_ConstraintRequired" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Constraint Details</label>
+                                    <input type="text" asp-for="HL_ConstraintDetails" class="form-control" readonly />
+                                    <span asp-validation-for="HL_ConstraintDetails" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Dehydration Risk</label>
-                                <baserecord asp-key="Dehydration_Risk" asp-for="HL_DehydrationRisk" asp-items="null" />
-                                <span asp-validation-for="HL_DehydrationRisk" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Means Of Comm</label>
+                                    <baserecord asp-key="Means_Of_Comm" asp-for="HL_MeansOfComm" asp-items="null" />
+                                    <span asp-validation-for="HL_MeansOfComm" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Smoking</label>
+                                    <baserecord asp-key="Health_Smoking" asp-for="HL_Smoking" asp-items="null" />
+                                    <span asp-validation-for="HL_Smoking" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Ability To Read</label>
+                                    <baserecord asp-key="Health_Ability_To_Read" asp-for="HL_AbilityToRead" asp-items="null" />
+                                    <span asp-validation-for="HL_AbilityToRead" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Life Style</label>
-                                <baserecord asp-key="Life_Style" asp-for="HL_LifeStyle" asp-items="null" />
-                                <span asp-validation-for="HL_LifeStyle" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Text Font Size</label>
+                                    <baserecord asp-key="Text_Font_Size" asp-for="HL_TextFontSize" asp-items="null" />
+                                    <span asp-validation-for="HL_TextFontSize" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Email</label>
+                                    <baserecord asp-key="Health_Email" asp-for="HL_Email" asp-items="null" />
+                                    <span asp-validation-for="HL_Email" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Finance Management</label>
+                                    <baserecord asp-key="Finance_Management" asp-for="HL_FinanceManagement" asp-items="null" />
+                                    <span asp-validation-for="HL_FinanceManagement" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Pressure Sore</label>
-                                <baserecord asp-key="Pressure_Sore" asp-for="HL_PressureSore" asp-items="null" />
-                                <span asp-validation-for="HL_PressureSore" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Postal Service</label>
+                                    <baserecord asp-key="Postal_Service" asp-for="HL_PostalService" asp-items="null" />
+                                    <span asp-validation-for="HL_PostalService" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Letter Opening</label>
+                                    <baserecord asp-key="Letter_Opening" asp-for="HL_LetterOpening" asp-items="null" />
+                                    <span asp-validation-for="HL_LetterOpening" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Shopping Required</label>
+                                    <baserecord asp-key="Shopping_Required" asp-for="HL_ShoppingRequired" asp-items="null" />
+                                    <span asp-validation-for="HL_ShoppingRequired" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Continence Issue</label>
-                                <baserecord asp-key="Continence_Issue" asp-for="HL_ContinenceIssue" asp-items="null" />
-                                <span asp-validation-for="HL_ContinenceIssue" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Special Cleaning</label>
+                                    <baserecord asp-key="Special_Cleaning" asp-for="HL_SpecialCleaning" asp-items="null" />
+                                    <span asp-validation-for="HL_SpecialCleaning" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Laundary Required</label>
+                                    <baserecord asp-key="Laundary_Required" asp-for="HL_LaundaryRequired" asp-items="null" />
+                                    <span asp-validation-for="HL_LaundaryRequired" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Video Call Required</label>
+                                    <baserecord asp-key="Video_Call_Required" asp-for="HL_VideoCallRequired" asp-items="null" />
+                                    <span asp-validation-for="HL_VideoCallRequired" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Continence Needs</label>
-                                <input type="text" asp-for="HL_ContinenceNeeds" class="form-control" readonly />
-                                <span asp-validation-for="HL_ContinenceNeeds" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Eating With Staff</label>
+                                    <baserecord asp-key="Eating_With_Staff" asp-for="HL_EatingWithStaff" asp-items="null" />
+                                    <span asp-validation-for="HL_EatingWithStaff" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Allow Chats</label>
+                                    <baserecord asp-key="Allow_Chats" asp-for="HL_AllowChats" asp-items="null" />
+                                    <span asp-validation-for="HL_AllowChats" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Tea Chocolate Coffee</label>
+                                    <baserecord asp-key="Tea_Chocolate_Coffee" asp-for="HL_TeaChocolateCoffee" asp-items="null" />
+                                    <span asp-validation-for="HL_TeaChocolateCoffee" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Continence Source</label>
-                                <input type="text" asp-for="HL_ContinenceSource" class="form-control" readonly />
-                                <span asp-validation-for="HL_ContinenceSource" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Neighbour Involment</label>
+                                    <baserecord asp-key="Neighbour_Involment" asp-for="HL_NeighbourInvolment" asp-items="null" />
+                                    <span asp-validation-for="HL_NeighbourInvolment" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Family Update</label>
+                                    <baserecord asp-key="Family_Update" asp-for="HL_FamilyUpdate" asp-items="null" />
+                                    <span asp-validation-for="HL_FamilyUpdate" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Alcoholic Drink</label>
+                                    <baserecord asp-key="Alcoholic_Drink" asp-for="HL_AlcoholicDrink" asp-items="null" />
+                                    <span asp-validation-for="HL_AlcoholicDrink" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Contraint Required</label>
-                                <baserecord asp-key="Contraint_Required" asp-for="HL_ConstraintRequired" asp-items="null" />
-                                <span asp-validation-for="HL_ConstraintRequired" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Brief Health</label>
+                                    <input type="text" asp-for="HL_BriefHealth" class="form-control" readonly />
+                                    <span asp-validation-for="HL_BriefHealth" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">TV And Music</label>
+                                    <baserecord asp-key="TV_and_Music" asp-for="HL_TVandMusic" asp-items="null" />
+                                    <span asp-validation-for="HL_TVandMusic" class="text-danger"></span>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Special Caution</label>
+                                    <input type="text" asp-for="HL_SpecialCaution" class="form-control" readonly />
+                                    <span asp-validation-for="HL_SpecialCaution" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Constraint Details</label>
-                                <input type="text" asp-for="HL_ConstraintDetails" class="form-control" readonly />
-                                <span asp-validation-for="HL_ConstraintDetails" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Means Of Comm</label>
-                                <baserecord asp-key="Means_Of_Comm" asp-for="HL_MeansOfComm" asp-items="null" />
-                                <span asp-validation-for="HL_MeansOfComm" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Smoking</label>
-                                <baserecord asp-key="Health_Smoking" asp-for="HL_Smoking" asp-items="null" />
-                                <span asp-validation-for="HL_Smoking" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Ability To Read</label>
-                                <baserecord asp-key="Health_Ability_To_Read" asp-for="HL_AbilityToRead" asp-items="null" />
-                                <span asp-validation-for="HL_AbilityToRead" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Text Font Size</label>
-                                <baserecord asp-key="Text_Font_Size" asp-for="HL_TextFontSize" asp-items="null" />
-                                <span asp-validation-for="HL_TextFontSize" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Email</label>
-                                <baserecord asp-key="Health_Email" asp-for="HL_Email" asp-items="null" />
-                                <span asp-validation-for="HL_Email" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Finance Management</label>
-                                <baserecord asp-key="Finance_Management" asp-for="HL_FinanceManagement" asp-items="null" />
-                                <span asp-validation-for="HL_FinanceManagement" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Postal Service</label>
-                                <baserecord asp-key="Postal_Service" asp-for="HL_PostalService" asp-items="null" />
-                                <span asp-validation-for="HL_PostalService" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Letter Opening</label>
-                                <baserecord asp-key="Letter_Opening" asp-for="HL_LetterOpening" asp-items="null" />
-                                <span asp-validation-for="HL_LetterOpening" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Shopping Required</label>
-                                <baserecord asp-key="Shopping_Required" asp-for="HL_ShoppingRequired" asp-items="null" />
-                                <span asp-validation-for="HL_ShoppingRequired" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Special Cleaning</label>
-                                <baserecord asp-key="Special_Cleaning" asp-for="HL_SpecialCleaning" asp-items="null" />
-                                <span asp-validation-for="HL_SpecialCleaning" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Laundary Required</label>
-                                <baserecord asp-key="Laundary_Required" asp-for="HL_LaundaryRequired" asp-items="null" />
-                                <span asp-validation-for="HL_LaundaryRequired" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Video Call Required</label>
-                                <baserecord asp-key="Video_Call_Required" asp-for="HL_VideoCallRequired" asp-items="null" />
-                                <span asp-validation-for="HL_VideoCallRequired" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Eating With Staff</label>
-                                <baserecord asp-key="Eating_With_Staff" asp-for="HL_EatingWithStaff" asp-items="null" />
-                                <span asp-validation-for="HL_EatingWithStaff" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Allow Chats</label>
-                                <baserecord asp-key="Allow_Chats" asp-for="HL_AllowChats" asp-items="null" />
-                                <span asp-validation-for="HL_AllowChats" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Tea Chocolate Coffee</label>
-                                <baserecord asp-key="Tea_Chocolate_Coffee" asp-for="HL_TeaChocolateCoffee" asp-items="null" />
-                                <span asp-validation-for="HL_TeaChocolateCoffee" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Neighbour Involment</label>
-                                <baserecord asp-key="Neighbour_Involment" asp-for="HL_NeighbourInvolment" asp-items="null" />
-                                <span asp-validation-for="HL_NeighbourInvolment" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Family Update</label>
-                                <baserecord asp-key="Family_Update" asp-for="HL_FamilyUpdate" asp-items="null" />
-                                <span asp-validation-for="HL_FamilyUpdate" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Alcoholic Drink</label>
-                                <baserecord asp-key="Alcoholic_Drink" asp-for="HL_AlcoholicDrink" asp-items="null" />
-                                <span asp-validation-for="HL_AlcoholicDrink" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Brief Health</label>
-                                <input type="text" asp-for="HL_BriefHealth" class="form-control" readonly />
-                                <span asp-validation-for="HL_BriefHealth" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">TV And Music</label>
-                                <baserecord asp-key="TV_and_Music" asp-for="HL_TVandMusic" asp-items="null" />
-                                <span asp-validation-for="HL_TVandMusic" class="text-danger"></span>
-                            </div>
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Special Caution</label>
-                                <input type="text" asp-for="HL_SpecialCaution" class="form-control" readonly />
-                                <span asp-validation-for="HL_SpecialCaution" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                                <label class="control-label">Brief Health</label>
-                                <input type="text" asp-for="HL_ObserveHealth" class="form-control" readonly />
-                                <span asp-validation-for="HL_ObserveHealth" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4">
-                        <div class="card">
-                            <div class="header">
-                                <h2>CONSTRAINT APPROVAL</h2>
-                            </div>
-                            <div class="body">
-                                <img src="@Model.HL_Attach" alt="image" width="300" height="240" />
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Brief Health</label>
+                                    <input type="text" asp-for="HL_ObserveHealth" class="form-control" readonly />
+                                    <span asp-validation-for="HL_ObserveHealth" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>CONSTRAINT APPROVAL</h2>
+                                </div>
+                                <div class="body">
+                                    <img src="@Model.HL_Attach" alt="image" width="300" height="240" />
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
-
+                <hr />
                 <h4>Balance</h4>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <input type="hidden" asp-for="BalanceId" />
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Name</label>
-                            <input type="text" asp-for="Balance_Name" class="form-control" readonly />
-                            <span asp-validation-for="Balance_Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Mobility</label>
-                            <baserecord asp-key="Balance_Mobility" asp-for="Balance_Mobility" asp-items="null" />
-                            <span asp-validation-for="Balance_Mobility" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Status</label>
-                            <baserecord asp-key="Balance_Status" asp-for="Balance_Status" asp-items="null" />
-                            <span asp-validation-for="Balance_Status" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Description</label>
-                            <p style="text-align:justify;">@Model.Balance_Description</p>
-                            <span asp-validation-for="Balance_Description" class="text-danger"></span>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.GetBalance.Count > 0)
+                        {
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+
+                                        <th>NAME</th>
+                                        <th>Mobility</th>
+                                        <th>Status</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetBalance)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Name
+                                            </td>
+                                            <td>
+                                                <baserecord asp-key="Balance_Mobility" asp-for="@item.Mobility" asp-items="null" />
+                                            </td>
+                                            <td>
+                                                <baserecord asp-key="Balance_Status" asp-for="@item.Status" asp-items="null" />
+
+                                            </td>
+                                            <td style="text-align:justify;">
+                                                @item.Description
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+
                     </div>
                 </div>
-
+                <hr />
                 <h4>Physical Ability</h4>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <input type="hidden" asp-for="BalanceId" />
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Name</label>
-                            <input type="text" asp-for="Physical_Name" class="form-control" readonly />
-                            <span asp-validation-for="Physical_Name" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Mobility</label>
-                            <baserecord asp-key="PhysicalAbility_Mobility" asp-for="Physical_Mobility" asp-items="null" />
-                            <span asp-validation-for="Physical_Mobility" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Status</label>
-                            <baserecord asp-key="PhysicalAbility_Status" asp-for="Physical_Status" asp-items="null" />
-                            <span asp-validation-for="Physical_Status" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Description</label>
-                            <p style="text-align:justify;">@Model.Physical_Description</p>
-                            <span asp-validation-for="Physical_Description" class="text-danger"></span>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.PhysicalId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <input type="text" asp-for="Physical_Name" class="form-control" readonly />
+                                    <span asp-validation-for="Physical_Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Mobility</label>
+                                    <baserecord asp-key="PhysicalAbility_Mobility" asp-for="Physical_Mobility" asp-items="null" />
+                                    <span asp-validation-for="Physical_Mobility" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Status</label>
+                                    <baserecord asp-key="PhysicalAbility_Status" asp-for="Physical_Status" asp-items="null" />
+                                    <span asp-validation-for="Physical_Status" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Description</label>
+                                    <p style="text-align:justify;">@Model.Physical_Description</p>
+                                    <span asp-validation-for="Physical_Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>History Of Fall</h4>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <input type="hidden" asp-for="HistoryId" />
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Date</label>
-                            <input type="text" asp-for="History_Date" class="form-control" readonly data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                            <span asp-validation-for="History_Date" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Cause</label>
-                            <input type="text" asp-for="History_Cause" class="form-control" readonly />
-                            <span asp-validation-for="History_Cause" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Details</label>
-                            <p style="text-align:justify;">@Model.History_Details</p>
-                            <span asp-validation-for="History_Details" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Prevention</label>
-                            <p style="text-align:justify;">@Model.History_Prevention</p>
-                            <span asp-validation-for="History_Prevention" class="text-danger"></span>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.HistoryId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Date</label>
+                                    <input type="text" asp-for="History_Date" class="form-control" readonly data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="History_Date" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Cause</label>
+                                    <input type="text" asp-for="History_Cause" class="form-control" readonly />
+                                    <span asp-validation-for="History_Cause" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Details</label>
+                                    <p style="text-align:justify;">@Model.History_Details</p>
+                                    <span asp-validation-for="History_Details" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Prevention</label>
+                                    <p style="text-align:justify;">@Model.History_Prevention</p>
+                                    <span asp-validation-for="History_Prevention" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>Special Health And Medication</h4>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <input type="hidden" asp-for="SHMId" class="form-control" />
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Date Time Date</label>
-                            <input type="text" asp-for="SHAM_Date" class="form-control" readonly />
-                            <span asp-validation-for="SHAM_Date" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Admin Lvl</label>
-                            <baserecord asp-key="Admin_Lvl" asp-for="SHAM_AdminLvl" asp-items="null" />
-                            <span asp-validation-for="SHAM_AdminLvl" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Medication Allergy</label>
-                            <baserecord asp-key="Medication_Allergy" asp-for="SHAM_MedicationAllergy" asp-items="null" />
-                            <span asp-validation-for="SHAM_MedicationAllergy" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Left Out Medicine</label>
-                            <baserecord asp-key="Left_Out_Medicine" asp-for="SHAM_LeftoutMedicine" asp-items="null" />
-                            <span asp-validation-for="SHAM_LeftoutMedicine" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Name Form Medication</label>
-                            <baserecord asp-key="Name_Form_Medication" asp-for="SHAM_NameFormMedicaiton" asp-items="null" />
-                            <span asp-validation-for="SHAM_NameFormMedicaiton" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Who Administer</label>
-                            <baserecord asp-key="Who_Administer" asp-for="SHAM_WhoAdminister" asp-items="null" />
-                            <span asp-validation-for="SHAM_WhoAdminister" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Meds GP Order</label>
-                            <baserecord asp-key="Meds_GP_Order" asp-for="SHAM_MedsGPOrder" asp-items="null" />
-                            <span asp-validation-for="SHAM_MedsGPOrder" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Pharma MAR Chart</label>
-                            <baserecord asp-key="Pharma_MAR_Chart" asp-for="SHAM_PharmaMARChart" asp-items="null" />
-                            <span asp-validation-for="SHAM_PharmaMARChart" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Temp MAR Chart</label>
-                            <baserecord asp-key="Temp_MAR_Chart" asp-for="SHAM_TempMARChart" asp-items="null" />
-                            <span asp-validation-for="SHAM_TempMARChart" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Medkey Code </label>
-                            <input type="text" asp-for="SHAM_MedKeyCode" class="form-control" readonly />
-                            <span asp-validation-for="SHAM_MedKeyCode" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Family Return Med</label>
-                            <baserecord asp-key="Family_Return_Med" asp-for="SHAM_FamilyReturnMed" asp-items="null" />
-                            <span asp-validation-for="SHAM_FamilyReturnMed" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Access Medication</label>
-                            <baserecord asp-key="Access_Medication" asp-for="SHAM_AccessMedication" asp-items="null" />
-                            <span asp-validation-for="SHAM_AccessMedication" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">No Med Access</label>
-                            <baserecord asp-key="No_Med_Access" asp-for="SHAM_NoMedAccess" asp-items="null" />
-                            <span asp-validation-for="SHAM_NoMedAccess" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Med Access Denial</label>
-                            <baserecord asp-key="Med_Access_Denail" asp-for="SHAM_MedAccessDenial" asp-items="null" />
-                            <span asp-validation-for="SHAM_MedAccessDenial" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">PNR Med Req</label>
-                            <baserecord asp-key="PNR_Med_Req" asp-for="SHAM_PNRMedReq" asp-items="null" />
-                            <span asp-validation-for="SHAM_PNRMedReq" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">PNR Doses</label>
-                            <baserecord asp-key="PNR_Doses" asp-for="SHAM_PNRDoses" asp-items="null" />
-                            <span asp-validation-for="SHAM_PNRDoses" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">PNR Meds Admin</label>
-                            <baserecord asp-key="PNR_Meds_Admin" asp-for="SHAM_PNRMedsAdmin" asp-items="null" />
-                            <span asp-validation-for="SHAM_PNRMedsAdmin" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Overdose Contact</label>
-                            <baserecord asp-key="Overdose_Contact" asp-for="SHAM_OverdoseContact" asp-items="null" />
-                            <span asp-validation-for="SHAM_OverdoseContact" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">PNR Meds Missing</label>
-                            <input type="text" asp-for="SHAM_PNRMedsMissing" class="form-control" readonly />
-                            <span asp-validation-for="SHAM_PNRMedsMissing" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Medication Storage</label>
-                            <input type="text" asp-for="SHAM_MedicationStorage" class="form-control" readonly />
-                            <span asp-validation-for="SHAM_MedicationStorage" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Special Storage</label>
-                            <baserecord asp-key="Special_Storage" asp-for="SHAM_SpecialStorage" asp-items="null" />
-                            <span asp-validation-for="SHAM_SpecialStorage" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">PNR Med List</label>
-                            <input type="text" asp-for="SHAM_PNRMedList" class="form-control" readonly />
-                            <span asp-validation-for="SHAM_PNRMedList" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Consent</label>
-                            <baserecord asp-key="SHAM_Consent" asp-for="SHAM_Consent" asp-items="null" />
-                            <span asp-validation-for="SHAM_Consent" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Type</label>
-                            <baserecord asp-key="SHAM_Type" asp-for="SHAM_Type" asp-items="null" />
-                            <span asp-validation-for="SHAM_Type" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">By</label>
-                            <input type="text" asp-for="SHAM_By" class="form-control" readonly />
-                            <span asp-validation-for="SHAM_By" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
-                            <label class="control-label">Family Meds</label>
-                            <baserecord asp-key="Family_Meds" asp-for="SHAM_FamilyMeds" asp-items="null" />
-                            <span asp-validation-for="SHAM_FamilyMeds" class="text-danger"></span>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.SHMId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Date Time Date</label>
+                                    <input type="text" asp-for="SHAM_Date" class="form-control" readonly />
+                                    <span asp-validation-for="SHAM_Date" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Admin Lvl</label>
+                                    <baserecord asp-key="Admin_Lvl" asp-for="SHAM_AdminLvl" asp-items="null" />
+                                    <span asp-validation-for="SHAM_AdminLvl" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Medication Allergy</label>
+                                    <baserecord asp-key="Medication_Allergy" asp-for="SHAM_MedicationAllergy" asp-items="null" />
+                                    <span asp-validation-for="SHAM_MedicationAllergy" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Left Out Medicine</label>
+                                    <baserecord asp-key="Left_Out_Medicine" asp-for="SHAM_LeftoutMedicine" asp-items="null" />
+                                    <span asp-validation-for="SHAM_LeftoutMedicine" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Name Form Medication</label>
+                                    <baserecord asp-key="Name_Form_Medication" asp-for="SHAM_NameFormMedicaiton" asp-items="null" />
+                                    <span asp-validation-for="SHAM_NameFormMedicaiton" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Who Administer</label>
+                                    <baserecord asp-key="Who_Administer" asp-for="SHAM_WhoAdminister" asp-items="null" />
+                                    <span asp-validation-for="SHAM_WhoAdminister" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Meds GP Order</label>
+                                    <baserecord asp-key="Meds_GP_Order" asp-for="SHAM_MedsGPOrder" asp-items="null" />
+                                    <span asp-validation-for="SHAM_MedsGPOrder" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Pharma MAR Chart</label>
+                                    <baserecord asp-key="Pharma_MAR_Chart" asp-for="SHAM_PharmaMARChart" asp-items="null" />
+                                    <span asp-validation-for="SHAM_PharmaMARChart" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Temp MAR Chart</label>
+                                    <baserecord asp-key="Temp_MAR_Chart" asp-for="SHAM_TempMARChart" asp-items="null" />
+                                    <span asp-validation-for="SHAM_TempMARChart" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Medkey Code </label>
+                                    <input type="text" asp-for="SHAM_MedKeyCode" class="form-control" readonly />
+                                    <span asp-validation-for="SHAM_MedKeyCode" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Family Return Med</label>
+                                    <baserecord asp-key="Family_Return_Med" asp-for="SHAM_FamilyReturnMed" asp-items="null" />
+                                    <span asp-validation-for="SHAM_FamilyReturnMed" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Access Medication</label>
+                                    <baserecord asp-key="Access_Medication" asp-for="SHAM_AccessMedication" asp-items="null" />
+                                    <span asp-validation-for="SHAM_AccessMedication" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">No Med Access</label>
+                                    <baserecord asp-key="No_Med_Access" asp-for="SHAM_NoMedAccess" asp-items="null" />
+                                    <span asp-validation-for="SHAM_NoMedAccess" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Med Access Denial</label>
+                                    <baserecord asp-key="Med_Access_Denail" asp-for="SHAM_MedAccessDenial" asp-items="null" />
+                                    <span asp-validation-for="SHAM_MedAccessDenial" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Med Req</label>
+                                    <baserecord asp-key="PNR_Med_Req" asp-for="SHAM_PNRMedReq" asp-items="null" />
+                                    <span asp-validation-for="SHAM_PNRMedReq" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Doses</label>
+                                    <baserecord asp-key="PNR_Doses" asp-for="SHAM_PNRDoses" asp-items="null" />
+                                    <span asp-validation-for="SHAM_PNRDoses" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Meds Admin</label>
+                                    <baserecord asp-key="PNR_Meds_Admin" asp-for="SHAM_PNRMedsAdmin" asp-items="null" />
+                                    <span asp-validation-for="SHAM_PNRMedsAdmin" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Overdose Contact</label>
+                                    <baserecord asp-key="Overdose_Contact" asp-for="SHAM_OverdoseContact" asp-items="null" />
+                                    <span asp-validation-for="SHAM_OverdoseContact" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Meds Missing</label>
+                                    <input type="text" asp-for="SHAM_PNRMedsMissing" class="form-control" readonly />
+                                    <span asp-validation-for="SHAM_PNRMedsMissing" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Medication Storage</label>
+                                    <input type="text" asp-for="SHAM_MedicationStorage" class="form-control" readonly />
+                                    <span asp-validation-for="SHAM_MedicationStorage" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Special Storage</label>
+                                    <baserecord asp-key="Special_Storage" asp-for="SHAM_SpecialStorage" asp-items="null" />
+                                    <span asp-validation-for="SHAM_SpecialStorage" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">PNR Med List</label>
+                                    <input type="text" asp-for="SHAM_PNRMedList" class="form-control" readonly />
+                                    <span asp-validation-for="SHAM_PNRMedList" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Consent</label>
+                                    <baserecord asp-key="SHAM_Consent" asp-for="SHAM_Consent" asp-items="null" />
+                                    <span asp-validation-for="SHAM_Consent" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Type</label>
+                                    <baserecord asp-key="SHAM_Type" asp-for="SHAM_Type" asp-items="null" />
+                                    <span asp-validation-for="SHAM_Type" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">By</label>
+                                    <input type="text" asp-for="SHAM_By" class="form-control" readonly />
+                                    <span asp-validation-for="SHAM_By" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
+                                    <label class="control-label">Family Meds</label>
+                                    <baserecord asp-key="Family_Meds" asp-for="SHAM_FamilyMeds" asp-items="null" />
+                                    <span asp-validation-for="SHAM_FamilyMeds" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>Special Health Condition</h4>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <input type="hidden" asp-for="HealthCondId" />
-                    <div class="row">
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Condition Name</label>
-                            <input type="text" asp-for="SHC_ConditionName" class="form-control" readonly />
-                            <span asp-validation-for="SHC_ConditionName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Source OF Information</label>
-                            <input type="text" asp-for="SHC_SourceInformation" class="form-control" readonly />
-                            <span asp-validation-for="SHC_SourceInformation" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                            <label class="control-label">Frequency Of Occurance</label>
-                            <input type="text" asp-for="SHC_Frequency" class="form-control" readonly />
-                            <span asp-validation-for="SHC_Frequency" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Feelings Before Incident</label>
-                            <p style="text-align:justify;">@Model.SHC_FeelingBeforeIncident</p>
-                            <span asp-validation-for="SHC_FeelingBeforeIncident" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Feelings After Incident</label>
-                            <p style="text-align:justify;">@Model.SHC_FeelingAfterIncident</p>
-                            <span asp-validation-for="SHC_FeelingAfterIncident" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Are There Risk Involved in Daily Living Activities</label>
-                            <p style="text-align:justify;">@Model.SHC_LivingActivities</p>
-                            <span asp-validation-for="SHC_LivingActivities" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Trigger</label>
-                            <p style="text-align:justify;">@Model.SHC_Trigger</p>
-                            <span asp-validation-for="SHC_Trigger" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Client Action</label>
-                            <p style="text-align:justify;">@Model.SHC_ClientAction</p>
-                            <span asp-validation-for="SHC_ClientAction" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Medication Or Clinic Recommendation</label>
-                            <p style="text-align:justify;">@Model.SHC_ClinicRecommendation</p>
-                            <span asp-validation-for="SHC_ClinicRecommendation" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">What LifeStyle Support Is Required</label>
-                            <p style="text-align:justify;">@Model.SHC_LifestyleSupport</p>
-                            <span asp-validation-for="SHC_LifestyleSupport" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <label class="control-label">Care assessment and Person Centred Planning for Health Condition/s</label>
-                            <p style="text-align:justify;">@Model.SHC_PlanningHealthCondition</p>
-                            <span asp-validation-for="SHC_PlanningHealthCondition" class="text-danger"></span>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12">
+                        @if (Model.HealthCondId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Condition Name</label>
+                                    <input type="text" asp-for="SHC_ConditionName" class="form-control" readonly />
+                                    <span asp-validation-for="SHC_ConditionName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Source OF Information</label>
+                                    <input type="text" asp-for="SHC_SourceInformation" class="form-control" readonly />
+                                    <span asp-validation-for="SHC_SourceInformation" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Frequency Of Occurance</label>
+                                    <input type="text" asp-for="SHC_Frequency" class="form-control" readonly />
+                                    <span asp-validation-for="SHC_Frequency" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Feelings Before Incident</label>
+                                    <p style="text-align:justify;">@Model.SHC_FeelingBeforeIncident</p>
+                                    <span asp-validation-for="SHC_FeelingBeforeIncident" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Feelings After Incident</label>
+                                    <p style="text-align:justify;">@Model.SHC_FeelingAfterIncident</p>
+                                    <span asp-validation-for="SHC_FeelingAfterIncident" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Are There Risk Involved in Daily Living Activities</label>
+                                    <p style="text-align:justify;">@Model.SHC_LivingActivities</p>
+                                    <span asp-validation-for="SHC_LivingActivities" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Trigger</label>
+                                    <p style="text-align:justify;">@Model.SHC_Trigger</p>
+                                    <span asp-validation-for="SHC_Trigger" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Client Action</label>
+                                    <p style="text-align:justify;">@Model.SHC_ClientAction</p>
+                                    <span asp-validation-for="SHC_ClientAction" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Medication Or Clinic Recommendation</label>
+                                    <p style="text-align:justify;">@Model.SHC_ClinicRecommendation</p>
+                                    <span asp-validation-for="SHC_ClinicRecommendation" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">What LifeStyle Support Is Required</label>
+                                    <p style="text-align:justify;">@Model.SHC_LifestyleSupport</p>
+                                    <span asp-validation-for="SHC_LifestyleSupport" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Care assessment and Person Centred Planning for Health Condition/s</label>
+                                    <p style="text-align:justify;">@Model.SHC_PlanningHealthCondition</p>
+                                    <span asp-validation-for="SHC_PlanningHealthCondition" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>Personal Hygiene</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="HygieneId" />
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">Cleaning</label>
-                                <baserecord asp-key="Cleaning" asp-for="Hygiene_Cleaning" asp-items="null" />
-                                <span asp-validation-for="Hygiene_Cleaning" class="text-danger"></span>
+                        @if (Model.HygieneId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Cleaning</label>
+                                    <baserecord asp-key="Cleaning" asp-for="Hygiene_Cleaning" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_Cleaning" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Cleaning Tools Location</label>
+                                    <baserecord asp-key="CleaningTools" asp-for="Hygiene_CleaningTools" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_CleaningTools" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Who Does My Cleaning</label>
+                                    <baserecord asp-key="WhoClean" asp-for="Hygiene_WhoClean" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_WhoClean" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">Cleaning Tools Location</label>
-                                <baserecord asp-key="CleaningTools" asp-for="Hygiene_CleaningTools" asp-items="null" />
-                                <span asp-validation-for="Hygiene_CleaningTools" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">How I Want Cleaning</label>
+                                    <baserecord asp-key="Desired_Cleaning" asp-for="Hygiene_DesiredCleaning" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_DesiredCleaning" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">How Often Do I Want Cleaning</label>
+                                    <baserecord asp-key="Cleaning_Freq" asp-for="Hygiene_CleaningFreq" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_CleaningFreq" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">General Cleaning Appliance</label>
+                                    <baserecord asp-key="General_Appliance" asp-for="Hygiene_GeneralAppliance" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_GeneralAppliance" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">Who Does My Cleaning</label>
-                                <baserecord asp-key="WhoClean" asp-for="Hygiene_WhoClean" asp-items="null" />
-                                <span asp-validation-for="Hygiene_WhoClean" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Dirty Laundry Location</label>
+                                    <baserecord asp-key="Dirty_Laundry" asp-for="Hygiene_DirtyLaundry" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_DirtyLaundry" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">How To Dry Laundry</label>
+                                    <baserecord asp-key="Dry_Laundry" asp-for="Hygiene_DryLaundry" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_DryLaundry" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Washing Machine Location</label>
+                                    <baserecord asp-key="Washing_Machine" asp-for="Hygiene_WashingMachine" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_WashingMachine" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">How I Want Cleaning</label>
-                                <baserecord asp-key="Desired_Cleaning" asp-for="Hygiene_DesiredCleaning" asp-items="null" />
-                                <span asp-validation-for="Hygiene_DesiredCleaning" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Ironing</label>
+                                    <baserecord asp-key="Ironing" asp-for="Hygiene_Ironing" asp-items="null" />
+                                    <span asp-validation-for="Hygiene_Ironing" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">How Often Do I Want Cleaning</label>
-                                <baserecord asp-key="Cleaning_Freq" asp-for="Hygiene_CleaningFreq" asp-items="null" />
-                                <span asp-validation-for="Hygiene_CleaningFreq" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">General Washing Instructions</label>
+                                    <p style="text-align:justify;">@Model.Hygiene_LaundryGuide</p>
+                                    <span asp-validation-for="Hygiene_LaundryGuide" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">General Cleaning Appliance</label>
-                                <baserecord asp-key="General_Appliance" asp-for="Hygiene_GeneralAppliance" asp-items="null" />
-                                <span asp-validation-for="Hygiene_GeneralAppliance" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Practical Support For Laundry</label>
+                                    <p style="text-align:justify;">@Model.Hygiene_LaundrySupport</p>
+                                    <span asp-validation-for="Hygiene_LaundrySupport" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">Dirty Laundry Location</label>
-                                <baserecord asp-key="Dirty_Laundry" asp-for="Hygiene_DirtyLaundry" asp-items="null" />
-                                <span asp-validation-for="Hygiene_DirtyLaundry" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">How To Dry Laundry</label>
-                                <baserecord asp-key="Dry_Laundry" asp-for="Hygiene_DryLaundry" asp-items="null" />
-                                <span asp-validation-for="Hygiene_DryLaundry" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">Washing Machine Location</label>
-                                <baserecord asp-key="Washing_Machine" asp-for="Hygiene_WashingMachine" asp-items="null" />
-                                <span asp-validation-for="Hygiene_WashingMachine" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                <label class="control-label">Ironing</label>
-                                <baserecord asp-key="Ironing" asp-for="Hygiene_Ironing" asp-items="null" />
-                                <span asp-validation-for="Hygiene_Ironing" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">General Washing Instructions</label>
-                                <p style="text-align:justify;">@Model.Hygiene_LaundryGuide</p>
-                                <span asp-validation-for="Hygiene_LaundryGuide" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">Practical Support For Laundry</label>
-                                <p style="text-align:justify;">@Model.Hygiene_LaundrySupport</p>
-                                <span asp-validation-for="Hygiene_LaundrySupport" class="text-danger"></span>
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>Managing Task</h4>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                    <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
-
-                    <table class="table table-hover table-bordered" id="tblMTasks">
-                        <thead>
-                            <tr>
-                                <th>Task</th>
-                                <th>Help Required</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.GetManagingTasks.Count > 0)
-                            {
-                                @foreach (var type in Model.GetManagingTasks)
-                                {
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        @if (Model.GetManagingTasks.Count > 0)
+                        {
+                            <table class="table table-hover table-bordered" id="tblMTasks">
+                                <thead>
                                     <tr>
-                                        <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Task" asp-items="null" /></td>
-                                        <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault().Help" value="@type.Help" class="form-control" readonly /></td>
-                                        <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Status" asp-items="null" /><input type="hidden" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).TaskId" value="@type.TaskId" /></td>
+                                        <th>Task</th>
+                                        <th>Help Required</th>
+                                        <th>Status</th>
                                     </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
 
+                                    @foreach (var type in Model.GetManagingTasks)
+                                    {
+                                        <tr>
+                                            <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Task" asp-items="null" /></td>
+                                            <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault().Help" value="@type.Help" class="form-control" readonly /></td>
+                                            <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Status" asp-items="null" /><input type="hidden" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).TaskId" value="@type.TaskId" /></td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                    </div>
                 </div>
-
+                <hr />
                 <h4>Infection Control</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <input type="hidden" asp-for="InfectionId" />
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
-                                <label class="control-label">Infection Type</label>
-                                <baserecord asp-key="Infection_Type" asp-for="Infection_Type" asp-items="null" />
-                                <span asp-validation-for="Infection_Type" class="text-danger"></span>
+                        @if (Model.InfectionId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
+                                    <label class="control-label">Infection Type</label>
+                                    <baserecord asp-key="Infection_Type" asp-for="Infection_Type" asp-items="null" />
+                                    <span asp-validation-for="Infection_Type" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
+                                    <label class="control-label">Vaccination Status</label>
+                                    <baserecord asp-key="Vaccination_Status" asp-for="Infection_VaccStatus" asp-items="null" />
+                                    <span asp-validation-for="Infection_VaccStatus" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
-                                <label class="control-label">Vaccination Status</label>
-                                <baserecord asp-key="Vaccination_Status" asp-for="Infection_VaccStatus" asp-items="null" />
-                                <span asp-validation-for="Infection_VaccStatus" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
+                                    <label class="control-label">Test Date</label>
+                                    <input type="text" asp-for="Infection_TestDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
+                                    <span asp-validation-for="Infection_TestDate" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
+                                    <label class="control-label">Status</label>
+                                    <baserecord asp-key="Infection_Status" asp-for="Infection_Status" asp-items="null" />
+                                    <span asp-validation-for="Infection_Status" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
-                                <label class="control-label">Test Date</label>
-                                <input type="text" asp-for="Infection_TestDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
-                                <span asp-validation-for="Infection_TestDate" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Government Guideline</label>
+                                    <p style="text-align:justify;">@Model.Infection_Guideline</p>
+                                    <span asp-validation-for="Infection_Guideline" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-6 col-md-6 col-xs-12 col-lg-6">
-                                <label class="control-label">Status</label>
-                                <baserecord asp-key="Infection_Status" asp-for="Infection_Status" asp-items="null" />
-                                <span asp-validation-for="Infection_Status" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Remarks</label>
+                                    <p style="text-align:justify;">@Model.Infection_Remarks</p>
+                                    <span asp-validation-for="Infection_Remarks" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">Government Guideline</label>
-                                <p style="text-align:justify;">@Model.Infection_Guideline</p>
-                                <span asp-validation-for="Infection_Guideline" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">Remarks</label>
-                                <p style="text-align:justify;">@Model.Infection_Remarks</p>
-                                <span asp-validation-for="Infection_Remarks" class="text-danger"></span>
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>INTEREST</h4>
-                <div class="row">
-                    <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                        <label class="control-label">Brief</label>
-                        <p style="text-align:justify;">@Model.Interest_Brief</p>
-                        <span asp-validation-for="Interest_Brief" class="text-danger"></span>
+                @if (!string.IsNullOrWhiteSpace(@Model.Interest_Brief))
+                {
+                    <div class="row">
+                        <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                            <label class="control-label">Brief</label>
+                            <p style="text-align:justify;">@Model.Interest_Brief</p>
+                            <span asp-validation-for="Interest_Brief" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-
+                }
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        @if (Model.GetInterest.Count > 0)
+                        {
+                            <table class="table table-hover table-bordered" id="tblInterest">
+                                <thead>
+                                    <tr>
+                                        <th> LeisureActivity</th>
+                                        <th> InformalActivity</th>
+                                        <th> MaintainContact</th>
+                                        <th> CommunityActivity</th>
+                                        <th> EventAwareness</th>
+                                        <th> GoalAndObjective</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                <input type="hidden" asp-for="@Model.InterestCount" value="@Model.InterestCount" />
-
-                                <table class="table table-hover table-bordered" id="tblInterest">
-                                    <thead>
+                                    @foreach (var type in Model.GetInterest)
+                                    {
                                         <tr>
-                                            <th> LeisureActivity</th>
-                                            <th> InformalActivity</th>
-                                            <th> MaintainContact</th>
-                                            <th> CommunityActivity</th>
-                                            <th> EventAwareness</th>
-                                            <th> GoalAndObjective</th>
+                                            <td><baserecord asp-key="Interest_LeisureAct" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).LeisureActivity" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Interest_InformalAct" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).InformalActivity" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Interest_MaintainContact" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).MaintainContact" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Interest_CommunityActivity" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).CommunityActivity" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Interest_EventAwareness" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).EventAwarness" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Interest_GoalAndObj" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).GoalAndObjective" asp-items="null" /></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (Model.GetInterest.Count > 0)
-                                        {
-                                            @foreach (var type in Model.GetInterest)
-                                            {
-                                                <tr>
-                                                    <td><baserecord asp-key="Interest_LeisureAct" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).LeisureActivity" asp-items="null" /></td>
-                                                    <td><baserecord asp-key="Interest_InformalAct" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).InformalActivity" asp-items="null" /></td>
-                                                    <td><baserecord asp-key="Interest_MaintainContact" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).MaintainContact" asp-items="null" /></td>
-                                                    <td><baserecord asp-key="Interest_CommunityActivity" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).CommunityActivity" asp-items="null" /></td>
-                                                    <td><baserecord asp-key="Interest_EventAwareness" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).EventAwarness" asp-items="null" /></td>
-                                                    <td><baserecord asp-key="Interest_GoalAndObj" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).GoalAndObjective" asp-items="null" /></td>
-                                                </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>GOAL AND OBJECTIVE OF CARE</h4>
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <p style="text-align:justify;">@Model.Interest_CareGoal</p>
-                    <span asp-validation-for="Interest_CareGoal" class="text-danger"></span>
-                </div>
+                @if (!string.IsNullOrWhiteSpace(@Model.Interest_Brief))
+                {
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <p style="text-align:justify;">@Model.Interest_CareGoal</p>
+                            <span asp-validation-for="Interest_CareGoal" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
 
+                <hr />
                 <h4>Personality Test</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <input type="hidden" asp-for="@Model.PersonalityCount" value="@Model.PersonalityCount" />
-                                <table class="table table-hover table-bordered" id="tbl_Ptest">
-                                    <thead>
+                        @if (Model.GetPersonalityTest.Count > 0)
+                        {
+                            <table class="table table-hover table-bordered" id="tbl_Ptest">
+                                <thead>
+                                    <tr>
+                                        <th> Question </th>
+                                        <th> Answer </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var type in Model.GetPersonalityTest)
+                                    {
                                         <tr>
-                                            <th> Question </th>
-                                            <th> Answer </th>
+                                            <td><baserecord asp-key="PTest_Question" asp-for="@Model.GetPersonalityTest.FirstOrDefault(s=>s.TestId==type.TestId).Question" asp-items="null" /></td>
+                                            <td><baserecord asp-key="PTest_Answer" asp-for="@Model.GetPersonalityTest.FirstOrDefault(s=>s.TestId==type.TestId).Answer" asp-items="null" /></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (Model.GetPersonalityTest.Count > 0)
-                                        {
-                                            @foreach (var type in Model.GetPersonalityTest)
-                                            {
-                                                <tr>
-                                                    <td><baserecord asp-key="PTest_Question" asp-for="@Model.GetPersonalityTest.FirstOrDefault(s=>s.TestId==type.TestId).Question" asp-items="null" /></td>
-                                                    <td><baserecord asp-key="PTest_Answer" asp-for="@Model.GetPersonalityTest.FirstOrDefault(s=>s.TestId==type.TestId).Answer" asp-items="null" /></td>
-                                                </tr>
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
                     </div>
                 </div>
-
+                <hr />
                 <h4>Pets</h4>
                 <div class="row">
                     <div class="col-xs-8 col-sm-8 col-md-8">
-                        <input type="hidden" asp-for="PetsId" />
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Name</label>
-                                <input type="text" asp-for="Pet_Name" class="form-control" readonly />
-                                <span asp-validation-for="Pet_Name" class="text-danger"></span>
+                        @if (Model.PetsId > 0)
+                        {
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Name</label>
+                                    <input type="text" asp-for="Pet_Name" class="form-control" readonly />
+                                    <span asp-validation-for="Pet_Name" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Type</label>
+                                    <baserecord asp-key="Pets_Type" asp-for="Pet_Type" asp-items="null" />
+                                    <span asp-validation-for="Pet_Type" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Age</label>
+                                    <input type="text" asp-for="Pet_Age" class="form-control" readonly />
+                                    <span asp-validation-for="Pet_Age" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Type</label>
-                                <baserecord asp-key="Pets_Type" asp-for="Pet_Type" asp-items="null" />
-                                <span asp-validation-for="Pet_Type" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Gender</label>
+                                    <baserecord asp-key="Pets_Gender" asp-for="Gender" asp-items="null" />
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Pet Meal Storage</label>
+                                    <baserecord asp-key="Pet_Meal_Storage" asp-for="Pet_MealStorage" asp-items="null" />
+                                    <span asp-validation-for="Pet_MealStorage" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Vet Visit</label>
+                                    <baserecord asp-key="Pet_Vet_Visit" asp-for="Pet_VetVisit" asp-items="null" />
+                                    <span asp-validation-for="Pet_VetVisit" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Age</label>
-                                <input type="text" asp-for="Pet_Age" class="form-control" readonly />
-                                <span asp-validation-for="Pet_Age" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Pet Insurance</label>
+                                    <baserecord asp-key="Pet_Insurance" asp-for="PetInsurance" asp-items="null" />
+                                    <span asp-validation-for="PetInsurance" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Gender</label>
-                                <baserecord asp-key="Pets_Gender" asp-for="Gender" asp-items="null" />
-                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Pet Activities</label>
+                                    <p style="text-align:justify;">@Model.PetActivities</p>
+                                    <span asp-validation-for="PetActivities" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Pet Meal Storage</label>
-                                <baserecord asp-key="Pet_Meal_Storage" asp-for="Pet_MealStorage" asp-items="null" />
-                                <span asp-validation-for="Pet_MealStorage" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Pet Care</label>
+                                    <p style="text-align:justify;">@Model.PetCare</p>
+                                    <span asp-validation-for="PetCare" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Vet Visit</label>
-                                <baserecord asp-key="Pet_Vet_Visit" asp-for="Pet_VetVisit" asp-items="null" />
-                                <span asp-validation-for="Pet_VetVisit" class="text-danger"></span>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label class="control-label">Meal Pattern</label>
+                                    <p style="text-align:justify;">@Model.Pet_MealPattern</p>
+                                    <span asp-validation-for="Pet_MealPattern" class="text-danger"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                <label class="control-label">Pet Insurance</label>
-                                <baserecord asp-key="Pet_Insurance" asp-for="PetInsurance" asp-items="null" />
-                                <span asp-validation-for="PetInsurance" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">Pet Activities</label>
-                                <p style="text-align:justify;">@Model.PetActivities</p>
-                                <span asp-validation-for="PetActivities" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">Pet Care</label>
-                                <p style="text-align:justify;">@Model.PetCare</p>
-                                <span asp-validation-for="PetCare" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                <label class="control-label">Meal Pattern</label>
-                                <p style="text-align:justify;">@Model.Pet_MealPattern</p>
-                                <span asp-validation-for="Pet_MealPattern" class="text-danger"></span>
-                            </div>
-                        </div>
+                        }
                     </div>
                 </div>
+                <hr />
                 <h4>Home Risk Assessment</h4>
                 <div class="row">
                     <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
@@ -1334,55 +1480,54 @@
 
                             </div>
                             <div class="body">
-                                <table class="table table-bordered table-hover" id="homeRisk">
-                                    <thead>
-                                        <tr>
-                                            <th>Heading</th>
-                                            <th>Tasks</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.HeadingList)
-                                        {
+                                @if (Model.GetHomeRiskAssessments.Count > 0)
+                                {
+                                    <table class="table table-bordered table-hover" id="homeRisk">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    @item.Text
-                                                </td>
-                                                <td>
-                                                    @if (Model.Tasks.Count > 0)
-                                                    {
+                                                <th>Heading</th>
+                                                <th>Tasks</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.HeadingList)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        @item.Text
+                                                    </td>
+                                                    <td>
 
-                                                        @foreach (var task in Model.Tasks)
+
+                                                        @foreach (var task in Model.GetHomeRiskAssessments.Where(s => s.HomeRiskAssessmentId.ToString() == item.Value).Select(s => s.GetHomeRiskAssessmentTask).FirstOrDefault())
                                                         {
-                                                            if (task.HomeRiskAssessmentId.ToString() == item.Value)
-                                                            {
-                                                                <table>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Title</th>
-                                                                            <th>Answer</th>
-                                                                            <th>Comment</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>@task.TitleName</td>
-                                                                            <td>@task.AnswerName</td>
-                                                                            <td>@task.Comment</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            }
+                                                            <table>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Title</th>
+                                                                        <th>Answer</th>
+                                                                        <th>Comment</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>@task.TitleName</td>
+                                                                        <td>@task.AnswerName</td>
+                                                                        <td style="white-space: normal; text-align: justify;">@task.Comment</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
                                                         }
 
-                                                    }
-                                                </td>
-                                            </tr>
+
+                                                    </td>
+                                                </tr>
 
 
-                                        }
-                                    </tbody>
-                                </table>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
                             </div>
                         </div>
                     </div>

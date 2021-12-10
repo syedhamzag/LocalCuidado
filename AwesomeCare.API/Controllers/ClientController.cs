@@ -489,7 +489,8 @@ namespace AwesomeCare.API.Controllers
                                                              select new GetClientDailyTask
                                                              {
                                                                 Date = cdt.Date,
-                                                                AmendmentDate = cdt.AmendmentDate
+                                                                AmendmentDate = cdt.AmendmentDate,
+                                                                DailyTaskName = cdt.DailyTaskName
                                                              }).ToList()
                                        
                                    }

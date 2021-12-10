@@ -4,6 +4,7 @@ using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
 using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
+using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
@@ -38,12 +39,12 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             InvolingList = new List<SelectListItem>();
             ClassList = new List<SelectListItem>();
             HeadingList = new List<SelectListItem>();
-            Tasks = new List<GetHomeRiskAssessmentTask>();
+            GetHomeRiskAssessments = new List<GetHomeRiskAssessment>();
             baseRecordList = new List<GetBaseRecordItem>();
             GetInvolvingParty = new List<GetClientInvolvingParty>();
             ServiceWatch = new List<GetClientServiceWatch>();
             Program = new List<GetClientProgram>();
-
+            GetBalance = new List<GetBalance>();
             #endregion
 
             #region ManagingTasks
@@ -68,6 +69,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
 
         public byte[] QRCode { get; set; }
         public string PassportFilePath { get; set; }
+
+        public string IdNumber { get; set; }
 
         public List<GetClientInvolvingParty> GetInvolvingParty { get; set; }
         #region PersonalDetail
@@ -287,11 +290,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         #region Health
 
         #region Balance
-        public int BalanceId { get; set; }
-        public string Balance_Name { get; set; }
-        public string Balance_Description { get; set; }
-        public int Balance_Mobility { get; set; }
-        public int Balance_Status { get; set; }
+        public List<GetBalance> GetBalance { get; set; }
         #endregion
 
         #region HealthAndLiving
@@ -400,14 +399,10 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
 
         #region Home Risk Assessment
         public List<SelectListItem> HeadingList { get; set; }
-        public int HomeRiskAssessmentId { get; set; }
-
-        public int HeadingId { get; set; }
-        public string Heading { get; set; }
+        public List<GetHomeRiskAssessment> GetHomeRiskAssessments { get; set; }
         public int TaskCountHRA { get; set; }
 
         public List<GetBaseRecordItem> baseRecordList { get; set; }
-        public List<GetHomeRiskAssessmentTask> Tasks { get; set; }
         #endregion
 
         #region Daily Task
