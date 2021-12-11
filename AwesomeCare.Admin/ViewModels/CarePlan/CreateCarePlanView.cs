@@ -1,6 +1,7 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
+using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
 using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
@@ -42,8 +43,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             GetHomeRiskAssessments = new List<GetHomeRiskAssessment>();
             baseRecordList = new List<GetBaseRecordItem>();
             GetInvolvingParty = new List<GetClientInvolvingParty>();
-            ServiceWatch = new List<GetClientServiceWatch>();
-            Program = new List<GetClientProgram>();
+            GetServiceWatch = new List<GetClientServiceWatch>();
+            GetProgram = new List<GetClientProgram>();
             GetBalance = new List<GetBalance>();
             #endregion
 
@@ -404,13 +405,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
 
         public List<GetBaseRecordItem> baseRecordList { get; set; }
         #endregion
-
-        #region Daily Task
-        public string DailyTaskName { get; set; }
-        public DateTime DailyTaskDate { get; set; }
-        public DateTime DailyTaskAmendmentDate { get; set; }
-        #endregion
-        public List<GetClientServiceWatch> ServiceWatch { get; set; }
-        public List<GetClientProgram> Program { get; set; }
+        public List<GetClientDailyTask> GetClientDailyTask { get; set; }
+        public List<GetClientServiceWatch> GetServiceWatch { get; set; }
+        public List<GetClientProgram> GetProgram { get; set; }
     }
 }
