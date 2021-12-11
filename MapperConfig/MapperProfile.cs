@@ -277,7 +277,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore())
                 .ForMember(dto => dto.DutyOnCall, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
@@ -322,7 +323,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetHospitalExit, mem => mem.Ignore())
                 .ForMember(dto => dto.GetHomeRiskAssessment, mem => mem.Ignore())
                 .ForMember(dto => dto.GetDutyOnCall, mem => mem.Ignore())
-                .ForMember(dto => dto.GetClientDailyTask, mem => mem.Ignore());
+                .ForMember(dto => dto.GetClientDailyTask, mem => mem.Ignore())
+                .ForMember(dto => dto.GetBestInterestAssessment, mem => mem.Ignore());
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));
@@ -390,10 +392,11 @@ namespace MapperConfig
                 .ForMember(dto => dto.HospitalEntry, mem => mem.Ignore())
                 .ForMember(dto => dto.CarePlanNutrition, mem => mem.Ignore())
                 .ForMember(dto => dto.HospitalExit, mem => mem.Ignore())
-                 .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore())
-                 .ForMember(dto => dto.DutyOnCall, mem => mem.Ignore())
-                 .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore())
-                 .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
+                .ForMember(dto => dto.HomeRiskAssessment, mem => mem.Ignore())
+                .ForMember(dto => dto.DutyOnCall, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
