@@ -24,13 +24,14 @@
                         <div class="card">
                             <div class="header">
                                 <h2 style="text-align:center;">Care Plan & Risk Assessment Board</h2>
+                                <hr />
                             </div>
                             <div class="body">
                                 <div class="row">
-                                    <div class="col-lg-6 col-md-6">
+                                    <div class="col-lg-8 col-md-8">
                                         <h2>Preferred Name: @Model.PreferredName</h2>
                                     </div>
-                                    <div class="col-lg-6 col-md-6">
+                                    <div class="col-lg-4 col-md-4">
                                         <h2>ID Number: @Model.IdNumber</h2>
                                     </div>
                                 </div>
@@ -1165,72 +1166,60 @@
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Cleaning</label>
                                     <baserecord asp-key="Cleaning" asp-for="Hygiene_Cleaning" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_Cleaning" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Cleaning Tools Location</label>
                                     <baserecord asp-key="CleaningTools" asp-for="Hygiene_CleaningTools" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_CleaningTools" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Who Does My Cleaning</label>
                                     <baserecord asp-key="WhoClean" asp-for="Hygiene_WhoClean" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_WhoClean" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">How I Want Cleaning</label>
                                     <baserecord asp-key="Desired_Cleaning" asp-for="Hygiene_DesiredCleaning" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_DesiredCleaning" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">How Often Do I Want Cleaning</label>
                                     <baserecord asp-key="Cleaning_Freq" asp-for="Hygiene_CleaningFreq" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_CleaningFreq" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">General Cleaning Appliance</label>
                                     <baserecord asp-key="General_Appliance" asp-for="Hygiene_GeneralAppliance" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_GeneralAppliance" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Dirty Laundry Location</label>
                                     <baserecord asp-key="Dirty_Laundry" asp-for="Hygiene_DirtyLaundry" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_DirtyLaundry" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">How To Dry Laundry</label>
                                     <baserecord asp-key="Dry_Laundry" asp-for="Hygiene_DryLaundry" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_DryLaundry" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Washing Machine Location</label>
                                     <baserecord asp-key="Washing_Machine" asp-for="Hygiene_WashingMachine" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_WashingMachine" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Ironing</label>
                                     <baserecord asp-key="Ironing" asp-for="Hygiene_Ironing" asp-items="null" />
-                                    <span asp-validation-for="Hygiene_Ironing" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">General Washing Instructions</label>
                                     <p style="text-align:justify;">@Model.Hygiene_LaundryGuide</p>
-                                    <span asp-validation-for="Hygiene_LaundryGuide" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <label class="control-label">Practical Support For Laundry</label>
                                     <p style="text-align:justify;">@Model.Hygiene_LaundrySupport</p>
-                                    <span asp-validation-for="Hygiene_LaundrySupport" class="text-danger"></span>
                                 </div>
                             </div>
                         }
@@ -1511,7 +1500,7 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td>@task.TitleName</td>
+                                                                        <td style="white-space: normal; text-align: justify;">@task.TitleName</td>
                                                                         <td>@task.AnswerName</td>
                                                                         <td style="white-space: normal; text-align: justify;">@task.Comment</td>
                                                                     </tr>
@@ -1530,6 +1519,129 @@
                                 }
                             </div>
                         </div>
+                    </div>
+                </div>
+                <hr />
+                <h4>Program</h4>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        @if (Model.GetProgram.Count > 0)
+                        {
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+
+                                        <th>Date</th>
+                                        <th>Deadline</th>
+                                        <th>Observation</th>
+                                        <th>Action Required</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetProgram)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Date
+                                            </td>
+                                            <td>
+                                                @item.Deadline
+                                            </td>
+                                            <td style="white-space: normal; text-align: justify;">
+                                                @item.Observation
+                                            </td>
+                                            <td style="white-space: normal; text-align: justify;">
+                                                @item.ActionRequired
+                                            </td>
+                                            <td style="white-space: normal; text-align: justify;">
+                                                @item.Remarks
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+                <hr />
+                <h4>Service Watch</h4>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        @if (Model.GetServiceWatch.Count > 0)
+                        {
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+
+                                        <th>Date</th>
+                                        <th>Deadline</th>
+                                        <th>Observation</th>
+                                        <th>Action Required</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetServiceWatch)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Date
+                                            </td>
+                                            <td>
+                                                @item.Deadline
+                                            </td>
+                                            <td style="white-space: normal; text-align: justify;">
+                                                @item.Observation
+                                            </td>
+                                            <td style="white-space: normal; text-align: justify;">
+                                                @item.ActionRequired
+                                            </td>
+                                            <td style="white-space: normal; text-align: justify;">
+                                                @item.Remarks
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+                <hr />
+                <h4>Daily Task</h4>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        @if (Model.GetClientDailyTask.Count > 0)
+                        {
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amendment Date</th>
+                                        <th>Task</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetClientDailyTask)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Date
+                                            </td>
+                                            <td>
+                                                @item.AmendmentDate
+                                            </td>
+                                            <td style="white-space: normal; text-align: justify;">
+                                                @item.DailyTaskName
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
                     </div>
                 </div>
             </div>

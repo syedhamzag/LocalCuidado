@@ -180,7 +180,7 @@
                 <div class="block-header">
                     <div class="row">
                         <div class="col-lg-6 col-md-8 col-sm-12">
-                            <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> @ViewData["Title"]</h2>
+                            <h2><a href="javascript:void(0)" id="btnHide" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> @ViewData["Title"]</h2>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
                                 <li class="breadcrumb-item active">@ViewData["Title"]</li>
@@ -272,6 +272,22 @@
     <script src="/assets/bundles/mainscripts.bundle.js"></script>
     <script src="/assets/js/pages/forms/advanced-form-elements.js"></script>
     <script>
+        $('#btnHide').on('click', function () {
+            
+            if ($('#left-sidebar').css('display') == 'none') {
+                $(this).children().first().removeClass('fa fa-arrow-right');
+                $(this).children().first().addClass('fa fa-arrow-left');
+                $('#left-sidebar').css('display', 'block');
+                $('#main-content').css('float', 'right');
+            }
+            else
+            {
+                $(this).children().first().removeClass('fa fa-arrow-left');
+                $(this).children().first().addClass('fa fa-arrow-right');
+                $('#left-sidebar').css('display', 'none');
+                $('#main-content').css('float', 'none');
+            }
+        });
         $(document).ready(function () {
 
             // Multiselect
