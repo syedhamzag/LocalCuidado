@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AwesomeCare.Model.Models
 {
-    public class BestInterestAssessment
+    public class BestInterestAssessment : Base.BaseModel
     {
         public BestInterestAssessment()
         {

@@ -39,6 +39,7 @@
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#telehealth">Tele Health</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#careplan" onclick="getCarePlan(@Model.ClientId)">Care Plan</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#dailytask">Daily Task</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#mcabest">MCA Best Interest</a></li>
 
                 </ul>
                 <div class="tab-content">
@@ -354,21 +355,21 @@
                                 <tbody>
                                     @foreach (var item in Model.GetDutyOnCall)
                                     {
-                                    <tr>
-                                        <td>@item.DateOfCall</td>
-                                        <td>
-                                            @item.RefNo
-                                        </td>
-                                        <td>@item.Subject</td>
-                                        <td>
-                                            @if (!string.IsNullOrEmpty(item.Attachment))
-                                            {
-                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                            }
+                                        <tr>
+                                            <td>@item.DateOfCall</td>
+                                            <td>
+                                                @item.RefNo
+                                            </td>
+                                            <td>@item.Subject</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.Attachment))
+                                                {
+                                                    <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
+                                                }
 
-                                        </td>
+                                            </td>
 
-                                    </tr>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -617,7 +618,7 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
                                             {
-                                            <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.EvidenceOfActionTaken" style="margin-left:5px;"><i class="fa fa-file"></i></a>
+                                                <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.EvidenceOfActionTaken" style="margin-left:5px;"><i class="fa fa-file"></i></a>
                                             }
 
                                         </td>
@@ -1316,7 +1317,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1341,7 +1341,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1366,7 +1365,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1391,7 +1389,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1416,7 +1413,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1441,7 +1437,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1470,7 +1465,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -1506,7 +1500,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1531,7 +1524,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1555,7 +1547,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1643,7 +1634,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -1651,7 +1641,7 @@
                             </div>
                         </div>
                     </div>
-                     
+
                     <div class="tab-pane" id="dailytask">
                         <div class="header">
                             <ul class="header-dropdown">
@@ -1659,6 +1649,50 @@
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                     <ul class="dropdown-menu dropdown-menu-right">
                                         <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientDailyTask">Create</a></li>
+
+
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Amendment Date</th>
+                                        <th>Task</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetClientDailyTask)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.Date
+                                            </td>
+                                            <td>
+                                                @item.AmendmentDate
+                                            </td>
+                                            <td style="text-align:justify; white-space:normal;">
+                                                @item.DailyTaskName
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane" id="mcabest">
+                        <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="BestInterestAssessment">Create</a></li>
 
 
                                     </ul>

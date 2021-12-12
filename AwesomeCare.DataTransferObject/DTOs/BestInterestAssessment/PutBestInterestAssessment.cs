@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment
 {
-    public class PutBestInterestAssessment
+    public class PutBestInterestAssessment :BaseDTO
     {
         public PutBestInterestAssessment()
         {

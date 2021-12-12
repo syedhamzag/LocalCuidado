@@ -49,7 +49,7 @@ namespace AwesomeCare.Admin.Controllers
             return View(reports);
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int staffId)
         {
             var model = new CreateStaffTeamLead();
 
@@ -60,6 +60,7 @@ namespace AwesomeCare.Admin.Controllers
             model.baseRecordList = filterBaseRecord.ToList();
             model.ClientList = client.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
             model.StaffList = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+            model.StaffPersonalInfoId = staffId;
             return View(model);
 
         }
