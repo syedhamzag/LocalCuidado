@@ -128,6 +128,7 @@ using AwesomeCare.DataTransferObject.DTOs.Staff.StaffHoliday;
 using AwesomeCare.DataTransferObject.DTOs.SetupStaffHoliday;
 using AwesomeCare.DataTransferObject.DTOs.StaffTeamLead;
 using AwesomeCare.DataTransferObject.DTOs.StaffTeamLeadTasks;
+using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 
 namespace MapperConfig
 {
@@ -2726,6 +2727,60 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
             CreateMap<StaffTeamLeadTasks, GetStaffTeamLeadTasks>();
             #endregion
+
+            #region BestInterestAssessment
+            CreateMap<PutBestInterestAssessment, BestInterestAssessment>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.BelieveTask, mem => mem.MapFrom(src => src.PutBelieveTask))
+                .ForMember(dto => dto.CareIssuesTask, mem => mem.MapFrom(src => src.PutCareIssuesTask))
+                .ForMember(dto => dto.HealthTask, mem => mem.MapFrom(src => src.PutHealthTask))
+                .ForMember(dto => dto.HealthTask2, mem => mem.MapFrom(src => src.PutHealthTask2));
+            CreateMap<PostBestInterestAssessment, BestInterestAssessment>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore())
+                .ForMember(dto => dto.BelieveTask, mem => mem.MapFrom(src => src.PostBelieveTask))
+                .ForMember(dto => dto.CareIssuesTask, mem => mem.MapFrom(src => src.PostCareIssuesTask))
+                .ForMember(dto => dto.HealthTask, mem => mem.MapFrom(src => src.PostHealthTask))
+                .ForMember(dto => dto.HealthTask2, mem => mem.MapFrom(src => src.PostHealthTask2));
+            CreateMap<BestInterestAssessment, GetBestInterestAssessment>()
+                .ForMember(dto => dto.GetBelieveTask, mem => mem.Ignore())
+                .ForMember(dto => dto.GetCareIssuesTask, mem => mem.Ignore())
+                .ForMember(dto => dto.GetHealthTask, mem => mem.Ignore())
+                .ForMember(dto => dto.GetHealthTask2, mem => mem.Ignore());
+            #endregion
+
+            #region BelieveTask
+            CreateMap<PutBelieveTask, BelieveTask>()
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+            CreateMap<PostBelieveTask, BelieveTask>()
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+            CreateMap<BelieveTask, GetBelieveTask>();
+            #endregion
+
+            #region CareIssuesTask
+            CreateMap<PutCareIssuesTask, CareIssuesTask>()
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+            CreateMap<PostCareIssuesTask, CareIssuesTask>()
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+            CreateMap<CareIssuesTask, GetCareIssuesTask>();
+            #endregion
+
+            #region HealthTask
+            CreateMap<PutHealthTask, HealthTask>()
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+            CreateMap<PostHealthTask, HealthTask>()
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+            CreateMap<HealthTask, GetHealthTask>();
+            #endregion
+
+            #region HealthTask2
+            CreateMap<PutHealthTask2, HealthTask2>()
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+            CreateMap<PostHealthTask2, HealthTask2>()
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+            CreateMap<HealthTask2, GetHealthTask2>();
+            #endregion
+
+           
         }
     }
 }

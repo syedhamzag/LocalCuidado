@@ -19,16 +19,16 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("BestId")
                .IsRequired();
 
-            builder.Property(p => p.HeadingId)
-                .HasColumnName("HeadingId")
+            builder.Property(p => p.Heading2Id)
+                .HasColumnName("Heading2Id")
                 .IsRequired();
 
             builder.Property(p => p.Status)
                 .HasColumnName("Status")
                 .IsRequired();
 
-            builder.Property(p => p.Remarks)
-                .HasColumnName("Remarks")
+            builder.Property(p => p.Remark)
+                .HasColumnName("Remark")
                 .IsRequired();
 
             #endregion

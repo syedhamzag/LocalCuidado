@@ -27,6 +27,8 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public string ClientName { get; set; }
         public string StaffName { get; set; }
         public int TaskCount { get; set; }
+
+        public int StaffPersonalInfoId { get; set; }
         public List<SelectListItem> StaffList { get; set; }
         public List<SelectListItem> ClientList { get; set; }
         public List<GetStaffTeamLeadTasks> GetStaffTeamLeadTasks { get; set; }
