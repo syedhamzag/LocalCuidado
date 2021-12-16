@@ -22,7 +22,6 @@ namespace AwesomeCare.Model.Models.Map
                .IsRequired();
             builder.Property(p => p.ValueName)
                 .HasColumnName("ValueName")
-                .HasMaxLength(225)
                 .IsRequired();
             builder.Property(p => p.Deleted)
                 .HasColumnName("Deleted");
@@ -38,6 +37,10 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.ViewLink)
               .HasColumnName("ViewLink")
               .IsRequired(false);
+
+            builder.Property(p => p.ExpiryInMonths)
+              .HasColumnName("ExpiryInMonths")
+              .HasDefaultValue(0);
             #endregion
         }
     }

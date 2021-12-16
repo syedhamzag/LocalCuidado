@@ -594,7 +594,8 @@ namespace AwesomeCare.API.Controllers
                                     StartDate = st.StartDate.ToString(),
                                     Status = st.Status.ToString(),
                                     Telephone = st.Telephone,
-                                    CanDrive = st.CanDrive == "Yes" ? true : false
+                                    CanDrive = st.CanDrive == "Yes" ? true : false,
+                                    ProfilePix = st.ProfilePix
 
                                 }).ToListAsync();
             return Ok(staffs);

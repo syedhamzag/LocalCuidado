@@ -48,6 +48,8 @@ namespace AwesomeCare.Model.Models
             StaffHoliday = new HashSet<StaffHoliday>();
             SetupStaffHoliday = new HashSet<SetupStaffHoliday>();
             StaffTeamLead = new HashSet<StaffTeamLead>();
+            StaffTrainingMatrix = new HashSet<StaffTrainingMatrix>();
+            FilesAndRecord = new HashSet<FilesAndRecord>();
         }
 
         public int StaffPersonalInfoId { get; set; }
@@ -148,6 +150,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffHoliday> StaffHoliday { get; set; }
         public virtual ICollection<SetupStaffHoliday> SetupStaffHoliday { get; set; }
         public virtual ICollection<StaffTeamLead> StaffTeamLead { get; set; }
+        public virtual ICollection<StaffTrainingMatrix> StaffTrainingMatrix { get; set; }
+        public virtual ICollection<FilesAndRecord> FilesAndRecord { get; set; }
 
     }
 }

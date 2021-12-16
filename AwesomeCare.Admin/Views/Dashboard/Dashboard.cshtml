@@ -225,7 +225,8 @@
                                         <li class="m-r-15"><small class="text-muted">Team</small></li>
                                         @foreach (var staff in item.AssignedTo)
                                         {
-                                            <li><img src="@Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId).ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" data-original-title="Avatar"></li>
+                                            var currentStaff = Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId);
+                                            <li><img src="@currentStaff.ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="@string.Concat(currentStaff.FirstName," ",currentStaff.MiddleName," ",currentStaff.LastName)" data-original-title="@string.Concat(currentStaff.FirstName," ",currentStaff.MiddleName," ",currentStaff.LastName)"></li>
                                         }
                                     </ul>
                                     <hr>

@@ -23,8 +23,12 @@ namespace AwesomeCare.Model.Models.Map
                 .HasColumnName("HeadingId")
                 .IsRequired();
 
-            builder.Property(p => p.Status)
-                .HasColumnName("Status")
+            builder.Property(p => p.Title)
+                .HasColumnName("Title")
+                .IsRequired();
+
+            builder.Property(p => p.Answer)
+                .HasColumnName("Answer")
                 .IsRequired();
 
             builder.Property(p => p.Remarks)

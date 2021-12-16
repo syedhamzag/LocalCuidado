@@ -3,6 +3,9 @@ using AwesomeCare.Admin.Services.Balance;
 using AwesomeCare.Admin.Services.CarePlanNutrition;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
+using AwesomeCare.Admin.Services.ClientRota;
+using AwesomeCare.Admin.Services.ClientRotaName;
+using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.HealthAndLiving;
 using AwesomeCare.Admin.Services.HistoryOfFall;
 using AwesomeCare.Admin.Services.InfectionControl;
@@ -12,6 +15,8 @@ using AwesomeCare.Admin.Services.PersonalDetail;
 using AwesomeCare.Admin.Services.PersonalHygiene;
 using AwesomeCare.Admin.Services.Pets;
 using AwesomeCare.Admin.Services.PhysicalAbility;
+using AwesomeCare.Admin.Services.RotaDayofWeek;
+using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.SpecialHealthAndMedication;
 using AwesomeCare.Admin.Services.SpecialHealthCondition;
 using AwesomeCare.Admin.Services.Staff;
@@ -53,6 +58,11 @@ namespace AwesomeCare.Admin.Controllers
         private IBaseRecordService _baseRecord;
         private IClientInvolvingParty _involvingparty;
         private IHomeRiskAssessmentService _clientHomeRiskAssessment;
+        IClientRotaTypeService _clientRotaTypeService;
+        IClientRotaNameService _clientRotaNameService;
+        IRotaTaskService _rotaTaskService;
+        IRotaDayofWeekService _rotaDayOfWeekService;
+        IClientRotaService _clientRotaService;
         private readonly QRCodeGenerator _qRCodeGenerator;
 
         public CarePlanController(  IFileUpload fileUpload, IStaffService staffService, IClientService clientService, IPersonalDetailService pdetailService,
@@ -60,7 +70,8 @@ namespace AwesomeCare.Admin.Controllers
                                     IPersonalHygieneService phygieneService, IInfectionControlService infectionService, IManagingTasksService mataskService,
                                     IPetsService petsService, IInterestAndObjectiveService interestService, IBalanceService balanceService, IPhysicalAbilityService physicalService,
                                     IHistoryOfFallService historyService, IHealthAndLivingService hlService, ISpecialHealthAndMedicationService shamService,
-                                    ISpecialHealthConditionService shcService, IHomeRiskAssessmentService clientHomeRiskAssessment, QRCodeGenerator qRCodeGenerator) : base(fileUpload)
+                                    ISpecialHealthConditionService shcService, IHomeRiskAssessmentService clientHomeRiskAssessment, QRCodeGenerator qRCodeGenerator, IClientRotaService clientRotaService,
+                                    IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
         {
             _staffService = staffService;
             _clientService = clientService;
@@ -81,8 +92,12 @@ namespace AwesomeCare.Admin.Controllers
             _shcService = shcService;
             _clientHomeRiskAssessment = clientHomeRiskAssessment;
             _qRCodeGenerator = qRCodeGenerator;
+            _clientRotaTypeService = clientRotaTypeService;
+            _clientRotaNameService = clientRotaNameService;
+            _rotaTaskService = rotaTaskService;
+            _rotaDayOfWeekService = rotaDayOfWeekService;
+            _clientRotaService = clientRotaService;
         }
-
         public async Task<IActionResult> CareView(int clientId)
         {
             CreateCarePlanView model = await GetCarPlan(clientId);
@@ -474,7 +489,20 @@ namespace AwesomeCare.Admin.Controllers
                 }
             }
             #endregion
+            #region Rottering
+            var rotaTypes = await _clientRotaTypeService.Get();
+            var rotas = await _clientRotaNameService.Get();
+            var rotaTasks = await _rotaTaskService.Get();
+            var weekDays = await _rotaDayOfWeekService.Get();
 
+            var clientRotas = await _clientRotaService.GetForEdit(clientId);
+
+            model.Rotas = rotas.Select(r => new SelectListItem { Text = r.RotaName, Value = r.RotaId.ToString() }).ToList();
+            model.RotaTasks = rotaTasks.Select(r => new SelectListItem { Text = r.TaskName, Value = r.RotaTaskId.ToString() }).ToList();
+            model.RotaTypes = rotaTypes;
+            model.WeekDays = weekDays;
+            model.ClientRotas = clientRotas;
+            #endregion
             model.GetProgram = client.GetClientProgram.ToList();
             model.GetServiceWatch = client.GetClientServiceWatch.ToList();
             model.GetClientDailyTask = client.GetClientDailyTask.ToList();

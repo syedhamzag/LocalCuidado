@@ -9,6 +9,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment
         public int BelieveTaskId { get; set; }
         public int BestId { get; set; }
 
-        public string ReasonableBelieve { get; set; }
+        public int ReasonableBelieve { get; set; }
     }
 }

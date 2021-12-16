@@ -77,8 +77,9 @@ namespace AwesomeCare.API.Controllers
                                                              HealthTaskId = t.HealthTaskId,
                                                              BestId = t.BestId,
                                                              HeadingId = t.HeadingId,
-                                                             Status = t.Status,
-                                                             Remarks = t.Remarks,
+                                                             Title = t.Title,
+                                                             Answer = t.Answer,
+                                                             Remarks = t.Remarks
                                                          }).ToList(),
                                        GetHealthTask2 = (from t in h.HealthTask2
                                                          select new GetHealthTask2
@@ -86,8 +87,9 @@ namespace AwesomeCare.API.Controllers
                                                              HealthTask2Id = t.HealthTask2Id,
                                                              BestId = t.BestId,
                                                              Heading2Id = t.Heading2Id,
-                                                             Status = t.Status,
-                                                             Remark = t.Remark,
+                                                             Title = t.Title,
+                                                             Answer = t.Answer,
+                                                             Remark = t.Remark
                                                          }).ToList()
                                    }).FirstOrDefaultAsync();
 

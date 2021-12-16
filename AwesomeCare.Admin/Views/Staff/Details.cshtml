@@ -21,6 +21,7 @@
                                 <ul class="nav nav-tabs-new2">
                                     <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalinfo">Personal Info</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#education">Education</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainingmatrix">Training Matrix</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainings">Training</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#referee">Referee</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#emergencyContact">Emergency Contact</a></li>
@@ -476,6 +477,42 @@
                                                                 <a href="@Model.Trainings[i].CertificateAttachment">Download</a>
                                                             </td>
 
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="trainingmatrix">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffTrainingMatrix">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="table-responsive table-bordered">
+
+                                            <table class="table tblTraining">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @foreach (var item in Model.GetStaffTrainingMatrix)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @item.GetTrainingMatrixList.FirstOrDefault().Date
+                                                            </td>
                                                         </tr>
                                                     }
 
