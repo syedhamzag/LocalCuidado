@@ -17,10 +17,24 @@ namespace AwesomeCare.Admin.ViewModels.Client
             GetBelieveTask = new List<GetBelieveTask>();
             GetHealthTask2 = new List<GetHealthTask2>();
             ClientList = new List<SelectListItem>();
+            AnswerSelectList = new List<SelectListItem>();
+            HeadingList = new List<GetBaseRecordItem>();
+            Heading2List = new List<GetBaseRecordItem>();
+            TitleList = new List<GetBaseRecordItem>();
+            Title2List = new List<GetBaseRecordItem>();
+            AnswerList = new List<GetBaseRecordItem>();
+            BaseRecordList = new List<GetBaseRecordWithItems>();
         }
         public int BestId { get; set; }
         public string ClientName { get; set; }
         public List<SelectListItem> ClientList { get; set; }
+        public List<GetBaseRecordItem> HeadingList { get; set; }
+        public List<GetBaseRecordItem> Heading2List { get; set; }
+        public List<GetBaseRecordItem> TitleList { get; set; }
+        public List<GetBaseRecordItem> Title2List { get; set; }
+        public List<GetBaseRecordItem> AnswerList { get; set; }
+        public List<SelectListItem> AnswerSelectList { get; set; }
+        public List<GetBaseRecordWithItems> BaseRecordList { get; set; }
         public int ClientId { get; set; }
         public DateTime Date { get; set; }
         public List<GetCareIssuesTask> GetCareIssuesTask { get; set; }

@@ -129,6 +129,7 @@ using AwesomeCare.DataTransferObject.DTOs.SetupStaffHoliday;
 using AwesomeCare.DataTransferObject.DTOs.StaffTeamLead;
 using AwesomeCare.DataTransferObject.DTOs.StaffTeamLeadTasks;
 using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
+using AwesomeCare.DataTransferObject.DTOs.FilesAndRecord;
 
 namespace MapperConfig
 {
@@ -279,7 +280,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.DutyOnCall, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
-                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore())
+                .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
                 .ForMember(dto => dto.QRCode, mem => mem.Ignore())
@@ -325,7 +327,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetHomeRiskAssessment, mem => mem.Ignore())
                 .ForMember(dto => dto.GetDutyOnCall, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientDailyTask, mem => mem.Ignore())
-                .ForMember(dto => dto.GetBestInterestAssessment, mem => mem.Ignore());
+                .ForMember(dto => dto.GetBestInterestAssessment, mem => mem.Ignore())
+                .ForMember(dto => dto.GetFilesAndRecord, mem => mem.Ignore());
 
             CreateMap<Client, GetClientDetail>()
                .ForMember(dto => dto.FullName, mem => mem.MapFrom(src => string.Concat(src.Firstname, " ", src.Middlename, " ", src.Surname)));
@@ -397,7 +400,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.DutyOnCall, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientDailyTask, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
-                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore());
+                .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore())
+                .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore());
             #endregion
 
             #region ClientInvolvingPartyItem
@@ -725,7 +729,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHoliday, mem => mem.Ignore())
                 .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTrainingMatrix, mem => mem.Ignore())
+                .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore());
 
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
@@ -773,7 +779,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHoliday, mem => mem.Ignore())
                 .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTrainingMatrix, mem => mem.Ignore())
+                .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore());
 
             CreateMap<PutStaffEducation, StaffEducation>()
                   .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -828,7 +836,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffShadowing, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffHoliday, mem => mem.Ignore())
                 .ForMember(dto => dto.SetupStaffHoliday, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTrainingMatrix, mem => mem.Ignore())
+                .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffProfile>()
                 .ForMember(dto => dto.GetStaffSpotCheck, mem => mem.Ignore())
@@ -847,7 +857,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetStaffHealth, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffInterview, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffShadowing, mem => mem.Ignore())
-                .ForMember(dto => dto.GetStaffHoliday, mem => mem.Ignore());
+                .ForMember(dto => dto.GetStaffHoliday, mem => mem.Ignore())
+                .ForMember(dto => dto.GetStaffTrainingMatrix, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffs>()
                 .ForMember(dto => dto.Fullname, mem => mem.MapFrom(src => string.Concat(src.FirstName, " ", src.MiddleName, " ", src.LastName)))
@@ -2780,7 +2791,18 @@ namespace MapperConfig
             CreateMap<HealthTask2, GetHealthTask2>();
             #endregion
 
-           
+            #region FilesAndRecord
+            CreateMap<PutFilesAndRecord, FilesAndRecord>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostFilesAndRecord, FilesAndRecord>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<FilesAndRecord, GetFilesAndRecord>();
+            #endregion
+
+
         }
     }
 }

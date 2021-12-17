@@ -4,12 +4,15 @@ using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
 using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
+using AwesomeCare.DataTransferObject.DTOs.ClientRota;
+using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
 using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.PersonCentred;
+using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
 using AwesomeCare.DataTransferObject.Validations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -25,7 +28,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
     {
         public CreateCarePlanView()
         {
-            #region Personal Detail
+            #region Care Plan
             Individuality = new List<SelectListItem>();
             RightsAndRespect = new List<SelectListItem>();
             Choice = new List<SelectListItem>();
@@ -46,13 +49,12 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             GetServiceWatch = new List<GetClientServiceWatch>();
             GetProgram = new List<GetClientProgram>();
             GetBalance = new List<GetBalance>();
-            #endregion
-
-            #region ManagingTasks
+            WeekDays = new List<GetRotaDayofWeek>();
+            RotaTypes = new List<GetClientRotaType>();
+            Rotas = new List<SelectListItem>();
+            RotaTasks = new List<SelectListItem>();
+            ClientRotas = new List<GetClientRota>();
             GetManagingTasks = new List<GetManagingTasks>();
-            #endregion
-
-            #region Interest And Objective
             GetInterest = new List<GetInterest>();
             GetPersonalityTest = new List<GetPersonalityTest>();
             #endregion
@@ -408,5 +410,13 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<GetClientDailyTask> GetClientDailyTask { get; set; }
         public List<GetClientServiceWatch> GetServiceWatch { get; set; }
         public List<GetClientProgram> GetProgram { get; set; }
+
+        public List<GetRotaDayofWeek> WeekDays { get; set; }
+        public List<GetClientRotaType> RotaTypes { get; set; }
+        public List<SelectListItem> RotaTasks { get; set; }
+
+        public List<SelectListItem> Rotas { get; set; }
+
+        public List<GetClientRota> ClientRotas { get; set; }
     }
 }

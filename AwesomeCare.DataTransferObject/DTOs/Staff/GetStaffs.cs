@@ -17,5 +17,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public string Status { get; set; }
         public string ApplicationUserId { get; set; }
         public bool CanDrive { get; set; }
+
+        public string ProfilePix { get; set; }
     }
 }

@@ -182,11 +182,11 @@
                         <div class="col-lg-6 col-md-8 col-sm-12">
                             <h2><a href="javascript:void(0)" id="btnHide" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> @ViewData["Title"]</h2>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="index.html"><i class="icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
                                 <li class="breadcrumb-item active">@ViewData["Title"]</li>
                             </ul>
                         </div>
-                        <div class="col-lg-6 col-md-4 col-sm-12 text-right">
+                        <div class="col-lg-6 col-md-4 col-sm-12 text-right" id="divtextright">
                             <div class="bh_chart hidden-xs">
                                 <div class="float-left m-r-15">
                                     <small>Meds Given</small>
@@ -278,14 +278,20 @@
                 $(this).children().first().removeClass('fa fa-arrow-right');
                 $(this).children().first().addClass('fa fa-arrow-left');
                 $('#left-sidebar').css('display', 'block');
+                $('.navbar-right').css('display', 'block');
+                $('#divtextright').css('display', 'block');
                 $('#main-content').css('float', 'right');
+                $('#main-content').css('margin-left', '0px');
             }
             else
             {
                 $(this).children().first().removeClass('fa fa-arrow-left');
                 $(this).children().first().addClass('fa fa-arrow-right');
                 $('#left-sidebar').css('display', 'none');
+                $('.navbar-right').css('display', 'none');
+                $('#divtextright').css('display', 'none');
                 $('#main-content').css('float', 'none');
+                $('#main-content').css('margin-left', '100px');
             }
         });
         $(document).ready(function () {

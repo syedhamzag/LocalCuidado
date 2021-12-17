@@ -56,6 +56,8 @@ using AwesomeCare.DataTransferObject.DTOs.HospitalExit;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
+using AwesomeCare.DataTransferObject.DTOs.FilesAndRecord;
+using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -491,8 +493,23 @@ namespace AwesomeCare.API.Controllers
                                                                 Date = cdt.Date,
                                                                 AmendmentDate = cdt.AmendmentDate,
                                                                 DailyTaskName = cdt.DailyTaskName
-                                                             }).ToList()
-                                       
+                                                             }).ToList(),
+                                       GetBestInterestAssessment = (from mca in client.BestInterestAssessment
+                                                                    select new GetBestInterestAssessment
+                                                                    {
+                                                                        Date = mca.Date,
+                                                                        Name = mca.Name,
+                                                                        Signature = mca.Signature,
+                                                                        Position = mca.Position
+                                                                    }).ToList(),
+                                       GetFilesAndRecord = (from f in client.FilesAndRecord
+                                                            select new GetFilesAndRecord
+                                                            {
+                                                                Date = f.Date,
+                                                                Subject = f.Subject,
+                                                                Attachment = f.Attachment
+                                                            }).ToList(),
+
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

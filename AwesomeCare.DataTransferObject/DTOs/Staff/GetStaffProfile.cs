@@ -19,6 +19,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
 using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.Staff.StaffHoliday;
+using AwesomeCare.DataTransferObject.DTOs.StaffTrainingMatrix;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
@@ -46,6 +47,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             GetStaffInterview  = new List<GetStaffInterview>();
             GetStaffShadowing = new List<GetStaffShadowing>();
             GetStaffHoliday = new List<GetStaffHoliday>();
+            GetStaffTrainingMatrix = new List<GetStaffTrainingMatrix>();
 
     }
         public List<GetStaffEducation> Education { get; set; }
@@ -68,6 +70,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetStaffInterview> GetStaffInterview{ get; set; }
         public List<GetStaffShadowing> GetStaffShadowing { get; set; }
         public List<GetStaffHoliday> GetStaffHoliday { get; set; }
+        public List<GetStaffTrainingMatrix> GetStaffTrainingMatrix { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]

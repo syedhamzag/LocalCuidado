@@ -1,0 +1,122 @@
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+@model CreateStaffTrainingMatrix
+@{
+    ViewData["Title"] = "Create Staff Training Matrix";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>@Model.StaffName</h2>
+            </div>
+            <div class="body">
+                <form asp-route="InfectionControl" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+
+                            <input type="hidden" asp-for="MatrixId" />
+                            <input type="hidden" asp-for="StaffPersonalInfoId" />
+                            <input type="hidden" asp-for="@Model.ListCount" value="@Model.ListCount" />
+
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Training</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Date</label>
+                                </div>
+                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                    <label class="control-label">Expiry Date</label>
+                                </div>
+                            </div>
+                            @{
+                                int i = 1;
+
+                                @foreach (var item in Model.baseRecordList)
+                                {
+                                    <div class="row">
+                                        <input type="hidden" name="@string.Concat("ExpiryInMonths",i)" id="@string.Concat("ExpiryInMonths",i)" value="@item.ExpiryInMonths" />
+                                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                            <div class="fancy-checkbox">
+                                                <input type="hidden" name="@string.Concat("TrainingId",i)" id="@string.Concat("TrainingId",i)" value="@item.BaseRecordItemId" />
+                                                <label><input type="checkbox" class="MealType" name="@string.Concat("chkTraining-",i)"><span>@item.ValueName</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+                                            <input type="text" class="form-control" onblur="setDate(this)" name="@string.Concat("Date-",i)" id="@string.Concat("Date-",i)" disabled data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        </div>
+                                        <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
+
+                                            <input type="text" name="@string.Concat("ExpiryDate",i)" id="@string.Concat("ExpiryDate",i)" class="form-control" disabled data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        </div>
+                                    </div>
+                                    i++;
+                                }
+                            }
+
+                            <div class="row">
+                                <div class="form-group col-sm-10 col-xs-10 col-md-12 col-lg-10">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
+                                    <a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+<script type="text/javascript">
+    function addMonths(date, months) {
+        var d = date.getDate();
+        date.setMonth(date.getMonth() + +months);
+        if (date.getDate() != d) {
+            date.setDate(0);
+        }
+        return date;
+    }
+    function setDate(element) {
+        var Name = element.id;
+        var Id = Name.split("Date-")[1];
+        var date = element.value;
+        if (date !== "") {
+            var months = document.getElementById('ExpiryInMonths' + Id).value;
+            var newdate = addMonths(new Date(date), months).toString();
+
+            document.getElementById('ExpiryDate' + Id).value = new Date(newdate).toLocaleDateString();
+        }
+    };
+    $(function () {
+        $('input:checkbox[class=MealType]').change(function () {
+            var chkName = $(this).attr('name');
+            var Id = chkName.split("chkTraining-")[1];
+            if ($(this).is(":checked")) {
+
+                $('#Date-' + Id).prop("disabled", false);
+            }
+            else
+            {
+                $('#Date-' + Id).prop("disabled", true);
+            }
+            
+        });
+
+    });
+</script>
+}

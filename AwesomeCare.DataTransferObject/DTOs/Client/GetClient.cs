@@ -54,6 +54,7 @@ using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
+using AwesomeCare.DataTransferObject.DTOs.FilesAndRecord;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -105,6 +106,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
             GetDutyOnCall = new HashSet<GetDutyOnCall>();
             GetClientDailyTask = new HashSet<GetClientDailyTask>();
             GetBestInterestAssessment = new HashSet<GetBestInterestAssessment>();
+            GetFilesAndRecord = new HashSet<GetFilesAndRecord>();
         }
         public int ClientId { get; set; }
         public string Firstname { get; set; }
@@ -227,5 +229,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetDutyOnCall> GetDutyOnCall { get; set; }
         public virtual ICollection<GetClientDailyTask> GetClientDailyTask { get; set; }
         public virtual ICollection<GetBestInterestAssessment> GetBestInterestAssessment { get; set; }
+        public virtual ICollection<GetFilesAndRecord> GetFilesAndRecord { get; set; }
     }
 }

@@ -63,6 +63,10 @@
     <Compile Remove="Migrations\20210919064308_TaskBoardUpdated.Designer.cs" />
     <Compile Remove="Migrations\20211205200736_Client_PreferredName_Add_Column.cs" />
     <Compile Remove="Migrations\20211205200736_Client_PreferredName_Add_Column.Designer.cs" />
+    <Compile Remove="Migrations\20211213204801_StaffTrainingMatrix.cs" />
+    <Compile Remove="Migrations\20211213204801_StaffTrainingMatrix.Designer.cs" />
+    <Compile Remove="Migrations\20211215174524_StaffTrainingMatrix.cs" />
+    <Compile Remove="Migrations\20211215174524_StaffTrainingMatrix.Designer.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
   </ItemGroup>
