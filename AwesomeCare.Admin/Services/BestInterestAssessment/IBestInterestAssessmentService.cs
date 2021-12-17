@@ -20,6 +20,6 @@ namespace AwesomeCare.Admin.Services.BestInterestAssessment
         Task<HttpResponseMessage> Create([Body] PostBestInterestAssessment model);
 
         [Put("/BestInterestAssessment/Put")]
-        Task<HttpResponseMessage> Put([Body] PutBestInterestAssessment model);
+        Task<HttpResponseMessage> Put([Body] PostBestInterestAssessment model);
     }
 }

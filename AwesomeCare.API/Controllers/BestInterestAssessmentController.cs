@@ -47,7 +47,7 @@ namespace AwesomeCare.API.Controllers
             }
 
             var getEntity = await (from h in _BestInterestAssessmentRepository.Table
-                                   where h.BestId == id && !h.Deleted
+                                   where h.ClientId == id && !h.Deleted
                                    select new GetBestInterestAssessment
                                    {
                                        Deleted = h.Deleted,
@@ -120,7 +120,7 @@ namespace AwesomeCare.API.Controllers
         }
         [HttpPut]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PutBestInterestAssessment model)
+        public async Task<IActionResult> Put([FromBody] PostBestInterestAssessment model)
         {
             if (!ModelState.IsValid)
             {

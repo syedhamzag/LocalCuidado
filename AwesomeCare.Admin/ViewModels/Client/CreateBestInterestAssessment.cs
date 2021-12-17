@@ -27,6 +27,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         }
         public int BestId { get; set; }
         public string ClientName { get; set; }
+
+        public string ActionName { get; set; } = "Save";
         public List<SelectListItem> ClientList { get; set; }
         public List<GetBaseRecordItem> HeadingList { get; set; }
         public List<GetBaseRecordItem> Heading2List { get; set; }
