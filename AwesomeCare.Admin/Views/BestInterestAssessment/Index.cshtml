@@ -20,8 +20,6 @@
                     <input type="hidden" asp-for="@Model.ClientId" />
                     <input type="hidden" asp-for="@Model.BestId" />
                     <input type="hidden" asp-for="@Model.BelieveTaskCount" value="@Model.BelieveTaskCount" />
-
-                    <input type="hidden" asp-for="@Model.HealthTask2Count" value="@Model.HealthTask2Count" />
                     <input type="hidden" asp-for="@Model.CareIssuesTaskCount" value="@Model.CareIssuesTaskCount" />
                     <div class="row">
                         <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
@@ -57,14 +55,33 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="control-label">The health or social care issue that needs a specific decision (Please Tick) : </label>
-                            @foreach (var item in Model.baseRecordList)
-                            {
-                                <div class="fancy-checkbox">
-                                    <input type="hidden" asp-for="@item.BaseRecordItemId" />
-                                    <label><input type="checkbox" class="MealType" name="@item.ValueName"><span>@item.ValueName</span></label>
-                                </div>
+                            @{
 
+                                int m = 1;
+                                foreach (var item in Model.baseRecordList)
+                                {
+                                    var issue = Model.GetCareIssuesTask.FirstOrDefault(s => s.Issues == item.BaseRecordItemId);
+                                    if (issue != null)
+                                    {
+                                        <div class="fancy-checkbox">
+                                            <input type="hidden" name="@string.Concat("Issues",m)" id="@string.Concat("Issues",m)" value="@item.BaseRecordItemId" />
+                                            <label><input type="checkbox" class="MealType" name="@string.Concat("careIssues", m)" checked><span>@item.ValueName</span></label>
+                                            <input type="hidden" name="@string.Concat("CareIssuesTaskId",m)" id="@string.Concat("CareIssuesTaskId",m)" value="@issue.CareIssuesTaskId" />
+                                        </div>
+                                        m++;
 
+                                    }
+                                    else
+                                    {
+                                        <div class="fancy-checkbox">
+                                            <input type="hidden" name="@string.Concat("Issues",m)" id="@string.Concat("Issues",m)" value="@item.BaseRecordItemId" />
+                                            <label><input type="checkbox" class="MealType" name="@string.Concat("careIssues", m)"><span>@item.ValueName</span></label>
+                                            <input type="hidden" name="@string.Concat("CareIssuesTaskId",m)" id="@string.Concat("CareIssuesTaskId",m)" value="0" />
+                                        </div>
+                                        m++;
+
+                                    }
+                                }
                             }
                         </div>
                     </div>
@@ -88,25 +105,52 @@
                             </div>
                             foreach (var title in Model.TitleList)
                             {
-                                <input type="hidden" name="@string.Concat("HealthTaskId",(j+i))" id="@string.Concat("HealthTaskId",(j+i))" value="0" />
-                                <input type="hidden" name="@string.Concat("HeadingId",(j+i))" id="@string.Concat("HeadingId",(j+i))" value="@head.BaseRecordItemId" />
-                                Model.AnswerList = Model.BaseRecordList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label class="control-label">@title.ValueName</label>
-                                        <input type="hidden" name="@string.Concat("Title",(j+i))" id="@string.Concat("Title",(j+i))" value="@title.BaseRecordItemId" />
+                                var health1 = Model.GetHealthTask.FirstOrDefault(s => s.Title == title.BaseRecordItemId);
+                                if (health1 != null)
+                                {
+                                    <input type="hidden" name="@string.Concat("HealthTaskId", (j + i))" id="@string.Concat("HealthTaskId", (j + i))" value="@health1.HealthTaskId" />
+                                    <input type="hidden" name="@string.Concat("HeadingId", (j + i))" id="@string.Concat("HeadingId", (j + i))" value="@health1.HeadingId" />
+                                    Model.AnswerList = Model.BaseRecordList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">@title.ValueName</label>
+                                            <input type="hidden" name="@string.Concat("Title", (j + i))" id="@string.Concat("Title", (j + i))" value="@health1.Title" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                        <label class="control-label">Answer</label>
-                                        <select class="custom-select" onchange="showHide(this)" name="@string.Concat("Answer",(j+i))" id="@string.Concat("Answer",(j+i))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList()"></select>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label class="control-label">Answer</label>
+                                            <select class="custom-select" onchange="showHide(this)" name="@string.Concat("Answer", (j + i))" id="@string.Concat("Answer", (j + i))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString(), s.BaseRecordItemId==health1.Answer)).ToList()"></select>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <label class="control-label" id="@string.Concat("lblRemarks", (j + i))" name="@string.Concat("lblRemarks", (j + i))" style="display:none">Remarks</label>
+                                            <input type="text" class="form-control" name="@string.Concat("Remarks", (j + i))" id="@string.Concat("Remarks", (j + i))" style="display:none" value="@health1.Remarks" />
+                                        </div>
                                     </div>
-                                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                        <label class="control-label" id="@string.Concat("lblRemarks",(j+i))" name="@string.Concat("lblRemarks",(j+i))" style="display:none">Remarks</label>
-                                        <input type="text" class="form-control" name="@string.Concat("Remarks",(j+i))" id="@string.Concat("Remarks",(j+i))" style="display:none" value=" " />
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="@string.Concat("HealthTaskId",(j+i))" id="@string.Concat("HealthTaskId",(j+i))" value="0" />
+                                    <input type="hidden" name="@string.Concat("HeadingId",(j+i))" id="@string.Concat("HeadingId",(j+i))" value="@head.BaseRecordItemId" />
+                                    Model.AnswerList = Model.BaseRecordList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">@title.ValueName</label>
+                                            <input type="hidden" name="@string.Concat("Title",(j+i))" id="@string.Concat("Title",(j+i))" value="@title.BaseRecordItemId" />
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label class="control-label">Answer</label>
+                                            <select class="custom-select" onchange="showHide(this)" name="@string.Concat("Answer",(j+i))" id="@string.Concat("Answer",(j+i))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList()"></select>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <label class="control-label" id="@string.Concat("lblRemarks",(j+i))" name="@string.Concat("lblRemarks",(j+i))" style="display:none">Remarks</label>
+                                            <input type="text" class="form-control" name="@string.Concat("Remarks",(j+i))" id="@string.Concat("Remarks",(j+i))" style="display:none" value=" " />
+                                        </div>
+                                    </div>
+
+                                }
                                 i++;
                             }
                             <hr />
@@ -119,9 +163,18 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="control-label">Reasonable believe</label>
-                            <input type="hidden" asp-for="@Model.GetBelieveTask.FirstOrDefault().BelieveTaskId" value="0" />
-                            <input type="text" class="form-control" asp-for="@Model.GetBelieveTask.FirstOrDefault().ReasonableBelieve" />
-                            <span asp-validation-for="@Model.GetBelieveTask.FirstOrDefault().ReasonableBelieve" class="text-danger"></span>
+                            @{
+                                if (Model.GetBelieveTask.Count > 0)
+                                {
+                                    <input type="hidden" asp-for="@Model.GetBelieveTask.FirstOrDefault().BelieveTaskId" />
+                                    <baserecord asp-key="MCA_Reasonable_Believe" asp-items="null" asp-for="@Model.GetBelieveTask.FirstOrDefault().ReasonableBelieve" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="@Model.GetBelieveTask.FirstOrDefault().BelieveTaskId" value="0" />
+                                    <baserecord asp-key="MCA_Reasonable_Believe" asp-items="null" asp-for="@Model.GetBelieveTask.FirstOrDefault().ReasonableBelieve" />
+                                }
+                            }
                         </div>
                     </div>
                     <hr />
@@ -144,40 +197,67 @@
                             </div>
                             foreach (var title in Model.Title2List)
                             {
-                                <input type="hidden" name="@string.Concat("HealthTaskId",(l+k))" id="@string.Concat("HealthTaskId",(l+k))" value="0" />
-                                <input type="hidden" name="@string.Concat("HeadingId",(l+k))" id="@string.Concat("HeadingId",(l+k))" value="@head.BaseRecordItemId" />
-                                Model.AnswerList = Model.BaseRecordList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label class="control-label">@title.ValueName</label>
-                                        <input type="hidden" name="@string.Concat("Title",(l+k))" id="@string.Concat("Title",(l+k))" value="@title.BaseRecordItemId" />
+                                var health2 = Model.GetHealthTask2.FirstOrDefault(s => s.Title == title.BaseRecordItemId);
+                                if (health2 != null)
+                                {
+                                    <input type="hidden" name="@string.Concat("HealthTask2Id", (l + k))" id="@string.Concat("HealthTask2Id", (l + k))" value="@health2.HealthTask2Id" />
+                                    <input type="hidden" name="@string.Concat("Heading2Id", (l + k))" id="@string.Concat("Heading2Id", (l + k))" value="@health2.Heading2Id" />
+                                    Model.AnswerList = Model.BaseRecordList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">@title.ValueName</label>
+                                            <input type="hidden" name="@string.Concat("Title2", (l + k))" id="@string.Concat("Title2", (l + k))" value="@health2.Title" />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                        <label class="control-label">Answer</label>
-                                        <select class="custom-select" onchange="show2Hide(this)" name="@string.Concat("Answer",(l+k))" id="@string.Concat("Answer",(l+k))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList()"></select>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label class="control-label">Answer</label>
+                                            <select class="custom-select" onchange="show2Hide(this)" name="@string.Concat("Answer2", (l + k))" id="@string.Concat("Answer2", (l + k))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString(),s.BaseRecordItemId==health2.Answer)).ToList()"></select>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <label class="control-label" id="@string.Concat("lblRemarks2", (l + k))" name="@string.Concat("lblRemarks2", (l + k))" style="display:none">Remarks</label>
+                                            <input type="text" class="form-control" name="@string.Concat("Remarks2", (l + k))" id="@string.Concat("Remarks2", (l + k))" style="display:none" value="@health2.Remark" />
+                                        </div>
                                     </div>
-                                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
-                                        <label class="control-label" id="@string.Concat("lblRemarks",(l+k))" name="@string.Concat("lblRemarks",(l+k))" style="display:none">Remarks</label>
-                                        <input type="text" class="form-control" name="@string.Concat("Remarks",(l+k))" id="@string.Concat("Remarks",(l+k))" style="display:none" value=" " />
+
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="@string.Concat("HealthTask2Id", (l + k))" id="@string.Concat("HealthTask2Id", (l + k))" value="0" />
+                                    <input type="hidden" name="@string.Concat("Heading2Id", (l + k))" id="@string.Concat("Heading2Id", (l + k))" value="@head.BaseRecordItemId" />
+                                    Model.AnswerList = Model.BaseRecordList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">@title.ValueName</label>
+                                            <input type="hidden" name="@string.Concat("Title2", (l + k))" id="@string.Concat("Title2", (l + k))" value="@title.BaseRecordItemId" />
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label class="control-label">Answer</label>
+                                            <select class="custom-select" onchange="show2Hide(this)" name="@string.Concat("Answer2", (l + k))" id="@string.Concat("Answer2", (l + k))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList()"></select>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <label class="control-label" id="@string.Concat("lblRemarks2", (l + k))" name="@string.Concat("lblRemarks2", (l + k))" style="display:none">Remarks</label>
+                                            <input type="text" class="form-control" name="@string.Concat("Remarks2", (l + k))" id="@string.Concat("Remarks2", (l + k))" style="display:none" value=" " />
+                                        </div>
+                                    </div>
+                                }
                                 k++;
                             }
                             <hr />
                             l++;
-                            var count = (l + k);
-                            <input type="hidden" asp-for="@Model.HealthTaskCount" value="@count.ToString()" />
+
+                            <input type="hidden" asp-for="@Model.HealthTask2Count" value="@Model.Title2List.Count" />
                         }
                     }
                     <hr />
                     <div class="row">
                         <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                            <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
                         </div>
                         <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                            <a asp-action="Index" asp-route-clientId="ClientId" class="btn btn-primary pull-left">Cancel</a>
+                            <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
                         </div>
                     </div>
                 </form>
@@ -195,6 +275,17 @@
     <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
     <script src="../../../assets/js/pages/forms/dropify.js"></script>
     <script>
+
+        
+        window.onload = function ()
+        {
+            if (document.getElementById('BestId').value > "0")
+            {
+                $('#ReasonableBelieve').change();
+            }
+        };
+                
+
         function showHide(element) {
             var Name = element.id;
             var Id = Name.split("Answer")[1];
@@ -211,32 +302,30 @@
         };
         function show2Hide(element) {
             var Name = element.id;
-            var Id = Name.split("Answer")[1];
+            var Id = Name.split("Answer2")[1];
             if (element.options[element.selectedIndex].text == 'Yes') {
-                document.getElementById('Remarks' + Id).style.display = 'block';
-                document.getElementById('lblRemarks' + Id).style.display = 'block';
+                document.getElementById('Remarks2' + Id).style.display = 'block';
+                document.getElementById('lblRemarks2' + Id).style.display = 'block';
             }
             else {
-                document.getElementById('Remarks' + Id).style.display = 'none';
-                document.getElementById('lblRemarks' + Id).style.display = 'none';
+                document.getElementById('Remarks2' + Id).style.display = 'none';
+                document.getElementById('lblRemarks2' + Id).style.display = 'none';
             }
         };
 
-        $(function () {
-
+        $(function ()
+        {
             
-            $('#Heading2Id').on('change', function ()
+            $('[id^="Answer"]').change();
+
+            $('#ReasonableBelieve').on('change', function ()
             {
-                if ($('#Heading2Id option:selected').text() === 'Yes')
-                {
-                    $('#Remark').css('display', 'block');
-                    $('#lblRemark').css('display', 'block');
-                }
-                else {
-                    $('#Remark').css('display', 'none');
-                    $('#lblRemark').css('display', 'none');
-                }
+                $('#ReasonableBelieve').css('height', '125px');
+                $('#ReasonableBelieve').css('text-align', 'justify');
+                $('#ReasonableBelieve').css('white-space', 'break-spaces');
             });
+            
+
             var table = $('#tbl_Task').DataTable({
                 scrollCollapse: true,
                 select: {
