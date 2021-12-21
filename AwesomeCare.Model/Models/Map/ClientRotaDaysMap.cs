@@ -36,9 +36,23 @@ namespace AwesomeCare.Model.Models.Map
               .HasMaxLength(25)
              .IsRequired();
 
+            builder.Property(p => p.WeekDay)
+            .HasColumnName("WeekDay")
+             .HasMaxLength(25)
+            .IsRequired(false);
+
+
             builder.Property(p => p.RotaId)
                 .HasColumnName("RotaId")
                 .IsRequired();
+
+            builder.Property(p => p.ClientId)
+              .HasColumnName("ClientId")
+              .IsRequired(false);
+
+            builder.Property(p => p.ClientRotaTypeId)
+             .HasColumnName("ClientRotaTypeId")
+             .IsRequired(false);
 
             #endregion
 

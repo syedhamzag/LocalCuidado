@@ -33,6 +33,12 @@ namespace AwesomeCare.Model.Models.Map
                .HasMaxLength(50)
                .IsRequired();
 
+            builder.Property(p => p.PreferredName)
+               .HasColumnName("PreferredName")
+               .HasMaxLength(50)
+               .IsRequired(false);
+
+
             builder.Property(p => p.Email)
                .HasColumnName("Email")
                .HasMaxLength(50)
@@ -176,6 +182,12 @@ namespace AwesomeCare.Model.Models.Map
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
+
+            builder.HasMany<ClientNutrition>(p => p.ClientNutrition)
+                .WithOne(p => p.Client)
+                .HasForeignKey(p => p.ClientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

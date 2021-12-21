@@ -1,0 +1,147 @@
+﻿@using AwesomeCare.Admin.ViewModels.ClientProgram;
+@model CreateClientProgram
+@{
+    ViewData["Title"] = "Create Client Program";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+
+                <h2>Client: @if (Model.ClientName != null)
+                {@Model.ClientName;
+            }</h2>
+
+            </div>
+            <div class="body">
+                <form asp-route="ClientProgram" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <input type="hidden" asp-for="ProgramId" />
+                            <input type="hidden" asp-for="ClientId" />
+                            <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">DATE</label>
+                                <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="Date" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">NEXT DUE DATE</label>
+                                <input type="text" asp-for="NextCheckDate" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="NextCheckDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">DEADLINE</label>
+                                <input type="text" asp-for="Deadline" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="Deadline" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Program Of Choice</label>
+                                <baserecord asp-key="Program_Of_Choice" asp-for="ProgramOfChoice" asp-items="null" />
+                                <span asp-validation-for="ProgramOfChoice" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Days Of Choice</label>
+                                <baserecord asp-key="Days_Of_Choice" asp-for="DaysOfChoice" asp-items="null" />
+                                <span asp-validation-for="DaysOfChoice" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Program Place and Location</label>
+                                <baserecord asp-key="Place_Location_Program" asp-for="PlaceLocationProgram" asp-items="null" />
+                                <span asp-validation-for="PlaceLocationProgram" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Details Of Program</label>
+                                <baserecord asp-key="Details_Of_Program" asp-for="DetailsOfProgram" asp-items="null" />
+                                <span asp-validation-for="DetailsOfProgram" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Officer to Take Action</label>
+                                <select asp-for="OfficerToTakeAction" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
+                                <span asp-validation-for="OfficerToTakeAction" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Status</label>
+                                <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                                <span asp-validation-for="Status" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Reference</label>
+                                <input type="text" asp-for="Reference" class="form-control" />
+                                <span asp-validation-for="Reference" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">Remark/Closing Comment</label>
+                                <input type="text" asp-for="Remarks" class="form-control" />
+                                <span asp-validation-for="Remarks" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label class="control-label">URL</label>
+                                <input type="text" asp-for="URL" class="form-control" />
+                                <span asp-validation-for="URL" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Action Required</label>
+                                <textarea type="text" asp-for="ActionRequired" class="form-control"></textarea>
+                                <span asp-validation-for="ActionRequired" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                <label class="control-label">Observation</label>
+                                <textarea type="text" asp-for="Observation" class="form-control"></textarea>
+                                <span asp-validation-for="Observation" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                <div class="card">
+                                    <div class="header">
+                                        <h2>Attachment Image<small></small></h2>
+                                    </div>
+                                    <div class="body">
+                                        <input type="file" asp-for="Attach" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
+                                        <span asp-validation-for="Attach" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}
+

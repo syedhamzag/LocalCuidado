@@ -20,5 +20,8 @@ namespace AwesomeCare.Admin.Services.ClientInvolvingParty
 
         [Post("/ClientInvolvingParty")]
         Task<HttpResponseMessage> Post([Body]List<PostClientInvolvingParty> models);
+
+        [Put("/ClientInvolvingParty/Put")]
+        Task<HttpResponseMessage> Put([Body] List<PutClientInvolvingParty> models);
     }
 }

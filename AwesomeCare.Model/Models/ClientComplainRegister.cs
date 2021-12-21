@@ -8,19 +8,19 @@ namespace AwesomeCare.Model.Models
     {
         public ClientComplainRegister()
         {
-
+            StaffName = new HashSet<ComplainStaffName>();
+            OfficerToAct = new HashSet<ComplainOfficerToAct>();
         }
             public int ComplainId { get; set; }
+            public string Reference { get; set; }
             public int ClientId { get; set; }
             public string LINK { get; set; }
             public string IRFNUMBER { get; set; }
             public DateTime INCIDENTDATE { get; set; }
             public DateTime DATERECIEVED { get; set; }
             public DateTime DATEOFACKNOWLEDGEMENT { get; set; }
-            public int OFFICERTOACTId { get; set; }
             public string SOURCEOFCOMPLAINTS { get; set; }
             public string COMPLAINANTCONTACT { get; set; }
-            public int STAFFId { get; set; }
             public string CONCERNSRAISED { get; set; }
             public DateTime DUEDATE { get; set; }
             public string LETTERTOSTAFF { get; set; }
@@ -31,5 +31,9 @@ namespace AwesomeCare.Model.Models
             public string REMARK { get; set; }
             public int StatusId { get; set; }
             public string EvidenceFilePath { get; set; }
+
+        public virtual Client Client { get; set; }
+        public virtual ICollection<ComplainOfficerToAct> OfficerToAct { get; set; }
+        public virtual ICollection<ComplainStaffName> StaffName { get; set; }
     }
 }

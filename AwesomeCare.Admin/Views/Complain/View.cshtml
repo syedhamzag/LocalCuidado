@@ -1,0 +1,155 @@
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+@model CreateComplainRegister
+@{
+    ViewData["Title"] = "View Complain Register";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<h4></h4>
+<hr />
+<div class="row">
+    <form asp-route="Edit" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-xs-8 col-sm-8 col-md-8">
+                <input type="hidden" asp-for="ComplainId" />
+                <input type="hidden" asp-for="ClientId" />
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="LINK" class="control-label"></label>
+                        <input asp-for="LINK" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">IRF-NUMBER</label>
+                        <input asp-for="IRFNUMBER" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">INCIDENT DATE</label>
+                        <input type="text" asp-for="INCIDENTDATE" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">DATE RECIEVED</label>
+                        <input type="text" asp-for="DATERECIEVED" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">DATE OF ACKNOWLEDGEMENT</label>
+                        <input type="text" asp-for="DATEOFACKNOWLEDGEMENT" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">OFFICER TO ACT</label>
+                        <select asp-for="OfficerToAct" asp-items="@Model.OfficerToActList" class="selectpicker form-control" data-live-search="true" multiple></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">SOURCE OF COMPLAINTS</label>
+                        <input asp-for="SOURCEOFCOMPLAINTS" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">COMPLAINANT CONTACT</label>
+                        <input asp-for="COMPLAINANTCONTACT" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">STAFF</label>
+                        <select asp-for="StaffName" asp-items="@Model.StaffList" class="selectpicker form-control" data-live-search="true" multiple></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">FINAL RESPONSE TO FAMILY</label>
+                        <input asp-for="FINALRESPONSETOFAMILY" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">DUE DATE</label>
+                        <input type="text" asp-for="DUEDATE" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">LETTER TO STAFF</label>
+                        <input asp-for="LETTERTOSTAFF" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">ROOT CAUSE</label>
+                        <input asp-for="ROOTCAUSE" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label asp-for="Reference" class="control-label"></label>
+                        <input type="text" asp-for="Reference" class="form-control" readonly />
+                    </div>
+                    <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                        <label class="control-label">Status</label>
+                        <baserecord asp-key="Staff_Communication_Status" asp-for="StatusId" asp-items="null" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                        <label asp-for="REMARK" class="control-label"></label>
+                        <input type="text" asp-for="REMARK" class="form-control" readonly />
+                    </div>
+                </div>HI
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-12">
+                        <label class="control-label">CONCERNS RAISED</label>
+                        <textarea asp-for="CONCERNSRAISED" class="form-control" rows="4" cols="50" readonly></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-12">
+                        <label class="control-label">INVESTIGATION OUTCOME</label>
+                        <textarea asp-for="INVESTIGATIONOUTCOME" class="form-control" rows="4" cols="50" readonly></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-12">
+                        <label class="control-label">ACTION TAKEN</label>
+                        <textarea asp-for="ACTIONTAKEN" class="form-control" rows="4" cols="50" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <div class="card">
+                    <div class="header">
+                        <h2>Evidence Image<small></small></h2>
+                    </div>
+                    <div class="body">
+                        <img src="@Model.Evidence" alt="image" width="300" height="240" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    </div>
+                    <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                        <a asp-action="Complain" asp-route-clientId="@Model.ClientId" asp-controller="Client" class="btn btn-primary pull-left">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.custom-select').attr("disabled", "disabled");
+        });
+    </script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script>
+        $(document).ready(function () {
+             $('a[href="#@Model.ActiveTab"]').tab('show');
+
+        })
+    </script>
+}

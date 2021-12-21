@@ -14,5 +14,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.BaseRecord
         public bool HasGoogleForm { get; set; }
         public string AddLink { get; set; }
         public string ViewLink { get; set; }
+        public int ExpiryInMonths { get; set; }
     }
 }

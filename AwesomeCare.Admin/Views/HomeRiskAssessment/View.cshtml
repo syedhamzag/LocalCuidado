@@ -1,0 +1,69 @@
+﻿@using AwesomeCare.Admin.ViewModels.CarePlan.HomeRiskAssessment;
+
+@model CreateHomeRiskAssessment
+@{
+    ViewData["Title"] = "Home Risk Assessment Task";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="col-lg-12">
+    <div class="accordion" id="accordion">
+        <div>
+            <div class="card-header">
+
+            </div>
+
+            <div class="card-body">
+                    <input type="hidden" asp-for="@Model.ClientId" />
+                    <input type="hidden" asp-for="@Model.HomeRiskAssessmentId" />
+                    <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
+                    <table class="table table-bordered table-hover" name="@Model.Tasks" id="tbl_Task">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Answer</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Tasks.Count > 0)
+                            {
+                                foreach (var item in Model.Tasks)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.HomeRiskAssessmentTaskId==item.HomeRiskAssessmentTaskId).HomeRiskAssessmentTaskId" />
+                                            <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault(s=>s.HomeRiskAssessmentTaskId==item.HomeRiskAssessmentTaskId).Title" asp-items="null" />
+                                            <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                            <baserecord asp-key="Home_Risk_Assessment_Answer" asp-for="@Model.Tasks.FirstOrDefault(s=>s.HomeRiskAssessmentTaskId==item.HomeRiskAssessmentTaskId).Answer" asp-items="null" />
+                                            <span asp-validation-for="@Model.Tasks.FirstOrDefault().Answer" class="text-danger"></span>
+                                        </td>
+                                        <td>
+                                            <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.HomeRiskAssessmentTaskId==item.HomeRiskAssessmentTaskId).Comment" type="text" class="form-control" readonly />
+                                            <span asp-validation-for="@Model.Tasks.FirstOrDefault().Comment" class="text-danger"></span>
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}

@@ -17,17 +17,22 @@ using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Extensions;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
 using Newtonsoft.Json;
-using AwesomeCare.DataTransferObject.DTOs.ClientMeal;
+using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Hosting;
 using AwesomeCare.Admin.Services.Client;
+using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.Admin.Services.ClientRotaType;
+using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class NutritionController : BaseController
     {
         private INutritionService _nutritionService;
+        private IClientRotaTypeService _clientRotaTypeService;
         private IRotaDayofWeekService _MealDayOfWeekService;
         private IStaffService _staffService;
         private IClientService _clientService;
@@ -35,20 +40,69 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IMemoryCache _cache;
 
         public NutritionController(INutritionService nutritionService, IFileUpload fileUpload, IRotaDayofWeekService MealDayOfWeekService,
-            IClientService clientService, IMemoryCache cache, IStaffService staffService , IWebHostEnvironment env) : base(fileUpload)
+            IClientService clientService, IMemoryCache cache, IStaffService staffService, IClientRotaTypeService clientRotaTypeService, IWebHostEnvironment env) : base(fileUpload)
         {
             _nutritionService = nutritionService;
             _MealDayOfWeekService = MealDayOfWeekService;
             _staffService = staffService;
             _cache = cache;
             _clientService = clientService;
+            _clientRotaTypeService = clientRotaTypeService;
             _env = env;
+        }
+        public async Task<IActionResult> List()
+        {
+            var entities = await _nutritionService.Get();
+
+            var client = await _clientService.GetClientDetail();
+            List<NutritionViewModel> reports = new List<NutritionViewModel>();
+            foreach (GetClientNutrition item in entities)
+            {
+                var report = new NutritionViewModel();
+                report.DATETO = item.DATETO;
+                report.DATEFROM = item.DATEFROM;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
+                reports.Add(report);
+            }
+            return View(reports);
+        }
+        public async Task<IActionResult> Reports(int clientId)
+        {
+            NutritionViewModel model = new NutritionViewModel();
+
+            var Client = await _clientService.GetClient(clientId);
+            var nutrition = await _nutritionService.GetForEdit(clientId);
+            List<GetStaffs> AllStaffs = await _staffService.GetStaffs();
+            var Clients = await _clientService.GetClientDetail();
+            var MealTypes = await _clientRotaTypeService.Get();
+            var weekDays = await _MealDayOfWeekService.Get();
+            model.ClientList = Clients.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
+            model.MealTypes = MealTypes;
+            model.WeekDays = weekDays;
+            if (nutrition.Count > 0)
+            {
+                model.ClientMealDays = nutrition.FirstOrDefault().ClientMealDays;
+                model.ClientId = clientId;
+                model.ClientName = Clients.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+                model.NutritionId = nutrition.FirstOrDefault().NutritionId;
+                model.ClientCleaning = nutrition.FirstOrDefault().ClientCleaning;
+                model.ClientShopping = nutrition.FirstOrDefault().ClientShopping;
+                model.StaffId = nutrition.FirstOrDefault().StaffId;
+                model.STAFF = AllStaffs;
+                model.PlannerName = model.STAFF.FirstOrDefault(s => s.StaffPersonalInfoId == model.StaffId).Fullname.ToString();
+                model.PlannerContact = model.STAFF.FirstOrDefault(s => s.StaffPersonalInfoId == model.StaffId).Telephone.ToString();
+                model.DATEFROM = nutrition.FirstOrDefault().DATEFROM;
+                model.DATETO = nutrition.FirstOrDefault().DATETO;
+                ViewBag.Staff = AllStaffs;
+
+            }
+            return View(model);
         }
         public async Task<IActionResult> Index(int clientId)
         {
             NutritionViewModel model = new NutritionViewModel();
             model.ClientId = clientId;
-            var MealTypes = await _nutritionService.Get();
+            var MealTypes = await _clientRotaTypeService.Get();
             var weekDays = await _MealDayOfWeekService.Get();
             var Client = await _clientService.GetClient(clientId);
             var nutrition = await _nutritionService.GetForEdit(clientId);
@@ -58,7 +112,7 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientImage = Client.PassportFilePath;
             
             var staffNames = await _staffService.GetStaffs();
-
+            model.StaffList = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             ViewBag.GetStaffs = staffNames;
 
             if (nutrition.Count > 0)
@@ -82,14 +136,14 @@ namespace AwesomeCare.Admin.Controllers
             }
 
             HttpContext.Session.Set<List<GetRotaDayofWeek>>("weekDays", model.WeekDays);
-            HttpContext.Session.Set<List<GetClientMealType>>("MealTypes", MealTypes);
+            HttpContext.Session.Set<List<GetClientRotaType>>("MealTypes", MealTypes);
             return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(NutritionViewModel model, IFormCollection formsCollection)
         {
-            List<GetClientMealType> MealTypes = HttpContext.Session.Get<List<GetClientMealType>>("MealTypes");
+            List<GetClientRotaType> MealTypes = HttpContext.Session.Get<List<GetClientRotaType>>("MealTypes");
             List<GetRotaDayofWeek> weekDays = HttpContext.Session.Get<List<GetRotaDayofWeek>>("weekDays");
             if (model == null || !ModelState.IsValid)
             {
@@ -99,7 +153,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.ClientImage = Client.PassportFilePath;
                 model.MealTypes = MealTypes;
                 model.WeekDays = weekDays;
-                ViewBag.GetStaffs = staffNames;
+                model.StaffList = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
             var Nutrition = new CreateNutrition();
@@ -118,9 +172,9 @@ namespace AwesomeCare.Admin.Controllers
 
             foreach (var MealType in MealTypes)
             {
-                var Mealtype = formsCollection[MealType.MealType];
+                var Mealtype = formsCollection[MealType.RotaType];
 
-                string NutritionId = $"{MealType.MealType}-NutritionId";
+                string NutritionId = $"{MealType.RotaType}-NutritionId";
 
                 if (MealType != null)
                 {
@@ -128,21 +182,22 @@ namespace AwesomeCare.Admin.Controllers
 
                     if (Mealtype.Count > 0 && Mealtype[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
                     {
+                        int i = 0;
                         foreach (var weekDay in weekDays)
                         {
-                            string weekdayid = $"{MealType.MealType}-isChecked-{weekDay.DayofWeek}";
+                            string weekdayid = $"{MealType.RotaType}-isChecked-{weekDay.DayofWeek}";
                             var WeekDay = formsCollection[weekdayid];
                             if (WeekDay.Count > 0 && WeekDay[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 var MealDay = new CreateClientMealDays();
 
-                                string mealdetailId = $"{MealType.MealType}-{weekDay.DayofWeek}-MealDetails";
-                                string howtoprepareId = $"{MealType.MealType}-{weekDay.DayofWeek}-HowtoPrepare";
-                                string typeId = $"{MealType.MealType}-{weekDay.DayofWeek}-TypeId";
-                                string seeVideoId = $"{MealType.MealType}-{weekDay.DayofWeek}-SeeVideo";
-                                var pictureId = $"{MealType.MealType}-{weekDay.DayofWeek}-Picture";
-                                string weekDayId = $"{MealType.MealType}-{weekDay.DayofWeek}-Day";
-                                string clientMealDay = $"{MealType.MealType}-{weekDay.DayofWeek}-DayId";
+                                string mealdetailId = $"{MealType.RotaType}-{weekDay.DayofWeek}-MealDetails";
+                                string howtoprepareId = $"{MealType.RotaType}-{weekDay.DayofWeek}-HowtoPrepare";
+                                string typeId = $"TypeId";
+                                string seeVideoId = $"{MealType.RotaType}-{weekDay.DayofWeek}-SeeVideo";
+                                var pictureId = $"{MealType.RotaType}-{weekDay.DayofWeek}-Picture";
+                                string weekDayId = $"{MealType.RotaType}-{weekDay.DayofWeek}-Day";
+                                string clientMealDay = $"{MealType.RotaType}-{weekDay.DayofWeek}-DayId";
 
 
                                 var mealDetail = formsCollection[mealdetailId];
@@ -160,18 +215,18 @@ namespace AwesomeCare.Admin.Controllers
                                     string filename = pictureId;
                                     path = await _fileUpload.UploadFile(folder, true, filename, picture.OpenReadStream());
                                 }
-
                                 MealDay.MEALDETAILS = mealDetail[0].ToString();
                                 MealDay.HOWTOPREPARE = howtoPrepare[0].ToString();
-                                MealDay.TypeId = int.Parse(TypeId);
+                                MealDay.TypeId = int.Parse(TypeId[i].ToString());
                                 MealDay.SEEVIDEO = seeVideo[0].ToString();
                                 MealDay.PICTURE = path;
                                 MealDay.MealDayofWeekId = int.Parse(weekday);
                                 MealDay.ClientMealId = int.TryParse(clientMealDayId, out int dayId) ? dayId : 0;
                                 MealDay.NutritionId = Nutrition.NutritionId;
-                                MealDay.MealId = MealTypes.FirstOrDefault(r => r.MealType.Equals(MealType.MealType)).ClientMealTypeId;
+                                MealDay.ClientMealTypeId = MealTypes.FirstOrDefault(r => r.RotaType.Equals(MealType.RotaType)).ClientRotaTypeId;
 
                                 MealDays.Add(MealDay);
+                                i++;
                             }
 
                         }
@@ -189,7 +244,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var Shopping = new CreateClientShopping();
 
-                string StaffId = "Shopping.StaffId";
+                string StaffId = "STAFFId";
                 string MeasureId = "MeansOfPurchase";
                 string LocationId = "LocationOfPurchase";
                 string ItemId = "Item";
@@ -197,11 +252,11 @@ namespace AwesomeCare.Admin.Controllers
                 string QuantityId = "Quantity";
                 string AmountId = "Amount";
                 string DAYOFSHOPPINGId = "DAYOFSHOPPING";
-                string DATEFROMId = "Shopping.DATEFROM";
-                string DATETOId = "Shopping.DATETO";
-                string ImageId = "Image";
+                string DATEFROMId = "DATEFROM";
+                string DATETOId = "DATETO";
+                string ImageId = string.Concat("Image_",DateTime.Now.ToString());
 
-                var Staff = int.Parse(formsCollection[StaffId][i].ToString()); ;
+                var Staff = int.Parse(formsCollection[StaffId][i].ToString());
                 var Measure = formsCollection[MeasureId][i].ToString();
                 var Location = formsCollection[LocationId][i].ToString();
                 var Item = formsCollection[ItemId][i].ToString();
@@ -243,21 +298,21 @@ namespace AwesomeCare.Admin.Controllers
             for (int i = 0; i < model.CleaningRowCount; i++)
             {
                 var Cleaning = new CreateClientCleaning();
-                string StaffId = "ClientCleaning.StaffId";
-                string AreasAndItemsId = "ClientCleaning.AreasAndItems";
-                string DetailsId = "ClientCleaning.Details";
-                string SafetyHazardId = "ClientCleaning.SafetyHazard";
-                string LocationOfItemId = "ClientCleaning.LocationOfItem";
-                string DescOfItemId = "ClientCleaning.DescOfItem";
-                string MinuteAllotedId = "ClientCleaning.MinuteAlloted";
-                string DisposalId = "ClientCleaning.Disposal";
-                string WhereToGetId = "ClientCleaning.WhereToGet";
-                string SEEVIDEOId = "ClientCleaning.SEEVIDEO";
-                string DAYOFCLEANINGId = "ClientCleaning.DAYOFCLEANING";
-                string DATEFROMId = "ClientCleaning.DATEFROM";
-                string DATETOId = "ClientCleaning.DATETO";
-                string WhereToKeepId = "ClientCleaning.WhereToKeep";
-                string ImageId = "ClientCleaning.Image";
+                string StaffId = "STAFFId";
+                string AreasAndItemsId = "AreasAndItems";
+                string DetailsId = "Details";
+                string SafetyHazardId = "SafetyHazard";
+                string LocationOfItemId = "LocationOfItem";
+                string DescOfItemId = "DescOfItem";
+                string MinuteAllotedId = "MinuteAlloted";
+                string DisposalId = "Disposal";
+                string WhereToGetId = "WhereToGet";
+                string SEEVIDEOId = "SEEVIDEO";
+                string DAYOFCLEANINGId = "DAYOFCLEANING";
+                string DATEFROMId = "DATEFROM";
+                string DATETOId = "DATETO";
+                string WhereToKeepId = "WhereToKeep";
+                string ImageId = "Image";
 
                 var Staff = int.Parse(formsCollection[StaffId][i].ToString());
                 var AreasAndItems = int.Parse(formsCollection[AreasAndItemsId][i].ToString());
@@ -270,7 +325,7 @@ namespace AwesomeCare.Admin.Controllers
                 var WhereToGet = int.Parse(formsCollection[WhereToGetId][i].ToString());
                 var SEEVIDEO = formsCollection[SEEVIDEOId][i].ToString();
                 var DAYOFCLEANING = formsCollection[DAYOFCLEANINGId][i].ToString();
-                var WhereToKeep = formsCollection.Files.GetFile(WhereToKeepId[i].ToString());
+                var WhereToKeep = formsCollection.Files.GetFile(WhereToKeepId);
                 var DATEFROM = DateTime.Parse(formsCollection[DATEFROMId][i].ToString());
                 var DATETO = DateTime.Parse(formsCollection[DATETOId][i].ToString());
                 var Image = formsCollection.Files.GetFile(ImageId);
@@ -309,8 +364,8 @@ namespace AwesomeCare.Admin.Controllers
                 Cleanings.Add(Cleaning);
             }
             Nutrition.ClientCleaning = Cleanings;
+            var json = JsonConvert.SerializeObject(Nutrition);
             #endregion
-
             if (Nutrition != null)
             {
                 if (model.ActionName == "Update")

@@ -13,16 +13,13 @@ namespace AwesomeCare.Admin.Services.ComplainRegister
         [Get("/Complain")]
         Task<List<GetClientComplainRegister>> Get();
 
-        [Get("/Complain/{complainId}")]
-        Task<GetClientComplainRegister> Get(int complainId);
+        [Get("/Complain/Get/{id}")]
+        Task<GetClientComplainRegister> Get(int id);
 
-        [Get("/GetComplain/{clientId}/{complainId}")]
-        Task<GetClientComplainRegister> GetComplain(int clientId, int complainId);
+        [Post("/Complain/Create")]
+        Task<HttpResponseMessage> Create([Body] PostComplainRegister model);
 
-        [Post("/Complain")]
-        Task<HttpResponseMessage> PostComplainRegister([Body] PostComplainRegister model);
-
-        [Put("/Complain")]
-        Task<GetClientComplainRegister> Put([Body] PutComplainRegister model);
+        [Put("/Complain/Put")]
+        Task<HttpResponseMessage> Put([Body] PutComplainRegister model);
     }
 }

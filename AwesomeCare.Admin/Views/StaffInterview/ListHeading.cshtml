@@ -1,0 +1,75 @@
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+
+@model CreateStaffInterview
+@{
+    ViewData["Title"] = "Staff Interview Heading";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-md-12" id="accordion">
+        <div class="card">
+            <div class="header">
+                <h2>Add Heading</h2>
+            </div>
+            <div class="body clearfix">
+                <form asp-action="CreateHeading" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
+                    <div class="col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label class="control-label">Heading</label>
+                            <baserecord asp-key="Staff_Interview_Heading" asp-items="null" asp-for="HeadingId" class="form-control" />
+                            <span asp-validation-for="HeadingId" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="header">
+                <h2>Staff Interview Headings</h2>
+
+            </div>
+            <div class="body">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Heading</th>
+                            <th>Task</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.HeadingList)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Text
+                                </td>
+                                <td>
+                                    <a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-route-heading="@item.Text" asp-route-staffInterviewId="@item.Value" class="btn btn-success btn-sm">Tasks</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}

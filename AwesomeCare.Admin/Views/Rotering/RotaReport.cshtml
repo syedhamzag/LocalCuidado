@@ -1,0 +1,434 @@
+﻿@using AwesomeCare.Admin.ViewModels.Rotering;
+@using System.Globalization;
+@using AwesomeCare.DataTransferObject.DTOs.Rotering;
+@model LiveRota
+@{
+    ViewData["Title"] = "Rota Report";
+}
+
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>Live Rota</h2>
+                <p>Server Time: @DateTime.Now</p>
+                <p>UTC Time: @DateTimeOffset.UtcNow.AddHours(1);</p>
+            </div>
+            <div class="body">
+
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-4 col-lg-4">
+                            <div class="row">
+
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label> Start Date</label>
+                                    <input type="text" id="startDate" name="startDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label> Stop Date</label>
+                                    <input type="text" id="stopDate" name="stopDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
+
+                                </div>
+
+                            </div>
+                            <button type="submit" asp-action="RotaReport" class="btn btn-primary">Search</button>
+                        </div>
+
+                        <div class="col-sm-2 col-lg-2 col-xs-2">
+
+                        </div>
+                        <div class="col-sm-6 col-lg-6 col-xs-6">
+                            <table class="table table-condensed table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Period</th>
+                                        <th>Total</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var period in Model.ClockDifferences)
+                                    {
+                                        <tr>
+                                            <th>@period.Period</th>
+                                            <th>@period.TotalClockDifference</th>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+                    @if (Model.GroupLiveRotas?.Count > 0)
+                    {
+
+                        <table id="rotaReportTable" class="table table-condensed table-hover table-bordered datatablesExportExcel">
+                            <thead>
+                                <tr>
+
+                                    <th>Rota</th>
+                                    <th>Rota Name</th>
+                                    <th>Client Name</th>
+                                    <th>Client IdNumber</th>
+                                    <th>Client Tel. No.</th>
+                                    <th>Client Address</th>
+                                    <th>Client Geolocation (lat;long)</th>
+                                    <th>Clock In Address</th>
+                                    <th>Clock In Distance</th>
+                                    <th>Clock Out Address</th>
+                                    <th>Clock Out Distance</th>
+                                    <th>Staff Name</th>
+                                    <th>Staff Tel.</th>
+                                    <th>Allocated Date</th>
+                                    <th>StartTime</th>
+                                    <th>StopTime</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>ClockIn Method</th>
+                                    <th>ClockOut Method</th>
+                                    <th>Clock Diff.(Mins)</th>
+                                    <th>Feedback</th>
+                                    <th>No. of Staffs</th>
+                                    <th>Rate</th>
+                                    <th>Amount Provided</th>
+                                    <th>Commissioned Hrs</th>
+                                    <th>Amt. Commissioned</th>
+                                    <th>Call Status</th>
+                                    <th>Reply/Remark/Comment</th>
+                                    <th>Handover Note</th>
+                                    <th>Area Code</th>
+                                    <th>Provider Ref.</th>
+                                    <th>Task Performed</th>
+                                    <th>Staff Rate</th>
+                                    <th>Staff Pay by Com. Hrs</th>
+                                    <th>Amount by Times Spent</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var model in Model.GroupLiveRotas)
+                                {
+                                    foreach (var rota in model.Trackers)
+                                    {
+
+                                <tr style="background-color:@rota.RowClass(rota.StartTime,rota.ClockInTime)">
+
+                                    <td>@rota.Period</td>
+                                    <td>@rota.Rota</td>
+                                    <td>@rota.ClientName</td>
+                                    <td>@rota.ClientIdNumber</td>
+                                    <td>@rota.ClientTelephone</td>
+                                    <td>@rota.ClientPostCode</td>
+                                    <td>@rota.ClientLatitude;@rota.ClientLongitude</td>
+                                    <td>@rota.ClockInAddress</td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                if (!string.IsNullOrWhiteSpace(rota.ClockInAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
+                                                {
+                                                    double careerlat = 0;
+                                                    double careerlongi = 0;
+                                                    double clientlat = 0;
+                                                    double clientlongi = 0;
+                                                    // int decimalPlaces = 5;
+
+                                                    var clockInLocation = rota.ClockInAddress.Split(";");
+                                                    var clockInLatitude = clockInLocation[0];
+                                                    var clockInLongitude = clockInLocation[1];
+
+                                                    var careerLocation = new Location();
+
+                                                    careerLocation.Latitude = double.TryParse(clockInLatitude, out careerlat) ? careerlat : 0;
+                                                    careerLocation.Longitude = double.TryParse(clockInLongitude, out careerlongi) ? careerlongi : 0;
+
+                                                    var clientLocation = new Location();
+                                                    clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlat) ? clientlat : 0;
+                                                    clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongi) ? clientlongi : 0;
+
+                                                    var clockInDistance = rota.CalculateDistance(clientLocation, careerLocation);
+                                                    @clockInDistance;
+                                                }
+                                                else
+                                                {
+                                                    var dist = "N/A";
+                                                    @dist
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+                                                var dist = "err";
+                                                @dist
+                                            }
+                                        }
+
+                                    </td>
+                                    <td>@rota.ClockOutAddress</td>
+                                    <td>
+                                        @{
+                                            try
+                                            {
+                                                if (!string.IsNullOrWhiteSpace(rota.ClockOutAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
+                                                {
+                                                    double careerlat = 0;
+                                                    double careerlongi = 0;
+                                                    double clientlatOut = 0;
+                                                    double clientlongiOut = 0;
+                                                    //  int decimalPlaces = 5;
+
+
+                                                    var clockOutLocation = rota.ClockOutAddress.Split(";");
+                                                    var clockOutLatitude = clockOutLocation[0];
+                                                    var clockOutLongitude = clockOutLocation[1];
+
+                                                    var careerLocation = new Location();
+
+                                                    careerLocation.Latitude = double.TryParse(clockOutLatitude, out careerlat) ? careerlat : 0;
+                                                    careerLocation.Longitude = double.TryParse(clockOutLongitude, out careerlongi) ? careerlongi : 0;
+
+                                                    var clientLocation = new Location();
+                                                    clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlatOut) ? clientlatOut : 0;
+                                                    clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongiOut) ? clientlongiOut : 0;
+
+                                                    var clockOutDistance = rota.CalculateDistance(clientLocation, careerLocation);
+                                                    @clockOutDistance;
+                                                }
+                                                else
+                                                {
+                                                    var dist = "N/A";
+                                                    @dist
+                                                }
+                                            }
+                                            catch (Exception)
+                                            {
+
+                                                var dist = "err";
+                                                @dist
+                                            }
+                                        }
+
+
+
+                                    </td>
+                                    <td>@rota.Staff</td>
+                                    <td>@rota.StaffTelephone</td>
+                                    <td>@rota.RotaDate.ToString("MM/dd/yyyy")</td>
+                                    <td>@rota.StartTime</td>
+                                    <td>@rota.StopTime</td>
+                                    <td>
+                                        @{
+                                            if (rota.ClockInTime.HasValue)
+                                            {
+                                                var clockInTime = rota.ClockInTime.Value.AddHours(1).ToString("HH:mm:ss");
+                                                @clockInTime;
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (rota.ClockOutTime.HasValue)
+                                            {
+                                                var clockOutTime = rota.ClockOutTime.Value.AddHours(1).ToString("HH:mm:ss");
+                                                @clockOutTime;
+                                            }
+                                        }
+                                    </td>
+                                    <td>@rota.ClockInMethod</td>
+                                    <td>@rota.ClockOutMethod</td>
+                                    <td>
+                                        @{
+
+                                            bool isClockInTimeValid = false;
+                                            bool isClockOutTimeValid = false;
+                                            TimeSpan clockIn = default;
+                                            TimeSpan clockOut = default;
+                                            if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
+                                            {
+                                                isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.AddHours(1).ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockIn);
+                                                isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.AddHours(1).ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockOut);
+                                                if (isClockInTimeValid && isClockOutTimeValid)
+                                                {
+                                                    var clockDiff = clockOut.Subtract(clockIn);
+                                                    @clockDiff
+                                                }
+                                            }
+
+                                        }
+                                    </td>
+                                    <td>@rota.Feedback</td>
+                                    <td>@rota.NumberOfStaff</td>
+                                    <td>@rota.ClientRate</td>
+                                    <td>
+                                        @{
+                                            if (isClockInTimeValid && isClockOutTimeValid)
+                                            {
+                                                var clockDiff = clockOut.Subtract(clockIn).TotalMinutes;
+                                                var amountProvided = decimal.Parse(clockDiff.ToString()) * 24 * 60 * decimal.Parse(rota.NumberOfStaff.ToString()) * rota.ClientRate;
+
+                                                @amountProvided;
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            bool isStartTimeValid = TimeSpan.TryParseExact(rota.StartTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan startTime);
+                                            bool isStopTimeValid = TimeSpan.TryParseExact(rota.StopTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan stopTime);
+                                            if (isStartTimeValid && isStopTimeValid)
+                                            {
+                                                var diff = stopTime.Subtract(startTime);
+                                                @diff
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (isStartTimeValid && isStopTimeValid)
+                                            {
+                                                var diff = stopTime.Subtract(startTime).TotalMinutes;
+
+                                                var amt_comm = rota.ClientRate * decimal.Parse(diff.ToString()) * 24 * 60;
+                                                @amt_comm
+                                            }
+
+
+
+
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+
+                                            string callStatus = "MISSED";
+                                            if (rota.ClockInTime.HasValue)
+                                            {
+                                                var st = TimeSpan.TryParseExact(rota.StartTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
+                                                var ct = TimeSpan.TryParseExact(rota.ClockInTime.Value.AddHours(1).DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
+                                                var df = st.Subtract(ct).TotalMinutes;
+
+                                                //var st = DateTime.TryParseExact(rota.StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);
+                                                //var df = st.Subtract(rota.ClockInTime.Value.DateTime).TotalMinutes;
+
+                                                if (df <= 15 && df >= -15)
+                                                {
+                                                    //color = "green";
+                                                    callStatus = "ONTIME";
+                                                }
+                                                else if (df > 15 && df <= 30)
+                                                {
+                                                    // color = "blue";
+                                                    callStatus = "EARLY";
+                                                }
+                                                else if (df >= -30)
+                                                {
+                                                    //  color = "yellow";
+                                                    callStatus = "MILD";
+                                                }
+                                                else
+                                                {
+                                                    //  color = "red";
+                                                    callStatus = "LATE";
+                                                }
+
+                                                <p style="color:black" class="text-center">@callStatus</p>
+                                            }
+                                            else
+                                            {
+                                                <p style="color:black" class="text-center">@callStatus</p>
+                                            }
+
+
+                                        }
+                                    </td>
+                                    <td>@rota.Comment</td>
+                                    <td>@rota.HandOver</td>
+                                    <td>@rota.AreaCode</td>
+                                    <td>@rota.ClientProviderReference</td>
+                                    <td>task performed</td>
+                                    <td>@rota.StaffRate</td>
+                                    <td>
+                                        @{
+                                            if (isStartTimeValid && isStopTimeValid)
+                                            {
+                                                var diff = stopTime.Subtract(startTime).TotalMinutes;
+
+                                                var amt_comm = rota.StaffRate * decimal.Parse(diff.ToString()) * 24 * 60;
+                                                @amt_comm
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (isClockInTimeValid && isClockOutTimeValid)
+                                            {
+                                                var clockDiff = clockOut.Subtract(clockIn).TotalMinutes;
+                                                var amountByTimeSpent = decimal.Parse(clockDiff.ToString()) * 24 * 60 * rota.StaffRate;
+
+                                                @amountByTimeSpent;
+                                            }
+                                        }
+                                    </td>
+                                    <td>@rota.StaffRotaPeriodId</td>
+
+                                    <td>
+                                        <a asp-action="EditLiveRota" asp-controller="Rotering" asp-route-staffRotaPeriodId="@rota.StaffRotaPeriodId" target="_blank" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit"> <i class="icon-pencil" aria-hidden="true"></i></a>
+                                    </td>
+                                    <td>
+
+                                        @*<input type="hidden" value="@rota.StaffRotaPeriodId" name="deleteId" id="deleteId" />*@
+                                        <button type="submit" asp-route-deleteId="@rota.StaffRotaPeriodId" asp-route-redirectAction="RotaReport" asp-action="DeleteRota" class="btn btn-danger deleteRotaPeriodBtn"><i class="icon-trash" aria-hidden="true"></i></button>
+
+
+                                    </td>
+                                </tr>
+                                    }
+
+
+                                }
+
+                            </tbody>
+                        </table>
+
+                    }
+                    else
+                    {
+                        <p class="text-center">No Rota for today</p>
+                    }
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#rotaReportTable tbody tr").on("click", "button.deleteRotaPeriodBtn", function (event) {
+                console.log('delete button clicked')
+                var confirmResult = confirm("The selected Staff Rota will be delete \n Do you want to continue?");
+
+                console.log(confirmResult)
+                if (!confirmResult)
+                    event.preventDefault();
+            })
+
+        })
+    </script>
+
+}

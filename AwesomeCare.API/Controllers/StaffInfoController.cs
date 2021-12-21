@@ -7,9 +7,25 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
+using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.Staff.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.Staff.StaffHoliday;
+using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
+using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
+using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
+using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
+using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
+using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
+using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
+using AwesomeCare.DataTransferObject.DTOs.StaffReference;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
+using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
+using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -44,7 +60,7 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
             IGenericRepository<StaffRating> staffRatingRepository,
             IGenericRepository<Client> clientRepository,
-             IGenericRepository<StaffWorkTeam> staffWorkTeamRepository,
+            IGenericRepository<StaffWorkTeam> staffWorkTeamRepository,
             IGenericRepository<ApplicationUser> applicationUserRepository)
         {
             _staffInfoRepository = staffInfoRepository;
@@ -178,8 +194,8 @@ namespace AwesomeCare.API.Controllers
             //    .Include(c => c.Trainings)
             //    .FirstOrDefaultAsync(s => s.StaffPersonalInfoId == id);
 
-            var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
-            var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
+            //var baseRecordEntity = _dbContext.Set<BaseRecordModel>();
+            //var baseRecordItemEntity = _dbContext.Set<BaseRecordItemModel>();
             // var teamEntity = _dbContext.Set<StaffWorkTeam>();
             // var profile = Mapper.Map<GetStaffProfile>(staffDetails);
 
@@ -274,22 +290,98 @@ namespace AwesomeCare.API.Controllers
                                                      Training = t.Training
                                                  }).ToList(),
                                     WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
-                                    RegulatoryContacts = (from rc in st.RegulatoryContact
-                                                          join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
-                                                          join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId
-                                                          select new GetStaffRegulatoryContact
-                                                          {
-                                                              BaseRecordItemId = bitem.BaseRecordItemId,
-                                                              DatePerformed = rc.DatePerformed,
-                                                              DueDate = rc.DueDate,
-                                                              Evidence = rc.Evidence,
-                                                              RegulatoryContact = bitem.ValueName,
-                                                              StaffPersonalInfoId = rc.StaffPersonalInfoId,
-                                                              StaffRegulatoryContactId = rc.StaffRegulatoryContactId,
-                                                              AddLink = bitem.AddLink,
-                                                              HasGoogleForm = bitem.HasGoogleForm,
-                                                              ViewLink = bitem.ViewLink
-                                                          }).ToList()
+                                    GetStaffAdlObs = (from adl in st.StaffAdlObs
+                                                      select new GetStaffAdlObs
+                                                      {
+                                                          ActionRequired = adl.ActionRequired,
+                                                          Attachment = adl.Attachment
+                                                      }).ToList(),
+                                    GetStaffMedComp = (from s in st.StaffMedCompObs
+                                                       select new GetStaffMedComp
+                                                       {
+                                                           ActionRequired = s.ActionRequired,
+                                                           Attachment = s.Attachment
+                                                       }).ToList(),
+                                    GetStaffKeyWorkerVoice = (from s in st.StaffKeyWorkerVoice
+                                                              select new GetStaffKeyWorkerVoice
+                                                              {
+                                                                  ActionRequired = s.ActionRequired,
+                                                                  Attachment = s.Attachment
+                                                              }).ToList(),
+                                    GetStaffOneToOne = (from s in st.StaffOneToOne
+                                                        select new GetStaffOneToOne
+                                                        {
+                                                            ActionRequired = s.ActionRequired,
+                                                            Attachment = s.Attachment
+                                                        }).ToList(),
+                                    GetStaffReference = (from s in st.StaffReference
+                                                         select new GetStaffReference
+                                                         {
+                                                             Relationship = s.Relationship,
+                                                             Attachment = s.Attachment
+                                                         }).ToList(),
+                                    GetStaffSpotCheck = (from s in st.StaffSpotCheck
+                                                         select new GetStaffSpotCheck
+                                                         {
+                                                             ActionRequired = s.ActionRequired,
+                                                             Attachment = s.Attachment
+                                                         }).ToList(),
+                                    GetStaffSupervisionAppraisal = (from s in st.StaffSupervisionAppraisal
+                                                                    select new GetStaffSupervisionAppraisal
+                                                                    {
+                                                                        ActionRequired = s.ActionRequired,
+                                                                        Attachment = s.Attachment
+                                                                    }).ToList(),
+                                    GetStaffSurvey = (from s in st.StaffSurvey
+                                                      select new GetStaffSurvey
+                                                      {
+                                                          ActionRequired = s.ActionRequired,
+                                                          Attachment = s.Attachment
+                                                      }).ToList(),
+                                    GetStaffInfectionControl = (from s in st.StaffInfectionControl
+                                                                select new GetStaffInfectionControl
+                                                                {
+                                                                    TestDate = s.TestDate,
+                                                                    Guideline = s.Guideline
+                                                                }).ToList(),
+                                    GetStaffPersonalityTest = (from s in st.StaffPersonalityTest
+                                                               select new GetStaffPersonalityTest
+                                                               {
+                                                                   TestId = s.TestId,
+                                                                   StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                                   Question = s.Question,
+                                                                   Answer = s.Answer
+                                                               }).ToList(),
+                                    GetStaffCompetenceTest = (from s in st.StaffCompetenceTest
+                                                              select new GetStaffCompetenceTest
+                                                              {
+                                                                  StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                                  Heading = s.Heading
+                                                              }).ToList(),
+                                    GetStaffHealth = (from s in st.StaffHealth
+                                                      select new GetStaffHealth
+                                                      {
+                                                          StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                          Heading = s.Heading
+                                                      }).ToList(),
+                                    GetStaffInterview = (from s in st.StaffInterview
+                                                         select new GetStaffInterview
+                                                         {
+                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                             Heading = s.Heading
+                                                         }).ToList(),
+                                    GetStaffShadowing = (from s in st.StaffShadowing
+                                                         select new GetStaffShadowing
+                                                         {
+                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                             Heading = s.Heading
+                                                         }).ToList(),
+                                    GetStaffHoliday = (from sh in st.StaffHoliday
+                                                       select new GetStaffHoliday
+                                                       {
+                                                            StartDate = sh.StartDate
+                                                       }).ToList(),
+
                                 }).FirstOrDefault();
 
             return Ok(staffProfile);
@@ -502,7 +594,8 @@ namespace AwesomeCare.API.Controllers
                                     StartDate = st.StartDate.ToString(),
                                     Status = st.Status.ToString(),
                                     Telephone = st.Telephone,
-                                    CanDrive = st.CanDrive == "Yes" ? true : false
+                                    CanDrive = st.CanDrive == "Yes" ? true : false,
+                                    ProfilePix = st.ProfilePix
 
                                 }).ToListAsync();
             return Ok(staffs);
@@ -551,14 +644,17 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest(model);
             }
             var postEntity = Mapper.Map<List<StaffRota>>(model);
-            await _staffRotaRepository.InsertEntities(postEntity);
+
+             await _staffRotaRepository.InsertEntities(postEntity);
 
 
             return Ok();
         }
 
+       
+
         [HttpGet("Rota/Get/{id}")]
-        [ProducesResponseType(statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> GetStaffRota(int id)
         {
             return Ok();
@@ -699,6 +795,32 @@ namespace AwesomeCare.API.Controllers
                                    join st in _staffInfoRepository.Table on fb.StaffPersonalInfoId equals st.StaffPersonalInfoId
                                    join cl in _clientRepository.Table on fb.ClientId equals cl.ClientId
                                    where fb.StaffPersonalInfoId == staffPersonalInfoId.Value
+                                   select new GetStaffRating
+                                   {
+                                       StaffPersonalInfoId = fb.StaffPersonalInfoId,
+                                       Client = cl.Firstname + " " + cl.Middlename + " " + cl.Surname,
+                                       ClientId = fb.ClientId,
+                                       Comment = fb.Comment,
+                                       CommentDate = fb.CommentDate,
+                                       Rating = fb.Rating,
+                                       Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
+                                       StaffRatingId = fb.StaffRatingId
+                                   }
+                            ).ToListAsync();
+            return Ok(feedbacks);
+        }
+        /// <summary>
+        /// Get Client Feedbacks All Staffs
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("ClientFeedback")]
+        [ProducesResponseType(type: typeof(List<GetStaffRating>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetClientFeedback()
+        {
+            var feedbacks = await (from fb in _staffRatingRepository.Table
+                                   join st in _staffInfoRepository.Table on fb.StaffPersonalInfoId equals st.StaffPersonalInfoId
+                                   join cl in _clientRepository.Table on fb.ClientId equals cl.ClientId
                                    select new GetStaffRating
                                    {
                                        StaffPersonalInfoId = fb.StaffPersonalInfoId,

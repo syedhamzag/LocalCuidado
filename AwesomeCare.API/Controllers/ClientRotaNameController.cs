@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using System.Globalization;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -18,9 +19,13 @@ namespace AwesomeCare.API.Controllers
     public class ClientRotaNameController : ControllerBase
     {
         private IGenericRepository<Rota> _rotaRepository;
-        public ClientRotaNameController(IGenericRepository<Rota> rotaRepository)
+        private readonly IGenericRepository<StaffRota> staffRotaRepository;
+
+        public ClientRotaNameController(IGenericRepository<Rota> rotaRepository,
+             IGenericRepository<StaffRota> staffRotaRepository)
         {
             _rotaRepository = rotaRepository;
+            this.staffRotaRepository = staffRotaRepository;
         }
 
         /// <summary>
@@ -101,6 +106,48 @@ namespace AwesomeCare.API.Controllers
             return Ok(getEntity);
 
 
+        }
+
+        /// <summary>
+        /// comma separated dates to exclude, Format yyyy-MM-dd
+        /// </summary>
+        /// <param name="excludeDates"></param>
+        /// <returns></returns>
+        [HttpGet("ExcludeRotaByDates/{excludeDates}")]
+        [ProducesResponseType(type: typeof(List<GetClientRotaName>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult Get(string excludeDates)
+        {
+            string format = "yyyy-MM-dd";
+            //List<DateTime> dateTimes = new List<DateTime>();
+            //if (excludeDates.Contains(","))
+            //{
+            //    var dates = excludeDates.Split(",");
+            //    foreach (var date in dates)
+            //    {
+            //        if (DateTime.TryParseExact(date, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime singleDate))
+            //        {
+            //            if (!dateTimes.Contains(singleDate))
+            //                dateTimes.Add(singleDate);
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    if (DateTime.TryParseExact(excludeDates, format, CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime singleDate))
+            //    {
+            //        if (!dateTimes.Contains(singleDate))
+            //            dateTimes.Add(singleDate);
+            //    }
+            //}
+
+            //var rotas = staffRotaRepository.Table.Where(r => dateTimes.Contains(r.RotaDate)).Select(id => id.RotaId).ToList();
+
+
+           // var getEntities = _rotaRepository.Table.Where(r => !r.Deleted && !rotas.Contains(r.RotaId)).ProjectTo<GetClientRotaName>().ToList();
+            var getEntities = _rotaRepository.Table.Where(r => !r.Deleted ).ProjectTo<GetClientRotaName>().ToList();
+            return Ok(getEntities);
         }
     }
 }

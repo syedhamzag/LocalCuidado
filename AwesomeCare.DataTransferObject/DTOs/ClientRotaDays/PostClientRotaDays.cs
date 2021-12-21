@@ -18,5 +18,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientRotaDays
         public string StopTime { get; set; }
         [Required(ErrorMessage = "Please provide Rota")]
         public int RotaId { get; set; }
+
+        public string WeekDay { get; set; }
+        public int? ClientId { get; set; }
+        public int? ClientRotaTypeId { get; set; }
     }
 }

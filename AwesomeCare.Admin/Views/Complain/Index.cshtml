@@ -1,5 +1,5 @@
-﻿@using AwesomeCare.DataTransferObject.DTOs.ClientComplainRegister;
-@model List<GetClientComplainRegister>
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+@model List<CreateComplainRegister>
 
 @{
     ViewData["Title"] = "Client - Complain Register ";
@@ -16,9 +16,11 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Link</th>
+                            <th>Client</th>
+                            <th>Date</th>
                             <th>Due Date</th>
-                            <th>Remarks</th>
+                            <th>Concern Raised</th>
+                            <th>Status</th>
 
                             <th></th>
                         </tr>
@@ -26,22 +28,30 @@
                     <tbody>
                         @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
                         {
-                        <tr>
-                            <td>@item.index </td>
-                            <td>@item.data.LINK</td>
-                            <td>@item.data.DUEDATE</td>
-                            <td>@item.data.REMARK</td>
-
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                        @Html.ActionLink("Edit", "Edit", "Complain", new { complainId = item.data.ComplainId }, new { @class = "dropdown-item" })
+                            <tr>
+                                <td>@item.index </td>
+                                <td>@item.data.ClientName</td>
+                                <td>@item.data.DATERECIEVED</td>
+                                <td>@item.data.DUEDATE</td>
+                                <td>@item.data.CONCERNSRAISED</td>
+                                <td>@item.data.StatusName</td>
+                                <td>
+                                    @if (item.data.EvidenceFilePath != "No Image")
+                                    {
+                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.data.EvidenceFilePath" style="margin-left:5px;"><i class="fa fa-file"></i></a>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Edit", "Edit", "Complain", new { complainId = item.data.ComplainId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("View", "View", "Complain", new { complainId = item.data.ComplainId }, new { @class = "dropdown-item" })
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         }
 
 
@@ -51,4 +61,20 @@
         </div>
     </div>
 </div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
 
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script>
+        $('.datatables').on('click', '.showfile-btn', function () {
+            const showBtn = $(this);
+            const Id = showBtn.data('id');
+            window.open(Id);
+        });
+    </script>
+}

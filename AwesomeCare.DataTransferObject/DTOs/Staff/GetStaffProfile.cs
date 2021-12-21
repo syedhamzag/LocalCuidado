@@ -1,8 +1,25 @@
-﻿using AwesomeCare.DataTransferObject.Enums;
+﻿using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
+using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
+using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
+using AwesomeCare.DataTransferObject.DTOs.StaffReference;
+using AwesomeCare.DataTransferObject.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
+using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
+using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
+using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
+using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
+using AwesomeCare.DataTransferObject.DTOs.Staff.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
+using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
+using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
+using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
+using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
+using AwesomeCare.DataTransferObject.DTOs.Staff.StaffHoliday;
+using AwesomeCare.DataTransferObject.DTOs.StaffTrainingMatrix;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
@@ -15,12 +32,45 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             References = new List<GetStaffReferee>();
             RegulatoryContacts = new List<GetStaffRegulatoryContact>();
             EmergencyContacts = new List<GetStaffEmergencyContact>();
-        }
+            GetStaffSpotCheck = new List<GetStaffSpotCheck>();
+            GetStaffAdlObs = new List<GetStaffAdlObs>();
+            GetStaffMedComp = new List<GetStaffMedComp>();
+            GetStaffKeyWorkerVoice = new List<GetStaffKeyWorkerVoice>();
+            GetStaffSurvey = new List<GetStaffSurvey>();
+            GetStaffSupervisionAppraisal = new List<GetStaffSupervisionAppraisal>();
+            GetStaffOneToOne = new List<GetStaffOneToOne>();
+            GetStaffReference = new List<GetStaffReference>();
+            GetStaffPersonalityTest = new List<GetStaffPersonalityTest>();
+            GetStaffInfectionControl = new List<GetStaffInfectionControl>();
+            GetStaffCompetenceTest = new List<GetStaffCompetenceTest>();
+            GetStaffHealth = new List<GetStaffHealth>();
+            GetStaffInterview  = new List<GetStaffInterview>();
+            GetStaffShadowing = new List<GetStaffShadowing>();
+            GetStaffHoliday = new List<GetStaffHoliday>();
+            GetStaffTrainingMatrix = new List<GetStaffTrainingMatrix>();
+
+    }
         public List<GetStaffEducation> Education { get; set; }
         public List<GetStaffTraining> Trainings { get; set; }
         public List<GetStaffReferee> References { get; set; }
         public List<GetStaffRegulatoryContact> RegulatoryContacts { get; set; }
         public List<GetStaffEmergencyContact> EmergencyContacts { get; set; }
+        public List<GetStaffSpotCheck> GetStaffSpotCheck { get; set; }
+        public List<GetStaffAdlObs> GetStaffAdlObs { get; set; }
+        public List<GetStaffMedComp> GetStaffMedComp { get; set; }
+        public List<GetStaffKeyWorkerVoice> GetStaffKeyWorkerVoice { get; set; }
+        public List<GetStaffSurvey> GetStaffSurvey { get; set; }
+        public List<GetStaffSupervisionAppraisal> GetStaffSupervisionAppraisal { get; set; }
+        public List<GetStaffOneToOne> GetStaffOneToOne { get; set; }
+        public List<GetStaffReference> GetStaffReference { get; set; }
+        public List<GetStaffPersonalityTest> GetStaffPersonalityTest { get; set; }
+        public List<GetStaffInfectionControl> GetStaffInfectionControl { get; set; }
+        public List<GetStaffCompetenceTest> GetStaffCompetenceTest { get; set; }
+        public List<GetStaffHealth> GetStaffHealth { get; set; }
+        public List<GetStaffInterview> GetStaffInterview{ get; set; }
+        public List<GetStaffShadowing> GetStaffShadowing { get; set; }
+        public List<GetStaffHoliday> GetStaffHoliday { get; set; }
+        public List<GetStaffTrainingMatrix> GetStaffTrainingMatrix { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]

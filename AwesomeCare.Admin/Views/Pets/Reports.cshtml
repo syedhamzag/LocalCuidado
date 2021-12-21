@@ -1,0 +1,52 @@
+﻿@using AwesomeCare.Admin.ViewModels.CarePlan.InterestObjective;
+@model List<CreatePets>
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>All Pets</h2>
+            </div>
+            <div class="body">
+                <table class="table m-b-0 datatables">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Client</th>
+                            <th>Pet Name</th>
+                            <th>Type</th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                            <tr>
+                                <td>@item.index </td>
+                                <td>@item.data.ClientName </td>
+                                <td>@item.data.Name </td>
+                                <td>@item.data.TypeName </td>
+
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Edit", "Edit", "Pets", new { petsId = item.data.PetsId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("View", "View", "Pets", new { petsId = item.data.PetsId }, new { @class = "dropdown-item" })
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

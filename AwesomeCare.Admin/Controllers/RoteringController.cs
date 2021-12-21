@@ -23,6 +23,9 @@ using Newtonsoft.Json;
 using AwesomeCare.Model.Models;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using AutoMapper;
+using System.Globalization;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
+using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -33,17 +36,24 @@ namespace AwesomeCare.Admin.Controllers
         IRotaTaskService _rotaTaskService;
         IRotaDayofWeekService _rotaDayOfWeekService;
         IClientRotaService _clientRotaService;
-        public RoteringController(IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
+        private readonly ILogger<RoteringController> logger;
+
+        public RoteringController(ILogger<RoteringController> logger,
+            IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
         {
             _clientRotaTypeService = clientRotaTypeService;
             _clientRotaNameService = clientRotaNameService;
             _rotaTaskService = rotaTaskService;
             _rotaDayOfWeekService = rotaDayOfWeekService;
             _clientRotaService = clientRotaService;
+            this.logger = logger;
         }
-        public async Task<IActionResult> Index(int client)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(int client, string pin)
         {
-
+            if (pin != "3107")
+                return RedirectToAction("HomeCare", "Client"); 
             RoteringViewModel model = new RoteringViewModel();
             model.ClientId = client;
             var rotaTypes = await _clientRotaTypeService.Get();
@@ -70,7 +80,7 @@ namespace AwesomeCare.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(RoteringViewModel model, IFormCollection formsCollection)
+        public async Task<IActionResult> _Index(RoteringViewModel model, IFormCollection formsCollection)
         {
 
             List<GetClientRotaType> rotaTypes = HttpContext.Session.Get<List<GetClientRotaType>>("rotaTypes");
@@ -123,6 +133,10 @@ namespace AwesomeCare.Admin.Controllers
                             rotaDay.RotaDayofWeekId = int.Parse(weekday);
                             rotaDay.RotaId = int.TryParse(rota, out int rtid) ? rtid : 0;
                             rotaDay.ClientRotaDaysId = int.TryParse(clientRotaDayId, out int dayId) ? dayId : 0;
+                            rotaDay.WeekDay = weekDay.DayofWeek;
+                            rotaDay.ClientId = clientRota.ClientId;
+                            rotaDay.ClientRotaTypeId = clientRota.ClientRotaTypeId;
+
                             // rotaDay.ClientRotaId = int.TryParse(clientRotaid, out int crId) ? crId : 0;
                             //Count the number of Task
                             var tasks = new List<CreateClientRotaTask>();
@@ -148,7 +162,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 if (model.ActionName == "Update")
                 {
-                   
+
                     var result = await _clientRotaService.EditRota(clientRotas, model.ClientId);
                     SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully Updated" : "An Error Occurred" });
                     var content = await result.Content.ReadAsStringAsync();
@@ -187,16 +201,190 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LiveRota()
+        public async Task<IActionResult> LiveRota(string startDate, string stopDate)
         {
-            var date =  DateTime.Now.ToString("yyyy-MM-dd");
-            var rotaAdmin = await _rotaTaskService.LiveRota(date);
+            var liveRotaViewModel = new LiveRota();
+            // var date =DateTime.Now.ToString("yyyy-MM-dd");
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            var rotaAdmin = await _rotaTaskService.LiveRota(sdate, edate);
 
-            return View(rotaAdmin);
+            var clockDifferences = new List<LiveRotaClockDifference>();
+
+            var groupedByPeriod = (from rt in rotaAdmin
+                                   group rt by rt.Period into rtGrp
+                                   select new
+                                   {
+                                       Period = rtGrp.Key,
+                                       Trackers = rtGrp.ToList()
+                                   }).ToList();
+
+            foreach (var grp in groupedByPeriod)
+            {
+                var totalClockDifference = CalculateTotalClockDifference(grp.Trackers);
+                clockDifferences.Add(new LiveRotaClockDifference
+                {
+                    Period = grp.Period,
+                    TotalClockDifference = totalClockDifference
+                });
+            }
+
+            List<GroupLiveRota> groupedRota = null;
+            var todaysDate = DateTime.Now.ToString("yyyy-MM-dd");
+            //if (todaysDate.Equals(sdate))
+            //{
+            var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
+            groupedRota = (from rt in rotaAdmin
+                           group rt by rt.Staff into rtGrp
+                           select new GroupLiveRota
+                           {
+                               StaffName = rtGrp.Key,
+                               Trackers = rtGrp.Where(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+
+                           }).ToList();
+            // }
+            //else
+            //{
+            //groupedRota = (from rt in rotaAdmin
+            //                       group rt by rt.Staff into rtGrp
+            //                       select new GroupLiveRota
+            //                       {
+            //                           StaffName = rtGrp.Key,
+            //                           Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+
+            //                       }).ToList();
+            //}
+
+
+
+
+            liveRotaViewModel.GroupLiveRotas = groupedRota;
+            liveRotaViewModel.ClockDifferences = clockDifferences;
+
+
+
+            return View(liveRotaViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RotaReport(string startDate, string stopDate)
+        {
+            var liveRotaViewModel = new LiveRota();
+            // var date =DateTime.Now.ToString("yyyy-MM-dd");
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            var rotaAdmin = await _rotaTaskService.LiveRota(sdate, edate);
+
+            var clockDifferences = new List<LiveRotaClockDifference>();
+
+            var groupedByPeriod = (from rt in rotaAdmin
+                                   group rt by rt.Period into rtGrp
+                                   select new
+                                   {
+                                       Period = rtGrp.Key,
+                                       Trackers = rtGrp.ToList()
+                                   }).ToList();
+
+            foreach (var grp in groupedByPeriod)
+            {
+                var totalClockDifference = CalculateTotalClockDifference(grp.Trackers);
+                clockDifferences.Add(new LiveRotaClockDifference
+                {
+                    Period = grp.Period,
+                    TotalClockDifference = totalClockDifference
+                });
+            }
+
+
+            var groupedRota = (from rt in rotaAdmin
+                               group rt by rt.Staff into rtGrp
+                               orderby rtGrp.Key
+                               select new GroupLiveRota
+                               {
+                                   StaffName = rtGrp.Key,
+                                   Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
+
+                               }).ToList();
+
+            liveRotaViewModel.GroupLiveRotas = groupedRota;
+            liveRotaViewModel.ClockDifferences = clockDifferences;
+
+            return View(liveRotaViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult RotaReport(IFormCollection formCollection)
+        {
+            string startDate = formCollection["startDate"];
+            string stopDate = formCollection["stopDate"];
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            // var date = DateTime.Now.ToString("yyyy-MM-dd");
+            //var rotaAdmin = await _rotaTaskService.LiveRota(date);
+
+            return RedirectToActionPermanent("RotaReport", new { startDate = sdate, stopDate = edate });
+            // return View(rotaAdmin);
         }
 
 
-        [HttpGet("LiveRota/Edit",Name ="LiveRotaEdit")]
+        TimeSpan CalculateTotalClockDifference(List<LiveTracker> Trackers)
+        {
+            TimeSpan totalTime = new TimeSpan(0, 0, 0);
+            try
+            {
+
+                foreach (var rota in Trackers)
+                {
+                    if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
+                    {
+                        bool isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockIn);
+                        bool isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan clockOut);
+                        if (isClockInTimeValid && isClockOutTimeValid)
+                        {
+                            var clockDiff = clockOut.Subtract(clockIn);
+                            totalTime = totalTime.Add(clockDiff);
+                        }
+                    }
+                }
+
+                return totalTime;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "");
+                return totalTime;
+            }
+        }
+
+        [HttpPost]
+        public IActionResult LiveRota(IFormCollection formCollection)
+        {
+            string startDate = formCollection["startDate"];
+            string stopDate = formCollection["stopDate"];
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            // var date = DateTime.Now.ToString("yyyy-MM-dd");
+            //var rotaAdmin = await _rotaTaskService.LiveRota(date);
+
+            return RedirectToActionPermanent("LiveRota", new { startDate = sdate, stopDate = edate });
+            // return View(rotaAdmin);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRota(IFormCollection formCollection, string deleteId,string redirectAction)
+        {
+            //string id = formCollection["deleteId"];
+            int staffRotaId = int.TryParse(deleteId, out int rtId) ? rtId : 0;
+
+            var result = await _rotaTaskService.DeleteStaffRotaPeriod(staffRotaId);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Rota successfully deleted" : content });
+            return RedirectToActionPermanent(redirectAction);
+        }
+
+        [HttpGet("LiveRota/Edit", Name = "LiveRotaEdit")]
         public async Task<IActionResult> EditLiveRota(int staffRotaPeriodId)
         {
             var staffRotaPeriod = await _rotaTaskService.GetStaffRotaPeriod(staffRotaPeriodId);

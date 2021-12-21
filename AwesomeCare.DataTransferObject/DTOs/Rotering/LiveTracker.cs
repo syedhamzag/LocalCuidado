@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+
 
 namespace AwesomeCare.DataTransferObject.DTOs.Rotering
 {
-  public  class LiveTracker
+    public class LiveTracker
     {
         public LiveTracker()
         {
@@ -21,6 +23,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string ClientPostCode { get; set; }
         public string ClientTelephone { get; set; }
         public string ClientProviderReference { get; set; }
+        public string ClientIdNumber { get; set; }
+        public string ClientLatitude { get; set; }
+        public string ClientLongitude { get; set; }
         public decimal ClientRate { get; set; }
         public int NumberOfStaff { get; set; }
         public int AreaCode { get; set; }
@@ -45,5 +50,82 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string ClockOutAddress { get; set; }
         public string Comment { get; set; }
         public string HandOver { get; set; }
+        public string BowelMovement { get; set; }
+        public string OralCare { get; set; }
+        public string FluidIntake { get; set; }
+
+        public string RowClass(string startTime, DateTimeOffset? clockInTime)
+        {
+            try
+            {
+                //var st = TimeSpan.TryParseExact("6:15", "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out d) ? d : default(TimeSpan);
+                //var ct = TimeSpan.TryParseExact("06:15:00", "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out c) ? c : default(TimeSpan);
+                //var df = st.Subtract(ct);
+
+                string rowColor = "gray";
+                if (clockInTime.HasValue)
+                {
+                    var st = TimeSpan.TryParseExact(startTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
+                    var ct = TimeSpan.TryParseExact(clockInTime.Value.AddHours(1).DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
+                    var df = st.Subtract(ct).TotalMinutes;
+
+                    if (df <= 15 && df >= -15)
+                    {
+                        rowColor = "#dff0d8";//green
+                    }
+                    else if (df > 15 && df <= 30)
+                    {
+                        rowColor = "#ADD8E6";
+
+                    }
+                    else if (df >= -30)
+                    {
+                        rowColor = "yellow";
+                    }
+                    else
+                    {
+                        rowColor = "#A9A9A9";// "#f2dede";//red
+                    }
+
+
+                }
+                else
+                {
+                    rowColor = "#f2dede";
+                }
+
+                return rowColor;//missed;
+            }
+            catch (Exception ex)
+            {
+                return "gray";
+
+            }
+        }
+
+        public string CalculateDistance(Location point1, Location point2)
+        {
+            try
+            {
+                var d1 = point1.Latitude * (Math.PI / 180.0);
+                var num1 = point1.Longitude * (Math.PI / 180.0);
+                var d2 = point2.Latitude * (Math.PI / 180.0);
+                var num2 = point2.Longitude * (Math.PI / 180.0) - num1;
+                var d3 = Math.Pow(Math.Sin((d2 - d1) / 2.0), 2.0) +
+                         Math.Cos(d1) * Math.Cos(d2) * Math.Pow(Math.Sin(num2 / 2.0), 2.0);
+                return Math.Round(((6376500.0 * (2.0 * Math.Atan2(Math.Sqrt(d3), Math.Sqrt(1.0 - d3))) / 1000)),2).ToString();
+            }
+            catch (Exception ex)
+            {
+
+                return "N/A";
+            }
+        }
+    }
+
+    public class Location
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

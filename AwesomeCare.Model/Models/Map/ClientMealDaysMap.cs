@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientMealDays> builder)
         {
-            builder.ToTable("tbl_ClientMealDays");
+            builder.ToTable("tbl_Client_MealDay");
             builder.HasKey(p => p.ClientMealId);
 
             #region Properties
@@ -28,17 +28,14 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.Property(p => p.MEALDETAILS)
              .HasColumnName("MEALDETAILS")
-             .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.HOWTOPREPARE)
              .HasColumnName("HOWTOPREPARE")
-              .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.SEEVIDEO)
              .HasColumnName("SEEVIDEO")
-              .HasMaxLength(255)
              .IsRequired();
 
             builder.Property(p => p.PICTURE)
@@ -49,8 +46,8 @@ namespace AwesomeCare.Model.Models.Map
              .HasColumnName("TypeId")
              .IsRequired();
 
-            builder.Property(p => p.MealId)
-                .HasColumnName("MealId")
+            builder.Property(p => p.ClientMealTypeId)
+                .HasColumnName("ClientMealTypeId")
                 .IsRequired();
 
             #endregion
@@ -68,7 +65,7 @@ namespace AwesomeCare.Model.Models.Map
 
             builder.HasOne(p => p.ClientMealType)
                 .WithMany(p => p.ClientMeal)
-                .HasForeignKey(p => p.MealId)
+                .HasForeignKey(p => p.ClientMealTypeId)
                 .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }

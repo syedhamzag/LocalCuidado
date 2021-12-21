@@ -19,6 +19,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string Firstname { get; set; }
         public string Middlename { get; set; }
         public string Surname { get; set; }
+        public string PreferredName { get; set; }
         public string Email { get; set; }
         public string Address { get; set; }
         public string Latitude { get; set; }
@@ -62,6 +63,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public int NumberOfStaff { get; set; }
         public string UniqueId { get; set; }
         public string PassportFilePath { get; set; }
+
+        public int InvolvingPartyCount { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
         public virtual ICollection<GetClientRegulatoryContactForEdit> RegulatoryContact { get; set; }
     }

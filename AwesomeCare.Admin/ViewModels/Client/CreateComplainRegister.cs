@@ -18,73 +18,66 @@ namespace AwesomeCare.Admin.ViewModels.Client
 
         public CreateComplainRegister()
         {
-            STAFFINVOLVED = new List<GetStaffs>();
-            OFFICERTOACT = new List<GetStaffs>();
+            STAFFINVOLVED = new List<SelectListItem>();
+            OfficerToActList = new List<SelectListItem>();
+            StaffList = new List<SelectListItem>();
         }
         public int ComplainId { get; set; }
         public int ClientId { get; set; }
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
+        
         public IFormFile Evidence { get; set; }
         #region DropDowns
-        public ICollection<GetStaffs> OFFICERTOACT { get; set; }
-        public ICollection<GetStaffs> STAFFINVOLVED { get; set; }
+        public ICollection<SelectListItem> STAFFINVOLVED { get; set; }
+        public ICollection<SelectListItem> OfficerToActList { get; set; }
+        public ICollection<SelectListItem> StaffList { get; set; }
         public ICollection<SelectListItem> Status { get; set; }
         #endregion
 
         #region Tabs
         public string ActiveTab { get; set; } = "complaintregister";
-        // public string[] Tabs { get; set; } = new string[] { "" };
         #endregion
         public string ClientName { get; set; }
+        public string StatusName { get; set; }
+
+        [Required]
+        public string Reference { get; set; }
         #region ComplainRegister
         [Required]
-        [MaxLength(255)]
         public string LINK { get; set; }
         [Required]
-        [MaxLength(50)]
         public string IRFNUMBER { get; set; }
         [Required]
         public DateTime INCIDENTDATE { get; set; }
         [Required]
         public DateTime DATERECIEVED { get; set; }
         [Required]
-        public DateTime? DATEOFACKNOWLEDGEMENT { get; set; }
+        public DateTime DATEOFACKNOWLEDGEMENT { get; set; }
         [Required]
-        [Display(Name = "OFFICERTOACT")]
-        public int OFFICERTOACTId { get; set; }
+        public List<int> OfficerToAct { get; set; }
+        public List<string> OfficerName { get; set; }
         [Required]
-        [MaxLength(255)]
         public string SOURCEOFCOMPLAINTS { get; set; }
-
         [Required]
-        [MaxLength(50)]
         public string COMPLAINANTCONTACT { get; set; }
         [Required]
-        [Display(Name = "STAFFINVOLVED")]
-        public int STAFFId { get; set; }
+        public List<int> StaffName { get; set; }
+        public List<string> Staff_Name { get; set; }
         [Required]
-        [MaxLength(255)]
         public string CONCERNSRAISED { get; set; }
         [Required]
         public DateTime DUEDATE { get; set; }
         [Required]
-        [MaxLength(255)]
         public string LETTERTOSTAFF { get; set; }
         [Required]
-        [MaxLength(255)]
         public string INVESTIGATIONOUTCOME { get; set; }
         [Required]
-        [MaxLength(50)]
         public string ACTIONTAKEN { get; set; }
         [Required]
-        [MaxLength(255)]
         public string FINALRESPONSETOFAMILY  { get; set; }
         [Required]
-        [MaxLength(50)]
         public string ROOTCAUSE { get; set; }
-        [MaxLength(255)]
+        [Required]
         public string REMARK { get; set; }
         [Required]
         [Display(Name = "Status")]

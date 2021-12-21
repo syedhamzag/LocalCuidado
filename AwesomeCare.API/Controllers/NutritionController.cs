@@ -8,7 +8,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
-using AwesomeCare.DataTransferObject.DTOs.ClientMeal;
+using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealType;
 using AwesomeCare.DataTransferObject.DTOs.ClientShopping;
@@ -24,7 +24,6 @@ namespace AwesomeCare.API.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class NutritionController : ControllerBase
     {
         private ILogger<NutritionController> _logger;
@@ -74,12 +73,21 @@ namespace AwesomeCare.API.Controllers
             var clientMealEntity = _dbContext.Set<ClientNutrition>();
             var Nutrition = clientMealEntity.Where(c => c.ClientId == id).Include(d => d.ClientMealDays)
                 .Include(s => s.ClientShopping).Include(s => s.ClientCleaning).Include(s=>s.ClientMealDays).ToList(); //    GetClientMeal(id);//from database
-
+            
+            Nutrition.FirstOrDefault().ShoppingSpecialNote = model.ShoppingSpecialNote;
+            Nutrition.FirstOrDefault().CleaningSpecialNote = model.CleaningSpecialNote;
+            Nutrition.FirstOrDefault().DATEFROM = model.DATEFROM;
+            Nutrition.FirstOrDefault().DATETO = model.DATETO;
+            Nutrition.FirstOrDefault().MealSpecialNote = model.MealSpecialNote;
+            Nutrition.FirstOrDefault().StaffId = model.StaffId;
+            
+            _dbContext.Entry(Nutrition.FirstOrDefault()).State = EntityState.Modified;
+            
             foreach (var Meal in Nutrition.FirstOrDefault().ClientMealDays.ToList())
             {
 
                 //check if Meal in db is part of the Meals in Model if not mark as Deleted
-                var currentMeal = model.ClientMealDays.Select(s=>s).Where(s=>s.MealId == Meal.MealId);
+                var currentMeal = model.ClientMealDays.Select(s=>s).Where(s=>s.ClientMealTypeId == Meal.ClientMealTypeId);
                 if (currentMeal == null)
                 {
                     //delete from database
@@ -97,7 +105,7 @@ namespace AwesomeCare.API.Controllers
                         Meal.HOWTOPREPARE = currentDbMeal.HOWTOPREPARE;
                         Meal.TypeId = currentDbMeal.TypeId;
                         Meal.SEEVIDEO = currentDbMeal.SEEVIDEO;
-                        Meal.MealId = currentDbMeal.MealId;
+                        Meal.ClientMealTypeId = currentDbMeal.ClientMealTypeId;
                         Meal.PICTURE = Meal.PICTURE;
                         Meal.NutritionId = Meal.NutritionId;
 
@@ -169,7 +177,7 @@ namespace AwesomeCare.API.Controllers
             //Meals from Model not in Database
             foreach (var item in model.ClientMealDays)
             {
-                var MealNotInDb = Nutrition[0].ClientMealDays.FirstOrDefault(r => r.MealId == item.MealId);
+                var MealNotInDb = Nutrition[0].ClientMealDays.FirstOrDefault(r => r.ClientMealTypeId == item.ClientMealTypeId);
                 if (MealNotInDb == null)
                 {
                     var postEntity = Mapper.Map<ClientMealDays>(item);
@@ -218,7 +226,7 @@ namespace AwesomeCare.API.Controllers
                                  ClientMealDays = (from d in c.ClientMealDays
                                                    select new GetClientMealDays
                                                    {
-                                                       MealId = d.MealId,
+                                                       ClientMealTypeId = d.ClientMealTypeId,
                                                        ClientMealId = d.ClientMealId,
                                                        MealDayofWeekId = d.MealDayofWeekId,
                                                        MEALDETAILS = d.MEALDETAILS,

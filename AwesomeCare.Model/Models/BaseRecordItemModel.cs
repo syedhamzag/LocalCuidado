@@ -13,6 +13,8 @@ namespace AwesomeCare.Model.Models
         public bool HasGoogleForm { get; set; }
         public string AddLink { get; set; }
         public string ViewLink { get; set; }
+
+        public int ExpiryInMonths { get; set; }
         public virtual BaseRecordModel BaseRecord { get; set; }
     }
 }

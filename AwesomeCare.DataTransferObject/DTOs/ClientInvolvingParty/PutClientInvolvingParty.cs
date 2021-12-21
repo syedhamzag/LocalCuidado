@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
+using System.Text; 
 
 namespace AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty
 {
@@ -20,7 +20,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty
         [MaxLength(225)]
         public string Address { get; set; }
         [Required]
-        [EmailAddress]
         [MaxLength(125)]
         public string Email { get; set; }
         [Required]

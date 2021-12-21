@@ -102,6 +102,8 @@ namespace AwesomeCare.API.Controllers
                             rotaDayDb.StopTime = currentDbRotaDay.StopTime;
                             rotaDayDb.RotaId = currentDbRotaDay.RotaId;
                             rotaDayDb.ClientRotaId = rotaDayDb.ClientRotaId;
+                            rotaDayDb.ClientId = currentDbRotaDay.ClientId;
+                            rotaDayDb.ClientRotaTypeId = currentDbRotaDay.ClientRotaTypeId;
 
                             _dbContext.Entry(rotaDayDb).State = EntityState.Modified;
                         }

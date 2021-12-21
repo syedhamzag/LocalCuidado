@@ -2,12 +2,11 @@
 @using Newtonsoft.Json;
 @using Microsoft.AspNetCore.Mvc.Razor;
 @using Microsoft.Extensions.Configuration;
-@inject IConfiguration configuration
 <!doctype html>
 <html lang="en">
 
 <head>
-    <title>@ViewData["Title"] - Cuidado Admin</title>
+    <title>@ViewData["Title"] - Cuidado Web</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -18,8 +17,21 @@
     <!-- VENDOR CSS -->
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-    <link rel="stylesheet" href="/assets/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.min.css">
+    <!--DataTabales-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
+    <!-- Material Design Bootstrap -->
+    @*<link href="/assets/vendor/mdb/css/mdb.css" rel="stylesheet" />*@
+    <link href="/assets/vendor/boostrap-multiselect2/css/bootstrap-select.css" rel="stylesheet" />
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/chartist/css/chartist.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css">
+    <link rel="stylesheet" href="~/assets/vendor/toastr/toastr.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/jvectormap/jquery-jvectormap-2.0.3.min.css" />
+    <link rel="stylesheet" href="~/assets/vendor/morrisjs/morris.min.css" />
+    <link rel="stylesheet" href="~/assets/vendor/chartist/css/chartist.min.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-timepicker/css/bootstrap-timepicker.min.css" />
@@ -29,30 +41,21 @@
     <link rel="stylesheet" href="/assets/vendor/nouislider/nouislider.min.css" />
     <link rel="stylesheet" href="/assets/vendor/parsleyjs/css/parsley.css">
     <link href="/assets/vendor/Chosen/css/chosen.min.css" rel="stylesheet" />
-
-    <!--DataTabales-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
-    <!-- Material Design Bootstrap -->
-    @*<link href="/assets/vendor/mdb/css/mdb.css" rel="stylesheet" />*@
-    <link href="/assets/vendor/boostrap-multiselect2/css/bootstrap-select.css" rel="stylesheet" />
-
     @RenderSection("VenderStyleSheets", required: false)<!--To be removed because of typo-->
     @RenderSection("VendorStyleSheets", required: false)
 
     @RenderSection("HeaderScripts", required: false)
 
     <!-- MAIN CSS -->
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link href="/assets/css/inbox.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/css/color_skins.css">
+    <link rel="stylesheet" href="~/assets/dark/css/main.css">
+    <link rel="stylesheet" href="~/assets/dark/css/color_skins.css">
 </head>
 <body class="theme-cyan">
 
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
-            <div class="m-t-30"><img src="/assets/images/logo-icon.svg" width="48" height="48" alt="AwesomeCare"></div>
+            <div class="m-t-30"><img src="~/assets/images/logo-icon.svg" width="48" height="48" alt="Lucid"></div>
             <p>Please wait...</p>
         </div>
     </div>
@@ -61,9 +64,13 @@
     <div id="wrapper">
 
         <nav class="navbar navbar-fixed-top">
-            <div class="container">
+            <div class="container-fluid">
+                <div class="navbar-btn">
+                    <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
+                </div>
+
                 <div class="navbar-brand">
-                    <a href="/"><img src="/assets/images/logo.svg" alt="AwesomeCare Logo" class="img-responsive logo"></a>
+                    <a href="index.html"><img src="~/assets/images/logo-white.svg" alt="Lucid Logo" class="img-responsive logo"></a>
                 </div>
 
                 <div class="navbar-right">
@@ -74,14 +81,14 @@
 
                     <div id="navbar-menu">
                         <ul class="nav navbar-nav">
-                            <li class="d-none d-sm-inline-block d-md-none d-lg-inline-block">
-                                <a href="doctor-events.html" class="icon-menu"><i class="icon-calendar"></i></a>
+                            <li>
+                                <a href="doctor-events.html" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-calendar"></i></a>
                             </li>
-                            <li class="d-none d-sm-none d-md-none d-lg-inline-block">
-                                <a href="app-chat.html" class="icon-menu"><i class="icon-bubbles"></i></a>
+                            <li>
+                                <a href="app-chat.html" class="icon-menu d-none d-sm-block"><i class="icon-bubbles"></i></a>
                             </li>
-                            <li class=" d-none d-sm-inline-block">
-                                <a asp-controller="Communication" asp-action="Index" class="icon-menu"><i class="icon-envelope"></i><span class="notification-dot"></span></a>
+                            <li>
+                                <a asp-controller="Communication" asp-action="Index" class="icon-menu d-none d-sm-block"><i class="icon-envelope"></i><span class="notification-dot"></span></a>
                             </li>
                             <li class="dropdown">
                                 <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
@@ -147,20 +154,17 @@
                             </li>
                             <li class="dropdown">
                                 <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
-                                @*<ul class="dropdown-menu user-menu menu-icon">
-                                        <li class="menu-heading">ACCOUNT SETTINGS</li>
-                                        <li><a href="javascript:void(0);"><i class="icon-note"></i> <span>Basic</span></a></li>
-                                        <li><a href="javascript:void(0);"><i class="icon-equalizer"></i> <span>Preferences</span></a></li>
-                                        <li><a href="javascript:void(0);"><i class="icon-lock"></i> <span>Privacy</span></a></li>
-                                        <li><a href="javascript:void(0);"><i class="icon-bell"></i> <span>Notifications</span></a></li>
-                                        <li class="menu-heading">BILLING</li>
-                                        <li><a href="javascript:void(0);"><i class="icon-credit-card"></i> <span>Payments</span></a></li>
-                                        <li><a href="javascript:void(0);"><i class="icon-printer"></i> <span>Invoices</span></a></li>
-                                        <li><a href="javascript:void(0);"><i class="icon-refresh"></i> <span>Renewals</span></a></li>
-                                    </ul>*@
-                            </li>
-                            <li class="d-none d-sm-inline-block">
-                                <a href="#" class="icon-menu rightbar_btn"><i class="icon-settings"></i></a>
+                                <ul class="dropdown-menu user-menu menu-icon">
+                                    <li class="menu-heading">ACCOUNT SETTINGS</li>
+                                    <li><a href="javascript:void(0);"><i class="icon-note"></i> <span>Basic</span></a></li>
+                                    <li><a href="javascript:void(0);"><i class="icon-equalizer"></i> <span>Preferences</span></a></li>
+                                    <li><a href="javascript:void(0);"><i class="icon-lock"></i> <span>Privacy</span></a></li>
+                                    <li><a href="javascript:void(0);"><i class="icon-bell"></i> <span>Notifications</span></a></li>
+                                    <li class="menu-heading">BILLING</li>
+                                    <li><a href="javascript:void(0);"><i class="icon-credit-card"></i> <span>Payments</span></a></li>
+                                    <li><a href="javascript:void(0);"><i class="icon-printer"></i> <span>Invoices</span></a></li>
+                                    <li><a href="javascript:void(0);"><i class="icon-refresh"></i> <span>Renewals</span></a></li>
+                                </ul>
                             </li>
                             <li>
                                 <a asp-controller="Account" asp-action="SignOut" class="icon-menu"><i class="icon-login"></i></a>
@@ -168,245 +172,77 @@
                         </ul>
                     </div>
                 </div>
-
-                <div class="navbar-btn">
-                    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                        <i class="lnr lnr-menu fa fa-bars"></i>
-                    </button>
-                </div>
             </div>
         </nav>
-
-        <div id="rightbar" class="rightbar">
-            <div class="sidebar-scroll">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs-new">
-                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Chat"><i class="icon-book-open"></i></a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#setting"><i class="icon-settings"></i></a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#question"><i class="icon-question"></i></a></li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane animated fadeIn active" id="Chat">
-                        <form>
-                            <div class="input-group m-b-20">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="icon-magnifier"></i></span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="Search...">
-                            </div>
-                        </form>
-                        <ul class="right_chat list-unstyled">
-                            <li class="online">
-                                <a href="javascript:void(0);">
-                                    <div class="media">
-                                        <img class="media-object " src="/assets/images/xs/avatar4.jpg" alt="">
-                                        <div class="media-body">
-                                            <span class="name">Chris Fox</span>
-                                            <span class="message">Designer, Blogger</span>
-                                            <span class="badge badge-outline status"></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="online">
-                                <a href="javascript:void(0);">
-                                    <div class="media">
-                                        <img class="media-object " src="/assets/images/xs/avatar5.jpg" alt="">
-                                        <div class="media-body">
-                                            <span class="name">Joge Lucky</span>
-                                            <span class="message">Java Developer</span>
-                                            <span class="badge badge-outline status"></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="offline">
-                                <a href="javascript:void(0);">
-                                    <div class="media">
-                                        <img class="media-object " src="/assets/images/xs/avatar2.jpg" alt="">
-                                        <div class="media-body">
-                                            <span class="name">Isabella</span>
-                                            <span class="message">CEO, Thememakker</span>
-                                            <span class="badge badge-outline status"></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="offline">
-                                <a href="javascript:void(0);">
-                                    <div class="media">
-                                        <img class="media-object " src="/assets/images/xs/avatar1.jpg" alt="">
-                                        <div class="media-body">
-                                            <span class="name">Folisise Chosielie</span>
-                                            <span class="message">Art director, Movie Cut</span>
-                                            <span class="badge badge-outline status"></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="online">
-                                <a href="javascript:void(0);">
-                                    <div class="media">
-                                        <img class="media-object " src="/assets/images/xs/avatar3.jpg" alt="">
-                                        <div class="media-body">
-                                            <span class="name">Alexander</span>
-                                            <span class="message">Writter, Mag Editor</span>
-                                            <span class="badge badge-outline status"></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane animated fadeIn" id="setting">
-                        <h6>Choose Skin</h6>
-                        <ul class="choose-skin list-unstyled">
-                            <li data-theme="purple">
-                                <div class="purple"></div>
-                                <span>Purple</span>
-                            </li>
-                            <li data-theme="blue">
-                                <div class="blue"></div>
-                                <span>Blue</span>
-                            </li>
-                            <li data-theme="cyan" class="active">
-                                <div class="cyan"></div>
-                                <span>Cyan</span>
-                            </li>
-                            <li data-theme="green">
-                                <div class="green"></div>
-                                <span>Green</span>
-                            </li>
-                            <li data-theme="orange">
-                                <div class="orange"></div>
-                                <span>Orange</span>
-                            </li>
-                            <li data-theme="blush">
-                                <div class="blush"></div>
-                                <span>Blush</span>
-                            </li>
-                        </ul>
-                        <hr>
-                        <h6>General Settings</h6>
-                        <ul class="setting-list list-unstyled">
-                            <li>
-                                <label class="fancy-checkbox">
-                                    <input type="checkbox" name="checkbox">
-                                    <span>Report Panel Usag</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="fancy-checkbox">
-                                    <input type="checkbox" name="checkbox" checked>
-                                    <span>Email Redirect</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="fancy-checkbox">
-                                    <input type="checkbox" name="checkbox" checked>
-                                    <span>Notifications</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="fancy-checkbox">
-                                    <input type="checkbox" name="checkbox">
-                                    <span>Auto Updates</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="fancy-checkbox">
-                                    <input type="checkbox" name="checkbox">
-                                    <span>Offline</span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="fancy-checkbox">
-                                    <input type="checkbox" name="checkbox">
-                                    <span>Location Permission</span>
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-pane animated fadeIn" id="question">
-                        <form>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="icon-magnifier"></i></span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="Search...">
-                            </div>
-                        </form>
-                        <ul class="list-unstyled question">
-                            <li class="menu-heading">HOW-TO</li>
-                            <li><a href="javascript:void(0);">How to Create Campaign</a></li>
-                            <li><a href="javascript:void(0);">Boost Your Sales</a></li>
-                            <li><a href="javascript:void(0);">Website Analytics</a></li>
-                            <li class="menu-heading">ACCOUNT</li>
-                            <li><a href="javascript:void(0);">Cearet New Account</a></li>
-                            <li><a href="javascript:void(0);">Change Password?</a></li>
-                            <li><a href="javascript:void(0);">Privacy &amp; Policy</a></li>
-                            <li class="menu-heading">BILLING</li>
-                            <li><a href="javascript:void(0);">Payment info</a></li>
-                            <li><a href="javascript:void(0);">Auto-Renewal</a></li>
-                            <li class="menu-button m-t-30">
-                                <a href="javascript:void(0);" class="btn btn-primary"><i class="icon-question"></i> Need Help?</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         @await Component.InvokeAsync(nameof(Menu))
-
         <div id="main-content">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="block-header">
                     <div class="row">
                         <div class="col-lg-6 col-md-8 col-sm-12">
-                            <h2> @ViewData["Title"]</h2>
-                            <breadcrumb></breadcrumb>
-
+                            <h2><a href="javascript:void(0)" id="btnHide" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> @ViewData["Title"]</h2>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
+                                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                            </ul>
                         </div>
-
+                        <div class="col-lg-6 col-md-4 col-sm-12 text-right" id="divtextright">
+                            <div class="bh_chart hidden-xs">
+                                <div class="float-left m-r-15">
+                                    <small>Meds Given</small>
+                                    <h6 class="mb-0 mt-1"><i class="icon-user"></i> </h6>
+                                </div>
+                                <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
+                            </div>
+                            <div class="bh_chart hidden-sm">
+                                <div class="float-left m-r-15">
+                                    <small>Meds Rejected</small>
+                                    <h6 class="mb-0 mt-1"><i class="icon-globe"></i> </h6>
+                                </div>
+                                <span class="bh_visits float-right">10,8,9,3,5,8,5</span>
+                            </div>
+                            <div class="bh_chart hidden-sm">
+                                <div class="float-left m-r-15">
+                                    <small>Meds Missed</small>
+                                    <h6 class="mb-0 mt-1"><i class="icon-bubbles"></i> </h6>
+                                </div>
+                                <span class="bh_chats float-right">1,8,5,6,2,4,3,2</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                @if (TempData["OperationStatus"] != null)
-                {
-
-                    var operationStatus = JsonConvert.DeserializeObject<AwesomeCare.Admin.Models.OperationStatus>(TempData["OperationStatus"]?.ToString());
-                    if (operationStatus.IsSuccessful)
-                    {
-                        <div class="alert alert-success alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <i class="fa fa-check-circle"></i> @operationStatus.Message
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <i class="fa fa-times-circle"></i>  @operationStatus.Message
-                        </div>
-                    }
-                }
                 @RenderBody()
-
-
-
             </div>
         </div>
-
     </div>
 
     <!-- Javascript -->
+    <script src="~/assets/dark/bundles/libscripts.bundle.js"></script>
+    <script src="~/assets/dark/bundles/vendorscripts.bundle.js"></script>
 
-    <script src="/assets/bundles/libscripts.bundle.js"></script>
-    <script src="/assets/bundles/vendorscripts.bundle.js"></script>
+    <script src="~/assets/dark/bundles/chartist.bundle.js"></script>
+    <script src="~/assets/dark/bundles/knob.bundle.js"></script> <!-- Jquery Knob-->
+    <script src="~/assets/dark/bundles/flotscripts.bundle.js"></script> <!-- flot charts Plugin Js -->
+    <script src="~/assets/vendor/toastr/toastr.js"></script>
+    <script src="~/assets/vendor/flot-charts/jquery.flot.selection.js"></script>
 
+    <script src="~/assets/dark/bundles/mainscripts.bundle.js"></script>
+    <script src="~/assets/dark/js/index.js"></script>
+
+    <script src="~/assets/dark/bundles/chartist.bundle.js"></script>
+    <script src="~/assets/dark/bundles/morrisscripts.bundle.js"></script><!-- Morris Plugin Js -->
+    <script src="~/assets/dark/bundles/jvectormap.bundle.js"></script> <!-- JVectorMap Plugin Js -->
+
+    <script src="~/assets/dark/js/pages/charts/chart-widgets.js"></script>
+
+    <script src="~/assets/vendor/jquery-sparkline/js/jquery.sparkline.min.js"></script>
+
+    <script src="~/assets/dark/bundles/mainscripts.bundle.js"></script>
+    <script src="~/assets/dark/js/pages/charts/peity_chart.js"></script>
+
+    <script src="~/assets/dark/js/widgets/infobox/infobox-1.js"></script>
+    @*  *@
+    <script src="/assets/vendor/bootstrap/js/bootstrap.js"></script>
     <script src="/assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js -->
     <script src="/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js -->
     <script src="/assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
@@ -415,23 +251,49 @@
     <script src="/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="/assets/vendor/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
     <script src="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js -->
-    <script src="/assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js -->
+    @*<script src="/assets/vendor/nouislider/nouislider.js"></script>*@ <!-- noUISlider Plugin Js -->
     <script src="/assets/vendor/parsleyjs/js/parsley.min.js"></script>
     <script src="/assets/vendor/boostrap-multiselect2/js/bootstrap-select.js"></script>
     <script src="/assets/vendor/Chosen/js/chosen.jquery.min.js"></script>
 
-    <!--DataTables-->
-    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <script src=" https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script>
-    
+    @*  *@
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+
     @RenderSection("VendorScripts", required: false)
 
 
     <script src="/assets/bundles/mainscripts.bundle.js"></script>
     <script src="/assets/js/pages/forms/advanced-form-elements.js"></script>
-
     <script>
+        $('#btnHide').on('click', function () {
+            
+            if ($('#left-sidebar').css('display') == 'none') {
+                $(this).children().first().removeClass('fa fa-arrow-right');
+                $(this).children().first().addClass('fa fa-arrow-left');
+                $('#left-sidebar').css('display', 'block');
+                $('.navbar-right').css('display', 'block');
+                $('#divtextright').css('display', 'block');
+                $('#main-content').css('float', 'right');
+                $('#main-content').css('margin-left', '0px');
+            }
+            else
+            {
+                $(this).children().first().removeClass('fa fa-arrow-left');
+                $(this).children().first().addClass('fa fa-arrow-right');
+                $('#left-sidebar').css('display', 'none');
+                $('.navbar-right').css('display', 'none');
+                $('#divtextright').css('display', 'none');
+                $('#main-content').css('float', 'none');
+                $('#main-content').css('margin-left', '100px');
+            }
+        });
         $(document).ready(function () {
 
             // Multiselect
@@ -458,6 +320,17 @@
             $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
 
             $(".datatables").DataTable();
+
+            $('.datatablesExportExcel').DataTable({
+                dom: 'Blfrtip',
+                buttons: [
+                    'excel'
+                ],
+                aLengthMenu: [
+                    [10, 20, 50, 100, -1],
+                    [10, 20, 50, 100, "All"]
+                ]
+            });
         })
     </script>
 

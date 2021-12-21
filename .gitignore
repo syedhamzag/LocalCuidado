@@ -261,3 +261,12 @@ __pycache__/
 *.pyc
 
 */Uploads/*
+AwesomeCare.IdentityServer/appsettings.Development.json
+AwesomeCare.Admin/appsettings.Development.json
+AwesomeCare.API/appsettings.Development.json
+AwesomeCare.Web/appsettings.Development.json
+AwesomeCare.API/appsettings.Development.json
+AwesomeCare.IdentityServer/appsettings.Development.json
+AwesomeCare.API/appsettings.Development.json
+AwesomeCare.IdentityServer/appsettings.Development.json
+AwesomeCare.IdentityServer/appsettings.Development.json

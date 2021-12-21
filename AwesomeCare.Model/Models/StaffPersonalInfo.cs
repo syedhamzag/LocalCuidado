@@ -19,8 +19,39 @@ namespace AwesomeCare.Model.Models
             StaffRating = new HashSet<StaffRating>();
             StaffBlackList = new HashSet<StaffBlackList>();
             ClientNutrition = new HashSet<ClientNutrition>();
+            ClientLogAudit = new HashSet<ClientLogAudit>();
+            ClientMedAudit = new HashSet<ClientMedAudit>();
+            ClientVoice = new HashSet<ClientVoice>();
+            ClientShopping = new HashSet<ClientShopping>();
+            ClientCleaning = new HashSet<ClientCleaning>();
+            ClientMgtVisit = new HashSet<ClientMgtVisit>();
+            ClientProgram = new HashSet<ClientProgram>();
+            ClientServiceWatch = new HashSet<ClientServiceWatch>();
+            StaffSpotCheck = new HashSet<StaffSpotCheck>();
+            StaffAdlObs = new HashSet<StaffAdlObs>();
+            StaffMedCompObs = new HashSet<StaffMedComp>();
+            StaffKeyWorkerVoice = new HashSet<StaffKeyWorkerVoice>();
+            StaffSurvey = new HashSet<StaffSurvey>();
+            StaffOneToOne = new HashSet<StaffOneToOne>();
+            StaffSupervisionAppraisal = new HashSet<StaffSupervisionAppraisal>();
+            StaffReference = new HashSet<StaffReference>();
+            Equipment = new HashSet<Equipment>();
+            HospitalEntryPersonToTakeAction = new HashSet<HospitalEntryPersonToTakeAction>();
+            HospitalEntryStaffInvolved = new HashSet<HospitalEntryStaffInvolved>();
+            HospitalExitOfficerToTakeAction = new HashSet<HospitalExitOfficerToTakeAction>();
+            StaffPersonalityTest = new HashSet<StaffPersonalityTest>();
+            StaffInfectionControl = new HashSet<StaffInfectionControl>();
+            StaffCompetenceTest = new HashSet<StaffCompetenceTest>();
+            StaffInterview = new HashSet<StaffInterview>();
+            StaffHealth = new HashSet<StaffHealth>();
+            StaffShadowing = new HashSet<StaffShadowing>();
+            StaffHoliday = new HashSet<StaffHoliday>();
+            SetupStaffHoliday = new HashSet<SetupStaffHoliday>();
+            StaffTeamLead = new HashSet<StaffTeamLead>();
+            StaffTrainingMatrix = new HashSet<StaffTrainingMatrix>();
+            FilesAndRecord = new HashSet<FilesAndRecord>();
         }
-       
+
         public int StaffPersonalInfoId { get; set; }
         /// <summary>
         ///  ApplicationUser Id
@@ -85,8 +116,42 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffRating> StaffRating { get; set; }
         public virtual ICollection<StaffBlackList> StaffBlackList { get; set; }
         public virtual ICollection<ClientNutrition> ClientNutrition { get; set; }
+        public virtual ICollection<ClientLogAudit> ClientLogAudit { get; set; }
+        public virtual ICollection<ClientMedAudit> ClientMedAudit { get; set; }
+        public virtual ICollection<ClientVoice> ClientVoice { get; set; }
+        public virtual ICollection<ClientShopping> ClientShopping { get; set; }
+        public virtual ICollection<ClientCleaning> ClientCleaning { get; set; }
+        public virtual ICollection<ClientMgtVisit> ClientMgtVisit { get; set; }
+        public virtual ICollection<ClientProgram> ClientProgram { get; set; }
+        public virtual ICollection<ClientServiceWatch> ClientServiceWatch { get; set; }
+        public virtual ICollection<StaffSpotCheck> StaffSpotCheck { get; set; }
+        public virtual ICollection<StaffAdlObs> StaffAdlObs { get; set; }
+        public virtual ICollection<StaffMedComp> StaffMedCompObs { get; set; }
+        public virtual ICollection<StaffKeyWorkerVoice> StaffKeyWorkerVoice { get; set; }
+        public virtual ICollection<StaffSurvey> StaffSurvey { get; set; }
+        public virtual ICollection<StaffOneToOne> StaffOneToOne { get; set; }
+        public virtual ICollection<StaffSupervisionAppraisal> StaffSupervisionAppraisal { get; set; }
+        public virtual ICollection<StaffReference> StaffReference { get; set; }
+        public virtual ICollection<Equipment> Equipment { get; set; }
+
+        public virtual ICollection<HospitalEntryStaffInvolved> HospitalEntryStaffInvolved { get; set; }
+        public virtual ICollection<HospitalEntryPersonToTakeAction> HospitalEntryPersonToTakeAction { get; set; }
+        public virtual ICollection<HospitalExitOfficerToTakeAction> HospitalExitOfficerToTakeAction { get; set; }
+        public virtual ICollection<StaffPersonalityTest> StaffPersonalityTest { get; set; }
+        public virtual ICollection<StaffCompetenceTest> StaffCompetenceTest { get; set; }
+        public virtual ICollection<StaffInterview> StaffInterview { get; set; }
+        public virtual ICollection<StaffHealth> StaffHealth { get; set; }
+        public virtual ICollection<StaffShadowing> StaffShadowing { get; set; }
 
         public virtual StaffWorkTeam StaffWorkTeam { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
+
+        public virtual ICollection<StaffInfectionControl> StaffInfectionControl { get; set; }
+        public virtual ICollection<StaffHoliday> StaffHoliday { get; set; }
+        public virtual ICollection<SetupStaffHoliday> SetupStaffHoliday { get; set; }
+        public virtual ICollection<StaffTeamLead> StaffTeamLead { get; set; }
+        public virtual ICollection<StaffTrainingMatrix> StaffTrainingMatrix { get; set; }
+        public virtual ICollection<FilesAndRecord> FilesAndRecord { get; set; }
+
     }
 }

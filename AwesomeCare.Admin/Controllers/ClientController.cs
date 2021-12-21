@@ -37,13 +37,14 @@ using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
+using AwesomeCare.Admin.Services.Admin;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class ClientController : BaseController
     {
         private readonly IClientService _clientService;
-        private readonly IClientInvolvingParty _clientInvolvingPartyService;
+        private IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
         private readonly IClientCareDetails _clientCareDetails;
         private readonly IWebHostEnvironment _env;
@@ -54,13 +55,15 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IMedicationService _medicationService;
         private readonly IClientRotaTypeService _clientRotaTypeService;
         private readonly IRotaDayofWeekService _rotaDayofWeekService;
+        private readonly IBaseRecordService _baseRecordService;
 
         public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
             IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService,
-            IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger,
+            IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger, IBaseRecordService baseRecordService,
             IClientCareDetails clientCareDetails, IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) : base(fileUpload)
         {
             _dropboxClient = dropboxClient;
+            _baseRecordService = baseRecordService;
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
             _env = env;
@@ -76,10 +79,16 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> HomeCare()
         {
             var result = await _clientService.GetClients();
-            return View(result);
+            var active = result.Where(s => s.Status == "Active").OrderBy(s=>s.ClientId).ToList();
+            
+            return View(active);
         }
-
-
+        public async Task<IActionResult> HomeCareOther()
+        {
+            var result = await _clientService.GetClients();
+            var active = result.Where(s => s.Status != "Active").OrderBy(s => s.ClientId).ToList();
+            return View(active);
+        }
         #region Registration
 
 
@@ -149,7 +158,7 @@ namespace AwesomeCare.Admin.Controllers
                 if (model == null || !ModelState.IsValid)
                 {
                     //model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
-                   
+
                     return View(model);
                 }
 
@@ -162,21 +171,9 @@ namespace AwesomeCare.Admin.Controllers
                 model.PassportFilePath = path;
                 #endregion
 
-                #region Involving Parties
-                var involvingParties = InvolvingParty(model);
-                model.InvolvingParties = involvingParties;
-                #endregion
-
-                #region Regulatory Contact
-                var regulatoryContact = await RegulatoryContact(model);
-                model.RegulatoryContacts = regulatoryContact;
-                #endregion
+               
 
                 var postClient = Mapper.Map<PostClient>(model);
-                #region CareDetails
-                var careDetails = CareDetails(model);
-                postClient.CareDetails = careDetails;
-                #endregion
                 var json = JsonConvert.SerializeObject(postClient);
                 var result = await _clientService.PostClient(postClient);
 
@@ -360,6 +357,7 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> EditRegistration(int? clientId)
         {
             var result = await _clientService.GetClientForEdit(clientId.Value);
+            result.InvolvingPartyCount = result.InvolvingParties.Count;
             return View(result);
         }
 
@@ -376,9 +374,11 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.ClientImage != null)
             {
-                string folder = $"ClientPassport/{model.Telephone}";
+              //  string folder = $"ClientPassport/{model.Telephone}";
                 string filename = string.Concat(model.Firstname, "_", model.Surname, Path.GetExtension(model.ClientImage.FileName));
-                await this.HttpContext.Request.UpdateDropboxFileAsync(_dropboxClient, model.ClientImage, folder, filename);
+               // await this.HttpContext.Request.UpdateDropboxFileAsync(_dropboxClient, model.ClientImage, folder, filename);
+                var clientProfilePicture = await _fileUpload.UploadFile("clientpassport", true, filename, model.ClientImage.OpenReadStream());
+                model.PassportFilePath = clientProfilePicture;
             }
 
 
@@ -395,8 +395,53 @@ namespace AwesomeCare.Admin.Controllers
             }
             return RedirectToAction("HomeCareDetails", new { clientId = model.ClientId });
         }
-        #endregion
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _EditInvolvingParties(GetClientForEdit model, IFormCollection formcollection)
+        {
 
+            if (model == null || !ModelState.IsValid)
+            {
+                return View("EditRegistration", model);
+            }
+            List<PutClientInvolvingParty> puts = new List<PutClientInvolvingParty>();
+            for (int i = 0; i < model.InvolvingPartyCount; i++)
+            {
+                
+                PutClientInvolvingParty put = new PutClientInvolvingParty();
+
+                int item = int.Parse(formcollection["ClientInvolvingPartyItemId"][i]);
+                int party = int.Parse(formcollection["ClientInvolvingPartyId"][i]);
+
+                var tel = formcollection["Telephone"][i];
+                var address = formcollection["Address"][i];
+                var email = formcollection["Email"][i];
+                var name = formcollection["Name"][i];
+                var relation = formcollection["Relationship"][i];
+                put.ClientInvolvingPartyId = party;
+                put.ClientId = model.ClientId;
+                put.Address = address;
+                put.Email = email;
+                put.Name = name;
+                put.Relationship = relation;
+                put.Telephone = tel;
+                put.ClientInvolvingPartyItemId = item;
+                puts.Add(put);
+            }
+            var json = JsonConvert.SerializeObject(puts);
+            var result = await _clientInvolvingPartyService.Put(puts);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "Client Involving Party successfully updated" : "An Error Occurred" });
+            if (result.IsSuccessStatusCode == false)
+            {
+                model.InvolvingParties = Mapper.Map<List<GetClientInvolvingPartyForEdit>>(puts);
+                // model.DeleteFileFromDisk(_env);
+                return View("EditRegistration", model);
+            }
+            return RedirectToAction("HomeCareDetails", new { clientId = model.ClientId });
+        }
+        #endregion
 
         #region Details
         public async Task<IActionResult> HomeCareDetails(int? clientId)
@@ -406,13 +451,18 @@ namespace AwesomeCare.Admin.Controllers
                 return NotFound();
             }
 
-            var result = await _clientService.GetClient(clientId.Value);
+            GetClient result = await _clientService.GetClient(clientId.Value);
             QRCodeData qrCodeData = _qRCodeGenerator.CreateQrCode(result.UniqueId, QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(5);
             result.QRCode = qrCodeImage.ToByteArray();
+            result.GetBaseRecords = await _baseRecordService.GetBaseRecordItem();
             return View(result);
         }
+        //public List<GetClient> GetCarePlan(int clientId)
+        //{
+        //    var client = _clientService.GetClientCarePlan(clientId);
+        //}
         #endregion
 
         #region Medication

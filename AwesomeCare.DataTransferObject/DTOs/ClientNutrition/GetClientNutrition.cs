@@ -7,7 +7,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
 using AwesomeCare.DataTransferObject.DTOs.ClientShopping;
 
-namespace AwesomeCare.DataTransferObject.DTOs.ClientMeal
+namespace AwesomeCare.DataTransferObject.DTOs.ClientNutrition
 {
     public class GetClientNutrition 
     {

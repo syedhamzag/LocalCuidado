@@ -64,9 +64,9 @@ namespace AwesomeCare.Model.Models.Map
         .IsRequired(false);
 
             builder.Property(p => p.ClockInMode)
-       .HasColumnName("ClockInMode")
-       .HasMaxLength(225)
-       .IsRequired(false);
+               .HasColumnName("ClockInMode")
+               .HasMaxLength(225)
+               .IsRequired(false);
 
             builder.Property(p => p.ClockOutMode)
                .HasColumnName("ClockOutMode")
@@ -82,6 +82,26 @@ namespace AwesomeCare.Model.Models.Map
               .HasColumnName("StopTime")
               .HasMaxLength(50)
               .IsRequired(false);
+
+            builder.Property(p => p.ClientId)
+             .HasColumnName("ClientId")
+             .IsRequired(false);
+
+
+            builder.Property(p => p.BowelMovement)
+             .HasColumnName("BowelMovement")
+             .HasMaxLength(5)
+             .IsRequired(false);
+
+            builder.Property(p => p.OralCare)
+              .HasColumnName("OralCare")
+              .HasMaxLength(5)
+              .IsRequired(false);
+
+            builder.Property(p => p.FluidIntake)
+             .HasColumnName("FluidIntake")
+             .HasMaxLength(5)
+             .IsRequired(false);
 
             #endregion
 

@@ -19,6 +19,31 @@ namespace AwesomeCare.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.AdlObsOfficerToAct", b =>
+                {
+                    b.Property<int>("AdlObsOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("AdlObsOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ObservationId")
+                        .HasColumnName("ObservationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AdlObsOfficerToActId");
+
+                    b.HasIndex("ObservationId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_AdlObs_OfficerToAct");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -84,6 +109,118 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartOfficerToAct", b =>
+                {
+                    b.Property<int>("BMIChartOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BMIChartOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BMIChartId")
+                        .HasColumnName("BMIChartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BMIChartOfficerToActId");
+
+                    b.HasIndex("BMIChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BMIChart_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartPhysician", b =>
+                {
+                    b.Property<int>("BMIChartPhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BMIChartPhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BMIChartId")
+                        .HasColumnName("BMIChartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BMIChartPhysicianId");
+
+                    b.HasIndex("BMIChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BMIChart_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartStaffName", b =>
+                {
+                    b.Property<int>("BMIChartStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BMIChartStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BMIChartId")
+                        .HasColumnName("BMIChartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BMIChartStaffNameId");
+
+                    b.HasIndex("BMIChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BMIChart_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Balance", b =>
+                {
+                    b.Property<int>("BalanceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BalanceId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnName("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Mobility")
+                        .HasColumnName("Mobility")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("BalanceId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Balance");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.BaseRecordItemModel", b =>
                 {
                     b.Property<int>("BaseRecordItemId")
@@ -104,6 +241,12 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnName("Deleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("ExpiryInMonths")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ExpiryInMonths")
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.Property<bool>("HasGoogleForm")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("HasGoogleForm")
@@ -113,8 +256,7 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.Property<string>("ValueName")
                         .IsRequired()
                         .HasColumnName("ValueName")
-                        .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ViewLink")
                         .HasColumnName("ViewLink")
@@ -149,6 +291,515 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasKey("BaseRecordId");
 
                     b.ToTable("tbl_BaseRecord");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BelieveTask", b =>
+                {
+                    b.Property<int>("BelieveTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BestId")
+                        .HasColumnName("BestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReasonableBelieve")
+                        .HasColumnName("ReasonableBelieve")
+                        .HasColumnType("int");
+
+                    b.HasKey("BelieveTaskId");
+
+                    b.HasIndex("BestId");
+
+                    b.ToTable("tbl_BelieveTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BestInterestAssessment", b =>
+                {
+                    b.Property<int>("BestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnName("Position")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Signature")
+                        .IsRequired()
+                        .HasColumnName("Signature")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BestId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_BestInterestAssessment");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagOfficerToAct", b =>
+                {
+                    b.Property<int>("BloodCoagOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BloodCoagOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BloodRecordId")
+                        .HasColumnName("BloodRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BloodCoagOfficerToActId");
+
+                    b.HasIndex("BloodRecordId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BloodCoag_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagPhysician", b =>
+                {
+                    b.Property<int>("BloodCoagPhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BloodCoagPhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BloodRecordId")
+                        .HasColumnName("BloodRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BloodCoagPhysicianId");
+
+                    b.HasIndex("BloodRecordId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BloodCoag_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagStaffName", b =>
+                {
+                    b.Property<int>("BloodCoagStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BloodCoagStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BloodRecordId")
+                        .HasColumnName("BloodRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BloodCoagStaffNameId");
+
+                    b.HasIndex("BloodRecordId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BloodCoag_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressureOfficerToAct", b =>
+                {
+                    b.Property<int>("BloodPressureOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BloodPressureOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BloodPressureId")
+                        .HasColumnName("BloodPressureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BloodPressureOfficerToActId");
+
+                    b.HasIndex("BloodPressureId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BloodPressure_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressurePhysician", b =>
+                {
+                    b.Property<int>("BloodPressurePhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BloodPressurePhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BloodPressureId")
+                        .HasColumnName("BloodPressureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BloodPressurePhysicianId");
+
+                    b.HasIndex("BloodPressureId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BloodPressure_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressureStaffName", b =>
+                {
+                    b.Property<int>("BloodPressureStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BloodPressureStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BloodPressureId")
+                        .HasColumnName("BloodPressureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BloodPressureStaffNameId");
+
+                    b.HasIndex("BloodPressureId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BloodPressure_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempOfficerToAct", b =>
+                {
+                    b.Property<int>("BodyTempOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BodyTempOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BodyTempId")
+                        .HasColumnName("BodyTempId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BodyTempOfficerToActId");
+
+                    b.HasIndex("BodyTempId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BodyTemp_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempPhysician", b =>
+                {
+                    b.Property<int>("BodyTempPhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BodyTempPhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BodyTempId")
+                        .HasColumnName("BodyTempId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BodyTempPhysicianId");
+
+                    b.HasIndex("BodyTempId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BodyTemp_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempStaffName", b =>
+                {
+                    b.Property<int>("BodyTempStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BodyTempStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BodyTempId")
+                        .HasColumnName("BodyTempId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BodyTempStaffNameId");
+
+                    b.HasIndex("BodyTempId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BodyTemp_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementOfficerToAct", b =>
+                {
+                    b.Property<int>("BowelMovementOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BowelMovementOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BowelMovementId")
+                        .HasColumnName("BowelMovementId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BowelMovementOfficerToActId");
+
+                    b.HasIndex("BowelMovementId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BowelMovement_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementPhysician", b =>
+                {
+                    b.Property<int>("BowelMovementPhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BowelMovementPhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BowelMovementId")
+                        .HasColumnName("BowelMovementId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BowelMovementPhysicianId");
+
+                    b.HasIndex("BowelMovementId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BowelMovement_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementStaffName", b =>
+                {
+                    b.Property<int>("BowelMovementStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("BowelMovementStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BowelMovementId")
+                        .HasColumnName("BowelMovementId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BowelMovementStaffNameId");
+
+                    b.HasIndex("BowelMovementId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BowelMovement_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Capacity", b =>
+                {
+                    b.Property<int>("CapacityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CapacityId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Implications")
+                        .IsRequired()
+                        .HasColumnName("Implications")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Pointer")
+                        .HasColumnName("Pointer")
+                        .HasColumnType("int");
+
+                    b.HasKey("CapacityId");
+
+                    b.HasIndex("PersonalDetailId")
+                        .IsUnique();
+
+                    b.ToTable("tbl_Capacity");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.CapacityIndicator", b =>
+                {
+                    b.Property<int>("CapacityIndicatorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CapacityIndicatorId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseRecordId")
+                        .HasColumnName("BaseRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CapacityId")
+                        .HasColumnName("CapacityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CapacityIndicatorId");
+
+                    b.HasIndex("CapacityId");
+
+                    b.ToTable("tbl_CapacityIndicator");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.CareIssuesTask", b =>
+                {
+                    b.Property<int>("CareIssuesTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BestId")
+                        .HasColumnName("BestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Issues")
+                        .HasColumnName("Issues")
+                        .HasColumnType("int");
+
+                    b.HasKey("CareIssuesTaskId");
+
+                    b.HasIndex("BestId");
+
+                    b.ToTable("tbl_CareIssuesTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.CarePlanNutrition", b =>
+                {
+                    b.Property<int>("NutritionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("NutritionId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AvoidFood")
+                        .IsRequired()
+                        .HasColumnName("AvoidFood")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DrinkType")
+                        .IsRequired()
+                        .HasColumnName("DrinkType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EatingDifficulty")
+                        .HasColumnName("EatingDifficulty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FoodIntake")
+                        .HasColumnName("FoodIntake")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FoodStorage")
+                        .HasColumnName("FoodStorage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MealPreparation")
+                        .HasColumnName("MealPreparation")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RiskMitigations")
+                        .IsRequired()
+                        .HasColumnName("RiskMitigations")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ServingMeal")
+                        .IsRequired()
+                        .HasColumnName("ServingMeal")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SpecialDiet")
+                        .IsRequired()
+                        .HasColumnName("SpecialDiet")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ThingsILike")
+                        .HasColumnName("ThingsILike")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WhenRestock")
+                        .IsRequired()
+                        .HasColumnName("WhenRestock")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WhoRestock")
+                        .HasColumnName("WhoRestock")
+                        .HasColumnType("int");
+
+                    b.HasKey("NutritionId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_CarePlanNutrition");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Client", b =>
@@ -270,6 +921,11 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<string>("PreferredName")
+                        .HasColumnName("PreferredName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
                     b.Property<string>("ProviderReference")
                         .IsRequired()
                         .HasColumnName("ProviderReference")
@@ -330,6 +986,396 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsUnique();
 
                     b.ToTable("tbl_Client");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBMIChart", b =>
+                {
+                    b.Property<int>("BMIChartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Height")
+                        .HasColumnName("Height")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberRange")
+                        .HasColumnName("NumberRange")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeeChart")
+                        .HasColumnName("SeeChart")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeeChartAttach")
+                        .HasColumnName("SeeChartAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Weight")
+                        .IsRequired()
+                        .HasColumnName("Weight")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BMIChartId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_BMIChart");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodCoagulationRecord", b =>
+                {
+                    b.Property<int>("BloodRecordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BloodStatus")
+                        .HasColumnName("BloodStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CurrentDose")
+                        .HasColumnName("CurrentDose")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("INR")
+                        .HasColumnName("INR")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Indication")
+                        .HasColumnName("Indication")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NewDose")
+                        .HasColumnName("NewDose")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NewINR")
+                        .HasColumnName("NewINR")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhysicianResponce")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponce")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnName("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnName("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetINR")
+                        .HasColumnName("TargetINR")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TargetINRAttach")
+                        .HasColumnName("TargetINRAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BloodRecordId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_BloodCoagulationRecord");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodPressure", b =>
+                {
+                    b.Property<int>("BloodPressureId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GoalDiastolic")
+                        .HasColumnName("GoalDiastolic")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalSystolic")
+                        .HasColumnName("GoalSystolic")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReadingDiastolic")
+                        .HasColumnName("ReadingDiastolic")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReadingSystolic")
+                        .HasColumnName("ReadingSystolic")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusAttach")
+                        .HasColumnName("StatusAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusImage")
+                        .HasColumnName("StatusImage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BloodPressureId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_BloodPressure");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBodyTemp", b =>
+                {
+                    b.Property<int>("BodyTempId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentReading")
+                        .IsRequired()
+                        .HasColumnName("CurrentReading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeeChart")
+                        .HasColumnName("SeeChart")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeeChartAttach")
+                        .HasColumnName("SeeChartAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetTemp")
+                        .HasColumnName("TargetTemp")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TargetTempAttach")
+                        .HasColumnName("TargetTempAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BodyTempId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_BodyTemp");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBowelMovement", b =>
+                {
+                    b.Property<int>("BowelMovementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Color")
+                        .HasColumnName("Color")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ColorAttach")
+                        .HasColumnName("ColorAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Size")
+                        .HasColumnName("Size")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusAttach")
+                        .HasColumnName("StatusAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusImage")
+                        .HasColumnName("StatusImage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeAttach")
+                        .HasColumnName("TypeAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BowelMovementId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_BowelMovement");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetails", b =>
@@ -440,6 +1486,103 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_ClientCareDetailsTask");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCleaning", b =>
+                {
+                    b.Property<int>("CleaningId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CleaningId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AreasAndItems")
+                        .HasColumnName("AreasAndItems")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DATEFROM")
+                        .HasColumnName("DATEFROM")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DATETO")
+                        .HasColumnName("DATETO")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DAYOFCLEANING")
+                        .IsRequired()
+                        .HasColumnName("DAYOFCLEANING")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("DescOfItem")
+                        .IsRequired()
+                        .HasColumnName("DescOfItem")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnName("Details")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Disposal")
+                        .IsRequired()
+                        .HasColumnName("Disposal")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnName("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LocationOfItem")
+                        .IsRequired()
+                        .HasColumnName("LocationOfItem")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("MinuteAlloted")
+                        .HasColumnName("MinuteAlloted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NutritionId")
+                        .HasColumnName("NutritionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SEEVIDEO")
+                        .IsRequired()
+                        .HasColumnName("SEEVIDEO")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("STAFFId")
+                        .HasColumnName("STAFFId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SafetyHazard")
+                        .IsRequired()
+                        .HasColumnName("SafetyHazard")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("WhereToGet")
+                        .HasColumnName("WhereToGet")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WhereToKeep")
+                        .IsRequired()
+                        .HasColumnName("WhereToKeep")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CleaningId");
+
+                    b.HasIndex("NutritionId");
+
+                    b.HasIndex("STAFFId");
+
+                    b.ToTable("tbl_Client_Cleaning");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientComplainRegister", b =>
                 {
                     b.Property<int>("ComplainId")
@@ -450,20 +1593,17 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.Property<string>("ACTIONTAKEN")
                         .IsRequired()
                         .HasColumnName("ACTIONTAKEN")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("COMPLAINANTCONTACT")
                         .IsRequired()
                         .HasColumnName("COMPLAINANTCONTACT")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CONCERNSRAISED")
                         .IsRequired()
                         .HasColumnName("CONCERNSRAISED")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ClientId")
                         .HasColumnName("ClientId")
@@ -482,15 +1622,13 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EvidenceFilePath")
-                        .IsRequired()
                         .HasColumnName("EvidenceFilePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FINALRESPONSETOFAMILY")
                         .IsRequired()
                         .HasColumnName("FINALRESPONSETOFAMILY")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("INCIDENTDATE")
                         .HasColumnName("INCIDENTDATE")
@@ -499,52 +1637,42 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.Property<string>("INVESTIGATIONOUTCOME")
                         .IsRequired()
                         .HasColumnName("INVESTIGATIONOUTCOME")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IRFNUMBER")
                         .IsRequired()
                         .HasColumnName("IRFNUMBER ")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LETTERTOSTAFF")
                         .IsRequired()
                         .HasColumnName("LETTERTOSTAFF")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LINK")
                         .IsRequired()
                         .HasColumnName("LINK")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.Property<int>("OFFICERTOACTId")
-                        .HasColumnName("OFFICERTOACTId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("REMARK")
                         .IsRequired()
                         .HasColumnName("REMARK")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ROOTCAUSE")
                         .IsRequired()
                         .HasColumnName("ROOTCAUSE")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SOURCEOFCOMPLAINTS")
                         .IsRequired()
                         .HasColumnName("SOURCEOFCOMPLAINTS")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.Property<int>("STAFFId")
-                        .HasColumnName("STAFFId")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StatusId")
                         .HasColumnName("StatusId")
@@ -554,7 +1682,283 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientComplainRegister");
+                    b.ToTable("tbl_Client_ComplainRegister");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientDailyTask", b =>
+                {
+                    b.Property<int>("DailyTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AmendmentDate")
+                        .HasColumnName("AmendmentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DailyTaskName")
+                        .IsRequired()
+                        .HasColumnName("DailyTaskName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DailyTaskId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_ClientDailyTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", b =>
+                {
+                    b.Property<int>("EyeHealthId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CurrentScore")
+                        .HasColumnName("CurrentScore")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MethodUsed")
+                        .HasColumnName("MethodUsed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MethodUsedAttach")
+                        .HasColumnName("MethodUsedAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PatientGlasses")
+                        .HasColumnName("PatientGlasses")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusAttach")
+                        .HasColumnName("StatusAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusImage")
+                        .HasColumnName("StatusImage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetSet")
+                        .HasColumnName("TargetSet")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ToolUsed")
+                        .HasColumnName("ToolUsed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ToolUsedAttach")
+                        .HasColumnName("ToolUsedAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EyeHealthId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_EyeHealthMonitoring");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientFoodIntake", b =>
+                {
+                    b.Property<int>("FoodIntakeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CurrentIntake")
+                        .HasColumnName("CurrentIntake")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Goal")
+                        .HasColumnName("Goal")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusAttach")
+                        .HasColumnName("StatusAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusImage")
+                        .HasColumnName("StatusImage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("FoodIntakeId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_FoodIntake");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientHeartRate", b =>
+                {
+                    b.Property<int>("HeartRateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Age")
+                        .HasColumnName("Age")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BeatsPerSeconds")
+                        .HasColumnName("BeatsPerSeconds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Gender")
+                        .HasColumnName("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GenderAttach")
+                        .HasColumnName("GenderAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeeChart")
+                        .HasColumnName("SeeChart")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeeChartAttach")
+                        .HasColumnName("SeeChartAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetHR")
+                        .HasColumnName("TargetHR")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TargetHRAttach")
+                        .HasColumnName("TargetHRAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("HeartRateId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_HeartRate");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientInvolvingParty", b =>
@@ -643,6 +2047,351 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasName("IX_tbl_ClientInvolvingPartyItem_ItemName");
 
                     b.ToTable("tbl_ClientInvolvingPartyItem");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientLogAudit", b =>
+                {
+                    b.Property<int>("LogAuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRecommended")
+                        .IsRequired()
+                        .HasColumnName("ActionRecommended")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ActionTaken")
+                        .IsRequired()
+                        .HasColumnName("ActionTaken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Communication")
+                        .IsRequired()
+                        .HasColumnName("Communication")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EvidenceFilePath")
+                        .HasColumnName("EvidenceFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EvidenceOfActionTaken")
+                        .IsRequired()
+                        .HasColumnName("EvidenceOfActionTaken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImproperDocumentation")
+                        .IsRequired()
+                        .HasColumnName("ImproperDocumentation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsCareDifference")
+                        .IsRequired()
+                        .HasColumnName("IsCareDifference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsCareExpected")
+                        .IsRequired()
+                        .HasColumnName("IsCareExpected")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LessonLearntAndShared")
+                        .IsRequired()
+                        .HasColumnName("LessonLearntAndShared")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LogURL")
+                        .IsRequired()
+                        .HasColumnName("LogURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameOfAuditor")
+                        .IsRequired()
+                        .HasColumnName("NameOfAuditor")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextDueDate")
+                        .HasColumnName("NextDueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observations")
+                        .IsRequired()
+                        .HasColumnName("Observations")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProperDocumentation")
+                        .IsRequired()
+                        .HasColumnName("ProperDocumentation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RepeatOfIncident")
+                        .HasColumnName("RepeatOfIncident")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RotCause")
+                        .IsRequired()
+                        .HasColumnName("RotCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ThinkingServiceUsers")
+                        .IsRequired()
+                        .HasColumnName("ThinkingServiceUsers")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThinkingStaff")
+                        .IsRequired()
+                        .HasColumnName("ThinkingStaff")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThinkingStaffStop")
+                        .IsRequired()
+                        .HasColumnName("ThinkingStaffStop")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LogAuditId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Client_LogAudit");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealDays", b =>
+                {
+                    b.Property<int>("ClientMealId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ClientMealId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientMealTypeId")
+                        .HasColumnName("ClientMealTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HOWTOPREPARE")
+                        .IsRequired()
+                        .HasColumnName("HOWTOPREPARE")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MEALDETAILS")
+                        .IsRequired()
+                        .HasColumnName("MEALDETAILS")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MealDayofWeekId")
+                        .HasColumnName("MealDayofWeekId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NutritionId")
+                        .HasColumnName("NutritionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PICTURE")
+                        .IsRequired()
+                        .HasColumnName("PICTURE")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SEEVIDEO")
+                        .IsRequired()
+                        .HasColumnName("SEEVIDEO")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnName("TypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClientMealId");
+
+                    b.HasIndex("ClientMealTypeId");
+
+                    b.HasIndex("MealDayofWeekId");
+
+                    b.HasIndex("NutritionId");
+
+                    b.ToTable("tbl_Client_MealDay");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealType", b =>
+                {
+                    b.Property<int>("ClientMealTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ClientMealTypeId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnName("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MealType")
+                        .IsRequired()
+                        .HasColumnName("MealType")
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
+                    b.HasKey("ClientMealTypeId");
+
+                    b.HasIndex("MealType")
+                        .IsUnique()
+                        .HasName("IX_tbl_Client_MealType_MealType");
+
+                    b.ToTable("tbl_Client_MealType");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedAudit", b =>
+                {
+                    b.Property<int>("MedAuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRecommended")
+                        .IsRequired()
+                        .HasColumnName("ActionRecommended")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ActionTaken")
+                        .IsRequired()
+                        .HasColumnName("ActionTaken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EvidenceOfActionTaken")
+                        .IsRequired()
+                        .HasColumnName("EvidenceOfActionTaken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GapsInAdmistration")
+                        .HasColumnName("GapsInAdmistration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HardCopyReview")
+                        .HasColumnName("HardCopyReview")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LessonLearntAndShared")
+                        .IsRequired()
+                        .HasColumnName("LessonLearntAndShared")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LogURL")
+                        .IsRequired()
+                        .HasColumnName("LogURL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MarChartReview")
+                        .HasColumnName("MarChartReview")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MedicationConcern")
+                        .HasColumnName("MedicationConcern")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MedicationInfoUploadEefficiency")
+                        .HasColumnName("MedicationInfoUploadEefficiency")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MedicationSupplyEfficiency")
+                        .HasColumnName("MedicationSupplyEfficiency")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NextDueDate")
+                        .HasColumnName("NextDueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observations")
+                        .IsRequired()
+                        .HasColumnName("Observations")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RepeatOfIncident")
+                        .HasColumnName("RepeatOfIncident")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RightsOfMedication")
+                        .IsRequired()
+                        .HasColumnName("RightsOfMedication")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RotCause")
+                        .IsRequired()
+                        .HasColumnName("RotCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ThinkingServiceUsers")
+                        .IsRequired()
+                        .HasColumnName("ThinkingServiceUsers")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MedAuditId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Client_MedAudit");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedication", b =>
@@ -784,6 +2533,478 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_ClientMedicationPeriod");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMgtVisit", b =>
+                {
+                    b.Property<int>("VisitId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ActionsTakenByMPCC")
+                        .IsRequired()
+                        .HasColumnName("ActionsTakenByMPCC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EvidenceOfActionTaken")
+                        .IsRequired()
+                        .HasColumnName("EvidenceOfActionTaken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HowToComplain")
+                        .HasColumnName("HowToComplain")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImprovementExpect")
+                        .IsRequired()
+                        .HasColumnName("ImprovementExpect")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LessonLearntAndShared")
+                        .IsRequired()
+                        .HasColumnName("LessonLearntAndShared")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observation")
+                        .IsRequired()
+                        .HasColumnName("Observation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RateManagers")
+                        .HasColumnName("RateManagers")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RateServiceRecieving")
+                        .HasColumnName("RateServiceRecieving")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RotCause")
+                        .IsRequired()
+                        .HasColumnName("RotCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ServiceRecommended")
+                        .HasColumnName("ServiceRecommended")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VisitId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Client_MgtVisit");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientNutrition", b =>
+                {
+                    b.Property<int>("NutritionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("NutritionId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CleaningSpecialNote")
+                        .IsRequired()
+                        .HasColumnName("CleaningSpecialNote")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DATEFROM")
+                        .HasColumnName("DATEFROM")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DATETO")
+                        .HasColumnName("DATETO")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MealSpecialNote")
+                        .IsRequired()
+                        .HasColumnName("MealSpecialNote")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShoppingSpecialNote")
+                        .IsRequired()
+                        .HasColumnName("ShoppingSpecialNote")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NutritionId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Client_Nutrition");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientOxygenLvl", b =>
+                {
+                    b.Property<int>("OxygenLvlId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentReading")
+                        .IsRequired()
+                        .HasColumnName("CurrentReading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeeChart")
+                        .HasColumnName("SeeChart")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeeChartAttach")
+                        .HasColumnName("SeeChartAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetOxygen")
+                        .HasColumnName("TargetOxygen")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TargetOxygenAttach")
+                        .HasColumnName("TargetOxygenAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("OxygenLvlId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_Oxygenlvl");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientPainChart", b =>
+                {
+                    b.Property<int>("PainChartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Location")
+                        .HasColumnName("Location")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LocationAttach")
+                        .HasColumnName("LocationAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PainLvl")
+                        .HasColumnName("PainLvl")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusAttach")
+                        .HasColumnName("StatusAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusImage")
+                        .HasColumnName("StatusImage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeAttach")
+                        .HasColumnName("TypeAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PainChartId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_PainChart");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientProgram", b =>
+                {
+                    b.Property<int>("ProgramId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DaysOfChoice")
+                        .HasColumnName("DaysOfChoice")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DetailsOfProgram")
+                        .HasColumnName("DetailsOfProgram")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observation")
+                        .IsRequired()
+                        .HasColumnName("Observation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PlaceLocationProgram")
+                        .HasColumnName("PlaceLocationProgram")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProgramOfChoice")
+                        .HasColumnName("ProgramOfChoice")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProgramId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Client_Program");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientPulseRate", b =>
+                {
+                    b.Property<int>("PulseRateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Chart")
+                        .IsRequired()
+                        .HasColumnName("Chart")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentPulse")
+                        .IsRequired()
+                        .HasColumnName("CurrentPulse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeeChart")
+                        .HasColumnName("SeeChart")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeeChartAttach")
+                        .HasColumnName("SeeChartAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TargetPulse")
+                        .HasColumnName("TargetPulse")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TargetPulseAttach")
+                        .HasColumnName("TargetPulseAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("PulseRateId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_PulseRate");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRegulatoryContact", b =>
                 {
                     b.Property<int>("ClientRegulatoryContactId")
@@ -854,8 +3075,16 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ClientRotaId")
                         .HasColumnName("ClientRotaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientRotaTypeId")
+                        .HasColumnName("ClientRotaTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("RotaDayofWeekId")
@@ -875,6 +3104,11 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.Property<string>("StopTime")
                         .IsRequired()
                         .HasColumnName("StopTime")
+                        .HasColumnType("nvarchar(25)")
+                        .HasMaxLength(25);
+
+                    b.Property<string>("WeekDay")
+                        .HasColumnName("WeekDay")
                         .HasColumnType("nvarchar(25)")
                         .HasMaxLength(25);
 
@@ -939,6 +3173,86 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasName("IX_tbl_ClientRotaType_RotaType");
 
                     b.ToTable("tbl_ClientRotaType");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientSeizure", b =>
+                {
+                    b.Property<int>("SeizureId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Often")
+                        .HasColumnName("Often")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeizureLength")
+                        .HasColumnName("SeizureLength")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeizureLengthAttach")
+                        .HasColumnName("SeizureLengthAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeizureType")
+                        .HasColumnName("SeizureType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SeizureTypeAttach")
+                        .HasColumnName("SeizureTypeAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusAttach")
+                        .HasColumnName("StatusAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusImage")
+                        .HasColumnName("StatusImage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WhatHappened")
+                        .IsRequired()
+                        .HasColumnName("WhatHappened")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SeizureId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_Seizure");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetail", b =>
@@ -1033,6 +3347,385 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("ClientServiceDetailId");
 
                     b.ToTable("tbl_ClientServiceDetailReceipt");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceWatch", b =>
+                {
+                    b.Property<int>("WatchId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Contact")
+                        .HasColumnName("Contact")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Details")
+                        .HasColumnName("Details")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Incident")
+                        .HasColumnName("Incident")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Observation")
+                        .IsRequired()
+                        .HasColumnName("Observation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("WatchId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Client_ServiceWatch");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientShopping", b =>
+                {
+                    b.Property<int>("ShoppingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ShoppingId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnName("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DATEFROM")
+                        .HasColumnName("DATEFROM")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DATETO")
+                        .HasColumnName("DATETO")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DAYOFSHOPPING")
+                        .IsRequired()
+                        .HasColumnName("DAYOFSHOPPING")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnName("Description")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnName("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Item")
+                        .IsRequired()
+                        .HasColumnName("Item")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("LocationOfPurchase")
+                        .IsRequired()
+                        .HasColumnName("LocationOfPurchase")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("MeansOfPurchase")
+                        .IsRequired()
+                        .HasColumnName("MeansOfPurchase")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<int>("NutritionId")
+                        .HasColumnName("NutritionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnName("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("STAFFId")
+                        .HasColumnName("STAFFId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShoppingId");
+
+                    b.HasIndex("NutritionId");
+
+                    b.HasIndex("STAFFId");
+
+                    b.ToTable("tbl_Client_Shopping");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientVoice", b =>
+                {
+                    b.Property<int>("VoiceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ActionsTakenByMPCC")
+                        .IsRequired()
+                        .HasColumnName("ActionsTakenByMPCC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AreasOfImprovements")
+                        .IsRequired()
+                        .HasColumnName("AreasOfImprovements")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EvidenceOfActionTaken")
+                        .IsRequired()
+                        .HasColumnName("EvidenceOfActionTaken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HealthGoalLongTerm")
+                        .IsRequired()
+                        .HasColumnName("HealthGoalLongTerm")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HealthGoalShortTerm")
+                        .IsRequired()
+                        .HasColumnName("HealthGoalShortTerm")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InterestedInPrograms")
+                        .HasColumnName("InterestedInPrograms")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LessonLearntAndShared")
+                        .IsRequired()
+                        .HasColumnName("LessonLearntAndShared")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OfficeStaffSupport")
+                        .HasColumnName("OfficeStaffSupport")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RateServiceRecieving")
+                        .HasColumnName("RateServiceRecieving")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RateStaffAttending")
+                        .HasColumnName("RateStaffAttending")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RotCause")
+                        .IsRequired()
+                        .HasColumnName("RotCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SomethingSpecial")
+                        .IsRequired()
+                        .HasColumnName("SomethingSpecial")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VoiceId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Client_Voice");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientWoundCare", b =>
+                {
+                    b.Property<int>("WoundCareId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Goal")
+                        .HasColumnName("Goal")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Location")
+                        .HasColumnName("Location")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LocationAttach")
+                        .HasColumnName("LocationAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MeasurementAttach")
+                        .HasColumnName("MeasurementAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Measurment")
+                        .HasColumnName("Measurment")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PainLvl")
+                        .HasColumnName("PainLvl")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnName("PhysicianResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StatusAttach")
+                        .HasColumnName("StatusAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusImage")
+                        .HasColumnName("StatusImage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TypeAttach")
+                        .HasColumnName("TypeAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UlcerStage")
+                        .HasColumnName("UlcerStage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UlcerStageAttach")
+                        .HasColumnName("UlcerStageAttach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WoundCause")
+                        .HasColumnName("WoundCause")
+                        .HasColumnType("int");
+
+                    b.HasKey("WoundCareId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_WoundCare");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Communication", b =>
@@ -1161,6 +3854,1499 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_Company");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.ComplainOfficerToAct", b =>
+                {
+                    b.Property<int>("ComplainOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ComplainOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ComplainId")
+                        .HasColumnName("ComplainId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ComplainOfficerToActId");
+
+                    b.HasIndex("ComplainId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Complain_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ComplainStaffName", b =>
+                {
+                    b.Property<int>("ComplainStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ComplainStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ComplainId")
+                        .HasColumnName("ComplainId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ComplainStaffNameId");
+
+                    b.HasIndex("ComplainId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Complain_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentCare", b =>
+                {
+                    b.Property<int>("CareId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("CareId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Name")
+                        .HasColumnName("Name")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Signature")
+                        .HasColumnName("Signature")
+                        .HasColumnType("int");
+
+                    b.HasKey("CareId");
+
+                    b.HasIndex("PersonalDetailId")
+                        .IsUnique();
+
+                    b.ToTable("tbl_ConsentCare");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentData", b =>
+                {
+                    b.Property<int>("DataId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("DataId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Name")
+                        .HasColumnName("Name")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Signature")
+                        .HasColumnName("Signature")
+                        .HasColumnType("int");
+
+                    b.HasKey("DataId");
+
+                    b.HasIndex("PersonalDetailId")
+                        .IsUnique();
+
+                    b.ToTable("tbl_ConsentData");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandLine", b =>
+                {
+                    b.Property<int>("LandlineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("LandlineId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Name")
+                        .HasColumnName("Name")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Signature")
+                        .HasColumnName("Signature")
+                        .HasColumnType("int");
+
+                    b.HasKey("LandlineId");
+
+                    b.HasIndex("PersonalDetailId")
+                        .IsUnique();
+
+                    b.ToTable("tbl_ConsentLandLine");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandlineLog", b =>
+                {
+                    b.Property<int>("ConsentLandlineLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ConsentLandlineLogId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseRecordId")
+                        .HasColumnName("BaseRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LandlineId")
+                        .HasColumnName("LandlineId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConsentLandlineLogId");
+
+                    b.HasIndex("LandlineId");
+
+                    b.ToTable("tbl_ConsentLandlineLog");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCall", b =>
+                {
+                    b.Property<int>("DutyOnCallId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionTaken")
+                        .IsRequired()
+                        .HasColumnName("ActionTaken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientInitial")
+                        .IsRequired()
+                        .HasColumnName("ClientInitial")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfCall")
+                        .HasColumnName("DateOfCall")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfIncident")
+                        .HasColumnName("DateOfIncident")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DetailsOfIncident")
+                        .IsRequired()
+                        .HasColumnName("DetailsOfIncident")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DetailsRequired")
+                        .IsRequired()
+                        .HasColumnName("DetailsRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NotificationStatus")
+                        .HasColumnName("NotificationStatus")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("NotifyPerson")
+                        .HasColumnName("NotifyPerson")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("NotifyStaffInvolved")
+                        .HasColumnName("NotifyStaffInvolved")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PositionOfReporting")
+                        .HasColumnName("PositionOfReporting")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Priority")
+                        .HasColumnName("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RefNo")
+                        .IsRequired()
+                        .HasColumnName("RefNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReportedBy")
+                        .IsRequired()
+                        .HasColumnName("ReportedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("StaffBlacklisted")
+                        .HasColumnName("StaffBlacklisted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnName("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TelephoneToCall")
+                        .HasColumnName("TelephoneToCall")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeOfCall")
+                        .HasColumnName("TimeOfCall")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TypeOfDutyCall")
+                        .HasColumnName("TypeOfDutyCall")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeOfIncident")
+                        .HasColumnName("TypeOfIncident")
+                        .HasColumnType("int");
+
+                    b.HasKey("DutyOnCallId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_DutyOnCall");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCallPersonResponsible", b =>
+                {
+                    b.Property<int>("PersonResponsibleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PersonResponsibleId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DutyOnCallId")
+                        .HasColumnName("DutyOnCallId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonResponsibleId");
+
+                    b.HasIndex("DutyOnCallId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_DutyOnCallPersonResponsible");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCallPersonToAct", b =>
+                {
+                    b.Property<int>("PersonToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PersonToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DutyOnCallId")
+                        .HasColumnName("DutyOnCallId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonToActId");
+
+                    b.HasIndex("DutyOnCallId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_DutyOnCallPersonToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Enotice", b =>
+                {
+                    b.Property<int>("EnoticeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnName("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnName("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnName("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublishBy")
+                        .IsRequired()
+                        .HasColumnName("PublishBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PublishTo")
+                        .HasColumnName("PublishTo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Video")
+                        .IsRequired()
+                        .HasColumnName("Video")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EnoticeId");
+
+                    b.HasIndex("PublishTo");
+
+                    b.ToTable("tbl_Enotice_");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Equipment", b =>
+                {
+                    b.Property<int>("EquipmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("EquipmentId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Location")
+                        .HasColumnName("Location")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Name")
+                        .HasColumnName("Name")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NextServiceDate")
+                        .HasColumnName("NextServiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PersonToAct")
+                        .HasColumnName("PersonToAct")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ServiceDate")
+                        .HasColumnName("ServiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("EquipmentId");
+
+                    b.HasIndex("PersonToAct");
+
+                    b.HasIndex("PersonalDetailId");
+
+                    b.ToTable("tbl_Equipment");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthOfficerToAct", b =>
+                {
+                    b.Property<int>("EyeHealthOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("EyeHealthOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EyeHealthId")
+                        .HasColumnName("EyeHealthId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EyeHealthOfficerToActId");
+
+                    b.HasIndex("EyeHealthId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_EyeHealth_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthPhysician", b =>
+                {
+                    b.Property<int>("EyeHealthPhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("EyeHealthPhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EyeHealthId")
+                        .HasColumnName("EyeHealthId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EyeHealthPhysicianId");
+
+                    b.HasIndex("EyeHealthId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_EyeHealth_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthStaffName", b =>
+                {
+                    b.Property<int>("EyeHealthStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("EyeHealthStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EyeHealthId")
+                        .HasColumnName("EyeHealthId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EyeHealthStaffNameId");
+
+                    b.HasIndex("EyeHealthId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_EyeHealth_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.FilesAndRecord", b =>
+                {
+                    b.Property<int>("FilesAndRecordId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnName("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FilesAndRecordId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_FilesAndRecord");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakeOfficerToAct", b =>
+                {
+                    b.Property<int>("FoodIntakeOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("FoodIntakeOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FoodIntakeId")
+                        .HasColumnName("FoodIntakeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FoodIntakeOfficerToActId");
+
+                    b.HasIndex("FoodIntakeId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_FoodIntake_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakePhysician", b =>
+                {
+                    b.Property<int>("FoodIntakePhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("FoodIntakePhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FoodIntakeId")
+                        .HasColumnName("FoodIntakeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FoodIntakePhysicianId");
+
+                    b.HasIndex("FoodIntakeId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_FoodIntake_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakeStaffName", b =>
+                {
+                    b.Property<int>("FoodIntakeStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("FoodIntakeStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FoodIntakeId")
+                        .HasColumnName("FoodIntakeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FoodIntakeStaffNameId");
+
+                    b.HasIndex("FoodIntakeId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_FoodIntake_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HealthAndLiving", b =>
+                {
+                    b.Property<int>("HLId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HLId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AbilityToRead")
+                        .HasColumnName("AbilityToRead")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AlcoholicDrink")
+                        .HasColumnName("AlcoholicDrink")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllowChats")
+                        .HasColumnName("AllowChats")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BriefHealth")
+                        .IsRequired()
+                        .HasColumnName("BriefHealth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CareSupport")
+                        .IsRequired()
+                        .HasColumnName("CareSupport")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConstraintAttachment")
+                        .IsRequired()
+                        .HasColumnName("ConstraintAttachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConstraintDetails")
+                        .IsRequired()
+                        .HasColumnName("ConstraintDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ConstraintRequired")
+                        .HasColumnName("ConstraintRequired")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContinenceIssue")
+                        .HasColumnName("ContinenceIssue")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContinenceNeeds")
+                        .IsRequired()
+                        .HasColumnName("ContinenceNeeds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContinenceSource")
+                        .IsRequired()
+                        .HasColumnName("ContinenceSource")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DehydrationRisk")
+                        .HasColumnName("DehydrationRisk")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EatingWithStaff")
+                        .HasColumnName("EatingWithStaff")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Email")
+                        .HasColumnName("Email")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FamilyUpdate")
+                        .HasColumnName("FamilyUpdate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FinanceManagement")
+                        .HasColumnName("FinanceManagement")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LaundaryRequired")
+                        .HasColumnName("LaundaryRequired")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LetterOpening")
+                        .HasColumnName("LetterOpening")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LifeStyle")
+                        .HasColumnName("LifeStyle")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MeansOfComm")
+                        .HasColumnName("MeansOfComm")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MovingAndHandling")
+                        .IsRequired()
+                        .HasColumnName("MovingAndHandling")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NeighbourInvolment")
+                        .HasColumnName("NeighbourInvolment")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ObserveHealth")
+                        .IsRequired()
+                        .HasColumnName("ObserveHealth")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostalService")
+                        .HasColumnName("PostalService")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PressureSore")
+                        .HasColumnName("PressureSore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoppingRequired")
+                        .HasColumnName("ShoppingRequired")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Smoking")
+                        .HasColumnName("Smoking")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SpecialCaution")
+                        .IsRequired()
+                        .HasColumnName("SpecialCaution")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SpecialCleaning")
+                        .HasColumnName("SpecialCleaning")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupportToBed")
+                        .IsRequired()
+                        .HasColumnName("SupportToBed")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TVandMusic")
+                        .HasColumnName("TVandMusic")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeaChocolateCoffee")
+                        .HasColumnName("TeaChocolateCoffee")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TextFontSize")
+                        .HasColumnName("TextFontSize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VideoCallRequired")
+                        .HasColumnName("VideoCallRequired")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WakeUp")
+                        .IsRequired()
+                        .HasColumnName("WakeUp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HLId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_HealthAndLiving");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HealthTask", b =>
+                {
+                    b.Property<int>("HealthTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BestId")
+                        .HasColumnName("BestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HeadingId")
+                        .HasColumnName("HeadingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("HealthTaskId");
+
+                    b.HasIndex("BestId");
+
+                    b.ToTable("tbl_HealthTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HealthTask2", b =>
+                {
+                    b.Property<int>("HealthTask2Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BestId")
+                        .HasColumnName("BestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Heading2Id")
+                        .HasColumnName("Heading2Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnName("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("HealthTask2Id");
+
+                    b.HasIndex("BestId");
+
+                    b.ToTable("tbl_HealthTask2");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HeartRateOfficerToAct", b =>
+                {
+                    b.Property<int>("HeartRateOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HeartRateOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("HeartRateId")
+                        .HasColumnName("HeartRateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HeartRateOfficerToActId");
+
+                    b.HasIndex("HeartRateId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_HeartRate_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HeartRatePhysician", b =>
+                {
+                    b.Property<int>("HeartRatePhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HeartRatePhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("HeartRateId")
+                        .HasColumnName("HeartRateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HeartRatePhysicianId");
+
+                    b.HasIndex("HeartRateId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_HeartRate_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HeartRateStaffName", b =>
+                {
+                    b.Property<int>("HeartRateStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HeartRateStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("HeartRateId")
+                        .HasColumnName("HeartRateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HeartRateStaffNameId");
+
+                    b.HasIndex("HeartRateId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_HeartRate_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HistoryOfFall", b =>
+                {
+                    b.Property<int>("HistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HistoryId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Cause")
+                        .IsRequired()
+                        .HasColumnName("Cause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnName("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prevention")
+                        .IsRequired()
+                        .HasColumnName("Prevention")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HistoryId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_HistoryOfFall");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessment", b =>
+                {
+                    b.Property<int>("HomeRiskAssessmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnName("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HomeRiskAssessmentId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_HomeRiskAssessment");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessmentTask", b =>
+                {
+                    b.Property<int>("HomeRiskAssessmentTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HomeRiskAssessmentId")
+                        .HasColumnName("HomeRiskAssessmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("HomeRiskAssessmentTaskId");
+
+                    b.HasIndex("HomeRiskAssessmentId");
+
+                    b.ToTable("tbl_HomeRiskAssessmentTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntry", b =>
+                {
+                    b.Property<int>("HospitalEntryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CauseofAdmission")
+                        .IsRequired()
+                        .HasColumnName("CauseofAdmission")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ConditionOfAdmission")
+                        .HasColumnName("ConditionOfAdmission")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IsFamilyInformed")
+                        .HasColumnName("IsFamilyInformed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IsHomeCleaned")
+                        .HasColumnName("IsHomeCleaned")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastDateofAdmission")
+                        .HasColumnName("LastDateofAdmission")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MeansOfTransport")
+                        .HasColumnName("MeansOfTransport")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NameParamedicStaff")
+                        .HasColumnName("NameParamedicStaff")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParamicStaffTeamNo")
+                        .HasColumnName("ParamicStaffTeamNo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PossibleDateReturn")
+                        .HasColumnName("PossibleDateReturn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PurposeofAdmission")
+                        .IsRequired()
+                        .HasColumnName("PurposeofAdmission")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnName("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("URLLINK")
+                        .IsRequired()
+                        .HasColumnName("URLLINK")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HospitalEntryId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_HospitalEntry");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryPersonToTakeAction", b =>
+                {
+                    b.Property<int>("HospitalEntryPersonToTakeActionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HospitalEntryPersonToTakeActionId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("HospitalEntryId")
+                        .HasColumnName("HospitalEntryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HospitalEntryPersonToTakeActionId");
+
+                    b.HasIndex("HospitalEntryId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_HospitalEntryPersonToTakeAction");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryStaffInvolved", b =>
+                {
+                    b.Property<int>("HospitalEntryStaffInvolvedId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HospitalEntryStaffInvolvedId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("HospitalEntryId")
+                        .HasColumnName("HospitalEntryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HospitalEntryStaffInvolvedId");
+
+                    b.HasIndex("HospitalEntryId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_HospitalEntryStaffInvolved");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
+                {
+                    b.Property<int>("HospitalExitId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AreContinentProductNeedAndAvailable")
+                        .HasColumnName("AreContinentProductNeedAndAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreEqipmentNeededAvailable")
+                        .HasColumnName("AreEqipmentNeededAvailable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreLocalSupportOrProgramNeeded")
+                        .HasColumnName("AreLocalSupportOrProgramNeeded")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AreStaffTrainnedOnEquipmentNeeded")
+                        .HasColumnName("AreStaffTrainnedOnEquipmentNeeded")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ConditionOnDischarge")
+                        .HasColumnName("ConditionOnDischarge")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ContactIncaseOfReAdmission")
+                        .IsRequired()
+                        .HasColumnName("ContactIncaseOfReAdmission")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IsCarePlanUpdated")
+                        .HasColumnName("IsCarePlanUpdated")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IsGrosSriesAvaible")
+                        .HasColumnName("IsGrosSriesAvaible")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IsHomeCleaned")
+                        .HasColumnName("IsHomeCleaned")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IsMedicationAvaialable")
+                        .HasColumnName("IsMedicationAvaialable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IsServiceUseronRota")
+                        .HasColumnName("IsServiceUseronRota")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModeOfMeansOfTrasportBackHome")
+                        .HasColumnName("ModeOfMeansOfTrasportBackHome")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfStaffRequiredOnDischarge")
+                        .HasColumnName("NumberOfStaffRequiredOnDischarge")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PurposeofAdmission")
+                        .IsRequired()
+                        .HasColumnName("PurposeofAdmission")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReablementRequired")
+                        .HasColumnName("ReablementRequired")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnName("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnName("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("URLLINK")
+                        .IsRequired()
+                        .HasColumnName("URLLINK")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhichSupportIsNeeded")
+                        .IsRequired()
+                        .HasColumnName("WhichSupportIsNeeded")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("isLittleCashAvailableForServiceUser")
+                        .HasColumnName("isLittleCashAvailableForServiceUser")
+                        .HasColumnType("int");
+
+                    b.Property<int>("isRotaTeamInformed")
+                        .HasColumnName("isRotaTeamInformed")
+                        .HasColumnType("int");
+
+                    b.HasKey("HospitalExitId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_HospitalExit");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExitOfficerToTakeAction", b =>
+                {
+                    b.Property<int>("HospitalExitOfficerToTakeActionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HospitalExitOfficerToTakeActionId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("HospitalExitId")
+                        .HasColumnName("HospitalExitId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HospitalExitOfficerToTakeActionId");
+
+                    b.HasIndex("HospitalExitId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_HospitalExitOfficerToTakeAction");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.IncomingMeds", b =>
+                {
+                    b.Property<int>("IncomingMedsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ChartImage")
+                        .IsRequired()
+                        .HasColumnName("ChartImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MedsImage")
+                        .IsRequired()
+                        .HasColumnName("MedsImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StaffName")
+                        .IsRequired()
+                        .HasColumnName("StaffName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasColumnName("StartDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserName")
+                        .HasColumnName("UserName")
+                        .HasColumnType("int");
+
+                    b.HasKey("IncomingMedsId");
+
+                    b.HasIndex("UserName");
+
+                    b.ToTable("tbl_Incoming_Meds");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.InfectionControl", b =>
+                {
+                    b.Property<int>("InfectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("InfectionId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Guideline")
+                        .IsRequired()
+                        .HasColumnName("Guideline")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TestDate")
+                        .HasColumnName("TestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VaccStatus")
+                        .HasColumnName("VaccStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("InfectionId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_InfectionControl");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Interest", b =>
+                {
+                    b.Property<int>("InterestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("InterestId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CommunityActivity")
+                        .HasColumnName("CommunityActivity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventAwarness")
+                        .HasColumnName("EventAwarness")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalAndObjective")
+                        .HasColumnName("GoalAndObjective")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalId")
+                        .HasColumnName("GoalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InformalActivity")
+                        .HasColumnName("InformalActivity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LeisureActivity")
+                        .HasColumnName("LeisureActivity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaintainContact")
+                        .HasColumnName("MaintainContact")
+                        .HasColumnType("int");
+
+                    b.HasKey("InterestId");
+
+                    b.HasIndex("GoalId");
+
+                    b.ToTable("tbl_Interest");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.InterestAndObjective", b =>
+                {
+                    b.Property<int>("GoalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("GoalId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Brief")
+                        .IsRequired()
+                        .HasColumnName("Brief")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CareGoal")
+                        .IsRequired()
+                        .HasColumnName("CareGoal")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GoalId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_InterestAndObjective");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.Investigation", b =>
                 {
                     b.Property<int>("InvestigationId")
@@ -1223,6 +5409,254 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_InvestigationAttachment");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicatorLog", b =>
+                {
+                    b.Property<int>("KeyIndicatorLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("KeyIndicatorLogId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseRecordId")
+                        .HasColumnName("BaseRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KeyId")
+                        .HasColumnName("KeyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KeyIndicatorLogId");
+
+                    b.HasIndex("KeyId");
+
+                    b.ToTable("tbl_KeyIndicatorLog");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicators", b =>
+                {
+                    b.Property<int>("KeyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("KeyId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AboutMe")
+                        .IsRequired()
+                        .HasColumnName("AboutMe")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Debture")
+                        .HasColumnName("Debture")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FamilyRole")
+                        .IsRequired()
+                        .HasColumnName("FamilyRole")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LivingStatus")
+                        .HasColumnName("LivingStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ThingsILike")
+                        .IsRequired()
+                        .HasColumnName("ThingsILike")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("KeyId");
+
+                    b.HasIndex("PersonalDetailId")
+                        .IsUnique();
+
+                    b.ToTable("tbl_KeyIndicators");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyWorkerOfficerToAct", b =>
+                {
+                    b.Property<int>("KeyWorkerOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("KeyWorkerOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("KeyWorkerId")
+                        .HasColumnName("KeyWorkerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KeyWorkerOfficerToActId");
+
+                    b.HasIndex("KeyWorkerId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_KeyWorker_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyWorkerWorkteam", b =>
+                {
+                    b.Property<int>("KeyWorkerWorkteamId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("KeyWorkerWorkteamId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("KeyWorkerId")
+                        .HasColumnName("KeyWorkerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KeyWorkerWorkteamId");
+
+                    b.HasIndex("KeyWorkerId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_KeyWorker_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.LogAuditOfficerToAct", b =>
+                {
+                    b.Property<int>("LogAuditOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("LogAuditOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LogAuditId")
+                        .HasColumnName("LogAuditId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LogAuditOfficerToActId");
+
+                    b.HasIndex("LogAuditId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_LogAudit_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ManagingTasks", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ManagingTasksId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Help")
+                        .IsRequired()
+                        .HasColumnName("Help")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Task")
+                        .HasColumnName("Task")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_ManagingTasks");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditOfficerToAct", b =>
+                {
+                    b.Property<int>("MedAuditOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("MedAuditOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("MedAuditId")
+                        .HasColumnName("MedAuditId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MedAuditOfficerToActId");
+
+                    b.HasIndex("MedAuditId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_MedAudit_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditStaffName", b =>
+                {
+                    b.Property<int>("MedAuditStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("MedAuditStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("MedAuditId")
+                        .HasColumnName("MedAuditId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MedAuditStaffNameId");
+
+                    b.HasIndex("MedAuditId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_MedAudit_AuditorName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.MedCompOfficerToAct", b =>
+                {
+                    b.Property<int>("MedCompOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("MedCompOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("MedCompId")
+                        .HasColumnName("MedCompId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MedCompOfficerToActId");
+
+                    b.HasIndex("MedCompId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_MedComp_OfficerToAct");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.Medication", b =>
                 {
                     b.Property<int>("MedicationId")
@@ -1277,6 +5711,784 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasName("IX_tbl_MedicationManufacturer_Manufacturer");
 
                     b.ToTable("tbl_MedicationManufacturer");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OfficeLocation", b =>
+                {
+                    b.Property<int>("OfficeLocationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OfficeLocationId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnName("Address")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ContactPersonEmail")
+                        .HasColumnName("ContactPersonEmail")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ContactPersonFullName")
+                        .HasColumnName("ContactPersonFullName")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ContactPersonPhoneNumber")
+                        .HasColumnName("ContactPersonPhoneNumber")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Latitude")
+                        .HasColumnName("Latitude")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Longitude")
+                        .HasColumnName("Longitude")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("UniqueId")
+                        .HasColumnName("UniqueId")
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
+                    b.HasKey("OfficeLocationId");
+
+                    b.ToTable("tbl_OfficeLocation");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OneToOneOfficerToAct", b =>
+                {
+                    b.Property<int>("OneToOneOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OneToOneOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OneToOneId")
+                        .HasColumnName("OneToOneId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OneToOneOfficerToActId");
+
+                    b.HasIndex("OneToOneId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_OneToOne_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlOfficerToAct", b =>
+                {
+                    b.Property<int>("OxygenLvlOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OxygenLvlOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OxygenLvlId")
+                        .HasColumnName("OxygenLvlId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OxygenLvlOfficerToActId");
+
+                    b.HasIndex("OxygenLvlId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_OxygenLvl_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlPhysician", b =>
+                {
+                    b.Property<int>("OxygenLvlPhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OxygenLvlPhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OxygenLvlId")
+                        .HasColumnName("OxygenLvlId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OxygenLvlPhysicianId");
+
+                    b.HasIndex("OxygenLvlId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_OxygenLvl_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlStaffName", b =>
+                {
+                    b.Property<int>("OxygenLvlStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("OxygenLvlStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OxygenLvlId")
+                        .HasColumnName("OxygenLvlId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OxygenLvlStaffNameId");
+
+                    b.HasIndex("OxygenLvlId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_OxygenLvl_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PainChartOfficerToAct", b =>
+                {
+                    b.Property<int>("PainChartOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PainChartOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PainChartId")
+                        .HasColumnName("PainChartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PainChartOfficerToActId");
+
+                    b.HasIndex("PainChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_PainChart_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PainChartPhysician", b =>
+                {
+                    b.Property<int>("PainChartPhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PainChartPhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PainChartId")
+                        .HasColumnName("PainChartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PainChartPhysicianId");
+
+                    b.HasIndex("PainChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_PainChart_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PainChartStaffName", b =>
+                {
+                    b.Property<int>("PainChartStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PainChartStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PainChartId")
+                        .HasColumnName("PainChartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PainChartStaffNameId");
+
+                    b.HasIndex("PainChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_PainChart_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PerformanceIndicator", b =>
+                {
+                    b.Property<int>("PerformanceIndicatorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnName("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnName("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnName("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PerformanceIndicatorId");
+
+                    b.ToTable("tbl_PerformanceIndicator");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PerformanceIndicatorTask", b =>
+                {
+                    b.Property<int>("PerformanceIndicatorTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PerformanceIndicatorId")
+                        .HasColumnName("StaffCompetenceTestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnName("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("PerformanceIndicatorTaskId");
+
+                    b.HasIndex("PerformanceIndicatorId");
+
+                    b.ToTable("tbl_PerformanceIndicatorTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentred", b =>
+                {
+                    b.Property<int>("PersonCentredId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PersonCentredId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Class")
+                        .HasColumnName("Class")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExpSupport")
+                        .IsRequired()
+                        .HasColumnName("ExpSupport")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonCentredId");
+
+                    b.HasIndex("PersonalDetailId");
+
+                    b.ToTable("tbl_PersonCentred");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentredFocus", b =>
+                {
+                    b.Property<int>("PersonCentredFocusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PersonCentredFocusId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaseRecordId")
+                        .HasColumnName("BaseRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonCentredId")
+                        .HasColumnName("PersonCentredId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonCentredFocusId");
+
+                    b.HasIndex("PersonCentredId");
+
+                    b.ToTable("tbl_PersonCentredFocus");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Personal", b =>
+                {
+                    b.Property<int>("PersonalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PersonalId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DNR")
+                        .HasColumnName("DNR")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nationality")
+                        .IsRequired()
+                        .HasColumnName("Nationality")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Religion")
+                        .IsRequired()
+                        .HasColumnName("Religion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Smoking")
+                        .HasColumnName("Smoking")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonalId");
+
+                    b.HasIndex("PersonalDetailId")
+                        .IsUnique();
+
+                    b.ToTable("tbl_Personal");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalDetail", b =>
+                {
+                    b.Property<int>("PersonalDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PersonalDetailId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_PersonalDetail");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalHygiene", b =>
+                {
+                    b.Property<int>("HygieneId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HygieneId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Cleaning")
+                        .HasColumnName("Cleaning")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CleaningFreq")
+                        .HasColumnName("CleaningFreq")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CleaningTools")
+                        .HasColumnName("CleaningTools")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DesiredCleaning")
+                        .HasColumnName("DesiredCleaning")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DirtyLaundry")
+                        .HasColumnName("DirtyLaundry")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DryLaundry")
+                        .HasColumnName("DryLaundry")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GeneralAppliance")
+                        .HasColumnName("GeneralAppliance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Ironing")
+                        .HasColumnName("Ironing")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LaundryGuide")
+                        .IsRequired()
+                        .HasColumnName("LaundryGuide")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LaundrySupport")
+                        .IsRequired()
+                        .HasColumnName("LaundrySupport")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WashingMachine")
+                        .HasColumnName("WashingMachine")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WhoClean")
+                        .HasColumnName("WhoClean")
+                        .HasColumnType("int");
+
+                    b.HasKey("HygieneId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_PersonalHygiene");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalityTest", b =>
+                {
+                    b.Property<int>("TestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("TestId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GoalId")
+                        .HasColumnName("GoalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Question")
+                        .HasColumnName("Question")
+                        .HasColumnType("int");
+
+                    b.HasKey("TestId");
+
+                    b.HasIndex("GoalId");
+
+                    b.ToTable("tbl_PersonalityTest");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Pets", b =>
+                {
+                    b.Property<int>("PetsId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PetsId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Age")
+                        .IsRequired()
+                        .HasColumnName("Age")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Gender")
+                        .HasColumnName("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MealPattern")
+                        .IsRequired()
+                        .HasColumnName("MealPattern")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MealStorage")
+                        .HasColumnName("MealStorage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PetActivities")
+                        .IsRequired()
+                        .HasColumnName("PetActivities")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PetCare")
+                        .IsRequired()
+                        .HasColumnName("PetCare")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PetInsurance")
+                        .HasColumnName("PetInsurance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VetVisit")
+                        .HasColumnName("VetVisit")
+                        .HasColumnType("int");
+
+                    b.HasKey("PetsId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Pets");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PhysicalAbility", b =>
+                {
+                    b.Property<int>("PhysicalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PhysicalId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnName("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Mobility")
+                        .HasColumnName("Mobility")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnName("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("PhysicalId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_PhysicalAbility");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ProgramOfficerToAct", b =>
+                {
+                    b.Property<int>("ProgramOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ProgramOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ProgramId")
+                        .HasColumnName("ProgramId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProgramOfficerToActId");
+
+                    b.HasIndex("ProgramId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Program_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PulseRateOfficerToAct", b =>
+                {
+                    b.Property<int>("PulseRateOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PulseRateOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PulseRateId")
+                        .HasColumnName("PulseRateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PulseRateOfficerToActId");
+
+                    b.HasIndex("PulseRateId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_PulseRate_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PulseRatePhysician", b =>
+                {
+                    b.Property<int>("PulseRatePhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PulseRatePhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PulseRateId")
+                        .HasColumnName("PulseRateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PulseRatePhysicianId");
+
+                    b.HasIndex("PulseRateId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_PulseRate_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PulseRateStaffName", b =>
+                {
+                    b.Property<int>("PulseRateStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("PulseRateStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("PulseRateId")
+                        .HasColumnName("PulseRateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PulseRateStaffNameId");
+
+                    b.HasIndex("PulseRateId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_PulseRate_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Resources", b =>
+                {
+                    b.Property<int>("ResourcesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnName("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnName("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnName("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublishBy")
+                        .IsRequired()
+                        .HasColumnName("PublishBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PublishTo")
+                        .HasColumnName("PublishTo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Video")
+                        .IsRequired()
+                        .HasColumnName("Video")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ResourcesId");
+
+                    b.HasIndex("PublishTo");
+
+                    b.ToTable("tbl_Resources_");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Review", b =>
+                {
+                    b.Property<int>("ReviewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ReviewId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CP_PreDate")
+                        .HasColumnName("CP_PreDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CP_ReviewDate")
+                        .HasColumnName("CP_ReviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnName("PersonalDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RA_PreDate")
+                        .HasColumnName("RA_PreDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("RA_ReviewDate")
+                        .HasColumnName("RA_ReviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ReviewId");
+
+                    b.HasIndex("PersonalDetailId")
+                        .IsUnique();
+
+                    b.ToTable("tbl_Review");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Rota", b =>
@@ -1435,6 +6647,186 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_RotaTask");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.SeizureOfficerToAct", b =>
+                {
+                    b.Property<int>("SeizureOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SeizureOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SeizureId")
+                        .HasColumnName("SeizureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeizureOfficerToActId");
+
+                    b.HasIndex("SeizureId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Seizure_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SeizurePhysician", b =>
+                {
+                    b.Property<int>("SeizurePhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SeizurePhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SeizureId")
+                        .HasColumnName("SeizureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeizurePhysicianId");
+
+                    b.HasIndex("SeizureId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Seizure_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SeizureStaffName", b =>
+                {
+                    b.Property<int>("SeizureStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SeizureStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SeizureId")
+                        .HasColumnName("SeizureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SeizureStaffNameId");
+
+                    b.HasIndex("SeizureId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Seizure_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ServiceOfficerToAct", b =>
+                {
+                    b.Property<int>("ServiceOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ServiceOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnName("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServiceOfficerToActId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Service_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ServiceStaffName", b =>
+                {
+                    b.Property<int>("ServiceStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("ServiceStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnName("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServiceStaffNameId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_Service_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SetupStaffHoliday", b =>
+                {
+                    b.Property<int>("SetupHolidayId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("HoursSoFar")
+                        .HasColumnName("HoursSoFar")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IncrementalDailyHolidayByHrs")
+                        .HasColumnName("IncrementalDailyHolidayByHrs")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfDays")
+                        .HasColumnName("NumberOfDays")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnName("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeOfHoliday")
+                        .HasColumnName("TypeOfHoliday")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("YearEndPeriodStartDate")
+                        .HasColumnName("YearEndPeriodStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("YearOfEmployment")
+                        .HasColumnName("YearOfEmployment")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SetupHolidayId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_SetupStaffHoliday");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ShiftBooking", b =>
                 {
                     b.Property<int>("ShiftBookingId")
@@ -1521,6 +6913,326 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("ShiftBookingId");
 
                     b.ToTable("tbl_ShiftBookingBlockedDays");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SpecialHealthAndMedication", b =>
+                {
+                    b.Property<int>("SHMId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SHMId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccessMedication")
+                        .HasColumnName("AccessMedication")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AdminLvl")
+                        .HasColumnName("AdminLvl")
+                        .HasColumnType("int");
+
+                    b.Property<string>("By")
+                        .IsRequired()
+                        .HasColumnName("By")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Consent")
+                        .HasColumnName("Consent")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FamilyMeds")
+                        .HasColumnName("FamilyMeds")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FamilyReturnMed")
+                        .HasColumnName("FamilyReturnMed")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LeftoutMedicine")
+                        .HasColumnName("LeftoutMedicine")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MedAccessDenial")
+                        .HasColumnName("MedAccessDenial")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MedKeyCode")
+                        .IsRequired()
+                        .HasColumnName("MedKeyCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedicationAllergy")
+                        .HasColumnName("MedicationAllergy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MedicationStorage")
+                        .IsRequired()
+                        .HasColumnName("MedicationStorage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedsGPOrder")
+                        .HasColumnName("MedsGPOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NameFormMedicaiton")
+                        .HasColumnName("NameFormMedicaiton")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoMedAccess")
+                        .HasColumnName("NoMedAccess")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OverdoseContact")
+                        .HasColumnName("OverdoseContact")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PNRDoses")
+                        .HasColumnName("PNRDoses")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PNRMedList")
+                        .IsRequired()
+                        .HasColumnName("PNRMedList")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PNRMedReq")
+                        .HasColumnName("PNRMedReq")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PNRMedsAdmin")
+                        .HasColumnName("PNRMedsAdmin")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PNRMedsMissing")
+                        .IsRequired()
+                        .HasColumnName("PNRMedsMissing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PharmaMARChart")
+                        .HasColumnName("PharmaMARChart")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SpecialStorage")
+                        .HasColumnName("SpecialStorage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TempMARChart")
+                        .HasColumnName("TempMARChart")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WhoAdminister")
+                        .HasColumnName("WhoAdminister")
+                        .HasColumnType("int");
+
+                    b.HasKey("SHMId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_SpecialHealthAndMedication");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SpecialHealthCondition", b =>
+                {
+                    b.Property<int>("HealthCondId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("HealthCondId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClientAction")
+                        .IsRequired()
+                        .HasColumnName("ClientAction")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClinicRecommendation")
+                        .IsRequired()
+                        .HasColumnName("ClinicRecommendation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConditionName")
+                        .IsRequired()
+                        .HasColumnName("ConditionName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FeelingAfterIncident")
+                        .IsRequired()
+                        .HasColumnName("FeelingAfterIncident")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FeelingBeforeIncident")
+                        .IsRequired()
+                        .HasColumnName("FeelingBeforeIncident")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Frequency")
+                        .IsRequired()
+                        .HasColumnName("Frequency")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LifestyleSupport")
+                        .IsRequired()
+                        .HasColumnName("LifestyleSupport")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LivingActivities")
+                        .IsRequired()
+                        .HasColumnName("LivingActivities")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlanningHealthCondition")
+                        .IsRequired()
+                        .HasColumnName("PlanningHealthCondition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SourceInformation")
+                        .IsRequired()
+                        .HasColumnName("SourceInformation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Trigger")
+                        .IsRequired()
+                        .HasColumnName("Trigger")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HealthCondId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_SpecialHealthCondition");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SpotCheckOfficerToAct", b =>
+                {
+                    b.Property<int>("SpotCheckOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SpotCheckOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("SpotCheckId")
+                        .HasColumnName("SpotCheckId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SpotCheckOfficerToActId");
+
+                    b.HasIndex("SpotCheckId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_SpotCheck_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffAdlObs", b =>
+                {
+                    b.Property<int>("ObservationID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnName("Comments")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnName("Details")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("FivePrinciples")
+                        .HasColumnName("FivePrinciples")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UnderstandingofControl")
+                        .HasColumnName("UnderstandingofControl")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnderstandingofEquipment")
+                        .HasColumnName("UnderstandingofEquipment")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnderstandingofService")
+                        .HasColumnName("UnderstandingofService")
+                        .HasColumnType("int");
+
+                    b.HasKey("ObservationID");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Staff_AdlObs");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffBlackList", b =>
@@ -1616,6 +7328,74 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasKey("StaffCommunicationId");
 
                     b.ToTable("tbl_StaffCommunication");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTest", b =>
+                {
+                    b.Property<int>("StaffCompetenceTestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnName("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffCompetenceTestId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffCompetenceTest");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTestTask", b =>
+                {
+                    b.Property<int>("StaffCompetenceTestTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Point")
+                        .HasColumnName("Point")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnName("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffCompetenceTestId")
+                        .HasColumnName("StaffCompetenceTestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffCompetenceTestTaskId");
+
+                    b.HasIndex("StaffCompetenceTestId");
+
+                    b.ToTable("tbl_StaffCompetenceTestTask");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffEducation", b =>
@@ -1723,6 +7503,144 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_StaffEmergencyContact");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealth", b =>
+                {
+                    b.Property<int>("StaffHealthId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnName("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffHealthId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffHealth");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealthTask", b =>
+                {
+                    b.Property<int>("StaffHealthTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Point")
+                        .HasColumnName("Point")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnName("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffHealthId")
+                        .HasColumnName("StaffHealthId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffHealthTaskId");
+
+                    b.HasIndex("StaffHealthId");
+
+                    b.ToTable("tbl_StaffHealthTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffHoliday", b =>
+                {
+                    b.Property<int>("StaffHolidayId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("AllocatedDays")
+                        .HasColumnName("AllocatedDays")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Class")
+                        .HasColumnName("Class")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CopyOfHandover")
+                        .IsRequired()
+                        .HasColumnName("CopyOfHandover")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Days")
+                        .HasColumnName("Days")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnName("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PersonOnResponsibility")
+                        .IsRequired()
+                        .HasColumnName("PersonOnResponsibility")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnName("Purpose")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .IsRequired()
+                        .HasColumnName("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnName("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("YearOfService")
+                        .HasColumnName("YearOfService")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("StaffHolidayId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffHoliday");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffIncidentReporting", b =>
                 {
                     b.Property<int>("StaffIncidentReportingId")
@@ -1778,6 +7696,414 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasKey("StaffIncidentReportingId");
 
                     b.ToTable("tbl_StaffIncidentReporting");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffInfectionControl", b =>
+                {
+                    b.Property<int>("InfectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("InfectionId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Guideline")
+                        .IsRequired()
+                        .HasColumnName("Guideline")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TestDate")
+                        .HasColumnName("TestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnName("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VaccStatus")
+                        .HasColumnName("VaccStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("InfectionId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffInfectionControl");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterview", b =>
+                {
+                    b.Property<int>("StaffInterviewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnName("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffInterviewId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffInterview");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterviewTask", b =>
+                {
+                    b.Property<int>("StaffInterviewTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Point")
+                        .HasColumnName("Point")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnName("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffInterviewId")
+                        .HasColumnName("StaffInterviewId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffInterviewTaskId");
+
+                    b.HasIndex("StaffInterviewId");
+
+                    b.ToTable("tbl_StaffInterviewTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffKeyWorkerVoice", b =>
+                {
+                    b.Property<int>("KeyWorkerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChangesWeNeed")
+                        .IsRequired()
+                        .HasColumnName("ChangesWeNeed")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnName("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HealthAndWellNessChanges")
+                        .IsRequired()
+                        .HasColumnName("HealthAndWellNessChanges")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicationChanges")
+                        .IsRequired()
+                        .HasColumnName("MedicationChanges")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MovingAndHandling")
+                        .IsRequired()
+                        .HasColumnName("MovingAndHandling")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NotComfortableServices")
+                        .HasColumnName("NotComfortableServices")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NutritionalChanges")
+                        .IsRequired()
+                        .HasColumnName("NutritionalChanges")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RiskAssessment")
+                        .IsRequired()
+                        .HasColumnName("RiskAssessment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ServicesRequiresServices")
+                        .HasColumnName("ServicesRequiresServices")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServicesRequiresTime")
+                        .HasColumnName("ServicesRequiresTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WellSupportedServices")
+                        .HasColumnName("WellSupportedServices")
+                        .HasColumnType("int");
+
+                    b.HasKey("KeyWorkerId");
+
+                    b.HasIndex("ServicesRequiresServices");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Staff_KeyWorkerVoice");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedComp", b =>
+                {
+                    b.Property<int>("MedCompId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CarePlan")
+                        .HasColumnName("CarePlan")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnName("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RateStaff")
+                        .HasColumnName("RateStaff")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReadingMedicalPrescriptions")
+                        .HasColumnName("ReadingMedicalPrescriptions")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UnderstandingofMedication")
+                        .HasColumnName("UnderstandingofMedication")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnderstandingofRights")
+                        .HasColumnName("UnderstandingofRights")
+                        .HasColumnType("int");
+
+                    b.HasKey("MedCompId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Staff_MedCompObs");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffOneToOne", b =>
+                {
+                    b.Property<int>("OneToOneId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentEventArea")
+                        .IsRequired()
+                        .HasColumnName("CurrentEventArea")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DecisionsReached")
+                        .IsRequired()
+                        .HasColumnName("DecisionsReached")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImprovementRecorded")
+                        .IsRequired()
+                        .HasColumnName("ImprovementRecorded")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PreviousSupervision")
+                        .HasColumnName("PreviousSupervision")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasColumnName("Purpose")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StaffConclusion")
+                        .IsRequired()
+                        .HasColumnName("StaffConclusion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StaffImprovedInAreas")
+                        .IsRequired()
+                        .HasColumnName("StaffImprovedInAreas")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OneToOneId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Staff_OneToOne");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfo", b =>
@@ -2064,6 +8390,33 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_StaffPersonalInfoComment");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalityTest", b =>
+                {
+                    b.Property<int>("TestId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("TestId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Question")
+                        .HasColumnName("Question")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TestId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffPersonalityTest");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRating", b =>
                 {
                     b.Property<int>("StaffRatingId")
@@ -2162,6 +8515,115 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("StaffPersonalInfoId");
 
                     b.ToTable("tbl_StaffReferee");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffReference", b =>
+                {
+                    b.Property<int>("StaffReferenceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnName("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ApplicantRole")
+                        .HasColumnName("ApplicantRole")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Caring")
+                        .HasColumnName("Caring")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ConfirmedBy")
+                        .HasColumnName("ConfirmedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Contact")
+                        .IsRequired()
+                        .HasColumnName("Contact")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DateofEmployement")
+                        .HasColumnName("DateofEmployement")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DateofExit")
+                        .IsRequired()
+                        .HasColumnName("DateofExit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnName("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Integrity")
+                        .HasColumnName("Integrity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Knowledgeable")
+                        .HasColumnName("Knowledgeable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PreviousExperience")
+                        .HasColumnName("PreviousExperience")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefreeName")
+                        .IsRequired()
+                        .HasColumnName("RefreeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RehireStaff")
+                        .IsRequired()
+                        .HasColumnName("RehireStaff")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Relationship")
+                        .IsRequired()
+                        .HasColumnName("Relationship")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeamWork")
+                        .HasColumnName("TeamWork")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkUnderPressure")
+                        .HasColumnName("WorkUnderPressure")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffReferenceId");
+
+                    b.HasIndex("ApplicantRole");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Staff_Reference");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRegulatoryContact", b =>
@@ -2319,6 +8781,15 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("BowelMovement")
+                        .HasColumnName("BowelMovement")
+                        .HasColumnType("nvarchar(5)")
+                        .HasMaxLength(5);
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ClientRotaTypeId")
                         .HasColumnName("ClientRotaTypeId")
                         .HasColumnType("int");
@@ -2361,10 +8832,20 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(225)")
                         .HasMaxLength(225);
 
+                    b.Property<string>("FluidIntake")
+                        .HasColumnName("FluidIntake")
+                        .HasColumnType("nvarchar(5)")
+                        .HasMaxLength(5);
+
                     b.Property<string>("HandOver")
                         .HasColumnName("HandOver")
                         .HasColumnType("nvarchar(225)")
                         .HasMaxLength(225);
+
+                    b.Property<string>("OralCare")
+                        .HasColumnName("OralCare")
+                        .HasColumnType("nvarchar(5)")
+                        .HasMaxLength(5);
 
                     b.Property<int>("StaffRotaId")
                         .HasColumnName("StaffRotaId")
@@ -2414,6 +8895,74 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("StaffRotaPeriodId");
 
                     b.ToTable("tbl_StaffRotaTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowing", b =>
+                {
+                    b.Property<int>("StaffShadowingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Heading")
+                        .IsRequired()
+                        .HasColumnName("Heading")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffShadowingId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffShadowing");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowingTask", b =>
+                {
+                    b.Property<int>("StaffShadowingTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Answer")
+                        .HasColumnName("Answer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnName("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Point")
+                        .HasColumnName("Point")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnName("Score")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffShadowingId")
+                        .HasColumnName("StaffShadowingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffShadowingTaskId");
+
+                    b.HasIndex("StaffShadowingId");
+
+                    b.ToTable("tbl_StaffShadowingTask");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBooking", b =>
@@ -2477,6 +9026,382 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_StaffShiftBookingDay");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSpotCheck", b =>
+                {
+                    b.Property<int>("SpotCheckId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AreaComments")
+                        .IsRequired()
+                        .HasColumnName("AreaComments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnName("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnName("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffArriveOnTime")
+                        .HasColumnName("StaffArriveOnTime")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffDressCode")
+                        .HasColumnName("StaffDressCode")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SpotCheckId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Staff_SpotCheck");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSupervisionAppraisal", b =>
+                {
+                    b.Property<int>("StaffSupervisionAppraisalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CondourAndWhistleBlowing")
+                        .IsRequired()
+                        .HasColumnName("CondourAndWhistleBlowing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnName("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FiveStarRating")
+                        .IsRequired()
+                        .HasColumnName("FiveStarRating")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NoAbilityToSupport")
+                        .IsRequired()
+                        .HasColumnName("NoAbilityToSupport")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoCondourAndWhistleBlowing")
+                        .IsRequired()
+                        .HasColumnName("NoCondourAndWhistleBlowing")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProfessionalDevelopment")
+                        .HasColumnName("ProfessionalDevelopment")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StaffAbility")
+                        .IsRequired()
+                        .HasColumnName("StaffAbility")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffComplaints")
+                        .HasColumnName("StaffComplaints")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StaffDevelopment")
+                        .IsRequired()
+                        .HasColumnName("StaffDevelopment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffRating")
+                        .HasColumnName("StaffRating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffSupportAreas")
+                        .HasColumnName("StaffSupportAreas")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StaffSupervisionAppraisalId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Staff_SupervisionAppraisal");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSurvey", b =>
+                {
+                    b.Property<int>("StaffSurveyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccessToPolicies")
+                        .HasColumnName("AccessToPolicies")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AdequateTrainingReceived")
+                        .HasColumnName("AdequateTrainingReceived")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AreaRequiringImprovements")
+                        .IsRequired()
+                        .HasColumnName("AreaRequiringImprovements")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CompanyManagement")
+                        .HasColumnName("CompanyManagement")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnName("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnName("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HealthCareServicesSatisfaction")
+                        .HasColumnName("HealthCareServicesSatisfaction")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NextCheckDate")
+                        .HasColumnName("NextCheckDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnName("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnName("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupportFromCompany")
+                        .HasColumnName("SupportFromCompany")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WorkEnvironmentSuggestions")
+                        .IsRequired()
+                        .HasColumnName("WorkEnvironmentSuggestions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StaffSurveyId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("tbl_Staff_Survey");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLead", b =>
+                {
+                    b.Property<int>("TeamLeadId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClientInvolved")
+                        .HasColumnName("ClientInvolved")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DidYouDo")
+                        .IsRequired()
+                        .HasColumnName("DidYouDo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DidYouObserved")
+                        .IsRequired()
+                        .HasColumnName("DidYouObserved")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfficeToDo")
+                        .IsRequired()
+                        .HasColumnName("OfficeToDo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rota")
+                        .HasColumnName("Rota")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffInvolved")
+                        .HasColumnName("StaffInvolved")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffStoppedWorking")
+                        .HasColumnName("StaffStoppedWorking")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeamLeadId");
+
+                    b.HasIndex("ClientInvolved");
+
+                    b.HasIndex("StaffInvolved");
+
+                    b.ToTable("tbl_StaffTeamLead");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLeadTasks", b =>
+                {
+                    b.Property<int>("TeamLeadTaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnName("Comments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnName("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeamLeadId")
+                        .HasColumnName("TeamLeadId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Title")
+                        .HasColumnName("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("TeamLeadTaskId");
+
+                    b.HasIndex("TeamLeadId");
+
+                    b.ToTable("tbl_StaffTeamLeadTasks");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>
                 {
                     b.Property<int>("StaffTrainingId")
@@ -2535,6 +9460,46 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_StaffTraining");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrix", b =>
+                {
+                    b.Property<int>("MatrixId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MatrixId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffTrainingMatrix");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrixList", b =>
+                {
+                    b.Property<int>("TrainingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MatrixId")
+                        .HasColumnName("MatrixId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TrainingId");
+
+                    b.HasIndex("MatrixId");
+
+                    b.ToTable("tbl_StaffTrainingMatrixList");
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffWorkTeam", b =>
                 {
                     b.Property<int>("StaffWorkTeamId")
@@ -2551,6 +9516,281 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasKey("StaffWorkTeamId");
 
                     b.ToTable("tbl_StaffWorkTeam");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SupervisionOfficerToAct", b =>
+                {
+                    b.Property<int>("SupervisionOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SupervisionOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffSupervisionAppraisalId")
+                        .HasColumnName("StaffSupervisionAppraisalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SupervisionOfficerToActId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("StaffSupervisionAppraisalId");
+
+                    b.ToTable("tbl_Supervision_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SupervisionWorkteam", b =>
+                {
+                    b.Property<int>("SupervisionWorkteamId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SupervisionWorkteamId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffSupervisionAppraisalId")
+                        .HasColumnName("StaffSupervisionAppraisalId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SupervisionWorkteamId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("StaffSupervisionAppraisalId");
+
+                    b.ToTable("tbl_Supervision_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SurveyOfficerToAct", b =>
+                {
+                    b.Property<int>("SurveyOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SurveyOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffSurveyId")
+                        .HasColumnName("StaffSurveyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SurveyOfficerToActId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("StaffSurveyId");
+
+                    b.ToTable("tbl_Survey_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SurveyWorkteam", b =>
+                {
+                    b.Property<int>("SurveyWorkteamId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SurveyWorkteamId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffSurveyId")
+                        .HasColumnName("StaffSurveyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SurveyWorkteamId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("StaffSurveyId");
+
+                    b.ToTable("tbl_Survey_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TaskBoard", b =>
+                {
+                    b.Property<int>("TaskId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AssignedBy")
+                        .HasColumnName("AssignedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CompletionDate")
+                        .HasColumnName("CompletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnName("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TaskImage")
+                        .IsRequired()
+                        .HasColumnName("TaskImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskName")
+                        .IsRequired()
+                        .HasColumnName("TaskName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TaskId");
+
+                    b.ToTable("tbl_TaskBoard");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TaskBoardAssignedTo", b =>
+                {
+                    b.Property<int>("TaskBoardAssignedToId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("TaskBoardAssignedToId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TaskBoardId")
+                        .HasColumnName("TaskBoardId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TaskBoardAssignedToId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("TaskBoardId");
+
+                    b.ToTable("tbl_TaskBoardAssignedTo");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernManager", b =>
+                {
+                    b.Property<int>("TrackingConcernManagerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("TrackingConcernManagerId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrackingConcernNoteId")
+                        .HasColumnName("TrackingConcernNoteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TrackingConcernManagerId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("TrackingConcernNoteId");
+
+                    b.ToTable("tbl_TrackingConcernManager");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernNote", b =>
+                {
+                    b.Property<int>("Ref")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ActionRequired")
+                        .IsRequired()
+                        .HasColumnName("ActionRequired")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnName("Attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcernNote")
+                        .IsRequired()
+                        .HasColumnName("ConcernNote")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfIncident")
+                        .HasColumnName("DateOfIncident")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpectedDeadline")
+                        .HasColumnName("ExpectedDeadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ManagerCopied")
+                        .HasColumnName("ManagerCopied")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnName("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StaffNotify")
+                        .HasColumnName("StaffNotify")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Ref");
+
+                    b.ToTable("tbl_TrackingConcernNote");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernStaff", b =>
+                {
+                    b.Property<int>("TrackingConcernStaffId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("TrackingConcernManagerId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrackingConcernNoteId")
+                        .HasColumnName("TrackingConcernNoteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TrackingConcernStaffId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("TrackingConcernNoteId");
+
+                    b.ToTable("tbl_TrackingConcernStaff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Untowards", b =>
@@ -2749,6 +9989,285 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("tbl_UntowardsStaffInvolved");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.VisitOfficerToAct", b =>
+                {
+                    b.Property<int>("VisitOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("VisitOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VisitId")
+                        .HasColumnName("VisitId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VisitOfficerToActId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("VisitId");
+
+                    b.ToTable("tbl_Visit_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VisitStaffName", b =>
+                {
+                    b.Property<int>("VisitStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("VisitStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VisitId")
+                        .HasColumnName("VisitId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VisitStaffNameId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("VisitId");
+
+                    b.ToTable("tbl_Visit_StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VoiceCallerName", b =>
+                {
+                    b.Property<int>("VoiceCallerNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("VoiceCallerNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VoiceId")
+                        .HasColumnName("VoiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VoiceCallerNameId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("VoiceId");
+
+                    b.ToTable("tbl_Voice_CallerName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VoiceGoodStaff", b =>
+                {
+                    b.Property<int>("VoiceGoodStaffId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("VoiceGoodStaffId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VoiceId")
+                        .HasColumnName("VoiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VoiceGoodStaffId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("VoiceId");
+
+                    b.ToTable("tbl_Voice_GoodStaff");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VoiceOfficerToAct", b =>
+                {
+                    b.Property<int>("VoiceOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("VoiceOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VoiceId")
+                        .HasColumnName("VoiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VoiceOfficerToActId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("VoiceId");
+
+                    b.ToTable("tbl_Voice_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VoicePoorStaff", b =>
+                {
+                    b.Property<int>("VoicePoorStaffId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("VoicePoorStaffId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VoiceId")
+                        .HasColumnName("VoiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VoicePoorStaffId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("VoiceId");
+
+                    b.ToTable("tbl_Voice_PoorStaff");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.WhisttleBlower", b =>
+                {
+                    b.Property<int>("WhisttleBlowerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Evidence")
+                        .IsRequired()
+                        .HasColumnName("Evidence")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Happening")
+                        .IsRequired()
+                        .HasColumnName("Happening")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IncidentDate")
+                        .IsRequired()
+                        .HasColumnName("IncidentDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LikeCalling")
+                        .HasColumnName("LikeCalling")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StaffName")
+                        .IsRequired()
+                        .HasColumnName("StaffName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnName("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserName")
+                        .HasColumnName("UserName")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Witness")
+                        .HasColumnName("Witness")
+                        .HasColumnType("int");
+
+                    b.HasKey("WhisttleBlowerId");
+
+                    b.HasIndex("UserName");
+
+                    b.ToTable("tbl_Whisttle_Blower");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.WoundCareOfficerToAct", b =>
+                {
+                    b.Property<int>("WoundCareOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("WoundCareOfficerToActId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WoundCareId")
+                        .HasColumnName("WoundCareId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WoundCareOfficerToActId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("WoundCareId");
+
+                    b.ToTable("tbl_WoundCare_OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.WoundCarePhysician", b =>
+                {
+                    b.Property<int>("WoundCarePhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("WoundCarePhysicianId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WoundCareId")
+                        .HasColumnName("WoundCareId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WoundCarePhysicianId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("WoundCareId");
+
+                    b.ToTable("tbl_WoundCare_Physician");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.WoundCareStaffName", b =>
+                {
+                    b.Property<int>("WoundCareStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("WoundCareStaffNameId")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnName("StaffPersonalInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WoundCareId")
+                        .HasColumnName("WoundCareId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WoundCareStaffNameId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.HasIndex("WoundCareId");
+
+                    b.ToTable("tbl_WoundCare_StaffName");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -2880,11 +10399,359 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.AdlObsOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffAdlObs", "AdlObs")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("ObservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("BMIChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartPhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
+                        .WithMany("Physician")
+                        .HasForeignKey("BMIChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
+                        .WithMany("StaffName")
+                        .HasForeignKey("BMIChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Balance", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("Balance")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.BaseRecordItemModel", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.BaseRecordModel", "BaseRecord")
                         .WithMany("BaseRecordItems")
                         .HasForeignKey("BaseRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BelieveTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.BestInterestAssessment", "BestInterestAssessment")
+                        .WithMany("BelieveTask")
+                        .HasForeignKey("BestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BestInterestAssessment", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("BestInterestAssessment")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBloodCoagulationRecord", "BloodCoagulation")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("BloodRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagPhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBloodCoagulationRecord", "BloodCoagulation")
+                        .WithMany("Physician")
+                        .HasForeignKey("BloodRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBloodCoagulationRecord", "BloodCoagulation")
+                        .WithMany("StaffName")
+                        .HasForeignKey("BloodRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressureOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBloodPressure", "BloodPressure")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("BloodPressureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressurePhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBloodPressure", "BloodPressure")
+                        .WithMany("Physician")
+                        .HasForeignKey("BloodPressureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressureStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBloodPressure", "BloodPressure")
+                        .WithMany("StaffName")
+                        .HasForeignKey("BloodPressureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBodyTemp", "BodyTemp")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("BodyTempId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempPhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBodyTemp", "BodyTemp")
+                        .WithMany("Physician")
+                        .HasForeignKey("BodyTempId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBodyTemp", "BodyTemp")
+                        .WithMany("StaffName")
+                        .HasForeignKey("BodyTempId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBowelMovement", "BowelMovement")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("BowelMovementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementPhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBowelMovement", "BowelMovement")
+                        .WithMany("Physician")
+                        .HasForeignKey("BowelMovementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBowelMovement", "BowelMovement")
+                        .WithMany("StaffName")
+                        .HasForeignKey("BowelMovementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Capacity", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithOne("Capacity")
+                        .HasForeignKey("AwesomeCare.Model.Models.Capacity", "PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.CapacityIndicator", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Capacity", "Capacity")
+                        .WithMany("Indicator")
+                        .HasForeignKey("CapacityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.CareIssuesTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.BestInterestAssessment", "BestInterestAssessment")
+                        .WithMany("CareIssuesTask")
+                        .HasForeignKey("BestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.CarePlanNutrition", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("CarePlanNutrition")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBMIChart", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientBMIChart")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodCoagulationRecord", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientBloodCoagulationRecord")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodPressure", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientBloodPressure")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBodyTemp", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientBodyTemp")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBowelMovement", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientBowelMovement")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -2913,10 +10780,61 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCleaning", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientNutrition", "ClientNutrition")
+                        .WithMany("ClientCleaning")
+                        .HasForeignKey("NutritionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("ClientCleaning")
+                        .HasForeignKey("STAFFId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientComplainRegister", b =>
                 {
-                    b.HasOne("AwesomeCare.Model.Models.Client", null)
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
                         .WithMany("ComplainRegister")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientDailyTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientDailyTask")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientEyeHealthMonitoring")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientFoodIntake", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientFoodIntake")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientHeartRate", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientHeartRate")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2935,6 +10853,53 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientInvolvingPartyItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientLogAudit", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientLogAudit")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                        .WithMany("ClientLogAudit")
+                        .HasForeignKey("StaffPersonalInfoId");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealDays", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientMealType", "ClientMealType")
+                        .WithMany("ClientMeal")
+                        .HasForeignKey("ClientMealTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.RotaDayofWeek", "MealDayofWeek")
+                        .WithMany("ClientMealDays")
+                        .HasForeignKey("MealDayofWeekId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientNutrition", "ClientNutrition")
+                        .WithMany("ClientMealDays")
+                        .HasForeignKey("NutritionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedAudit", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientMedAudit")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                        .WithMany("ClientMedAudit")
+                        .HasForeignKey("StaffPersonalInfoId");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedication", b =>
@@ -2988,6 +10953,74 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.ClientRotaType", "ClientRotaType")
                         .WithMany("ClientMedicationPeriod")
                         .HasForeignKey("ClientRotaTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMgtVisit", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientMgtVisit")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                        .WithMany("ClientMgtVisit")
+                        .HasForeignKey("StaffPersonalInfoId");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientNutrition", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientNutrition")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("ClientNutrition")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientOxygenLvl", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientOxygenLvl")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientPainChart", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientPainChart")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientProgram", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientProgram")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                        .WithMany("ClientProgram")
+                        .HasForeignKey("StaffPersonalInfoId");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientPulseRate", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientPulseRate")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -3058,6 +11091,15 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientSeizure", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientSeizure")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetailItem", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.ClientServiceDetail", "ClientServiceDetail")
@@ -3076,11 +11118,493 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceWatch", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientServiceWatch")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                        .WithMany("ClientServiceWatch")
+                        .HasForeignKey("StaffPersonalInfoId");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientShopping", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientNutrition", "ClientNutrition")
+                        .WithMany("ClientShopping")
+                        .HasForeignKey("NutritionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("ClientShopping")
+                        .HasForeignKey("STAFFId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientVoice", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientVoice")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
+                        .WithMany("ClientVoice")
+                        .HasForeignKey("StaffPersonalInfoId");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientWoundCare", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientWoundCare")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.CompanyContactModel", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.CompanyModel", "Company")
                         .WithOne("CompanyContact")
                         .HasForeignKey("AwesomeCare.Model.Models.CompanyContactModel", "CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ComplainOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientComplainRegister", "ComplainRegister")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("ComplainId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ComplainStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientComplainRegister", "ComplainRegister")
+                        .WithMany("StaffName")
+                        .HasForeignKey("ComplainId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentCare", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithOne("ConsentCare")
+                        .HasForeignKey("AwesomeCare.Model.Models.ConsentCare", "PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentData", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithOne("ConsentData")
+                        .HasForeignKey("AwesomeCare.Model.Models.ConsentData", "PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandLine", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithOne("ConsentLandLine")
+                        .HasForeignKey("AwesomeCare.Model.Models.ConsentLandLine", "PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandlineLog", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ConsentLandLine", "ConsentLandLine")
+                        .WithMany("LogMethod")
+                        .HasForeignKey("LandlineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCall", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("DutyOnCall")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCallPersonResponsible", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.DutyOnCall", "DutyOnCall")
+                        .WithMany("PersonResponsible")
+                        .HasForeignKey("DutyOnCallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCallPersonToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.DutyOnCall", "DutyOnCall")
+                        .WithMany("PersonToAct")
+                        .HasForeignKey("DutyOnCallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Enotice", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("Enotice")
+                        .HasForeignKey("PublishTo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Equipment", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("Equipment")
+                        .HasForeignKey("PersonToAct")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithMany("Equipment")
+                        .HasForeignKey("PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", "EyeHealth")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("EyeHealthId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthPhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", "EyeHealth")
+                        .WithMany("Physician")
+                        .HasForeignKey("EyeHealthId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", "EyeHealth")
+                        .WithMany("StaffName")
+                        .HasForeignKey("EyeHealthId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.FilesAndRecord", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("FilesAndRecord")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("FilesAndRecord")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakeOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientFoodIntake", "FoodIntake")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("FoodIntakeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakePhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientFoodIntake", "FoodIntake")
+                        .WithMany("Physician")
+                        .HasForeignKey("FoodIntakeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakeStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientFoodIntake", "FoodIntake")
+                        .WithMany("StaffName")
+                        .HasForeignKey("FoodIntakeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HealthAndLiving", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("HealthAndLiving")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HealthTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.BestInterestAssessment", "BestInterestAssessment")
+                        .WithMany("HealthTask")
+                        .HasForeignKey("BestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HealthTask2", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.BestInterestAssessment", "BestInterestAssessment")
+                        .WithMany("HealthTask2")
+                        .HasForeignKey("BestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HeartRateOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientHeartRate", "HeartRate")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("HeartRateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HeartRatePhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientHeartRate", "HeartRate")
+                        .WithMany("Physician")
+                        .HasForeignKey("HeartRateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HeartRateStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientHeartRate", "HeartRate")
+                        .WithMany("StaffName")
+                        .HasForeignKey("HeartRateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HistoryOfFall", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("HistoryOfFall")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessment", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("HomeRiskAssessment")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessmentTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.HomeRiskAssessment", "HomeRiskAssessment")
+                        .WithMany("HomeRiskAssessmentTask")
+                        .HasForeignKey("HomeRiskAssessmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntry", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("HospitalEntry")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryPersonToTakeAction", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.HospitalEntry", "HospitalEntry")
+                        .WithMany("PersonToTakeAction")
+                        .HasForeignKey("HospitalEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("HospitalEntryPersonToTakeAction")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryStaffInvolved", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.HospitalEntry", "HospitalEntry")
+                        .WithMany("StaffInvolved")
+                        .HasForeignKey("HospitalEntryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("HospitalEntryStaffInvolved")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("HospitalExit")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExitOfficerToTakeAction", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.HospitalExit", "HospitalExit")
+                        .WithMany("OfficerToTakeAction")
+                        .HasForeignKey("HospitalExitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("HospitalExitOfficerToTakeAction")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.IncomingMeds", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("IncomingMeds")
+                        .HasForeignKey("UserName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.InfectionControl", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("InfectionControl")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Interest", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.InterestAndObjective", "InterestAndObjective")
+                        .WithMany("Interest")
+                        .HasForeignKey("GoalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.InterestAndObjective", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("InterestAndObjective")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -3094,12 +11618,525 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicatorLog", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.KeyIndicators", "KeyIndicators")
+                        .WithMany("LogMethod")
+                        .HasForeignKey("KeyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicators", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithOne("KeyIndicators")
+                        .HasForeignKey("AwesomeCare.Model.Models.KeyIndicators", "PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyWorkerOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffKeyWorkerVoice", "KeyWorker")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("KeyWorkerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyWorkerWorkteam", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffKeyWorkerVoice", "KeyWorker")
+                        .WithMany("Workteam")
+                        .HasForeignKey("KeyWorkerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.LogAuditOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientLogAudit", "LogAudit")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("LogAuditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ManagingTasks", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ManagingTasks")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientMedAudit", "MedAudit")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("MedAuditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientMedAudit", "MedAudit")
+                        .WithMany("StaffName")
+                        .HasForeignKey("MedAuditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.MedCompOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffMedComp", "MedComp")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("MedCompId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OneToOneOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffOneToOne", "OneToOne")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("OneToOneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientOxygenLvl", "OxygenLvl")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("OxygenLvlId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlPhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientOxygenLvl", "OxygenLvl")
+                        .WithMany("Physician")
+                        .HasForeignKey("OxygenLvlId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientOxygenLvl", "OxygenLvl")
+                        .WithMany("StaffName")
+                        .HasForeignKey("OxygenLvlId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PainChartOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientPainChart", "PainChart")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("PainChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PainChartPhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientPainChart", "PainChart")
+                        .WithMany("Physician")
+                        .HasForeignKey("PainChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PainChartStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientPainChart", "PainChart")
+                        .WithMany("StaffName")
+                        .HasForeignKey("PainChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PerformanceIndicatorTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PerformanceIndicator", "PerformanceIndicator")
+                        .WithMany("PerformanceIndicatorTask")
+                        .HasForeignKey("PerformanceIndicatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentred", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithMany("PersonCentred")
+                        .HasForeignKey("PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentredFocus", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonCentred", "PersonCentre")
+                        .WithMany("Focus")
+                        .HasForeignKey("PersonCentredId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Personal", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithOne("Personal")
+                        .HasForeignKey("AwesomeCare.Model.Models.Personal", "PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalDetail", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("PersonalDetail")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalHygiene", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("PersonalHygiene")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalityTest", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.InterestAndObjective", "InterestAndObjective")
+                        .WithMany("PersonalityTest")
+                        .HasForeignKey("GoalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Pets", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("Pets")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PhysicalAbility", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("PhysicalAbility")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ProgramOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientProgram", "Program")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PulseRateOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientPulseRate", "PulseRate")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("PulseRateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PulseRatePhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientPulseRate", "PulseRate")
+                        .WithMany("Physician")
+                        .HasForeignKey("PulseRateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PulseRateStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientPulseRate", "PulseRate")
+                        .WithMany("StaffName")
+                        .HasForeignKey("PulseRateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Resources", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("Resources")
+                        .HasForeignKey("PublishTo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Review", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithOne("Review")
+                        .HasForeignKey("AwesomeCare.Model.Models.Review", "PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SeizureOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientSeizure", "Seizure")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("SeizureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SeizurePhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientSeizure", "Seizure")
+                        .WithMany("Physician")
+                        .HasForeignKey("SeizureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SeizureStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientSeizure", "Seizure")
+                        .WithMany("StaffName")
+                        .HasForeignKey("SeizureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ServiceOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientServiceWatch", "Service")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ServiceStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientServiceWatch", "Service")
+                        .WithMany("StaffName")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SetupStaffHoliday", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("SetupStaffHoliday")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.ShiftBookingBlockedDays", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.ShiftBooking", "ShiftBooking")
                         .WithMany("ShiftBookingBlockedDays")
                         .HasForeignKey("ShiftBookingId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SpecialHealthAndMedication", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("SpecialHealthAndMedication")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SpecialHealthCondition", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("SpecialHealthCondition")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SpotCheckOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffSpotCheck", "SpotCheck")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("SpotCheckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffAdlObs", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("StaffAdlObs")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("StaffAdlObs")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -3118,6 +12155,24 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTest", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffCompetenceTest")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTestTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffCompetenceTest", "StaffCompetenceTest")
+                        .WithMany("StaffCompetenceTestTask")
+                        .HasForeignKey("StaffCompetenceTestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffEducation", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
@@ -3132,6 +12187,99 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
                         .WithMany("EmergencyContacts")
                         .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealth", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffHealth")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealthTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffHealth", "StaffHealth")
+                        .WithMany("StaffHealthTask")
+                        .HasForeignKey("StaffHealthId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffHoliday", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffHoliday")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffInfectionControl", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffInfectionControl")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterview", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffInterview")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterviewTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffInterview", "StaffInterview")
+                        .WithMany("StaffInterviewTask")
+                        .HasForeignKey("StaffInterviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffKeyWorkerVoice", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("StaffKeyWorkerVoice")
+                        .HasForeignKey("ServicesRequiresServices")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("StaffKeyWorkerVoice")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedComp", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("StaffMedCompObs")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("StaffMedCompObs")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffOneToOne", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("StaffOneToOne")
+                        .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -3156,6 +12304,15 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalityTest", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffPersonalityTest")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRating", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
@@ -3170,6 +12327,21 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("References")
                         .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffReference", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("StaffReference")
+                        .HasForeignKey("ApplicantRole")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("StaffReference")
+                        .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -3240,6 +12412,24 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowing", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffShadowing")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowingTask", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffShadowing", "StaffShadowing")
+                        .WithMany("StaffShadowingTask")
+                        .HasForeignKey("StaffShadowingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBooking", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.Rota", null)
@@ -3268,11 +12458,191 @@ namespace AwesomeCare.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSpotCheck", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("StaffSpotCheck")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("StaffSpotCheck")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSupervisionAppraisal", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("StaffSupervisionAppraisal")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSurvey", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
+                        .WithMany("StaffSurvey")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLead", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("StaffTeamLead")
+                        .HasForeignKey("ClientInvolved")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffTeamLead")
+                        .HasForeignKey("StaffInvolved")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLeadTasks", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffTeamLead", "StaffTeamLead")
+                        .WithMany("StaffTeamLeadTasks")
+                        .HasForeignKey("TeamLeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>
                 {
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "Staff")
                         .WithMany("Trainings")
                         .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrix", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffTrainingMatrix")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrixList", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffTrainingMatrix", "StaffTrainingMatrix")
+                        .WithMany("StaffTrainingMatrixList")
+                        .HasForeignKey("MatrixId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SupervisionOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffSupervisionAppraisal", "Supervision")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("StaffSupervisionAppraisalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SupervisionWorkteam", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffSupervisionAppraisal", "Supervision")
+                        .WithMany("Workteam")
+                        .HasForeignKey("StaffSupervisionAppraisalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SurveyOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffSurvey", "Survey")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("StaffSurveyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.SurveyWorkteam", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffSurvey", "Survey")
+                        .WithMany("Workteam")
+                        .HasForeignKey("StaffSurveyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TaskBoardAssignedTo", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.TaskBoard", "TaskBoard")
+                        .WithMany("AssignedTo")
+                        .HasForeignKey("TaskBoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernManager", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.TrackingConcernNote", "TrackingConcernNote")
+                        .WithMany("ManagerInvolved")
+                        .HasForeignKey("TrackingConcernNoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernStaff", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.TrackingConcernNote", "TrackingConcernNote")
+                        .WithMany("StaffInvolved")
+                        .HasForeignKey("TrackingConcernNoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -3303,6 +12673,150 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.Untowards", "Untowards")
                         .WithMany("StaffInvolved")
                         .HasForeignKey("UntowardsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VisitOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientMgtVisit", "Visit")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("VisitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VisitStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientMgtVisit", "Visit")
+                        .WithMany("StaffName")
+                        .HasForeignKey("VisitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VoiceCallerName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientVoice", "Voice")
+                        .WithMany("CallerName")
+                        .HasForeignKey("VoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VoiceGoodStaff", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientVoice", "Voice")
+                        .WithMany("GoodStaff")
+                        .HasForeignKey("VoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VoiceOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientVoice", "Voice")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("VoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.VoicePoorStaff", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientVoice", "Voice")
+                        .WithMany("PoorStaff")
+                        .HasForeignKey("VoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.WhisttleBlower", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("WhisttleBlower")
+                        .HasForeignKey("UserName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.WoundCareOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientWoundCare", "WoundCare")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("WoundCareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.WoundCarePhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientWoundCare", "WoundCare")
+                        .WithMany("Physician")
+                        .HasForeignKey("WoundCareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.WoundCareStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.ClientWoundCare", "WoundCare")
+                        .WithMany("StaffName")
+                        .HasForeignKey("WoundCareId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

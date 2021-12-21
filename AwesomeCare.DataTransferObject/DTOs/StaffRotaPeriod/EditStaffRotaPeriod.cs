@@ -31,5 +31,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod
         [MaxLength(225)]
         [Display(Name = "Handover Note")]
         public string HandOver { get; set; }
+
+        public int? ClientId { get; set; }
     }
 }

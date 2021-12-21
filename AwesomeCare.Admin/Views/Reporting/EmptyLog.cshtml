@@ -1,0 +1,179 @@
+﻿@using AwesomeCare.Admin.ViewModels.Reporting;
+
+@model ReportingViewModel
+@{
+    ViewData["Title"] = "Empty Log Book";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+            </div>
+            <div class="body">
+                <form asp-action="EmptyLog" method="post">
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label class="control-label">Date</label>
+                            <input type="text" class="form-control" placeholder="07-2021" />
+                        </div>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label class="control-label">Select Client</label>
+                            <select name="ClientId" asp-items="@Model.ClientList" class="selectpicker form-control" data-live-search="true">
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <input type="submit" class="btn btn-success" style="margin-top:30px !important;" value="Search" />
+                        </div>
+                    </div>
+                </form>
+
+                @if (Model.ClientRotas != null)
+                {
+
+                    <h4>AWESOME HEALTHCARE SOLUTIONS LOG BOOK (Client Name: @Model.ClientName) (ID: @Model.IdNumber)</h4>
+                    <br />
+                    if (Model.ClientId > 0)
+                    {
+                        @Html.ActionLink("Download", "Download", "Reporting", new { clientId = Model.ClientId })
+                        <br />
+                    }
+
+                    <table class="table table-condensed table-hover table-bordered">
+                        <tbody>
+                            @foreach (var rotaType in Model.RotaTypes)
+                            {
+                                var rotaDywk = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == 1);
+                                if (rotaDywk != null)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="fancy-checkbox">
+                                                <label><input type="checkbox" name="@rotaType.RotaType" checked disabled><span>@rotaType.RotaType</span></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <table class="table table-condensed table-hover table-bordered">
+                                                <tbody>
+                                                    <tr><td>Date  </td></tr>
+                                                    <tr><td>Time In:</td></tr>
+                                                    <tr><td>Time Out:</td></tr>
+                                                    <tr><td>Duration</td></tr>
+                                                    <tr><td>Carer 1: Full Name</td></tr>
+                                                    <tr><td>Signature: Remark(Text)</td></tr>
+                                                    <tr><td>Carer 2: Full Name Signature:</td></tr>
+                                                    <tr><td>Signature:</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <table class="table table-condensed table-hover table-bordered">
+                                                <tbody>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                    <tr><td><br /></td></tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                        <td style="vertical-align:top;">
+                                            <table class="table table-condensed table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Please select 'Yes' for care delivered:</th>
+                                                        <th>Yes</th>
+                                                        <th>No</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        var tasks = rotaDywk.RotaTasks.Where(s => s.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
+                                                        foreach (var tk in Model.RotaTasks)
+                                                        {
+                                                            if (tasks.FirstOrDefault(s => s.RotaTaskId.ToString() == tk.Value) != null)
+                                                            {
+                                                                <tr>
+                                                                    <td> @tk.Text.ToString()</td>
+                                                                    <td><input type="checkbox" /></td>
+                                                                    <td><input type="checkbox" /></td>
+                                                                </tr>
+                                                            }
+
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="vertical-align:top;">
+                                            <h6>Care note if any:</h6>
+                                            <br />
+                                            <br />
+                                            <br />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>
+                                            Bowel Movement:
+                                            <br />
+                                            Oral Care:
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" value="" />Yes
+                                            <input type="checkbox" value="" />No
+                                            <br />
+                                            <input type="checkbox" value="" />Yes
+                                            <input type="checkbox" value="" />No
+                                        </td>
+                                        <td>
+                                            <table class="table table-condensed table-hover table-bordered">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="vertical-align:top;">Food and Fluid Prepared</td>
+                                                        <td><br /><br /><br /><br /><br /></td>
+                                                        <td>
+                                                            <input type="checkbox" value="" />1/4
+                                                            <br />
+                                                            <input type="checkbox" value="" />2/4
+                                                            <br />
+                                                            <input type="checkbox" value="" />3/4
+                                                            <br />
+                                                            <input type="checkbox" value="" />Full
+                                                            <br />
+                                                        </td>
+                                                        <td style="vertical-align:top;">Handover to next Carers </td>
+                                                        <td><br /><br /><br /><br /><br /></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        $(".date-picker").datepicker({
+            format: "mm-yyyy",
+            startView: "months",
+            minViewMode: "months"
+        });
+    });
+</script>	 	

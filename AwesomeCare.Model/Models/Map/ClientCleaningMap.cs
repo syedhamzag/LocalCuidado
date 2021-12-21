@@ -10,7 +10,7 @@ namespace AwesomeCare.Model.Models.Map
     {
         public void Configure(EntityTypeBuilder<ClientCleaning> builder)
         {
-            builder.ToTable("tbl_ClientCleaning");
+            builder.ToTable("tbl_Client_Cleaning");
             builder.HasKey(p => p.CleaningId);
 
             #region Properties
@@ -96,6 +96,11 @@ namespace AwesomeCare.Model.Models.Map
                 .WithMany(p => p.ClientCleaning)
                 .HasForeignKey(p => p.NutritionId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(p => p.StaffPersonalInfo)
+                .WithMany(p => p.ClientCleaning)
+                .HasForeignKey(p => p.STAFFId)
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }

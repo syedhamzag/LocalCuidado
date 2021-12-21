@@ -20,7 +20,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public DateTime DueDate { get; set; }
 
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght = 1)]
+        
         [RequiredDependant("true", nameof(IsSelected), typeof(bool))]
         // [AllowedExtensions(new string[] { ".pdf" })]
         public IFormFile EvidenceFile { get; set; }

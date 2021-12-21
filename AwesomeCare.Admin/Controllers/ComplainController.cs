@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Hosting;
 using AwesomeCare.Admin.Services.Staff;
+using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.DataTransferObject.DTOs.ClientComplain;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -26,6 +28,7 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IComplainService _complainService;
         private IClientService _clientService;
+        private IBaseRecordService _baseService;
         private IStaffService _staffService;
         private readonly IWebHostEnvironment _env;
         private ILogger<ClientController> _logger;
@@ -33,11 +36,12 @@ namespace AwesomeCare.Admin.Controllers
 
         public ComplainController(IComplainService complainService, IFileUpload fileUpload, 
             IClientService clientService, IStaffService staffService, IWebHostEnvironment env, 
-            ILogger<ClientController> logger, IMemoryCache cache) : base(fileUpload)
+            ILogger<ClientController> logger, IMemoryCache cache, IBaseRecordService baseService) : base(fileUpload)
         {
             _complainService = complainService;
             _clientService = clientService;
             _staffService = staffService;
+            _baseService = baseService;
             _env = env;
             _logger = logger;
             _cache = cache;
@@ -46,29 +50,71 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var entities = await _complainService.Get();
-            return View(entities);
+            var client = await _clientService.GetClientDetail();
+            List<CreateComplainRegister> reports = new List<CreateComplainRegister>();
+            foreach (GetClientComplainRegister item in entities)
+            {
+                var report = new CreateComplainRegister();
+                report.ComplainId = item.ComplainId;
+                report.DATERECIEVED = item.DATERECIEVED;
+                report.DUEDATE = item.DUEDATE;
+                report.CONCERNSRAISED = item.CONCERNSRAISED;
+                report.ClientName = client.Where(s => s.ClientId == item.ClientId).FirstOrDefault().FullName;
+                report.StatusName = _baseService.GetBaseRecordItemById(item.StatusId).Result.ValueName;
+                report.EvidenceFilePath = item.EvidenceFilePath;
+                reports.Add(report);
+            }
+            return View(reports);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> View(int complainId)
         {
-            return View();
+            var complain = _complainService.Get(complainId);
+            var staffNames = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+            if (complain == null) return NotFound();
+            var putEntity = new CreateComplainRegister
+            {
+                ClientName = client.Where(s=>s.ClientId==complain.Result.ClientId).FirstOrDefault().FullName,
+                Reference = complain.Result.Reference,
+                ComplainId = complain.Result.ComplainId,
+                ClientId = complain.Result.ClientId,
+                ACTIONTAKEN = complain.Result.ACTIONTAKEN,
+                COMPLAINANTCONTACT = complain.Result.COMPLAINANTCONTACT,
+                CONCERNSRAISED = complain.Result.CONCERNSRAISED,
+                DATEOFACKNOWLEDGEMENT = complain.Result.DATEOFACKNOWLEDGEMENT,
+                DATERECIEVED = complain.Result.DATERECIEVED,
+                DUEDATE = complain.Result.DUEDATE,
+                EvidenceFilePath = complain.Result.EvidenceFilePath,
+                FINALRESPONSETOFAMILY = complain.Result.FINALRESPONSETOFAMILY,
+                INCIDENTDATE = complain.Result.INCIDENTDATE,
+                INVESTIGATIONOUTCOME = complain.Result.INVESTIGATIONOUTCOME,
+                IRFNUMBER = complain.Result.IRFNUMBER,
+                LETTERTOSTAFF = complain.Result.LETTERTOSTAFF,
+                LINK = complain.Result.LINK,
+                REMARK = complain.Result.REMARK,
+                ROOTCAUSE = complain.Result.ROOTCAUSE,
+                SOURCEOFCOMPLAINTS = complain.Result.SOURCEOFCOMPLAINTS,
+                StatusId = complain.Result.StatusId,
+                OfficerToAct = complain.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = complain.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                OfficerToActList = complain.Result.OfficerToAct.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+                StaffList = complain.Result.StaffName.Select(s => new SelectListItem(s.StaffName, s.StaffPersonalInfoId.ToString())).ToList(),
+            };
+            return View(putEntity);
         }
 
         #region Complain
-        [Route("[Controller]/Complain/Create/{clientId}", Name = "CreateComplainRegister")]
         public async Task<IActionResult> CreateComplainRegister(int? clientId)
         {
             var model = new CreateComplainRegister();
-            var client = await _clientService.GetClient(clientId.Value);
             var staffNames = await _staffService.GetStaffs();
-            ViewBag.GetStaffs = staffNames;
-            model.ClientId = clientId.Value;
-            model.ClientName = client.Firstname +" "+client.Middlename+" "+client.Surname ;
-            //model.STAFFINVOLVED = (IEnumerable<GetStaffs>)staffNames.Select(s => new SelectListItem(s.Fullname.ToString(), s.ApplicationUserId)).ToList();
-            //model.OFFICERTOACT = (IEnumerable<GetStaffs>)staffNames.Select(s => new SelectListItem(s.Fullname.ToString(), s.ApplicationUserId)).ToList();
+            model.STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+            var client = await _clientService.GetClientDetail();
+            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
             return View(model);
         }
-        [HttpPost("[Controller]/Complain/Create/{clientId}", Name = "CreateComplainRegister")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateComplainRegister(CreateComplainRegister model)
         {
@@ -76,32 +122,57 @@ namespace AwesomeCare.Admin.Controllers
             {
                 if (model == null || !ModelState.IsValid)
                 {
+                    var client = await _clientService.GetClientDetail();
+                    model.ClientName = client.Where(s => s.ClientId == model.ClientId).FirstOrDefault().FullName;
                     var staffNames = await _staffService.GetStaffs();
-                    ViewBag.GetStaffs = staffNames;
-                    ViewBag.Officer = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.OFFICERTOACTId);
-                    ViewBag.Staff = new SelectList(staffNames, "StaffPersonalInfoId", "FullName", model.STAFFId);
-                    var client = await _clientService.GetClient(model.ClientId);
-                    model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
+                    model.STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                     return View(model);
                 }
 
 
                 #region Evidence
+                if (model.Evidence != null)
+                {
+                    string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
+                    string folder = "clientcomplain";
+                    string filename = string.Concat(folder, "_Evidence_", extention);
+                    string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                    model.EvidenceFilePath = path;
 
-                string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_", model.IRFNUMBER);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                }
+                else
+                {
+                    model.EvidenceFilePath = "No Image";
+                }
 
-                model.EvidenceFilePath = path;
                 #endregion
 
-                var postComplain = Mapper.Map<PostComplainRegister>(model);
+                var post = new PostComplainRegister();
+                post.ACTIONTAKEN = model.ACTIONTAKEN;
+                post.ClientId = model.ClientId;
+                post.COMPLAINANTCONTACT = model.COMPLAINANTCONTACT;
+                post.CONCERNSRAISED = model.CONCERNSRAISED;
+                post.DATEOFACKNOWLEDGEMENT = model.DATEOFACKNOWLEDGEMENT;
+                post.DATERECIEVED = model.DATERECIEVED;
+                post.DUEDATE = model.DUEDATE;
+                post.FINALRESPONSETOFAMILY = model.FINALRESPONSETOFAMILY;
+                post.INCIDENTDATE = model.INCIDENTDATE;
+                post.INVESTIGATIONOUTCOME = model.INVESTIGATIONOUTCOME;
+                post.IRFNUMBER = model.IRFNUMBER;
+                post.LETTERTOSTAFF = model.LETTERTOSTAFF;
+                post.LINK = model.LINK;
+                post.OfficerToAct = model.OfficerToAct.Select(o => new PostComplainOfficerToAct { StaffPersonalInfoId = o, ComplainId = model.ComplainId}).ToList();
+                post.Reference = model.Reference;
+                post.REMARK = model.REMARK;
+                post.ROOTCAUSE = model.ROOTCAUSE;
+                post.SOURCEOFCOMPLAINTS = model.SOURCEOFCOMPLAINTS;
+                post.StaffName = model.StaffName.Select(o => new PostComplainStaffName { StaffPersonalInfoId = o, ComplainId = model.ComplainId }).ToList();
+                post.StatusId = model.StatusId;
 
-                var json = JsonConvert.SerializeObject(postComplain);
-                var result = await _complainService.PostComplainRegister(postComplain);
+                var result = await _complainService.Create(post);
                 var content = await result.Content.ReadAsStringAsync();
 
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Complain successfully registered" : "An Error Occurred" });
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode , Message = result.Content.ReadAsStringAsync().Result != null ? "New Complain successfully registered" : "An Error Occurred" });
                 return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
             }
             catch (Exception ex)
@@ -113,39 +184,37 @@ namespace AwesomeCare.Admin.Controllers
         }
         public async Task<IActionResult> Edit(int complainId)
         {
-            var complain = await _complainService.Get(complainId);
+            var complain = _complainService.Get(complainId);
             var staffNames = await _staffService.GetStaffs();
-            ViewBag.GetStaffs = staffNames;
-            var client = await _clientService.GetClient(complain.ClientId);
+            var client = await _clientService.GetClientDetail();
             if (complain == null) return NotFound();
-
-            var putEntity = new CreateComplainRegister
+        var putEntity = new CreateComplainRegister
             {
-                ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname,
-                ComplainId = complain.ComplainId,
-                ClientId = complain.ClientId,
-                ACTIONTAKEN = complain.ACTIONTAKEN,
-                COMPLAINANTCONTACT = complain.COMPLAINANTCONTACT,
-                CONCERNSRAISED = complain.CONCERNSRAISED,
-                DATEOFACKNOWLEDGEMENT = complain.DATEOFACKNOWLEDGEMENT,
-                DATERECIEVED = complain.DATERECIEVED,
-                DUEDATE = complain.DUEDATE,
-                EvidenceFilePath = complain.EvidenceFilePath,
-                FINALRESPONSETOFAMILY = complain.FINALRESPONSETOFAMILY,
-                INCIDENTDATE = complain.INCIDENTDATE,
-                INVESTIGATIONOUTCOME = complain.INVESTIGATIONOUTCOME,
-                IRFNUMBER = complain.IRFNUMBER,
-                LETTERTOSTAFF = complain.LETTERTOSTAFF,
-                LINK = complain.LINK,
-                OFFICERTOACTId = complain.OFFICERTOACTId,
-                REMARK = complain.REMARK,
-                ROOTCAUSE = complain.ROOTCAUSE,
-                SOURCEOFCOMPLAINTS = complain.SOURCEOFCOMPLAINTS,
-                STAFFId = complain.STAFFId,
-                StatusId = complain.StatusId,
-                //STAFFINVOLVED = (IEnumerable<GetStaffs>)staffNames.Select(s => new SelectListItem(s.Fullname.ToString(), s.ApplicationUserId)).ToList(),
-                //OFFICERTOACT = (IEnumerable<GetStaffs>)staffNames.Select(s => new SelectListItem(s.Fullname.ToString(), s.ApplicationUserId)).ToList()
-            };
+               
+                Reference = complain.Result.Reference,
+                ComplainId = complain.Result.ComplainId,
+                ClientId = complain.Result.ClientId,
+                ACTIONTAKEN = complain.Result.ACTIONTAKEN,
+                COMPLAINANTCONTACT = complain.Result.COMPLAINANTCONTACT,
+                CONCERNSRAISED = complain.Result.CONCERNSRAISED,
+                DATEOFACKNOWLEDGEMENT = complain.Result.DATEOFACKNOWLEDGEMENT,
+                DATERECIEVED = complain.Result.DATERECIEVED,
+                DUEDATE = complain.Result.DUEDATE,
+                EvidenceFilePath = complain.Result.EvidenceFilePath,
+                FINALRESPONSETOFAMILY = complain.Result.FINALRESPONSETOFAMILY,
+                INCIDENTDATE = complain.Result.INCIDENTDATE,
+                INVESTIGATIONOUTCOME = complain.Result.INVESTIGATIONOUTCOME,
+                IRFNUMBER = complain.Result.IRFNUMBER,
+                LETTERTOSTAFF = complain.Result.LETTERTOSTAFF,
+                LINK = complain.Result.LINK,
+                REMARK = complain.Result.REMARK,
+                ROOTCAUSE = complain.Result.ROOTCAUSE,
+                SOURCEOFCOMPLAINTS = complain.Result.SOURCEOFCOMPLAINTS,
+                StatusId = complain.Result.StatusId,
+                OfficerToAct = complain.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
+                StaffName = complain.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
+                STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
+        };
             return View(putEntity);
         }
         [HttpPost]
@@ -154,15 +223,17 @@ namespace AwesomeCare.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var staffNames = await _staffService.GetStaffs();
+                model.STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
             #region Evidence
             if (model.Evidence != null)
             {
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientcomplain";
-                string filename = string.Concat(folder, "_", model.IRFNUMBER);
+                string filename = string.Concat(folder, "_Evidence_", extention);
                 string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
-
                 model.EvidenceFilePath = path;
             }
             else
@@ -170,18 +241,49 @@ namespace AwesomeCare.Admin.Controllers
                 model.EvidenceFilePath = model.EvidenceFilePath;
             }
             #endregion
-            var putComplain = Mapper.Map<PutComplainRegister>(model);
+            var put = new PutComplainRegister();
+            put.EvidenceFilePath = model.EvidenceFilePath;
+            put.ComplainId = model.ComplainId;
+            put.ACTIONTAKEN = model.ACTIONTAKEN;
+            put.ClientId = model.ClientId;
+            put.COMPLAINANTCONTACT = model.COMPLAINANTCONTACT;
+            put.CONCERNSRAISED = model.CONCERNSRAISED;
+            put.DATEOFACKNOWLEDGEMENT = model.DATEOFACKNOWLEDGEMENT;
+            put.DATERECIEVED = model.DATERECIEVED;
+            put.DUEDATE = model.DUEDATE;
+            put.FINALRESPONSETOFAMILY = model.FINALRESPONSETOFAMILY;
+            put.INCIDENTDATE = model.INCIDENTDATE;
+            put.INVESTIGATIONOUTCOME = model.INVESTIGATIONOUTCOME;
+            put.IRFNUMBER = model.IRFNUMBER;
+            put.LETTERTOSTAFF = model.LETTERTOSTAFF;
+            put.LINK = model.LINK;
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutComplainOfficerToAct { StaffPersonalInfoId = o, ComplainId = model.ComplainId }).ToList();
+            put.Reference = model.Reference;
+            put.REMARK = model.REMARK;
+            put.ROOTCAUSE = model.ROOTCAUSE;
+            put.SOURCEOFCOMPLAINTS = model.SOURCEOFCOMPLAINTS;
+            put.StaffName = model.StaffName.Select(o => new PutComplainStaffName { StaffPersonalInfoId = o, ComplainId = model.ComplainId }).ToList();
+            put.StatusId = model.StatusId;
+            
+            var putComplain = Mapper.Map<PutComplainRegister>(put);
             var entity = await _complainService.Put(putComplain);
+            
             SetOperationStatus(new Models.OperationStatus
             {
-                IsSuccessful = entity != null,
-                Message = entity != null ? "Successful" : "Operation failed"
+                IsSuccessful = entity.IsSuccessStatusCode,
+                Message = entity.IsSuccessStatusCode == true ? "Successful" : "Operation failed"
             });
-            if (entity != null)
+            if (entity.IsSuccessStatusCode != false)
             {
                 return RedirectToAction("Index");
             }
-            return View(model);
+            else
+            {
+                var staffNames = await _staffService.GetStaffs();
+                model.STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                return View(model);
+            }
+            
 
         }
         #endregion

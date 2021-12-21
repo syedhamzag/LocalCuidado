@@ -14,6 +14,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMealDays
         public string HOWTOPREPARE { get; set; }
         public string SEEVIDEO { get; set; }
         public string PICTURE { get; set; }
-        public int MealId { get; set; }
+        public int ClientMealTypeId { get; set; }
     }
 }

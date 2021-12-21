@@ -28,6 +28,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
             ComplainRegisters = new List<CreateComplainRegister>();
         }
         public int ClientId { get; set; }
+        [Required]
         [DataType(DataType.Upload)]
         [MaxFileSize(Lenght =1)]
         [AllowedExtensions(new string[] { ".png", ".jpg" , ".jpeg" })]
@@ -53,6 +54,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [Required]
         [MaxLength(50)]
         public string Surname { get; set; }
+
+        public string PreferredName { get; set; }
         [Required]
         [MaxLength(50)]
         [EmailAddress]
@@ -136,6 +139,12 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [Display(Name = "Number of Staff")]
         public int NumberOfStaff { get; set; }
         public string PassportFilePath { get; set; }
+        public string Latitude { get; set; }
+
+        public string Longitude { get; set; }
+        public string Status { get; set; }
+
+        public string UniqueId { get; set; }
         #endregion
         public List<ClientInvolvingParty> InvolvingParties { get; set; }
         public List<ClientRegulatoryContact> RegulatoryContacts { get; set; }

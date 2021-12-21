@@ -17,6 +17,9 @@ namespace AwesomeCare.Admin.Services.Staff
         [Get("/StaffInfo/GetStaffs")]
         Task<List<GetStaffs>> GetStaffs();
 
+        [Get("/StaffInfo/")]
+        Task<List<GetStaffPersonalInfo>> GetAsync();
+
         [Get("/StaffInfo/{id}")]
         Task<GetStaffPersonalInfo> GetStaff(int id);
 
@@ -50,6 +53,9 @@ namespace AwesomeCare.Admin.Services.Staff
         #region Client Feedback/Rating
         [Get("/StaffInfo/ClientFeedback/{staffPersonalInfoId}")]
         Task<List<GetStaffRating>> GetClientFeedback(int? staffPersonalInfoId);
+
+        [Get("/StaffInfo/ClientFeedback")]
+        Task<List<GetStaffRating>> GetClientFeedback();
 
         [Post("/StaffInfo/ClientFeedback")]
         Task<HttpResponseMessage> PostClientFeedback([Body]PostStaffRating model);

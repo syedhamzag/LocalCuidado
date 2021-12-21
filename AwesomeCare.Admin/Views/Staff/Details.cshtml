@@ -1,4 +1,5 @@
 ﻿@using AwesomeCare.Admin.ViewModels.Staff;
+@using System.IO; 
 @model StaffDetails;
 
 @{
@@ -20,10 +21,29 @@
                                 <ul class="nav nav-tabs-new2">
                                     <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalinfo">Personal Info</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#education">Education</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainingmatrix">Training Matrix</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#trainings">Training</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#referee">Referee</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#regulatorycontact">Regulatory Contact</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#emergencyContact">Emergency Contact</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#spotcheck">Spot Check</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#adlobs">Adl Observation</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#medcomp">Med Comp Observation</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#keyworker">Key Worker Voice</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#survey">Survey</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#onetoone">One To One</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#supervision">Supervision</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reference">Reference</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personalitytest">Personality Test</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#infection">Infection Control</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#competence">Competence Test</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#health">Health</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#interview">Interview</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#shadowing">Shadowing</a></li>
+                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#staffholiday">Holidays</a></li>
+                                    @if (Model.IsTeamLeader.Equals("Yes"))
+                                    {
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#staffteamlead">Staff Team Lead</a></li>
+                                    }
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane show active" id="personalinfo">
@@ -174,10 +194,10 @@
                                             </div>
                                             <div class="col-xs-4 col-sm-4 col-md-4">
 
-                                                    @*<div class="form-group">
-                                                        <label asp-for="Rate" class="control-label"></label>
-                                                        <input type="text" asp-for="Rate" class="form-control" readonly>
-                                                    </div>*@
+                                                @*<div class="form-group">
+                        <label asp-for="Rate" class="control-label"></label>
+                        <input type="text" asp-for="Rate" class="form-control" readonly>
+                    </div>*@
 
                                             </div>
                                         </div>
@@ -258,7 +278,7 @@
                                             <div class="col-xs-4 col-sm-4 col-md-4">
                                                 <div class="form-group">
                                                     <label asp-for="JobCategory" class="control-label"></label>
-                                                    <baserecord asp-key="Staff_JobCategory" asp-for="JobCategory" asp-items="null" readonly/>
+                                                    <baserecord asp-key="Staff_JobCategory" asp-for="JobCategory" asp-items="null" readonly />
                                                 </div>
                                             </div>
                                         </div>
@@ -466,6 +486,42 @@
                                         </div>
                                     </div>
 
+                                    <div class="tab-pane" id="trainingmatrix">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffTrainingMatrix">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="table-responsive table-bordered">
+
+                                            <table class="table tblTraining">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @foreach (var item in Model.GetStaffTrainingMatrix)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @item.GetTrainingMatrixList.FirstOrDefault().Date
+                                                            </td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
                                     <div class="tab-pane" id="referee">
                                         <h6>Referees</h6>
                                         <div class="table-responsive table-bordered">
@@ -518,62 +574,6 @@
 
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="regulatorycontact">
-                                        <h6>Regulatory Contact</h6>
-                                        <div class="table-responsive table-bordered">
-                                            <table class="table table-bordered table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Regulatory Contact</th>
-                                                        <th>Date Performed</th>
-                                                        <th>Date Due</th>
-                                                        <th>Evidence</th>
-                                                        <th>Add Form</th>
-                                                        <th>View Response</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @for (int r = 0; r < Model.RegulatoryContacts.Count; r++)
-                                                    {
-                                                    <tr>
-
-                                                        <td>
-
-                                                            @Model.RegulatoryContacts[r].RegulatoryContact
-                                                        </td>
-                                                        <td>
-                                                            @Model.RegulatoryContacts[r].DatePerformed
-                                                        </td>
-                                                        <td>
-                                                            @Model.RegulatoryContacts[r].DueDate
-                                                        </td>
-                                                        <td>
-                                                            <a asp-action="DownloadFile" asp-route-file="@Model.RegulatoryContacts[r].Evidence">Download</a>
-
-                                                        </td>
-                                                        <td>
-                                                            @if (Model.RegulatoryContacts[r].HasGoogleForm)
-                                                            {
-                                                                <a class="btn" target="_blank" href="@Model.RegulatoryContacts[r].AddLink">Add</a>
-
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            @if (Model.RegulatoryContacts[r].HasGoogleForm)
-                                                            {
-                                                                <a target="_blank" href="@Model.RegulatoryContacts[r].ViewLink">Response</a>
-
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                    }
-
-                                                </tbody>
-                                            </table>
-
-
-                                        </div>
-                                    </div>
 
                                     <div class="tab-pane" id="emergencyContact">
                                         <h6>Emergency Contact</h6>
@@ -620,6 +620,569 @@
                                         </div>
                                     </div>
 
+                                    <div class="tab-pane" id="spotcheck">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffSpotCheck">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Action Required</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffSpotCheck)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.ActionRequired
+                                                        </td>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="@string.Concat("DownloadFile", System.IO.Path.GetExtension(item.Attachment))" asp-route-file="@item.Attachment">Download</a>
+                                                            }
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="adlobs">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffAdlObs">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Action Required</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffAdlObs)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.ActionRequired
+                                                        </td>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                            }
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="medcomp">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffMedComp">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Action Required</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffMedComp)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.ActionRequired
+                                                        </td>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                            }
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="keyworker">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffKeyWorkerVoice">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Action Required</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffKeyWorkerVoice)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.ActionRequired
+                                                        </td>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                            }
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="survey">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffSurvey">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Action Required</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffSurvey)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.ActionRequired
+                                                        </td>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                            }
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="onetoone">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffOneToOne">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Action Required</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffOneToOne)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.ActionRequired
+                                                        </td>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                            }
+
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="supervision">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffSupervisionAppraisal">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Action Required</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffSupervisionAppraisal)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.ActionRequired
+                                                        </td>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                            }
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="reference">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffReference">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Relationship</th>
+                                                    <th>Attachment</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffReference)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.Relationship
+                                                        </td>
+                                                        <td>
+                                                            @if (!string.IsNullOrEmpty(item.Attachment))
+                                                            {
+                                                                <a asp-action="DownloadFile" asp-route-file="@item.Attachment">Download</a>
+                                                            }
+
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane" id="personalitytest">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffPersonalityTest">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Question</th>
+                                                    <th>Answer</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffPersonalityTest)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.QuestionName
+                                                        </td>
+                                                        <td>
+                                                            @item.AnswerName
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="infection">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffInfectionControl">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Question</th>
+                                                    <th>Answer</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffInfectionControl)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.TestDate
+                                                        </td>
+                                                        <td>
+                                                            @item.Guideline
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="competence">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="ListHeading" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffCompetenceTest">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Heading</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffCompetenceTest)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.Heading
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="health">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="ListHeading" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffHealth">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Heading</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffHealth)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.Heading
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="interview">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="ListHeading" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffInterview">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Heading</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffInterview)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.Heading
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="shadowing">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="ListHeading" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffShadowing">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Heading</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffShadowing)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.Heading
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="staffholiday">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffHoliday">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Start Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffHoliday)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.StartDate
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane" id="staffteamlead">
+                                        <div class="header">
+                                            <ul class="header-dropdown">
+                                                <li class="dropdown">
+                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right">
+                                                        <li><a asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" asp-controller="StaffTeamLead">Create</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Start Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.GetStaffHoliday)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @item.StartDate
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
