@@ -116,6 +116,8 @@ using AwesomeCare.Admin.Services.StaffHoliday;
 using AwesomeCare.Admin.Services.StaffTeamLead;
 using AwesomeCare.Admin.Services.BestInterestAssessment;
 using AwesomeCare.Admin.Services.FilesAndRecord;
+using AwesomeCare.Admin.Services.SalaryAllowance;
+using AwesomeCare.Admin.Services.SalaryDeduction;
 
 namespace AwesomeCare.Admin
 {
@@ -1064,6 +1066,18 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IFilesAndRecordService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("SalaryAllowance", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ISalaryAllowanceService>(r))
+            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+
+            services.AddHttpClient("SalaryDeduction", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ISalaryDeductionService>(r))
             .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
         }
     }
