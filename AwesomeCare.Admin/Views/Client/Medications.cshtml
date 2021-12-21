@@ -10,16 +10,31 @@
         <div class="card planned_task">
             <div class="header">
                 <h2>Medication Details</h2>
-               
+               <ul class="header-dropdown">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a asp-route="CreateMedication" asp-route-clientId="@ViewBag.ClientId">Create Medication</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
             </div>
             <div class="body">
             <table class="table table-bordered">
             <thead>
+
             <tr>
             <td>Medication</td>
             <td>Manufacturer</td>
             <td>Expiry Date<td>
+            <td>Dossage</td>
             <td>Frequency</td>
+            <td>Gap Hour</td>
+            <td>Start Date</td>
+            <td>Stop Date</td>
+            <td>Status</td>
+            <td>Remark</td>
             </tr>
             </thead>
             <tbody>
@@ -30,6 +45,11 @@
                 <td>@item.ExpiryDate</td>
                 <td>@item.Dossage</td>
                 <td>@item.Frequency</td>
+                <td>@item.Gap_Hour</td>
+                <td>@item.StartDate</td>
+                <td>@item.StopDate</td>
+                <td>@item.Status</td>
+                <td>@item.Remark</td>
                 </tr>
             }
             </tbody>
