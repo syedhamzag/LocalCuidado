@@ -132,6 +132,7 @@ using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 using AwesomeCare.DataTransferObject.DTOs.FilesAndRecord;
 using AwesomeCare.DataTransferObject.DTOs.Staff.SalaryAllowance;
 using AwesomeCare.DataTransferObject.DTOs.Staff.SalaryDeduction;
+using AwesomeCare.DataTransferObject.DTOs.Staff.StaffTax;
 
 namespace MapperConfig
 {
@@ -735,7 +736,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffTrainingMatrix, mem => mem.Ignore())
                 .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore())
                 .ForMember(dto => dto.SalaryAllowance, mem => mem.Ignore())
-                .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore());
+                .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTax, mem => mem.Ignore());
 
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
@@ -787,7 +789,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffTrainingMatrix, mem => mem.Ignore())
                 .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore())
                 .ForMember(dto => dto.SalaryAllowance, mem => mem.Ignore())
-                .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore());
+                .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTax, mem => mem.Ignore());
 
             CreateMap<PutStaffEducation, StaffEducation>()
                   .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -846,7 +849,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffTrainingMatrix, mem => mem.Ignore())
                 .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore())
                 .ForMember(dto => dto.SalaryAllowance, mem => mem.Ignore())
-                .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore());
+                .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffTax, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffProfile>()
                 .ForMember(dto => dto.GetStaffSpotCheck, mem => mem.Ignore())
@@ -867,6 +871,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetStaffShadowing, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffHoliday, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffTrainingMatrix, mem => mem.Ignore());
+               
 
             CreateMap<StaffPersonalInfo, GetStaffs>()
                 .ForMember(dto => dto.Fullname, mem => mem.MapFrom(src => string.Concat(src.FirstName, " ", src.MiddleName, " ", src.LastName)))
@@ -2826,6 +2831,15 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
 
             CreateMap<SalaryDeduction, GetSalaryDeduction>();
+            #endregion
+
+            #region StaffTax
+            CreateMap<PutStaffTax, StaffTax>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<PostStaffTax, StaffTax>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+
+            CreateMap<StaffTax, GetStaffTax>();
             #endregion
 
 

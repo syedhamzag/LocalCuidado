@@ -52,6 +52,7 @@ namespace AwesomeCare.Model.Models
             FilesAndRecord = new HashSet<FilesAndRecord>();
             SalaryAllowance = new HashSet<SalaryAllowance>();
             SalaryDeduction = new HashSet<SalaryDeduction>();
+            StaffTax = new HashSet<StaffTax>();
         }
 
         public int StaffPersonalInfoId { get; set; }
@@ -156,6 +157,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<FilesAndRecord> FilesAndRecord { get; set; }
         public virtual ICollection<SalaryAllowance> SalaryAllowance { get; set; }
         public virtual ICollection<SalaryDeduction> SalaryDeduction { get; set; }
+        public virtual ICollection<StaffTax> StaffTax { get; set; }
 
     }
 }
