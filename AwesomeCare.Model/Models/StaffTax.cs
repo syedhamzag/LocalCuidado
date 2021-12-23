@@ -9,7 +9,7 @@ namespace AwesomeCare.Model.Models
         public int StaffTaxId { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public decimal Tax { get; set; }
-        public Decimal NI { get; set; }
+        public decimal NI { get; set; }
         public string Remarks { get; set; }
 
         public virtual StaffPersonalInfo StaffPersonalInfo { get; set; }

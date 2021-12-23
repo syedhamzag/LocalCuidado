@@ -34,7 +34,10 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateStaffTax();
                 report.StaffTaxId = item.StaffTaxId;
-                report.StartDate = item.StartDate;
+                report.StaffPersonalInfoId = item.StaffPersonalInfoId;
+                report.Tax = item.Tax;
+                report.NI = item.NI;
+                report.Remarks = item.Remarks;
                 report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
                 reports.Add(report);
             }
