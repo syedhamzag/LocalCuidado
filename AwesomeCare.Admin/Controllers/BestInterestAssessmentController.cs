@@ -57,9 +57,7 @@ namespace AwesomeCare.Admin.Controllers
             var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
             model.baseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
             model.HeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-            model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-            model.TitleList = baseRecord.Where(s => s.KeyName == "MCA_Health_Task_Title").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-            model.Title2List = baseRecord.Where(s => s.KeyName == "MCA_Health_Task_Title2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+            model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();           
             model.BaseRecordList = baseRecord.ToList();
             model.ClientId = clientId;
             model.BelieveTaskCount = 1;
@@ -73,8 +71,6 @@ namespace AwesomeCare.Admin.Controllers
                 model.baseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
                 model.HeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
                 model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                model.TitleList = baseRecord.Where(s => s.KeyName == "MCA_Health_Task_Title").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                model.Title2List = baseRecord.Where(s => s.KeyName == "MCA_Health_Task_Title2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
                 model.BaseRecordList = baseRecord.ToList();
                 model.BelieveTaskCount = mcaBest.GetBelieveTask.Count;
                 model.CareIssuesTaskCount = model.baseRecordList.Count;

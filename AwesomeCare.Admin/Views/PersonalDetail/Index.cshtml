@@ -103,7 +103,7 @@
                                                     <td>
                                                         <div class="fancy-checkbox">
                                                             <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" /><span><small> </small></span></label>
-
+                                                            <input type="hidden" id="@string.Concat("PersonCentredId",i)" name="@string.Concat("PersonCentredId",i)" value="0" />
                                                         </div>
                                                     </td>
                                                     <td>
@@ -452,11 +452,17 @@
             $('#itemIdcmb').siblings().first().val(value);
         };
         $(function () {
+            var counter = $('#PersonCentreCount').val();
             $('#btnClass1').on('click', function () {
                 $('#tblPersonCentered > tbody  > tr').each(function () {
                     var Id = $(this)[0].id;
                     if (Id == "trClass1") {
                         $('#' + Id).show(1000);
+                        if (counter == 0)
+                        {
+                            counter++;
+                            $('#PersonCentreCount').val(counter);
+                        }
                     }
                 });
             });
@@ -465,6 +471,10 @@
                     var Id = $(this)[0].id;
                     if (Id == "trClass2") {
                         $('#' + Id).show(1000);
+                        if (counter == 1) {
+                            counter++;
+                            $('#PersonCentreCount').val(counter);
+                        }
                     }
                 });
             });
@@ -473,6 +483,10 @@
                     var Id = $(this)[0].id;
                     if (Id == "trClass3") {
                         $('#' + Id).show(1000);
+                        if (counter == 2) {
+                            counter++;
+                            $('#PersonCentreCount').val(counter);
+                        }
                     }
                 });
             });
@@ -481,6 +495,10 @@
                     var Id = $(this)[0].id;
                     if (Id == "trClass4") {
                         $('#' + Id).show(1000);
+                        if (counter == 3) {
+                            counter++;
+                            $('#PersonCentreCount').val(counter);
+                        }
                     }
                 });
             });
@@ -489,6 +507,10 @@
                     var Id = $(this)[0].id;
                     if (Id == "trClass5") {
                         $('#' + Id).show(1000);
+                        if (counter == 4) {
+                            counter++;
+                            $('#PersonCentreCount').val(counter);
+                        }
                     }
                 });
             });

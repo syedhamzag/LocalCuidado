@@ -361,11 +361,7 @@ namespace AwesomeCare.Admin.Controllers
                 if (isChecked.Count > 0 && isChecked[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
                 { 
                     PostPersonCentred pc = new PostPersonCentred();
-                    var PersonCenteredId = 0;
-                    if (model.PersonalDetailId > 0)
-                    {
-                        PersonCenteredId = int.Parse(formcollection[$"PersonCentredId{i}"]);
-                    }
+                    var PersonCenteredId = int.Parse(formcollection[$"PersonCentredId{i}"]);
                     var Class = int.Parse(formcollection[$"Class{i}"]);
                     var Focus = formcollection[$"Focus{i}"];
                     var ExpSupport = formcollection[$"ExpSupport{i}"].ToString();
