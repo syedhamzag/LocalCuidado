@@ -3,79 +3,130 @@
 @{
     ViewData["Title"] = "HomeCare";
 }
-<div class="row clearfix">
-    <div class="col-lg-12 col-md-12">
-        <div class="card planned_task">
-            <div class="header">
-                <h2>HomeCare Clients</h2>
-                <ul class="header-dropdown">
-                    <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a asp-action="HomeCareRegistration" asp-controller="Client">New Client</a></li>
 
-                        </ul>
-                    </li>
-                </ul>
+<!-- Page Header -->
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+        </div>
+        <div class="col-auto float-end ms-auto">
+            <a asp-action="HomeCareRegistration" asp-controller="Client" class="btn add-btn"><i class="fa fa-plus"></i> Add Client</a>
+            <div class="row user-tabs view-icons">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <ul class="nav nav-tabs nav-tabs-bottom">
+                        <li class="nav-item col-sm-3"><a class="grid-view btn nav-link active" data-bs-toggle="tab" href="#client"><i class="fa fa-th"></i></a></li>
+                        <li class="nav-item col-sm-3"><a class="list-view btn nav-link" data-bs-toggle="tab" href="#clientlist"><i class="fa fa-bars"></i></a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="body">
-                <table class="table m-b-0 datatables">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th></th>
-                            <th>Name</th>
-                            <th>ID Number</th>
-                            <th>Telephone</th>
-                            <th>Rate</th>
-                            <th>Keyworker</th>
-                            <th>PostCode</th>
-                            <th>BirthDay</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var client in Model.Select((d, i) => new { index = i + 1, data = d }))
-                        {
-                            <tr>
-                                <td>@client.index </td>
-                                <td><img src="@client.data.PassportFilePath" alt="Image" width="35" height="35" style="border-radius:50%;" /></td>
-                                <td><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></td>
-                                <td>@client.data.IdNumber</td>
-                                <td><span class="text-info">@client.data.Telephone</span></td>
-                                <td>@client.data.Rate</td>
-                                <td>@client.data.Keyworker</td>
-                                <td>@client.data.PostCode</td>
-                                <td>@client.data.DateOfBirth</td>
-                                <td>@client.data.StartDate.ToString("dd MMM yyyy")</td>
-                                <td>@client.data.EndDate?.ToString("dd MMM yyyy")</td>
-                                <td><span class="badge badge-success">@client.data.Status</span></td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        </div>
+    </div>
+</div>
+<!-- /Page Header -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="tab-content profile-tab-content">
+
+            <!-- Client Tab -->
+            <div id="client" class="tab-pane fade show active">
+                <div class="row staff-grid-row">
+                    @foreach (var client in Model.Select((d, i) => new { index = i + 1, data = d }))
+                    {
+                        <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
+                            <div class="profile-widget">
+                                <div class="profile-img">
+                                    <a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails" class="avatar"><img alt="" src="@client.data.PassportFilePath" width="80" height="84"></a>
+                                </div>
+                                <div class="dropdown profile-action">
+                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        @Html.ActionLink("Nutrition", "Index", "Nutrition", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                        @*@Html.ActionLink("Rotering", "Index", "Rotering", new { client = client.data.ClientId }, new { @class = "dropdown-item" })*@
+                                        <button type="button" id="@string.Concat("btnRoteringGrid",client.data.ClientId)" class="dropdown-item" data-toggle="modal" data-target="#RoteringModal" data-id="@client.data.ClientId">
+                                            Rotering
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                            @Html.ActionLink("Nutrition", "Index", "Nutrition", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
-                                            @*@Html.ActionLink("Rotering", "Index", "Rotering", new { client = client.data.ClientId }, new { @class = "dropdown-item" })*@
-                                            <button type="button" id="btnRotering" class="dropdown-item" data-toggle="modal" data-target="#RoteringModal" data-id="@client.data.ClientId">
-                                                Rotering
-                                            </button>
-                                            @Html.ActionLink("Details", "HomeCareDetails", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
-                                            @Html.ActionLink("Edit", "EditRegistration", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
-                                            <a class="dropdown-item" asp-route-clientId="@client.data.ClientId" asp-action="Medications">Medications</a>
-                                        </div>
+                                        @Html.ActionLink("Details", "HomeCareDetails", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                        @Html.ActionLink("Edit", "EditRegistration", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                        <a class="dropdown-item" asp-route-clientId="@client.data.ClientId" asp-action="Medications">Medications</a>
                                     </div>
-                                </td>
-                            </tr>
-                        }
+                                </div>
+                                <h4 class="user-name m-t-10 mb-0 text-ellipsis"><a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails"><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></a></h4>
+                                <h5 class="user-name m-t-10 mb-0 text-ellipsis"><a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails">@client.data.Email</a></h5>
+                                <div class="small text-muted">@client.data.IdNumber</div>
+                                <a href="chat.html" class="btn btn-white btn-sm m-t-10">Message</a>
+                                <a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails" class="btn btn-white btn-sm m-t-10">View Profile</a>
+                            </div>
+                        </div>
+                    }
+                </div>
 
-
-                    </tbody>
-                </table>
-
+            </div>
+            <!-- Client List Tab -->
+            <div id="clientlist" class="tab-pane fade">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-dark custom-table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Client ID</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th>Rate</th>
+                                        <th>Keyworker</th>
+                                        <th>PostCode</th>
+                                        <th>BirthDay</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var client in Model.Select((d, i) => new { index = i + 1, data = d }))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <h2 class="table-avatar">
+                                                    <a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails" class="avatar"><img src="@client.data.PassportFilePath" alt="" width="38" height="42"></a>
+                                                    <a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails"><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></a>
+                                                </h2>
+                                            </td>
+                                            <td>@client.data.IdNumber</td>
+                                            <td>@client.data.Email</td>
+                                            <td>@client.data.Telephone</td>
+                                            <td>@client.data.Rate</td>
+                                            <td>@client.data.Keyworker</td>
+                                            <td>@client.data.PostCode</td>
+                                            <td>@client.data.DateOfBirth</td>
+                                            <td>@client.data.StartDate.ToString("dd MMM yyyy")</td>
+                                            <td>@client.data.EndDate?.ToString("dd MMM yyyy")</td>
+                                            <td>
+                                                @client.data.Status
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="dropdown dropdown-action">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        @Html.ActionLink("Nutrition", "Index", "Nutrition", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                                        @*@Html.ActionLink("Rotering", "Index", "Rotering", new { client = client.data.ClientId }, new { @class = "dropdown-item" })*@
+                                                        <button type="button" id="@string.Concat("btnRotering",client.data.ClientId)" class="dropdown-item" data-toggle="modal" data-target="#RoteringModal" data-id="@client.data.ClientId">
+                                                            Rotering
+                                                        </button>
+                                                        @Html.ActionLink("Details", "HomeCareDetails", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                                        @Html.ActionLink("Edit", "EditRegistration", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                                        <a class="dropdown-item" asp-route-clientId="@client.data.ClientId" asp-action="Medications">Medications</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -98,7 +149,7 @@
                         </div>
                         <div class="body">
                             <div class="form-group">
-                                <input type="hidden" id="clientId" name="client" value="0" />
+                                <input type="hidden" id="clientId" name="clientId" value="0" />
                                 <label>Please enter pin code</label>
                                 <input type="password" class="form-control" name="pin" />
                             </div>
@@ -115,31 +166,40 @@
     </div>
 </div>
 @section VendorScripts{
-    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
-    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+    <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+    <script src="~/assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="~/assets/bundles/mainscripts.bundle.js"></script>
     <script src="~/js/Notification.js"></script>
     <script type="text/javascript">
-        $('.datatables').on('click', '#btnRotering', function () {
-            const Btn = $(this);
-            const Id = Btn.data('id');
-            $('#clientId').val(Id);
-        });
-        $('#RoteringForm').submit(function () {
-            const id = $('#clientId').val();
-            const pin = $('#pin').val();
-            console.log(pin);
-            if (pin != undefined) {
-                shownotification("Please enter your pin code", "error");
-                return false;
-            }
-            else {
-                if (id > 0) {
-                    return true;
+        $(document).ready(function () {
+            $('[id^="btnRotering"]').on('click', function () {
+                const Btn = $(this);
+                const Id = Btn.data('id');
+                console.log(Id);
+                $('#clientId').val(Id);
+            });
+            $('[id^="#btnRoteringGrid"]').on('click', function () {
+                const Btn = $(this);
+                const Id = Btn.data('id');
+                console.log(Id);
+                $('#clientId').val(Id);
+            });
+            $('#RoteringForm').submit(function () {
+                const id = $('#clientId').val();
+                const pin = $('#pin').val();
+                console.log(pin);
+                if (pin != undefined) {
+                    shownotification("Please enter your pin code", "error");
+                    return false;
                 }
+                else {
+                    if (id > 0) {
+                        return true;
+                    }
 
 
-            }
+                }
+            });
         });
     </script>
 }

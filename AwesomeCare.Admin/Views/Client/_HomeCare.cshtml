@@ -1,0 +1,145 @@
+﻿@using  AwesomeCare.DataTransferObject.DTOs.Client;
+@model List<GetClient>
+@{
+    ViewData["Title"] = "HomeCare";
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="header">
+                <h2>HomeCare Clients</h2>
+                <ul class="header-dropdown">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a asp-action="HomeCareRegistration" asp-controller="Client">New Client</a></li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="body">
+                <table class="table m-b-0 datatables">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th></th>
+                            <th>Name</th>
+                            <th>ID Number</th>
+                            <th>Telephone</th>
+                            <th>Rate</th>
+                            <th>Keyworker</th>
+                            <th>PostCode</th>
+                            <th>BirthDay</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var client in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                            <tr>
+                                <td>@client.index </td>
+                                <td><img src="@client.data.PassportFilePath" alt="Image" width="35" height="35" style="border-radius:50%;" /></td>
+                                <td><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></td>
+                                <td>@client.data.IdNumber</td>
+                                <td><span class="text-info">@client.data.Telephone</span></td>
+                                <td>@client.data.Rate</td>
+                                <td>@client.data.Keyworker</td>
+                                <td>@client.data.PostCode</td>
+                                <td>@client.data.DateOfBirth</td>
+                                <td>@client.data.StartDate.ToString("dd MMM yyyy")</td>
+                                <td>@client.data.EndDate?.ToString("dd MMM yyyy")</td>
+                                <td><span class="badge badge-success">@client.data.Status</span></td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Nutrition", "Index", "Nutrition", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                            @*@Html.ActionLink("Rotering", "Index", "Rotering", new { client = client.data.ClientId }, new { @class = "dropdown-item" })*@
+                                            <button type="button" id="btnRotering" class="dropdown-item" data-toggle="modal" data-target="#RoteringModal" data-id="@client.data.ClientId">
+                                                Rotering
+                                            </button>
+                                            @Html.ActionLink("Details", "HomeCareDetails", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("Edit", "EditRegistration", "Client", new { clientId = client.data.ClientId }, new { @class = "dropdown-item" })
+                                            <a class="dropdown-item" asp-route-clientId="@client.data.ClientId" asp-action="Medications">Medications</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="RoteringModal" tabindex="-1" role="dialog" aria-labelledby="RoteringModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="RoteringForm" asp-controller="Rotering" asp-action="Index" method="post">
+                <div class="modal-body">
+                    <div class="card">
+
+                        <div class="header">
+                        </div>
+                        <div class="body">
+                            <div class="form-group">
+                                <input type="hidden" id="clientId" name="client" value="0" />
+                                <label>Please enter pin code</label>
+                                <input type="password" class="form-control" name="pin" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+    <script src="~/js/Notification.js"></script>
+    <script type="text/javascript">
+        $('.datatables').on('click', '#btnRotering', function () {
+            const Btn = $(this);
+            const Id = Btn.data('id');
+            $('#clientId').val(Id);
+        });
+        $('#RoteringForm').submit(function () {
+            const id = $('#clientId').val();
+            const pin = $('#pin').val();
+            console.log(pin);
+            if (pin != undefined) {
+                shownotification("Please enter your pin code", "error");
+                return false;
+            }
+            else {
+                if (id > 0) {
+                    return true;
+                }
+
+
+            }
+        });
+    </script>
+}

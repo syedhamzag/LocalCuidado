@@ -2,6 +2,7 @@
 @using Newtonsoft.Json;
 @using Microsoft.AspNetCore.Mvc.Razor;
 @using Microsoft.Extensions.Configuration;
+@using IdentityServer4.Extensions;
 <!doctype html>
 <html lang="en">
 
@@ -12,26 +13,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="description" content="Cuidado Admin">
     <meta name="author" content="Cuidado Admin, design by: olamidejames.com">
+    @*<meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern, accounts, invoice, html5, responsive, CRM, Projects">*@
     @RenderSection("Meta", required: false)
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <!-- VENDOR CSS -->
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets2/img/favicon.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/assets2/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="/assets2/css/font-awesome.min.css">
+
+    <!-- Lineawesome CSS -->
+    <link rel="stylesheet" href="/assets2/css/line-awesome.min.css">
+
+    <!-- Chart CSS -->
+    <link rel="stylesheet" href="/assets2/plugins/morris/morris.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/assets2/css/style.css">
+
+
+
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <!--DataTabales-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
+    <link href="~/assets2/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">*@
     <!-- Material Design Bootstrap -->
     @*<link href="/assets/vendor/mdb/css/mdb.css" rel="stylesheet" />*@
     <link href="/assets/vendor/boostrap-multiselect2/css/bootstrap-select.css" rel="stylesheet" />
     <!-- VENDOR CSS -->
     <link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/assets/vendor/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="~/assets/vendor/chartist/css/chartist.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/chartist/css/chartist.css">
     <link rel="stylesheet" href="~/assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css">
     <link rel="stylesheet" href="~/assets/vendor/toastr/toastr.min.css">
     <link rel="stylesheet" href="~/assets/vendor/jvectormap/jquery-jvectormap-2.0.3.min.css" />
     <link rel="stylesheet" href="~/assets/vendor/morrisjs/morris.min.css" />
-    <link rel="stylesheet" href="~/assets/vendor/chartist/css/chartist.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/chartist/css/chartist.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" href="/assets/vendor/bootstrap-timepicker/css/bootstrap-timepicker.min.css" />
@@ -41,299 +62,284 @@
     <link rel="stylesheet" href="/assets/vendor/nouislider/nouislider.min.css" />
     <link rel="stylesheet" href="/assets/vendor/parsleyjs/css/parsley.css">
     <link href="/assets/vendor/Chosen/css/chosen.min.css" rel="stylesheet" />
-    @RenderSection("VenderStyleSheets", required: false)<!--To be removed because of typo-->
-    @RenderSection("VendorStyleSheets", required: false)
 
-    @RenderSection("HeaderScripts", required: false)
 
     <!-- MAIN CSS -->
-    <link rel="stylesheet" href="~/assets/dark/css/main.css">
+    <link rel="stylesheet" href="~/assets2/css/style.css">
     <link rel="stylesheet" href="~/assets/dark/css/color_skins.css">
+    @RenderSection("VenderStyleSheets", required: false)<!--To be removed because of typo-->
+    @RenderSection("VendorStyleSheets", required: false)
+    @RenderSection("HeaderScripts", required: false)
 </head>
-<body class="theme-cyan">
+@*<body class="theme-cyan">*@
+<body>
+    @*<div id="wrapper">*@
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
 
-    <!-- Page Loader -->
-    <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="m-t-30"><img src="~/assets/images/logo-icon.svg" width="48" height="48" alt="Lucid"></div>
-            <p>Please wait...</p>
-        </div>
-    </div>
-    <!-- Overlay For Sidebars -->
+        <!-- Header -->
+        <div class="header">
 
-    <div id="wrapper">
-
-        <nav class="navbar navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="navbar-btn">
-                    <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
-                </div>
-
-                <div class="navbar-brand">
-                    <a href="index.html"><img src="~/assets/images/logo-white.svg" alt="Lucid Logo" class="img-responsive logo"></a>
-                </div>
-
-                <div class="navbar-right">
-                    <form id="navbar-search" class="navbar-form search-form">
-                        <input value="" class="form-control" placeholder="Search here..." type="text">
-                        <button type="button" class="btn btn-default"><i class="icon-magnifier"></i></button>
-                    </form>
-
-                    <div id="navbar-menu">
-                        <ul class="nav navbar-nav">
-                            <li>
-                                <a href="doctor-events.html" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-calendar"></i></a>
-                            </li>
-                            <li>
-                                <a href="app-chat.html" class="icon-menu d-none d-sm-block"><i class="icon-bubbles"></i></a>
-                            </li>
-                            <li>
-                                <a asp-controller="Communication" asp-action="Index" class="icon-menu d-none d-sm-block"><i class="icon-envelope"></i><span class="notification-dot"></span></a>
-                            </li>
-                            <li class="dropdown">
-                                <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
-                                    <i class="icon-bell"></i>
-                                    <span class="notification-dot"></span>
-                                </a>
-                                <ul class="dropdown-menu notifications">
-                                    <li class="header"><strong>You have 4 new Notifications</strong></li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <i class="icon-info text-warning"></i>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="text">Campaign <strong>Holiday Sale</strong> is nearly reach budget limit.</p>
-                                                    <span class="timestamp">10:00 AM Today</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <i class="icon-like text-success"></i>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="text">Your New Campaign <strong>Holiday Sale</strong> is approved.</p>
-                                                    <span class="timestamp">11:30 AM Today</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <i class="icon-pie-chart text-info"></i>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="text">Website visits from Twitter is 27% higher than last week.</p>
-                                                    <span class="timestamp">04:00 PM Today</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="media">
-                                                <div class="media-left">
-                                                    <i class="icon-info text-danger"></i>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p class="text">Error on website analytics configurations</p>
-                                                    <span class="timestamp">Yesterday</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="footer"><a href="javascript:void(0);" class="more">See all notifications</a></li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
-                                <ul class="dropdown-menu user-menu menu-icon">
-                                    <li class="menu-heading">ACCOUNT SETTINGS</li>
-                                    <li><a href="javascript:void(0);"><i class="icon-note"></i> <span>Basic</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-equalizer"></i> <span>Preferences</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-lock"></i> <span>Privacy</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-bell"></i> <span>Notifications</span></a></li>
-                                    <li class="menu-heading">BILLING</li>
-                                    <li><a href="javascript:void(0);"><i class="icon-credit-card"></i> <span>Payments</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-printer"></i> <span>Invoices</span></a></li>
-                                    <li><a href="javascript:void(0);"><i class="icon-refresh"></i> <span>Renewals</span></a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a asp-controller="Account" asp-action="SignOut" class="icon-menu"><i class="icon-login"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <!-- Logo -->
+            <div class="header-left">
+                <a href="index.html" class="logo">
+                    <img src="/assets2/img/logo.png" width="40" height="40" alt="">
+                </a>
             </div>
-        </nav>
-        @await Component.InvokeAsync(nameof(Menu))
-        <div id="main-content">
-            <div class="container-fluid">
-                <div class="block-header">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-8 col-sm-12">
-                            <h2><a href="javascript:void(0)" id="btnHide" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> @ViewData["Title"]</h2>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/"><i class="icon-home"></i></a></li>
-                                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+            <!-- /Logo -->
+
+            <a id="toggle_btn" href="javascript:void(0);">
+                <span class="bar-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </a>
+
+            <!-- Header Title -->
+            <div class="page-title-box">
+                <h3>AwesomeCare</h3>
+            </div>
+            <!-- /Header Title -->
+
+            <a id="mobile_btn" class="mobile_btn" href="#sidebar"><i class="fa fa-bars"></i></a>
+
+            <!-- Header Menu -->
+            <ul class="nav user-menu">
+
+                <!-- Search -->
+                <li class="nav-item">
+                    <div class="top-nav-search">
+                        <a href="javascript:void(0);" class="responsive-search">
+                            <i class="fa fa-search"></i>
+                        </a>
+                        <form action="search.html">
+                            <input class="form-control" type="text" placeholder="Search here">
+                            <button class="btn" type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                </li>
+                <!-- /Search -->
+                <!-- Flag -->
+                <li class="nav-item dropdown has-arrow flag-nav">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+                        <img src="/assets2/img/flags/us.png" alt="" height="20"> <span>English</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="/assets2/img/flags/us.png" alt="" height="16"> English
+                        </a>
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="/assets2/img/flags/fr.png" alt="" height="16"> French
+                        </a>
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="/assets2/img/flags/es.png" alt="" height="16"> Spanish
+                        </a>
+                        <a href="javascript:void(0);" class="dropdown-item">
+                            <img src="/assets2/img/flags/de.png" alt="" height="16"> German
+                        </a>
+                    </div>
+                </li>
+                <!-- /Flag -->
+                <!-- Notifications -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <i class="fa fa-bell-o"></i> <span class="badge rounded-pill">3</span>
+                    </a>
+                    <div class="dropdown-menu notifications">
+                        <div class="topnav-dropdown-header">
+                            <span class="notification-title">Notifications</span>
+                            <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+                        </div>
+                        <div class="noti-content">
+                            <ul class="notification-list">
                             </ul>
                         </div>
-                        <div class="col-lg-6 col-md-4 col-sm-12 text-right" id="divtextright">
-                            <div class="bh_chart hidden-xs">
-                                <div class="float-left m-r-15">
-                                    <small>Meds Given</small>
-                                    <h6 class="mb-0 mt-1"><i class="icon-user"></i> </h6>
-                                </div>
-                                <span class="bh_visitors float-right">2,5,1,8,3,6,7,5</span>
-                            </div>
-                            <div class="bh_chart hidden-sm">
-                                <div class="float-left m-r-15">
-                                    <small>Meds Rejected</small>
-                                    <h6 class="mb-0 mt-1"><i class="icon-globe"></i> </h6>
-                                </div>
-                                <span class="bh_visits float-right">10,8,9,3,5,8,5</span>
-                            </div>
-                            <div class="bh_chart hidden-sm">
-                                <div class="float-left m-r-15">
-                                    <small>Meds Missed</small>
-                                    <h6 class="mb-0 mt-1"><i class="icon-bubbles"></i> </h6>
-                                </div>
-                                <span class="bh_chats float-right">1,8,5,6,2,4,3,2</span>
-                            </div>
+                        <div class="topnav-dropdown-footer">
+                            <a href="activities.html">View all Notifications</a>
+                        </div>
+                    </div>
+                </li>
+                <!-- /Notifications -->
+                <!-- Message Notifications -->
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <i class="fa fa-comment-o"></i> <span class="badge rounded-pill">8</span>
+                    </a>
+                    <div class="dropdown-menu notifications">
+                        <div class="topnav-dropdown-header">
+                            <span class="notification-title">Messages</span>
+                            <a href="javascript:void(0)" class="clear-noti"> Clear All </a>
+                        </div>
+                        <div class="topnav-dropdown-footer">
+                            <a asp-controller="Communication" asp-action="Index">View all Messages</a>
+                        </div>
+                    </div>
+                </li>
+                <!-- /Message Notifications -->
+
+                <li class="nav-item dropdown has-arrow main-drop">
+                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <span class="user-img">
+                            <img src="/assets2/img/profiles/avatar-21.jpg" alt="">
+                            <span class="status online"></span>
+                        </span>
+                        <span> @User.GetDisplayName() </span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="profile.html">My Profile</a>
+                        <a class="dropdown-item" href="settings.html">Settings</a>
+                        <a asp-controller="Account" asp-action="SignOut" class="dropdown-item">Logout</a>
+                    </div>
+                </li>
+            </ul>
+            <!-- /Header Menu -->
+            <!-- Mobile Menu -->
+            <div class="dropdown mobile-user-menu">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="profile.html">My Profile</a>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                    <a asp-controller="Account" asp-action="SignOut" class="dropdown-item">Logout</a>
+                </div>
+            </div>
+            <!-- /Mobile Menu -->
+
+        </div>
+        <!-- /Header -->
+        <!-- Page Wrapper -->
+        <div class="page-wrapper">
+
+            <!-- Page Content -->
+            <div class="content container-fluid">
+
+                @await Component.InvokeAsync(nameof(Menu))
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h3 class="page-title">@ViewData["Title"]</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
                 @RenderBody()
             </div>
         </div>
-    </div>
 
-    <!-- Javascript -->
-    <script src="~/assets/dark/bundles/libscripts.bundle.js"></script>
-    <script src="~/assets/dark/bundles/vendorscripts.bundle.js"></script>
-
-    <script src="~/assets/dark/bundles/chartist.bundle.js"></script>
-    <script src="~/assets/dark/bundles/knob.bundle.js"></script> <!-- Jquery Knob-->
-    <script src="~/assets/dark/bundles/flotscripts.bundle.js"></script> <!-- flot charts Plugin Js -->
-    <script src="~/assets/vendor/toastr/toastr.js"></script>
-    <script src="~/assets/vendor/flot-charts/jquery.flot.selection.js"></script>
-
-    <script src="~/assets/dark/bundles/mainscripts.bundle.js"></script>
-    <script src="~/assets/dark/js/index.js"></script>
-
-    <script src="~/assets/dark/bundles/chartist.bundle.js"></script>
-    <script src="~/assets/dark/bundles/morrisscripts.bundle.js"></script><!-- Morris Plugin Js -->
-    <script src="~/assets/dark/bundles/jvectormap.bundle.js"></script> <!-- JVectorMap Plugin Js -->
-
-    <script src="~/assets/dark/js/pages/charts/chart-widgets.js"></script>
-
-    <script src="~/assets/vendor/jquery-sparkline/js/jquery.sparkline.min.js"></script>
-
-    <script src="~/assets/dark/bundles/mainscripts.bundle.js"></script>
-    <script src="~/assets/dark/js/pages/charts/peity_chart.js"></script>
-
-    <script src="~/assets/dark/js/widgets/infobox/infobox-1.js"></script>
-    @*  *@
-    <script src="/assets/vendor/bootstrap/js/bootstrap.js"></script>
-    <script src="/assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js -->
-    <script src="/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js -->
-    <script src="/assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
-    <script src="/assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
-    <script src="/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
-    <script src="/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-    <script src="/assets/vendor/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
-    <script src="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js -->
-    @*<script src="/assets/vendor/nouislider/nouislider.js"></script>*@ <!-- noUISlider Plugin Js -->
-    <script src="/assets/vendor/parsleyjs/js/parsley.min.js"></script>
-    <script src="/assets/vendor/boostrap-multiselect2/js/bootstrap-select.js"></script>
-    <script src="/assets/vendor/Chosen/js/chosen.jquery.min.js"></script>
-
-    @*  *@
-    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+        <!-- /Page Header -->
+        <!-- Javascript -->
 
 
-    @RenderSection("VendorScripts", required: false)
+        @RenderSection("VendorScripts", required: false)
+
+        <!-- jQuery -->
+        <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+
+        <!-- Bootstrap Core JS -->
+        <script src="~/assets2/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Slimscroll JS -->
+        <script src="~/assets2/js/jquery.slimscroll.min.js"></script>
+
+        <!-- Custom JS -->
+        <script src="~/assets2/js/app.js"></script>
+
+        @RenderSection("Scripts", required: false)
+
+        <!-- Javascript -->
+        <script src="~/assets/dark/bundles/libscripts.bundle.js"></script>
+        <script src="~/assets/dark/bundles/vendorscripts.bundle.js"></script>
+
+        <script src="~/assets/dark/bundles/knob.bundle.js"></script> <!-- Jquery Knob-->
+        <script src="~/assets/dark/bundles/flotscripts.bundle.js"></script> <!-- flot charts Plugin Js -->
+        <script src="~/assets/vendor/toastr/toastr.js"></script>
+        <script src="~/assets/vendor/flot-charts/jquery.flot.selection.js"></script>
+
+        <script src="~/assets/dark/bundles/mainscripts.bundle.js"></script>
+
+        <script src="~/assets/dark/bundles/morrisscripts.bundle.js"></script><!-- Morris Plugin Js -->
+        <script src="~/assets/dark/bundles/jvectormap.bundle.js"></script> <!-- JVectorMap Plugin Js -->
+
+        <script src="~/assets/vendor/jquery-sparkline/js/jquery.sparkline.min.js"></script>
+
+        <script src="~/assets/dark/bundles/mainscripts.bundle.js"></script>
+        <script src="~/assets/dark/js/pages/charts/peity_chart.js"></script>
+
+        <script src="~/assets/dark/js/widgets/infobox/infobox-1.js"></script>
+
+        <script src="~/assets/vendor/bootstrap/js/bootstrap.js"></script>
+        <script src="~/assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js -->
+        <script src="~/assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js -->
+        <script src="~/assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+        <script src="~/assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
+        <script src="~/assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+        <script src="~/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+        <script src="~/assets/vendor/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
+        <script src="~/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js -->
+        @*<script src="/assets/vendor/nouislider/nouislider.js"></script>*@ <!-- noUISlider Plugin Js -->
+        <script src="~/assets/vendor/parsleyjs/js/parsley.min.js"></script>
+        <script src="~/assets/vendor/boostrap-multiselect2/js/bootstrap-select.js"></script>
+        <script src="~/assets/vendor/Chosen/js/chosen.jquery.min.js"></script>
+
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+        <script src="~/assets2/js/dataTables.bootstrap4.min.js"></script>
+        @*
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>*@
 
 
-    <script src="/assets/bundles/mainscripts.bundle.js"></script>
-    <script src="/assets/js/pages/forms/advanced-form-elements.js"></script>
-    <script>
-        $('#btnHide').on('click', function () {
-            
-            if ($('#left-sidebar').css('display') == 'none') {
-                $(this).children().first().removeClass('fa fa-arrow-right');
-                $(this).children().first().addClass('fa fa-arrow-left');
-                $('#left-sidebar').css('display', 'block');
-                $('.navbar-right').css('display', 'block');
-                $('#divtextright').css('display', 'block');
-                $('#main-content').css('float', 'right');
-                $('#main-content').css('margin-left', '0px');
-            }
-            else
-            {
-                $(this).children().first().removeClass('fa fa-arrow-left');
-                $(this).children().first().addClass('fa fa-arrow-right');
-                $('#left-sidebar').css('display', 'none');
-                $('.navbar-right').css('display', 'none');
-                $('#divtextright').css('display', 'none');
-                $('#main-content').css('float', 'none');
-                $('#main-content').css('margin-left', '100px');
-            }
-        });
-        $(document).ready(function () {
+        @*@RenderSection("VendorScripts", required: false)*@
 
-            // Multiselect
-            //$('.multiselect').multiselect({
-            //    maxHeight: 300
-            //});
-            $('.multiselectfilter').multiselect({
-                enableFiltering: true,
-                enableCaseInsensitiveFiltering: true,
-                maxHeight: 200
-            });
+        <script src="/assets/bundles/mainscripts.bundle.js"></script>
+        <script>
+            $(document).ready(function () {
 
-            var date = new Date();
-            date.setDate(date.getDate());
-            $('.datepickerfromtoday').datepicker({
-                startDate: date,
-                todayBtn: true
-            })
+                // Multiselect
+                //$('.multiselect').multiselect({
+                //    maxHeight: 300
+                //});
+                $('.multiselectfilter').multiselect({
+                    enableFiltering: true,
+                    enableCaseInsensitiveFiltering: true,
+                    maxHeight: 200
+                });
 
-            $('.datepickerbeforeOrtoday').datepicker({
-                endDate: date,
-                todayBtn: true
-            })
-            $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
+                var date = new Date();
+                date.setDate(date.getDate());
+                $('.datepickerfromtoday').datepicker({
+                    startDate: date,
+                    todayBtn: true
+                })
 
-            $(".datatables").DataTable();
+                $('.datepickerbeforeOrtoday').datepicker({
+                    endDate: date,
+                    todayBtn: true
+                })
+                $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
 
-            $('.datatablesExportExcel').DataTable({
-                dom: 'Blfrtip',
-                buttons: [
-                    'excel'
-                ],
-                aLengthMenu: [
-                    [10, 20, 50, 100, -1],
-                    [10, 20, 50, 100, "All"]
-                ]
-            });
-        })
-    </script>
+                $(".datatable").DataTable({
+                    destroy: true,
+                    searching: true
+                });
 
-    @RenderSection("Scripts", required: false)
+                $('.datatablesExportExcel').DataTable({
+                    dom: 'Blfrtip',
+                    buttons: [
+                        'excel'
+                    ],
+                    aLengthMenu: [
+                        [10, 20, 50, 100, -1],
+                        [10, 20, 50, 100, "All"]
+                    ]
+                });
+            })</script>
+
+        @*RenderSection("Scripts", required: false)*@
 </body>
 </html>

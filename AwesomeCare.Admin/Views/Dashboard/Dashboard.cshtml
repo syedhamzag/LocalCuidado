@@ -5,801 +5,1397 @@
 }
 @section HeaderScripts{
 
-    <link href="~/assets/css/main.css" rel="stylesheet" />
-    <link href="~/assets/css/color_skins.css" rel="stylesheet" />
-    <link href="~/assets/vendor/nestable/jquery-nestable.css" rel="stylesheet" />
 }
-
-<div class="row clearfix">
-    <div class="col-lg-6 col-md-12">
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-6">
-                <div class="card top_counter">
-                    <div class="body">
-                        <div id="top_counter1" class="carousel vert slide" data-ride="carousel" data-interval="2500">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="icon"><i class="fa fa-user"></i> </div>
-                                    <div class="content">
-                                        <div class="text">Active Service Users</div>
-                                        <h5 class="number">@Model.ActiveUser</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div id="top_counter2" class="carousel vert slide" data-ride="carousel" data-interval="2300">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="icon"><i class="fa fa-user-md"></i> </div>
-                                    <div class="content">
-                                        <div class="text">Approved staff</div>
-                                        <h5 class="number">@Model.ApprovedStaff</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-        <div class="row clearfix">
-            <div class="col-lg-6 col-md-6">
-                <div class="card">
-                    <div class="header">
-                        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#ratingModal">
-                            Show Details
-                        </button>
-                    </div>
-                    <div class="body">
-                        <div id="top_counter3" class="carousel vert slide" data-ride="carousel" data-interval="2100">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="icon"><i class="fa fa-smile-o"></i> </div>
-                                    <div class="content">
-                                        <div class="text">Top Rated Staffs</div>
-                                        <div class="row">
-                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/5star.jpg" height="20" />
-                                            </div>
-                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value.Count</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/4star.jpg" height="20" />
-                                            </div>
-                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value.Count</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/3star.jpg" height="20" />
-                                            </div>
-                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value.Count</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/2star.jpg" height="20" />
-                                            </div>
-                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value.Count</div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12">
-                                                <img src="../assets/images/1star.jpg" height="20" />
-                                            </div>
-                                            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                                                <div class="text">@Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value.Count</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="card top_counter">
-                    <div class="">
-                        <div class="icon"><i class="fa fa-thumbs-o-up"></i> </div>
-                        <div class="content">
-                            <div class="text">Service Watch</div>
-                            <h5 class="number">5</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="card top_counter">
-                    <div class="">
-                        <div id="top_counter3" class="carousel vert slide" data-ride="carousel" data-interval="2300">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="icon"><i class="fa fa-eye"></i> </div>
-                                    <div class="content">
-                                        <div class="text">Total Visit</div>
-                                        <h5 class="number">8</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card top_counter">
-                    <div class="">
-                        <div class="icon"><i class="fa fa-university"></i> </div>
-                        <div class="content">
-                            <div class="text">Revenue</div>
-                            <h5 class="number">11</h5>
-                        </div>
-                    </div>
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="card dash-widget">
+            <div class="card-body">
+                <span class="dash-widget-icon"><i class="fa fa-cubes"></i></span>
+                <div class="dash-widget-info">
+                    <h3>0</h3>
+                    <span>Projects</span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-6 col-md-12">
-        <div class="card">
-            <div class="header">
-                <h3>ADL Tracker</h3>
-                <ul class="header-dropdown nav nav-tabs-new2">
-                    <li class="nav-item"><a class="tab_btn nav-link" data-toggle="tab" href="#Daily">D</a></li>
-                    <li class="nav-item"><a class="tab_btn nav-link" data-toggle="tab" href="#Weekly">W</a></li>
-                    <li class="nav-item"><a class="tab_btn nav-link active show" data-toggle="tab" href="#Monthly">M</a></li>
-                </ul>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="card dash-widget">
+            <div class="card-body">
+                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@Model.ActiveUser</h3>
+                    <span>Clients</span>
+                </div>
             </div>
-            <div class="body">
-                <div class="tab-content">
-                    <div class="tab-pane" id="Daily">
-                        <canvas id="AdlDaily" style="height:280px !important;"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="card dash-widget">
+            <div class="card-body">
+                <span class="dash-widget-icon"><i class="fa fa-diamond"></i></span>
+                <div class="dash-widget-info">
+                    <h3>0</h3>
+                    <span>Tasks</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+        <div class="card dash-widget">
+            <div class="card-body">
+                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                <div class="dash-widget-info">
+                    <h3>@Model.ApprovedStaff</h3>
+                    <span>Employees</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Meds Admin Tracker</h5>
+            </div>
+            <div class="card-body">
+                
+                <canvas id="med-bar-chart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Adl Tracker</h5>
+            </div>
+            <div class="card-body">
+                <div class="tab-box">
+                    <div class="row user-tabs">
+                        <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
+                            <ul class="nav nav-tabs nav-tabs-bottom">
+                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#daily">Daily</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#weekly">Weekly</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#monthly">Monthly</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="tab-pane" id="Weekly">
-                        <canvas id="AdlWeekly" style="height:280px !important;"></canvas>
+                </div>
+                <div class="tab-content profile-tab-content">
+                    <div class="tab-pane fade show active" id="daily">
+                        <canvas id="AdlDaily"></canvas>
                     </div>
-                    <div class="tab-pane show active" id="Monthly">
-                        <canvas id="AdlTracker" style="height:280px !important;"></canvas>
+                    <div class="tab-pane fade" id="weekly">
+                        <canvas id="AdlWeekly"></canvas>
+                    </div>
+                    <div class="tab-pane fade" id="monthly">
+                        <canvas id="AdlTracker"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row clearfix">
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-        <div class="card">
-            <div class="header">
-                On Call 
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-group m-b-30">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <span class="d-block">New Employees</span>
+                        </div>
+                        <div>
+                            <span class="text-success">+10%</span>
+                        </div>
+                    </div>
+                    <h3 class="mb-3">10</h3>
+                    <div class="progress mb-2" style="height: 5px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mb-0">Overall Employees 218</p>
+                </div>
             </div>
-            <div class="body">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <span class="d-block">Earnings</span>
+                        </div>
+                        <div>
+                            <span class="text-success">+12.5%</span>
+                        </div>
+                    </div>
+                    <h3 class="mb-3">$1,42,300</h3>
+                    <div class="progress mb-2" style="height: 5px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mb-0">Previous Month <span class="text-muted">$1,15,852</span></p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <span class="d-block">Expenses</span>
+                        </div>
+                        <div>
+                            <span class="text-danger">-2.8%</span>
+                        </div>
+                    </div>
+                    <h3 class="mb-3">$8,500</h3>
+                    <div class="progress mb-2" style="height: 5px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mb-0">Previous Month <span class="text-muted">$7,500</span></p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <span class="d-block">Profit</span>
+                        </div>
+                        <div>
+                            <span class="text-danger">-75%</span>
+                        </div>
+                    </div>
+                    <h3 class="mb-3">$1,12,000</h3>
+                    <div class="progress mb-2" style="height: 5px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 70%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="mb-0">Previous Month <span class="text-muted">$1,42,000</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+        <div class="card flex-fill dash-statistics">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Staff Rating</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#ratingModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="stats-list">
+                    <div class="stats-info">
+                        @{
+                            decimal total = Model.StaffRating.Where(s => s.Key == "Total").FirstOrDefault().Value.Count;
+                            decimal star5 = Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value.Count;
+                            decimal star4 = Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value.Count;
+                            decimal star3 = Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value.Count;
+                            decimal star2 = Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value.Count;
+                            decimal star1 = Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value.Count;
+                            decimal p5 = (star5 / total) * 100;
+                            decimal p4 = (star4 / total) * 100;
+                            decimal p3 = (star3 / total) * 100;
+                            decimal p2 = (star2 / total) * 100;
+                            decimal p1 = (star1 / total) * 100;
+                        }
+                        <p>5 Star <strong>@star5 <small>/ @total </small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: @string.Concat(p5,"%")" aria-valuenow="@p5" aria-valuemin="0" aria-valuemax="@total"></div>
+                        </div>
+                    </div>
+                    <div class="stats-info">
+                        <p>4 Star <strong>@star4 <small>/ @total </small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: @string.Concat(p4,"%")" aria-valuenow="@p4" aria-valuemin="0" aria-valuemax="@total"></div>
+                        </div>
+                    </div>
+                    <div class="stats-info">
+                        <p>3 Star <strong>@star3 <small>/ @total </small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: @string.Concat(p3,"%")" aria-valuenow="@p3" aria-valuemin="0" aria-valuemax="@total"></div>
+                        </div>
+                    </div>
+                    <div class="stats-info">
+                        <p>2 Star <strong>@star2 <small>/ @total </small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: @string.Concat(p2,"%")" aria-valuenow="@p2" aria-valuemin="0" aria-valuemax="@total"></div>
+                        </div>
+                    </div>
+                    <div class="stats-info">
+                        <p>1 Star <strong>@star1 <small>/ @total </small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: @string.Concat(p1,"%")" aria-valuenow="@p1" aria-valuemin="0" aria-valuemax="@total"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Tasks</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#taskModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="statistics">
+                    @{
+                        decimal created = Model.GetTaskBoard.Where(s => s.Key == "Created").FirstOrDefault().Value.Count;
+                        decimal progress = Model.GetTaskBoard.Where(s => s.Key == "InProgress").FirstOrDefault().Value.Count;
+                        decimal completed = Model.GetTaskBoard.Where(s => s.Key == "Completed").FirstOrDefault().Value.Count;
+                        decimal taskTotal = (created+progress+completed);
+                        decimal taskperCr = (created / taskTotal) * 100;
+                        decimal taskperP = (progress / taskTotal) * 100;
+                        decimal taskperC = (completed / taskTotal) * 100;
+                    }
+                    <div class="row">
+                        <div class="col-md-6 col-6 text-center">
+                            <div class="stats-box mb-4">
+                                <p>Total Tasks</p>
+                                <h3>@taskTotal</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-6 text-center">
+                            <div class="stats-box mb-4">
+                                <p>Tasks in Progress</p>
+                                <h3>@progress</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress mb-4">
+                    <div class="progress-bar bg-purple" role="progressbar" style="width: @string.Concat(Math.Round(taskperCr,0),"%")" aria-valuenow="@created" aria-valuemin="0" aria-valuemax="@taskTotal">@string.Concat(Math.Round(taskperCr,0), "%")</div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: @string.Concat(Math.Round(taskperP,0),"%")" aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="@taskTotal">@string.Concat(Math.Round(taskperP,0), "%")</div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @string.Concat(Math.Round(taskperC,0),"%")" aria-valuenow="@completed" aria-valuemin="0" aria-valuemax="@taskTotal">@string.Concat(Math.Round(taskperC,0), "%")</div>
+                </div>
+                <div>
+                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Created Tasks<span class="float-end">@created</span></p>
+                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Inprogress Tasks <span class="float-end">@progress</span></p>
+                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Completed Tasks<span class="float-end">@completed</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h4 class="card-title">Today Absent <span class="badge bg-inverse-danger ms-2">5</span></h4>
+                <div class="leave-info-box">
+                    <div class="media d-flex align-items-center">
+                        <a href="profile.html" class="avatar"><img alt="" src="~/assets2/img/user.jpg"></a>
+                        <div class="media-body flex-grow-1">
+                            <div class="text-sm my-0">Martin Lewis</div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-3">
+                        <div class="col-6">
+                            <h6 class="mb-0">4 Sep 2019</h6>
+                            <span class="text-sm text-muted">Leave Date</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-inverse-danger">Pending</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="leave-info-box">
+                    <div class="media d-flex align-items-center">
+                        <a href="profile.html" class="avatar"><img alt="" src="~/assets2/img/user.jpg"></a>
+                        <div class="media-body flex-grow-1">
+                            <div class="text-sm my-0">Martin Lewis</div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-3">
+                        <div class="col-6">
+                            <h6 class="mb-0">4 Sep 2019</h6>
+                            <span class="text-sm text-muted">Leave Date</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-inverse-success">Approved</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="load-more text-center">
+                    <a class="text-dark" href="javascript:void(0);">Load More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Staff Matrix</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#staffModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <canvas id="StaffMetrics"></canvas>
+            </div>
+            <div class="card-footer">
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Client Matrix</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#clientModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <canvas id="ClientMetrics"></canvas>
+            </div>
+            <div class="card-footer">
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Tele Health</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#teleModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <canvas id="Tele"></canvas>
+            </div>
+            <div class="card-footer">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h4 class="card-title">Today Absent <span class="badge bg-inverse-danger ms-2">5</span></h4>
+                <div class="leave-info-box">
+                    <div class="media d-flex align-items-center">
+                        <a href="profile.html" class="avatar"><img alt="" src="~/assets2/img/user.jpg"></a>
+                        <div class="media-body flex-grow-1">
+                            <div class="text-sm my-0">Martin Lewis</div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-3">
+                        <div class="col-6">
+                            <h6 class="mb-0">4 Sep 2019</h6>
+                            <span class="text-sm text-muted">Leave Date</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-inverse-danger">Pending</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="leave-info-box">
+                    <div class="media d-flex align-items-center">
+                        <a href="profile.html" class="avatar"><img alt="" src="~/assets2/img/user.jpg"></a>
+                        <div class="media-body flex-grow-1">
+                            <div class="text-sm my-0">Martin Lewis</div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-3">
+                        <div class="col-6">
+                            <h6 class="mb-0">4 Sep 2019</h6>
+                            <span class="text-sm text-muted">Leave Date</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-inverse-success">Approved</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="load-more text-center">
+                    <a class="text-dark" href="javascript:void(0);">Load More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">OnCall</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#oncallModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="statistics">
+                    @{
+                        decimal totalOn = Model.OnCallGraph.Where(s => s.Key == "Total").FirstOrDefault().Value;
+                        decimal pending = Model.OnCallGraph.Where(s => s.Key == "Pending").FirstOrDefault().Value;
+                        decimal closed = Model.OnCallGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value;
+                        decimal open = Model.OnCallGraph.Where(s => s.Key == "Open").FirstOrDefault().Value;
+                        decimal perP = (pending / totalOn) * 100;
+                        decimal perC = (closed / totalOn) * 100;
+                        decimal perO = (open / totalOn) * 100;
+                    }
+                    <div class="row">
+                        <div class="col-md-6 col-6 text-center">
+                            <div class="stats-box mb-4">
+                                <p>Total</p>
+                                <h3>@totalOn</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-6 text-center">
+                            <div class="stats-box mb-4">
+                                <p>Pending</p>
+                                <h3>@pending</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress mb-4">
+                    <div class="progress-bar bg-purple" role="progressbar" style="width: @string.Concat(Math.Round(perO,0),"%")" aria-valuenow="@open" aria-valuemin="0" aria-valuemax="@totalOn">@string.Concat(Math.Round(perO,0), "%")</div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: @string.Concat(Math.Round(perP,0),"%")" aria-valuenow="@pending" aria-valuemin="0" aria-valuemax="@totalOn">@string.Concat(Math.Round(perP,0), "%")</div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @string.Concat(Math.Round(perC,0),"%")" aria-valuenow="@closed" aria-valuemin="0" aria-valuemax="@totalOn">@string.Concat(Math.Round(perC,0), "%")</div>
+                </div>
+                <div>
+                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Open<span class="float-end">@open</span></p>
+                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Pending <span class="float-end">@pending</span></p>
+                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Closed<span class="float-end">@closed</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Tracker Concern</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#concernModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="statistics">
+                    @{
+                        decimal Contotal = Model.concernNoteGraph.Where(s => s.Key == "Total").FirstOrDefault().Value;
+                        decimal Conpending = Model.concernNoteGraph.Where(s => s.Key == "Pending").FirstOrDefault().Value;
+                        decimal Conclosed = Model.concernNoteGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value;
+                        decimal Conopen = Model.concernNoteGraph.Where(s => s.Key == "Open").FirstOrDefault().Value;
+                        decimal ConperP = (Conpending / Contotal) * 100;
+                        decimal ConperC = (Conclosed / Contotal) * 100;
+                        decimal ConperO = (Conopen / Contotal) * 100;
+                    }
+                    <div class="row">
+                        <div class="col-md-6 col-6 text-center">
+                            <div class="stats-box mb-4">
+                                <p>Total</p>
+                                <h3>@Contotal</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-6 text-center">
+                            <div class="stats-box mb-4">
+                                <p>Pending</p>
+                                <h3>@Conpending</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress mb-4">
+                    <div class="progress-bar bg-purple" role="progressbar" style="width: @string.Concat(Math.Round(ConperO,0), "%")" aria-valuenow="@Conopen" aria-valuemin="0" aria-valuemax="@Contotal">@string.Concat(Math.Round(ConperO,0), "%")</div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: @string.Concat(Math.Round(ConperP,0), "%")" aria-valuenow="@Conpending" aria-valuemin="0" aria-valuemax="@Contotal">@string.Concat(Math.Round(ConperP,0), "%")</div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: @string.Concat(Math.Round(ConperC,0), "%")" aria-valuenow="@Conclosed" aria-valuemin="0" aria-valuemax="@Contotal">@string.Concat(Math.Round(ConperC,0), "%")</div>
+                </div>
+                <div>
+                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Open<span class="float-end">@Conopen</span></p>
+                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Pending <span class="float-end">@Conpending</span></p>
+                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Closed<span class="float-end">@Conclosed</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6 d-flex">
+        <div class="card card-table flex-fill">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Invoices</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-nowrap custom-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Client</th>
+                                <th>Due Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="invoice-view.html">#INV-0001</a></td>
+                                <td>
+                                    <h2><a href="#">Global Technologies</a></h2>
+                                </td>
+                                <td>11 Mar 2019</td>
+                                <td>$380</td>
+                                <td>
+                                    <span class="badge bg-inverse-warning">Partially Paid</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="invoice-view.html">#INV-0002</a></td>
+                                <td>
+                                    <h2><a href="#">Delta Infotech</a></h2>
+                                </td>
+                                <td>8 Feb 2019</td>
+                                <td>$500</td>
+                                <td>
+                                    <span class="badge bg-inverse-success">Paid</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="invoice-view.html">#INV-0003</a></td>
+                                <td>
+                                    <h2><a href="#">Cream Inc</a></h2>
+                                </td>
+                                <td>23 Jan 2019</td>
+                                <td>$60</td>
+                                <td>
+                                    <span class="badge bg-inverse-danger">Unpaid</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="invoices.html">View all invoices</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 d-flex">
+        <div class="card card-table flex-fill">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Payments</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table custom-table table-nowrap mb-0">
+                        <thead>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Client</th>
+                                <th>Payment Type</th>
+                                <th>Paid Date</th>
+                                <th>Paid Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="invoice-view.html">#INV-0001</a></td>
+                                <td>
+                                    <h2><a href="#">Global Technologies</a></h2>
+                                </td>
+                                <td>Paypal</td>
+                                <td>11 Mar 2019</td>
+                                <td>$380</td>
+                            </tr>
+                            <tr>
+                                <td><a href="invoice-view.html">#INV-0002</a></td>
+                                <td>
+                                    <h2><a href="#">Delta Infotech</a></h2>
+                                </td>
+                                <td>Paypal</td>
+                                <td>8 Feb 2019</td>
+                                <td>$500</td>
+                            </tr>
+                            <tr>
+                                <td><a href="invoice-view.html">#INV-0003</a></td>
+                                <td>
+                                    <h2><a href="#">Cream Inc</a></h2>
+                                </td>
+                                <td>Paypal</td>
+                                <td>23 Jan 2019</td>
+                                <td>$60</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="payments.html">View all payments</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 d-flex">
+        <div class="card card-table flex-fill">
+            <div class="card-header">
+                <h3 class="card-title mb-0">General Task</h3>          
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs nav-tabs-bottom">
+                    <li class="nav-item"><a class="nav-link active show" data-bs-toggle="tab" href="#Client">Clients</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#Staff">Staff</a></li>
+                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#Special">Special</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="Client">
+                        <div class="table-responsive">
+                            <table class="table custom-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Birthday</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetClients)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <h2 class="table-avatar">
+                                                    <a href="#" class="avatar"><img alt="" src="@item.PassportFilePath" width="38" height="42"></a>
+                                                    <a asp-controller="Client" asp-action="HomeCareDetails" asp-route-clientId="@item.ClientId">@string.Concat(item.Firstname, " ", item.Middlename, " ", item.Surname)</a>
+                                                </h2>
+                                            </td>
+                                            <td>@item.DateOfBirth</td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                            @*<hr />
+                    <a asp-controller="Client" asp-action="HomeCare">View all clients</a>*@
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="Staff">
+                        <div class=" table-responsive">
+                            <table class="table custom-table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Birthday</th>
+                                        <th>Rota Team</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.GetStaffPersonalInfos)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <h2 class="table-avatar">
+                                                    <a href="#" class="avatar"><img alt="" src="@item.ProfilePix" width="38" height="42"></a>
+                                                    <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@item.StaffPersonalInfoId">@string.Concat(item.FirstName, " ", item.MiddleName, " ", item.LastName)</a>
+                                                </h2>
+                                            </td>
+                                            <td>@item.DateOfBirth</td>
+                                            <td>@item.WorkTeam</td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+                            @*<hr />
+                    <a asp-controller="Staff" asp-action="Details">View all employees</a>*@
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="Special">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 d-flex">
+        <div class="card card-table flex-fill">
+            <div class="card-header">
+                <h3 class="card-title mb-0">Recent Projects</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table custom-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Project Name </th>
+                                <th>Progress</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h2><a href="project-view.html">Office Management</a></h2>
+                                    <small class="block text-ellipsis">
+                                        <span>1</span> <span class="text-muted">open tasks, </span>
+                                        <span>9</span> <span class="text-muted">tasks completed</span>
+                                    </small>
+                                </td>
+                                <td>
+                                    <div class="progress progress-xs progress-striped">
+                                        <div class="progress-bar" role="progressbar" data-bs-toggle="tooltip" title="" style="width: 65%" data-bs-original-title="65%" aria-label="65%"></div>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <div class="dropdown dropdown-action">
+                                        <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                            <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="projects.html">View all projects</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Old Dashboard -->
+<div class="row clearfix">
+    @*<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                On Call
+            </div>
+            <div class="card-body">
                 <canvas id="ChartOnCall" style="height:150px;"></canvas>
             </div>
         </div>
-        
+
     </div>
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <div class="card">
-            <div class="header">
+            <div class="card-header">
                 Tracking Concern
             </div>
-            <div class="body">
+            <div class="card-body">
                 <canvas id="ChartConcern" style="height:150px;"></canvas>
             </div>
         </div>
-        
-    </div>
+
+    </div>*@
 
 </div>
-<div class="row clearfix taskboard">
-    
-    <div class="col-lg-4 col-md-12">
-        <div class="card planned_task">
-            <div class="header">
-                <h2>Task Created</h2>
-                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-toggle="modal" data-target="#deleteModal">
-                    <i class="icon-trash"></i>
+<!-- OnCall Modal -->
+<div class="modal fade" id="oncallModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="body taskboard">
-                <div class="dd" data-plugin="nestable">
-                    <ol class="dd-list">
-                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Created").Value)
+            <div class="modal-body">
+                <table class="table m-b-0 datatables">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th>Date</th>
+                            <th>Officer</th>
+                            <th>Client</th>
+                            <th>Concern</th>
+                            <th>Notification</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OnCall)
                         {
-                            <li class="dd-item" data-id="@item.TaskId">
-                                <div class="dd-handle">
-                                    <div class="fancy-checkbox">
-                                        <label>
-                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
-                                            <span>#L @item.TaskId</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="dd-content p-15">
-                                    <h5>@item.TaskName</h5>
-                                    <p>@item.Note</p>
-                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
-                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
-                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
-                                        @foreach (var staff in item.AssignedTo)
-                                        {
-                                            var currentStaff = Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId);
-                                            <li><img src="@currentStaff.ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="@string.Concat(currentStaff.FirstName," ",currentStaff.MiddleName," ",currentStaff.LastName)" data-original-title="@string.Concat(currentStaff.FirstName," ",currentStaff.MiddleName," ",currentStaff.LastName)"></li>
-                                        }
-                                    </ul>
-                                    <hr>
-                                    <div class="action">
-                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
-                                    </div>
-                                </div>
-                            </li>
+
+                            <tr>
+
+                                <td><a href="/DutyOnCall/Edit?DutyOnCallId=@item.DutyOnCallId" title="Edit"><i class="icon-note"></i></a></td>
+                                <td>@item.Date.ToString("yyyy/MM/dd") </td>
+                                <td style="white-space:normal;">@item.StaffName</td>
+                                <td style="white-space:normal;">@item.ClientName</td>
+                                <td style="white-space:normal;">@item.Concern</td>
+                                <td>@item.NotificationStatusName</td>
+                                <td>@item.StatusName</td>
+
+                            </tr>
+
                         }
-                    </ol>
-                </div>
+                    </tbody>
+                </table>
             </div>
-        </div>
-    </div>
+            <div class="modal-footer">
 
-    <div class="col-lg-4 col-md-12">
-        <div class="card progress_task">
-            <div class="header">
-                <h2>Task In Progress</h2>
-                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-toggle="modal" data-target="#deleteModal">
-                    <i class="icon-trash"></i>
-                </button>
-            </div>
-            <div class="body taskboard">
-                <div class="dd" data-plugin="nestable">
-                    <ol class="dd-list">
-                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "InProgress").Value)
-                        {
-                            <li class="dd-item" data-id="@item.TaskId">
-                                <div class="dd-handle">
-                                    <div class="fancy-checkbox">
-                                        <label>
-                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
-                                            <span>#L @item.TaskId</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="dd-content p-15">
-                                    <h5>@item.TaskName</h5>
-                                    <p>@item.Note</p>
-                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
-                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
-                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
-                                        @foreach (var staff in item.AssignedTo)
-                                        {
-                                            <li><img src="@Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId).ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" data-original-title="Avatar"></li>
-                                        }
-                                    </ul>
-                                    <hr>
-                                    <div class="action">
-                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-4 col-md-12">
-        <div class="card completed_task">
-            <div class="header">
-                <h2>Task Completed</h2>
-                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-toggle="modal" data-target="#deleteModal">
-                    <i class="icon-trash"></i>
-                </button>
-            </div>
-            <div class="body taskboard">
-                <div class="dd" data-plugin="nestable">
-                    <ol class="dd-list">
-                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Completed").Value)
-                        {
-                            <li class="dd-item" data-id="@item.TaskId">
-
-                                <div class="dd-handle">
-                                    <div class="fancy-checkbox">
-                                        <label>
-                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
-                                            <span>#L @item.TaskId</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="dd-content p-15">
-                                    <h5>@item.TaskName</h5>
-                                    <p>@item.Note.</p>
-                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
-                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
-                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
-
-                                        @foreach (var staff in item.AssignedTo)
-                                        {
-                                            <li><img src="@Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId).ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" data-original-title="Avatar"></li>
-                                        }
-                                    </ul>
-                                    <hr>
-                                    <div class="action">
-                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
-                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="icon-trash"></i></button>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    </ol>
-                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row clearfix">
-    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-        <div class="card">
-            <div class="header">
-                <h3>General Task</h3>
-                <ul class="header-dropdown nav nav-tabs-new2">
-                    <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#Client">Clients</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Staff">Staff</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Special">Special</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#oncall">On Call</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#concern">Tracking Concern</a></li>
-                </ul>
+<!-- Concern Modal -->
+<div class="modal fade" id="concernModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="body">
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="Client">
-                        <table class="table m-b-0 datatables">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Birth</th>
+            <div class="modal-body">
+                <table class="table m-b-0 datatables table-responsive">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th></th>
+                            <th>Ref</th>
+                            <th>Date</th>
+                            <th>Deadline</th>
+                            <th>Staff</th>
+                            <th>Manager</th>
+                            <th>Concern</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.concernNotes)
+                        {
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.GetClients)
-                                {
-                                    <tr>
-                                        <td><img src="@item.PassportFilePath" width="150" height="100" /></td>
-                                        <td>@item.Firstname</td>
-                                        <td>@item.DateOfBirth</td>
+                            <tr>
 
-                                    </tr>
-
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane" id="Staff">
-                        <table class="table m-b-0 datatables">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Birth</th>
-                                    <th>Rota Team</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.GetStaffPersonalInfos)
-                                {
-                                    <tr>
-
-                                        <td><img src="@item.ProfilePix" width="150" height="100" /></td>
-                                        <td>@item.FirstName</td>
-                                        <td>@item.DateOfBirth</td>
-                                        <td>@item.WorkTeam</td>
-                                    </tr>
-
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane" id="Special">
-
-                    </div>
-                    <div class="tab-pane" id="oncall">
-                        <table class="table m-b-0 datatables">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th></th>
-                                    <th>Date</th>
-                                    <th>Officer</th>
-                                    <th>Client</th>
-                                    <th>Concern</th>
-                                    <th>Notification</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.OnCall)
-                                {
-
-                                    <tr>
-
-                                        <td><a href="/DutyOnCall/Edit?DutyOnCallId=@item.DutyOnCallId" title="Edit"><i class="icon-note"></i></a></td>
-                                        <td>@item.Date.ToString("yyyy/MM/dd") </td>
-                                        <td style="white-space:normal;">@item.StaffName</td>
-                                        <td style="white-space:normal;">@item.ClientName</td>
-                                        <td style="white-space:normal;">@item.Concern</td>
-                                        <td>@item.NotificationStatusName</td>
-                                        <td>@item.StatusName</td>
-
-                                    </tr>
-
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane" id="concern">
-                        <table class="table m-b-0 datatables table-responsive">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th></th>
-                                    <th>Ref</th>
-                                    <th>Date</th>
-                                    <th>Deadline</th>
-                                    <th>Staff</th>
-                                    <th>Manager</th>
-                                    <th>Concern</th>
-                                    <th>Action</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.concernNotes)
-                                {
-
-                                <tr>
-
-                                    <td><a href="/TrackingConcernNote/Edit?TrackingConcernNoteId=@item.Ref" title="Edit"><i class="icon-note"></i></a></td>
-                                    <td>@item.Ref</td>
-                                    <td>@item.DateOfIncident.ToString("yyyy/MM/dd") </td>
-                                    <td>@item.ExpectedDeadline.ToString("yyyy/MM/dd") </td>
-                                    <td style="white-space:normal;">
-                                        @foreach (var staff in item.StaffInvolved)
-                                        {
-                                            staff.StaffName.ToString(); <br />
-                                        }
-                                    </td>
-                                    <td style="white-space:normal;">
-                                        @foreach (var manager in item.ManagerInvolved)
-                                        {
-                                            manager.StaffName.ToString(); <br />
-                                        }
+                                <td><a href="/TrackingConcernNote/Edit?TrackingConcernNoteId=@item.Ref" title="Edit"><i class="icon-note"></i></a></td>
+                                <td>@item.Ref</td>
+                                <td>@item.DateOfIncident.ToString("yyyy/MM/dd") </td>
+                                <td>@item.ExpectedDeadline.ToString("yyyy/MM/dd") </td>
+                                <td style="white-space:normal;">
+                                    @foreach (var staff in item.StaffInvolved)
+                                    {
+                                        staff.StaffName.ToString();<br />
+                                    }
+                                </td>
+                                <td style="white-space:normal;">
+                                    @foreach (var manager in item.ManagerInvolved)
+                                    {
+                                        manager.StaffName.ToString();<br />
+                                    }
                                 </td>
                                 <td style="white-space:normal;">@item.ConcernNote</td>
                                 <td style="white-space:normal;">@item.ActionRequired</td>
                                 <td>@item.StatusName</td>
 
-                                </tr>
+                            </tr>
 
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-        <div class="card">
-            <div class="header">
-                <div class="row">
-                    <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <h3>Tele Health</h3>
-                    </div>
+            <div class="modal-footer">
 
-                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <a href="javascript:void(0);" id="showmore">Show / Less</a>
-                    </div>
-                </div>
-            </div>
-            <div class="body" id="parent">
-                <div class="row">
-                    <div class="chart-container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <canvas id="Tele" style="height:250px; width:50%;"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="20" height="20" /> <br />
-                            <span class="text">Blood Coag</span>
-                        </div>
-                        <canvas id="Coag"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="20" height="20" /> <br />
-                            <span>Blood Pressure</span>
-                        </div>
-                        <canvas id="Pressure"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Body.png" class="" width="20" height="20" /> <br />
-                            <span>Body Temp</span>
-                        </div>
-                        <canvas id="BodyTemp"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Bowel.png" class="" width="20" height="20" /> <br />
-                            <span>Bowel</span>
-                        </div>
-                        <canvas id="Bowel"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="20" height="20" /> <br />
-                            <span>BMI</span>
-                            <br />
-                        </div>
-                        <canvas id="BMI"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Eye.png" class="" width="20" height="20" /> <br />
-                            <span>Eye</span>
-                        </div>
-                        <canvas id="Eye"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Food.png" class="" width="20" height="20" /> <br />
-                            <span>Food</span>
-                        </div>
-                        <canvas id="Food"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Heart.png" class="" width="20" height="20" /> <br />
-                            <span>Heart</span>
-                        </div>
-                        <canvas id="Heart"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Oxygen.png" class="" width="20" height="20" /> <br />
-                            <span>Oxygen</span>
-                        </div>
-                        <canvas id="Oxygen"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Pain.png" class="" width="20" height="20" /> <br />
-                            <span>Pain Monitor</span>
-                        </div>
-                        <canvas id="Pain"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Pulse.png" class="" width="20" height="20" /> <br />
-                            <span>Pulse Rate</span>
-                        </div>
-                        <canvas id="Pulse"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Wound.png" class="" width="20" height="20" /> <br />
-                            <span>Wound Care</span>
-                        </div>
-                        <canvas id="Wound"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Seizure.png" class="" width="20" height="20" /> <br />
-                            <span>Seizure Monitor</span>
-                        </div>
-                        <canvas id="Seizure"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="header">
-                <div class="row">
-                    <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <h3>Client Metrics</h3>
-                    </div>
-
-                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <a href="javascript:void(0);" id="clientshow">Show / Less</a>
-                    </div>
-                </div>
-            </div>
-            <div class="body" id="clientParent">
-                <div class="row">
-                    <div class="chart-container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <canvas id="ClientMetrics" style="height: 250px; width: 50%;"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/LogAudit.png" class="" width="20" height="20" />
-                            <br /><span>Log Audit</span>
-
-                        </div>
-                        <canvas id="LogAudit"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/MedAudit.png" class="" width="20" height="20" />
-                            <br /><span>Med Audit</span>
-
-                        </div>
-                        <canvas id="MedAudit"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/ServiceWatch.png" class="" width="20" height="20" />
-                            <br /><span>Service Watch</span>
-
-                        </div>
-                        <canvas id="ServiceWatch"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/ManagementVisit.png" class="" width="20" height="20" />
-                            <br /><span>Mgt Visit</span>
-
-                        </div>
-                        <canvas id="MgtVisit"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Program.png" class="" width="20" height="20" />
-                            <br /><span>Program</span>
-
-                        </div>
-                        <canvas id="Program"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Complain.png" class="" width="20" height="20" />
-                            <br /><span>Complain</span>
-
-                        </div>
-                        <canvas id="Complain"></canvas>
-                    </div>                    
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Voice.png" class="" width="20" height="20" />
-                            <br /><span>Voice</span>
-
-                        </div>
-                        <canvas id="Voice"></canvas>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="card">
-            <div class="header">
-                <div class="row">
-                    <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <h3>Staff Metrics</h3>
-                    </div>
-
-                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <a href="javascript:void(0);" id="staffshow">Show / Less</a>
-                    </div>
-                </div>
-            </div>
-            <div class="body" id="staffParent">
-
-                <div class="row">
-                    <div class="chart-container col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <canvas id="StaffMetrics" style="height: 250px; width: 50%;"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Supervision.png" class="" width="20" height="20" />
-                            <br /><span>Super Vision</span>
-
-                        </div>
-                        <canvas id="Sup"></canvas>
-                    </div>                   
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/KeyworkerVoice.png" class="" width="20" height="20" />
-                            <br /><span>Key Worker</span>
-
-                        </div>
-                        <canvas id="Key"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/CompMedObs.png" class="" width="20" height="20" />
-                            <br /><span>Med Comp</span>
-
-                        </div>
-                        <canvas id="Med"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/OnetoOne.png" class="" width="20" height="20" />
-                            <br /><span>One To One</span>
-
-                        </div>
-                        <canvas id="One"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Reference.png" class="" width="20" height="20" />
-                            <br /><span>Reference</span>
-
-                        </div>
-                        <canvas id="Ref"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/SpotCheck.png" class="" width="20" height="20" />
-                            <br /><span>Spot Check</span>
-
-                        </div>
-                        <canvas id="Spot"></canvas>
-                    </div>
-                </div>
-                <div class="row padding-25">
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/AdlObservation.png" class="" width="20" height="20" />
-                            <br /><span>Adl Obs</span>
-
-                        </div>
-                        <canvas id="Adl"></canvas>
-                    </div>
-                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <div class="form-group align-center">
-                            <img src="../assets/images/TeleHealthIcon/Survey.png" class="" width="20" height="20" />
-                            <br /><span>Survey</span>
-
-                        </div>
-                        <canvas id="Sur"></canvas>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<!-- Tele Modal -->
+<div class="modal fade" id="teleModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Tele Health</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row padding-25">
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="20" height="20" /> <br />
+                                    <span class="text">Blood Coag</span>
+                                </div>
+                                <canvas id="Coag"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="20" height="20" /> <br />
+                                    <span>Blood Pressure</span>
+                                </div>
+                                <canvas id="Pressure"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Body.png" class="" width="20" height="20" /> <br />
+                                    <span>Body Temp</span>
+                                </div>
+                                <canvas id="BodyTemp"></canvas>
+                            </div>
+                        </div>
+                        <div class="row padding-25">
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Bowel.png" class="" width="20" height="20" /> <br />
+                                    <span>Bowel</span>
+                                </div>
+                                <canvas id="Bowel"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="20" height="20" /> <br />
+                                    <span>BMI</span>
+                                    <br />
+                                </div>
+                                <canvas id="BMI"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Eye.png" class="" width="20" height="20" /> <br />
+                                    <span>Eye</span>
+                                </div>
+                                <canvas id="Eye"></canvas>
+                            </div>
+                        </div>
+                        <div class="row padding-25">
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Food.png" class="" width="20" height="20" /> <br />
+                                    <span>Food</span>
+                                </div>
+                                <canvas id="Food"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Heart.png" class="" width="20" height="20" /> <br />
+                                    <span>Heart</span>
+                                </div>
+                                <canvas id="Heart"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Oxygen.png" class="" width="20" height="20" /> <br />
+                                    <span>Oxygen</span>
+                                </div>
+                                <canvas id="Oxygen"></canvas>
+                            </div>
+                        </div>
+                        <div class="row padding-25">
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Pain.png" class="" width="20" height="20" /> <br />
+                                    <span>Pain Monitor</span>
+                                </div>
+                                <canvas id="Pain"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Pulse.png" class="" width="20" height="20" /> <br />
+                                    <span>Pulse Rate</span>
+                                </div>
+                                <canvas id="Pulse"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Wound.png" class="" width="20" height="20" /> <br />
+                                    <span>Wound Care</span>
+                                </div>
+                                <canvas id="Wound"></canvas>
+                            </div>
+                        </div>
+                        <div class="row padding-25">
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Seizure.png" class="" width="20" height="20" /> <br />
+                                    <span>Seizure Monitor</span>
+                                </div>
+                                <canvas id="Seizure"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Staff Modal -->
+<div class="modal fade" id="staffModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Staff Matrix</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row padding-25">
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Supervision.png" class="" width="20" height="20" />
+                                    <br /><span>Super Vision</span>
+
+                                </div>
+                                <canvas id="Sup"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/KeyworkerVoice.png" class="" width="20" height="20" />
+                                    <br /><span>Key Worker</span>
+
+                                </div>
+                                <canvas id="Key"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/CompMedObs.png" class="" width="20" height="20" />
+                                    <br /><span>Med Comp</span>
+
+                                </div>
+                                <canvas id="Med"></canvas>
+                            </div>
+                        </div>
+                        <div class="row padding-25">
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/OnetoOne.png" class="" width="20" height="20" />
+                                    <br /><span>One To One</span>
+
+                                </div>
+                                <canvas id="One"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Reference.png" class="" width="20" height="20" />
+                                    <br /><span>Reference</span>
+
+                                </div>
+                                <canvas id="Ref"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/SpotCheck.png" class="" width="20" height="20" />
+                                    <br /><span>Spot Check</span>
+
+                                </div>
+                                <canvas id="Spot"></canvas>
+                            </div>
+                        </div>
+                        <div class="row padding-25">
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/AdlObservation.png" class="" width="20" height="20" />
+                                    <br /><span>Adl Obs</span>
+
+                                </div>
+                                <canvas id="Adl"></canvas>
+                            </div>
+                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group align-center">
+                                    <img src="../assets/images/TeleHealthIcon/Survey.png" class="" width="20" height="20" />
+                                    <br /><span>Survey</span>
+
+                                </div>
+                                <canvas id="Sur"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Client Modal -->
+<div class="modal fade" id="clientModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Client Matrix</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row padding-25">
+                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group align-center">
+                                <img src="../assets/images/TeleHealthIcon/LogAudit.png" class="" width="20" height="20" />
+                                <br /><span>Log Audit</span>
+
+                            </div>
+                            <canvas id="LogAudit"></canvas>
+                        </div>
+                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group align-center">
+                                <img src="../assets/images/TeleHealthIcon/MedAudit.png" class="" width="20" height="20" />
+                                <br /><span>Med Audit</span>
+
+                            </div>
+                            <canvas id="MedAudit"></canvas>
+                        </div>
+                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group align-center">
+                                <img src="../assets/images/TeleHealthIcon/ServiceWatch.png" class="" width="20" height="20" />
+                                <br /><span>Service Watch</span>
+
+                            </div>
+                            <canvas id="ServiceWatch"></canvas>
+                        </div>
+                    </div>
+                    <div class="row padding-25">
+                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group align-center">
+                                <img src="../assets/images/TeleHealthIcon/ManagementVisit.png" class="" width="20" height="20" />
+                                <br /><span>Mgt Visit</span>
+
+                            </div>
+                            <canvas id="MgtVisit"></canvas>
+                        </div>
+                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group align-center">
+                                <img src="../assets/images/TeleHealthIcon/Program.png" class="" width="20" height="20" />
+                                <br /><span>Program</span>
+
+                            </div>
+                            <canvas id="Program"></canvas>
+                        </div>
+                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group align-center">
+                                <img src="../assets/images/TeleHealthIcon/Complain.png" class="" width="20" height="20" />
+                                <br /><span>Complain</span>
+
+                            </div>
+                            <canvas id="Complain"></canvas>
+                        </div>
+                    </div>
+                    <div class="row padding-25">
+                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group align-center">
+                                <img src="../assets/images/TeleHealthIcon/Voice.png" class="" width="20" height="20" />
+                                <br /><span>Voice</span>
+
+                            </div>
+                            <canvas id="Voice"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+    </div>
+</div>
+<!-- Tasks Modal -->
+<div class="modal fade" id="taskModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix taskboard">
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card planned_task">
+                            <div class="card-header">
+                                <h2>Task Created</h2>
+                                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            </div>
+                            <div class="card-body taskboard">
+                                <div class="dd" data-plugin="nestable">
+                                    <ol class="dd-list">
+                                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Created").Value)
+                                        {
+                                            <li class="dd-item" data-id="@item.TaskId">
+                                                <div class="dd-handle">
+                                                    <div class="fancy-checkbox">
+                                                        <label>
+                                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
+                                                            <span>#L @item.TaskId</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="dd-content p-15">
+                                                    <h5>@item.TaskName</h5>
+                                                    <p>@item.Note</p>
+                                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
+                                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
+                                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+                                                        @foreach (var staff in item.AssignedTo)
+                                                        {
+                                                            var currentStaff = Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId);
+                                                            <li class="table-avatar"><a href="#" class="avatar"><img src="@currentStaff.ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avator" data-original-title="@string.Concat(currentStaff.FirstName," ",currentStaff.MiddleName," ",currentStaff.LastName)"></a></li>
+                                                        }
+                                                    </ul>
+                                                    <hr>
+                                                    <div class="action">
+                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card progress_task">
+                            <div class="card-header">
+                                <h2>Task In Progress</h2>
+                                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            </div>
+                            <div class="card-body taskboard">
+                                <div class="dd" data-plugin="nestable">
+                                    <ol class="dd-list">
+                                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "InProgress").Value)
+                                        {
+                                            <li class="dd-item" data-id="@item.TaskId">
+                                                <div class="dd-handle">
+                                                    <div class="fancy-checkbox">
+                                                        <label>
+                                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
+                                                            <span>#L @item.TaskId</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="dd-content p-15">
+                                                    <h5>@item.TaskName</h5>
+                                                    <p>@item.Note</p>
+                                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
+                                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
+                                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+                                                        @foreach (var staff in item.AssignedTo)
+                                                        {
+                                                            var currentStaff = Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId);
+                                                            <li class="table-avatar"><a href="#" class="avatar"><img src="@currentStaff.ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" data-original-title="Avatar"></a></li>
+                                                        }
+                                                    </ul>
+                                                    <hr>
+                                                    <div class="action">
+                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12">
+                        <div class="card completed_task">
+                            <div class="card-header">
+                                <h2>Task Completed</h2>
+                                <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            </div>
+                            <div class="card-body taskboard">
+                                <div class="dd" data-plugin="nestable">
+                                    <ol class="dd-list">
+                                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Completed").Value)
+                                        {
+                                            <li class="dd-item" data-id="@item.TaskId">
+
+                                                <div class="dd-handle">
+                                                    <div class="fancy-checkbox">
+                                                        <label>
+                                                            <input type="checkbox" id="chkId" onchange="setId(this)" data-id="@item.TaskId">
+                                                            <span>#L @item.TaskId</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="dd-content p-15">
+                                                    <h5>@item.TaskName</h5>
+                                                    <p>@item.Note.</p>
+                                                    <img src="@item.TaskImage" class="img-fluid" alt="Avatar">
+                                                    <ul class="list-unstyled team-info m-t-20 m-b-20">
+                                                        <li class="m-r-15"><small class="text-muted">Team</small></li>
+
+                                                        @foreach (var staff in item.AssignedTo)
+                                                        {
+                                                            var currentStaff = Model.GetAllStaff.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId);
+                                                            <li class="table-avatar"><a href="#" class="avatar"><img src="@currentStaff.ProfilePix" data-toggle="tooltip" data-placement="top" title="" alt="Avatar" data-original-title="Avatar"></a></li>
+                                                        }
+                                                    </ul>
+                                                    <hr>
+                                                    <div class="action">
+                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
+                                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="icon-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Warning</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -831,127 +1427,120 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<!-- Ratting Modal -->
+<div class="modal fade" id="ratingModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Staff Rating</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card">
-
-                    <div class="header">
-                        <ul class="header-dropdown nav nav-tabs-new2">
-                            <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#Star5">5-Star</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star4">4-Star</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star3">3-Star</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star2">2-Star</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star1">1-Star</a></li>
-                        </ul>
+                <ul class="header-dropdown nav nav-tabs-new2">
+                    <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#Star5">5-Star</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star4">4-Star</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star3">3-Star</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star2">2-Star</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star1">1-Star</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="Star5">
+                        <table class="table m-b-0 datatables">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value)
+                                {
+                                    <tr>
+                                        <td>@table.Staff</td>
+                                        <td>@table.Rating</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="body">
-                        <div class="tab-content">
-                            <div class="tab-pane show active" id="Star5">
-                                <table class="table m-b-0 datatables">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value)
-                                        {
-                                            <tr>
-                                                <td>@table.Staff</td>
-                                                <td>@table.Rating</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="Star4">
-                                <table class="table m-b-0 datatables">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value)
-                                        {
-                                            <tr>
-                                                <td>@table.Staff</td>
-                                                <td>@table.Rating</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="Star3">
-                                <table class="table m-b-0 datatables">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value)
-                                        {
-                                            <tr>
-                                                <td>@table.Staff</td>
-                                                <td>@table.Rating</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="Star2">
-                                <table class="table m-b-0 datatables">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value)
-                                        {
-                                            <tr>
-                                                <td>@table.Staff</td>
-                                                <td>@table.Rating</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="Star1">
-                                <table class="table m-b-0 datatables">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Rating</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var table in Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value)
-                                        {
-                                            <tr>
-                                                <td>@table.Staff</td>
-                                                <td>@table.Rating</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="tab-pane" id="Star4">
+                        <table class="table m-b-0 datatables">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value)
+                                {
+                                    <tr>
+                                        <td>@table.Staff</td>
+                                        <td>@table.Rating</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
-
+                    <div class="tab-pane" id="Star3">
+                        <table class="table m-b-0 datatables">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value)
+                                {
+                                    <tr>
+                                        <td>@table.Staff</td>
+                                        <td>@table.Rating</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="Star2">
+                        <table class="table m-b-0 datatables">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value)
+                                {
+                                    <tr>
+                                        <td>@table.Staff</td>
+                                        <td>@table.Rating</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="Star1">
+                        <table class="table m-b-0 datatables">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value)
+                                {
+                                    <tr>
+                                        <td>@table.Staff</td>
+                                        <td>@table.Rating</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -960,12 +1549,16 @@
         </div>
     </div>
 </div>
+
 @section VendorScripts{
-    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
-    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+
+    <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+
     <script src="~/js/Notification.js"></script>
-    <script src="~/js/StackedChart.js"></script>
+    <script src="~/assets2/js/StackedChart.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+
     <script type="text/javascript">
 
         function setId(e) {
@@ -999,46 +1592,6 @@
                         return false;
                     }
 
-                }
-            });
-
-            var length = $('#parent').children().length;
-            for (i = length; i > 1; i--) {
-                var child = $('#parent').children()[i - 1];
-                $(child).hide();
-            };
-            var clength = $('#clientParent').children().length;
-            for (i = clength; i > 1; i--) {
-                var cChild = $('#clientParent').children()[i - 1];
-                $(cChild).hide();
-            };
-            var slength = $('#staffParent').children().length;
-            for (i = slength; i > 1; i--) {
-                var schild = $('#staffParent').children()[i - 1];
-                $(schild).hide();
-            };
-            $('#showmore').on('click', function ()
-            {
-                var length = $('#parent').children().length;
-                for (i = length; i > 1; i--)
-                {
-                    var child = $('#parent').children()[i - 1];
-                    $(child).toggle();
-                }
-            });
-
-            $('#clientshow').on('click', function () {
-                var length = $('#clientParent').children().length;
-                for (i = length; i > 1; i--) {
-                    var child = $('#clientParent').children()[i - 1];
-                    $(child).toggle();
-                }
-            });
-            $('#staffshow').on('click', function () {
-                var length = $('#staffParent').children().length;
-                for (i = length; i > 1; i--) {
-                    var child = $('#staffParent').children()[i - 1];
-                    $(child).toggle();
                 }
             });
 
@@ -1349,90 +1902,7 @@
                     data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ClientMatrix.Select(s => s.Value).ToList()))
                 }]
             };
-            var chartconcern = "ChartConcern";
-            var ctxconcern = document.getElementById(chartconcern).getContext('2d');
-            var concerndata = {
-                labels: ['Concern'],
-                datasets: [
-                    {
-                        label: "Pending",
-                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.concernNoteGraph.Where(s => s.Key == "Pending").FirstOrDefault().Value))],
-                        backgroundColor: 'rgba(255, 193, 7, 1)'
-                    },
-                    {
-                        label: "Closed",
-                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.concernNoteGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value))],
-                        backgroundColor: 'rgba(40, 167, 69, 1)'
-                    },
-                    {
-                        label: "Open",
-                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.concernNoteGraph.Where(s => s.Key == "Open").FirstOrDefault().Value))],
-                        backgroundColor: 'rgba(220, 53, 69, 1)'
-                    }
-                ]
-            };
-            var Chart_Concern = new Chart(ctxconcern, {
-                data: concerndata,
-                type: 'bar',
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    scales: {
-                        x:  {
-                                stacked: true,
-
-                            },
-                        y:  {
-                                stacked: true,
-
-                            }
-                    },
-                }
-            });
-            var chartOnCall = "ChartOnCall";
-            var ctxoncall = document.getElementById(chartOnCall).getContext('2d');
-            var oncalldata = {
-                labels: ['OnCall'],
-                datasets: [
-                    {
-                        label: "Pending",
-                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s => s.Key == "Pending").FirstOrDefault().Value))],
-                        backgroundColor: 'rgba(255, 193, 7, 1)'
-                    },
-                    {
-                        label: "Closed",
-                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value))],
-                        backgroundColor: 'rgba(40, 167, 69, 1)'
-                    },
-                    {
-                        label: "Open",
-                        data: [@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OnCallGraph.Where(s => s.Key == "Open").FirstOrDefault().Value))],
-                        backgroundColor: 'rgba(220, 53, 69, 1)'
-                    }
-                ]
-            };
-            var Chart_OnCall = new Chart(ctxoncall, {
-                data: oncalldata,
-                type: 'bar',
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    scales: {
-                        x:  {
-                                stacked: true,
-
-                            },
-                        y:  {
-                                stacked: true,
-
-                            }
-                    }
-                }
-            });
-
-
-
-
+            
             var log = {
                 labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LogAudit.Select(s => s.Key).ToList())),
                 datasets: [{
@@ -1656,22 +2126,8 @@
                 borderWidth: 0,
                 data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Wound.Select(s => s.Value).ToList()))
             }]
-        };
-        var options = {
-            maintainAspectRatio: false,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        min: 0,
-                        beginAtZero: true
-                    },
-                    gridLines: {
-                        display: true,
-                        color: "rgba(255,99,164,0.2)"
-                    }
-                }]
-            }
             };
+
             var hidelabel = {
                 plugins: {
                 legend: {
@@ -1681,8 +2137,13 @@
             };
             var trackerOptions = {
                 maintainAspectRatio: false,
-
+                legend: {
+                    labels: {
+                        fontColor: trackerColor
+                    }
+                },
             };
+
             var TrackerM = new Chart(ctxTrackM, {
                 data: trackM,
                 type: 'line',
@@ -1702,62 +2163,88 @@
 
             });
             var Staff = new Chart(ctxStaff, {
-                    options: options,
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                beginAtZero: true
+                            },
+                            gridLines: {
+                                display: false,
+                            }
+                        }]
+                    }
+                },
                     data: staff,
                     type: 'pie'
 
                 });
 
-                var Adl = new Chart(ctxAdl, {
-                    options: hidelabel,
-                    data: adl,
-                    type: 'pie'
+            var Adl = new Chart(ctxAdl, {
+                options: hidelabel,
+                data: adl,
+                type: 'pie'
 
-                });
-                var Key = new Chart(ctxKey, {
-                    options: hidelabel,
-                    data: key,
-                    type: 'pie'
+            });
+            var Key = new Chart(ctxKey, {
+                options: hidelabel,
+                data: key,
+                type: 'pie'
 
-                });
-                var Comp = new Chart(ctxMedC, {
-                    options: hidelabel,
-                    data: medcomp,
-                    type: 'pie'
+            });
+            var Comp = new Chart(ctxMedC, {
+                options: hidelabel,
+                data: medcomp,
+                type: 'pie'
 
-                });
-                var One = new Chart(ctxOne, {
-                    options: hidelabel,
-                    data: one,
-                    type: 'pie'
+            });
+            var One = new Chart(ctxOne, {
+                options: hidelabel,
+                data: one,
+                type: 'pie'
 
-                });
-                var Ref = new Chart(ctxRef, {
-                    options: hidelabel,
-                    data: refs,
-                    type: 'pie'
+            });
+            var Ref = new Chart(ctxRef, {
+                options: hidelabel,
+                data: refs,
+                type: 'pie'
 
-                });
-                var Spot = new Chart(ctxSpot, {
-                    options: hidelabel,
-                    data: spot,
-                    type: 'pie'
+            });
+            var Spot = new Chart(ctxSpot, {
+                options: hidelabel,
+                data: spot,
+                type: 'pie'
 
-                });
-                var Super = new Chart(ctxSup, {
-                    options: hidelabel,
-                    data: superv,
-                    type: 'pie'
+            });
+            var Super = new Chart(ctxSup, {
+                options: hidelabel,
+                data: superv,
+                type: 'pie'
 
-                });
-                var Survey = new Chart(ctxSur, {
-                    options: hidelabel,
-                    data: survey,
-                    type: 'pie'
+            });
+            var Survey = new Chart(ctxSur, {
+                options: hidelabel,
+                data: survey,
+                type: 'pie'
 
-                });
+            });
             var Client = new Chart(ctxClient, {
-                options: options,
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                beginAtZero: true
+                            },
+                            gridLines: {
+                                display: false,
+                            }
+                        }]
+                    }
+                },
                 data: client,
                 type: 'pie'
 
@@ -1805,7 +2292,20 @@
 
             });
             var Tele = new Chart(ctxTele, {
-            options: options,
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                beginAtZero: true
+                            },
+                            gridLines: {
+                                display: false,
+                            }
+                        }]
+                    }
+                },
             data: tele,
             type: 'pie'
 
@@ -1889,8 +2389,40 @@
 
             });
 
+            // Bar Chart
+            var chartMedBar = "med-bar-chart";
+            var ctxMedBar = document.getElementById(chartMedBar).getContext('2d');
+            var MedBarChart = new Chart(ctxMedBar, {
+                type: 'bar',
+                data: {
+                    labels: ["2017","2018","2019","2020", "2021", "2022"],
+                    datasets: [
+                        {
+                            label: "Total Income",
+                            backgroundColor: "#ff9b44",
+                            data: [55,45,80,95,75,65]
+                        },
+                        {
+                            label: "Total Outcome",
+                            backgroundColor: "#fc6075",
+                            data: [80,95,75,65,45,55]
+                        }
+                    ]
+                },
+                options: {
+                    barValueSpacing: 20,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                            }
+                        }]
+                    }
+                }
+            });
 
 });
+
 
         var table = $('.datatables').DataTable({
             pageLength: 5,

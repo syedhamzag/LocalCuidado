@@ -223,9 +223,13 @@ namespace AwesomeCare.Admin.Controllers
             var Client = new List<Status>();
             #region Oncall
             var Oncall = new List<Status>();
+            var oncallTotal = 0;
             var oncallpending = oncall.Where(s => s.Status == oncallIdP).Count();
+            oncallTotal += oncallpending;
             var oncallclosed = oncall.Where(s => s.Status == oncallIdC).Count();
+            oncallTotal += oncallclosed;
             var oncallopen = oncall.Where(s => s.Status == oncallIdO).Count();
+            oncallTotal += oncallopen;
             Oncall.Add(new Status
             {
                 Key = "Pending",
@@ -241,13 +245,22 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Open",
                 Value = oncallopen
             });
+            Oncall.Add(new Status
+            {
+                Key = "Total",
+                Value = oncallTotal
+            });
             dashboard.OnCallGraph = Oncall;
             #endregion
             #region Concern
             var Concern = new List<Status>();
+            var concernTotal = 0;
             var Concernpending = concern.Where(s => s.Status == ConcernIdP).Count();
+            concernTotal += Concernpending;
             var Concernclosed = concern.Where(s => s.Status == ConcernIdC).Count();
+            concernTotal += Concernclosed;
             var Concernopen = concern.Where(s => s.Status == ConcernIdO).Count();
+            concernTotal += Concernopen;
             Concern.Add(new Status
             {
                 Key = "Pending",
@@ -262,6 +275,11 @@ namespace AwesomeCare.Admin.Controllers
             {
                 Key = "Open",
                 Value = Concernopen
+            });
+            Concern.Add(new Status
+            {
+                Key = "Total",
+                Value = concernTotal
             });
             dashboard.concernNoteGraph = Concern;
             #endregion
@@ -693,22 +711,22 @@ namespace AwesomeCare.Admin.Controllers
             var BloodCoag = new List<Status>();
             BloodCoag.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = normal
             });
             BloodCoag.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = observation
             });
             BloodCoag.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = attention
             });
             BloodCoag.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = received
             });
             dashboard.BloodCoag = BloodCoag;
@@ -725,22 +743,22 @@ namespace AwesomeCare.Admin.Controllers
             var Pressure = new List<Status>();
             Pressure.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = pnormal
             });
             Pressure.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = pobservation
             });
             Pressure.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = pattention
             });
             Pressure.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = preceived
             });
             dashboard.Pressure = Pressure;
@@ -757,22 +775,22 @@ namespace AwesomeCare.Admin.Controllers
             var BMI = new List<Status>();
             BMI.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = bmi_normal
             });
             BMI.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = bmi_observation
             });
             BMI.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = bmi_attention
             });
             BMI.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = bmi_received
             });
             dashboard.BMI = BMI;
@@ -789,22 +807,22 @@ namespace AwesomeCare.Admin.Controllers
             var Body = new List<Status>();
             Body.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Body_normal
             });
             Body.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Body_observation
             });
             Body.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Body_attention
             });
             Body.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Body_received
             });
             dashboard.Body = Body;
@@ -821,22 +839,22 @@ namespace AwesomeCare.Admin.Controllers
             var Bowel = new List<Status>();
             Bowel.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Bowel_normal
             });
             Bowel.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Bowel_observation
             });
             Bowel.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Bowel_attention
             });
             Bowel.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Bowel_received
             });
             dashboard.Bowel = Bowel;
@@ -853,22 +871,22 @@ namespace AwesomeCare.Admin.Controllers
             var Eye = new List<Status>();
             Eye.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Eye_normal
             });
             Eye.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Eye_observation
             });
             Eye.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Eye_attention
             });
             Eye.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Eye_received
             });
             dashboard.EyeHealth = Eye;
@@ -885,22 +903,22 @@ namespace AwesomeCare.Admin.Controllers
             var Food = new List<Status>();
             Food.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Food_normal
             });
             Food.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Food_observation
             });
             Food.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Food_attention
             });
             Food.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Food_received
             });
             dashboard.Food = Food;
@@ -917,22 +935,22 @@ namespace AwesomeCare.Admin.Controllers
             var Heart = new List<Status>();
             Heart.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Heart_normal
             });
             Heart.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Heart_observation
             });
             Heart.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Heart_attention
             });
             Heart.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Heart_received
             });
             dashboard.Heart = Heart;
@@ -949,22 +967,22 @@ namespace AwesomeCare.Admin.Controllers
             var Oxygen = new List<Status>();
             Oxygen.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Oxygen_normal
             });
             Oxygen.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Oxygen_observation
             });
             Oxygen.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Oxygen_attention
             });
             Oxygen.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Oxygen_received
             });
             dashboard.Oxygen = Oxygen;
@@ -981,22 +999,22 @@ namespace AwesomeCare.Admin.Controllers
             var Pain = new List<Status>();
             Pain.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Pain_normal
             });
             Pain.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Pain_observation
             });
             Pain.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Pain_attention
             });
             Pain.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Pain_received
             });
             dashboard.Pain = Pain;
@@ -1013,22 +1031,22 @@ namespace AwesomeCare.Admin.Controllers
             var Pulse = new List<Status>();
             Pulse.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Pulse_normal
             });
             Pulse.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Pulse_observation
             });
             Pulse.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Pulse_attention
             });
             Pulse.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Pulse_received
             });
             dashboard.Pulse = Pulse;
@@ -1045,22 +1063,22 @@ namespace AwesomeCare.Admin.Controllers
             var Seizure = new List<Status>();
             Seizure.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Seizure_normal
             });
             Seizure.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Seizure_observation
             });
             Seizure.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Seizure_attention
             });
             Seizure.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Seizure_received
             });
             dashboard.Seizure = Seizure;
@@ -1077,22 +1095,22 @@ namespace AwesomeCare.Admin.Controllers
             var Wound = new List<Status>();
             Wound.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = Wound_normal
             });
             Wound.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = Wound_observation
             });
             Wound.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = Wound_attention
             });
             Wound.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = Wound_received
             });
             dashboard.Wound = Wound;
@@ -1100,22 +1118,22 @@ namespace AwesomeCare.Admin.Controllers
             #region TeleHealth
             TeleHeath.Add(new Status
             {
-                Key = "Normal",
+                Key = "N",
                 Value = TeleNormal
             });
             TeleHeath.Add(new Status
             {
-                Key = "Under Observation",
+                Key = "O",
                 Value = TeleObservation
             });
             TeleHeath.Add(new Status
             {
-                Key = "Urgent Attention",
+                Key = "A",
                 Value = TeleAttention
             });
             TeleHeath.Add(new Status
             {
-                Key = "Response Received",
+                Key = "R",
                 Value = TeleReceived
             });
             dashboard.TeleHealth = TeleHeath;
@@ -1234,6 +1252,7 @@ namespace AwesomeCare.Admin.Controllers
             staffRating.Add("3-Star", threestar);
             staffRating.Add("2-Star", twostar);
             staffRating.Add("1-Star", onestar);
+            staffRating.Add("Total", ratings);
 
             return staffRating;
         }
@@ -1249,6 +1268,7 @@ namespace AwesomeCare.Admin.Controllers
             var clients = getClients.Where(s => Convert.ToDateTime(s.DateOfBirth.ToString()).Date.ToString("MM") == currentMonth && s.Status == "Active").ToList();
             return clients;
         }
+        #region Adl Tracker
         private Dictionary<string, List<Status>> GetTrackerMonthly(string sdate, string edate, List<string> _months, List<LiveTracker> rotaAdmins)
         {
             var liveTrack = new Dictionary<string, List<Status>>();
@@ -1564,5 +1584,6 @@ namespace AwesomeCare.Admin.Controllers
             liveTrack.Add("MISSED", missedstatus);
             return (liveTrack);
         }
+        #endregion
     }
 }
