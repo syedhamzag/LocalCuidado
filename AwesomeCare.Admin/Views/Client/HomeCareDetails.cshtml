@@ -1,9 +1,19 @@
 ﻿@using  AwesomeCare.DataTransferObject.DTOs.Client;
 @model GetClient
 @{
-    ViewData["Title"] = "HomeCare";
+    ViewData["Title"] = "HomeCare Details";
 }
 <div class="card mb-0">
+    <div class="card-header">
+        <h2>HomeCare Client Details</h2>
+        <h3>@Model.PreferredName</h3>
+        <div class="dropdown profile-action">
+            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+            <div class="dropdown-menu dropdown-menu-right" style="">
+                <a asp-action="EditRegistration" asp-route-clientId="@Model.ClientId" asp-controller="Client">Edit Client</a>
+            </div>
+        </div>
+    </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
@@ -11,7 +21,7 @@
                     <div class="profile-img-wrap">
                         <div class="profile-img">
                             <a href="">
-                                <img src="assets/img/profiles/avatar-19.jpg" alt="">
+                                <img src="@Model.PassportFilePath" alt="">
                             </a>
                         </div>
                     </div>
@@ -19,34 +29,43 @@
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="profile-info-left">
-                                    <h3 class="user-name m-t-0">Global Technologies</h3>
-                                    <h5 class="company-role m-t-0 mb-0">Barry Cuda</h5>
-                                    <small class="text-muted">CEO</small>
-                                    <div class="staff-id">Employee ID : CLT-0001</div>
-                                    <div class="staff-msg"><a href="chat.html" class="btn btn-custom">Send Message</a></div>
+                                    <h3 class="user-name m-t-0">@string.Concat(Model.Firstname, " ", Model.Middlename, " ", Model.Surname)</h3>
+                                    <h5 class="company-role m-t-0 mb-0"></h5>
+                                    <small class="text-muted"></small>
+                                    <div class="staff-id">Client ID : @Model.IdNumber</div>
+                                    <div class="staff-msg">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <a asp-route-clientId="@Model.ClientId" asp-action="Index" asp-controller="Chat" class="btn btn-custom">Send Message</a>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                @Html.ActionLink("View Care Plan", "CareView", "CarePlan", new { clientId = Model.ClientId }, new { @class = "btn btn-custom" })
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-7">
                                 <ul class="personal-info">
                                     <li>
                                         <span class="title">Phone:</span>
-                                        <span class="text"><a href="">9876543210</a></span>
+                                        <span class="text"><a href="">@Model.Telephone</a></span>
                                     </li>
                                     <li>
                                         <span class="title">Email:</span>
-                                        <span class="text"><a href="">barrycuda@example.com</a></span>
+                                        <span class="text"><a href="">@Model.Email</a></span>
                                     </li>
                                     <li>
                                         <span class="title">Birthday:</span>
-                                        <span class="text">2nd August</span>
+                                        <span class="text">@Model.DateOfBirth</span>
                                     </li>
                                     <li>
                                         <span class="title">Address:</span>
-                                        <span class="text">5754 Airport Rd, Coosada, AL, 36020</span>
+                                        <span class="text">@Model.Address</span>
                                     </li>
                                     <li>
                                         <span class="title">Gender:</span>
-                                        <span class="text">Male</span>
+                                        <span class="text">@Model.Gender</span>
                                     </li>
                                 </ul>
                             </div>
@@ -62,80 +81,131 @@
         <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
             <ul class="nav nav-tabs nav-tabs-bottom">
                 <li class="nav-item col-sm-3"><a class="nav-link active" data-bs-toggle="tab" href="#personalInfo">Personal Info</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#involvingparties">Involving Parties</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#dutyoncall">Duty On Call</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#hospitalentry">Hospital Entry</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#hospitalexit">Hospital Exit</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#filesrecord">Files And Record</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#complaintregister">Complaint Register</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#logaudit">Log Audit</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#medaudit">Med Audit</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#voice">Voice</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#mgtvisit">Management Visit</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#program">Program</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#servicewatch">Service Watch</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#involvingparties" id="@Model.ClientId" onclick="getInvolving(this)">Involving Parties</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#dutyoncall" id="@Model.ClientId" onclick="getdutyoncall(this)">Duty On Call</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#hospitalentry" id="@Model.ClientId" onclick="gethospitalentry(this)">Hospital Entry</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#hospitalexit" id="@Model.ClientId" onclick="gethospitalexit(this)">Hospital Exit</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#filesrecord" id="@Model.ClientId" onclick="getfilesrecord(this)">Files And Record</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#complaintregister" id="@Model.ClientId" onclick="getcomplaintregister(this)">Complaint Register</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#logaudit" id="@Model.ClientId" onclick="getlogaudit(this)">Log Audit</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#medaudit" id="@Model.ClientId" onclick="getmedaudit(this)">Med Audit</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#voice" id="@Model.ClientId" onclick="getvoice(this)">Voice</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#mgtvisit" id="@Model.ClientId" onclick="getmgtvisit(this)">Management Visit</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#program" id="@Model.ClientId" onclick="getprogram(this)">Program</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#servicewatch" id="@Model.ClientId" onclick="getservicewatch(this)">Service Watch</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#telehealth">Tele Health</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#careplan" onclick="getCarePlan(@Model.ClientId)">Care Plan</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#dailytask">Daily Task</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#mcabest">MCA Best Interest</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#careplan">Care Plan</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#dailytask" id="@Model.ClientId" onclick="getdailytask(this)">Daily Task</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#mcabest" id="@Model.ClientId" onclick="getmcabest(this)">MCA Best Interest</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#careobj" id="@Model.ClientId" onclick="getcareobj(this)">Care Objectives</a></li>
             </ul>
         </div>
     </div>
 </div>
-
+<script type="text/javascript" src="~/assets2/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src=~/js/getDetails.js>
+</script>
 <div class="row">
     <div class="col-lg-12">
         <div class="tab-content profile-tab-content">
 
             <!-- Projects Tab -->
             <div id="personalInfo" class="tab-pane fade show active">
-                <div class="row">
-                    <div class="col-xs-7 col-sm-7 col-md-7">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-7 col-sm-7 col-md-7">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="Firstname" class="control-label"></label>
+                                            <input type="text" class="form-control" asp-for="Firstname" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="Middlename" class="control-label"></label>
+                                            <input type="text" class="form-control" asp-for="Middlename" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="Surname" class="control-label"></label>
+                                            <input type="text" class="form-control" asp-for="Surname" readonly>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="Gender" class="control-label"></label>
+                                            <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="DateOfBirth" class="control-label"></label>
+                                            <input asp-for="DateOfBirth" class="form-control" readonly>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4 col-md-4">
+                                        <div class="form-group">
+                                            <label asp-for="IdNumber" class="control-label"></label>
+                                            <input type="text" class="form-control" asp-for="IdNumber" readonly>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2>QR Code<small></small></h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <img alt="clientimage" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2>Image<small></small></h2>
+                                    </div>
+                                    <div class="card-body">
+                                        <img alt="clientimage" src="@Model.PassportFilePath" height="150" width="150">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
-                                    <label asp-for="Firstname" class="control-label"></label>
-                                    <input type="text" class="form-control" asp-for="Firstname" readonly>
+                                    <label class="control-label">Client Manager</label>
+                                    <select asp-for="ClientManager" asp-items="ViewBag.staffList" class="selectpicker form-control" data-live-search="true"></select>
+                                    <span asp-validation-for="ClientManager" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
-                                    <label asp-for="Middlename" class="control-label"></label>
-                                    <input type="text" class="form-control" asp-for="Middlename" readonly>
+                                    <label asp-for="Denture" class="control-label"></label>
+                                    <baserecord asp-key="Client_Denture" asp-for="Denture" asp-items="null" />
+                                    <span asp-validation-for="Denture" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
-                                    <label asp-for="Surname" class="control-label"></label>
-                                    <input type="text" class="form-control" asp-for="Surname" readonly>
+                                    <label asp-for="Aid" class="control-label"></label>
+                                    <baserecord asp-key="Client_Aid" asp-for="Aid" asp-items="null" />
+                                    <span asp-validation-for="Aid" class="text-danger"></span>
                                 </div>
                             </div>
-
                         </div>
-
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <div class="form-group">
-                                    <label asp-for="Gender" class="control-label"></label>
-                                    <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <div class="form-group">
-                                    <label asp-for="DateOfBirth" class="control-label"></label>
-                                    <input asp-for="DateOfBirth" class="form-control" readonly>
-
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-4 col-md-4">
-                                <div class="form-group">
-                                    <label asp-for="IdNumber" class="control-label"></label>
-                                    <input type="text" class="form-control" asp-for="IdNumber" readonly>
-                                </div>
-                            </div>
-
-                        </div>
-
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
@@ -181,1601 +251,1232 @@
                             </div>
 
                         </div>
-                    </div>
-                    <div class="col-xs-2 col-sm-2 col-md-2">
-                        <div class="card">
-                            <div class="header">
-                                <h2>QR Code<small></small></h2>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="ServiceId" class="control-label"></label>
+                                    <baserecord asp-key="Service" asp-for="ServiceId" asp-items="null" />
+                                </div>
                             </div>
-                            <div class="body">
-                                <img alt="clientimage" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="ProvisionVenue" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="ProvisionVenue" readonly>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3">
-                        <div class="card">
-                            <div class="header">
-                                <h2>Image<small></small></h2>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="PostCode" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="PostCode" readonly>
+                                </div>
                             </div>
-                            <div class="body">
-                                <img alt="clientimage" src="@Model.PassportFilePath" height="150" width="150">
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Rate" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Rate" readonly>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="ServiceId" class="control-label"></label>
-                            <baserecord asp-key="Service" asp-for="ServiceId" asp-items="null" />
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="ProvisionVenue" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="ProvisionVenue" readonly>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="PostCode" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="PostCode" readonly>
-                        </div>
-                    </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="TeamLeader" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="TeamLeader" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Telephone" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Telephone" readonly>
+                                </div>
+                            </div>
 
-                </div>
+                        </div>
 
-                <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="Rate" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="Rate" readonly>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="TeamLeader" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="TeamLeader" readonly>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="Telephone" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="Telephone" readonly>
-                        </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="LanguageId" class="control-label"></label>
+                                    <baserecord asp-key="Language" asp-for="LanguageId" asp-items="null" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="KeySafe" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="KeySafe" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="ChoiceOfStaffId" class="control-label"></label>
+                                    <baserecord asp-key="Client_ChoiceOfStaff" asp-for="ChoiceOfStaffId" asp-items="null" />
+                                </div>
+                            </div>
 
-                </div>
+                        </div>
 
-                <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="LanguageId" class="control-label"></label>
-                            <baserecord asp-key="Language" asp-for="LanguageId" asp-items="null" />
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="KeySafe" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="KeySafe" readonly>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="ChoiceOfStaffId" class="control-label"></label>
-                            <baserecord asp-key="Client_ChoiceOfStaff" asp-for="ChoiceOfStaffId" asp-items="null" />
-                        </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="CapacityId" class="control-label"></label>
+                                    <baserecord asp-key="Client_Capacity" asp-for="CapacityId" asp-items="null" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="ProviderReference" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="ProviderReference" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="NumberOfStaff" class="control-label"></label>
+                                    <input type="number" class="form-control" asp-for="NumberOfStaff" readonly>
+                                </div>
+                            </div>
 
-                </div>
+                        </div>
 
-                <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="CapacityId" class="control-label"></label>
-                            <baserecord asp-key="Client_Capacity" asp-for="CapacityId" asp-items="null" />
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="ProviderReference" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="ProviderReference" readonly>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="NumberOfStaff" class="control-label"></label>
-                            <input type="number" class="form-control" asp-for="NumberOfStaff" readonly>
-                        </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Keyworker" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Keyworker" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Latitude" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Latitude" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Longitude" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Longitude" readonly>
+                                </div>
+                            </div>
 
-                </div>
+                        </div>
 
-                <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="Keyworker" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="Keyworker" readonly>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="Latitude" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="Latitude" readonly>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="Longitude" class="control-label"></label>
-                            <input type="text" class="form-control" asp-for="Longitude" readonly>
-                        </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Address" class="control-label"></label>
+                                    <textarea class="form-control" asp-for="Address" readonly></textarea>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="About" class="control-label"></label>
+                                    <textarea class="form-control" asp-for="About" readonly></textarea>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Hobbies" class="control-label"></label>
+                                    <textarea class="form-control" asp-for="Hobbies" readonly></textarea>
+                                </div>
+                            </div>
 
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="Address" class="control-label"></label>
-                            <textarea class="form-control" asp-for="Address" readonly></textarea>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="About" class="control-label"></label>
-                            <textarea class="form-control" asp-for="About" readonly></textarea>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-4 col-md-4">
-                        <div class="form-group">
-                            <label asp-for="Hobbies" class="control-label"></label>
-                            <textarea class="form-control" asp-for="Hobbies" readonly></textarea>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
             <div class="tab-pane fade" id="involvingparties">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
 
-                            <th>NAME</th>
-                            <th>ADDRESS</th>
-                            <th>EMAIL</th>
-                            <th>TELEPHONE</th>
-                            <th>RELATIONSHIP</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.InvolvingParties)
-                        {
-                            <tr>
-                                <td>
-                                    @item.Name
-                                </td>
-                                <td>
-                                    @item.Address
-                                </td>
-                                <td>
-                                    @item.Email
-                                </td>
-                                <td>
-                                    @item.Telephone
-                                </td>
-                                <td>
-                                    @item.Relationship
-                                </td>
-                            </tr>
-                        }
+                                    <th>NAME</th>
+                                    <th>ADDRESS</th>
+                                    <th>EMAIL</th>
+                                    <th>TELEPHONE</th>
+                                    <th>RELATIONSHIP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_involvingparties">
 
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane fade" id="dutyoncall">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="DutyOnCall">Create</a></li>
-
-
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="body">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>RefNo</th>
-                                <th>Subject</th>
-                                <th>Attachment</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.GetDutyOnCall)
-                            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="DutyOnCall">Create</a>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>@item.DateOfCall</td>
-                                    <td>
-                                        @item.RefNo
-                                    </td>
-                                    <td>@item.Subject</td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Attachment))
-                                        {
-                                            <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                        }
-
-                                    </td>
-
+                                    <th>Date</th>
+                                    <th>RefNo</th>
+                                    <th>Subject</th>
+                                    <th>Attachment</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody id="tbl_dutyoncall">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="hospitalentry">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HospitalEntry">Create</a></li>
-
-
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="body">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Reference</th>
-                                <th>Attachment</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.GetHospitalEntry)
-                            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HospitalEntry">Create</a>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @item.Reference
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Attachment))
-                                        {
-                                            <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                        }
-
-                                    </td>
-
+                                    <th>Reference</th>
+                                    <th>Attachment</th>
                                 </tr>
-                            }
+                            </thead>
+                            <tbody id="tbl_hospitalentry">
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="hospitalexit">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HospitalExit">Create</a></li>
-
-
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="body">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Reference</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.GetHospitalExit)
-                            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HospitalExit">Create</a>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @item.Reference
-                                    </td>
-                                    <td>
-                                        @item.Date
-                                    </td>
-
+                                    <th>Reference</th>
+                                    <th>Date</th>
                                 </tr>
-                            }
-
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody id="tbl_hospitalexit">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
             </div>
             <div class="tab-pane fade" id="filesrecord">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="FilesAndRecord">Create</a></li>
-
-
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="body">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Subject</th>
-                                <th>Attachment</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.GetFilesAndRecord)
-                            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="FilesAndRecord">Create</a>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Subject
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.Attachment))
-                                        {
-                                            <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                        }
-                                    </td>
-
+                                    <th>Date</th>
+                                    <th>Subject</th>
+                                    <th>Attachment</th>
                                 </tr>
-                            }
+                            </thead>
+                            <tbody id="tbl_filesrecord">
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="complaintregister">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="CreateComplainRegister" asp-route-clientId="@Model.ClientId" asp-controller="Complain">Create</a></li>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="CreateComplainRegister" asp-route-clientId="@Model.ClientId" asp-controller="Complain">Create</a>
+                            </div>
+                        </div>
+                        </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover" id="tbl_complaintregister">
+                            <thead>
+                                <tr>
+                                    <th>Date</th> 
+                                    <th>Due Date</th> 
+                                    <th>Incident Date</th> 
+                                    <th>Reference</th> 
+                                    <th>Remark</th>
+                                    <th>Complain Contact</th>
+                                    <th>Action Taken</th>
+                                    <th>Evidence</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-
-                            </ul>
-                        </li>
-                    </ul>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Complain Contact</th>
-                            <th>Evidence</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.GetClientComplain)
-                        {
-                            <tr>
-                                <td>
-                                    @item.COMPLAINANTCONTACT
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.EvidenceFilePath))
-                                    {
-                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.EvidenceFilePath" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                    }
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
             </div>
 
             <div class="tab-pane fade" id="logaudit">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientLogAudit">Create</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientLogAudit">Create</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-hover" id="tbl_logaudit">
+                            <thead>
+                                <tr>
+                                    <th>Date</th> 
+                                    <th>Next Check Date</th> 
+                                    <th>Deadline</th> 
+                                    <th>Reference</th> 
+                                    <th>Remarks</th> 
+                                    <th>Action Taken</th>
+                                    <th>Action Recommended</th>
+                                    <th>Evidence of Action Taken</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Action Recommended</th>
-                            <th>Evidence of Action Taken</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.GetClientLogAudit)
-                        {
-                            <tr>
-                                <td>
-                                    @item.ActionRecommended
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
-                                    {
-                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.EvidenceOfActionTaken" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                    }
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
             </div>
 
             <div class="tab-pane fade" id="medaudit">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientMedAudit">Create</a></li>
-
-
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientMedAudit">Create</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-hover" id="tbl_medaudit">
+                            <thead>
+                                <tr>
+                                    <th>Date</th> 
+                                    <th>Next Check Date</th> 
+                                    <th>Deadline</th> 
+                                    <th>Reference</th> 
+                                    <th>Remarks</th> 
+                                    <th>Action Taken</th>
+                                    <th>Evidence of Action Taken</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Action Recommended</th>
-                            <th>Evidence of Action Taken</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.GetClientMedAudit)
-                        {
-                            <tr>
-                                <td>
-                                    @item.ActionRecommended
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.EvidenceOfActionTaken))
-                                    {
-                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.EvidenceOfActionTaken" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                    }
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
             </div>
 
             <div class="tab-pane fade" id="voice">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientVoice">Create</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientVoice">Create</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-hover" id="tbl_voice">
+                            <thead>
+                                <tr>
+                                    <th>Date</th> 
+                                    <th>Next Check Date</th> 
+                                    <th>Deadline</th> 
+                                    <th>Reference</th> 
+                                    <th>Remarks</th> 
+                                    <th>Action Required</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Action Required</th>
-                            <th>Attachment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.GetClientVoice)
-                        {
-                            <tr>
-                                <td>
-                                    @item.ActionRequired
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.Attachment))
-                                    {
-                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                    }
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
             </div>
 
             <div class="tab-pane fade" id="mgtvisit">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientMgtVisit">Create</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientMgtVisit">Create</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover" id="tbl_mgtvisit">
+                            <thead>
+                                <tr>
+                                    <th>Date</th> 
+                                    <th>Next Check Date</th> 
+                                    <th>Deadline</th> 
+                                    <th>Reference</th> 
+                                    <th>Remarks</th> 
+                                    <th>Action Required</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Action Required</th>
-                            <th>Attachment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.GetClientMgtVisit)
-                        {
-                            <tr>
-                                <td>
-                                    @item.ActionRequired
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.Attachment))
-                                    {
-                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                    }
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
             </div>
 
             <div class="tab-pane fade" id="program">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientProgram">Create</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientProgram">Create</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-hover" id="tbl_program">
+                            <thead>
+                                <tr>
+                                    <th>Date</th> 
+                                    <th>Next Check Date</th> 
+                                    <th>Deadline</th> 
+                                    <th>Reference</th> 
+                                    <th>Remarks</th> 
+                                    <th>Action Required</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Action Required</th>
-                            <th>Attachment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.GetClientProgram)
-                        {
-                            <tr>
-                                <td>
-                                    @item.ActionRequired
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.Attachment))
-                                    {
-                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                    }
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
             </div>
 
             <div class="tab-pane fade" id="servicewatch">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientServiceWatch">Create</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientServiceWatch">Create</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-hover" id="tbl_servicewatch">
+                            <thead>
+                                <tr>
+                                    <th>Date</th> 
+                                    <th>Next Check Date</th> 
+                                    <th>Deadline</th> 
+                                    <th>Reference</th> 
+                                    <th>Remarks</th> 
+                                    <th>Action Required</th>
+                                    <th>Attachment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Action Required</th>
-                            <th>Attachment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.GetClientServiceWatch)
-                        {
-                            <tr>
-                                <td>
-                                    @item.ActionRequired
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.Attachment))
-                                    {
-                                        <a href="#" class="on-default showfile-btn" title="Download" data-id="@item.Attachment" style="margin-left:5px;"><i class="fa fa-file"></i></a>
-                                    }
-
-                                </td>
-
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
             </div>
 
             <div class="tab-pane fade" id="telehealth">
-                <div class="header">
-                </div>
-                <div class="body">
-                    <ul class="nav nav-tabs-new2">
-                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#bloodcoag">Blood Coagulation</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bloodpressure">Blood Pressure</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bmichart">BMI Chart</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bodytemp">Body Temp</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bowel">Bowel Movement</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#eyehealth">Eye Health</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#foodintake">Food Intake</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#heartrate">Heart Rate</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#oxygen">Oxygen Level</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#painchart">Pain Chart</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pulserate">Pulse Rate</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seizure">Seizure</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#woundcare">Wound Care</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade" id="bloodcoag">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBloodCoagulationRecord">Create</a></li>
-                                        </ul>
-                                    </li>
+                    <div class="project-task">
+                                <ul class="nav nav-tabs nav-tabs-top nav-justified mb-0">
+                                    <li class="nav-item col-sm-3"><a class="nav-link active" data-bs-toggle="tab" href="#bloodcoag" id="@Model.ClientId" onclick="getbloodcoag(this)">Blood Coagulation</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#bloodpressure" id="@Model.ClientId" onclick="getbloodpressure(this)">Blood Pressure</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#bmichart" id="@Model.ClientId" onclick="getbmichart(this)">BMI Chart</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#bodytemp" id="@Model.ClientId" onclick="getbodytemp(this)">Body Temp</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#bowel" id="@Model.ClientId" onclick="getbowel(this)">Bowel Movement</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#eyehealth" id="@Model.ClientId" onclick="geteyehealth(this)">Eye Health</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#foodintake" id="@Model.ClientId" onclick="getfoodintake(this)">Food Intake</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#heartrate" id="@Model.ClientId" onclick="getheartrate(this)">Heart Rate</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#oxygen" id="@Model.ClientId" onclick="getoxygen(this)">Oxygen Level</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#painchart" id="@Model.ClientId" onclick="getpainchart(this)">Pain Chart</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#pulserate" id="@Model.ClientId" onclick="getpulserate(this)">Pulse Rate</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#seizure" id="@Model.ClientId" onclick="getseizure(this)">Seizure</a></li>
+                                    <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#woundcare" id="@Model.ClientId" onclick="getwoundcare(this)">Wound Care</a></li>
                                 </ul>
-                            </div>
-                            <div class="body">
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Comments</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.GetClientBloodCoagulationRecord)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @item.Date
-                                                </td>
-                                                <td>
-                                                    @item.Comment
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
 
-                        </div>
-                        <div class="tab-pane fade" id="bloodpressure">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBloodPressure">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientBloodPressure)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="bmichart">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBMIChart">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientBMIChart)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="bodytemp">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBodyTemp">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientBodyTemp)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="bowel">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBowelMovement">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientBowelMovement)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="eyehealth">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientEyeHealthMonitoring">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientEyeHealthMonitoring)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="foodintake">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientFoodIntake">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientFoodIntake)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="heartrate">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientHeartRate">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientHeartRate)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="oxygen">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientOxygenLvl">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientOxygenLvl)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="painchart">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientPainChart">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientPainChart)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="pulserate">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientPulseRate">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientPulseRate)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="seizure">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientSeizure">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Remarks</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientSeizure)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Remarks
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="woundcare">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientWoundCare">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Comments</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClientWoundCare)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.Date
-                                            </td>
-                                            <td>
-                                                @item.Comment
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-pane fade" id="careplan">
-                <div class="header">
-                </div>
-                <div class="body">
-                    <ul class="nav nav-tabs-new2">
-                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#personaldetail">Personal Detail</a></li>
-                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#health">Health</a></li>
-                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nutrition">Nutrition</a></li>
-                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#hygiene">Hygiene</a></li>
-                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#interests">Interest And Objectives</a></li>
-                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#homerisk">Home Risk Assessment</a></li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade" id="personaldetail">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonalDetail">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="body">
-                                <table class="table table-bordered table-hover" id="GetReview">
-                                    <thead>
-                                        <tr>
-                                            <th>Prepare Date</th>
-                                            <th>Review Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="health">
-                            <div class="header">
-                            </div>
-                            <div class="body">
-                                <ul class="nav nav-tabs-new2">
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#healthliving">Health and Living</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#specialhealthmed">Special Health and Medication</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#balance">Balance</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#physicalability">Physical Ability</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#specialhealthcond">Special Health Condition</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#historyoffall">History Of Fall</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane fade" id="healthliving">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HealthLiving">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetHealthAndLiving">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Health Brief</th>
-                                                        <th>How I Want To Wake Up</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="specialhealthmed">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthAndMedication">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetSpecialHealthAndMedication">
+                            <div class="tab-content profile-tab-content">
+                                <div class="tab-pane fade" id="bloodcoag">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBloodCoagulationRecord">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>
-                                                        <th>By</th>
+                                                        <th>Comments</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbl_bloodcoag">
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="balance">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Balance">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetBalance">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Description</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="physicalability">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PhysicalAbility">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetPhysicalAbility">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Description</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="specialhealthcond">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthCondition">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetSpecialHealthCondition">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name Of Condition</th>
-                                                        <th>Source Of Information</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="historyoffall">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HistoryOfFall">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetHistoryOfFall">
+
+                                </div>
+                                <div class="tab-pane fade" id="bloodpressure">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBloodPressure">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>
-                                                        <th>Cause</th>
+                                                        <th>Comments</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbl_bloodpressure">
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="nutrition">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CarePlanNutrition">Create</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="body">
-                                <table class="table table-bordered table-hover" id="GetCarePlanNutrition">
-                                    <thead>
-                                        <tr>
-                                            <th>Special Diet</th>
-                                            <th>Food To Avoid</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="hygiene">
-                            <div class="header">
-                            </div>
-                            <div class="body">
-                                <ul class="nav nav-tabs-new2">
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personalhygiene">Personal Hygiene</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#infectioncontrol">Infection Control</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#mtask">Managing Tasks</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane fade" id="personalhygiene">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonalHygiene">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetPersonalHygiene">
+                                <div class="tab-pane fade" id="bmichart">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBMIChart">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Practical Laundry Support</th>
-                                                        <th>Laundry Guide</th>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbl_bmichart">
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="infectioncontrol">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="InfectionControl">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetInfectionControl">
+                                </div>
+                                <div class="tab-pane fade" id="bodytemp">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBodyTemp">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Test Date</th>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl_bodytemp">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="bowel">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientBowelMovement">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl_bowel">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="eyehealth">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientEyeHealthMonitoring">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl_eyehealth">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="foodintake">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientFoodIntake">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl_foodintake">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="heartrate">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientHeartRate">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl_heartrate">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="oxygen">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientOxygenLvl">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl_oxygen">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="painchart">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientPainChart">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl_painchart">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="pulserate">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientPulseRate">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbl_pulserate">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="seizure">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientSeizure">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
                                                         <th>Remarks</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbl_seizure">
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="mtask">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ManagingTasks">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetManagingTasks">
+                                </div>
+                                <div class="tab-pane fade" id="woundcare">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown profile-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right" style="">
+                                                    <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientWoundCare">Create</a>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>Help Required</th>
+                                                        <th>Date</th>
+                                                        <th>Comments</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="tbl_woundcare">
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                    </div>
+            </div>
 
-                        <div class="tab-pane fade" id="interests">
-                            <div class="header">
-                            </div>
-                            <div class="body">
-                                <ul class="nav nav-tabs-new2">
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#intandobj">Interests And Objectives</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pets">Pets</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane fade" id="intandobj">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="InterestAndObjective">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
+            <div class="tab-pane fade" id="careplan">
+                        <div class="project-task">
+                            <ul class="nav nav-tabs nav-tabs-top nav-justified mb-0">
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#personaldetail" id="@Model.ClientId" onclick="getpersonaldetail(this)">Personal Detail</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#health">Health</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nutrition" id="@Model.ClientId" onclick="getnutrition(this)">Nutrition</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#hygiene">Hygiene</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#interests">Interest And Objectives</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#homerisk" id="@Model.ClientId" onclick="gethomerisk(this)">Home Risk Assessment</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content profile-tab-content">
+                            <div class="tab-pane fade" id="personaldetail">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="dropdown profile-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonalDetail">Create</a>
+                                            </div>
                                         </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetInterestAndObjective">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Goal/Objective of Care</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="pets">
-                                        <div class="header">
-                                            <ul class="header-dropdown">
-                                                <li class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                                    <ul class="dropdown-menu dropdown-menu-right">
-                                                        <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Pets">Create</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="body">
-                                            <table class="table table-bordered table-hover" id="GetPets">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Age</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                        <table class="table table-bordered table-hover" id="GetReview">
+                                            <thead>
+                                                <tr>
+                                                    <th>Prepare Date</th>
+                                                    <th>Review Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_personaldetail">
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="tab-pane fade" id="homerisk">
-                            <div class="header">
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a asp-action="ListHeading" asp-route-clientId="@Model.ClientId" asp-controller="HomeRiskAssessment">Create</a></li>
+                            <div class="tab-pane fade" id="health">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs nav-tabs-bottom">
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#healthliving" id="@Model.ClientId" onclick="gethealthliving(this)">Health and Living</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#specialhealthmed" id="@Model.ClientId" onclick="getspecialhealthmed(this)">Special Health and Medication</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#balance" id="@Model.ClientId" onclick="getbalance(this)">Balance</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#physicalability" id="@Model.ClientId" onclick="getphysicalability(this)">Physical Ability</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#specialhealthcond" id="@Model.ClientId" onclick="getspecialhealthcond(this)">Special Health Condition</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#historyoffall" id="@Model.ClientId" onclick="gethistoryoffall(this)">History Of Fall</a></li>
                                         </ul>
-                                    </li>
-                                </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade" id="healthliving">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HealthLiving">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetHealthAndLiving">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Health Brief</th>
+                                                                    <th>How I Want To Wake Up</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_healthliving">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="specialhealthmed">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthAndMedication">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetSpecialHealthAndMedication">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Date</th>
+                                                                    <th>By</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_specialhealthmed">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="balance">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Balance">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetBalance">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Description</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_balance">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="physicalability">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PhysicalAbility">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetPhysicalAbility">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Description</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_physicalability">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="specialhealthcond">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthCondition">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetSpecialHealthCondition">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name Of Condition</th>
+                                                                    <th>Source Of Information</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_specialhealthcond">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="historyoffall">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HistoryOfFall">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetHistoryOfFall">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Date</th>
+                                                                    <th>Cause</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_historyoffall">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="body">
-                                <table class="table table-bordered table-hover" id="GetHomeRiskAssessment">
-                                    <thead>
-                                        <tr>
-                                            <th>Heading</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+
+                            <div class="tab-pane fade" id="nutrition">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="dropdown profile-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CarePlanNutrition">Create</a>
+                                            </div>
+                                        </div>
+                                        <table class="table table-bordered table-hover" id="GetCarePlanNutrition">
+                                            <thead>
+                                                <tr>
+                                                    <th>Special Diet</th>
+                                                    <th>Food To Avoid</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="hygiene">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs nav-tabs-bottom">
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#personalhygiene" id="@Model.ClientId" onclick="getpersonalhygiene(this)">Personal Hygiene</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#infectioncontrol" id="@Model.ClientId" onclick="getinfectioncontrol(this)">Infection Control</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#mtask" id="@Model.ClientId" onclick="getmtask(this)">Managing Tasks</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade" id="personalhygiene">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonalHygiene">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetPersonalHygiene">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Practical Laundry Support</th>
+                                                                    <th>Laundry Guide</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="infectioncontrol">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="InfectionControl">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetInfectionControl">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Test Date</th>
+                                                                    <th>Remarks</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="mtask">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ManagingTasks">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetManagingTasks">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Help Required</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="interests">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs nav-tabs-bottom">
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#intandobj" id="@Model.ClientId" onclick="getintandobj(this)">Interests And Objectives</a></li>
+                                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#pets" id="@Model.ClientId" onclick="getpets(this)">Pets</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade" id="intandobj">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="InterestAndObjective">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetInterestAndObjective">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Goal/Objective of Care</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="pets">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="dropdown profile-action">
+                                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Pets">Create</a>
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-bordered table-hover" id="GetPets">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Name</th>
+                                                                    <th>Age</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="tbl_">
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="homerisk">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="dropdown profile-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                <a asp-action="ListHeading" asp-route-clientId="@Model.ClientId" asp-controller="HomeRiskAssessment">Create</a>
+                                            </div>
+                                        </div>
+                                        <table class="table table-bordered table-hover" id="GetHomeRiskAssessment">
+                                            <thead>
+                                                <tr>
+                                                    <th>Heading</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+            </div>
+
+            <div class="tab-pane fade" id="dailytask">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientDailyTask">Create</a>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Amendment Date</th>
+                                    <th>Task</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_dailytask">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="dailytask">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientDailyTask">Create</a></li>
-
-
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="body">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Amendment Date</th>
-                                <th>Task</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.GetClientDailyTask)
-                            {
-                                <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.AmendmentDate
-                                    </td>
-                                    <td style="text-align:justify; white-space:normal;">
-                                        @item.DailyTaskName
-                                    </td>
-                                </tr>
-                            }
-
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
             <div class="tab-pane fade" id="mcabest">
-                <div class="header">
-                    <ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="BestInterestAssessment">Create</a></li>
-
-
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="body">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Name</th>
-                                <th>Signature</th>
-                                <th>Position</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.GetBestInterestAssessment)
-                            {
+                <div class="card">
+                    <div class="card-body">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="BestInterestAssessment">Create</a>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        @item.Date
-                                    </td>
-                                    <td>
-                                        @item.Name
-                                    </td>
-                                    <td style="text-align:justify; white-space:normal;">
-                                        @item.Signature
-                                    </td>
-                                    <td>
-                                        @item.Position
-                                    </td>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Signature</th>
+                                    <th>Position</th>
                                 </tr>
-                            }
-
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody id="tbl_mcabest">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-
             </div>
 
+            <div class="tab-pane fade" id="careobj">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Calender" asp-route-clientId="@Model.ClientId" asp-controller="ClientCareObj">Create</a>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Note</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_careobj">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+

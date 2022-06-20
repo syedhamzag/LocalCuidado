@@ -1,0 +1,95 @@
+﻿@using  AwesomeCare.DataTransferObject.DTOs.Client;
+@model List<GetClient>
+@{
+    ViewData["Title"] = "HomeCare";
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <h3 class="page-title">Clients</h3>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">Clients</li>
+            </ul>
+        </div>
+        <div class="col-auto float-end ms-auto">
+            <a href="#" class="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client"><i class="fa fa-plus"></i> Add Client</a>
+            <div class="card tab-box">
+                <div class="row user-tabs">
+                    <div class="col-lg-12 col-md-12 col-sm-12 view-icons">
+                        <ul class="nav nav-tabs nav-tabs-bottom">
+                            <li class="nav-item col-sm-3"><a class="grid-view nav-link active" data-bs-toggle="tab" href="#client"><i class="fa fa-th"></i></a></li>
+                            <li class="nav-item col-sm-3"><a class="list-view nav-link" data-bs-toggle="tab" href="#clientlist"><i class="fa fa-bars"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="view-icons">
+                <a href="clients.html" class="grid-view btn btn-link active"><i class="fa fa-th"></i></a>
+                <a href="clients-list.html" class="list-view btn btn-link"><i class="fa fa-bars"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Page Header -->
+<!-- Search Filter -->
+<div class="row filter-row">
+    <div class="col-sm-6 col-md-3">
+        <div class="form-group form-focus">
+            <input type="text" class="form-control floating">
+            <label class="focus-label">Client ID</label>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="form-group form-focus">
+            <input type="text" class="form-control floating">
+            <label class="focus-label">Client Name</label>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="d-grid">
+            <a href="#" class="btn btn-success"> Search </a>
+        </div>
+    </div>
+</div>
+<!-- Search Filter -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="tab-content profile-tab-content">
+
+            <!-- Client Tab -->
+            <div id="client" class="tab-pane fade show active">
+                <div class="row staff-grid-row">
+                    @foreach (var client in Model.Select((d, i) => new { index = i + 1, data = d }))
+                    {
+                        <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
+                            <div class="profile-widget">
+                                <div class="profile-img">
+                                    <a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails" class="avatar"><img alt="" src="@client.data.PassportFilePath"></a>
+                                </div>
+                                <div class="dropdown profile-action">
+                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" asp-route-clientId="@client.data.ClientId" asp-action="EditRegistration"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                        <a class="dropdown-item" asp-route-clientId="@client.data.ClientId" asp-action="Medications">Medications</a>
+                                    </div>
+                                </div>
+                                <h4 class="user-name m-t-10 mb-0 text-ellipsis"><a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails"><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></a></h4>
+                                <h5 class="user-name m-t-10 mb-0 text-ellipsis"><a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails">Barry Cuda</a></h5>
+                                <div class="small text-muted">CEO</div>
+                                <a href="chat.html" class="btn btn-white btn-sm m-t-10">Message</a>
+                                <a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails" class="btn btn-white btn-sm m-t-10">View Profile</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+            <!-- Client List Tab -->
+            <div id="clientlist" class="tab-pane fade show active">
+            </div>
+        </div>
+    </div>
+</div>

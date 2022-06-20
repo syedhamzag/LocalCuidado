@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,5 +14,6 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public decimal NI { get; set; }
         public string Remarks { get; set; }
         public string StaffName { get; set; }
+        public List<SelectListItem> StaffList { get; set; }
     }
 }

@@ -1,0 +1,134 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Dashboard;
+@model GetDashboard
+@{
+    ViewData["Title"] = "Employee Dashboard";
+}
+<div class="row">
+    <div class="col-md-6 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Activities</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#ratingModal" style="font-size: .75em;margin-top: -25px;">See More</button>
+            </div>
+            <div class="card-body">
+                <a asp-action="Details" asp-controller="Staff" asp-route-staffId="@Model.StaffId" asp-route-ActiveTab="spotcheck" class="btn btn-success form-control mt-5">Spot Check</a>
+                <a asp-action="Details" asp-controller="Staff" asp-route-staffId="@Model.StaffId" asp-route-ActiveTab="adlobs" class="btn btn-danger form-control mt-5">Observation</a>
+                <a asp-action="Details" asp-controller="Staff" asp-route-staffId="@Model.StaffId" asp-route-ActiveTab="onetoone" class="btn btn-primary form-control mt-5">One To One</a>
+                <a asp-action="Details" asp-controller="Staff" asp-route-staffId="@Model.StaffId" asp-route-ActiveTab="survey" class="btn btn-info form-control mt-5">Survey</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Your Office Team</h5>
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Social Chat/Video</h5>
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Supervision</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="supervision"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Key Worker</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="keyworker"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">One To One</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="one"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Med Comp Observation</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="medcomp"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-1">
+
+                    </div>
+                    <div class="col-md-2">
+                        <a asp-action="Details" asp-controller="Staff" asp-route-StaffId="@Model.StaffId" asp-route-ActiveTab="personalitytest" class="btn btn-success form-control mt-1" style="padding: 100px 0;text-align: center;">Personality Test</a>
+                    </div>
+                    <div class="col-md-2 center-align">
+                         <a asp-action="Details" asp-controller="Staff" asp-route-StaffId="@Model.StaffId" asp-route-ActiveTab="infection" class="btn btn-danger form-control mt-1" style="padding: 100px 0;text-align: center;">Infection Control</a>
+                    </div>
+                    <div class="col-md-2 center-align">
+                        <a asp-action="Details" asp-controller="Staff" asp-route-StaffId="@Model.StaffId" asp-route-ActiveTab="competence" class="btn btn-primary form-control mt-1" style="padding: 100px 0;text-align: center;">Competence Test</a>
+                    </div>
+                    <div class="col-md-2 center-align">
+                        <a asp-action="Details" asp-controller="Staff" asp-route-StaffId="@Model.StaffId" asp-route-ActiveTab="health" class="btn btn-info form-control mt-1" style="padding: 100px 0;text-align: center;">Health</a>
+                    </div>
+                    <div class="col-md-2 center-align">
+                        <a asp-action="Details" asp-controller="Staff" asp-route-StaffId="@Model.StaffId" asp-route-ActiveTab="supervision" class="btn btn-secondary form-control mt-1" style="padding: 100px 0;text-align: center;">Supervision</a>
+                    </div>
+                    <div class="col-md-1">
+
+                    </div>
+                 </div>  
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+<script src="~/assets2/js/StackedChart.js"></script>
+<script src="~/js/dashboard.js"></script>
+<script type="text/javascript">
+    $(function () 
+    {
+        var supervision = "supervision";
+        var keyworker = "keyworker";
+        var one = "one";
+        var medcomp = "medcomp";
+        var ctxsupervision = document.getElementById(supervision).getContext('2d');
+        var ctxkeyworker = document.getElementById(keyworker).getContext('2d');
+        var ctxone = document.getElementById(one).getContext('2d');
+        var ctxmedcomp = document.getElementById(medcomp).getContext('2d');
+        getSupervision(@Model.pId,@Model.cId,@Model.lId,ctxsupervision);
+        getSupervision(@Model.pId,@Model.cId,@Model.lId,ctxkeyworker);
+        getSupervision(@Model.pId,@Model.cId,@Model.lId,ctxone);
+        getSupervision(@Model.pId,@Model.cId,@Model.lId,ctxmedcomp);
+    });
+</script>

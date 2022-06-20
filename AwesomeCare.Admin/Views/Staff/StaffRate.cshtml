@@ -1,0 +1,47 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Staff;
+@model List<GetStaffPersonalInfo>
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="card-header">
+                <h2>All Staff Rates</h2>
+            </div>
+            <div class="card-body">
+                <table class="table m-b-0 datatables">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Staff</th>
+                            <th>Number</th>
+                            <th>Is Team Leader</th>
+                            <th>Is Key Worker</th>
+                            <th>Rates</th>
+                            <th>Date Of Employeement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                            <tr>
+                                <td>@item.index </td>
+                                <td>@string.Concat(item.data.FirstName," ",item.data.MiddleName," ",item.data.LastName) </td>
+                                <td>@item.data.RegistrationId</td>
+                                <td>@item.data.IsTeamLeader</td>
+                                <td>@item.data.IsKeyWorker</td>
+                                <td>@item.data.Rate</td>
+                                <td>@item.data.EmploymentDate</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

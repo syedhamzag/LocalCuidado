@@ -103,5 +103,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string Latitude { get; set; }
         [MaxLength(250)]
         public string Longitude { get; set; }
+
+        public int ClientManager { get; set; }
+        public int Denture { get; set; }
+        public int Aid { get; set; }
     }
 }

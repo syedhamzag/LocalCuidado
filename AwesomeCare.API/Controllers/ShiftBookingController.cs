@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -18,6 +20,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ShiftBookingController : ControllerBase
@@ -143,7 +146,22 @@ namespace AwesomeCare.API.Controllers
 
             return CreatedAtRoute("GetShiftBookingById", new { id = getEntity.ShiftBookingId }, getEntity);
         }
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put([FromBody] PutShiftBooking model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var postEntity = Mapper.Map<ShiftBooking>(model);
+            var entity = await _shiftBookingRepository.UpdateEntity(postEntity);
+
+            return Ok(entity);
+        }
         /// <summary>
         /// Create Staff Booking
         /// </summary>
@@ -260,8 +278,100 @@ namespace AwesomeCare.API.Controllers
             return Ok(entity);
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shiftId">0</param>
+        /// <returns></returns>
+        [HttpGet("GetStaffShift/{shiftId}")]
+        [ProducesResponseType(type: typeof(List<StaffBooked>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetStaffShift(int shiftId)
+        {
+            var entity = (from shift in _shiftBookingRepository.Table
+                          join stShift in _staffShiftBookingRepo.Table on shift.ShiftBookingId equals stShift.ShiftBookingId
+                          join staff in _staffPersonalInfoRepository.Table on stShift.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                          where shift.ShiftBookingId == shiftId
+                                select new StaffBooked
+                                {
+                                    StaffPersonalInfoId = stShift.StaffPersonalInfoId,
+                                    StaffName = staff.FirstName + " " + staff.LastName,
+                                    ShiftBookingId = shift.ShiftBookingId,
 
-      
+                                }).ToList();
+            return Ok(entity);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="rotaId">0</param>
+        /// <returns></returns>
+        [HttpGet("GetShiftBookByDate/{rotaId}")]
+        [ProducesResponseType(type: typeof(GetShiftBookedByMonthYear), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetShiftBookByDate(int rotaId)
+        {
+            var entity = await (from shift in _shiftBookingRepository.Table
+                                where shift.Rota == rotaId
+                                // join staffShiftBooking in _stafShiftBookingRepo.Table on shift.ShiftBookingId equals staffShiftBooking.ShiftBookingId
+                                select new GetShiftBookedByMonthYear
+                                {
+                                    TeamId = shift.Team,
+                                    DriverRequired = shift.DriverRequired,
+                                    NumberOfStaffRequired = shift.NumberOfStaff,
+                                    PublishTo = shift.PublishTo,
+                                    Remark = shift.Remark,
+                                    RotaId = shift.Rota,
+                                    ShiftBookingId = shift.ShiftBookingId,
+                                    ShiftDate = shift.ShiftDate,
+                                    StartTime = shift.StartTime,
+                                    StopTime = shift.StopTime,
+                                    NumberOfStaffRegistered = shift.StaffShiftBooking.Count,
+                                    
+                                    BlockedDays = (from bd in shift.ShiftBookingBlockedDays
+                                                   select new GetShiftBookingBlockedDays
+                                                   {
+                                                       Day = bd.Day,
+                                                       ShiftBookingBlockedDaysId = bd.ShiftBookingBlockedDaysId,
+                                                       ShiftBookingId = bd.ShiftBookingId,
+                                                       WeekDay = bd.WeekDay
+                                                   }).ToList(),
+                                    Staffs = (from st in shift.StaffShiftBooking
+                                              join st2 in _staffPersonalInfoRepository.Table on st.StaffPersonalInfoId equals st2.StaffPersonalInfoId
+                                              where st.StaffPersonalInfoId == st2.StaffPersonalInfoId
+                                              select new StaffBooked
+                                              {
+                                                  StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                                  StaffName = st2.FirstName + " " + st2.LastName,
+                                                  StaffShiftBookingId = st.StaffShiftBookingId,
+                                                  BookedDays = (from shiftDay in st.Days
+                                                                where shiftDay.Date.Year > 0001
+                                                                select new BookedDays
+                                                                {
+                                                                    Day = shiftDay.Day,
+                                                                    ShiftBookedById = st.StaffPersonalInfoId,
+                                                                    StaffShiftBookingDayId = shiftDay.StaffShiftBookingDayId,
+                                                                    StaffShiftBookingId = shiftDay.StaffShiftBookingId,
+                                                                    WeekDay = shiftDay.WeekDay,
+                                                                    Date = shiftDay.Date,
+                                                                }).ToList()
+                                              }).ToList(),
+                                    BookedDays = (from shiftStaff in shift.StaffShiftBooking
+                                                  join shiftDay in _staffShiftBookingDayRepo.Table on shiftStaff.StaffShiftBookingId equals shiftDay.StaffShiftBookingId
+                                                  select new BookedDays
+                                                  {
+                                                      Day = shiftDay.Day,
+                                                      ShiftBookedById = shiftStaff.StaffPersonalInfoId,
+                                                      StaffShiftBookingDayId = shiftDay.StaffShiftBookingDayId,
+                                                      StaffShiftBookingId = shiftDay.StaffShiftBookingId,
+                                                      WeekDay = shiftDay.WeekDay
+                                                  }).ToList()
+                                }).FirstOrDefaultAsync();
+
+            return Ok(entity);
+
+        }
+
         [HttpGet("Admin/{monthId}/{rotaId}", Name = "GetShiftForAdminByMonth")]
         [ProducesResponseType(type: typeof(GetShiftBookedByMonthYear), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -344,7 +454,17 @@ namespace AwesomeCare.API.Controllers
 
             return Ok();
         }
+        [HttpDelete("DeleteStaffShift/{dayId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteStaffShift(int dayId)
+        {
+            var shiftBooking = await _staffShiftBookingDayRepo.GetEntity(dayId);
+            if (shiftBooking == null) return NotFound();
 
+            await _staffShiftBookingDayRepo.DeleteEntity(shiftBooking);
+
+            return Ok();
+        }
         [HttpPost("BlockDay")]
         [ProducesResponseType(type: typeof(GetShiftBookingBlockedDays), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -361,6 +481,21 @@ namespace AwesomeCare.API.Controllers
 
 
             return Ok(getEntity);
+        }
+        [HttpPost("BookDay")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> BookDays([FromBody] PostStaffShiftBookingDay model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+
+            var postEntity = Mapper.Map<StaffShiftBookingDay>(model);
+            var entity = await _staffShiftBookingDayRepo.InsertEntity(postEntity);
+
+            return Ok(entity);
         }
 
 
@@ -393,6 +528,28 @@ namespace AwesomeCare.API.Controllers
             }
             var rowCount = _dbContext.SaveChanges();
             return Ok(rowCount);
+        }
+
+        /// <summary>
+        /// Create Staff Booking
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> EditStaff([FromBody] List<PutStaffShiftBooking> model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var postEntity = Mapper.Map<List<StaffShiftBooking>>(model);
+            foreach (var item in postEntity)
+            {
+                await _staffShiftBookingRepo.UpdateEntity(item);
+            }
+            return Ok();
+            // return CreatedAtRoute("GetShiftBookingById", new { id = getEntity.ShiftBookingId }, getEntity);
         }
     }
 }

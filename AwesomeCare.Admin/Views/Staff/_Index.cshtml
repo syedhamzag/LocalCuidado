@@ -1,0 +1,120 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Staff;
+@using  AwesomeCare.DataTransferObject.Enums;
+@using System.Globalization;
+@model List<GetStaffs>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="card-header">
+
+                @*<ul class="header-dropdown">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="javascript:void(0);">Action</a></li>
+                                <li><a href="javascript:void(0);">Another Action</a></li>
+                                <li><a href="javascript:void(0);">Something else</a></li>
+                            </ul>
+                        </li>
+                    </ul>*@
+            </div>
+            <div class="card-body">
+                <h4>Staffs</h4>
+
+                <table class="table m-b-0 datatables">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Telephone</th>
+                            <th>Email</th>
+                            <th>Can Drive</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Registration Id</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var staff in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                        <tr>
+                            <td>@staff.index </td>
+                            <td><img src="@staff.data.ProfilePix" alt="Image" width="35" height="35" style="border-radius:50%;" /></td>
+                            <td>
+                                <span>
+                                    <a href="@Url.Action("Details", "Staff", new { staffId = staff.data.StaffPersonalInfoId })">
+                                    @staff.data.Fullname
+                                    </a>
+                                    </span>
+                                    
+                                </td>
+                            <td><span class="text-info">@staff.data.Telephone</span></td>
+                            <td>@staff.data.Email</td>
+                            <td>
+                                @{
+                                    var canDrive = staff.data.CanDrive ? "Yes" : "No";
+                                    @canDrive;
+                                }
+                            </td>
+                            <td>
+                                @*@{
+
+                string yes = "Yes";
+                var date = DateTime.TryParseExact(staff.data.StartDate, "MM/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime startDate)?startDate.ToString("MMM dd yyyy"):staff.data.StartDate;
+               // var date = DateTime.TryParseExact(staff.data.StartDate, "MM/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime startDate) ? "Yes" : "No";
+
+                @date;
+            }*@
+                                @staff.data.StartDate
+                            </td>
+                            <td>@staff.data.EndDate</td>
+                            <td>@staff.data.RegistrationId</td>
+                            <td>
+                                @if (staff.data.Status == StaffRegistrationEnum.Approved.ToString())
+                                {
+                                    <span class="badge badge-success">@staff.data.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-default">@staff.data.Status</span>
+                                }
+
+                            </td>
+                            <td>
+
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        @Html.ActionLink("Details", "Details", "Staff", new { staffId = staff.data.StaffPersonalInfoId }, new { @class = "dropdown-item" })
+                                        <a asp-controller="Staff" asp-action="Feedback" class="dropdown-item" asp-route-staffpersonalInfoId="@staff.data.StaffPersonalInfoId">Feedback/Ratings</a>
+                                        <a asp-controller="Staff" asp-action="EditProfile" class="dropdown-item" asp-route-staffId="@staff.data.StaffPersonalInfoId">Edit</a>
+                                        @if (!string.IsNullOrEmpty(staff.data.ApplicationUserId))
+                                        {
+                                            <a asp-controller="Staff" asp-action="ChangeEmail" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Email</a>
+                                            <a asp-controller="Staff" asp-action="ChangePassword" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Password</a>
+
+                                        }
+
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -38,6 +38,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientMedicationDay;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
 using AwesomeCare.Admin.Services.Admin;
+using AwesomeCare.Admin.Services.Staff;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -56,10 +57,11 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientRotaTypeService _clientRotaTypeService;
         private readonly IRotaDayofWeekService _rotaDayofWeekService;
         private readonly IBaseRecordService _baseRecordService;
+        private IStaffService _staffService;
 
         public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
-            IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService,
-            IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger, IBaseRecordService baseRecordService,
+            IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IStaffService staffService,
+        IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger, IBaseRecordService baseRecordService,
             IClientCareDetails clientCareDetails, IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) : base(fileUpload)
         {
             _dropboxClient = dropboxClient;
@@ -75,12 +77,12 @@ namespace AwesomeCare.Admin.Controllers
             _medicationService = medicationService;
             _clientRotaTypeService = clientRotaTypeService;
             _rotaDayofWeekService = rotaDayofWeekService;
+            _staffService = staffService;
         }
         public async Task<IActionResult> HomeCare()
         {
             var result = await _clientService.GetClients();
             var active = result.Where(s => s.Status == "Active").OrderBy(s=>s.ClientId).ToList();
-            
             return View(active);
         }
         public async Task<IActionResult> HomeCareOther()
@@ -98,6 +100,7 @@ namespace AwesomeCare.Admin.Controllers
             List<ClientCareDetailsHeading> careDetailsItems = new List<ClientCareDetailsHeading>();
 
             var client = new CreateClient();
+            var staffs = await _staffService.GetStaffs();
             var involvingPartyItems = await _clientService.GetClientInvolvingPartyBase();
             var clientCareDetails = await _clientCareDetails.GetHeadingsWithTasks();
             foreach (var item in involvingPartyItems)
@@ -131,6 +134,7 @@ namespace AwesomeCare.Admin.Controllers
             HttpContext.Session.Set<List<ClientCareDetailsHeading>>("caredetailsItems", careDetailsItems);
             client.InvolvingParties = clientInvolvingPartyItems;
             client.CareDetails = careDetailsItems;
+            client.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             #region Regulatory Contact
             if (_cache.TryGetValue(cacheKey, out List<GetBaseRecordWithItems> baseRecords))
             {
@@ -154,11 +158,12 @@ namespace AwesomeCare.Admin.Controllers
             try
             {
                 model.StatusId = 14;
-
+                var staffs = await _staffService.GetStaffs();
                 if (model == null || !ModelState.IsValid)
                 {
                     //model.InvolvingParties = HttpContext.Session.Get<List<ClientInvolvingParty>>("involvingPartyItems");
-
+                    model = new CreateClient();
+                    model.StaffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                     return View(model);
                 }
 
@@ -358,8 +363,10 @@ namespace AwesomeCare.Admin.Controllers
         #region Edit
         public async Task<IActionResult> EditRegistration(int? clientId)
         {
+            var staffs = await _staffService.GetStaffs();
             var result = await _clientService.GetClientForEdit(clientId.Value);
             result.InvolvingPartyCount = result.InvolvingParties.Count;
+            ViewBag.staffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString()));
             return View(result);
         }
 
@@ -452,13 +459,17 @@ namespace AwesomeCare.Admin.Controllers
             {
                 return NotFound();
             }
-
+            var staffs = await _staffService.GetStaffs();
             GetClient result = await _clientService.GetClient(clientId.Value);
+            var baserecords = await _baseRecordService.GetBaseRecordItem();
             QRCodeData qrCodeData = _qRCodeGenerator.CreateQrCode(result.UniqueId, QRCodeGenerator.ECCLevel.Q);
             QRCode qrCode = new QRCode(qrCodeData);
             Bitmap qrCodeImage = qrCode.GetGraphic(5);
             result.QRCode = qrCodeImage.ToByteArray();
-            result.GetBaseRecords = await _baseRecordService.GetBaseRecordItem();
+            result.GetBaseRecords = baserecords;
+            result.Status = baserecords.Where(s => s.BaseRecordItemId == result.StatusId).FirstOrDefault().ValueName;
+            result.Gender = baserecords.Where(s => s.KeyName == "Gender" && s.BaseRecordItemId == result.GenderId).FirstOrDefault().ValueName;
+            ViewBag.staffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString()));
             return View(result);
         }
         //public List<GetClient> GetCarePlan(int clientId)
@@ -534,6 +545,18 @@ namespace AwesomeCare.Admin.Controllers
                     }).ToList()
                 });
             }
+            if (model.Evidence != null)
+            {
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
+                string folder = "clientmedication";
+                string filename = string.Concat(folder, "_Evidence_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                model.ClientMedImage = path;
+            }
+            else
+            {
+                model.ClientMedImage = "No Image";
+            }
             var postClientMed = Mapper.Map<PostClientMedication>(model);
             //   var j = JsonConvert.SerializeObject(postClientMed);
             var result = await _clientService.PostMedication(postClientMed);
@@ -558,6 +581,107 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
+        public async Task<IActionResult> EditMedication(int clientId, int id)
+        {
+            var medication = await _clientService.GetMedication(clientId, id);
+            var model = new EditMedicationViewModel();
+            var medNames = await _medicationService.Get();
+            var medManufacturers = await _medicationService.GetManufacturers();
+            var weekdays = await _rotaDayofWeekService.Get();
+            var rotaTypes = await _clientRotaTypeService.Get();
+            if (medication != null)
+            {
+                model.ClientId = clientId;
+                model.ClientMedicationId = medication.ClientMedicationId;
+                model.TimeCritical = medication.TimeCritical;
+                model.Dossage = medication.Dossage;
+                model.ExpiryDate = medication.ExpiryDate;
+                model.Frequency = medication.Frequency;
+                model.Gap_Hour = medication.Gap_Hour;
+                model.Means = medication.Means;
+                model.MedicationId = medication.MedicationId;
+                model.StopDate = medication.StopDate;
+                model.MedicationManufacturerId = medication.MedicationManufacturerId;
+                model.Type = medication.Type;
+                model.Status = medication.Status;
+                model.StartDate = medication.StartDate;
+                model.Route = medication.Route;
+                model.Remark = medication.Remark;
+                model.ClientMedImage = medication.ClientMedImage;
+                var daysPeriods = medication.ClientMedicationDay.ToList();
+                foreach (var item in daysPeriods)
+                {
+                    model.ClientMedicationDay.Add(new PutClientMedicationDay()
+                    {
+                        RotaDayofWeekId = item.RotaDayofWeekId,
+                        ClientMedicationPeriod = rotaTypes.Select(n => new PutClientMedicationPeriod
+                        {
+                            ClientRotaTypeId = n.ClientRotaTypeId
+                        }).ToList()
+                    });
+                }
+            }
+
+            model.Medications = medNames.Select(s => new SelectListItem(string.Concat(s.MedicationName, " (", s.Strength, ")"), s.MedicationId.ToString())).ToList();
+            model.MedicationManufacturers = medManufacturers.Select(s => new SelectListItem(s.Manufacturer, s.MedicationManufacturerId.ToString())).ToList();
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditMedication(EditMedicationViewModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var daysPeriods = model.Days.Where(d => d.IsSelected).ToList();
+            foreach (var item in daysPeriods)
+            {
+                model.ClientMedicationDay.Add(new PutClientMedicationDay()
+                {
+                    RotaDayofWeekId = item.RotaDayofWeekId,
+                    ClientMedicationPeriod = item.RotaTypes.Where(s => s.IsSelected).Select(n => new PutClientMedicationPeriod
+                    {
+                        ClientRotaTypeId = n.ClientRotaTypeId
+                    }).ToList()
+                });
+            }
+            if (model.Evidence != null)
+            {
+                string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
+                string folder = "clientmedication";
+                string filename = string.Concat(folder, "_Evidence_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                model.ClientMedImage = path;
+            }
+            else
+            {
+                model.ClientMedImage = model.ClientMedImage;
+            }
+            var postClientMed = Mapper.Map<PutClientMedication>(model);
+            //   var j = JsonConvert.SerializeObject(postClientMed);
+            var result = await _clientService.PutMedication(postClientMed);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus
+            {
+                IsSuccessful = result.IsSuccessStatusCode,
+                Message = result.IsSuccessStatusCode ? "Operation Successful" : "Operation Failed"
+            });
+
+            if (result.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Medications", new { clientId = model.ClientId });
+            }
+            else
+            {
+                _logger.LogError(content, new[] { $"{this.HttpContext.Request.Path.ToUriComponent()}" });
+                return View(model);
+            }
+
+        }
         [Route("[Controller]/Medication/Details/{clientId}/{id}", Name = "MedicationDetails")]
         public async Task<IActionResult> MedicationDetails(int clientId, int id)
         {
@@ -590,6 +714,262 @@ namespace AwesomeCare.Admin.Controllers
                 }).ToList()
             }).ToList();
 
+        }
+        #endregion
+
+        #region Client_Details
+        [HttpGet]
+        public JsonResult involvingparties(int clientId)
+        {
+            var getClient = _clientService.GetInvolvingParty(clientId);
+            return Json(getClient.Result);
+        }
+
+        [HttpGet]
+        public JsonResult dutyoncall(int clientId)
+        {
+            var getClient = _clientService.GetDutyOnCall(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult hospitalentry(int clientId)
+        {
+            var getClient = _clientService.GetHospitalEntry(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult hospitalexit(int clientId)
+        {
+            var getClient = _clientService.GetHospitalExit(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult filesrecord(int clientId)
+        {
+            var getClient = _clientService.GetFilesAndRecord(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult complaintregister(int clientId)
+        {
+            var getClient = _clientService.GetComplain(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult logaudit(int clientId)
+        {
+            var getClient = _clientService.GetLogAudit(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult medaudit(int clientId)
+        {
+            var getClient = _clientService.GetMedAudit(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult voice(int clientId)
+        {
+            var getClient = _clientService.GetVoice(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult mgtvisit(int clientId)
+        {
+            var getClient = _clientService.GetMgtVisit(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult program(int clientId)
+        {
+            var getClient = _clientService.GetProgram(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult servicewatch(int clientId)
+        {
+            var getClient = _clientService.GetServiceWatch(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult dailytask(int clientId)
+        {
+            var getClient = _clientService.GetDailyTask(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult mcabest(int clientId)
+        {
+            var getClient = _clientService.GetBestInterest(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult careobj(int clientId)
+        {
+            var getClient = _clientService.GetCarObj(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult bloodcoag(int clientId)
+        {
+            var getClient = _clientService.GetBloodCoag(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult bloodpressure(int clientId)
+        {
+            var getClient = _clientService.GetPressure(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult bmichart(int clientId)
+        {
+            var getClient = _clientService.GetBMIChart(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult bodytemp(int clientId)
+        {
+            var getClient = _clientService.GetBodyTemp(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult bowel(int clientId)
+        {
+            var getClient = _clientService.GetBowel(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult eyehealth(int clientId)
+        {
+            var getClient = _clientService.GetEyeHealth(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult foodintake(int clientId)
+        {
+            var getClient = _clientService.GetFoodIntake(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult heartrate(int clientId)
+        {
+            var getClient = _clientService.GetHeartRate(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult oxygen(int clientId)
+        {
+            var getClient = _clientService.GetOxygenLvl(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult painchart(int clientId)
+        {
+            var getClient = _clientService.GetPainChart(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult pulserate(int clientId)
+        {
+            var getClient = _clientService.GetPulseRate(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult seizure(int clientId)
+        {
+            var getClient = _clientService.GetSeizure(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult woundcare(int clientId)
+        {
+            var getClient = _clientService.GetWoundCare(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult personaldetail(int clientId)
+        {
+            var getClient = _clientService.GetReview(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult healthliving(int clientId)
+        {
+            var getClient = _clientService.GetHealthAndLiving(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult specialhealthmed(int clientId)
+        {
+            var getClient = _clientService.GetHealthAndMed(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult balance(int clientId)
+        {
+            var getClient = _clientService.GetBalance(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult physicalability(int clientId)
+        {
+            var getClient = _clientService.GetPhysicalAbility(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult specialhealthcond(int clientId)
+        {
+            var getClient = _clientService.GetHealthCondition(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult historyoffall(int clientId)
+        {
+            var getClient = _clientService.GetHistoryOfFall(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult nutrition(int clientId)
+        {
+            var getClient = _clientService.GetCarePlanNut(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult personalhygiene(int clientId)
+        {
+            var getClient = _clientService.GetPersonalHyg(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult infectioncontrol(int clientId)
+        {
+            var getClient = _clientService.GetInfectionControl(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult mtask(int clientId)
+        {
+            var getClient = _clientService.GetManagingTask(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult intandobj(int clientId)
+        {
+            var getClient = _clientService.GetInterestAndObj(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult pets(int clientId)
+        {
+            var getClient = _clientService.GetPets(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult homerisk(int clientId)
+        {
+            var getClient = _clientService.GetHomeRisk(clientId);
+            return Json(getClient.Result);
         }
         #endregion
     }

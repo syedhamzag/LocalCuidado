@@ -5,6 +5,7 @@ using AwesomeCare.Admin.ViewModels.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Staff.StaffTax;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,22 +35,47 @@ namespace AwesomeCare.Admin.Controllers
             {
                 var report = new CreateStaffTax();
                 report.StaffTaxId = item.StaffTaxId;
-                report.StaffPersonalInfoId = item.StaffPersonalInfoId;
                 report.Tax = item.Tax;
                 report.NI = item.NI;
-                report.Remarks = item.Remarks;
                 report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
                 reports.Add(report);
             }
             return View(reports);
         }
 
-        public async Task<IActionResult> Index(int staffId)
+        public async Task<IActionResult> Index()
         {
             var model = new CreateStaffTax();
-            model.StaffPersonalInfoId = staffId;
             var staff = await _staffService.GetStaffs();
-            model.StaffName = staff.Where(s => s.StaffPersonalInfoId == staffId).FirstOrDefault().Fullname;
+            model.StaffList = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+            return View(model);
+
+        }
+        public async Task<IActionResult> Edit(int taxId)
+        {
+            var model = new CreateStaffTax();
+            var tax = await _StaffTax.Get(taxId);
+            var staff = await _staffService.GetStaffs();
+            model.StaffTaxId = tax.StaffTaxId;
+            model.Tax = tax.Tax;
+            model.StaffPersonalInfoId = tax.StaffPersonalInfoId;
+            model.NI = tax.NI;
+            model.Remarks = tax.Remarks;
+            model.StaffName = staff.Where(s=>s.StaffPersonalInfoId==tax.StaffPersonalInfoId).FirstOrDefault().Fullname;
+            return View(model);
+
+        }
+        public async Task<IActionResult> View(int taxId)
+        {
+            var model = new CreateStaffTax();
+            var tax = await _StaffTax.Get(taxId);
+            var staff = await _staffService.GetStaffs();
+            model.StaffTaxId = tax.StaffTaxId;
+            model.Tax = tax.Tax;
+            model.StaffPersonalInfoId = tax.StaffPersonalInfoId;
+            model.NI = tax.NI;
+            model.Remarks = tax.Remarks;
+            model.StaffName = staff.Where(s => s.StaffPersonalInfoId == tax.StaffPersonalInfoId).FirstOrDefault().Fullname;
             return View(model);
 
         }
@@ -81,6 +107,7 @@ namespace AwesomeCare.Admin.Controllers
 
             return RedirectToAction("Details", "Staff", new { staffId = model.StaffPersonalInfoId });
         }
+
 
     }
 }

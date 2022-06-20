@@ -12,12 +12,13 @@
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
-            <div class="header">
+            <div class="card-header">
                 <h2>Live Rota</h2>
                 <p>Server Time: @DateTime.Now</p>
-                <p>UTC Time: @DateTimeOffset.UtcNow.AddHours(1)</p>
+                <p>UTC Time: @DateTime.UtcNow</p>
+                <p>Portal Time: @DateTime.UtcNow.ToPortalDateTime()</p>
             </div>
-            <div class="body">
+            <div class="card-body">
 
                 <form method="post">
                     <div class="row">
@@ -75,7 +76,7 @@
                     @if (Model.GroupLiveRotas?.Count > 0)
                     {
 
-                        <table id="liveRotaTable" class="table table-condensed table-hover table-bordered datatablesExportExcel">
+                        <table id="liveRotaTable" class="table table-condensed table-hover table-bordered datatablesExportExcel table-responsive">
                             <thead>
                                 <tr>
                                     <th></th>
@@ -130,7 +131,7 @@
                                     foreach (var rota in model.Trackers)
                                     {
 
-                                        <tr style="background-color:@rota.RowClass(rota.StartTime,rota.ClockInTime)">
+                                        <tr style="color:black;background-color:@rota.RowClass(rota.StartTime,rota.ClockInTime)">
                                             <td>
                                                 <a asp-action="EditLiveRota" asp-controller="Rotering" asp-route-staffRotaPeriodId="@rota.StaffRotaPeriodId" target="_blank" class="btn btn-sm btn-icon btn-pure btn-success on-default m-r-5 button-edit"> <i class="icon-pencil" aria-hidden="true"></i></a>
                                             </td>
@@ -232,14 +233,14 @@
                                             </td>
                                             <td>@rota.Staff</td>
                                             <td>@rota.StaffTelephone</td>
-                                            <td>@rota.RotaDate.ToString("MM/dd/yyyy")</td>
+                                            <td>@rota.RotaDate.ToPortalDateTime().ToString("MM/dd/yyyy")</td>
                                             <td>@rota.StartTime</td>
                                             <td>@rota.StopTime</td>
                                             <td>
                                                 @{
                                                     if (rota.ClockInTime.HasValue)
                                                     {
-                                                        var clockInTime = rota.ClockInTime.Value.AddHours(1).ToString("HH:mm:ss tt");
+                                                        var clockInTime = rota.ClockInTime.Value.DateTime.ToPortalDateTime().ToString("HH:mm:ss tt");
                                                         @clockInTime;
                                                     }
                                                 }
@@ -248,7 +249,7 @@
                                                 @{
                                                     if (rota.ClockOutTime.HasValue)
                                                     {
-                                                        var clockOutTime = rota.ClockOutTime.Value.AddHours(1).ToString("HH:mm:ss tt");
+                                                        var clockOutTime = rota.ClockOutTime.Value.DateTime.ToPortalDateTime().ToString("HH:mm:ss tt");
                                                         @clockOutTime;
                                                     }
                                                 }
@@ -264,8 +265,8 @@
                                                     TimeSpan clockOut = default;
                                                     if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
                                                     {
-                                                        isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.AddHours(1).ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockIn);
-                                                        isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.AddHours(1).ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockOut);
+                                                        isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.DateTime.ToPortalDateTime().ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockIn);
+                                                        isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.DateTime.ToPortalDateTime().ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockOut);
                                                         if (isClockInTimeValid && isClockOutTimeValid)
                                                         {
                                                             var clockDiff = clockOut.Subtract(clockIn);
@@ -322,7 +323,7 @@
                                                     if (rota.ClockInTime.HasValue)
                                                     {
                                                         var st = TimeSpan.TryParseExact(rota.StartTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
-                                                        var ct = TimeSpan.TryParseExact(rota.ClockInTime.Value.AddHours(1).DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
+                                                        var ct = TimeSpan.TryParseExact(rota.ClockInTime.Value.DateTime.ToPortalDateTime().TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
                                                         var df = st.Subtract(ct).TotalMinutes;
 
                                                         //var st = DateTime.TryParseExact(rota.StartTime, "h:mm tt", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime d) ? d : default(DateTime);

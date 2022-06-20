@@ -103,6 +103,7 @@ namespace AwesomeCare.Model.Models
         public StaffRegistrationEnum Status { get; set; }
 
         public bool? IsTeamLeader { get; set; }
+        public bool? IsKeyWorker { get; set; }
         public bool? HasUniform { get; set; }
         public bool? HasIdCard { get; set; }
         public DateTime? EmploymentDate { get; set; }

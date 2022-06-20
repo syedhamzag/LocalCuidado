@@ -23,7 +23,7 @@ namespace AwesomeCare.API.Controllers
         {
             _clientBaserecordRepository = clientBaserecordRepository;
         }
-
+        [AllowAnonymous]
         [HttpGet()]
         [ProducesResponseType(type: typeof(GetDashboard), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -31,11 +31,12 @@ namespace AwesomeCare.API.Controllers
         public async Task<IActionResult> Get()
         {
             var dashboard = new GetDashboard();
-
-            var labels = await _clientBaserecordRepository.Table.Where(s => s.BaseRecord.KeyName == "Tele_Health_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToListAsync();
-            var label = await _clientBaserecordRepository.Table.Where(s => s.BaseRecord.KeyName == "Staff_Communication_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToListAsync();
-            var oncalllabels = await _clientBaserecordRepository.Table.Where(s => s.BaseRecord.KeyName == "DutyOnCall_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToListAsync();
-            var concernlabels = await _clientBaserecordRepository.Table.Where(s => s.BaseRecord.KeyName == "TrackingConcernNote_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToListAsync();
+            var baseRecord = await _clientBaserecordRepository.Table.Include(s=>s.BaseRecord).ToListAsync();
+            var careLabel = baseRecord.Where(s => s.BaseRecord.KeyName == "CareOjb_Status").Select(j => new { j.ValueName, j.BaseRecordItemId}).Distinct().ToList();
+            var labels = baseRecord.Where(s => s.BaseRecord.KeyName == "Tele_Health_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToList();
+            var label = baseRecord.Where(s => s.BaseRecord.KeyName == "Staff_Communication_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToList();
+            var oncalllabels = baseRecord.Where(s => s.BaseRecord.KeyName == "DutyOnCall_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToList();
+            var concernlabels = baseRecord.Where(s => s.BaseRecord.KeyName == "TrackingConcernNote_Status").Select(j => new { j.ValueName, j.BaseRecordItemId }).Distinct().ToList();
 
             dashboard.nId = labels.FirstOrDefault(s => s.ValueName == "Normal").BaseRecordItemId;
             dashboard.oId = labels.FirstOrDefault(s => s.ValueName == "Under Observation").BaseRecordItemId;
@@ -52,6 +53,12 @@ namespace AwesomeCare.API.Controllers
             dashboard.ConcernIdP = concernlabels.FirstOrDefault(s => s.ValueName == "Pending").BaseRecordItemId;
             dashboard.ConcernIdC = concernlabels.FirstOrDefault(s => s.ValueName == "Closed").BaseRecordItemId;
             dashboard.ConcernIdO = concernlabels.FirstOrDefault(s => s.ValueName == "Open").BaseRecordItemId;
+
+            dashboard.careLId = careLabel.FirstOrDefault(s => s.ValueName == "Achieved ").BaseRecordItemId;
+            dashboard.carePId = careLabel.FirstOrDefault(s => s.ValueName == "Pending").BaseRecordItemId;
+            dashboard.careCId = careLabel.FirstOrDefault(s => s.ValueName == "Progressing").BaseRecordItemId;
+            
+            
             return Ok(dashboard);
         }
     }

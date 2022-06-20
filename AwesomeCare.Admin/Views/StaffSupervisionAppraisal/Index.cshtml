@@ -10,12 +10,12 @@
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
-            <div class="header">
+            <div class="card-header">
 
                 <h2></h2>
 
             </div>
-            <div class="body">
+            <div class="card-body">
                 <form asp-route="StaffSupervisionAppraisal" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
@@ -146,10 +146,10 @@
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">
                                 <div class="card">
-                                    <div class="header">
+                                    <div class="card-header">
                                         <h2>Attachment Image<small></small></h2>
                                     </div>
-                                    <div class="body">
+                                    <div class="card-body">
                                         <input type="file" asp-for="Attach" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                         <span asp-validation-for="Attach" class="text-danger"></span>
                                     </div>

@@ -46,6 +46,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMedication
         [Required]
         [MaxLength(250)]
         public string Remark { get; set; }
+        public int Means { get; set; }
+        public int Type { get; set; }
+        public int TimeCritical { get; set; }
+        public string ClientMedImage { get; set; }
 
         public List<PutClientMedicationDay> ClientMedicationDay { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.ClientRota;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,12 @@ namespace AwesomeCare.Admin.Services.ClientRota
     {
         [Post("/ClientRota/CreateRota")]
         Task<HttpResponseMessage> CreateRota([Body]List<CreateClientRota> model);
+
+        [Post("/ClientRota/ChangePin")]
+        Task<HttpResponseMessage> ChangePin([Body] PostRotaPin model);
+
+        [Get("/ClientRota/GetPin")]
+        Task<GetRotaPin> GetPin();
 
         [Get("/ClientRota/GetForEdit/{id}")]
         Task<List<GetClientRota>> GetForEdit(int id);

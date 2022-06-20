@@ -1,1 +1,65 @@
-﻿
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+@model List<CreateSalaryAllowance>
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="card-header">
+                <h2>All Salary Allowance</h2>
+            </div>
+            <div class="card-body">
+                <table class="table m-b-0 datatables">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Staff</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>%</th>
+                            <th>Amount</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                            <tr>
+                                <td>@item.index </td>
+                                <td>@item.data.StaffName</td>
+                                <td>@item.data.StartDate</td>
+                                <td>@item.data.EndDate</td>
+                                <td>@item.data.Percentage</td>
+                                <td>@item.data.Amount</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Edit", "Edit", "SalaryAllowance", new { salaryId = item.data.SalaryAllowanceId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("View", "View", "SalaryAllowance", new { salaryId = item.data.SalaryAllowanceId }, new { @class = "dropdown-item" })
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+}

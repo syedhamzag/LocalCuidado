@@ -1,0 +1,269 @@
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+
+@model CreateBestInterestAssessment
+@{
+    ViewData["Title"] = "Best Interest Assessment";
+}
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+
+                    <input type="hidden" asp-for="@Model.ClientId" />
+                    <input type="hidden" asp-for="@Model.BestId" />
+                    <input type="hidden" asp-for="@Model.BelieveTaskCount" value="@Model.BelieveTaskCount" />
+                    <input type="hidden" asp-for="@Model.CareIssuesTaskCount" value="@Model.CareIssuesTaskCount" />
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Date</label>
+                                <input type="text" class="form-control" asp-for="@Model.Date" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="Date" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input type="text" class="form-control" asp-for="@Model.Name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Position</label>
+                                <input type="text" class="form-control" asp-for="@Model.Position" />
+                                <span asp-validation-for="Position" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Signature</label>
+                                <input type="text" class="form-control" asp-for="@Model.Signature" />
+                                <span asp-validation-for="Signature" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label">The health or social care issue that needs a specific decision (Please Tick) : </label>
+                            @{
+
+                                int m = 1;
+                                foreach (var item in Model.baseRecordList)
+                                {
+                                    var issue = Model.GetCareIssuesTask.FirstOrDefault(s => s.Issues == item.BaseRecordItemId);
+                                    if (issue != null)
+                                    {
+                                        <div class="fancy-checkbox">
+                                            <input type="hidden" name="@string.Concat("Issues",m)" id="@string.Concat("Issues",m)" value="@item.BaseRecordItemId" />
+                                            <label><input type="checkbox" class="MealType" name="@string.Concat("careIssues", m)" checked><span>@item.ValueName</span></label>
+                                            <input type="hidden" name="@string.Concat("CareIssuesTaskId",m)" id="@string.Concat("CareIssuesTaskId",m)" value="@issue.CareIssuesTaskId" />
+                                        </div>
+                                        m++;
+
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                    <hr />
+                    @{
+                        int i = 1;
+                        @foreach (var head in Model.HeadingList)
+                        {
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h3>
+                                        @head.ValueName
+                                    </h3>
+
+                                </div>
+                            </div>
+                            Model.TitleList = Model.BaseRecordList.Where(s => s.KeyName.Contains(head.ValueName.Substring(0,25))).Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                            foreach (var title in Model.TitleList)
+                            {
+                                var health1 = Model.GetHealthTask.FirstOrDefault(s => s.Title == title.BaseRecordItemId);
+                                if (health1 != null)
+                                {
+                                    <input type="hidden" name="@string.Concat("HealthTaskId", (i))" id="@string.Concat("HealthTaskId", (i))" value="@health1.HealthTaskId" />
+                                    <input type="hidden" name="@string.Concat("HeadingId", (i))" id="@string.Concat("HeadingId", (i))" value="@health1.HeadingId" />
+                                    Model.AnswerList = Model.BaseRecordList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">@title.ValueName</label>
+                                            <input type="hidden" name="@string.Concat("Title", (i))" id="@string.Concat("Title", (i))" value="@health1.Title" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label class="control-label">Answer</label>
+                                            <select class="custom-select" onchange="showHide(this)" name="@string.Concat("Answer", (i))" id="@string.Concat("Answer", (i))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString(), s.BaseRecordItemId==health1.Answer)).ToList()"></select>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <label class="control-label" id="@string.Concat("lblRemarks", (i))" name="@string.Concat("lblRemarks", (i))" style="display:none">Remarks</label>
+                                            <input type="text" class="form-control" name="@string.Concat("Remarks", (i))" id="@string.Concat("Remarks", (i))" style="display:none" value="@health1.Remarks" />
+                                        </div>
+                                    </div>
+                                }
+                                i++;
+                                Model.HealthTaskCount += 1;
+                            }
+                            <hr />
+                            <input type="hidden" asp-for="@Model.HealthTaskCount" />
+                        }
+                    }
+                    <hr />
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label">Reasonable believe</label>
+                            @{
+                                if (Model.GetBelieveTask.Count > 0)
+                                {
+                                    <input type="hidden" asp-for="@Model.GetBelieveTask.FirstOrDefault().BelieveTaskId" />
+                                    <baserecord asp-key="MCA_Reasonable_Believe" asp-items="null" asp-for="@Model.GetBelieveTask.FirstOrDefault().ReasonableBelieve" />
+                                }
+                            }
+                        </div>
+                    </div>
+                    <hr />
+                    @{
+                        int k = 1;
+                        @foreach (var head in Model.Heading2List)
+                        {
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h3>
+                                        @head.ValueName
+                                    </h3>
+
+                                </div>
+                            </div>
+                            
+                            Model.Title2List = Model.BaseRecordList.Where(s => s.KeyName.Contains(head.ValueName.Substring(0, 25))).Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                            foreach (var title in Model.Title2List)
+                            {
+                                var health2 = Model.GetHealthTask2.FirstOrDefault(s => s.Title == title.BaseRecordItemId);
+                                if (health2 != null)
+                                {
+                                    <input type="hidden" name="@string.Concat("HealthTask2Id", (k))" id="@string.Concat("HealthTask2Id", (k))" value="@health2.HealthTask2Id" />
+                                    <input type="hidden" name="@string.Concat("Heading2Id", (k))" id="@string.Concat("Heading2Id", (k))" value="@health2.Heading2Id" />
+                                    Model.AnswerList = Model.BaseRecordList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">@title.ValueName</label>
+                                            <input type="hidden" name="@string.Concat("Title2", (k))" id="@string.Concat("Title2", (k))" value="@health2.Title" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label class="control-label">Answer</label>
+                                            <select class="custom-select" onchange="show2Hide(this)" name="@string.Concat("Answer2", (k))" id="@string.Concat("Answer2", (k))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString(),s.BaseRecordItemId==health2.Answer)).ToList()"></select>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <label class="control-label" id="@string.Concat("lblRemarks2", (k))" name="@string.Concat("lblRemarks2", (k))" style="display:none">Remarks</label>
+                                            <input type="text" class="form-control" name="@string.Concat("Remarks2", (k))" id="@string.Concat("Remarks2", (k))" style="display:none" value="@health2.Remark" />
+                                        </div>
+                                    </div>
+
+                                }
+                                k++;
+                                Model.HealthTask2Count += 1;
+                            }
+                        }
+                    }
+    </div>
+</div>
+@section Scripts{
+
+     <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+    <script>
+
+        
+        window.onload = function ()
+        {
+            if (document.getElementById('BestId').value > "0")
+            {
+                $('#ReasonableBelieve').change();
+            }
+        };
+                
+
+        function showHide(element) {
+            var Name = element.id;
+            var Id = Name.split("Answer")[1];
+            if (element.options[element.selectedIndex].text == 'Yes')
+            {
+                document.getElementById('Remarks' + Id).style.display = 'block';
+                document.getElementById('lblRemarks' + Id).style.display = 'block';
+            }
+            else
+            {
+                document.getElementById('Remarks' + Id).style.display ='none';
+                document.getElementById('lblRemarks' + Id).style.display ='none';
+            }
+        };
+        function show2Hide(element) {
+            var Name = element.id;
+            var Id = Name.split("Answer2")[1];
+            if (element.options[element.selectedIndex].text == 'Yes') {
+                document.getElementById('Remarks2' + Id).style.display = 'block';
+                document.getElementById('lblRemarks2' + Id).style.display = 'block';
+            }
+            else {
+                document.getElementById('Remarks2' + Id).style.display = 'none';
+                document.getElementById('lblRemarks2' + Id).style.display = 'none';
+            }
+        };
+
+        $(function ()
+        {
+            
+            $('[id^="Answer"]').change();
+
+            $('#ReasonableBelieve').on('change', function ()
+            {
+                $('#ReasonableBelieve').css('height', '125px');
+                $('#ReasonableBelieve').css('text-align', 'justify');
+                $('#ReasonableBelieve').css('white-space', 'break-spaces');
+            });
+            
+
+            var table = $('#tbl_Task').DataTable({
+                scrollCollapse: true,
+                select: {
+                    style: 'single'
+                },
+                searching: false, paging: false, info: false
+            });
+            var counter = $("#TaskCount").val();
+            $('#Addrow').on('click', function () {
+                counter++;
+                var clone = $("#task tr:last").clone();
+                clone.attr('id', 'row-' + counter);
+                table.rows.add(clone).draw();
+                $('#TaskCount').val(counter);
+
+            });
+            $('#tbl_Task tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+            $('#Delrow').click(function () {
+                const id = table.row('.selected').id();
+                if (table.row('.selected').length > 0) {
+                    const row = table.rows('.selected').remove().draw();
+                    counter--;
+                    $('#TaskCount').val(counter);
+                }
+                else {
+                    alert("Please select row for delete !");
+                }
+            });
+        });
+    </script>
+    }

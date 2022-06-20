@@ -15,7 +15,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
 {
     public class CreateClient
     {
-        
+
         public CreateClient()
         {
             Gender = new List<SelectListItem> {
@@ -26,12 +26,13 @@ namespace AwesomeCare.Admin.ViewModels.Client
             RegulatoryContacts = new List<ClientRegulatoryContact>();
             CareDetails = new List<ClientCareDetailsHeading>();
             ComplainRegisters = new List<CreateComplainRegister>();
+            StaffList = new List<SelectListItem>();
         }
         public int ClientId { get; set; }
         [Required]
         [DataType(DataType.Upload)]
-        [MaxFileSize(Lenght =1)]
-        [AllowedExtensions(new string[] { ".png", ".jpg" , ".jpeg" })]
+        [MaxFileSize(Lenght = 1)]
+        [AllowedExtensions(new string[] { ".png", ".jpg", ".jpeg" })]
         public IFormFile ClientImage { get; set; }
         #region DropDowns
         public IEnumerable<SelectListItem> Gender { get; set; }
@@ -40,7 +41,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         #endregion
 
         #region Tabs
-        public string ActiveTab { get; set; } =  "personalInfo";
+        public string ActiveTab { get; set; } = "personalInfo";
         // public string[] Tabs { get; set; } = new string[] { "" };
         #endregion
 
@@ -145,7 +146,12 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Status { get; set; }
 
         public string UniqueId { get; set; }
+
+        public int ClientManager { get; set; }
+        public int Denture { get; set; }
+        public int Aid { get; set; }
         #endregion
+        public List<SelectListItem> StaffList {get;set;}
         public List<ClientInvolvingParty> InvolvingParties { get; set; }
         public List<ClientRegulatoryContact> RegulatoryContacts { get; set; }
         public List<ClientCareDetailsHeading> CareDetails { get; set; }

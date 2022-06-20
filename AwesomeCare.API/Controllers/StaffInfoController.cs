@@ -10,7 +10,10 @@ using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Staff.InfectionControl;
+using AwesomeCare.DataTransferObject.DTOs.Staff.SalaryAllowance;
+using AwesomeCare.DataTransferObject.DTOs.Staff.SalaryDeduction;
 using AwesomeCare.DataTransferObject.DTOs.Staff.StaffHoliday;
+using AwesomeCare.DataTransferObject.DTOs.Staff.StaffTax;
 using AwesomeCare.DataTransferObject.DTOs.StaffAdlObs;
 using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
@@ -26,6 +29,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
 using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;
 using AwesomeCare.DataTransferObject.DTOs.StaffSurvey;
+using AwesomeCare.DataTransferObject.DTOs.StaffTrainingMatrix;
 using AwesomeCare.DataTransferObject.Enums;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -222,19 +226,6 @@ namespace AwesomeCare.API.Controllers
                                     HasIdCard = st.HasIdCard.Value ? "Yes" : "No",
                                     HasUniform = st.HasUniform.Value ? "Yes" : "No",
                                     IsTeamLeader = st.IsTeamLeader.Value ? "Yes" : "No",
-                                    Education = (from edu in st.Education
-                                                 select new GetStaffEducation
-                                                 {
-                                                     Address = edu.Address,
-                                                     Certificate = edu.Certificate,
-                                                     CertificateAttachment = edu.CertificateAttachment,
-                                                     EndDate = edu.EndDate,
-                                                     Institution = edu.Institution,
-                                                     Location = edu.Location,
-                                                     StaffEducationId = edu.StaffEducationId,
-                                                     StaffPersonalInfoId = edu.StaffPersonalInfoId,
-                                                     StartDate = edu.StartDate
-                                                 }).ToList(),
                                     Email = st.Email,
                                     StartDate = st.StartDate,
                                     EndDate = st.EndDate,
@@ -254,19 +245,6 @@ namespace AwesomeCare.API.Controllers
                                     Rate = st.Rate,
                                     PlaceOfBirth = st.PlaceOfBirth,
                                     JobCategory = st.JobCategory,
-                                    References = (from rf in st.References
-                                                  select new GetStaffReferee
-                                                  {
-                                                      Address = rf.Address,
-                                                      Attachment = rf.Attachment,
-                                                      CompanyName = rf.CompanyName,
-                                                      Email = rf.Email,
-                                                      PhoneNumber = rf.PhoneNumber,
-                                                      PositionofReferee = rf.PositionofReferee,
-                                                      Referee = rf.Referee,
-                                                      StaffPersonalInfoId = rf.StaffPersonalInfoId,
-                                                      StaffRefereeId = rf.StaffRefereeId
-                                                  }).ToList(),
                                     RegistrationId = st.RegistrationId,
                                     RightToWork = st.RightToWork,
                                     RightToWorkAttachment = st.RightToWorkAttachment,
@@ -276,111 +254,7 @@ namespace AwesomeCare.API.Controllers
                                     Status = st.Status,
                                     TeamLeader = st.TeamLeader,
                                     Telephone = st.Telephone,
-                                    Trainings = (from t in st.Trainings
-                                                 select new GetStaffTraining
-                                                 {
-                                                     StaffPersonalInfoId = t.StaffPersonalInfoId,
-                                                     Certificate = t.Certificate,
-                                                     CertificateAttachment = t.CertificateAttachment,
-                                                     ExpiredDate = t.ExpiredDate,
-                                                     Location = t.Location,
-                                                     StaffTrainingId = t.StaffTrainingId,
-                                                     StartDate = t.StartDate,
-                                                     Trainer = t.Trainer,
-                                                     Training = t.Training
-                                                 }).ToList(),
                                     WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
-                                    GetStaffAdlObs = (from adl in st.StaffAdlObs
-                                                      select new GetStaffAdlObs
-                                                      {
-                                                          ActionRequired = adl.ActionRequired,
-                                                          Attachment = adl.Attachment
-                                                      }).ToList(),
-                                    GetStaffMedComp = (from s in st.StaffMedCompObs
-                                                       select new GetStaffMedComp
-                                                       {
-                                                           ActionRequired = s.ActionRequired,
-                                                           Attachment = s.Attachment
-                                                       }).ToList(),
-                                    GetStaffKeyWorkerVoice = (from s in st.StaffKeyWorkerVoice
-                                                              select new GetStaffKeyWorkerVoice
-                                                              {
-                                                                  ActionRequired = s.ActionRequired,
-                                                                  Attachment = s.Attachment
-                                                              }).ToList(),
-                                    GetStaffOneToOne = (from s in st.StaffOneToOne
-                                                        select new GetStaffOneToOne
-                                                        {
-                                                            ActionRequired = s.ActionRequired,
-                                                            Attachment = s.Attachment
-                                                        }).ToList(),
-                                    GetStaffReference = (from s in st.StaffReference
-                                                         select new GetStaffReference
-                                                         {
-                                                             Relationship = s.Relationship,
-                                                             Attachment = s.Attachment
-                                                         }).ToList(),
-                                    GetStaffSpotCheck = (from s in st.StaffSpotCheck
-                                                         select new GetStaffSpotCheck
-                                                         {
-                                                             ActionRequired = s.ActionRequired,
-                                                             Attachment = s.Attachment
-                                                         }).ToList(),
-                                    GetStaffSupervisionAppraisal = (from s in st.StaffSupervisionAppraisal
-                                                                    select new GetStaffSupervisionAppraisal
-                                                                    {
-                                                                        ActionRequired = s.ActionRequired,
-                                                                        Attachment = s.Attachment
-                                                                    }).ToList(),
-                                    GetStaffSurvey = (from s in st.StaffSurvey
-                                                      select new GetStaffSurvey
-                                                      {
-                                                          ActionRequired = s.ActionRequired,
-                                                          Attachment = s.Attachment
-                                                      }).ToList(),
-                                    GetStaffInfectionControl = (from s in st.StaffInfectionControl
-                                                                select new GetStaffInfectionControl
-                                                                {
-                                                                    TestDate = s.TestDate,
-                                                                    Guideline = s.Guideline
-                                                                }).ToList(),
-                                    GetStaffPersonalityTest = (from s in st.StaffPersonalityTest
-                                                               select new GetStaffPersonalityTest
-                                                               {
-                                                                   TestId = s.TestId,
-                                                                   StaffPersonalInfoId = s.StaffPersonalInfoId,
-                                                                   Question = s.Question,
-                                                                   Answer = s.Answer
-                                                               }).ToList(),
-                                    GetStaffCompetenceTest = (from s in st.StaffCompetenceTest
-                                                              select new GetStaffCompetenceTest
-                                                              {
-                                                                  StaffPersonalInfoId = s.StaffPersonalInfoId,
-                                                                  Heading = s.Heading
-                                                              }).ToList(),
-                                    GetStaffHealth = (from s in st.StaffHealth
-                                                      select new GetStaffHealth
-                                                      {
-                                                          StaffPersonalInfoId = s.StaffPersonalInfoId,
-                                                          Heading = s.Heading
-                                                      }).ToList(),
-                                    GetStaffInterview = (from s in st.StaffInterview
-                                                         select new GetStaffInterview
-                                                         {
-                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
-                                                             Heading = s.Heading
-                                                         }).ToList(),
-                                    GetStaffShadowing = (from s in st.StaffShadowing
-                                                         select new GetStaffShadowing
-                                                         {
-                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
-                                                             Heading = s.Heading
-                                                         }).ToList(),
-                                    GetStaffHoliday = (from sh in st.StaffHoliday
-                                                       select new GetStaffHoliday
-                                                       {
-                                                            StartDate = sh.StartDate
-                                                       }).ToList(),
 
                                 }).FirstOrDefault();
 
@@ -420,30 +294,6 @@ namespace AwesomeCare.API.Controllers
                                     HasIdCard = st.HasIdCard.Value ? "Yes" : "No",
                                     HasUniform = st.HasUniform.Value ? "Yes" : "No",
                                     IsTeamLeader = st.IsTeamLeader.Value ? "Yes" : "No",
-                                    Education = (from edu in st.Education
-                                                 select new GetStaffEducation
-                                                 {
-                                                     Address = edu.Address,
-                                                     Certificate = edu.Certificate,
-                                                     CertificateAttachment = edu.CertificateAttachment,
-                                                     EndDate = edu.EndDate,
-                                                     Institution = edu.Institution,
-                                                     Location = edu.Location,
-                                                     StaffEducationId = edu.StaffEducationId,
-                                                     StaffPersonalInfoId = edu.StaffPersonalInfoId,
-                                                     StartDate = edu.StartDate
-                                                 }).ToList(),
-                                    EmergencyContacts = (from em in st.EmergencyContacts
-                                                         select new GetStaffEmergencyContact
-                                                         {
-                                                             Address = em.Address,
-                                                             ContactName = em.ContactName,
-                                                             Email = em.Email,
-                                                             Relationship = em.Relationship,
-                                                             StaffEmergencyContactId = em.StaffEmergencyContactId,
-                                                             StaffPersonalInfoId = em.StaffPersonalInfoId,
-                                                             Telephone = em.Telephone
-                                                         }).ToList(),
                                     Email = st.Email,
                                     StartDate = st.StartDate,
                                     EndDate = st.EndDate,
@@ -463,19 +313,6 @@ namespace AwesomeCare.API.Controllers
                                     Rate = st.Rate,
                                     PlaceOfBirth = st.PlaceOfBirth,
                                     JobCategory = st.JobCategory,
-                                    References = (from rf in st.References
-                                                  select new GetStaffReferee
-                                                  {
-                                                      Address = rf.Address,
-                                                      Attachment = rf.Attachment,
-                                                      CompanyName = rf.CompanyName,
-                                                      Email = rf.Email,
-                                                      PhoneNumber = rf.PhoneNumber,
-                                                      PositionofReferee = rf.PositionofReferee,
-                                                      Referee = rf.Referee,
-                                                      StaffPersonalInfoId = rf.StaffPersonalInfoId,
-                                                      StaffRefereeId = rf.StaffRefereeId
-                                                  }).ToList(),
                                     RegistrationId = st.RegistrationId,
                                     RightToWork = st.RightToWork,
                                     RightToWorkAttachment = st.RightToWorkAttachment,
@@ -485,37 +322,8 @@ namespace AwesomeCare.API.Controllers
                                     Status = st.Status,
                                     TeamLeader = st.TeamLeader,
                                     Telephone = st.Telephone,
-                                    Trainings = (from t in st.Trainings
-                                                 select new GetStaffTraining
-                                                 {
-                                                     StaffPersonalInfoId = t.StaffPersonalInfoId,
-                                                     Certificate = t.Certificate,
-                                                     CertificateAttachment = t.CertificateAttachment,
-                                                     ExpiredDate = t.ExpiredDate,
-                                                     Location = t.Location,
-                                                     StaffTrainingId = t.StaffTrainingId,
-                                                     StartDate = t.StartDate,
-                                                     Trainer = t.Trainer,
-                                                     Training = t.Training
-                                                 }).ToList(),
                                     WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
                                     StaffWorkTeamId = wk == null ? 0 : wk.StaffWorkTeamId,
-                                    RegulatoryContacts = (from rc in st.RegulatoryContact
-                                                          join bitem in baseRecordItemEntity on rc.BaseRecordItemId equals bitem.BaseRecordItemId
-                                                          join baseRec in baseRecordEntity on bitem.BaseRecordId equals baseRec.BaseRecordId
-                                                          select new GetStaffRegulatoryContact
-                                                          {
-                                                              BaseRecordItemId = bitem.BaseRecordItemId,
-                                                              DatePerformed = rc.DatePerformed,
-                                                              DueDate = rc.DueDate,
-                                                              Evidence = rc.Evidence,
-                                                              RegulatoryContact = bitem.ValueName,
-                                                              StaffPersonalInfoId = rc.StaffPersonalInfoId,
-                                                              StaffRegulatoryContactId = rc.StaffRegulatoryContactId,
-                                                              AddLink = bitem.AddLink,
-                                                              HasGoogleForm = bitem.HasGoogleForm,
-                                                              ViewLink = bitem.ViewLink
-                                                          }).ToList()
                                 }).FirstOrDefault();
 
             return Ok(staffProfile);
@@ -853,6 +661,690 @@ namespace AwesomeCare.API.Controllers
             var entity = Mapper.Map<StaffRating>(model);
             var staffRating = await _staffRatingRepository.InsertEntity(entity);
             return Ok();
+        }
+        #endregion
+
+        #region Staff Details
+        [HttpGet("StaffHoliday/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffHoliday(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffHoliday = (from sh in st.StaffHoliday
+                                                       select new GetStaffHoliday
+                                                       {
+                                                           StaffHolidayId = sh.StaffHolidayId,
+                                                           StartDate = sh.StartDate,
+                                                           AllocatedDays = sh.AllocatedDays,
+                                                           Class = sh.Class,
+                                                           EndDate = sh.EndDate,
+                                                           
+                                                       }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffEducation/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffEducation(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    Education = (from edu in st.Education
+                                                 select new GetStaffEducation
+                                                 {
+                                                     Address = edu.Address,
+                                                     Certificate = edu.Certificate,
+                                                     CertificateAttachment = edu.CertificateAttachment,
+                                                     EndDate = edu.EndDate,
+                                                     Institution = edu.Institution,
+                                                     Location = edu.Location,
+                                                     StaffEducationId = edu.StaffEducationId,
+                                                     StaffPersonalInfoId = edu.StaffPersonalInfoId,
+                                                     StartDate = edu.StartDate
+                                                 }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffTrainingMatrix/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffTrainingMatrix(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffTrainingMatrix = (from t in st.StaffTrainingMatrix
+                                                              select new GetStaffTrainingMatrix
+                                                              {
+                                                                  StaffPersonalInfoId = t.StaffPersonalInfoId,
+                                                                  MatrixId = t.MatrixId,
+                                                                  GetTrainingMatrixList = (from l in t.StaffTrainingMatrixList
+                                                                                           select new GetTrainingMatrixList
+                                                                                           {
+                                                                                               Date = l.Date,
+                                                                                               MatrixId=l.MatrixId,
+                                                                                               TrainingId = l.TrainingId,
+                                                                                           }).ToList(),
+                                                              }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffTraining/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffTraining(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    Trainings = (from t in st.Trainings
+                                                 select new GetStaffTraining
+                                                 {
+                                                     StaffPersonalInfoId = t.StaffPersonalInfoId,
+                                                     Certificate = t.Certificate,
+                                                     CertificateAttachment = t.CertificateAttachment,
+                                                     ExpiredDate = t.ExpiredDate,
+                                                     Location = t.Location,
+                                                     StaffTrainingId = t.StaffTrainingId,
+                                                     StartDate = t.StartDate,
+                                                     Trainer = t.Trainer,
+                                                     Training = t.Training
+                                                 }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffReferee/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffReferee(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    References = (from rf in st.References
+                                                  select new GetStaffReferee
+                                                  {
+                                                      Address = rf.Address,
+                                                      Attachment = rf.Attachment,
+                                                      CompanyName = rf.CompanyName,
+                                                      Email = rf.Email,
+                                                      PhoneNumber = rf.PhoneNumber,
+                                                      PositionofReferee = rf.PositionofReferee,
+                                                      Referee = rf.Referee,
+                                                      StaffPersonalInfoId = rf.StaffPersonalInfoId,
+                                                      StaffRefereeId = rf.StaffRefereeId
+                                                  }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffEmergencyContact/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffEmergencyContact(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    EmergencyContacts = (from em in st.EmergencyContacts
+                                                         select new GetStaffEmergencyContact
+                                                         {
+                                                             Address = em.Address,
+                                                             ContactName = em.ContactName,
+                                                             Email = em.Email,
+                                                             Relationship = em.Relationship,
+                                                             StaffEmergencyContactId = em.StaffEmergencyContactId,
+                                                             StaffPersonalInfoId = em.StaffPersonalInfoId,
+                                                             Telephone = em.Telephone
+                                                         }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffSpotCheck/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffSpotCheck(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffSpotCheck = (from s in st.StaffSpotCheck
+                                                         select new GetStaffSpotCheck
+                                                         {
+                                                             ActionRequired = s.ActionRequired,
+                                                             Attachment = s.Attachment,
+                                                             AreaComments = s.AreaComments,
+                                                             ClientId = s.ClientId,
+                                                             Date = s.Date,
+                                                             Deadline = s.Deadline,
+                                                             Details = s.Details,
+                                                             NextCheckDate = s.NextCheckDate,
+                                                             OfficerToAct = (from o in s.OfficerToAct
+                                                                             join staff in _staffInfoRepository.Table on o.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                             select new GetSpotCheckOfficerToAct
+                                                                             {
+                                                                                 SpotCheckId = o.SpotCheckId,
+                                                                                 SpotCheckOfficerToActId = o.SpotCheckOfficerToActId,
+                                                                                 StaffPersonalInfoId = o.StaffPersonalInfoId,
+                                                                                 StaffName = staff.FirstName + " " + staff.LastName
+                                                                             }).ToList(),
+                                                             Reference  = s.Reference,
+
+                                                         }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffAdlObs/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffAdlObs(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffAdlObs = (from adl in st.StaffAdlObs
+                                                      select new GetStaffAdlObs
+                                                      {
+                                                          ActionRequired = adl.ActionRequired,
+                                                          Attachment = adl.Attachment,
+                                                          ClientId = adl.ClientId,
+                                                          Date = adl.Date,
+                                                          Deadline = adl.Deadline,
+                                                          Details = adl.Details,
+                                                          NextCheckDate = adl.NextCheckDate,
+                                                          OfficerToAct = (from o in adl.OfficerToAct
+                                                                          join staff in _staffInfoRepository.Table on o.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                          select new GetAdlObsOfficerToAct
+                                                                          {
+                                                                              ObservationId = o.ObservationId,  
+                                                                              AdlObsOfficerToActId = o.AdlObsOfficerToActId,
+                                                                              StaffPersonalInfoId = o.StaffPersonalInfoId,
+                                                                              StaffName = staff.FirstName + " " + staff.LastName
+                                                                          }).ToList(),
+                                                          Reference = adl.Reference,
+                                                      }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffMedComp/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffMedComp(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffMedComp = (from s in st.StaffMedCompObs
+                                                       select new GetStaffMedComp
+                                                       {
+                                                           ActionRequired = s.ActionRequired,
+                                                           Attachment = s.Attachment,
+                                                           ClientId = s.ClientId,
+                                                           Date = s.Date,
+                                                           Deadline = s.Deadline,
+                                                           Details = s.Details,
+                                                           NextCheckDate = s.NextCheckDate,
+                                                           OfficerToAct = (from o in s.OfficerToAct
+                                                                           join staff in _staffInfoRepository.Table on o.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                           select new GetMedCompOfficerToAct
+                                                                           {
+                                                                               MedCompId = o.MedCompId,
+                                                                               MedCompOfficerToActId = o.MedCompOfficerToActId,
+                                                                               StaffPersonalInfoId = o.StaffPersonalInfoId,
+                                                                               StaffName = staff.FirstName + " " + staff.LastName
+                                                                           }).ToList(),
+                                                           Reference = s.Reference,
+                                                       }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffKeyWorker/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffKeyWorker(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffKeyWorkerVoice = (from s in st.StaffKeyWorkerVoice
+                                                              select new GetStaffKeyWorkerVoice
+                                                              {
+                                                                  ActionRequired = s.ActionRequired,
+                                                                  Attachment = s.Attachment,
+                                                                  Remarks = s.Remarks,
+                                                                  Date = s.Date,
+                                                                  Deadline = s.Deadline,
+                                                                  Details = s.Details,
+                                                                  NextCheckDate = s.NextCheckDate,
+                                                                  OfficerToAct = (from o in s.OfficerToAct
+                                                                                  join staff in _staffInfoRepository.Table on o.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                                  select new GetKeyWorkerOfficerToAct
+                                                                                  {
+                                                                                      KeyWorkerId = o.KeyWorkerId,
+                                                                                      KeyWorkerOfficerToActId = o.KeyWorkerOfficerToActId,
+                                                                                      StaffPersonalInfoId = o.StaffPersonalInfoId,
+                                                                                      StaffName = staff.FirstName + " " + staff.LastName
+                                                                                  }).ToList(),
+                                                                  Reference = s.Reference,
+                                                              }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffSurvey/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffSurvey(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffSurvey = (from s in st.StaffSurvey
+                                                      select new GetStaffSurvey
+                                                      {
+                                                          ActionRequired = s.ActionRequired,
+                                                          Attachment = s.Attachment,
+                                                          Remarks = s.Remarks,
+                                                          Date = s.Date,
+                                                          Deadline = s.Deadline,
+                                                          Details = s.Details,
+                                                          NextCheckDate = s.NextCheckDate,
+                                                          OfficerToAct = (from o in s.OfficerToAct
+                                                                          join staff in _staffInfoRepository.Table on o.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                          select new GetSurveyOfficerToAct
+                                                                          {
+                                                                              StaffSurveyId = o.StaffSurveyId,
+                                                                              SurveyOfficerToActId = o.SurveyOfficerToActId,
+                                                                              StaffPersonalInfoId = o.StaffPersonalInfoId,
+                                                                              StaffName = staff.FirstName + " " + staff.LastName
+                                                                          }).ToList(),
+                                                          Reference = s.Reference,
+                                                      }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffOneToOne/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffOneToOne(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffOneToOne = (from s in st.StaffOneToOne
+                                                        select new GetStaffOneToOne
+                                                        {
+                                                            ActionRequired = s.ActionRequired,
+                                                            Attachment = s.Attachment,
+                                                            Remarks = s.Remarks,
+                                                            Date = s.Date,
+                                                            Deadline = s.Deadline,
+                                                            NextCheckDate = s.NextCheckDate,
+                                                            OfficerToAct = (from o in s.OfficerToAct
+                                                                            join staff in _staffInfoRepository.Table on o.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                            select new GetOneToOneOfficerToAct
+                                                                            {
+                                                                                OneToOneId = o.OneToOneId,
+                                                                                OneToOneOfficerToActId = o.OneToOneOfficerToActId,
+                                                                                StaffPersonalInfoId = o.StaffPersonalInfoId,
+                                                                                StaffName = staff.FirstName + " " + staff.LastName
+                                                                            }).ToList(),
+                                                            Reference = s.Reference,
+                                                        }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffSupervision/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffSupervision(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffSupervisionAppraisal = (from s in st.StaffSupervisionAppraisal
+                                                                    select new GetStaffSupervisionAppraisal
+                                                                    {
+                                                                        ActionRequired = s.ActionRequired,
+                                                                        Attachment = s.Attachment,
+                                                                        Remarks = s.Remarks,
+                                                                        Date = s.Date,
+                                                                        Deadline = s.Deadline,
+                                                                        Details = s.Details,
+                                                                        NextCheckDate = s.NextCheckDate,
+                                                                        OfficerToAct = (from o in s.OfficerToAct
+                                                                                        join staff in _staffInfoRepository.Table on o.StaffPersonalInfoId equals staff.StaffPersonalInfoId
+                                                                                        select new GetSupervisionOfficerToAct
+                                                                                        {
+                                                                                            StaffSupervisionAppraisalId = o.StaffSupervisionAppraisalId,
+                                                                                            SupervisionOfficerToActId = o.SupervisionOfficerToActId,
+                                                                                            StaffPersonalInfoId = o.StaffPersonalInfoId,
+                                                                                            StaffName = staff.FirstName + " " + staff.LastName
+                                                                                        }).ToList(),
+                                                                        Reference = s.Reference,
+                                                                    }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffReference/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffReference(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffReference = (from rf in st.StaffReference
+                                                  select new GetStaffReference
+                                                  {
+                                                      Address = rf.Address,
+                                                      Attachment = rf.Attachment,
+                                                      Email = rf.Email,
+                                                      Contact = rf.Contact, 
+                                                      Date  = rf.Date,
+                                                      DateofEmployement = rf.DateofEmployement,
+                                                      DateofExit = rf.DateofExit,
+                                                      RehireStaff = rf.RehireStaff,
+                                                  }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffPersonalityTest/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffPersonalityTest(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffPersonalityTest = (from s in st.StaffPersonalityTest
+                                                               select new GetStaffPersonalityTest
+                                                               {
+                                                                   TestId = s.TestId,
+                                                                   StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                                   Question = s.Question,
+                                                                   Answer = s.Answer,
+                                                               }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffInfectionControl/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffInfectionControl(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffInfectionControl = (from s in st.StaffInfectionControl
+                                                                select new GetStaffInfectionControl
+                                                                {
+                                                                    TestDate = s.TestDate,
+                                                                    Guideline = s.Guideline,
+                                                                    Remarks = s.Remarks,
+                                                                    Status = s.Status,
+                                                                    Type = s.Type,  
+                                                                    VaccStatus  = s.VaccStatus,
+                                                                }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffCompetenceTest/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffCompetenceTest(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffCompetenceTest = (from s in st.StaffCompetenceTest
+                                                              select new GetStaffCompetenceTest
+                                                              {
+                                                                  StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                                  Heading = s.Heading,
+                                                                  GetStaffCompetenceTestTask = (from t in s.StaffCompetenceTestTask
+                                                                                                select new GetStaffCompetenceTestTask
+                                                                                                {
+                                                                                                    Answer = t.Answer,
+                                                                                                    Title = t.Title,
+                                                                                                    Comment = t.Comment,
+                                                                                                    Point = t.Point,
+                                                                                                    Score = t.Score,
+                                                                                                }).ToList(),
+                                                              }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffHealth/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffHealth(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffHealth = (from s in st.StaffHealth
+                                                      select new GetStaffHealth
+                                                      {
+                                                          StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                          Heading = s.Heading,
+                                                          GetStaffHealthTask = (from t in s.StaffHealthTask
+                                                                                select new GetStaffHealthTask
+                                                                                {
+                                                                                    Answer = t.Answer,
+                                                                                    Title = t.Title,
+                                                                                    Comment = t.Comment,
+                                                                                    Point = t.Point,
+                                                                                    Score = t.Score,
+                                                                                }).ToList(),
+                                                      }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffInterview/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffInterview(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffInterview = (from s in st.StaffInterview
+                                                         select new GetStaffInterview
+                                                         {
+                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                             Heading = s.Heading,
+                                                             GetStaffInterviewTask = (from t in s.StaffInterviewTask
+                                                                                      select new GetStaffInterviewTask
+                                                                                      {
+                                                                                          Answer = t.Answer,
+                                                                                          Title = t.Title,
+                                                                                          Comment = t.Comment,
+                                                                                          Point = t.Point,
+                                                                                          Score = t.Score,
+                                                                                      }).ToList(),
+                                                         }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffShadowing/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffShadowing(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetStaffShadowing = (from s in st.StaffShadowing
+                                                         select new GetStaffShadowing
+                                                         {
+                                                             StaffPersonalInfoId = s.StaffPersonalInfoId,
+                                                             Heading = s.Heading,
+                                                             GetStaffShadowingTask = (from t in s.StaffShadowingTask
+                                                                                      select new GetStaffShadowingTask
+                                                                                      {
+                                                                                        Answer = t.Answer,
+                                                                                        Title = t.Title,
+                                                                                        Comment = t.Comment,
+                                                                                        Point = t.Point,
+                                                                                        Score = t.Score,
+                                                                                      }).ToList(),
+                                                         }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffAllowance/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffAllowance(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetSalaryAllowance = (from edu in st.SalaryAllowance
+                                                 select new GetSalaryAllowance
+                                                 {
+                                                     EndDate = edu.EndDate,
+                                                     StaffPersonalInfoId = edu.StaffPersonalInfoId,
+                                                     StartDate = edu.StartDate,
+                                                     AllowanceType = edu.AllowanceType,
+                                                     Amount = edu.Amount,
+                                                     Deleted = edu.Deleted,
+                                                     Percentage = edu.Percentage,
+                                                     Reoccurent = edu.Reoccurent,
+                                                     SalaryAllowanceId = edu.SalaryAllowanceId,
+                                                 }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffDeduction/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffDeduction(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    GetSalaryDeduction = (from edu in st.SalaryDeduction
+                                                 select new GetSalaryDeduction
+                                                 {
+                                                     EndDate = edu.EndDate,
+                                                     StaffPersonalInfoId = edu.StaffPersonalInfoId,
+                                                     StartDate = edu.StartDate,
+                                                     AllowanceType = edu.AllowanceType,
+                                                     Amount = edu.Amount,
+                                                     Deleted = edu.Deleted,
+                                                     Percentage = edu.Percentage,
+                                                     Reoccurent = edu.Reoccurent,
+                                                     SalaryDeductionId = edu.SalaryDeductionId,
+                                                 }).ToList(),
+
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
+        }
+
+        [HttpGet("StaffTeamLead/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> StaffTeamLead(int id)
+        {
+            var staffProfile = (from st in _staffInfoRepository.Table
+                                where st.StaffPersonalInfoId == id
+                                select new GetStaffProfile
+                                {
+                                    StaffPersonalInfoId = st.StaffPersonalInfoId,
+                                    
+                                }).FirstOrDefault();
+
+            return Ok(staffProfile);
         }
         #endregion
     }

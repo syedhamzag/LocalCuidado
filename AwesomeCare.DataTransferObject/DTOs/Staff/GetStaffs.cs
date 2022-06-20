@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwesomeCare.DataTransferObject.DTOs.Chat;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,5 +20,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public bool CanDrive { get; set; }
 
         public string ProfilePix { get; set; }
+        public virtual GetChat GetChat { get; set; }
     }
 }

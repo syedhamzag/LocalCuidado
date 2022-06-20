@@ -18,6 +18,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
         /// </summary>
         public int Team { get; set; }
         public bool DriverRequired { get; set; }
-        public string PublishTo { get; set; }
+        public int? PublishTo { get; set; }
     }
 }

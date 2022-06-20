@@ -6,7 +6,7 @@
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
-            <div class="header">
+            <div class="card-header">
                 <h2>HomeCare Client Details</h2>
                 <h3>@Model.PreferredName</h3>
                 <ul class="header-dropdown">
@@ -20,7 +20,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="body">
+            <div class="card-body">
                 <ul class="nav nav-tabs-new2">
                     <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#personalInfo">Personal Info</a></li>
                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#involvingparties">Involving Parties</a></li>
@@ -140,20 +140,20 @@
                             </div>
                             <div class="col-xs-2 col-sm-2 col-md-2">
                                 <div class="card">
-                                    <div class="header">
+                                    <div class="card-header">
                                         <h2>QR Code<small></small></h2>
                                     </div>
-                                    <div class="body">
+                                    <div class="card-body">
                                         <img alt="clientimage" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3">
                                 <div class="card">
-                                    <div class="header">
+                                    <div class="card-header">
                                         <h2>Image<small></small></h2>
                                     </div>
-                                    <div class="body">
+                                    <div class="card-body">
                                         <img alt="clientimage" src="@Model.PassportFilePath" height="150" width="150">
                                     </div>
                                 </div>
@@ -330,7 +330,7 @@
                         </table>
                     </div>
                     <div class="tab-pane" id="dutyoncall">
-                        <div class="header">
+                        <div class="card-header">
                             <ul class="header-dropdown">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -342,7 +342,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="body">
+                        <div class="card-body">
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -376,7 +376,7 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="hospitalentry">
-                        <div class="header">
+                        <div class="card-header">
                             <ul class="header-dropdown">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -388,7 +388,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="body">
+                        <div class="card-body">
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -419,7 +419,7 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="hospitalexit">
-                        <div class="header">
+                        <div class="card-header">
                             <ul class="header-dropdown">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -431,7 +431,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="body">
+                        <div class="card-body">
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -459,7 +459,7 @@
 
                     </div>
                     <div class="tab-pane" id="filesrecord">
-                        <div class="header">
+                        <div class="card-header">
                             <ul class="header-dropdown">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -471,7 +471,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="body">
+                        <div class="card-body">
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -505,7 +505,7 @@
                         </div>
                     </div>
                         <div class="tab-pane" id="complaintregister">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -547,7 +547,7 @@
                         </div>
 
                         <div class="tab-pane" id="logaudit">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -587,7 +587,7 @@
                         </div>
 
                         <div class="tab-pane" id="medaudit">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -629,7 +629,7 @@
                         </div>
 
                         <div class="tab-pane" id="voice">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -669,7 +669,7 @@
                         </div>
 
                         <div class="tab-pane" id="mgtvisit">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -709,7 +709,7 @@
                         </div>
 
                         <div class="tab-pane" id="program">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -749,7 +749,7 @@
                         </div>
 
                         <div class="tab-pane" id="servicewatch">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -789,9 +789,9 @@
                         </div>
 
                         <div class="tab-pane" id="telehealth">
-                            <div class="header">
+                            <div class="card-header">
                             </div>
-                            <div class="body">
+                            <div class="card-body">
                                 <ul class="nav nav-tabs-new2">
                                     <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#bloodcoag">Blood Coagulation</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#bloodpressure">Blood Pressure</a></li>
@@ -809,7 +809,7 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane" id="bloodcoag">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -819,7 +819,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="body">
+                                        <div class="card-body">
                                             <table class="table table-bordered table-hover">
                                                 <thead>
                                                     <tr>
@@ -845,7 +845,7 @@
 
                                     </div>
                                     <div class="tab-pane" id="bloodpressure">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -878,7 +878,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="bmichart">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -911,7 +911,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="bodytemp">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -944,7 +944,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="bowel">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -977,7 +977,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="eyehealth">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1010,7 +1010,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="foodintake">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1043,7 +1043,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="heartrate">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1076,7 +1076,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="oxygen">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1109,7 +1109,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="painchart">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1142,7 +1142,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="pulserate">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1175,7 +1175,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="seizure">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1208,7 +1208,7 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane" id="woundcare">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1245,9 +1245,9 @@
                         </div>
 
                         <div class="tab-pane" id="careplan">
-                            <div class="header">
+                            <div class="card-header">
                             </div>
-                            <div class="body">
+                            <div class="card-body">
                                 <ul class="nav nav-tabs-new2">
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personaldetail">Personal Detail</a></li>
                                     <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#health">Health</a></li>
@@ -1258,7 +1258,7 @@
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane" id="personaldetail">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1268,7 +1268,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="body">
+                                        <div class="card-body">
                                             <table class="table table-bordered table-hover" id="GetReview">
                                                 <thead>
                                                     <tr>
@@ -1283,9 +1283,9 @@
                                     </div>
 
                                     <div class="tab-pane" id="health">
-                                        <div class="header">
+                                        <div class="card-header">
                                         </div>
-                                        <div class="body">
+                                        <div class="card-body">
                                             <ul class="nav nav-tabs-new2">
                                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#healthliving">Health and Living</a></li>
                                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#specialhealthmed">Special Health and Medication</a></li>
@@ -1296,7 +1296,7 @@
                                             </ul>
                                             <div class="tab-content">
                                                 <div class="tab-pane" id="healthliving">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1306,7 +1306,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetHealthAndLiving">
                                                             <thead>
                                                                 <tr>
@@ -1320,7 +1320,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="specialhealthmed">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1330,7 +1330,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetSpecialHealthAndMedication">
                                                             <thead>
                                                                 <tr>
@@ -1344,7 +1344,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="balance">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1354,7 +1354,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetBalance">
                                                             <thead>
                                                                 <tr>
@@ -1368,7 +1368,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="physicalability">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1378,7 +1378,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetPhysicalAbility">
                                                             <thead>
                                                                 <tr>
@@ -1392,7 +1392,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="specialhealthcond">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1402,7 +1402,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetSpecialHealthCondition">
                                                             <thead>
                                                                 <tr>
@@ -1416,7 +1416,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="historyoffall">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1426,7 +1426,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetHistoryOfFall">
                                                             <thead>
                                                                 <tr>
@@ -1444,7 +1444,7 @@
                                     </div>
 
                                     <div class="tab-pane" id="nutrition">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1454,7 +1454,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="body">
+                                        <div class="card-body">
                                             <table class="table table-bordered table-hover" id="GetCarePlanNutrition">
                                                 <thead>
                                                     <tr>
@@ -1469,9 +1469,9 @@
                                     </div>
 
                                     <div class="tab-pane" id="hygiene">
-                                        <div class="header">
+                                        <div class="card-header">
                                         </div>
-                                        <div class="body">
+                                        <div class="card-body">
                                             <ul class="nav nav-tabs-new2">
                                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#personalhygiene">Personal Hygiene</a></li>
                                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#infectioncontrol">Infection Control</a></li>
@@ -1479,7 +1479,7 @@
                                             </ul>
                                             <div class="tab-content">
                                                 <div class="tab-pane" id="personalhygiene">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1489,7 +1489,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetPersonalHygiene">
                                                             <thead>
                                                                 <tr>
@@ -1503,7 +1503,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="infectioncontrol">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1513,7 +1513,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetInfectionControl">
                                                             <thead>
                                                                 <tr>
@@ -1527,7 +1527,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="mtask">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1537,7 +1537,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetManagingTasks">
                                                             <thead>
                                                                 <tr>
@@ -1554,16 +1554,16 @@
                                     </div>
 
                                     <div class="tab-pane" id="interests">
-                                        <div class="header">
+                                        <div class="card-header">
                                         </div>
-                                        <div class="body">
+                                        <div class="card-body">
                                             <ul class="nav nav-tabs-new2">
                                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#intandobj">Interests And Objectives</a></li>
                                                 <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pets">Pets</a></li>
                                             </ul>
                                             <div class="tab-content">
                                                 <div class="tab-pane" id="intandobj">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1573,7 +1573,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetInterestAndObjective">
                                                             <thead>
                                                                 <tr>
@@ -1586,7 +1586,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane" id="pets">
-                                                    <div class="header">
+                                                    <div class="card-header">
                                                         <ul class="header-dropdown">
                                                             <li class="dropdown">
                                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1596,7 +1596,7 @@
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <div class="body">
+                                                    <div class="card-body">
                                                         <table class="table table-bordered table-hover" id="GetPets">
                                                             <thead>
                                                                 <tr>
@@ -1614,7 +1614,7 @@
                                     </div>
 
                                     <div class="tab-pane" id="homerisk">
-                                        <div class="header">
+                                        <div class="card-header">
                                             <ul class="header-dropdown">
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1624,7 +1624,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="body">
+                                        <div class="card-body">
                                             <table class="table table-bordered table-hover" id="GetHomeRiskAssessment">
                                                 <thead>
                                                     <tr>
@@ -1641,7 +1641,7 @@
                         </div>
 
                         <div class="tab-pane" id="dailytask">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1653,7 +1653,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="body">
+                            <div class="card-body">
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
@@ -1685,7 +1685,7 @@
                         </div>
 
                         <div class="tab-pane" id="mcabest">
-                            <div class="header">
+                            <div class="card-header">
                                 <ul class="header-dropdown">
                                     <li class="dropdown">
                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
@@ -1697,7 +1697,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="body">
+                            <div class="card-body">
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>

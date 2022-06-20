@@ -1,7 +1,11 @@
 ﻿using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Balance;
+using AwesomeCare.Admin.Services.BestInterestAssessment;
 using AwesomeCare.Admin.Services.CarePlanNutrition;
 using AwesomeCare.Admin.Services.Client;
+using AwesomeCare.Admin.Services.ClientProgram;
+using AwesomeCare.Admin.Services.ClientServiceWatch;
+using AwesomeCare.Admin.Services.ClientDailyTask;
 using AwesomeCare.Admin.Services.ClientInvolvingParty;
 using AwesomeCare.Admin.Services.ClientRota;
 using AwesomeCare.Admin.Services.ClientRotaName;
@@ -11,6 +15,7 @@ using AwesomeCare.Admin.Services.HistoryOfFall;
 using AwesomeCare.Admin.Services.InfectionControl;
 using AwesomeCare.Admin.Services.InterestAndObjective;
 using AwesomeCare.Admin.Services.ManagingTasks;
+using AwesomeCare.Admin.Services.Nutrition;
 using AwesomeCare.Admin.Services.PersonalDetail;
 using AwesomeCare.Admin.Services.PersonalHygiene;
 using AwesomeCare.Admin.Services.Pets;
@@ -21,6 +26,8 @@ using AwesomeCare.Admin.Services.SpecialHealthAndMedication;
 using AwesomeCare.Admin.Services.SpecialHealthCondition;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.CarePlan;
+using AwesomeCare.Admin.ViewModels.Client;
+using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail;
 using AwesomeCare.Services.Services;
@@ -40,6 +47,9 @@ namespace AwesomeCare.Admin.Controllers
 {
     public class CarePlanController : BaseController
     {
+        private IClientDailyTaskService _clientDailyTaskService;
+        private IClientProgramService _clientProgramService;
+        private IClientServiceWatchService _clientServiceWatchService;
         private IPersonalDetailService _pdetailService;
         private ICarePlanNutritionService _nutritionService;
         private IPersonalHygieneService _phygieneService;
@@ -63,15 +73,18 @@ namespace AwesomeCare.Admin.Controllers
         IRotaTaskService _rotaTaskService;
         IRotaDayofWeekService _rotaDayOfWeekService;
         IClientRotaService _clientRotaService;
+        private INutritionService _clientNutritionService;
         private readonly QRCodeGenerator _qRCodeGenerator;
+        private IBestInterestAssessmentService _bestInterestAssessment;
 
         public CarePlanController(  IFileUpload fileUpload, IStaffService staffService, IClientService clientService, IPersonalDetailService pdetailService,
-                                    IBaseRecordService baseRecord, IClientInvolvingParty involvingparty, ICarePlanNutritionService nutritionService,
+                                    IBaseRecordService baseRecord, IClientInvolvingParty involvingparty, ICarePlanNutritionService nutritionService, INutritionService clientNutritionService,
                                     IPersonalHygieneService phygieneService, IInfectionControlService infectionService, IManagingTasksService mataskService,
                                     IPetsService petsService, IInterestAndObjectiveService interestService, IBalanceService balanceService, IPhysicalAbilityService physicalService,
-                                    IHistoryOfFallService historyService, IHealthAndLivingService hlService, ISpecialHealthAndMedicationService shamService,
+                                    IHistoryOfFallService historyService, IHealthAndLivingService hlService, ISpecialHealthAndMedicationService shamService, IBestInterestAssessmentService bestInterestAssessment,
                                     ISpecialHealthConditionService shcService, IHomeRiskAssessmentService clientHomeRiskAssessment, QRCodeGenerator qRCodeGenerator, IClientRotaService clientRotaService,
-                                    IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
+                                    IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService,
+                                    IClientDailyTaskService clientDailyTaskService, IClientProgramService clientProgramService,IClientServiceWatchService clientServiceWatchService) : base(fileUpload)
         {
             _staffService = staffService;
             _clientService = clientService;
@@ -97,6 +110,11 @@ namespace AwesomeCare.Admin.Controllers
             _rotaTaskService = rotaTaskService;
             _rotaDayOfWeekService = rotaDayOfWeekService;
             _clientRotaService = clientRotaService;
+            _clientNutritionService = clientNutritionService;
+            _bestInterestAssessment = bestInterestAssessment;
+            _clientDailyTaskService = clientDailyTaskService;
+            _clientProgramService = clientProgramService;
+            _clientServiceWatchService = clientServiceWatchService;
         }
         public async Task<IActionResult> CareView(int clientId)
         {
@@ -110,6 +128,7 @@ namespace AwesomeCare.Admin.Controllers
             var baseClass = bases.Where(s => s.KeyName == "Class").FirstOrDefault().BaseRecordId;
             var classItems = await _baseRecord.GetBaseRecordWithItems(baseClass);
 
+            var clientNutrition = await _clientNutritionService.GetForEdit(clientId);
             var pdetail = await _pdetailService.Get(clientId);
             var nutrition = await _nutritionService.Get();
             var infection = await _infectionService.Get();
@@ -127,6 +146,9 @@ namespace AwesomeCare.Admin.Controllers
             var party = await _involvingparty.GetAll();
             var InvolvingParty = party.Where(s => s.ClientId == clientId).Select(s=>s.Relationship);
             var Relation = "N/A";
+            var program = await _clientProgramService.Get();
+            var daily = await _clientDailyTaskService.Get();
+            var swatch = await _clientServiceWatchService.Get();
             if (InvolvingParty != null)
             {
                 Relation = InvolvingParty.FirstOrDefault();
@@ -143,9 +165,17 @@ namespace AwesomeCare.Admin.Controllers
             model.IdNumber = client.IdNumber;
             model.GetInvolvingParty = party.Where(s => s.ClientId == clientId).ToList(); 
             var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
+            var baseRecordItem = await _baseRecord.GetBaseRecordItem();
             var filterBaseRecord = baseRecord.Where(s => s.KeyName == "Home_Risk_Assessment_Heading").Select(s => s.BaseRecordItems).FirstOrDefault();
-            model.baseRecordList = filterBaseRecord.ToList();
-            
+            model.baseRecordList = baseRecordItem.ToList();
+            #region Client Nutrition
+            if (clientNutrition.Count > 0)
+            {
+                model.ClientCleaning = clientNutrition.FirstOrDefault().ClientCleaning;
+                model.ClientShopping = clientNutrition.FirstOrDefault().ClientShopping;
+                model.ClientMealDays = clientNutrition.FirstOrDefault().ClientMealDays;
+            }
+            #endregion
             #region Home Risk
             if (home.Count > 0)
             {
@@ -163,7 +193,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.CapacityId = pdetail.Capacity.FirstOrDefault().CapacityId;
                 model.Implications = pdetail.Capacity.FirstOrDefault().Implications;
                 model.Pointer = pdetail.Capacity.FirstOrDefault().Pointer;
-                model.IndicatorList = pdetail.Capacity.FirstOrDefault().Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList();
+                model.IndicatorList = pdetail.Capacity.FirstOrDefault().Indicator.Select(s => s.ValueName).ToList();
                 model.Indicator = pdetail.Capacity.FirstOrDefault().Indicator.Select(s => s.BaseRecordId).ToList();
                 model.CareId = pdetail.ConsentCare.FirstOrDefault().CareId;
                 model.CareSignature = pdetail.ConsentCare.FirstOrDefault().Signature;
@@ -178,7 +208,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.LandLineId = pdetail.ConsentLandline.FirstOrDefault().LandlineId;
                 model.LandLineSignature = pdetail.ConsentLandline.FirstOrDefault().Signature;
                 model.LandLineDate = pdetail.ConsentLandline.FirstOrDefault().Date;
-                model.LandLogList = pdetail.ConsentLandline.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList();
+                model.LandLogList = pdetail.ConsentLandline.FirstOrDefault().LogMethod.Select(s => s.ValueName).ToList();
                 model.LandLineLogMethod = pdetail.ConsentLandline.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList();
                 model.LandName = pdetail.ConsentLandline.FirstOrDefault().Name;
                 model.LandRelation = Relation;
@@ -189,7 +219,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.FamilyRole = pdetail.KeyIndicators.FirstOrDefault().FamilyRole;
                 model.Debture = pdetail.KeyIndicators.FirstOrDefault().Debture;
                 model.LivingStatus = pdetail.KeyIndicators.FirstOrDefault().LivingStatus;
-                model.KeyLogList = pdetail.KeyIndicators.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList();
+                model.KeyLogList = pdetail.KeyIndicators.FirstOrDefault().LogMethod.Select(s => s.ValueName).ToList();
                 model.LogMethod = pdetail.KeyIndicators.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList();
                 model.ThingsILike = pdetail.KeyIndicators.FirstOrDefault().ThingsILike;
                 model.PersonalId = pdetail.Personal.FirstOrDefault().PersonalId;
@@ -324,11 +354,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 if (physical.Where(s => s.ClientId == clientId).Count() > 0)
                 {
-                    model.Physical_Description = physical.Where(s => s.ClientId == clientId).FirstOrDefault().Description;
-                    model.Physical_Mobility = physical.Where(s => s.ClientId == clientId).FirstOrDefault().Mobility;
-                    model.PhysicalId = physical.Where(s => s.ClientId == clientId).FirstOrDefault().PhysicalId;
-                    model.Physical_Name = physical.Where(s => s.ClientId == clientId).FirstOrDefault().Name;
-                    model.Physical_Status = physical.Where(s => s.ClientId == clientId).FirstOrDefault().Status;
+                    model.PhysicalAbility = physical.Where(s => s.ClientId == clientId).ToList();
                 }
             }
             if (hl.Count > 0)
@@ -489,6 +515,7 @@ namespace AwesomeCare.Admin.Controllers
                 }
             }
             #endregion
+
             #region Rottering
             var rotaTypes = await _clientRotaTypeService.Get();
             var rotas = await _clientRotaNameService.Get();
@@ -503,9 +530,67 @@ namespace AwesomeCare.Admin.Controllers
             model.WeekDays = weekDays;
             model.ClientRotas = clientRotas;
             #endregion
-            model.GetProgram = client.GetClientProgram.ToList();
-            model.GetServiceWatch = client.GetClientServiceWatch.ToList();
-            model.GetClientDailyTask = client.GetClientDailyTask.ToList();
+
+            #region Best Interest
+
+            GetBestInterestAssessment mcaBest = await _bestInterestAssessment.Get(clientId); 
+            
+            if (mcaBest != null)
+            {
+                model.careIssuebaseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                model.getBestInterestAssessment = mcaBest;
+                model.baseRecordBestInterestList = baseRecord.ToList();
+                model.BestHeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                model.BaseRecordList = baseRecord.ToList();
+                model.BelieveTaskCount = mcaBest.GetBelieveTask.Count;
+                model.CareIssuesTaskCount = model.baseRecordList.Count;
+                model.Date = mcaBest.Date;
+                model.BestId = mcaBest.BestId;
+                model.Name = mcaBest.Name;
+                model.Position = mcaBest.Position;
+                model.Signature = mcaBest.Signature;
+                model.GetBelieveTask = (from t in mcaBest.GetBelieveTask
+                                        select new GetBelieveTask
+                                        {
+                                            BelieveTaskId = t.BelieveTaskId,
+                                            BestId = t.BestId,
+                                            ReasonableBelieve = t.ReasonableBelieve,
+                                        }).ToList();
+                model.GetCareIssuesTask = (from t in mcaBest.GetCareIssuesTask
+                                           select new GetCareIssuesTask
+                                           {
+                                               CareIssuesTaskId = t.CareIssuesTaskId,
+                                               BestId = t.BestId,
+                                               Issues = t.Issues,
+                                           }).ToList();
+                model.GetHealthTask = (from t in mcaBest.GetHealthTask
+                                       select new GetHealthTask
+                                       {
+                                           HealthTaskId = t.HealthTaskId,
+                                           BestId = t.BestId,
+                                           HeadingId = t.HeadingId,
+                                           Title = t.Title,
+                                           Answer = t.Answer,
+                                           Remarks = t.Remarks
+                                       }).ToList();
+                model.GetHealthTask2 = (from t in mcaBest.GetHealthTask2
+                                        select new GetHealthTask2
+                                        {
+                                            HealthTask2Id = t.HealthTask2Id,
+                                            BestId = t.BestId,
+                                            Heading2Id = t.Heading2Id,
+                                            Title = t.Title,
+                                            Answer = t.Answer,
+                                            Remark = t.Remark
+                                        }).ToList();
+            }
+            #endregion
+
+
+            model.GetProgram = program.Where(s=>s.ClientId==clientId).ToList();
+            model.GetServiceWatch = swatch.Where(s => s.ClientId == clientId).ToList();
+            model.GetClientDailyTask = daily.Where(s => s.ClientId == clientId).ToList();
             return model;
         }
         public async Task<IActionResult> Reports()

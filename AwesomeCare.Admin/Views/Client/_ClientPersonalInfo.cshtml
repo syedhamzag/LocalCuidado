@@ -57,91 +57,91 @@
 
         </div>
 
-        <div class="row">
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input type="email" class="form-control" asp-for="Email">
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="StartDate" class="control-label"></label>
-                    <input type="text" data-provide="datepicker" asp-for="StartDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="EndDate" class="control-label"></label>
-                    <input type="text" data-provide="datepicker" asp-for="EndDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
-                    <span asp-validation-for="EndDate" class="text-danger"></span>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="NumberOfCalls" class="control-label"></label>
-                    <input type="number" class="form-control" asp-for="NumberOfCalls">
-                    <span asp-validation-for="NumberOfCalls" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="AreaCodeId" class="control-label"></label>
-                    <baserecord asp-key="AreaCode" asp-for="AreaCodeId" asp-items="null" />
-                    <span asp-validation-for="AreaCodeId" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="TeritoryId" class="control-label"></label>
-                    <baserecord asp-key="Teritory" asp-for="TeritoryId" asp-items="null" />
-                    <span asp-validation-for="TeritoryId" class="text-danger"></span>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="Latitude" class="control-label"></label>
-                    <input type="number" class="form-control" asp-for="Latitude">
-                    <span asp-validation-for="Latitude" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="Longitude" class="control-label"></label>
-                    <input type="text" class="form-control" asp-for="Longitude">
-                    <span asp-validation-for="Longitude" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <label asp-for="PreferredName" class="control-label"></label>
-                    <input type="text" class="form-control" asp-for="PreferredName">
-                    <span asp-validation-for="PreferredName" class="text-danger"></span>
-                </div>
-            </div>
-
-        </div>
     </div>
     <div class="col-xs-4 col-sm-4 col-md-4">
         <div class="card">
-            <div class="header">
+            <div class="card-header">
                 <h2>Client Image<small></small></h2>
             </div>
-            <div class="body">
+            <div class="card-body">
                 <input type="file" asp-for="ClientImage" class="dropify" data-allowed-file-extensions="png jpg jpeg">
                 <span asp-validation-for="ClientImage" class="text-danger"></span>
             </div>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input type="email" class="form-control" asp-for="Email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="StartDate" class="control-label"></label>
+            <input type="text" data-provide="datepicker" asp-for="StartDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="EndDate" class="control-label"></label>
+            <input type="text" data-provide="datepicker" asp-for="EndDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="NumberOfCalls" class="control-label"></label>
+            <input type="number" class="form-control" asp-for="NumberOfCalls">
+            <span asp-validation-for="NumberOfCalls" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="AreaCodeId" class="control-label"></label>
+            <baserecord asp-key="AreaCode" asp-for="AreaCodeId" asp-items="null" />
+            <span asp-validation-for="AreaCodeId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="TeritoryId" class="control-label"></label>
+            <baserecord asp-key="Teritory" asp-for="TeritoryId" asp-items="null" />
+            <span asp-validation-for="TeritoryId" class="text-danger"></span>
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="Latitude" class="control-label"></label>
+            <input type="text" class="form-control" asp-for="Latitude">
+            <span asp-validation-for="Latitude" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="Longitude" class="control-label"></label>
+            <input type="text" class="form-control" asp-for="Longitude">
+            <span asp-validation-for="Longitude" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="PreferredName" class="control-label"></label>
+            <input type="text" class="form-control" asp-for="PreferredName">
+            <span asp-validation-for="PreferredName" class="text-danger"></span>
+        </div>
+    </div>
+
 </div>
 <div class="row">
     <div class="col-xs-12 col-sm-4 col-md-4">
@@ -215,7 +215,29 @@
             <span asp-validation-for="ChoiceOfStaffId" class="text-danger"></span>
         </div>
     </div>
-
+</div>
+<div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label class="control-label">Client Manager</label>
+            <select asp-for="ClientManager" asp-items="@Model.StaffList" class="selectpicker form-control" data-live-search="true"></select>
+            <span asp-validation-for="ClientManager" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="Denture" class="control-label"></label>
+            <baserecord asp-key="Client_Denture" asp-for="Denture" asp-items="null" />
+            <span asp-validation-for="Denture" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="Aid" class="control-label"></label>
+            <baserecord asp-key="Client_Aid" asp-for="Aid" asp-items="null" />
+            <span asp-validation-for="Aid" class="text-danger"></span>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -276,6 +298,6 @@
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
     </div>
-    
+
 </div>
 

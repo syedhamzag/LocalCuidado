@@ -7,6 +7,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.ClientRota;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,10 +23,11 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientRota> _clientRotaRepository;
         private IGenericRepository<ClientRotaDays> _clientRotaDaysRepository;
         private IGenericRepository<ClientRotaTask> _clientRotaTaskRepository;
+        private IGenericRepository<RotaPin> _rotaPinRepository;
         private AwesomeCareDbContext _dbContext;
 
         public ClientRotaController(IGenericRepository<ClientRota> clientRotaRepository,
-            IGenericRepository<ClientRotaDays> clientRotaDaysRepository,
+            IGenericRepository<ClientRotaDays> clientRotaDaysRepository, IGenericRepository<RotaPin> rotaPinRepository,
             IGenericRepository<ClientRotaTask> clientRotaTaskRepository,
             AwesomeCareDbContext dbContext)
         {
@@ -33,6 +35,7 @@ namespace AwesomeCare.API.Controllers
             _clientRotaDaysRepository = clientRotaDaysRepository;
             _clientRotaTaskRepository = clientRotaTaskRepository;
             _dbContext = dbContext;
+            _rotaPinRepository = rotaPinRepository;
         }
 
         /// <summary>
@@ -301,6 +304,26 @@ namespace AwesomeCare.API.Controllers
                                  }).FirstOrDefaultAsync();
 
             return Ok(periods);
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> ChangePin([FromBody] PostRotaPin model)
+        {
+            var postEntity = Mapper.Map<RotaPin>(model);
+            await _rotaPinRepository.UpdateEntity(postEntity);
+            return Ok();
+        }
+
+        [HttpGet("GetPin")]
+        [ProducesResponseType(type: typeof(GetClientRota), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetPin()
+        {
+            var getEntity = _rotaPinRepository.Table.ProjectTo<GetRotaPin>().FirstOrDefault();
+
+            return Ok(getEntity);
         }
     }
 }

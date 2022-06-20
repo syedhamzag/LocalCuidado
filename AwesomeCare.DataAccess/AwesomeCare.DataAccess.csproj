@@ -67,6 +67,8 @@
     <Compile Remove="Migrations\20211213204801_StaffTrainingMatrix.Designer.cs" />
     <Compile Remove="Migrations\20211215174524_StaffTrainingMatrix.cs" />
     <Compile Remove="Migrations\20211215174524_StaffTrainingMatrix.Designer.cs" />
+    <Compile Remove="Migrations\20220122155934_UpdateChatModel.cs" />
+    <Compile Remove="Migrations\20220122155934_UpdateChatModel.Designer.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.cs" />
     <Compile Remove="Migrations\ApplicationDb\20200330212630_tbl_StaffPersonalInfo_ApplicationUser.Designer.cs" />
   </ItemGroup>

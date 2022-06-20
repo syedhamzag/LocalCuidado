@@ -20,6 +20,9 @@ using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 using AwesomeCare.DataTransferObject.DTOs.PerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.Staff.StaffHoliday;
 using AwesomeCare.DataTransferObject.DTOs.StaffTrainingMatrix;
+using AwesomeCare.DataTransferObject.DTOs.Staff.SalaryAllowance;
+using AwesomeCare.DataTransferObject.DTOs.Staff.SalaryDeduction;
+using AwesomeCare.DataTransferObject.DTOs.Staff.StaffTax;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
@@ -48,7 +51,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
             GetStaffShadowing = new List<GetStaffShadowing>();
             GetStaffHoliday = new List<GetStaffHoliday>();
             GetStaffTrainingMatrix = new List<GetStaffTrainingMatrix>();
-
+            GetSalaryAllowance = new List<GetSalaryAllowance>();
+            GetSalaryDeduction = new List<GetSalaryDeduction>();
+            GetStaffTax = new List<GetStaffTax>();
     }
         public List<GetStaffEducation> Education { get; set; }
         public List<GetStaffTraining> Trainings { get; set; }
@@ -71,6 +76,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetStaffShadowing> GetStaffShadowing { get; set; }
         public List<GetStaffHoliday> GetStaffHoliday { get; set; }
         public List<GetStaffTrainingMatrix> GetStaffTrainingMatrix { get; set; }
+        public List<GetSalaryAllowance> GetSalaryAllowance { get; set; }
+        public List<GetSalaryDeduction> GetSalaryDeduction { get; set; }
+        public List<GetStaffTax> GetStaffTax { get; set; }
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]

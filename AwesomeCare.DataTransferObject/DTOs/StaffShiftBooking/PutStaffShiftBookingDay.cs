@@ -10,5 +10,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking
         public int StaffShiftBookingId { get; set; }
         public string Day { get; set; }
         public string WeekDay { get; set; }
+        public DateTime Date { get; set; }
     }
 }

@@ -1,0 +1,50 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Staff;
+@model List<GetStaffProfile>
+@{
+    ViewData["Title"] = "Payroll Reports";
+}
+
+<!-- Page Content -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped table-dark custom-table datatable">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Can Drive</th>
+                        <th>Work Team</th>
+                        <th>Status</th>
+                        <th>Rate</th>
+                        <th>Employee ID</th>
+                        <th>Email</th>
+                        <th>Join Date</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var staff in Model)
+                    {
+                    <tr>
+                        <td>
+                            <h2 class="table-avatar">
+                                <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@staff.StaffPersonalInfoId" class="avatar"><img alt="" src="@staff.ProfilePix"></a>
+                                <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@staff.StaffPersonalInfoId">@string.Concat(staff.FirstName," ",staff.MiddleName," ",staff.LastName)</a>
+                            </h2>
+                        </td>
+                        <td>@staff.CanDrive</td>
+                        <td>@staff.WorkTeam</td>
+                        <td>@staff.Status</td>
+                        <td>@staff.Rate</td>
+                        <td>@staff.IdNumber</td>
+                        <td>@staff.Email</td>
+                        <td>@staff.StartDate.Date.ToString("dd/MM/yyyy")</td>
+                        <td><a class="btn btn-sm btn-primary" asp-controller="Payroll" asp-action="View" asp-route-staffId="@staff.StaffPersonalInfoId">View Payroll</a></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- /Page Content -->

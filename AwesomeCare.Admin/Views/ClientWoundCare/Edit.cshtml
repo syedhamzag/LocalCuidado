@@ -10,10 +10,10 @@
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
-            <div class="header">
+            <div class="card-header">
                 <h2></h2>
             </div>
-            <div class="body">
+            <div class="card-body">
                 <form asp-route="Edit" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-8 col-sm-8 col-md-8">
@@ -140,46 +140,46 @@
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <div class="card">
-                                <div class="header">
+                                <div class="card-header">
                                     <h2>Status Attachment<small></small></h2>
                                 </div>
-                                <div class="body">
+                                <div class="card-body">
                                     <input type="file" asp-for="StatusAttachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="StatusAttachment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="header">
+                                <div class="card-header">
                                     <h2>Type Attachment<small></small></h2>
                                 </div>
-                                <div class="body">
+                                <div class="card-body">
                                     <input type="file" asp-for="TypeAttachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="TypeAttachment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="header">
+                                <div class="card-header">
                                     <h2>Location Attachment<small></small></h2>
                                 </div>
-                                <div class="body">
+                                <div class="card-body">
                                     <input type="file" asp-for="LocationAttachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="LocationAttachment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="header">
+                                <div class="card-header">
                                     <h2>UlcerStage Attachment<small></small></h2>
                                 </div>
-                                <div class="body">
+                                <div class="card-body">
                                     <input type="file" asp-for="UlcerStageAttachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="UlcerStageAttachment" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="header">
+                                <div class="card-header">
                                     <h2>Measurement Attachment<small></small></h2>
                                 </div>
-                                <div class="body">
+                                <div class="card-body">
                                     <input type="file" asp-for="MeasurementAttachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
                                     <span asp-validation-for="MeasurementAttachment" class="text-danger"></span>
                                 </div>

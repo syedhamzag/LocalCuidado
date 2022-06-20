@@ -71,11 +71,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
 
                     if (df <= 15 && df >= -15)
                     {
-                        rowColor = "#dff0d8";//green
+                        rowColor = "green";//green
                     }
                     else if (df > 15 && df <= 30)
                     {
-                        rowColor = "#ADD8E6";
+                        rowColor = "gray";
 
                     }
                     else if (df >= -30)
@@ -84,7 +84,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
                     }
                     else
                     {
-                        rowColor = "#A9A9A9";// "#f2dede";//red
+                        rowColor = "red";// "#f2dede";//red
                     }
 
 

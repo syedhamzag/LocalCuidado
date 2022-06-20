@@ -21,6 +21,10 @@ namespace AwesomeCare.Model.Models
         public string StopDate { get; set; }
         public string Status { get; set; }
         public string Remark { get; set; }
+        public int Means { get; set; }
+        public int Type { get; set; }
+        public int TimeCritical { get; set; }
+        public string ClientMedImage { get; set; }
 
         public virtual MedicationManufacturer MedicationManufacturer { get; set; }
         public virtual Medication Medication { get; set; }

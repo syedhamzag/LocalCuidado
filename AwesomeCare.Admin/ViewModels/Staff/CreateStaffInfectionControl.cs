@@ -20,5 +20,6 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public string StaffName { get; set; }
         public string VaccName { get; set; }
         public string InfectionName { get; set; }
+        public string TypeName { get; set; }
     }
 }

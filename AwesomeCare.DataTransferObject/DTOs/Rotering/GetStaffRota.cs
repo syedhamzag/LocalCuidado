@@ -29,7 +29,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public string NotGivenAcronym { get; set; }
     }
 
-    public class StaffRotaPartner
+    public class GetStaffRotaPartner
     {
         [JsonProperty("partner")]
         public string Partner { get; set; }
@@ -155,7 +155,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public List<Task> Tasks { get; set; }
 
         [JsonProperty("partners")]
-        public List<StaffRotaPartner> Partners { get; set; }
+        public List<GetStaffRotaPartner> Partners { get; set; }
     }
 
    

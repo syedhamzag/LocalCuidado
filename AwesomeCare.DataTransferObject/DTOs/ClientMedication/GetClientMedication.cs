@@ -29,6 +29,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientMedication
         public string StopDate { get; set; }
         public string Status { get; set; }
         public string Remark { get; set; }
+        public int Means { get; set; }
+        public int Type { get; set; }
+        public int TimeCritical { get; set; }
+        public string ClientMedImage { get; set; }
 
         public List<GetClientMedicationDay> ClientMedicationDay { get; set; }
     }

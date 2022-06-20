@@ -32,6 +32,10 @@ namespace AwesomeCare.Model.Models.Map
               .HasMaxLength(15)
               .IsRequired();
 
+            builder.Property(p => p.Date)
+               .HasColumnName("Date")
+               .IsRequired();
+
             #endregion
 
             #region Relationship

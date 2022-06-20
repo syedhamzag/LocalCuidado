@@ -116,7 +116,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [MaxLength(250)]
         public string Longitude { get; set; }
         public string PassportFilePath { get; set; }
-
+        public int ClientManager { get; set; }
+        public int Denture { get; set; }
+        public int Aid { get; set; }
 
         public List<PostClientInvolvingParty> InvolvingParties { get; set; }
         public List<PostClientRegulatoryContact> RegulatoryContacts { get; set; }

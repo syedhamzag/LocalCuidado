@@ -2,6 +2,7 @@
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.TaskBoard;
 using AwesomeCare.Admin.ViewModels.TaskBoard;
+using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -198,24 +199,46 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(int clientId, string pin)
+        {
+            var getmodal = await _taskService.GetPin();
+            if (pin != getmodal.Pin)
+                return RedirectToAction("HomeCare", "Client");
+            return RedirectToAction("Index", new { clientId = clientId });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string pin, List<int> Ids)
         {
-            if (pin == "2252")
-            {
-                List<GetTaskBoard> model = new List<GetTaskBoard>();
-                foreach (var item in Ids)
-                {
-                    GetTaskBoard getTask = new GetTaskBoard();
-                    getTask.TaskId = item;
-                    model.Add(getTask);
-                }
-                var result = await _taskService.Delete(model);
-                var content = await result.Content.ReadAsStringAsync();
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "Task Board successfully deleted" : "An Error Occurred" });
-                return RedirectToAction("Dashboard", "Dashboard");
-            }
+            var getmodal = await _taskService.GetPin();
+            if (pin != getmodal.Pin)
+                return RedirectToAction("Reports");
 
-            return RedirectToAction("Reports");
+            List<GetTaskBoard> model = new List<GetTaskBoard>();
+            foreach (var item in Ids)
+            {
+                GetTaskBoard getTask = new GetTaskBoard();
+                getTask.TaskId = item;
+                model.Add(getTask);
+            }
+            var result = await _taskService.Delete(model);
+            var content = await result.Content.ReadAsStringAsync();
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "Task Board successfully deleted" : "An Error Occurred" });
+            return RedirectToAction("Dashboard", "Dashboard");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePin(string newPin, string oldPin)
+        {
+            var getmodal = await _taskService.GetPin();
+            if (getmodal.Pin != oldPin)
+                return RedirectToAction("BaseRecord", "Admin");
+            var model = new PostRotaPin();
+            model.PinId = getmodal.PinId;
+            model.Pin = newPin;
+            var result = await _taskService.ChangePin(model);
+
+            return RedirectToAction("Dashboard", "Dashboard");
         }
     }
 }

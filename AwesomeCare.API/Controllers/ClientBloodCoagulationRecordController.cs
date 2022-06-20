@@ -128,7 +128,6 @@ namespace AwesomeCare.API.Controllers
             return Ok();
         }
         /// <summary>
-        /// Get ClientBloodCoagulationRecord by ProgramId
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

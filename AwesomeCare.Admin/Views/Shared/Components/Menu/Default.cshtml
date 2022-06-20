@@ -4,26 +4,33 @@
         <div class="sidebar-inner slimscroll">
             <div id="sidebar-menu" class="sidebar-menu">
                 <ul>
-                    <li class="menu-title">
-                        <span>Main</span>
-                    </li>
                     <li class="submenu">
                         <a href="#"><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
                         <ul style="display: none;">
                             <li><a class="active" href="/">Admin Dashboard</a></li>
-                            <li><a href="employee-dashboard.html">Employee Dashboard</a></li>
+                            <li><a asp-controller="Dashboard" asp-action="Client">Client Dashboard</a></li>
+                            <li><a asp-controller="Dashboard" asp-action="Employee" asp-route-staffId="2">Employee Dashboard</a></li>                         
                         </ul>
                     </li>
                     <li class="submenu">
-                        <a href="#"><i class="la la-cube"></i> <span> Clients</span> <span class="menu-arrow"></span></a>
+						<a href="#"><i class="la la-cube"></i> <span> Social</span> <span class="menu-arrow"></span></a>
+						<ul style="display: none;">
+							<li><a href="voicecall.html">Voice Call</a></li>
+							<li><a href="videocall.html">Video Call</a></li>
+							<li><a href="contacts.html">Chat</a></li>
+							<li><a href="inbox.html">Emails</a></li>
+						</ul>
+					</li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-users"></i> <span> Clients</span> <span class="menu-arrow"></span></a>
                         <ul style="display: none;">
                             <li class="submenu">
                                 <a href="#"><span> HomeCare</span> <span class="menu-arrow"></span></a>
                                 <ul style="display: none;">
-                                    <li><a asp-controller="Client" asp-action="HomeCare">Home Care Active</a></li>
-                                    <li><a asp-controller="Client" asp-action="HomeCareOther">Home Care Inactive</a></li>
+                                    <li><a asp-controller="Client" asp-action="HomeCare">Active Client</a></li>
+                                    <li><a asp-controller="Client" asp-action="HomeCareOther">Non-Active Client</a></li>
                                     <li><a asp-controller="Client" asp-action="HomeCareRegistration">Registration</a></li>
-                                    <li><a asp-controller="CarePlan" asp-action="Reports">Care Plan</a></li>
+                                    <li><a asp-controller="CarePlan" asp-action="Reports">Care Plan & Risk Assessment</a></li>
                                 </ul>
                             </li>
                             <li class="submenu">
@@ -32,9 +39,198 @@
                                     <li><a href="patients-all.html">All Patients</a></li>
                                 </ul>
                             </li>
+                            <li><a href="respite.html">Respite</a></li>
                         </ul>
                     </li>
-                    <li class="menu-title">
+					@*<li class="menu-title"> 
+						<span>Employees</span>
+					</li>*@
+					<li class="submenu">
+						<a href="#"><i class="la la-user"></i> <span> Employees</span> <span class="menu-arrow"></span></a>
+						<ul style="display: none;">
+                            <li><a asp-controller="User" asp-action="Index">All Users</a></li>
+                            <li><a asp-controller="Staff" asp-action="Index">Approved Staffs</a></li>
+                            <li><a asp-controller="Staff" asp-action="OtherStaff">Other Staffs</a></li>
+                            <li><a asp-controller="Staff" asp-action="Communication">Communication</a></li>
+                            <li><a href="non-activestaff.html">Non-Active Staff</a></li>                           
+                            <li><a asp-controller="StaffBlackList" asp-action="Index">Blacklist</a></li>
+                            <li><a href="leaves.html">Leave</a></li>
+                            <li><a href="attendance.html">Attendance</a></li>
+                            @*<li><a asp-controller="User" asp-action="Index">All Staffs</a></li>
+                            <li><a asp-controller="Staff" asp-action="Index">Approved Staffs</a></li>
+                            <li><a asp-controller="Staff" asp-action="OtherStaff">Other Staffs</a></li>
+                            <li><a asp-controller="Staff" asp-action="Communication">Communication</a></li>
+                            <li><a asp-route="CreateRota">Create Rota</a></li>
+                            <li><a asp-controller="Communication" asp-action="Index">Communication</a></li>
+                            <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
+                            <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>*@
+						</ul>
+					</li>
+					<li class="submenu">
+						<a href="#"><i class="la la-user-secret"></i> <span> Rotaring & Shift</span> <span class="menu-arrow"></span></a>
+						<ul style="display: none;">
+                            @*<li><a asp-controller="Admin" asp-action="BaseRecord">BaseRecord</a></li>
+                            <li><a asp-controller="OfficeLocation" asp-action="Index">Office Location</a></li>
+                            <li><a asp-controller="Admin" asp-action="InvolvingParty">Client Involving Party</a></li>*@
+                            <li><a asp-route="CreateRota">Send Rota</a></li>
+                            @*<li><a asp-controller="Rota" asp-action="Index">Send Rota</a></li>*@
+                            @*<li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>*@
+                            @*<li><a asp-controller="RotaTask" asp-action="Index">Task</a></li>
+                            <li><a asp-controller="Admin" asp-action="ClientCareDetailsHeading">Client CareDetails</a></li>
+                            <li><a asp-controller="UnTowards" asp-action="Index">UnTowards</a></li>*@
+                            <li><a asp-controller="ShiftBooking" asp-action="Index">Create Shift</a></li>
+                            <li><a asp-controller="ShiftBooking" asp-action="Index">Book Shift</a></li>
+                            <li><a asp-controller="ShiftBooking" asp-action="ShiftSchedule">View Shift</a></li>
+                            @*<li><a asp-controller="StaffWorkTeam" asp-action="Index">Staff Work Team</a></li>
+                            <li><a asp-controller="StaffRotaSelection" asp-action="Index">Staff Rota Item</a></li>
+                            <li><a asp-controller="Rotering" asp-action="RotaAdmin">Rota Admin</a></li>
+                            <li><a asp-controller="Rotering" asp-action="LiveRota">Live Tracker</a></li>
+                            <li><a asp-controller="Rotering" asp-action="RotaReport">Rota Report</a></li>
+                            <li><a asp-controller="Medication" asp-action="Index">Medications</a></li>
+                            <li><a asp-controller="MedicationManufacturer" asp-action="Index">Manufacturers</a></li>
+                            <li><a asp-controller="Enotice" asp-action="Reports">Enotice</a></li>
+                            <li><a asp-controller="IncomingMeds" asp-action="Reports">Incoming Meds</a></li>
+                            <li><a asp-controller="Resources" asp-action="Reports">Resources</a></li>
+                            <li><a asp-controller="WhisttleBlower" asp-action="Reports">Whisttle Blower</a></li>*@
+						</ul>
+					</li>
+					<li class="submenu">
+						<a href="#"><i class="la la-ticket"></i> <span> Duty/OnCall</span> <span class="menu-arrow"></span></a>
+						<ul style="display: none;">
+                            <li><a asp-controller="Communication" asp-action="Index">Communication</a>
+                            <ul style="display: none;">
+                                <li><a href="attendance-employee.html">Office Hours</a></li>
+                                <li><a href="departments.html">Oncall Hours</a></li>
+                            </ul>
+                            </li>
+                            <li><a asp-controller="HospitalEntry" asp-action="Reports">Hospital Entry</a></li>
+                            <li><a asp-controller="EHospitalExit" asp-action="Reports">Hospital Exit</a></li>
+                        </ul>
+					</li>
+					<li class="submenu">
+						<a href="#"><i class="la la-edit"></i> <span> Tracker/ECM</span> <span class="menu-arrow"></span></a>
+						<ul style="display: none;">
+                            <li><a asp-controller="Rotering" asp-action="OfficeAttendance">Office Attendance</a></li>
+                            <li><a asp-controller="StaffAdlObs" asp-action="Reports">ADL Live Tracker</a></li>
+                            <li><a asp-controller="Medication" asp-action="MedTracker">Medication Live Tracker</a></li>
+                            <li><a asp-controller="Medication" asp-action="Index">New Incoming Medications</a></li>
+                            <li><a asp-controller="TrackingConcernNote" asp-action="Index">Tracker Concerns</a></li>
+                            <li><a asp-controller="Rotering" asp-action="LiveRota">Tracker Report</a></li>
+                        </ul>
+					</li>
+                    <li class="submenu">
+						<a href="#"><i class="la la-crosshairs"></i> <span> Incoming</span> <span class="menu-arrow"></span></a>
+						<ul style="display: none;">
+                            <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
+                            <li><a asp-controller="Medication" asp-action="Index">New Incoming Medications</a></li>
+                            <li><a asp-controller="WhisttleBlower" asp-action="Reports">Whisttle Blower</a></li>
+                        </ul>
+					</li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-user"></i><span> Forms &amp; Logs</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a href="Customizedlogbook.html">Customized Logbook</a></li>
+                            <li><a href="customizedmedicationchart.html">Customized Medication Chart</a></li>                            
+                            <li><a asp-controller="Reporting" asp-action="EmptyLog">Empty Log Book</a></li>
+                            <li><a asp-controller="Reporting" asp-action="FilledLog">Filled Log Book</a></li>
+                            <li><a href="Fillededicationchart.html">Filled Medication Chart</a></li>  
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-pie-chart"></i><span> Manager </span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="PerformanceIndicator" asp-action="Reports">Performance Indicator</a></li>
+                            <li><a asp-controller="UnTowards" asp-action="Index">UnTowards Notifications</a></li>
+                            <li><a href="nursing-home.html">CQC Notifications</a></li>
+                            <li><a href="nursing-home.html">Monthly Report</a></li>
+                            <li><a asp-controller="HealthLiving" asp-action="Reports">Health And Safety</a></li>
+                            <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
+                            @*<li><a asp-controller="StaffBlackList" asp-action="Index">Blacklist</a></li>
+                            <li><a href="nursing-hkome.html">Newsletter</a></li>
+                            <li><a href="nursing-home.html">Birthdays</a></li>
+                            <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
+                            <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
+                            <li><a href="nursing-home.html">Meetings</a></li>
+                            <li><a href="nursing-home.html">Client Matrix</a></li>*@
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-money"></i><span> Audit/Monitoring </span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="ClientLogAudit" asp-action="Reports">Log Audit</a></li>
+                            <li><a asp-controller="ClientMedAudit" asp-action="Reports">Medication Admin Audit</a></li>
+                            <li><a asp-controller="CarePlan" asp-action="Reports">Care Plan Review</a></li>
+                            <li><a href="nursing-home.html">Staff File Review</a></li>
+                            <li><a href="nursing-home.html">Quality Assurance</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-graduation-cap"></i><span> Human Resources </span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="SetupStaffHoliday" asp-action="Reports">Leave and Holiday Admin</a></li>
+                            <li><a href="nursing-home.html">Attendance Admin</a></li>
+                            <li><a href="timesheet.html">Timesheet</a></li>
+                            <li><a href="nursing-home.html">Trainings</a></li>
+                            <li><a href="jobs.html"> Jobs </a></li>
+                            <li><a href="nursing-home.html">Contracts</a></li>
+                            <li><a href="nursing-home.html">Promotion</a></li>
+                            <li><a href="nursing-home.html">Transfers</a></li>
+                            <li><a href="nursing-home.html">Resignation</a></li>
+                            <li><a href="nursing-home.html">Job Descriptions</a></li>
+                            <li><a href="nursing-home.html">Fixed Asset Register</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-object-ungroup"></i> <span> Finance</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li class="submenu">
+                                <a href="#"><span> Accounting</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-controller="Rotering" asp-action="TrackerReport">Tracker Report</a></li>
+                                    <li><a asp-controller="Payroll" asp-action="Reports">Payroll Schedule</a></li>
+                                    <li><a href="respite.html">Profit and loss</a></li>
+                                    <li><a href="respite.html">Balance Sheet</a></li>
+                                    <li><a href="respite.html">Fixed Asset Register</a></li>
+                                    <li><a href="respite.html">Budget Expenses</a></li>
+                                    <li><a href="respite.html">Budget Income</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="#"><span> Payment</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a href="patients-all.html">Payroll</a></li>
+                                    <li><a href="respite.html">Payslip</a></li>
+                                    <li><a href="respite.html">Staff Rate</a></li>
+                                    <li><a href="respite.html">Taxes</a></li>
+                                    <li><a href="respite.html">Deductions</a></li>
+                                    <li><a href="respite.html">Credits</a></li>
+                                    <li><a href="respite.html">NI</a></li>
+                                    <li><a href="respite.html">Pension</a></li>
+                                    <li><a href="respite.html">Ownership Bonus</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-briefcase"></i><span>Knowledge Base</span><span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Enotice" asp-action="Reports">Enotice</a></li>
+                            <li><a asp-controller="Resources" asp-action="Reports">Resource Materials</a></li>
+                            <li><a href="nursing-home.html">Newsletter</a></li>
+                            <li><a href="nursing-home.html">Local Authority</a></li>
+                            <li><a href="nursing-home.html">CQC</a></li>
+                            <li><a href="nursing-home.html">WHO</a></li>                           
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-bell"></i><span>Distance Finder</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Reporting" asp-action="DistanceFinder">Clients</a></li>
+                            <li><a asp-controller="Reporting" asp-action="DistanceFinder">Employees</a></li>                        
+                        </ul>
+                    </li>
+
+                    @*<li class="menu-title">
                         <span>Staff</span>
                     </li>
                     <li class="submenu">
@@ -61,17 +257,46 @@
                             <li><a href="shift-scheduling.html">Shift & Schedule</a></li>
                             <li><a href="overtime.html">Overtime</a></li>
                         </ul>
-                    </li>
-                    <li class="menu-title">
+                    </li>*@
+
+                    @*<li class="menu-title">
                         <span>Administration</span>
-                    </li>
+                    </li>*@
                     <li class="submenu">
-                        <a href="#" class="noti-dot"><i class="la la-user"></i> <span> Admin</span> <span class="menu-arrow"></span></a>
+                        <a href="#"><i class="la la-user"></i> <span> Admin</span> <span class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a asp-controller="Admin" asp-action="BaseRecord">BaseRecord</a></li>
+                            <li><a asp-controller="Admin" asp-action="BaseRecord">Base Record</a></li>
+                            <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
+                            <li class="submenu">
+                                <a href="#"><span> Rota</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
+                                    <li><a href="respite.html">Task Settings</a></li>
+                                    <li><a asp-controller="StaffRotaSelection" asp-action="Index">Rota Item</a></li>
+                                </ul>
+                            </li>
+                            <li><a asp-controller="Medication" asp-action="Index">Medications</a></li>
+                            <li class="submenu">
+                                <a href="#"><span> Medication</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-controller="StaffRotaSelection" asp-action="Index">New Medication Settings</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="leave-settings.html">Leave Setting</a></li>
+                            <li><a href="leave-settings.html">Attendance Settings</a></li>
+                            <li><a href="leave-settings.html">Departments</a></li>
+                            <li><a href="leave-settings.html">Designations</a></li>
+                            <li><a href="leave-settings.html">Managers</a></li>
+                            <li><a href="leave-settings.html">Performance and Indicator settings</a></li> 
+                            <li><a href="leave-settings.html">Training Settings</a></li>
+                            <li><a href="leave-settings.html">Shift and Booking settings</a></li>
+                            <li><a href="leave-settings.html">Payroll</a></li>
+                            <li><a href="leave-settings.html">Assets</a></li>
+                            <li><a href="leave-settings.html">Accounting</a></li>
+                            <li><a href="leave-settings.html">Matrix employees</a></li>
+                            <li><a href="leave-settings.html">Matrix Clients</a></li>                            
                             <li><a asp-controller="OfficeLocation" asp-action="Index">Office Location</a></li>
                             <li><a asp-controller="Admin" asp-action="InvolvingParty">Client Involving Party</a></li>
-                            <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
                             <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
                             <li><a asp-controller="RotaTask" asp-action="Index">Task</a></li>
                             <li><a asp-controller="Admin" asp-action="ClientCareDetailsHeading">Client CareDetails</a></li>
@@ -91,7 +316,7 @@
                             <li><a asp-controller="WhisttleBlower" asp-action="Reports">Whisttle Blower</a></li>
                         </ul>
                     </li>
-                    <li>
+                    @*<li>
                         <a href="assets.html"><i class="la la-object-ungroup"></i> <span>Assets</span></a>
                     </li>
                     <li class="submenu">
@@ -104,23 +329,36 @@
                             <li><a href="shortlist-candidates.html"> Shortlist Candidates </a></li>
                             <li><a href="interview-questions.html"> Interview Questions </a></li>
                             <li><a href="offer_approvals.html"> Offer Approvals </a></li>
-                            <li><a href="experiance-level.html"> Experience Level </a></li>
+                            <li><a href="experiatnce-level.html"> Experience Level </a></li>
                             <li><a href="candidates.html"> Candidates List </a></li>
                             <li><a href="schedule-timing.html"> Schedule timing </a></li>
                             <li><a href="apptitude-result.html"> Aptitude Results </a></li>
                         </ul>
+                    </li>*@
+                    <li>
+                        <a href="knowledgebase.html"><i class="la la-question"></i> <span>Tickets</span></a>
                     </li>
                     <li>
-                        <a href="knowledgebase.html"><i class="la la-question"></i> <span>Knowledgebase</span></a>
+                        <a href="activities.html"><i class="la la-bell"></i> <span>Leads</span></a>
                     </li>
                     <li>
-                        <a href="activities.html"><i class="la la-bell"></i> <span>Activities</span></a>
+                        <a href="users.html"><i class="la la-user-plus"></i> <span>Meetings and Calendar</span></a>
                     </li>
                     <li>
-                        <a href="users.html"><i class="la la-user-plus"></i> <span>Users</span></a>
+                        <a href="users.html"><i class="la la-user-plus"></i> <span>Projects</span></a>
                     </li>
                     <li>
-                        <a href="settings.html"><i class="la la-cog"></i> <span>Settings</span></a>
+                        <a href="users.html"><i class="la la-user-plus"></i> <span>Activities</span></a>
+                    </li>
+                    <li>
+                        <a href="settings.html"><i class="la la-cog"></i> <span>Company Settings</span></a>
+                    </li>
+                    <li>
+                        <a href="knowledgebase.html"><i class="la la-briefcase"></i> <span>Downloads</span></a>
+                    </li>
+
+                    <li class="menu-title">
+                        <span>OLD Menus</span>
                     </li>
                     <li class="menu-title">
                         <span>Reporting</span>
@@ -152,6 +390,7 @@
                                     <li><a asp-controller="ClientHeartRate" asp-action="Reports">Heart Rate</a></li>
                                     <li><a asp-controller="ClientOxygenLvl" asp-action="Reports">Oxygen Level</a></li>
                                     <li><a asp-controller="ClientWoundCare" asp-action="Reports">Wound Care</a></li>
+                                    <li><a asp-controller="ClientCareObj" asp-action="Reports">Care Objectives</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -283,7 +522,7 @@
                     <li class="submenu">
                         <a href="#"><span>Manager</span> <span class="menu-arrow"></span></a>
                         <ul style="display: none;">
-                            <li><a href="nursing-home.html">Duty/Oncall Report</a></li>
+                            <li><a asp-controller="PerformanceIndicator" asp-action="Reports">Performance Indicator</a></li>
                             <li><a asp-controller="UnTowards" asp-action="Index">UnTowards</a></li>
                             <li><a href="nursing-home.html">CQC Notifications</a></li>
                             <li><a asp-controller="StaffBlackList" asp-action="Index">Blacklist</a></li>
@@ -293,6 +532,7 @@
                             <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
                             <li><a href="nursing-home.html">Meetings</a></li>
                             <li><a href="nursing-home.html">Client Matrix</a></li>
+                            <li><a href="nursing-home.html">Duty/Oncall Report</a></li>
                         </ul>
                     </li>
                     <li class="menu-title">
@@ -607,10 +847,626 @@
                                 </nav>
                             </div>
                         </div>*@
+                </ul>        
             </div>
         </div>
     </div>
 </div>
+@*@using IdentityServer4.Extensions;
+<div class="main-wrapper">
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-inner slimscroll">
+            <div id="sidebar-menu" class="sidebar-menu">
+                <ul>
+                    <li class="menu-title">
+                        <span>Main</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-dashboard"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a class="active" href="/">Admin Dashboard</a></li>
+                            <li><a href="employee-dashboard.html">Employee Dashboard</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-cube"></i> <span> Clients</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li class="submenu">
+                                <a href="#"><span> HomeCare</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-controller="Client" asp-action="HomeCare">Home Care Active</a></li>
+                                    <li><a asp-controller="Client" asp-action="HomeCareOther">Home Care Inactive</a></li>
+                                    <li><a asp-controller="Client" asp-action="HomeCareRegistration">Registration</a></li>
+                                    <li><a asp-controller="CarePlan" asp-action="Reports">Care Plan</a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="#"><span> Nursing Home</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a href="patients-all.html">All Patients</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Staff</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#" class="noti-dot"><i class="la la-user"></i> <span> Staff</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="User" asp-action="Index">All Staffs</a></li>
+                            <li><a asp-controller="Staff" asp-action="Index">Approved Staffs</a></li>
+                            <li><a asp-controller="Staff" asp-action="OtherStaff">Other Staffs</a></li>
+                            <li><a asp-controller="Staff" asp-action="Communication">Communication</a></li>
+                            <li><a asp-route="CreateRota">Create Rota</a></li>
+                            <li><a asp-controller="StaffBlackList" asp-action="Index">Staff Blacklist</a></li>
+                            <li><a asp-controller="Communication" asp-action="Index">Communication</a></li>
+                            <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
+                            <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
+                            <li><a href="holidays.html">Holidays</a></li>
+                            <li><a href="leaves.html">Leaves (Admin) <span class="badge rounded-pill bg-primary float-end">1</span></a></li>
+                            <li><a href="leaves-employee.html">Leaves (Employee)</a></li>
+                            <li><a href="leave-settings.html">Leave Settings</a></li>
+                            <li><a href="attendance.html">Attendance (Admin)</a></li>
+                            <li><a href="attendance-employee.html">Attendance (Employee)</a></li>
+                            <li><a href="departments.html">Departments</a></li>
+                            <li><a href="designations.html">Designations</a></li>
+                            <li><a href="timesheet.html">Timesheet</a></li>
+                            <li><a href="shift-scheduling.html">Shift & Schedule</a></li>
+                            <li><a href="overtime.html">Overtime</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Administration</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#" class="noti-dot"><i class="la la-user"></i> <span> Admin</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Admin" asp-action="BaseRecord">BaseRecord</a></li>
+                            <li><a asp-controller="OfficeLocation" asp-action="Index">Office Location</a></li>
+                            <li><a asp-controller="Admin" asp-action="InvolvingParty">Client Involving Party</a></li>
+                            <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
+                            <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
+                            <li><a asp-controller="RotaTask" asp-action="Index">Task</a></li>
+                            <li><a asp-controller="Admin" asp-action="ClientCareDetailsHeading">Client CareDetails</a></li>
+                            <li><a asp-controller="UnTowards" asp-action="Index">UnTowards</a></li>
+                            <li><a asp-controller="ShiftBooking" asp-action="Index">Shift Booking</a></li>
+                            <li><a asp-controller="ShiftBooking" asp-action="ViewShift">View Shift</a></li>
+                            <li><a asp-controller="StaffWorkTeam" asp-action="Index">Staff Work Team</a></li>
+                            <li><a asp-controller="StaffRotaSelection" asp-action="Index">Staff Rota Item</a></li>
+                            <li><a asp-controller="Rotering" asp-action="RotaAdmin">Rota Admin</a></li>
+                            <li><a asp-controller="Rotering" asp-action="LiveRota">Live Tracker</a></li>
+                            <li><a asp-controller="Rotering" asp-action="RotaReport">Rota Report</a></li>
+                            <li><a asp-controller="Medication" asp-action="Index">Medications</a></li>
+                            <li><a asp-controller="MedicationManufacturer" asp-action="Index">Manufacturers</a></li>
+                            <li><a asp-controller="Enotice" asp-action="Reports">Enotice</a></li>
+                            <li><a asp-controller="IncomingMeds" asp-action="Reports">Incoming Meds</a></li>
+                            <li><a asp-controller="Resources" asp-action="Reports">Resources</a></li>
+                            <li><a asp-controller="WhisttleBlower" asp-action="Reports">Whisttle Blower</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="assets.html"><i class="la la-object-ungroup"></i> <span>Assets</span></a>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-briefcase"></i> <span> Jobs </span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a href="user-dashboard.html"> User Dasboard </a></li>
+                            <li><a href="jobs-dashboard.html"> Jobs Dasboard </a></li>
+                            <li><a href="jobs.html"> Manage Jobs </a></li>
+                            <li><a href="manage-resumes.html"> Manage Resumes </a></li>
+                            <li><a href="shortlist-candidates.html"> Shortlist Candidates </a></li>
+                            <li><a href="interview-questions.html"> Interview Questions </a></li>
+                            <li><a href="offer_approvals.html"> Offer Approvals </a></li>
+                            <li><a href="experiance-level.html"> Experience Level </a></li>
+                            <li><a href="candidates.html"> Candidates List </a></li>
+                            <li><a href="schedule-timing.html"> Schedule timing </a></li>
+                            <li><a href="apptitude-result.html"> Aptitude Results </a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="knowledgebase.html"><i class="la la-question"></i> <span>Knowledgebase</span></a>
+                    </li>
+                    <li>
+                        <a href="activities.html"><i class="la la-bell"></i> <span>Activities</span></a>
+                    </li>
+                    <li>
+                        <a href="users.html"><i class="la la-user-plus"></i> <span>Users</span></a>
+                    </li>
+                    <li>
+                        <a href="settings.html"><i class="la la-cog"></i> <span>Settings</span></a>
+                    </li>
+                    <li class="menu-title">
+                        <span>Reporting</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><i class="la la-cube"></i> <span> Reporting</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li class="submenu">
+                                <a href="#"><span> Client</span> <span class="menu-arrow"></span></a>
+                                <ul style="display: none;">
+                                    <li><a asp-controller="Complain" asp-action="Index">Complain Register</a></li>
+                                    <li><a asp-controller="Nutrition" asp-action="List">Nutrition</a></li>
+                                    <li><a asp-controller="ClientLogAudit" asp-action="Reports">Log Audit</a></li>
+                                    <li><a asp-controller="ClientMedAudit" asp-action="Reports">Med Audit</a></li>
+                                    <li><a asp-controller="ClientVoice" asp-action="Reports">Client Voice</a></li>
+                                    <li><a asp-controller="ClientMgtVisit" asp-action="Reports">MGT Visit</a></li>
+                                    <li><a asp-controller="ClientProgram" asp-action="Reports">Program</a></li>
+                                    <li><a asp-controller="ClientServiceWatch" asp-action="Reports">Ongoing/Service Watch</a></li>
+                                    <li><a asp-controller="ClientBloodCoagulationRecord" asp-action="Reports">Blood Coagulation</a></li>
+                                    <li><a asp-controller="ClientBloodPressure" asp-action="Reports">Blood Pressure</a></li>
+                                    <li><a asp-controller="ClientBowelMovement" asp-action="Reports">Bowel Movement</a></li>
+                                    <li><a asp-controller="ClientFoodIntake" asp-action="Reports">Food Intake</a></li>
+                                    <li><a asp-controller="ClientPainChart" asp-action="Reports">Pain Chart</a></li>
+                                    <li><a asp-controller="ClientBMIChart" asp-action="Reports">BMI Chart</a></li>
+                                    <li><a asp-controller="ClientPulseRate" asp-action="Reports">Pulse Rate</a></li>
+                                    <li><a asp-controller="ClientSeizure" asp-action="Reports">Seizure</a></li>
+                                    <li><a asp-controller="ClientBodyTemp" asp-action="Reports">BodyTemp</a></li>
+                                    <li><a asp-controller="ClientEyeHealthMonitoring" asp-action="Reports">Eye Health</a></li>
+                                    <li><a asp-controller="ClientHeartRate" asp-action="Reports">Heart Rate</a></li>
+                                    <li><a asp-controller="ClientOxygenLvl" asp-action="Reports">Oxygen Level</a></li>
+                                    <li><a asp-controller="ClientWoundCare" asp-action="Reports">Wound Care</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span> Care Plan</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="PersonalDetail" asp-action="Reports">Personal Detail</a></li>
+                            <li><a asp-controller="Balance" asp-action="Reports">Balance</a></li>
+                            <li><a asp-controller="HistoryOfFall" asp-action="Reports">History Of Fall</a></li>
+                            <li><a asp-controller="HealthLiving" asp-action="Reports">Health And Living</a></li>
+                            <li><a asp-controller="PhysicalAbility" asp-action="Reports">Physical Ability</a></li>
+                            <li><a asp-controller="SpecialHealthAndMedication" asp-action="Reports">Special Health And Medication</a></li>
+                            <li><a asp-controller="SpecialHealthCondition" asp-action="Reports">Special Health Condition</a></li>
+                            <li><a asp-controller="CarePlanNutrition" asp-action="Reports">CarePlan Nutrition</a></li>
+                            <li><a asp-controller="PersonalHygiene" asp-action="Reports">Personal Hygiene</a></li>
+                            <li><a asp-controller="InfectionControl" asp-action="Reports">Infection Control</a></li>
+                            <li><a asp-controller="ManagingTasks" asp-action="Reports">Managing Tasks</a></li>
+                            <li><a asp-controller="InterestAndObjective" asp-action="Reports">Interest And Objective</a></li>
+                            <li><a asp-controller="Pets" asp-action="Reports">Pets</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span> Staff</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="StaffSpotCheck" asp-action="Reports">Spot Check</a></li>
+                            <li><a asp-controller="StaffAdlObs" asp-action="Reports">Adl Observation</a></li>
+                            <li><a asp-controller="StaffMedComp" asp-action="Reports">Med Comp. Observation</a></li>
+                            <li><a asp-controller="StaffKeyWorkerVoice" asp-action="Reports">Key Worker Voice</a></li>
+                            <li><a asp-controller="StaffSurvey" asp-action="Reports">Survey</a></li>
+                            <li><a asp-controller="StaffOneToOne" asp-action="Reports">One To One</a></li>
+                            <li><a asp-controller="StaffSupervisionAppraisal" asp-action="Reports">Supervision Appraisal</a></li>
+                            <li><a asp-controller="StaffReference" asp-action="Reports">Reference</a></li>
+                            <li><a asp-controller="TaskBoard" asp-action="Reports">Task Board</a></li>
+                            <li><a asp-controller="StaffPersonalityTest" asp-action="Reports">Personality Test</a></li>
+                            <li><a asp-controller="StaffInfectionControl" asp-action="Reports">Infection Control</a></li>
+                            <li><a asp-controller="StaffHoliday" asp-action="Reports">Holiday</a></li>
+                            <li><a asp-controller="StaffTeamLead" asp-action="Reports">Staff Team Lead</a></li>
+                            <li><a asp-controller="StaffTax" asp-action="Reports">Staff Tax</a></li>
+                            <li><a asp-controller="SalaryAllowance" asp-action="Reports">Salary Allowance</a></li>
+                            <li><a asp-controller="SalaryDeduction" asp-action="Reports">Salary Deduction</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="menu-title">
+                        <span>Forms &amp; Logs</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span> Forms &amp; Logs</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Reporting" asp-action="EmptyLog">Empty Log Book</a></li>
+                            <li><a asp-controller="Reporting" asp-action="FilledLog">Filled Log Book</a></li>
+                            <li><a asp-controller="Reporting" asp-action="DistanceFinder">Distance Finder</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Rota &amp; Scheduling</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Rota &amp; Scheduling</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Reporting" asp-action="DistanceFinder">Distance Finder</a></li>
+                            <li><a asp-controller="ShiftBooking" asp-action="Index">CreateStaffShift</a></li>
+                            <li><a asp-controller="Rota" asp-action="Index">View Rota</a></li>
+                            <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
+                            <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Tracker</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Tracker</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Rotering" asp-action="LiveRota">Live Tracker</a></li>
+                            <li><a asp-controller="StaffAdlObs" asp-action="Reports">Adl Tracker</a></li>
+                            <li><a asp-controller="Medication" asp-action="Index">Incoming Medication</a></li>
+                            <li><a asp-controller="Rotering" asp-action="LiveRota">Tracker Report</a></li>
+                            <li><a asp-controller="TrackingConcernNote" asp-action="Index">Tracker Feedback</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Bookings</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Bookings</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="ShiftBooking" asp-action="Index">Shift Booking</a></li>
+                            <li><a asp-controller="ShiftBooking" asp-action="ViewShift">View Shift</a></li>
+                            <li><a asp-controller="ShiftBooking" asp-action="Index">Create Shift</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Resources</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Resources</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Enotice" asp-action="Reports">Enotice</a></li>
+                            <li><a href="policy.html">Policy</a></li>
+                            <li><a asp-controller="Resources" asp-action="Reports">Resources</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Duty</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Duty</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="DutyOnCall" asp-action="Reports">UnTowards</a></li>
+                            <li><a asp-controller="HospitalEntry" asp-action="Reports">Hospital Admission</a></li>
+                            <li><a asp-controller="EHospitalExit" asp-action="Reports">Hospital Discharge</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Client</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Client</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Client" asp-action="HomeCare">Home Care</a></li>
+                            <li><a href="nursing-home.html">Nursing Home</a></li>
+                            <li><a asp-controller="RotaTask" asp-action="Index">Tasks</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Manager</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Manager</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a href="nursing-home.html">Duty/Oncall Report</a></li>
+                            <li><a asp-controller="UnTowards" asp-action="Index">UnTowards</a></li>
+                            <li><a href="nursing-home.html">CQC Notifications</a></li>
+                            <li><a asp-controller="StaffBlackList" asp-action="Index">Blacklist</a></li>
+                            <li><a href="nursing-home.html">Newsletter</a></li>
+                            <li><a href="nursing-home.html">Birthdays</a></li>
+                            <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
+                            <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
+                            <li><a href="nursing-home.html">Meetings</a></li>
+                            <li><a href="nursing-home.html">Client Matrix</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Accounts</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Accounts</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="Payroll" asp-action="Reports">Payroll Schedule</a></li>
+                            <li><a href="nursing-home.html">Payroll</a></li>
+                            <li><a href="nursing-home.html">Payslip</a></li>
+                            <li><a href="nursing-home.html">Invoices</a></li>
+                            <li><a href="nursing-home.html">Local Authority Financial Report</a></li>
+                            <li><a href="nursing-home.html">Income andExpenses Account</a></li>
+                            <li><a href="nursing-home.html">Assets Registered</a></li>
+                            <li><a asp-controller="Staff" asp-action="StaffRate">Staff Rate</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Audit</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Audit</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a href="nursing-home.html">Filled Communication Log</a></li>
+                            <li><a href="nursing-home.html">Filled Mar Chart</a></li>
+                            <li><a asp-controller="PerformanceIndicator" asp-action="Reports">Performance Indicator</a></li>
+                            <li><a href="nursing-home.html">Monthly CarePlan Review</a></li>
+                            <li><a href="nursing-home.html">Monthly staff Review</a></li>
+                            <li><a href="nursing-home.html">Monthly Medication Review</a></li>
+                            <li><a href="nursing-home.html">Monthly Communication Log</a></li>
+                            <li><a href="nursing-home.html">Quality Assurance Report</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>Human Resources</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Human Resources</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a asp-controller="SetupStaffHoliday" asp-action="Reports">Setup Staff Holiday</a></li>
+                            <li><a href="nursing-home.html">Recruitment Matrix</a></li>
+                            <li><a href="nursing-home.html">Staff Matrix</a></li>
+                            <li><a href="nursing-home.html">Trainings</a></li>
+                            <li><a href="nursing-home.html">Attendance</a></li>
+                            <li><a href="nursing-home.html">Query</a></li>
+                            <li><a href="nursing-home.html">Promotion</a></li>
+                            <li><a href="nursing-home.html">Appraisals</a></li>
+                            <li><a href="nursing-home.html">Resignation</a></li>
+                            <li><a href="nursing-home.html">Transfer/Duty Change</a></li>
+                            <li><a href="nursing-home.html">Job Descriptions</a></li>
+                            <li><a href="nursing-home.html">Meetings</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-title">
+                        <span>News</span>
+                    </li>
+                    <li class="submenu">
+                        <a href="#"><span>Human Resources</span> <span class="menu-arrow"></span></a>
+                        <ul style="display: none;">
+                            <li><a href="nursing-home.html">CQC</a></li>
+                            <li><a href="nursing-home.html">Local Authorities</a></li>
+                            <li><a href="nursing-home.html">General News</a></li>
+                            <li><a href="nursing-home.html">Health News</a></li>
+                        </ul>
+                    </li>
+                    <!-- Tab panes -->
+                    @*<div class="tab-content p-l-0 p-r-0">
+                            <div class="tab-pane active" id="menu">
+                                <nav class="sidebar-nav">
+                                    <ul class="main-menu metismenu">
+                                        <li class="active"><a href="/"><i class="icon-home"></i><span>Dashboard</span></a></li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Client</span> </a>
+                                            <ul>
+                                                <li><label>Home Care</label></li>
+                                                <li><a asp-controller="Client" asp-action="HomeCare">Home Care Active</a></li>
+                                                <li><a asp-controller="Client" asp-action="HomeCareOther">Home Care Inactive</a></li>
+                                                <li><a asp-controller="Client" asp-action="HomeCareRegistration">Registration</a></li>
+                                                <li><a asp-controller="CarePlan" asp-action="Reports">Care Plan</a></li>
+                                                <li><label>Nursing Home</label></li>
+                                                <li><a href="patients-all.html">All Patients</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Staff</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="User" asp-action="Index">All Users</a></li>
+                                                <li><a asp-controller="Staff" asp-action="Index">Approved Staffs</a></li>
+                                                <li><a asp-controller="Staff" asp-action="OtherStaff">Other Staffs</a></li>
+                                                <li><a asp-controller="Staff" asp-action="Communication">Communication</a></li>
+                                                <li><a asp-route="CreateRota">Create Rota</a></li>
+                                                <li><a asp-controller="StaffBlackList" asp-action="Index">Staff Blacklist</a></li>
+                                                <li><a asp-controller="Communication" asp-action="Index">Communication</a></li>
+                                                <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
+                                                <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
+
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user"></i><span>Admin</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="Admin" asp-action="BaseRecord">BaseRecord</a></li>
+                                                <li><a asp-controller="OfficeLocation" asp-action="Index">Office Location</a></li>
+                                                <li><a asp-controller="Admin" asp-action="InvolvingParty">Client Involving Party</a></li>
+                                                <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
+                                                <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
+                                                <li><a asp-controller="RotaTask" asp-action="Index">Task</a></li>
+                                                <li><a asp-controller="Admin" asp-action="ClientCareDetailsHeading">Client CareDetails</a></li>
+                                                <li><a asp-controller="UnTowards" asp-action="Index">UnTowards</a></li>
+                                                <li><a asp-controller="ShiftBooking" asp-action="Index">Shift Booking</a></li>
+                                                <li><a asp-controller="ShiftBooking" asp-action="ViewShift">View Shift</a></li>
+                                                <li><a asp-controller="StaffWorkTeam" asp-action="Index">Staff Work Team</a></li>
+                                                <li><a asp-controller="StaffRotaSelection" asp-action="Index">Staff Rota Item</a></li>
+                                                <li><a asp-controller="Rotering" asp-action="RotaAdmin">Rota Admin</a></li>
+                                                <li><a asp-controller="Rotering" asp-action="LiveRota">Live Tracker</a></li>
+                                                <li><a asp-controller="Rotering" asp-action="RotaReport">Rota Report</a></li>
+                                                <li><a asp-controller="Medication" asp-action="Index">Medications</a></li>
+                                                <li><a asp-controller="MedicationManufacturer" asp-action="Index">Manufacturers</a></li>
+                                                <li><a asp-controller="Enotice" asp-action="Reports">Enotice</a></li>
+                                                <li><a asp-controller="IncomingMeds" asp-action="Reports">Incoming Meds</a></li>
+                                                <li><a asp-controller="Resources" asp-action="Reports">Resources</a></li>
+                                                <li><a asp-controller="WhisttleBlower" asp-action="Reports">Whisttle Blower</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-wallet"></i><span>Reporting</span> </a>
+                                            <ul>
+                                                <li><label>Client</label></li>
+                                                <li><a asp-controller="Complain" asp-action="Index">Complain Register</a></li>
+                                                <li><a asp-controller="Nutrition" asp-action="List">Nutrition</a></li>
+                                                <li><a asp-controller="ClientLogAudit" asp-action="Reports">Log Audit</a></li>
+                                                <li><a asp-controller="ClientMedAudit" asp-action="Reports">Med Audit</a></li>
+                                                <li><a asp-controller="ClientVoice" asp-action="Reports">Client Voice</a></li>
+                                                <li><a asp-controller="ClientMgtVisit" asp-action="Reports">MGT Visit</a></li>
+                                                <li><a asp-controller="ClientProgram" asp-action="Reports">Program</a></li>
+                                                <li><a asp-controller="ClientServiceWatch" asp-action="Reports">Ongoing/Service Watch</a></li>
+                                                <li><a asp-controller="ClientBloodCoagulationRecord" asp-action="Reports">Blood Coagulation</a></li>
+                                                <li><a asp-controller="ClientBloodPressure" asp-action="Reports">Blood Pressure</a></li>
+                                                <li><a asp-controller="ClientBowelMovement" asp-action="Reports">Bowel Movement</a></li>
+                                                <li><a asp-controller="ClientFoodIntake" asp-action="Reports">Food Intake</a></li>
+                                                <li><a asp-controller="ClientPainChart" asp-action="Reports">Pain Chart</a></li>
+                                                <li><a asp-controller="ClientBMIChart" asp-action="Reports">BMI Chart</a></li>
+                                                <li><a asp-controller="ClientPulseRate" asp-action="Reports">Pulse Rate</a></li>
+                                                <li><a asp-controller="ClientSeizure" asp-action="Reports">Seizure</a></li>
+                                                <li><a asp-controller="ClientBodyTemp" asp-action="Reports">BodyTemp</a></li>
+                                                <li><a asp-controller="ClientEyeHealthMonitoring" asp-action="Reports">Eye Health</a></li>
+                                                <li><a asp-controller="ClientHeartRate" asp-action="Reports">Heart Rate</a></li>
+                                                <li><a asp-controller="ClientOxygenLvl" asp-action="Reports">Oxygen Level</a></li>
+                                                <li><a asp-controller="ClientWoundCare" asp-action="Reports">Wound Care</a></li>
+                                                <li><label>Care Plan</label></li>
+                                                <li><a asp-controller="PersonalDetail" asp-action="Reports">Personal Detail</a></li>
+                                                <li><a asp-controller="Balance" asp-action="Reports">Balance</a></li>
+                                                <li><a asp-controller="HistoryOfFall" asp-action="Reports">History Of Fall</a></li>
+                                                <li><a asp-controller="HealthLiving" asp-action="Reports">Health And Living</a></li>
+                                                <li><a asp-controller="PhysicalAbility" asp-action="Reports">Physical Ability</a></li>
+                                                <li><a asp-controller="SpecialHealthAndMedication" asp-action="Reports">Special Health And Medication</a></li>
+                                                <li><a asp-controller="SpecialHealthCondition" asp-action="Reports">Special Health Condition</a></li>
+                                                <li><a asp-controller="CarePlanNutrition" asp-action="Reports">CarePlan Nutrition</a></li>
+                                                <li><a asp-controller="PersonalHygiene" asp-action="Reports">Personal Hygiene</a></li>
+                                                <li><a asp-controller="InfectionControl" asp-action="Reports">Infection Control</a></li>
+                                                <li><a asp-controller="ManagingTasks" asp-action="Reports">Managing Tasks</a></li>
+                                                <li><a asp-controller="InterestAndObjective" asp-action="Reports">Interest And Objective</a></li>
+                                                <li><a asp-controller="Pets" asp-action="Reports">Pets</a></li>
+                                                <li><label>Staff</label></li>
+                                                <li><a asp-controller="StaffSpotCheck" asp-action="Reports">Spot Check</a></li>
+                                                <li><a asp-controller="StaffAdlObs" asp-action="Reports">Adl Observation</a></li>
+                                                <li><a asp-controller="StaffMedComp" asp-action="Reports">Med Comp. Observation</a></li>
+                                                <li><a asp-controller="StaffKeyWorkerVoice" asp-action="Reports">Key Worker Voice</a></li>
+                                                <li><a asp-controller="StaffSurvey" asp-action="Reports">Survey</a></li>
+                                                <li><a asp-controller="StaffOneToOne" asp-action="Reports">One To One</a></li>
+                                                <li><a asp-controller="StaffSupervisionAppraisal" asp-action="Reports">Supervision Appraisal</a></li>
+                                                <li><a asp-controller="StaffReference" asp-action="Reports">Reference</a></li>
+                                                <li><a asp-controller="TaskBoard" asp-action="Reports">Task Board</a></li>
+                                                <li><a asp-controller="StaffPersonalityTest" asp-action="Reports">Personality Test</a></li>
+                                                <li><a asp-controller="StaffInfectionControl" asp-action="Reports">Infection Control</a></li>
+                                                <li><a asp-controller="StaffHoliday" asp-action="Reports">Holiday</a></li>
+                                                <li><a asp-controller="StaffTeamLead" asp-action="Reports">Staff Team Lead</a></li>
+                                                <li><a asp-controller="StaffTax" asp-action="Reports">Staff Tax</a></li>
+                                                <li><a asp-controller="SalaryAllowance" asp-action="Reports">Salary Allowance</a></li>
+                                                <li><a asp-controller="SalaryDeduction" asp-action="Reports">Salary Deduction</a></li>
+
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-wallet"></i><span>Forms &amp; Logs</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="Reporting" asp-action="EmptyLog">Empty Log Book</a></li>
+                                                <li><a asp-controller="Reporting" asp-action="FilledLog">Filled Log Book</a></li>
+                                                <li><a asp-controller="Reporting" asp-action="DistanceFinder">Distance Finder</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-wallet"></i><span>Rota &amp; Scheduling</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="Reporting" asp-action="DistanceFinder">Distance Finder</a></li>
+                                                <li><a asp-controller="ShiftBooking" asp-action="Index">CreateStaffShift</a></li>
+                                                <li><a asp-controller="Rota" asp-action="Index">View Rota</a></li>
+                                                <li><a asp-controller="Rota" asp-action="Index">Rota</a></li>
+                                                <li><a asp-controller="RotaType" asp-action="Index">RotaType</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-wallet"></i><span>Tracker</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="Rotering" asp-action="LiveRota">Live Tracker</a></li>
+                                                <li><a asp-controller="StaffAdlObs" asp-action="Reports">Adl Tracker</a></li>
+                                                <li><a asp-controller="Medication" asp-action="Index">Incoming Medication</a></li>
+                                                <li><a asp-controller="Rotering" asp-action="LiveRota">Tracker Report</a></li>
+                                                <li><a asp-controller="TrackingConcernNote" asp-action="Index">Tracker Feedback</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-wallet"></i><span>Bookings</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="ShiftBooking" asp-action="Index">Shift Booking</a></li>
+                                                <li><a asp-controller="ShiftBooking" asp-action="ViewShift">View Shift</a></li>
+                                                <li><a asp-controller="ShiftBooking" asp-action="Index">Create Shift</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-wallet"></i><span>Resources</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="Enotice" asp-action="Reports">Enotice</a></li>
+                                                <li><a href="policy.html">Policy</a></li>
+                                                <li><a asp-controller="Resources" asp-action="Reports">Resources</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-wallet"></i><span>Duty</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="DutyOnCall" asp-action="Reports">UnTowards</a></li>
+                                                <li><a asp-controller="HospitalEntry" asp-action="Reports">Hospital Admission</a></li>
+                                                <li><a asp-controller="EHospitalExit" asp-action="Reports">Hospital Discharge</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Client</span> </a>
+                                            <ul>
+                                                <li><label>Home Care</label></li>
+                                                <li><a asp-controller="Client" asp-action="HomeCare">Home Care</a></li>
+                                                <li><a href="nursing-home.html">Nursing Home</a></li>
+                                                <li><a asp-controller="RotaTask" asp-action="Index">Tasks</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Manager</span> </a>
+                                            <ul>
+                                                <li><a href="nursing-home.html">Duty/Oncall Report</a></li>
+                                                <li><a asp-controller="UnTowards" asp-action="Index">UnTowards</a></li>
+                                                <li><a href="nursing-home.html">CQC Notifications</a></li>
+                                                <li><a asp-controller="StaffBlackList" asp-action="Index">Blacklist</a></li>
+                                                <li><a href="nursing-home.html">Newsletter</a></li>
+                                                <li><a href="nursing-home.html">Birthdays</a></li>
+                                                <li><a asp-controller="IncidentReporting" asp-action="Reports">Incident Reports</a></li>
+                                                <li><a asp-controller="Investigation" asp-action="Index">Investigations</a></li>
+                                                <li><a href="nursing-home.html">Meetings</a></li>
+                                                <li><a href="nursing-home.html">Client Matrix</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Accounts</span> </a>
+                                            <ul>
+                                                <li><a href="nursing-home.html">Payroll</a></li>
+                                                <li><a href="nursing-home.html">Payslip</a></li>
+                                                <li><a href="nursing-home.html">Invoices</a></li>
+                                                <li><a href="nursing-home.html">Local Authority Financial Report</a></li>
+                                                <li><a href="nursing-home.html">Income andExpenses Account</a></li>
+                                                <li><a href="nursing-home.html">Assets Registered</a></li>
+                                                <li><a asp-controller="Staff" asp-action="StaffRate">Staff Rate</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Audit</span> </a>
+                                            <ul>
+                                                <li><a href="nursing-home.html">Filled Communication Log</a></li>
+                                                <li><a href="nursing-home.html">Filled Mar Chart</a></li>
+                                                <li><a asp-controller="PerformanceIndicator" asp-action="Reports">Performance Indicator</a></li>
+                                                <li><a href="nursing-home.html">Monthly CarePlan Review</a></li>
+                                                <li><a href="nursing-home.html">Monthly staff Review</a></li>
+                                                <li><a href="nursing-home.html">Monthly Medication Review</a></li>
+                                                <li><a href="nursing-home.html">Monthly Communication Log</a></li>
+                                                <li><a href="nursing-home.html">Quality Assurance Report</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>Human Resources</span> </a>
+                                            <ul>
+                                                <li><a asp-controller="SetupStaffHoliday" asp-action="Reports">Setup Staff Holiday</a></li>
+                                                <li><a href="nursing-home.html">Recruitment Matrix</a></li>
+                                                <li><a href="nursing-home.html">Staff Matrix</a></li>
+                                                <li><a href="nursing-home.html">Trainings</a></li>
+                                                <li><a href="nursing-home.html">Attendance</a></li>
+                                                <li><a href="nursing-home.html">Query</a></li>
+                                                <li><a href="nursing-home.html">Promotion</a></li>
+                                                <li><a href="nursing-home.html">Appraisals</a></li>
+                                                <li><a href="nursing-home.html">Resignation</a></li>
+                                                <li><a href="nursing-home.html">Transfer/Duty Change</a></li>
+                                                <li><a href="nursing-home.html">Job Descriptions</a></li>
+                                                <li><a href="nursing-home.html">Meetings</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="has-arrow"><i class="icon-user-follow"></i><span>News</span> </a>
+                                            <ul>
+                                                <li><a href="nursing-home.html">CQC</a></li>
+                                                <li><a href="nursing-home.html">Local Authorities</a></li>
+                                                <li><a href="nursing-home.html">General News</a></li>
+                                                <li><a href="nursing-home.html">Health News</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                    </div>*@
+                @*</ul>    
+            </div>
+        </div>
+    </div>
+</div>*@ 
         <!-- Sidebar -->
         @*<div class="sidebar" id="sidebar">
                 <div class="sidebar-inner slimscroll">

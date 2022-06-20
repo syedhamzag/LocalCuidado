@@ -1,13 +1,19 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
+using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
+using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
 using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
+using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
+using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
 using AwesomeCare.DataTransferObject.DTOs.ClientProgram;
 using AwesomeCare.DataTransferObject.DTOs.ClientRota;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.ClientServiceWatch;
+using AwesomeCare.DataTransferObject.DTOs.ClientShopping;
 using AwesomeCare.DataTransferObject.DTOs.Health.Balance;
+using AwesomeCare.DataTransferObject.DTOs.Health.PhysicalAbility;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.Interest;
 using AwesomeCare.DataTransferObject.DTOs.InterestAndObjective.PersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.PersonalDetail.Equipment;
@@ -34,12 +40,12 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             Choice = new List<SelectListItem>();
             DignityAndPrivacy = new List<SelectListItem>();
             Partnership = new List<SelectListItem>();
-            IndicatorList = new List<SelectListItem>();
+            IndicatorList = new List<string>();
             FocusList = new Dictionary<string, List<SelectListItem>>();
             StaffList = new List<SelectListItem>();
             GetEquipment = new List<GetEquipment>();
-            LandLogList = new List<SelectListItem>();
-            KeyLogList = new List<SelectListItem>();
+            LandLogList = new List<string>();
+            KeyLogList = new List<string>();
             InvolingList = new List<SelectListItem>();
             ClassList = new List<SelectListItem>();
             HeadingList = new List<SelectListItem>();
@@ -57,6 +63,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
             GetManagingTasks = new List<GetManagingTasks>();
             GetInterest = new List<GetInterest>();
             GetPersonalityTest = new List<GetPersonalityTest>();
+            ClientMealDays = new List<GetClientMealDays>();
+            ClientShopping = new List<GetClientShopping>();
+            ClientCleaning = new List<GetClientCleaning>();
             #endregion
 
 
@@ -92,9 +101,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<SelectListItem> Partnership { get; set; }
         public List<SelectListItem> StaffList { get; set; }
         public Dictionary<string, List<SelectListItem>> FocusList { get; set; }
-        public List<SelectListItem> IndicatorList { get; set; }
-        public List<SelectListItem> LandLogList { get; set; }
-        public List<SelectListItem> KeyLogList { get; set; }
+        public List<string> IndicatorList { get; set; }
+        public List<string> LandLogList { get; set; }
+        public List<string> KeyLogList { get; set; }
         public List<SelectListItem> InvolingList { get; set; }
         public List<SelectListItem> ClassList { get; set; }
 
@@ -219,6 +228,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public string Nutrition_DrinkType { get; set; }
         public string Nutrition_AvoidFood { get; set; }
         public int Nutrition_ThingsILike { get; set; }
+        public List<string> ListThingsILike { get; set; } = new List<string>();
         public int Nutrition_FoodIntake { get; set; }
         public int Nutrition_MealPreparation { get; set; }
         public int Nutrition_EatingDifficulty { get; set; }
@@ -406,7 +416,37 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public int TaskCountHRA { get; set; }
 
         public List<GetBaseRecordItem> baseRecordList { get; set; }
+        public List<GetBaseRecordItem> careIssuebaseRecordList { get; set; } = new List<GetBaseRecordItem>();
+        public List<GetBaseRecordWithItems> baseRecordBestInterestList { get; set; } = new List<GetBaseRecordWithItems> { };
         #endregion
+
+        #region Best Interest
+
+        public GetBestInterestAssessment getBestInterestAssessment { get; set; }
+        public int BestId { get; set; }
+        public List<SelectListItem> ClientList { get; set; }
+        public List<GetBaseRecordItem> BestHeadingList { get; set; }
+        public List<GetBaseRecordItem> Heading2List { get; set; }
+        public List<GetBaseRecordItem> TitleList { get; set; }
+        public List<GetBaseRecordItem> Title2List { get; set; }
+        public List<GetBaseRecordItem> AnswerList { get; set; }
+        public List<SelectListItem> AnswerSelectList { get; set; }
+        public List<GetBaseRecordWithItems> BaseRecordList { get; set; }
+        public DateTime Date { get; set; }
+        public List<GetCareIssuesTask> GetCareIssuesTask { get; set; }
+        public List<GetHealthTask> GetHealthTask { get; set; }
+        public List<GetBelieveTask> GetBelieveTask { get; set; }
+        public List<GetHealthTask2> GetHealthTask2 { get; set; }
+        public string Name { get; set; }
+        public string Position { get; set; }
+        public string Signature { get; set; }
+
+        public int BelieveTaskCount { get; set; }
+        public int CareIssuesTaskCount { get; set; }
+        public int HealthTaskCount { get; set; }
+        public int HealthTask2Count { get; set; }
+        #endregion
+        
         public List<GetClientDailyTask> GetClientDailyTask { get; set; }
         public List<GetClientServiceWatch> GetServiceWatch { get; set; }
         public List<GetClientProgram> GetProgram { get; set; }
@@ -418,5 +458,12 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<SelectListItem> Rotas { get; set; }
 
         public List<GetClientRota> ClientRotas { get; set; }
+
+
+        public List<GetClientMealDays> ClientMealDays { get; set; }
+        public List<GetClientShopping> ClientShopping { get; set; }
+        public List<GetClientCleaning> ClientCleaning { get; set; }
+
+        public List<GetPhysicalAbility> PhysicalAbility { get; set; } = new List<GetPhysicalAbility> { };
     }
 }

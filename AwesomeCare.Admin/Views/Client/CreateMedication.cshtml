@@ -8,12 +8,12 @@
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
-            <div class="header">
+            <div class="card-header">
                 <h2>Create Medication</h2>
 
             </div>
-            <div class="body">
-                <form asp-route="CreateMedication" method="post">
+            <div class="card-body">
+                <form asp-route="CreateMedication" method="post" enctype="multipart/form-data">
                     <input type="hidden" asp-for="ClientId" />
                     <div class="row">
 
@@ -28,7 +28,11 @@
                             <select asp-for="MedicationManufacturerId" asp-items="Model.MedicationManufacturers" class="form-control"></select>
                             <span asp-validation-for="MedicationManufacturerId" class="text-danger"></span>
                         </div>
-
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <h2>Client Med Image<small></small></h2>
+                            <input type="file" asp-for="Evidence" class="dropify" data-allowed-file-extensions="png jpg jpeg">
+                            <span asp-validation-for="Evidence" class="text-danger"></span>
+                        </div>
 
                     </div>
 
@@ -100,6 +104,25 @@
                             <label asp-for="Remark"></label>
                             <textarea asp-for="Remark" class="form-control"></textarea>
                             <span asp-validation-for="Remark" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Means"></label>
+                             <baserecord asp-key="Client_Med_Means" asp-for="Means" asp-items="null" />
+                            <span asp-validation-for="Means" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label asp-for="Type"></label>
+                             <baserecord asp-key="Client_Med_Type" asp-for="Type" asp-items="null" />
+                            <span asp-validation-for="Type" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                            <label>Time Critical</label>
+                             <baserecord asp-key="Client_Med_TimeCritical" asp-for="TimeCritical" asp-items="null" />
+                            <span asp-validation-for="TimeCritical" class="text-danger"></span>
                         </div>
                     </div>
                     <p>Days/Period</p>

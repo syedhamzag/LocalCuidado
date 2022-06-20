@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +10,10 @@ namespace AwesomeCare.Admin.ViewModels.Staff
 {
     public class CreateStaffHoliday
     {
+        public CreateStaffHoliday()
+        {
+            SetupStaffHoliday = new List<SelectListItem>();
+        }
         [DataType(DataType.Upload)]
 
         public IFormFile Attach { get; set; }
@@ -26,6 +31,12 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public string Remark { get; set; }
 
         public string StaffName { get; set; }
+        public string ClassName { get; set; }
+        public int Balance { get; set; }
         public string Attachment { get; set; }
+
+        public int maxDays { get; set; } = 0;
+
+        public List<SelectListItem> SetupStaffHoliday { get; set; }
     }
 }

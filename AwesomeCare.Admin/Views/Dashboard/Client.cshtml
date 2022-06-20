@@ -1,0 +1,200 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Dashboard;
+@model GetDashboard
+@{
+    ViewData["Title"] = "Client Dashboard";
+}
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 col-lg-12">
+                            <div class="row">
+
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label>Select Client</label>
+                                    <select asp-for="ClientId" asp-items="@Model.GetClients.Select(s => new SelectListItem(s.Firstname+" "+s.Surname,s.ClientId.ToString()))" class="selectpicker form-control" data-live-search="true"></select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 col-lg-12">
+        <h3 class="card-title">@if (Model.ClientId > 0) { @Model.ClientName.ToString() } </h3>
+    </div>
+            </div>
+<div class="row">
+    <div class="col-md-6 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Activities</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#ratingModal" style="font-size: .75em; margin-top: -25px;">See More</button>
+            </div>
+            <div class="card-body">
+                @if (Model.ClientId > 0)
+                { 
+                    <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="logaudit" class="btn btn-success form-control mt-5">Log Audit</a>
+                    <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="medaudit" class="btn btn-danger form-control mt-5">Medication Audit</a>
+                    <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="careobj" class="btn btn-primary form-control mt-5">Live Care Tracker</a>
+                    <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="mgtvisit" class="btn btn-info form-control mt-5">Message/Request</a>
+                }
+            </div>
+        </div>
+    </div>
+        <div class="col-md-3 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Your Office Team</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.ClientId > 0)
+                {
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 col-lg-12">
+                            <h5>Client Manager</h5>
+                            <h5 class="table-avatar">
+                                @if (Model.ClientManager.StaffPersonalInfoId > 0)
+                                { 
+                                    <a href="#" class="avatar"><img alt="" src="@Model.ClientManager.ProfilePix" width="38" height="42"></a>
+                                    <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@Model.ClientManager.StaffPersonalInfoId">@string.Concat(Model.ClientManager.FirstName, " ", Model.ClientManager.MiddleName, " ", Model.ClientManager.LastName)</a>
+                                }
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 col-lg-12">
+                            <h5>Team Leader</h5>
+                            <h5 class="table-avatar">
+                                @if (Model.TeamLeader.StaffPersonalInfoId > 0)
+                                {
+                                    <a href="#" class="avatar"><img alt="" src="@Model.TeamLeader.ProfilePix" width="38" height="42"></a>
+                                    <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@Model.TeamLeader.StaffPersonalInfoId">@string.Concat(Model.TeamLeader.FirstName, " ", Model.TeamLeader.MiddleName, " ", Model.TeamLeader.LastName)</a>
+                                }
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 col-lg-12">
+                            <h5>Key Worker</h5>
+                            <h5 class="table-avatar">
+                                @if (Model.KWorker.StaffPersonalInfoId > 0)
+                                {
+                                    <a href="#" class="avatar"><img alt="" src="@Model.KWorker.ProfilePix" width="38" height="42"></a>
+                                    <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@Model.KWorker.StaffPersonalInfoId">@string.Concat(Model.KWorker.FirstName, " ", Model.KWorker.MiddleName, " ", Model.KWorker.LastName)</a>
+                                }
+                            </h5>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Social Chat/Video</h5>
+            </div>
+            <div class="card-body">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Care Objectives</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="careChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Telehealth</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="telehealth"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Ongoing Task</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="ongoing"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-12 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Performance Indicator</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="pindicator"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    @if (Model.ClientId > 0)
+                    {
+                        <div class="col-md-1">
+
+                        </div>
+                        <div class="col-md-2">
+                            <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="mgtvisit" class="btn btn-success form-control mt-1" style="padding: 100px 0;text-align: center;">Visits</a>
+                        </div>
+                        <div class="col-md-2 center-align">
+                             <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="careplan" class="btn btn-danger form-control mt-1" style="padding: 100px 0;text-align: center;">Care Plan & Risk Assessment</a>
+                        </div>
+                        <div class="col-md-2 center-align">
+                            <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="careplan" class="btn btn-primary form-control mt-1" style="padding: 100px 0;text-align: center;">Invoicing</a>
+                        </div>
+                        <div class="col-md-2 center-align">
+                            <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="complaintregister" class="btn btn-info form-control mt-1" style="padding: 100px 0;text-align: center;">Complaint</a>
+                        </div>
+                        <div class="col-md-2 center-align">
+                            <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="telehealth" class="btn btn-secondary form-control mt-1" style="padding: 100px 0;text-align: center;">Telehealth</a>
+                        </div>
+                        <div class="col-md-1">
+
+                        </div>
+                    }
+                 </div>  
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+<script src="~/assets2/js/StackedChart.js"></script>
+<script src="~/js/dashboard.js"></script>
+<script type="text/javascript">
+    $(function () 
+    {
+        $('#ClientId').on("change",function(){
+            var element = this;
+            var Id = element.value;
+
+        
+        var careChart = "careChart";
+        var telehealth = "telehealth";
+        var ongoing = "ongoing";
+        var pindicator = "pindicator";
+        var ctxCare = document.getElementById(careChart).getContext('2d');
+        var ctxtele = document.getElementById(telehealth).getContext('2d');
+        var ctxongoing = document.getElementById(ongoing).getContext('2d');
+        var ctxindicator = document.getElementById(pindicator).getContext('2d');
+            getcareobj(@Model.carePId,@Model.careCId,@Model.careLId,ctxCare);
+            gettelehealth(@Model.carePId,@Model.careCId,@Model.careLId,ctxtele);
+            getongoing(@Model.carePId,@Model.careCId,@Model.careLId,ctxongoing);
+            getpindicator(@Model.carePId,@Model.careCId,@Model.careLId,ctxindicator);
+        });
+    });
+</script>

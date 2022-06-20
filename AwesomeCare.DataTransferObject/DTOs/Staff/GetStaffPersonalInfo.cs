@@ -77,7 +77,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public int StaffWorkTeamId { get; set; }
 
         public bool? IsTeamLeader { get; set; }
-       
+
+        public bool? IsKeyWorker { get; set; }
+
         public bool? HasUniform { get; set; }
         
         public bool? HasIdCard { get; set; }

@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class NutritionController : ControllerBase
@@ -177,7 +178,7 @@ namespace AwesomeCare.API.Controllers
             //Meals from Model not in Database
             foreach (var item in model.ClientMealDays)
             {
-                var MealNotInDb = Nutrition[0].ClientMealDays.FirstOrDefault(r => r.ClientMealTypeId == item.ClientMealTypeId);
+                var MealNotInDb = Nutrition[0].ClientMealDays.Where(r => r.ClientMealId == item.ClientMealId && r.MealDayofWeekId == item.MealDayofWeekId).SingleOrDefault();
                 if (MealNotInDb == null)
                 {
                     var postEntity = Mapper.Map<ClientMealDays>(item);
@@ -187,7 +188,7 @@ namespace AwesomeCare.API.Controllers
             //Shopping from Model not in Database
             foreach (var item in model.ClientShopping)
             {
-                var MealNotInDb = Nutrition[0].ClientShopping.FirstOrDefault(r => r.ShoppingId == item.ShoppingId);
+                var MealNotInDb = Nutrition[0].ClientShopping.SingleOrDefault(r => r.ShoppingId == item.ShoppingId);
                 if (MealNotInDb == null)
                 {
                     var postEntity = Mapper.Map<ClientShopping>(item);
@@ -197,7 +198,7 @@ namespace AwesomeCare.API.Controllers
             //Cleaning from Model not in Database
             foreach (var item in model.ClientCleaning)
             {
-                var MealNotInDb = Nutrition[0].ClientCleaning.FirstOrDefault(r => r.CleaningId == item.CleaningId);
+                var MealNotInDb = Nutrition[0].ClientCleaning.SingleOrDefault(r => r.CleaningId == item.CleaningId);
                 if (MealNotInDb == null)
                 {
                     var postEntity = Mapper.Map<ClientCleaning>(item);

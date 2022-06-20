@@ -49,7 +49,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.ShiftBooking
         /// StaffPersonalId
         /// </summary>
         public int ShiftBookedById { get; set; }
-
+        public DateTime Date { get; set; }
     }
 
     public class StaffBooked

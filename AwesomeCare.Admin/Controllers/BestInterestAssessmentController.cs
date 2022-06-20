@@ -79,14 +79,22 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-        public async Task<IActionResult> View(int teamleadId)
+        public async Task<IActionResult> View(int clientId)
         {
             var model = new CreateBestInterestAssessment();
-
-            var client = await _clientService.GetClientDetail();
             var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
-            var filterBaseRecord = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault();
-            model.baseRecordList = filterBaseRecord.ToList();
+            GetBestInterestAssessment mcaBest = await _BestInterestAssessment.Get(clientId); ;
+            if (mcaBest != null)
+            {
+                model = Get(mcaBest);
+                model.baseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                model.HeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                model.BaseRecordList = baseRecord.ToList();
+                model.BelieveTaskCount = mcaBest.GetBelieveTask.Count;
+                model.CareIssuesTaskCount = model.baseRecordList.Count;
+
+            }
             return View(model);
 
         }

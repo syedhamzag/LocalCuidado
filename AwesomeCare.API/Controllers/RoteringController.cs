@@ -460,7 +460,7 @@ namespace AwesomeCare.API.Controllers
                                                 HandOver = cl.HandOver,
                                                 NumberOfStaff = cl.NumberOfStaff,
                                                 Partners = (from p in cl.Partners
-                                                            select new DataTransferObject.DTOs.Rotering.StaffRotaPartner
+                                                            select new DataTransferObject.DTOs.Rotering.GetStaffRotaPartner
                                                             {
                                                                 Partner = p.Partner,
                                                                 Telephone = p.Telephone

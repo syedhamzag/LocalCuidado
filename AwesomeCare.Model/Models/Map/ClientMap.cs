@@ -175,6 +175,18 @@ namespace AwesomeCare.Model.Models.Map
           .HasMaxLength(250)
           .IsRequired(false);
 
+            builder.Property(p => p.ClientManager)
+          .HasColumnName("ClientManager")
+          .HasDefaultValue(0);
+
+            builder.Property(p => p.Denture)
+          .HasColumnName("Denture")
+          .HasDefaultValue(0);
+
+            builder.Property(p => p.Aid)
+          .HasColumnName("Aid")
+          .HasDefaultValue(0);
+
 
             builder.HasMany(p => p.RegulatoryContact)
                 .WithOne(p => p.Client)

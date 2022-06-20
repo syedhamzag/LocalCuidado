@@ -8,6 +8,7 @@ using AwesomeCare.API.AppSettings;
 using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.Model.Models;
+using AwesomeCare.Services.Services;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,56 +50,57 @@ namespace AwesomeCare.API
          
            
             services.AddControllers();
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(apipolicyname, policy =>
-                {
-                   policy.AddAuthenticationSchemes("Bearer");
-                   // policy.RequireClaim("scope", "awesomecareapi");
-                    policy.RequireAuthenticatedUser();
+            services.AddAuthorization();
+                //options =>
+            //{
+            //    options.AddPolicy(apipolicyname, policy =>
+            //    {
+            //       policy.AddAuthenticationSchemes("Bearer");
+            //       // policy.RequireClaim("scope", "awesomecareapi");
+            //        policy.RequireAuthenticatedUser();
                     
-                });
-            });
-            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-             .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme, opt =>
-             {
-                 var settings = Configuration.GetSection("JwtBearerSettings").Get<JwtBearerSettings>();
+            //    });
+            //});
+            //services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            // .AddIdentityServerAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme, opt =>
+            // {
+            //     var settings = Configuration.GetSection("JwtBearerSettings").Get<JwtBearerSettings>();
 
-                 opt.RequireHttpsMetadata = settings.RequireHttpsMetadata;
-                 opt.Authority = settings.Authority;
-                 opt.ApiName = settings.Audience;
-                 opt.JwtBearerEvents = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
-                 {
-                     OnChallenge = ctx =>
-                  {
-                      ctx.Response.StatusCode = 401;
-                      return Task.CompletedTask;
-                  },
-                     OnAuthenticationFailed = async ctx =>
-                     {
-                         ctx.Response.StatusCode = 401;
-                         await ctx.Response.WriteAsync(ctx.Exception.Message);
-                         // Task.CompletedTask;
-                     },
-                     OnForbidden = ctx =>
-                     {
-                         var kk = ctx;
-                         return Task.CompletedTask;
-                     },
-                     OnMessageReceived = ctx =>
-                     {
-                         var kk = ctx;
-                         return Task.CompletedTask;
-                     },
-                     OnTokenValidated = ctx =>
-                     {
-                         var kk = ctx;
-                         return Task.CompletedTask;
-                     }
-                 };
-                 //opt.SaveToken = settings.SaveToken;
-                 opt.SupportedTokens = SupportedTokens.Jwt;
-             });
+            //     opt.RequireHttpsMetadata = settings.RequireHttpsMetadata;
+            //     opt.Authority = settings.Authority;
+            //     opt.ApiName = settings.Audience;
+            //     opt.JwtBearerEvents = new Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+            //     {
+            //         OnChallenge = ctx =>
+            //      {
+            //          ctx.Response.StatusCode = 401;
+            //          return Task.CompletedTask;
+            //      },
+            //         OnAuthenticationFailed = async ctx =>
+            //         {
+            //             ctx.Response.StatusCode = 401;
+            //             await ctx.Response.WriteAsync(ctx.Exception.Message);
+            //             // Task.CompletedTask;
+            //         },
+            //         OnForbidden = ctx =>
+            //         {
+            //             var kk = ctx;
+            //             return Task.CompletedTask;
+            //         },
+            //         OnMessageReceived = ctx =>
+            //         {
+            //             var kk = ctx;
+            //             return Task.CompletedTask;
+            //         },
+            //         OnTokenValidated = ctx =>
+            //         {
+            //             var kk = ctx;
+            //             return Task.CompletedTask;
+            //         }
+            //     };
+            //     //opt.SaveToken = settings.SaveToken;
+            //     opt.SupportedTokens = SupportedTokens.Jwt;
+            // });
             //.AddJwtBearer("Bearer", options =>
             //{
             //    var settings = Configuration.GetSection("JwtBearerSettings").Get<JwtBearerSettings>();
@@ -242,7 +244,7 @@ namespace AwesomeCare.API
             });
             #endregion
 
-
+            services.AddScoped<IFileUpload, FileUpload>();
             //  services.AddOData();
         }
 
@@ -282,13 +284,13 @@ namespace AwesomeCare.API
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwesomeCare API V1");
                 }
                 c.RoutePrefix = string.Empty;
-                if (env.IsDevelopment())
-                {
-                    c.OAuthClientId("9e0024c1b7e7479d8fae56848499f35a");
-                    c.OAuthClientSecret("80ElH7wqOmuPUcA+5KJFbvSLOQDT6aN6OcQwXnpvFCw=");
-                    c.OAuthScopeSeparator(" ");
-                    c.OAuthUsePkce();
-                }
+                //if (env.IsDevelopment())
+                //{
+                //    c.OAuthClientId("9e0024c1b7e7479d8fae56848499f35a");
+                //    c.OAuthClientSecret("80ElH7wqOmuPUcA+5KJFbvSLOQDT6aN6OcQwXnpvFCw=");
+                //    c.OAuthScopeSeparator(" ");
+                //    c.OAuthUsePkce();
+                //}
 
             });
 
@@ -305,8 +307,14 @@ namespace AwesomeCare.API
                 //if (env.IsDevelopment())
                 //    endpoints.MapControllers();//.RequireAuthorization();
                 //else
-                endpoints.MapControllers().RequireAuthorization(apipolicyname);
+                endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<AwesomeCareDbContext>();
+                context.Database.Migrate();
+            }
 
         }
     }

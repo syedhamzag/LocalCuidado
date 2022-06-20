@@ -5,109 +5,136 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<div class="row clearfix">
-    <div class="col-lg-12 col-md-12">
-        <div class="card planned_task">
-            <div class="header">
-
-                @*<ul class="header-dropdown">
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a href="javascript:void(0);">Action</a></li>
-                                <li><a href="javascript:void(0);">Another Action</a></li>
-                                <li><a href="javascript:void(0);">Something else</a></li>
-                            </ul>
-                        </li>
-                    </ul>*@
-            </div>
-            <div class="body">
-                <h4>Staffs</h4>
-
-                <table class="table m-b-0 datatables">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Telephone</th>
-                            <th>Email</th>
-                            <th>Can Drive</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Registration Id</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var staff in Model.Select((d, i) => new { index = i + 1, data = d }))
-                        {
-                        <tr>
-                            <td>@staff.index </td>
-                            <td><img src="@staff.data.ProfilePix" alt="Image" width="35" height="35" style="border-radius:50%;" /></td>
-                            <td><span>@staff.data.Fullname</span></td>
-                            <td><span class="text-info">@staff.data.Telephone</span></td>
-                            <td>@staff.data.Email</td>
-                            <td>
-                                @{
-                                    var canDrive = staff.data.CanDrive ? "Yes" : "No";
-                                    @canDrive;
-                                }
-                            </td>
-                            <td>
-                                @*@{
-
-                string yes = "Yes";
-                var date = DateTime.TryParseExact(staff.data.StartDate, "MM/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime startDate)?startDate.ToString("MMM dd yyyy"):staff.data.StartDate;
-               // var date = DateTime.TryParseExact(staff.data.StartDate, "MM/dd/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime startDate) ? "Yes" : "No";
-
-                @date;
-            }*@
-                                @staff.data.StartDate
-                            </td>
-                            <td>@staff.data.EndDate</td>
-                            <td>@staff.data.RegistrationId</td>
-                            <td>
-                                @if (staff.data.Status == StaffRegistrationEnum.Approved.ToString())
-                                {
-                                    <span class="badge badge-success">@staff.data.Status</span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-default">@staff.data.Status</span>
-                                }
-
-                            </td>
-                            <td>
-
-                                <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                        @Html.ActionLink("Details", "Details", "Staff", new { staffId = staff.data.StaffPersonalInfoId }, new { @class = "dropdown-item" })
-                                        <a asp-controller="Staff" asp-action="Feedback" class="dropdown-item" asp-route-staffpersonalInfoId="@staff.data.StaffPersonalInfoId">Feedback/Ratings</a>
-                                        <a asp-controller="Staff" asp-action="EditProfile" class="dropdown-item" asp-route-staffId="@staff.data.StaffPersonalInfoId">Edit</a>
-                                        @if (!string.IsNullOrEmpty(staff.data.ApplicationUserId))
-                                        {
-                                            <a asp-controller="Staff" asp-action="ChangeEmail" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Email</a>
-                                            <a asp-controller="Staff" asp-action="ChangePassword" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Password</a>
-
-                                        }
-
-                                    </div>
-                                </div>
-
-                            </td>
-                        </tr>
-                        }
-
-
-                    </tbody>
-                </table>
+<!-- Page Header -->
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+        </div>
+        <div class="col-auto float-end ms-auto">
+            <div class="row user-tabs view-icons">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <ul class="nav nav-tabs nav-tabs-bottom">
+                        <li class="nav-item col-sm-3"><a class="grid-view btn nav-link active" data-bs-toggle="tab" href="#staff"><i class="fa fa-th"></i></a></li>
+                        <li class="nav-item col-sm-3"><a class="list-view btn nav-link" data-bs-toggle="tab" href="#stafflist"><i class="fa fa-bars"></i></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<!-- /Page Header -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="tab-content profile-tab-content">
 
+            <!-- Staff Tab -->
+            <div id="staff" class="tab-pane fade show active">
+                <div class="row staff-grid-row">
+                    @foreach (var staff in Model.Select((d, i) => new { index = i + 1, data = d }))
+                    {
+                    <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3">
+                        <div class="profile-widget">
+                            <div class="profile-img">
+                                <a asp-route-staffId="@staff.data.StaffPersonalInfoId" asp-action="Details" class="avatar"><img alt="" src="@staff.data.ProfilePix" width="80" height="84"></a>
+                            </div>
+                            <div class="dropdown profile-action">
+                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    @Html.ActionLink("Details", "Details", "Staff", new { staffId = staff.data.StaffPersonalInfoId }, new { @class = "dropdown-item" })
+                                    <a asp-controller="Staff" asp-action="Feedback" class="dropdown-item" asp-route-staffId="@staff.data.StaffPersonalInfoId">Feedback/Ratings</a>
+                                    <a asp-controller="Staff" asp-action="EditProfile" class="dropdown-item" asp-route-staffId="@staff.data.StaffPersonalInfoId">Edit</a>
+                                    @if (!string.IsNullOrEmpty(staff.data.ApplicationUserId))
+                                    {
+                                        <a asp-controller="Staff" asp-action="ChangeEmail" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Email</a>
+                                        <a asp-controller="Staff" asp-action="ChangePassword" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Password</a>
+                                    }
+                                </div>
+                            </div>
+                            <h4 class="user-name m-t-10 mb-0 text-ellipsis"><a asp-route-staffId="@staff.data.StaffPersonalInfoId" asp-action="Details"><span>@staff.data.Fullname </span></a></h4>
+                            @*<h5 class="user-name m-t-10 mb-0 text-ellipsis">Manager:  @if (!string.IsNullOrEmpty(staff.data.RotaTeam)) { @staff.data.RotaTeam}</h5>*@
+                            @*<div class="small text-muted">Birthday: @staff.data.DOB</div>*@
+                            <a asp-route-staffId="@staff.data.StaffPersonalInfoId" asp-action="StaffChat" asp-controller="Chat" class="btn btn-white btn-sm m-t-10">Message</a>
+                            <a asp-route-staffId="@staff.data.StaffPersonalInfoId" asp-action="Details" class="btn btn-white btn-sm m-t-10">View Profile</a>
+                            <a asp-route-staffId="@staff.data.StaffPersonalInfoId" asp-action="Employee" asp-controller="Dashboard" class="btn btn-white btn-sm m-t-10">Dashboard</a>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+            </div>
+            <!-- Staff List Tab -->
+            <div id="stafflist" class="tab-pane fade">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-dark custom-table datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Telephone</th>
+                                        <th>Email</th>
+                                        <th>Can Drive</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Registration Id</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var staff in Model.Select((d, i) => new { index = i + 1, data = d }))
+                                    {
+                                    <tr>
+                                        <td>
+                                            <h2 class="table-avatar">
+                                                <a asp-route-StaffPersonalInfoId="@staff.data.StaffPersonalInfoId" asp-action="Details" class="avatar"><img src="@staff.data.ProfilePix" alt="" width="38" height="42"></a>
+                                                <a asp-route-StaffPersonalInfoId="@staff.data.StaffPersonalInfoId" asp-action="Details"><span>@staff.data.Fullname</span></a>
+                                            </h2>
+                                        </td>
+                                        <td>@staff.data.Telephone</td>
+                                        <td>@staff.data.Email</td>
+                                        <td>
+                                            @{
+                                                var canDrive = staff.data.CanDrive ? "Yes" : "No";
+                                                @canDrive;
+                                            }
+                                        </td>
+                                        <td>@staff.data.StartDate</td>
+                                        <td>@staff.data.EndDate</td>
+                                        <td>@staff.data.RegistrationId</td>
+                                        <td>
+                                            @if (staff.data.Status == StaffRegistrationEnum.Approved.ToString())
+                                            {
+                                                <span class="badge badge-success">@staff.data.Status</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-default">@staff.data.Status</span>
+                                            }
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="dropdown dropdown-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    @Html.ActionLink("Details", "Details", "Staff", new { staffId = staff.data.StaffPersonalInfoId }, new { @class = "dropdown-item" })
+                                                    <a asp-controller="Staff" asp-action="Feedback" class="dropdown-item" asp-route-staffpersonalInfoId="@staff.data.StaffPersonalInfoId">Feedback/Ratings</a>
+                                                    <a asp-controller="Staff" asp-action="EditProfile" class="dropdown-item" asp-route-staffId="@staff.data.StaffPersonalInfoId">Edit</a>
+                                                    @if (!string.IsNullOrEmpty(staff.data.ApplicationUserId))
+                                                    {
+                                                        <a asp-controller="Staff" asp-action="ChangeEmail" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Email</a>
+                                                        <a asp-controller="Staff" asp-action="ChangePassword" class="dropdown-item" asp-route-userId="@staff.data.ApplicationUserId">Change Password</a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

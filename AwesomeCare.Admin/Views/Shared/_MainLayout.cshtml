@@ -40,7 +40,7 @@
     <!--DataTabales-->
     <link href="~/assets2/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
     @*<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">*@
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">*@
     <!-- Material Design Bootstrap -->
     @*<link href="/assets/vendor/mdb/css/mdb.css" rel="stylesheet" />*@
     <link href="/assets/vendor/boostrap-multiselect2/css/bootstrap-select.css" rel="stylesheet" />
@@ -70,6 +70,7 @@
     @RenderSection("VenderStyleSheets", required: false)<!--To be removed because of typo-->
     @RenderSection("VendorStyleSheets", required: false)
     @RenderSection("HeaderScripts", required: false)
+
 </head>
 @*<body class="theme-cyan">*@
 <body>
@@ -78,7 +79,7 @@
     <div class="main-wrapper">
 
         <!-- Header -->
-        <div class="header">
+        <div class="header" id="header">
 
             <!-- Logo -->
             <div class="header-left">
@@ -211,7 +212,7 @@
         <div class="page-wrapper">
 
             <!-- Page Content -->
-            <div class="content container-fluid">
+            <div class="content container-fluid" id="main-content">
 
                 @await Component.InvokeAsync(nameof(Menu))
                 <div class="page-header">
@@ -221,6 +222,13 @@
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active">@ViewData["Title"]</li>
                             </ul>
+                            @if (ViewData["Title"] != null)
+                            {
+                                if (ViewData["Title"].Equals("View Care Plan") || ViewData["Title"].Equals("Empty Log Book"))
+                                {
+                                    <button class="btn btn-primary" id="btnHide">Print</button>
+                                }
+                            }
                         </div>
                     </div>
                 </div>
@@ -242,7 +250,8 @@
 
         <!-- Slimscroll JS -->
         <script src="~/assets2/js/jquery.slimscroll.min.js"></script>
-
+        <!-- Dropfiles JS -->
+        @*<script src="~/assets2/js/dropfiles.js"></script>*@
         <!-- Custom JS -->
         <script src="~/assets2/js/app.js"></script>
 
@@ -285,21 +294,41 @@
 
         <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
         <script src="~/assets2/js/dataTables.bootstrap4.min.js"></script>
-        @*
+
         <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
         <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>*@
-
-
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
         @*@RenderSection("VendorScripts", required: false)*@
 
         <script src="/assets/bundles/mainscripts.bundle.js"></script>
         <script>
+            $('#btnHide').on('click', function () {
+
+                if ($('#sidebar').css('display') == 'none') {
+                    $(this).children().first().removeClass('fa fa-arrow-right');
+                    $(this).children().first().addClass('fa fa-arrow-left');
+                    $('#sidebar').css('display', 'block');
+                    $('.navbar-right').css('display', 'block');
+                    $('#header').css('display', 'block');
+                    $('#main-content').css('float', 'right');
+                    $('#main-content').css('margin-left', '0px');
+                }
+                else {
+                    $(this).children().first().removeClass('fa fa-arrow-left');
+                    $(this).children().first().addClass('fa fa-arrow-right');
+                    $('#sidebar').css('display', 'none');
+                    $('.navbar-right').css('display', 'none');
+                    $('#header').css('display', 'none');
+                    $('#main-content').css('float', 'none');
+                    $('#main-content').css('margin-left', '-100px');
+                }
+            });
             $(document).ready(function () {
 
+                $('.dropdown').css('padding', '0px');
                 // Multiselect
                 //$('.multiselect').multiselect({
                 //    maxHeight: 300
@@ -328,6 +357,12 @@
                     searching: true
                 });
 
+                $(".datatables").DataTable({
+                    searching: true,
+                    pageLength: 5,
+                    lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                });
+
                 $('.datatablesExportExcel').DataTable({
                     dom: 'Blfrtip',
                     buttons: [
@@ -341,5 +376,202 @@
             })</script>
 
         @*RenderSection("Scripts", required: false)*@
+                <input type="hidden" id="SenderId" value="@User.GetDisplayName().Split("@")[0]" />
+        <div class="modal fade" id="answercallmodel" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" >
+                        <div id="AnswerDeclineDiv">
+                            <p>You have a upcomming Call</p>
+                            <button onclick="answerCall();">Answer</button>
+                            <button onclieck="declineCall();">Decline</button>
+                        </div>
+                        <div class="chat-main-row" style="height:80vh;padding-top:0px !important;padding-bottom:0px !important;display:none; " id="videoReciveDiv">
+                            <div class="chat-main-wrapper">
+
+                                <div class="col-lg-12 message-view task-view">
+                                    <div class="chat-window">
+                                        <div class="fixed-header">
+                                            <div class="navbar">
+                                                <div class="user-details">
+                                                    <div class="float-start user-img">
+                                                        <a class="avatar" href="profile.html" title="Mike Litorus">
+                                                            <img src="assets/img/profiles/avatar-05.jpg" alt="" class="rounded-circle">
+                                                            <span class="status online"></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="user-info float-start">
+                                                        <a href="profile.html"><span>Mike Litorus</span></a>
+                                                        <span class="last-seen">Online</span>
+                                                    </div>
+                                                </div>
+                                                <ul class="nav float-end custom-menu">
+                                                    <li class="nav-item">
+                                                        <a href="#task_window" id="task_chat" class="task-chat profile-rightbar float-end"><i class="fa fa-comments"></i></a>
+                                                    </li>
+                                                    <li class="nav-item dropdown dropdown-action">
+                                                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a href="javascript:void(0)" class="dropdown-item">Settings</a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="chat-contents">
+                                            <div class="chat-content-wrap">
+                                                <div class="user-video">
+                                                    <video id="uservideo" autoplay ></video>
+                                                </div>
+                                                <div class="my-video">
+                                                    <ul>
+                                                        <li id="myvidli">
+                                                            <video id="myvideo" autoplay muted></video>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat-footer">
+                                            <div class="call-icons">
+                                                <span class="call-duration">00:59</span>
+                                                <ul class="call-items">
+                                                    <li class="call-item">
+                                                        <a  onclick="muteCam()"  title="Enable Video"  data-placement="top" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-video-camera camera"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="call-item">
+                                                        <a onclick="muteMic()" title="Mute Audio" data-placement="top" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-microphone microphone"></i>
+                                                        </a>
+                                                    </li>
+                                                    @*<li class="call-item">
+                                                        <a href="" title="Add User" data-placement="top" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-user-plus"></i>
+                                                        </a>
+                                                    </li>*@
+                                                    <li class="call-item">
+                                                        <a href="" title="Full Screen" data-placement="top" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-arrows-v full-screen"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="end-call">
+                                                    <a onclick="declineCall();">
+                                                        <i class="material-icons">call_end</i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <div class="modal fade" id="answeraudiocallmodel" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body" >
+                        <div id="AnswerDeclineDivaudio">
+                            <p>You have a upcomming Call</p>
+                            <button onclick="answerAudioCall();">Answer</button>
+                            <button onclick="DeclineAfterAnser();">Decline</button>
+                        </div>
+                        <div class="chat-main-row" style="height:170px;padding-top:0px !important;padding-bottom:0px !important;display:none; " id="videoReciveDivaudio">
+                            <div class="chat-main-wrapper">
+
+                                <div class="col-lg-12 message-view task-view">
+                                    <div class="chat-window">
+                                        <div class="fixed-header">
+                                            <div class="navbar">
+                                                <div class="user-details">
+                                                    <div class="float-start user-img">
+                                                        <a class="avatar" href="profile.html" title="Mike Litorus">
+                                                            <img src="assets/img/profiles/avatar-05.jpg" alt="" class="rounded-circle">
+                                                            <span class="status online"></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="user-info float-start">
+                                                        <a href="profile.html"><span>Mike Litorus</span></a>
+                                                        <span class="last-seen">Online</span>
+                                                    </div>
+                                                </div>
+                                                <ul class="nav float-end custom-menu">
+                                                    <li class="nav-item">
+                                                        <a href="#task_window" id="task_chat" class="task-chat profile-rightbar float-end"><i class="fa fa-comments"></i></a>
+                                                    </li>
+                                                    <li class="nav-item dropdown dropdown-action">
+                                                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <a href="javascript:void(0)" class="dropdown-item">Settings</a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="chat-contents">
+                                            <div class="chat-content-wrap">
+                                                <div class="user-video">
+                                                    <video id="useraudio" autoplay ></video>
+                                                </div>
+                                                <div class="my-video">
+                                                    <ul>
+                                                        <li id="myvidli">
+                                                            <video id="myaudio" autoplay muted></video>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="chat-footer">
+                                            <div class="call-icons">
+                                                <span class="call-duration">00:59</span>
+                                                <ul class="call-items">
+                                                    <li class="call-item">
+                                                        <a  onclick="muteCamAudio()"  title="Enable Video"  data-placement="top" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-video-camera camera"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="call-item">
+                                                        <a onclick="muteMicAudio()" title="Mute Audio" data-placement="top" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-microphone microphone"></i>
+                                                        </a>
+                                                    </li>
+                                                    @*<li class="call-item">
+                                                        <a href="" title="Add User" data-placement="top" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-user-plus"></i>
+                                                        </a>
+                                                    </li>*@
+                                                    <li class="call-item">
+                                                        <a href="" title="Full Screen" data-placement="top" data-bs-toggle="tooltip">
+                                                            <i class="fa fa-arrows-v full-screen"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="end-call">
+                                                    <a onclick="declineCallAudio();">
+                                                        <i class="material-icons">call_end</i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/peer.min.js" type="text/javascript"></script>
+        <script src="/js/p2pscript.js" type="text/javascript"></script>
+        <script src="/js/audiopeer.js" type="text/javascript"></script>
+
 </body>
 </html>

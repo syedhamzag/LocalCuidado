@@ -12,6 +12,14 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
 {
     public class GetDashboard
     {
+        public int ClientId { get; set; }
+        public string ClientName { get; set;}
+        public int StaffId { get; set; }
+        public string StaffName { get; set; }
+
+        public GetStaffPersonalInfo ClientManager { get; set; }
+        public GetStaffPersonalInfo TeamLeader { get; set; }
+        public GetStaffPersonalInfo KWorker { get; set; }
         public List<OnCall> OnCall { get; set; }
 
         public List<ConcernNotes> concernNotes { get; set; }
@@ -30,7 +38,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
         public int pId { get; set; }
         public int cId { get; set; }
         public int lId { get; set; }
-
+        public int carePId { get; set; }
+        public int careCId { get; set; }
+        public int careLId { get; set; }
         public int oncallP { get; set; }
         public int oncallC { get; set; }
         public int oncallO { get; set; }
@@ -39,6 +49,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Dashboard
         public int ConcernIdC { get; set; }
         public int ConcernIdO { get; set; }
 
+        public List<Status> CareObj { get; set; }
         public List<Status> OnCallGraph { get; set; }
         public List<Status> concernNoteGraph { get; set; }
         public List<Status> TeleHealth { get; set; }

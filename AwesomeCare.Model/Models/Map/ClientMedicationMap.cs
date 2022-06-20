@@ -73,6 +73,22 @@ namespace AwesomeCare.Model.Models.Map
                .HasColumnName("Remark")
                .HasMaxLength(250)
                .IsRequired();
+
+            builder.Property(p => p.Means)
+               .HasColumnName("Means")
+               .IsRequired();
+
+            builder.Property(p => p.Type)
+               .HasColumnName("Type")
+               .IsRequired();
+
+            builder.Property(p => p.TimeCritical)
+               .HasColumnName("TimeCritical")
+               .IsRequired();
+
+            builder.Property(p => p.ClientMedImage)
+               .HasColumnName("ClientMedImage")
+               .IsRequired();
             #endregion
 
             #region Relationship

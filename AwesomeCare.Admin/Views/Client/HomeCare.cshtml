@@ -51,10 +51,11 @@
                                     </div>
                                 </div>
                                 <h4 class="user-name m-t-10 mb-0 text-ellipsis"><a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails"><span>@client.data.Firstname  @client.data.Middlename   @client.data.Surname</span></a></h4>
-                                <h5 class="user-name m-t-10 mb-0 text-ellipsis"><a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails">@client.data.Email</a></h5>
-                                <div class="small text-muted">@client.data.IdNumber</div>
-                                <a href="chat.html" class="btn btn-white btn-sm m-t-10">Message</a>
+                                <h5 class="user-name m-t-10 mb-0 text-ellipsis">Manager:  @if (!string.IsNullOrEmpty(client.data.ManagerName)) { @client.data.ManagerName}</h5>
+                                <div class="small text-muted">Birthday: @client.data.DateOfBirth</div>
+                                <a asp-route-clientId="@client.data.ClientId" asp-action="Index" asp-controller="Chat" class="btn btn-white btn-sm m-t-10">Message</a>
                                 <a asp-route-clientId="@client.data.ClientId" asp-action="HomeCareDetails" class="btn btn-white btn-sm m-t-10">View Profile</a>
+                                <a asp-route-clientId="@client.data.ClientId" asp-action="Client" asp-controller="Dashboard" class="btn btn-white btn-sm m-t-10">Dashboard</a>
                             </div>
                         </div>
                     }
@@ -141,13 +142,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            
             <form id="RoteringForm" asp-controller="Rotering" asp-action="Index" method="post">
                 <div class="modal-body">
                     <div class="card">
 
-                        <div class="header">
+                        <div class="card-header">
                         </div>
-                        <div class="body">
+                        <div class="card-body">
                             <div class="form-group">
                                 <input type="hidden" id="clientId" name="clientId" value="0" />
                                 <label>Please enter pin code</label>

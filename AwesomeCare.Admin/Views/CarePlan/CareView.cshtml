@@ -4,54 +4,48 @@
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
     <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
-
 }
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
-            <div class="header">
+            <div class="card-header">
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                         <div class="card">
-                            <div class="header">
-                            </div>
-                            <div class="body">
+                            <div class="card-body">
                                 <img alt="clientimage" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
                         <div class="card">
-                            <div class="header">
+                            <div class="card-header">
                                 <h2 style="text-align:center;">Care Plan & Risk Assessment Board</h2>
-                                <hr />
                             </div>
-                            <div class="body">
+                            <div class="card-body">
                                 <div class="row">
-                                    <div class="col-lg-8 col-md-8">
-                                        <h2>Preferred Name: @Model.PreferredName</h2>
+                                    <div class="col-lg-7 col-md-7">
+                                        <p>Preferred Name: </p>
+                                        <h3>@Model.PreferredName</h3>
                                     </div>
-                                    <div class="col-lg-4 col-md-4">
-                                        <h2>ID Number: @Model.IdNumber</h2>
+                                    <div class="col-lg-5 col-md-5">
+                                        <p>ID Number: </p>
+                                        <h3>@Model.IdNumber</h3>
                                     </div>
                                 </div>
-                                
-
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                         <div class="card">
-                            <div class="header">
-                            </div>
-                            <div class="body">
+                            <div class="card-body">
                                 <img alt="clientimage" src="@Model.PassportFilePath" height="150" width="150">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="body">
+            <div class="card-body">
                 <h4>Person Centredness</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -160,9 +154,8 @@
                                     <span asp-validation-for="Implications" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Indicators</label>
-                                    <select asp-for="Indicator" asp-items="@Model.IndicatorList" class="selectpicker form-control" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="Indicator" class="text-danger"></span>
+                                    <label class="control-label">Indicators</label><br />
+                                    @String.Join(", ", Model.IndicatorList)
                                 </div>
                             </div>
                         }
@@ -252,9 +245,8 @@
                                     <span asp-validation-for="Debture" class="text-danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
-                                    <label class="control-label">Method of Log</label>
-                                    <select asp-for="LogMethod" asp-items="@Model.KeyLogList" class="selectpicker form-control" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="LogMethod" class="text-danger"></span>
+                                    <label class="control-label">Method of Log</label><br />
+                                    @String.Join(", ", Model.KeyLogList)
                                 </div>
                             </div>
                             <div class="row">
@@ -305,16 +297,16 @@
 
                                     @foreach (var equip in Model.GetEquipment)
                                     {
-                                    <tr id="@equip.EquipmentId">
-                                        <td>@equip.ServiceDate.ToString("dd/MM/yyyy")</td>
-                                        <td>@equip.NextServiceDate.ToString("dd/MM/yyyy")</td>
-                                        <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Status" asp-items="null" /></td>
-                                        <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Name" asp-items="null" /></td>
-                                        <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Type" asp-items="null" /></td>
-                                        <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Location" asp-items="null" /></td>
-                                        <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).PersonToAct" asp-items="Model.StaffList"></select></td>
-                                        <td><img src="@equip.Attachment" height="75" width="75" /></td>
-                                    </tr>
+                                        <tr id="@equip.EquipmentId">
+                                            <td>@equip.ServiceDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@equip.NextServiceDate.ToString("dd/MM/yyyy")</td>
+                                            <td><baserecord asp-key="Equipment_Status" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Status" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Name" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Name" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Type" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Type" asp-items="null" /></td>
+                                            <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Location" asp-items="null" /></td>
+                                            <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).PersonToAct" asp-items="Model.StaffList"></select></td>
+                                            <td><img src="@equip.Attachment" height="75" width="75" /></td>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>
@@ -371,7 +363,6 @@
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Things I Like To Have Around</label>
                                     <baserecord asp-key="Things_I_Like_To_Have_Around" asp-for="Nutrition_ThingsILike" asp-items="null" />
-                                    <span asp-validation-for="Nutrition_ThingsILike" class="text danger"></span>
                                 </div>
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Fruits Intake</label>
@@ -619,8 +610,7 @@
                             <div class="row">
                                 <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
                                     <label class="control-label">Brief Health</label>
-                                    <input type="text" asp-for="HL_BriefHealth" class="form-control" readonly />
-                                    <span asp-validation-for="HL_BriefHealth" class="text-danger"></span>
+                                    <p style="text-align:justify;">@Model.HL_BriefHealth</p>
                                 </div>
                                 <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
                                     <label class="control-label">TV And Music</label>
@@ -629,8 +619,7 @@
                                 </div>
                                 <div class="col-sm-4 col-md-4 col-xs-12 col-lg-4 ">
                                     <label class="control-label">Special Caution</label>
-                                    <input type="text" asp-for="HL_SpecialCaution" class="form-control" readonly />
-                                    <span asp-validation-for="HL_SpecialCaution" class="text-danger"></span>
+                                    <p style="text-align:justify;">@Model.HL_SpecialCaution</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -643,10 +632,10 @@
                         </div>
                         <div class="col-xs-4 col-sm-4 col-md-4">
                             <div class="card">
-                                <div class="header">
+                                <div class="card-header">
                                     <h2>CONSTRAINT APPROVAL</h2>
                                 </div>
-                                <div class="body">
+                                <div class="card-body">
                                     <img src="@Model.HL_Attach" alt="image" width="300" height="240" />
                                 </div>
                             </div>
@@ -676,13 +665,8 @@
                                             <td>
                                                 @item.Name
                                             </td>
-                                            <td>
-                                                <baserecord asp-key="Balance_Mobility" asp-for="@item.Mobility" asp-items="null" />
-                                            </td>
-                                            <td>
-                                                <baserecord asp-key="Balance_Status" asp-for="@item.Status" asp-items="null" />
-
-                                            </td>
+                                            <td>@Model.baseRecordList.Where(s=>s.BaseRecordItemId==item.Mobility).FirstOrDefault().ValueName</td>
+                                            <td>@Model.baseRecordList.Where(s=>s.BaseRecordItemId==item.Status).FirstOrDefault().ValueName</td>
                                             <td style="text-align:justify;">
                                                 @item.Description
                                             </td>
@@ -699,32 +683,30 @@
                 <h4>Physical Ability</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        @if (Model.PhysicalId > 0)
+                        @if (Model.PhysicalAbility.Count > 0)
                         {
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                    <label class="control-label">Name</label>
-                                    <input type="text" asp-for="Physical_Name" class="form-control" readonly />
-                                    <span asp-validation-for="Physical_Name" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                    <label class="control-label">Mobility</label>
-                                    <baserecord asp-key="PhysicalAbility_Mobility" asp-for="Physical_Mobility" asp-items="null" />
-                                    <span asp-validation-for="Physical_Mobility" class="text-danger"></span>
-                                </div>
-                                <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
-                                    <label class="control-label">Status</label>
-                                    <baserecord asp-key="PhysicalAbility_Status" asp-for="Physical_Status" asp-items="null" />
-                                    <span asp-validation-for="Physical_Status" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <label class="control-label">Description</label>
-                                    <p style="text-align:justify;">@Model.Physical_Description</p>
-                                    <span asp-validation-for="Physical_Description" class="text-danger"></span>
-                                </div>
-                            </div>
+                                <table class="table table-bordered table-hover col-sm-12 col-md-12 col-lg-12 col-xs-12">
+                                    <thead>
+                                        <tr>
+
+                                            <th>NAME</th>
+                                            <th>Mobility</th>
+                                            <th>Status</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.PhysicalAbility)
+                                        {
+                                            <tr>
+                                                <td>@item.Name</td>
+                                                <td>@Model.baseRecordList.Where(s=>s.BaseRecordItemId==item.Mobility).FirstOrDefault().ValueName</td>
+                                                <td>@Model.baseRecordList.Where(s=>s.BaseRecordItemId==item.Status).FirstOrDefault().ValueName</td>
+                                                <td>@item.Description</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                         }
                     </div>
                 </div>
@@ -1003,7 +985,7 @@
                     </div>
                 </div>
                 <hr />
-                <h4>Personal Hygiene</h4>
+                <h4>Hygiene</h4>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         @if (Model.HygieneId > 0)
@@ -1308,11 +1290,11 @@
                 <div class="row">
                     <div class="col-lg-12 col-xs-12 col-sm-12 col-md-12">
                         <div class="card">
-                            <div class="header">
+                            <div class="card-header">
                                 <h2>Home Risk Assessment Headings</h2>
 
                             </div>
-                            <div class="body">
+                            <div class="card-body">
                                 @if (Model.GetHomeRiskAssessments.Count > 0)
                                 {
                                     <table class="table table-bordered table-hover" id="homeRisk">
@@ -1331,27 +1313,27 @@
                                                     </td>
                                                     <td>
 
+                                                        <table>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Title</th>
+                                                                    <th>Answer</th>
+                                                                    <th>Comment</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var task in Model.GetHomeRiskAssessments.Where(s => s.HomeRiskAssessmentId.ToString() == item.Value).Select(s => s.GetHomeRiskAssessmentTask).FirstOrDefault())
+                                                                {
 
-                                                        @foreach (var task in Model.GetHomeRiskAssessments.Where(s => s.HomeRiskAssessmentId.ToString() == item.Value).Select(s => s.GetHomeRiskAssessmentTask).FirstOrDefault())
-                                                        {
-                                                            <table>
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Title</th>
-                                                                        <th>Answer</th>
-                                                                        <th>Comment</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
                                                                     <tr>
                                                                         <td style="white-space: normal; text-align: justify;">@task.TitleName</td>
                                                                         <td>@task.AnswerName</td>
                                                                         <td style="white-space: normal; text-align: justify;">@task.Comment</td>
                                                                     </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        }
 
+                                                                }
+                                                            </tbody>
+                                                        </table>
 
                                                     </td>
                                                 </tr>
@@ -1506,23 +1488,23 @@
                     </thead>
 
                     <tbody>
-                   @foreach (var rotaType in Model.RotaTypes)
-                    {
-                        <tr>
-                            @{
-                                var clientRotaType = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId);
-                                if (clientRotaType != null)
-                                {
-                                    <td>
-                                        <div class="fancy-checkbox">
-                                            <label><input type="checkbox" name="@rotaType.RotaType" checked><span>@rotaType.RotaType</span></label>
-                                            @Html.Hidden($"{rotaType.RotaType}-ClientRotaId", @clientRotaType.ClientRotaId)
-                                        </div>
-                                    </td>
+                        @foreach (var rotaType in Model.RotaTypes)
+                        {
+                            <tr>
+                                @{
+                                    var clientRotaType = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId);
+                                    if (clientRotaType != null)
+                                    {
+                                        <td>
+                                            <div class="fancy-checkbox">
+                                                <label><input type="checkbox" name="@rotaType.RotaType" checked><span>@rotaType.RotaType</span></label>
+                                                @Html.Hidden($"{rotaType.RotaType}-ClientRotaId", @clientRotaType.ClientRotaId)
+                                            </div>
+                                        </td>
+                                    }
                                 }
-                            }
-                            @foreach (var weekDay in Model.WeekDays)
-                            {
+                                @foreach (var weekDay in Model.WeekDays)
+                                {
                                     Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId);
                                     var rotaDywk = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == rotaType.ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == weekDay.RotaDayofWeekId);
                                     if (rotaDywk != null)
@@ -1531,50 +1513,453 @@
                                             @{
                                                 Html.Hidden($"{rotaType.RotaType}-{weekDay.DayofWeek}-DayId", rotaDywk.ClientRotaDaysId);
                                                 var rotasList = new List<SelectListItem>();
-                                                foreach (var m in Model.Rotas)
+                                                foreach (var mR in Model.Rotas)
                                                 {
-                                                    var sl = new SelectListItem(m.Text, m.Value);
+                                                    var sl = new SelectListItem(mR.Text, mR.Value);
                                                     sl.Selected = sl.Value == rotaDywk.RotaId.ToString();
                                                     rotasList.Add(sl);
                                                 }
                                             }
-                                                <div class="form-group">
-                                                    <label>Rota</label>
-                                                    @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rota", rotasList, "select rota", new { @class = "form-control" })
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="">Tasks</label>
-                                                    <br />
-                                                    @{ var rotaTaskList = new List<SelectListItem>();
-                                                        var rotaDays = rotaDywk.RotaTasks.Where(rd => rd.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
-                                                        foreach (var tk in Model.RotaTasks)
+                                            <div class="form-group">
+                                                <label>Rota</label>
+                                                @Html.DropDownList($"{rotaType.RotaType}-{weekDay.DayofWeek}-rota", rotasList, "select rota", new { @class = "form-control" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Tasks</label>
+                                                <br />
+                                                @{ var rotaTaskList = new List<SelectListItem>();
+                                                    var rotaDays = rotaDywk.RotaTasks.Where(rd => rd.ClientRotaDaysId == rotaDywk.ClientRotaDaysId).ToList();
+                                                    foreach (var tk in Model.RotaTasks)
+                                                    {
+                                                        if (rotaDays.FirstOrDefault(c => c.RotaTaskId.ToString() == tk.Value) != null)
                                                         {
-                                                            if (rotaDays.FirstOrDefault(c => c.RotaTaskId.ToString() == tk.Value) != null)
-                                                            {
-                                                                @string.Concat(tk.Text, ", ");
-                                                                <br />
-                                                            }
+                                                            @string.Concat(tk.Text, ", ");
+                                                            <br />
                                                         }
                                                     }
+                                                }
 
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Start Time</label>
-                                                    <input type="text" value="@rotaDywk.StartTime" name="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Start Time</label>
+                                                <input type="text" value="@rotaDywk.StartTime" name="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
 
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Stop Time</label>
-                                                    <input type="text" value="@rotaDywk.StopTime" name="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Stop Time</label>
+                                                <input type="text" value="@rotaDywk.StopTime" name="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" id="@rotaType.RotaType-@weekDay.DayofWeek-StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
 
-                                                </div>
+                                            </div>
                                         </td>
                                     }
-                            }
-                        </tr>
-                    }
+                                }
+                            </tr>
+                        }
                     </tbody>
                 </table>
+                <hr />
+                <h4>Client Nutrition</h4>
+                <table class="table table-hover table-bordered" id="tblMeal">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            @foreach (var weekDay in Model.WeekDays)
+                            {
+                                <th>
+                                    @weekDay.DayofWeek
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var MealType in Model.RotaTypes)
+                        {
+                            <tr id="@MealType.RotaType">
+                                <td>
+                                    <div class="fancy-checkbox">
+                                        @{
+
+                                            <input type="hidden" asp-for="@MealType.ClientRotaTypeId" />
+                                            var MealTypeId = Model.ClientMealDays.FirstOrDefault(c => c.ClientMealTypeId == MealType.ClientRotaTypeId);
+                                            if (MealTypeId != null)
+                                            {
+                                                //display and for edit
+                                                <label><input type="checkbox" class="MealType" name="@MealType.RotaType" checked><span>@MealType.RotaType</span></label>
+                                                @Html.Hidden($"{MealType.RotaType}-NutritionId-{Model.NutritionId}", @Model.NutritionId)
+                                            }
+                                        }
+
+                                    </div>
+                                </td>
+                                @foreach (var weekDay in Model.WeekDays)
+                                {
+                                    var mealDywk = Model.ClientMealDays.FirstOrDefault(d => d.ClientMealTypeId == MealType.ClientRotaTypeId && d.MealDayofWeekId == weekDay.RotaDayofWeekId);
+                                    <td>
+                                        @if (mealDywk != null)
+                                        {
+
+                                            <input type="checkbox" class="selectDay" name="@MealType.RotaType-isChecked-@weekDay.DayofWeek" id="@MealType.RotaType-isChecked-@weekDay.DayofWeek" checked />
+                                            @Html.Hidden($"{MealType.RotaType}-{weekDay.DayofWeek}-Day", weekDay.RotaDayofWeekId)
+
+                                            <div class="form-group">
+                                                <label><small>Meal Details</small></label>
+                                                <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-MealDetails" id="@MealType.RotaType-@weekDay.DayofWeek-MealDetails" class="form-control" value="@mealDywk.MEALDETAILS" />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label><small>How to Prepare</small></label>
+                                                <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" id="@MealType.RotaType-@weekDay.DayofWeek-HowtoPrepare" class="form-control" value="@mealDywk.HOWTOPREPARE" />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label><small>Type</small></label>
+                                                <baserecord asp-key="Client_Meal_Type" asp-for="ClientMealDays.FirstOrDefault().TypeId" asp-items="null" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label><small>Video URL</small></label>
+                                                <input type="text" name="@MealType.RotaType-@weekDay.DayofWeek-SeeVideo" id="@MealType.RotaType-@weekDay.DayofWeek-SeeVideo" class="form-control" value="@mealDywk.SEEVIDEO" />
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label><small>Picture</small></label>
+                                                <br />
+                                                <image alt="file" class="" src="@mealDywk.PICTURE" name="@MealType.RotaType-@weekDay.DayofWeek-Picture" id="@MealType.RotaType-@weekDay.DayofWeek-Picture" style="width: 100px !important; height: 100px !important;">
+
+                                            </div>
+                                        }
+                                    </td>
+
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <hr />
+                <h4>Client Shopping</h4>
+                @if (Model.ClientShopping.Count > 0)
+                {
+                    @foreach (var Shopping in Model.ClientShopping)
+                    {
+                        <table class="table table-hover table-bordered table-responsive" name="@Model.ClientShopping" id="tblShopping">
+                            <thead>
+                                
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Staff</th>
+                                    <th>Means</th>
+                                    <th>Location</th>
+                                    <th>Item</th>
+                                    <th>Desc</th>
+                                    <th>Qty</th>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select class="selectpicker" data-live-search="true" asp-for="@Model.ClientShopping.FirstOrDefault().STAFFId" asp-items="Model.StaffList"></select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().MeansOfPurchase" id="MeansOfPurchase" value="@Shopping.MeansOfPurchase" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().LocationOfPurchase" id="LocationOfPurchase" value="@Shopping.LocationOfPurchase" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Item" id="Item" value="@Shopping.Item" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Description" id="Description" value="@Shopping.Description" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Quantity" id="Quantity" value="@Shopping.Quantity" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Amount</th>
+                                    <th>Day</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Image</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="number" step="0.5" min="0" max="99999" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().Amount" id="Amount" value="@Shopping.Amount" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DAYOFSHOPPING" id="DAYOFSHOPPING" value="@Shopping.DAYOFSHOPPING" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DATEFROM" id="DATEFROM" value="@Shopping.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DATETO" id="DATETO" value="@Shopping.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <image alt="Image" class="ImagePreviewBox" name="@Model.ClientShopping.FirstOrDefault().Image" id="Image" src="@Shopping.Image" style="width: 100px !important; height: 100px !important;" />
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    }
+                }
+                <hr />
+                <h4>Client Cleaning</h4>
+                @if (Model.ClientCleaning.Count > 0)
+                {
+                    @foreach (var Cleaning in Model.ClientCleaning)
+                    {
+                        <table class="table table-hover table-bordered table-responsive" id="tblCleaning">
+                            <tbody>
+                                <tr>
+                                    <th>Staff</th>
+                                    <th>Items</th>
+                                    <th>Details</th>
+                                    <th>Safety</th>
+                                    <th>Location</th>
+                                    <th>Desc</th>
+                                    <th>Minute</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select class="selectpicker" data-live-search="true" asp-for="@Model.ClientCleaning.FirstOrDefault().STAFFId" asp-items="Model.StaffList"></select>
+                                    </td>
+                                    <td>
+                                        <baserecord asp-key="Areas_And_Items" asp-for="@Model.ClientCleaning.FirstOrDefault().AreasAndItems" asp-items="null" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().Details" id="Details" value="@Cleaning.Details" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().SafetyHazard" id="SafetyHazard" value="@Cleaning.SafetyHazard" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().LocationOfItem" id="LocationOfItem" value="@Cleaning.LocationOfItem" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DescOfItem" id="DescOfItem" value="@Cleaning.DescOfItem" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().MinuteAlloted" id="MinuteAlloted" value="@Cleaning.MinuteAlloted" data-provide="timepicker" data-show-meridian="false" data-minute-step="" />
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Disposal</th>
+                                    <th>Get</th>
+                                    <th>Video</th>
+                                    <th>Day</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Keep</th>
+                                    <th>Image</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().Disposal" id="Disposal" value="@Cleaning.Disposal" />
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().WhereToGet" id="WhereToGet" value="@Cleaning.WhereToGet" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().SEEVIDEO" id="SEEVIDEO" value="@Cleaning.SEEVIDEO" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DAYOFCLEANING" id="DAYOFCLEANING" value="@Cleaning.DAYOFCLEANING" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DATEFROM" id="DATEFROM" value="@Cleaning.DATEFROM" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" asp-for="@Model.ClientCleaning.FirstOrDefault().DATETO" id="DATETO" value="@Cleaning.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    </td>
+                                    <td>
+                                        <image alt="Image" name="@Model.ClientCleaning.FirstOrDefault().WhereToKeep" id="ClientCleaning.WhereToKeep" src="@Cleaning.WhereToKeep" style="width: 100px !important; height: 100px !important;" />
+                                    </td>
+                                    <td>
+                                        <image alt="Image" name="@Model.ClientCleaning.FirstOrDefault().Image" id="ClientCleaning.Image" src="@Cleaning.Image" style="width: 100px !important; height: 100px !important;" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                }
+                <hr />
+                <h4>Client Best Interest</h4>
+                @if (Model.getBestInterestAssessment != null)
+                { 
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                         <input type="hidden" asp-for="@Model.ClientId" />
+                    <input type="hidden" asp-for="@Model.BestId" />
+                    <input type="hidden" asp-for="@Model.BelieveTaskCount" value="@Model.BelieveTaskCount" />
+                    <input type="hidden" asp-for="@Model.CareIssuesTaskCount" value="@Model.CareIssuesTaskCount" />
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Date</label>
+                                <input type="text" class="form-control" asp-for="@Model.Date" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                <span asp-validation-for="Date" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Name</label>
+                                <input type="text" class="form-control" asp-for="@Model.Name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Position</label>
+                                <input type="text" class="form-control" asp-for="@Model.Position" />
+                                <span asp-validation-for="Position" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-12 col-md-3 col-lg-3">
+                            <div class="form-group">
+                                <label class="control-label">Signature</label>
+                                <input type="text" class="form-control" asp-for="@Model.Signature" />
+                                <span asp-validation-for="Signature" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label">The health or social care issue that needs a specific decision (Please Tick) : </label>
+                            @{
+
+                                int m = 1;
+                                foreach (var item in Model.careIssuebaseRecordList)
+                                {
+                                    var issue = Model.GetCareIssuesTask.FirstOrDefault(s => s.Issues == item.BaseRecordItemId);
+                                    if (issue != null)
+                                    {
+                                        <div class="fancy-checkbox">
+                                            <input type="hidden" name="@string.Concat("Issues",m)" id="@string.Concat("Issues",m)" value="@item.BaseRecordItemId" />
+                                            <label><input type="checkbox" class="MealType" name="@string.Concat("careIssues", m)" checked><span>@item.ValueName</span></label>
+                                            <input type="hidden" name="@string.Concat("CareIssuesTaskId",m)" id="@string.Concat("CareIssuesTaskId",m)" value="@issue.CareIssuesTaskId" />
+                                        </div>
+                                        m++;
+
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                    @{
+                        int bi = 1;
+                        @foreach (var head in Model.BestHeadingList)
+                        {
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h3>
+                                        @head.ValueName
+                                    </h3>
+
+                                </div>
+                            </div>
+                            Model.TitleList = Model.baseRecordBestInterestList.Where(s => s.KeyName.Contains(head.ValueName.Substring(0,25))).Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                            foreach (var title in Model.TitleList)
+                            {
+                                var health1 = Model.GetHealthTask.FirstOrDefault(s => s.Title == title.BaseRecordItemId);
+                                if (health1 != null)
+                                {
+                                    <input type="hidden" name="@string.Concat("HealthTaskId", (bi))" id="@string.Concat("HealthTaskId", (bi))" value="@health1.HealthTaskId" />
+                                    <input type="hidden" name="@string.Concat("HeadingId", (bi))" id="@string.Concat("HeadingId", (bi))" value="@health1.HeadingId" />
+                                    Model.AnswerList = Model.baseRecordBestInterestList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">@title.ValueName</label>
+                                            <input type="hidden" name="@string.Concat("Title", (bi))" id="@string.Concat("Title", (bi))" value="@health1.Title" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label class="control-label">Answer</label>
+                                            <select class="custom-select" onchange="showHide(this)" name="@string.Concat("Answer", (bi))" id="@string.Concat("Answer", (bi))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString(), s.BaseRecordItemId==health1.Answer)).ToList()"></select>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <label class="control-label" id="@string.Concat("lblRemarks", (bi))" name="@string.Concat("lblRemarks", (bi))" style="display:none">Remarks</label>
+                                            <input type="text" class="form-control" name="@string.Concat("Remarks", (bi))" id="@string.Concat("Remarks", (bi))" style="display:none" value="@health1.Remarks" />
+                                        </div>
+                                    </div>
+                                }
+                                bi++;
+                                Model.HealthTaskCount += 1;
+                            }
+                            <hr />
+                            <input type="hidden" asp-for="@Model.HealthTaskCount" />
+                        }
+                    }
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="control-label">Reasonable believe</label>
+                            @{
+                                if (Model.GetBelieveTask.Count > 0)
+                                {
+                                    <input type="hidden" asp-for="@Model.GetBelieveTask.FirstOrDefault().BelieveTaskId" />
+                                    <baserecord asp-key="MCA_Reasonable_Believe" asp-items="null" asp-for="@Model.GetBelieveTask.FirstOrDefault().ReasonableBelieve" />
+                                }
+                            }
+                        </div>
+                    </div>
+                    @{
+                        int k = 1;
+                        @foreach (var head in Model.Heading2List)
+                        {
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h3>
+                                        @head.ValueName
+                                    </h3>
+
+                                </div>
+                            </div>
+                            
+                            Model.Title2List = Model.baseRecordBestInterestList.Where(s => s.KeyName.Contains(head.ValueName.Substring(0, 25))).Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                            foreach (var title in Model.Title2List)
+                            {
+                                var health2 = Model.GetHealthTask2.FirstOrDefault(s => s.Title == title.BaseRecordItemId);
+                                if (health2 != null)
+                                {
+                                    <input type="hidden" name="@string.Concat("HealthTask2Id", (k))" id="@string.Concat("HealthTask2Id", (k))" value="@health2.HealthTask2Id" />
+                                    <input type="hidden" name="@string.Concat("Heading2Id", (k))" id="@string.Concat("Heading2Id", (k))" value="@health2.Heading2Id" />
+                                    Model.AnswerList = Model.baseRecordBestInterestList.Where(s => s.KeyName == "MCA_Health_Task_Answer").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label class="control-label">@title.ValueName</label>
+                                            <input type="hidden" name="@string.Concat("Title2", (k))" id="@string.Concat("Title2", (k))" value="@health2.Title" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                            <label class="control-label">Answer</label>
+                                            <select class="custom-select" onchange="show2Hide(this)" name="@string.Concat("Answer2", (k))" id="@string.Concat("Answer2", (k))" asp-items="@Model.AnswerList.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString(),s.BaseRecordItemId==health2.Answer)).ToList()"></select>
+                                        </div>
+                                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                            <label class="control-label" id="@string.Concat("lblRemarks2", (k))" name="@string.Concat("lblRemarks2", (k))" style="display:none">Remarks</label>
+                                            <input type="text" class="form-control" name="@string.Concat("Remarks2", (k))" id="@string.Concat("Remarks2", (k))" style="display:none" value="@health2.Remark" />
+                                        </div>
+                                    </div>
+
+                                }
+                                k++;
+                                Model.HealthTask2Count += 1;
+                            }
+                        }
+                    }
+                    </div>
+                </div>
+                }
                 <hr />
                 <h4>Consent For Landline</h4>
                 <div class="row">
@@ -1601,13 +1986,11 @@
                             <div class="row">
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Method of Log</label><br />
-                                    <select asp-for="LandLineLogMethod" asp-items="@Model.LandLogList" class="selectpicker form-control" data-live-search="true" multiple></select>
-                                    <span asp-validation-for="LandLineLogMethod" class="text-danger"></span>
+                                    @String.Join(", ", Model.LandLogList)                                    
                                 </div>
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <label class="control-label">Name</label>
                                     <select class="selectpicker form-control" asp-for="@Model.LandName" asp-items="@Model.InvolingList"></select>
-                                    <span asp-validation-for="LandName" class="text-danger"></span>
                                 </div>
                             </div>
                         }
@@ -1681,23 +2064,104 @@
     </div>
 </div>
 
+@section Scripts{
 
-@section VendorScripts{
-    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
-    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-    <script type="text/javascript">
+     <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+    <script>
         $(document).ready(function () {
             $('.custom-select').attr("disabled", "disabled");
+            $('[id^="-rota"]').attr("disabled", "disabled");
+            $('.selectpicker').attr("disabled", "disabled");
         });
-    </script>
-}
+        
+        window.onload = function ()
+        {
+            if (document.getElementById('BestId').value > "0")
+            {
+                $('#ReasonableBelieve').change();
+            }
+        };
+                
 
-@section Scripts{
-    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
-    <script src="../../../assets/js/pages/forms/dropify.js"></script>
-    <script>
-        $(function () {
+        function showHide(element) {
+            var Name = element.id;
+            var Id = Name.split("Answer")[1];
+            if (element.options[element.selectedIndex].text == 'Yes')
+            {
+                document.getElementById('Remarks' + Id).style.display = 'block';
+                document.getElementById('lblRemarks' + Id).style.display = 'block';
+            }
+            else
+            {
+                document.getElementById('Remarks' + Id).style.display ='none';
+                document.getElementById('lblRemarks' + Id).style.display ='none';
+            }
+        };
+        function show2Hide(element) {
+            var Name = element.id;
+            var Id = Name.split("Answer2")[1];
+            if (element.options[element.selectedIndex].text == 'Yes') {
+                document.getElementById('Remarks2' + Id).style.display = 'block';
+                document.getElementById('lblRemarks2' + Id).style.display = 'block';
+            }
+            else {
+                document.getElementById('Remarks2' + Id).style.display = 'none';
+                document.getElementById('lblRemarks2' + Id).style.display = 'none';
+            }
+        };
+
+        $(function ()
+        {
+            
+            $('[id^="Answer"]').change();
+
+            $('#ReasonableBelieve').on('change', function ()
+            {
+                $('#ReasonableBelieve').css('height', '125px');
+                $('#ReasonableBelieve').css('text-align', 'justify');
+                $('#ReasonableBelieve').css('white-space', 'break-spaces');
+            });
+            
+
+            var table = $('#tbl_Task').DataTable({
+                scrollCollapse: true,
+                select: {
+                    style: 'single'
+                },
+                searching: false, paging: false, info: false
+            });
+            var counter = $("#TaskCount").val();
+            $('#Addrow').on('click', function () {
+                counter++;
+                var clone = $("#task tr:last").clone();
+                clone.attr('id', 'row-' + counter);
+                table.rows.add(clone).draw();
+                $('#TaskCount').val(counter);
+
+            });
+            $('#tbl_Task tbody').on('click', 'tr', function () {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+            $('#Delrow').click(function () {
+                const id = table.row('.selected').id();
+                if (table.row('.selected').length > 0) {
+                    const row = table.rows('.selected').remove().draw();
+                    counter--;
+                    $('#TaskCount').val(counter);
+                }
+                else {
+                    alert("Please select row for delete !");
+                }
+            });
+        });
+
+         $(function () {
             $('#btnClass1').on('click', function () {
                 $('#tblPersonCentered > tbody  > tr').each(function () {
                     var Id = $(this)[0].id;
@@ -1740,4 +2204,4 @@
             });
         });
     </script>
-}
+    }

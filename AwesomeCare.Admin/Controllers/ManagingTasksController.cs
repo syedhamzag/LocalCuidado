@@ -101,18 +101,22 @@ namespace AwesomeCare.Admin.Controllers
 
             for (int i = 0; i < model.TaskCount; i++)
             {
+                var isChecked = formcollection[$"isChecked{i}"];
+                if (isChecked.Count > 0 && isChecked[0].ToString().Equals("on", StringComparison.InvariantCultureIgnoreCase))
+                { 
                 
-                PostManagingTasks post = new PostManagingTasks();
-                var TaskId = int.Parse(formcollection["TaskId"][i]);
-                var Task = int.Parse(formcollection["Task"][i]);
-                var Status = int.Parse(formcollection["Status"][i]);
-                var Help = formcollection["Help"][i].ToString();
-                post.TaskId = TaskId;
-                post.ClientId = model.ClientId;
-                post.Task = Task;
-                post.Status = Status;
-                post.Help = Help;
-                task.Add(post);
+                    PostManagingTasks post = new PostManagingTasks();
+                    var TaskId = int.Parse(formcollection["TaskId"][i]);
+                    var Task = int.Parse(formcollection["Task"][i]);
+                    var Status = int.Parse(formcollection["Status"][i]);
+                    var Help = formcollection["Help"][i].ToString();
+                    post.TaskId = TaskId;
+                    post.ClientId = model.ClientId;
+                    post.Task = Task;
+                    post.Status = Status;
+                    post.Help = Help;
+                    task.Add(post);
+                }
             }
             var result = new HttpResponseMessage();
             if (task.FirstOrDefault().TaskId > 0)

@@ -1,0 +1,228 @@
+﻿@using AwesomeCare.Admin.ViewModels.Rotering;
+@using System.Globalization;
+@using AwesomeCare.DataTransferObject.DTOs.Rotering;
+@model LiveRota
+@{
+    ViewData["Title"] = "Office Attendance";
+}
+
+@section Meta{
+    <meta http-equiv="refresh" content="600" />
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-4 col-lg-4">
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label> Start Date</label>
+                                    <input type="text" id="startDate" name="startDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label> Stop Date</label>
+                                    <input type="text" id="stopDate" name="stopDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
+                                </div>
+                            </div>
+                            <button type="submit" asp-action="OfficeAttendance" class="btn btn-primary">Search</button>
+                        </div>
+                        <div class="col-sm-2 col-lg-2 col-xs-2">
+
+                        </div>
+                        <div class="col-sm-6 col-lg-6 col-xs-6">
+                        </div>
+                    </div>
+
+
+
+                    @if (Model.GroupLiveRotas.Count > 0)
+                    {
+
+                        <table id="liveRotaTable" class="table table-condensed table-hover table-bordered datatablesExportExcel table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Rota</th>
+                                    <th>Rota Name</th>
+                                    <th>Staff Name</th>
+                                    <th>Location (lat;long)</th>
+                                    <th>Clock In Address</th>
+                                    <th>Clock In Distance</th>
+                                    <th>Clock Out Address</th>
+                                    <th>Clock Out Distance</th>
+                                    
+                                    <th>StartTime</th>
+                                    <th>StopTime</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
+                                    <th>ClockIn Method</th>
+                                    <th>ClockOut Method</th>
+                                    <th>Clock Diff.(Mins)</th>
+                                    <th>Remark</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var model in Model.GroupLiveRotas)
+                                {
+                                    foreach (var rota in model.Trackers)
+                                    {
+
+                                        <tr style="color:black;background-color:@rota.RowClass(rota.StartTime,rota.ClockInTime)">
+                                            <td>@rota.RotaDate.ToPortalDateTime().ToString("MM/dd/yyyy")</td>
+                                            <td>@rota.Period</td>
+                                            <td>@rota.Rota</td>
+                                            <td>@rota.Staff</td>
+                                             <td>@rota.ClientLatitude;@rota.ClientLongitude</td>
+                                            <td>@rota.ClockInAddress</td>
+                                            <td>
+                                                @{
+                                                    try
+                                                    {
+                                                        if (!string.IsNullOrWhiteSpace(rota.ClockInAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
+                                                        {
+                                                            double careerlat = 0;
+                                                            double careerlongi = 0;
+                                                            double clientlat = 0;
+                                                            double clientlongi = 0;
+                                                            // int decimalPlaces = 5;
+
+                                                            var clockInLocation = rota.ClockInAddress.Split(";");
+                                                            var clockInLatitude = clockInLocation[0];
+                                                            var clockInLongitude = clockInLocation[1];
+
+                                                            var careerLocation = new Location();
+
+                                                            careerLocation.Latitude = double.TryParse(clockInLatitude, out careerlat) ? careerlat : 0;
+                                                            careerLocation.Longitude = double.TryParse(clockInLongitude, out careerlongi) ? careerlongi : 0;
+
+                                                            var clientLocation = new Location();
+                                                            clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlat) ? clientlat : 0;
+                                                            clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongi) ? clientlongi : 0;
+
+                                                            var clockInDistance = rota.CalculateDistance(clientLocation, careerLocation);
+                                                            @clockInDistance;
+                                                        }
+                                                        else
+                                                        {
+                                                            var dist = "N/A";
+                                                            @dist
+                                                        }
+                                                    }
+                                                    catch (Exception)
+                                                    {
+                                                        var dist = "err";
+                                                        @dist
+                                                    }
+                                                }
+
+                                            </td>
+                                            <td>@rota.ClockOutAddress</td>
+                                            <td>
+                                                @{
+                                                    try
+                                                    {
+                                                        if (!string.IsNullOrWhiteSpace(rota.ClockOutAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
+                                                        {
+                                                            double careerlat = 0;
+                                                            double careerlongi = 0;
+                                                            double clientlatOut = 0;
+                                                            double clientlongiOut = 0;
+                                                            //  int decimalPlaces = 5;
+
+
+                                                            var clockOutLocation = rota.ClockOutAddress.Split(";");
+                                                            var clockOutLatitude = clockOutLocation[0];
+                                                            var clockOutLongitude = clockOutLocation[1];
+
+                                                            var careerLocation = new Location();
+
+                                                            careerLocation.Latitude = double.TryParse(clockOutLatitude, out careerlat) ? careerlat : 0;
+                                                            careerLocation.Longitude = double.TryParse(clockOutLongitude, out careerlongi) ? careerlongi : 0;
+
+                                                            var clientLocation = new Location();
+                                                            clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlatOut) ? clientlatOut : 0;
+                                                            clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongiOut) ? clientlongiOut : 0;
+
+                                                            var clockOutDistance = rota.CalculateDistance(clientLocation, careerLocation);
+                                                            @clockOutDistance;
+                                                        }
+                                                        else
+                                                        {
+                                                            var dist = "N/A";
+                                                            @dist
+                                                        }
+                                                    }
+                                                    catch (Exception )
+                                                    {
+
+                                                        var dist = "err";
+                                                        @dist
+                                                    }
+                                                }
+                                            </td>
+                                            <td>@rota.StartTime</td>
+                                            <td>@rota.StopTime</td>
+                                            <td>
+                                                @{
+                                                    if (rota.ClockInTime.HasValue)
+                                                    {
+                                                        var clockInTime = rota.ClockInTime.Value.DateTime.ToPortalDateTime().ToString("HH:mm:ss tt");
+                                                        @clockInTime;
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (rota.ClockOutTime.HasValue)
+                                                    {
+                                                        var clockOutTime = rota.ClockOutTime.Value.DateTime.ToPortalDateTime().ToString("HH:mm:ss tt");
+                                                        @clockOutTime;
+                                                    }
+                                                }
+                                            </td>
+                                            <td>@rota.ClockInMethod</td>
+                                            <td>@rota.ClockOutMethod</td>
+                                            <td>
+                                                @{
+
+                                                    bool isClockInTimeValid = false;
+                                                    bool isClockOutTimeValid = false;
+                                                    TimeSpan clockIn = default;
+                                                    TimeSpan clockOut = default;
+                                                    if (rota.ClockInTime.HasValue && rota.ClockOutTime.HasValue)
+                                                    {
+                                                        isClockInTimeValid = TimeSpan.TryParseExact(rota.ClockInTime.Value.DateTime.ToPortalDateTime().ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockIn);
+                                                        isClockOutTimeValid = TimeSpan.TryParseExact(rota.ClockOutTime.Value.DateTime.ToPortalDateTime().ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockOut);
+                                                        if (isClockInTimeValid && isClockOutTimeValid)
+                                                        {
+                                                            var clockDiff = clockOut.Subtract(clockIn);
+                                                            @clockDiff
+                                                        }
+                                                    }
+
+                                                }
+                                            </td>
+                                            <td>@rota.Remark</td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+
+                    }
+                    else
+                    {
+                        <p class="text-center">No Attendance for today</p>
+                    }
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

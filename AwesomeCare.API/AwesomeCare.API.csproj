@@ -62,6 +62,7 @@
     <ProjectReference Include="..\AwesomeCare.DataAccess\AwesomeCare.DataAccess.csproj" />
     <ProjectReference Include="..\AwesomeCare.DataTransferObject\AwesomeCare.DataTransferObject.csproj" />
     <ProjectReference Include="..\AwesomeCare.Model\AwesomeCare.Model.csproj" />
+    <ProjectReference Include="..\AwesomeCare.Services\AwesomeCare.Services.csproj" />
     <ProjectReference Include="..\MapperConfig\MapperConfig.csproj" />
   </ItemGroup>
 

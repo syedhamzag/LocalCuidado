@@ -1,0 +1,44 @@
+﻿@using AwesomeCare.Admin.ViewModels.ShiftBooking;
+@model ViewShiftViewModel
+@{
+    ViewData["Title"] = "Edit Staff Shift Booking";
+}
+<!-- /Content -->
+<!-- Search Filter -->
+<form asp-action="EditStaff" method="post">
+<div class="row filter-row">
+	<input type="hidden" asp-for="ShiftBookingId" />
+	<input type="hidden" value="@Model.Staffs.Count()" id="StaffCount" name="StaffCount" />
+	@{
+		int i = 1;
+	
+			@foreach(var staff in Model.Staffs)
+			{
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
+					<div class="form-group">
+						<select id="@string.Concat("staff",i)" name="@string.Concat("staff",i)" asp-items="@Model.Rotas" class="selectpicker form-control" selected="@staff.StaffPersonalInfoId" title="@staff.StaffName" value="@staff.StaffPersonalInfoId" data-live-search="true"></select>
+						<input type="hidden" id="@string.Concat("staffShiftId",i)" name="@string.Concat("staffShiftId",i)" value="@staff.StaffShiftBookingId" />
+					</div>
+				</div>
+				i++;
+			}
+	}
+	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">  
+		<input type="submit" class="btn btn-success w-100" value="Change" />  
+	</div>     
+</div>
+</form>
+<script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+	$(function () 
+    {
+		//var staff = JSON.parse('@Html.Raw(Model.Ids)');
+		//var counter = $('#StaffCount').val();
+		//for(j = 1; j <= counter; j++)
+		//{
+		//	var id = staff[j-1];
+		//	alert(id);
+		//	$('#staff'+j).val(id).change();
+		//}
+	});
+</script>

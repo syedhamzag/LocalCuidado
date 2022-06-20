@@ -11,7 +11,7 @@
 <div class="row clearfix">
     <div class="col-lg-12">
         <div class="card">
-            <div class="header">
+            <div class="card-header">
                 <h2>Base Record Items</h2>
             </div>
             <div class="card-body">
@@ -51,7 +51,7 @@
                                                                 //BaseRecord Content
                                                                 <tr>
                                                                     <td> @item.ValueName</td>
-                                                                    <td>   <a asp-controller="Admin" asp-action="EditBaseRecordItem" asp-route-baseRecordItemId="@item.BaseRecordItemId"> <i class="icon-pencil js-sweetalert" /></a></td>
+                                                                    <td>   <a asp-controller="Admin" asp-action="EditBaseRecordItem" asp-route-baseRecordItemId="@item.BaseRecordItemId"> <i class="fa fa-pencil m-r-5" /></a></td>
                                                                 </tr>
 
                                                             }
@@ -70,3 +70,194 @@
         </div>
     </div>
 </div>
+<div class="row clearfix">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h2>Base Record PIN</h2>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="pin">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0 row">
+                                <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#rottering" aria-expanded="false" aria-controls="rottering">
+                                    Rottering
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="rottering" class="collapse" aria-labelledby="rottering" data-parent="#pin">
+                            <div class="card-body">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0 row">
+                                            <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#rotaId" aria-expanded="false" aria-controls="rotaId">
+                                                <small>(Key: Rottering PIN)</small>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="rotaId" class="collapse" aria-labelledby="RotteringPIN" data-parent="#rottering">
+                                        <div class="card-body">
+                                            <table class="table table-condensed table-borderless table-hover">
+                                                <tr>
+                                                    <td> ********</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary fa fa-pencil m-r-5" data-bs-toggle="modal" data-bs-target="#roteringModal">
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="accordion" id="taskpin">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0 row">
+                                <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#taskboard" aria-expanded="false" aria-controls="taskboard">
+                                    Task Board
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="taskboard" class="collapse" aria-labelledby="taskboard" data-parent="#taskpin">
+                            <div class="card-body">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0 row">
+                                            <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#taskId" aria-expanded="false" aria-controls="taskId">
+                                                <small>(Key: Task Board PIN)</small>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                    <div id="taskId" class="collapse" aria-labelledby="TaskboardPIN" data-parent="#taskboard">
+                                        <div class="card-body">
+                                            <table class="table table-condensed table-borderless table-hover">
+                                                <tr>
+                                                    <td> ********</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-primary fa fa-pencil m-r-5" data-bs-toggle="modal" data-bs-target="#taskModal">
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="roteringModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="RoteringForm" asp-controller="Rotering" asp-action="ChangePin" method="post">
+                <div class="modal-body">
+                    <div class="card">
+
+                        <div class="card-header">
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Please Enter Old Pin</label>
+                                <input type="password" class="form-control" name="oldPin" />
+                            </div>
+                            <div class="form-group">
+                                <label>Please Enter New pin</label>
+                                <input type="password" class="form-control" name="newPin" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="taskModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="TaskBoardForm" asp-controller="TaskBoard" asp-action="ChangePin" method="post">
+                <div class="modal-body">
+                    <div class="card">
+
+                        <div class="card-header">
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Please Enter Old Pin</label>
+                                <input type="password" class="form-control" name="oldPin" />
+                            </div>
+                            <div class="form-group">
+                                <label>Please Enter New pin</label>
+                                <input type="password" class="form-control" name="newPin" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[id^="btnRotering"]').on('click', function () {
+                const Btn = $(this);
+                const Id = Btn.data('id');
+                $('#clientId').val(Id);
+            });
+            $('[id^="#btnRoteringGrid"]').on('click', function () {
+                const Btn = $(this);
+                const Id = Btn.data('id');
+                console.log(Id);
+                $('#clientId').val(Id);
+            });
+            $('#RoteringForm').submit(function () {
+                const id = $('#clientId').val();
+                const pin = $('#pin').val();
+                console.log(pin);
+                if (pin != undefined) {
+                    shownotification("Please enter your pin code", "error");
+                    return false;
+                }
+                else {
+                    if (id > 0) {
+                        return true;
+                    }
+
+
+                }
+            });
+        });
+    </script>
+}

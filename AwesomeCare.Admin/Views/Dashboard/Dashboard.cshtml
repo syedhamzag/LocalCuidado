@@ -6,14 +6,13 @@
 @section HeaderScripts{
 
 }
+<input type="hidden" asp-for="ActiveUser" />
 <div class="row">
     <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
         <div class="card dash-widget">
             <div class="card-body">
-                <span class="dash-widget-icon"><i class="fa fa-cubes"></i></span>
                 <div class="dash-widget-info">
-                    <h3>0</h3>
-                    <span>Projects</span>
+                    <span>Welcome!</span>
                 </div>
             </div>
         </div>
@@ -23,7 +22,7 @@
             <div class="card-body">
                 <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                 <div class="dash-widget-info">
-                    <h3>@Model.ActiveUser</h3>
+                    <h3 id="ActiveUsers"></h3>
                     <span>Clients</span>
                 </div>
             </div>
@@ -35,7 +34,7 @@
                 <span class="dash-widget-icon"><i class="fa fa-diamond"></i></span>
                 <div class="dash-widget-info">
                     <h3>0</h3>
-                    <span>Tasks</span>
+                    <span>Blacklist</span>
                 </div>
             </div>
         </div>
@@ -45,7 +44,7 @@
             <div class="card-body">
                 <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                 <div class="dash-widget-info">
-                    <h3>@Model.ApprovedStaff</h3>
+                    <h3 id="ApprovedStaff"></h3>
                     <span>Employees</span>
                 </div>
             </div>
@@ -59,7 +58,7 @@
                 <h5 class="card-title mb-0">Meds Admin Tracker</h5>
             </div>
             <div class="card-body">
-                
+
                 <canvas id="med-bar-chart"></canvas>
             </div>
         </div>
@@ -76,7 +75,7 @@
                             <ul class="nav nav-tabs nav-tabs-bottom">
                                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#daily">Daily</a></li>
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#weekly">Weekly</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#monthly">Monthly</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#monthly" onclick="getAdlMonthly()">Monthly</a></li>
                             </ul>
                         </div>
                     </div>
@@ -186,45 +185,31 @@
                 <div class="stats-list">
                     <div class="stats-info">
                         @{
-                            decimal total = Model.StaffRating.Where(s => s.Key == "Total").FirstOrDefault().Value.Count;
-                            decimal star5 = Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value.Count;
-                            decimal star4 = Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value.Count;
-                            decimal star3 = Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value.Count;
-                            decimal star2 = Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value.Count;
-                            decimal star1 = Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value.Count;
-                            decimal p5 = (star5 / total) * 100;
-                            decimal p4 = (star4 / total) * 100;
-                            decimal p3 = (star3 / total) * 100;
-                            decimal p2 = (star2 / total) * 100;
-                            decimal p1 = (star1 / total) * 100;
+                            
                         }
-                        <p>5 Star <strong>@star5 <small>/ @total </small></strong></p>
-                        <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: @string.Concat(p5,"%")" aria-valuenow="@p5" aria-valuemin="0" aria-valuemax="@total"></div>
+                        <p>5 Star <strong id="star5"> </strong></p>
+                        <div class="progress" id="p5">
+                            
                         </div>
                     </div>
                     <div class="stats-info">
-                        <p>4 Star <strong>@star4 <small>/ @total </small></strong></p>
-                        <div class="progress">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: @string.Concat(p4,"%")" aria-valuenow="@p4" aria-valuemin="0" aria-valuemax="@total"></div>
+                        <p>4 Star <strong id="star4"> </strong></p>
+                        <div class="progress" id="p4">
                         </div>
                     </div>
                     <div class="stats-info">
-                        <p>3 Star <strong>@star3 <small>/ @total </small></strong></p>
-                        <div class="progress">
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: @string.Concat(p3,"%")" aria-valuenow="@p3" aria-valuemin="0" aria-valuemax="@total"></div>
+                        <p>3 Star <strong id="star3"> </strong></p>
+                        <div class="progress" id="p3">
                         </div>
                     </div>
                     <div class="stats-info">
-                        <p>2 Star <strong>@star2 <small>/ @total </small></strong></p>
-                        <div class="progress">
-                            <div class="progress-bar bg-warning" role="progressbar" style="width: @string.Concat(p2,"%")" aria-valuenow="@p2" aria-valuemin="0" aria-valuemax="@total"></div>
+                        <p>2 Star <strong id="star2"> </strong></p>
+                        <div class="progress" id="p2">
                         </div>
                     </div>
                     <div class="stats-info">
-                        <p>1 Star <strong>@star1 <small>/ @total </small></strong></p>
-                        <div class="progress">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: @string.Concat(p1,"%")" aria-valuenow="@p1" aria-valuemin="0" aria-valuemax="@total"></div>
+                        <p>1 Star <strong id="star1"></strong></p>
+                        <div class="progress" id="p1">
                         </div>
                     </div>
                 </div>
@@ -244,39 +229,28 @@
             </div>
             <div class="card-body">
                 <div class="statistics">
-                    @{
-                        decimal created = Model.GetTaskBoard.Where(s => s.Key == "Created").FirstOrDefault().Value.Count;
-                        decimal progress = Model.GetTaskBoard.Where(s => s.Key == "InProgress").FirstOrDefault().Value.Count;
-                        decimal completed = Model.GetTaskBoard.Where(s => s.Key == "Completed").FirstOrDefault().Value.Count;
-                        decimal taskTotal = (created+progress+completed);
-                        decimal taskperCr = (created / taskTotal) * 100;
-                        decimal taskperP = (progress / taskTotal) * 100;
-                        decimal taskperC = (completed / taskTotal) * 100;
-                    }
                     <div class="row">
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
                                 <p>Total Tasks</p>
-                                <h3>@taskTotal</h3>
+                                <h3 id="totalTask"></h3>
                             </div>
                         </div>
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
                                 <p>Tasks in Progress</p>
-                                <h3>@progress</h3>
+                                <h3 id="inProgress"></h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-purple" role="progressbar" style="width: @string.Concat(Math.Round(taskperCr,0),"%")" aria-valuenow="@created" aria-valuemin="0" aria-valuemax="@taskTotal">@string.Concat(Math.Round(taskperCr,0), "%")</div>
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: @string.Concat(Math.Round(taskperP,0),"%")" aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="@taskTotal">@string.Concat(Math.Round(taskperP,0), "%")</div>
-                    <div class="progress-bar bg-success" role="progressbar" style="width: @string.Concat(Math.Round(taskperC,0),"%")" aria-valuenow="@completed" aria-valuemin="0" aria-valuemax="@taskTotal">@string.Concat(Math.Round(taskperC,0), "%")</div>
+                <div class="progress mb-4" id="taskDetails">
+                    
                 </div>
                 <div>
-                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Created Tasks<span class="float-end">@created</span></p>
-                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Inprogress Tasks <span class="float-end">@progress</span></p>
-                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Completed Tasks<span class="float-end">@completed</span></p>
+                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Created Tasks<span class="float-end" id="createTask"></span></p>
+                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Inprogress Tasks <span class="float-end" id="progressTask"></span></p>
+                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Completed Tasks<span class="float-end" id="completeTask"></span></p>
                 </div>
             </div>
         </div>
@@ -342,7 +316,7 @@
                 <canvas id="StaffMetrics"></canvas>
             </div>
             <div class="card-footer">
-                
+
             </div>
         </div>
     </div>
@@ -361,7 +335,7 @@
                 <canvas id="ClientMetrics"></canvas>
             </div>
             <div class="card-footer">
-                
+
             </div>
         </div>
     </div>
@@ -380,7 +354,7 @@
                 <canvas id="Tele"></canvas>
             </div>
             <div class="card-footer">
-                
+
             </div>
         </div>
     </div>
@@ -443,39 +417,27 @@
             </div>
             <div class="card-body">
                 <div class="statistics">
-                    @{
-                        decimal totalOn = Model.OnCallGraph.Where(s => s.Key == "Total").FirstOrDefault().Value;
-                        decimal pending = Model.OnCallGraph.Where(s => s.Key == "Pending").FirstOrDefault().Value;
-                        decimal closed = Model.OnCallGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value;
-                        decimal open = Model.OnCallGraph.Where(s => s.Key == "Open").FirstOrDefault().Value;
-                        decimal perP = (pending / totalOn) * 100;
-                        decimal perC = (closed / totalOn) * 100;
-                        decimal perO = (open / totalOn) * 100;
-                    }
                     <div class="row">
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
                                 <p>Total</p>
-                                <h3>@totalOn</h3>
+                                <h3 id="oncallTotal"></h3>
                             </div>
                         </div>
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
                                 <p>Pending</p>
-                                <h3>@pending</h3>
+                                <h3 id="oncallPending"></h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-purple" role="progressbar" style="width: @string.Concat(Math.Round(perO,0),"%")" aria-valuenow="@open" aria-valuemin="0" aria-valuemax="@totalOn">@string.Concat(Math.Round(perO,0), "%")</div>
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: @string.Concat(Math.Round(perP,0),"%")" aria-valuenow="@pending" aria-valuemin="0" aria-valuemax="@totalOn">@string.Concat(Math.Round(perP,0), "%")</div>
-                    <div class="progress-bar bg-success" role="progressbar" style="width: @string.Concat(Math.Round(perC,0),"%")" aria-valuenow="@closed" aria-valuemin="0" aria-valuemax="@totalOn">@string.Concat(Math.Round(perC,0), "%")</div>
+                <div class="progress mb-4" id="oncallDetails">
                 </div>
                 <div>
-                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Open<span class="float-end">@open</span></p>
-                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Pending <span class="float-end">@pending</span></p>
-                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Closed<span class="float-end">@closed</span></p>
+                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Open<span class="float-end" id="callOpen"></span></p>
+                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Pending <span class="float-end" id="callPending"></span></p>
+                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Closed<span class="float-end" id="callClosed"></span></p>
                 </div>
             </div>
         </div>
@@ -484,54 +446,164 @@
         <div class="card flex-fill">
             <div class="card-header">
                 <h5 class="card-title mb-0">Tracker Concern</h5>
-                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#concernModal" style="
-    font-size: .75em;
-    margin-top: -25px;
-">
-                    Show Details
-                </button>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#concernModal" style="font-size: .75em; margin-top: -25px;">Show Details</button>
             </div>
             <div class="card-body">
                 <div class="statistics">
-                    @{
-                        decimal Contotal = Model.concernNoteGraph.Where(s => s.Key == "Total").FirstOrDefault().Value;
-                        decimal Conpending = Model.concernNoteGraph.Where(s => s.Key == "Pending").FirstOrDefault().Value;
-                        decimal Conclosed = Model.concernNoteGraph.Where(s => s.Key == "Closed").FirstOrDefault().Value;
-                        decimal Conopen = Model.concernNoteGraph.Where(s => s.Key == "Open").FirstOrDefault().Value;
-                        decimal ConperP = (Conpending / Contotal) * 100;
-                        decimal ConperC = (Conclosed / Contotal) * 100;
-                        decimal ConperO = (Conopen / Contotal) * 100;
-                    }
                     <div class="row">
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
                                 <p>Total</p>
-                                <h3>@Contotal</h3>
+                                <h3 id="concernTotal"></h3>
                             </div>
                         </div>
                         <div class="col-md-6 col-6 text-center">
                             <div class="stats-box mb-4">
                                 <p>Pending</p>
-                                <h3>@Conpending</h3>
+                                <h3 id="concernPending"></h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="progress mb-4">
-                    <div class="progress-bar bg-purple" role="progressbar" style="width: @string.Concat(Math.Round(ConperO,0), "%")" aria-valuenow="@Conopen" aria-valuemin="0" aria-valuemax="@Contotal">@string.Concat(Math.Round(ConperO,0), "%")</div>
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: @string.Concat(Math.Round(ConperP,0), "%")" aria-valuenow="@Conpending" aria-valuemin="0" aria-valuemax="@Contotal">@string.Concat(Math.Round(ConperP,0), "%")</div>
-                    <div class="progress-bar bg-success" role="progressbar" style="width: @string.Concat(Math.Round(ConperC,0), "%")" aria-valuenow="@Conclosed" aria-valuemin="0" aria-valuemax="@Contotal">@string.Concat(Math.Round(ConperC,0), "%")</div>
+                <div class="progress mb-4" id="concernDetails">
+                   
                 </div>
                 <div>
-                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Open<span class="float-end">@Conopen</span></p>
-                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Pending <span class="float-end">@Conpending</span></p>
-                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Closed<span class="float-end">@Conclosed</span></p>
+                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Open<span class="float-end" id="conOpen"></span></p>
+                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Pending <span class="float-end" id="conPending"></span></p>
+                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>Closed<span class="float-end" id="conClosed"></span></p>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+<!-- Statistics Widget -->
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+        <div class="card flex-fill dash-statistics">
+            <div class="card-body">
+                <h5 class="card-title">Statistics</h5>
+                <div class="stats-list">
+                    <div class="stats-info">
+                        <p>Today Leave <strong>4 <small>/ 65</small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: 31%" aria-valuenow="31" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="stats-info">
+                        <p>Pending Invoice <strong>15 <small>/ 92</small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: 31%" aria-valuenow="31" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="stats-info">
+                        <p>Completed Projects <strong>85 <small>/ 112</small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 62%" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="stats-info">
+                        <p>Open Tickets <strong>190 <small>/ 212</small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 62%" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="stats-info">
+                        <p>Closed Tickets <strong>22 <small>/ 212</small></strong></p>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 22%" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h4 class="card-title">Task Statistics</h4>
+                <div class="statistics">
+                    <div class="row">
+                        <div class="col-md-6 col-6 text-center">
+                            <div class="stats-box mb-4">
+                                <p>Total Tasks</p>
+                                <h3>385</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-6 text-center">
+                            <div class="stats-box mb-4">
+                                <p>Overdue Tasks</p>
+                                <h3>19</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress mb-4">
+                    <div class="progress-bar bg-purple" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">30%</div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 22%" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100">22%</div>
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 24%" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100">24%</div>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="14" aria-valuemin="0" aria-valuemax="100">21%</div>
+                    <div class="progress-bar bg-info" role="progressbar" style="width: 10%" aria-valuenow="14" aria-valuemin="0" aria-valuemax="100">10%</div>
+                </div>
+                <div>
+                    <p><i class="fa fa-dot-circle-o text-purple me-2"></i>Completed Tasks <span class="float-end">166</span></p>
+                    <p><i class="fa fa-dot-circle-o text-warning me-2"></i>Inprogress Tasks <span class="float-end">115</span></p>
+                    <p><i class="fa fa-dot-circle-o text-success me-2"></i>On Hold Tasks <span class="float-end">31</span></p>
+                    <p><i class="fa fa-dot-circle-o text-danger me-2"></i>Pending Tasks <span class="float-end">47</span></p>
+                    <p class="mb-0"><i class="fa fa-dot-circle-o text-info me-2"></i>Review Tasks <span class="float-end">5</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-body">
+                <h4 class="card-title">Today Absent <span class="badge bg-inverse-danger ms-2">5</span></h4>
+                <div class="leave-info-box">
+                    <div class="media d-flex align-items-center">
+                        <a href="profile.html" class="avatar"><img alt="" src="assets/img/user.jpg"></a>
+                        <div class="media-body flex-grow-1">
+                            <div class="text-sm my-0">Martin Lewis</div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-3">
+                        <div class="col-6">
+                            <h6 class="mb-0">4 Sep 2019</h6>
+                            <span class="text-sm text-muted">Leave Date</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-inverse-danger">Pending</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="leave-info-box">
+                    <div class="media d-flex align-items-center">
+                        <a href="profile.html" class="avatar"><img alt="" src="assets/img/user.jpg"></a>
+                        <div class="media-body flex-grow-1">
+                            <div class="text-sm my-0">Martin Lewis</div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-3">
+                        <div class="col-6">
+                            <h6 class="mb-0">4 Sep 2019</h6>
+                            <span class="text-sm text-muted">Leave Date</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="badge bg-inverse-success">Approved</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="load-more text-center">
+                    <a class="text-dark" href="javascript:void(0);">Load More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Statistics Widget -->
 <div class="row">
     <div class="col-md-6 d-flex">
         <div class="card card-table flex-fill">
@@ -652,7 +724,7 @@
     <div class="col-md-6 d-flex">
         <div class="card card-table flex-fill">
             <div class="card-header">
-                <h3 class="card-title mb-0">General Task</h3>          
+                <h3 class="card-title mb-0">General Task</h3>
             </div>
             <div class="card-body">
                 <ul class="nav nav-tabs nav-tabs-bottom">
@@ -668,10 +740,11 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Birthday</th>
+                                        <th>Manager</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetClients)
+                                <tbody id="clientTbody">
+                                    @*@foreach (var item in Model.GetClients)
                                     {
                                         <tr>
                                             <td>
@@ -681,13 +754,14 @@
                                                 </h2>
                                             </td>
                                             <td>@item.DateOfBirth</td>
+                                            <td>@item.ManagerName</td>
                                         </tr>
 
-                                    }
+                                    }*@
                                 </tbody>
                             </table>
                             @*<hr />
-                    <a asp-controller="Client" asp-action="HomeCare">View all clients</a>*@
+                                <a asp-controller="Client" asp-action="HomeCare">View all clients</a>*@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="Staff">
@@ -700,8 +774,8 @@
                                         <th>Rota Team</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach (var item in Model.GetStaffPersonalInfos)
+                                <tbody  id="staffTbody">
+                                    @*@foreach (var item in Model.GetStaffPersonalInfos)
                                     {
                                         <tr>
                                             <td>
@@ -714,11 +788,9 @@
                                             <td>@item.WorkTeam</td>
                                         </tr>
 
-                                    }
+                                    }*@
                                 </tbody>
                             </table>
-                            @*<hr />
-                    <a asp-controller="Staff" asp-action="Details">View all employees</a>*@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="Special">
@@ -780,27 +852,27 @@
 <!-- Old Dashboard -->
 <div class="row clearfix">
     @*<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-        <div class="card">
-            <div class="card-header">
-                On Call
+            <div class="card">
+                <div class="card-header">
+                    On Call
+                </div>
+                <div class="card-body">
+                    <canvas id="ChartOnCall" style="height:150px;"></canvas>
+                </div>
             </div>
-            <div class="card-body">
-                <canvas id="ChartOnCall" style="height:150px;"></canvas>
-            </div>
-        </div>
 
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-        <div class="card">
-            <div class="card-header">
-                Tracking Concern
-            </div>
-            <div class="card-body">
-                <canvas id="ChartConcern" style="height:150px;"></canvas>
-            </div>
         </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="card">
+                <div class="card-header">
+                    Tracking Concern
+                </div>
+                <div class="card-body">
+                    <canvas id="ChartConcern" style="height:150px;"></canvas>
+                </div>
+            </div>
 
-    </div>*@
+        </div>*@
 
 </div>
 <!-- OnCall Modal -->
@@ -813,7 +885,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table m-b-0 datatables">
+                <table class="table table-striped table-dark custom-table datatables" id="oncallTable">
                     <thead class="thead-dark">
                         <tr>
                             <th></th>
@@ -826,12 +898,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.OnCall)
+                        @*@foreach (var item in Model.OnCall)
                         {
 
                             <tr>
 
-                                <td><a href="/DutyOnCall/Edit?DutyOnCallId=@item.DutyOnCallId" title="Edit"><i class="icon-note"></i></a></td>
+                                <td><a href="/DutyOnCall/Edit?DutyOnCallId=@item.DutyOnCallId" title="Edit"><i class="fa fa-pencil m-r-5"></i></a></td>
                                 <td>@item.Date.ToString("yyyy/MM/dd") </td>
                                 <td style="white-space:normal;">@item.StaffName</td>
                                 <td style="white-space:normal;">@item.ClientName</td>
@@ -841,7 +913,7 @@
 
                             </tr>
 
-                        }
+                        }*@
                     </tbody>
                 </table>
             </div>
@@ -861,7 +933,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table m-b-0 datatables table-responsive">
+                <table class="table table-striped table-responsive table-dark custom-table datatables" id="concernTable">
                     <thead class="thead-dark">
                         <tr>
                             <th></th>
@@ -876,12 +948,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.concernNotes)
+                        @*@foreach (var item in Model.concernNotes)
                         {
 
                             <tr>
 
-                                <td><a href="/TrackingConcernNote/Edit?TrackingConcernNoteId=@item.Ref" title="Edit"><i class="icon-note"></i></a></td>
+                                <td><a href="/TrackingConcernNote/Edit?TrackingConcernNoteId=@item.Ref" title="Edit"><i class="fa fa-pencil m-r-5"></i></a></td>
                                 <td>@item.Ref</td>
                                 <td>@item.DateOfIncident.ToString("yyyy/MM/dd") </td>
                                 <td>@item.ExpectedDeadline.ToString("yyyy/MM/dd") </td>
@@ -903,7 +975,7 @@
 
                             </tr>
 
-                        }
+                        }*@
                     </tbody>
                 </table>
             </div>
@@ -923,121 +995,109 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Tele Health</h3>
+                <h3 class="card-title">Tele Health</h3>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="20" height="20" /> <br />
+                            <span class="text">Blood Coag</span>
+                        </div>
+                        <canvas id="Coag"></canvas>
                     </div>
-                    <div class="card-body">
-                        <div class="row padding-25">
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Coag.png" class="" width="20" height="20" /> <br />
-                                    <span class="text">Blood Coag</span>
-                                </div>
-                                <canvas id="Coag"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="20" height="20" /> <br />
-                                    <span>Blood Pressure</span>
-                                </div>
-                                <canvas id="Pressure"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Body.png" class="" width="20" height="20" /> <br />
-                                    <span>Body Temp</span>
-                                </div>
-                                <canvas id="BodyTemp"></canvas>
-                            </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Pressure.png" class="" width="20" height="20" /> <br />
+                            <span>Blood Pressure</span>
                         </div>
-                        <div class="row padding-25">
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Bowel.png" class="" width="20" height="20" /> <br />
-                                    <span>Bowel</span>
-                                </div>
-                                <canvas id="Bowel"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="20" height="20" /> <br />
-                                    <span>BMI</span>
-                                    <br />
-                                </div>
-                                <canvas id="BMI"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Eye.png" class="" width="20" height="20" /> <br />
-                                    <span>Eye</span>
-                                </div>
-                                <canvas id="Eye"></canvas>
-                            </div>
-                        </div>
-                        <div class="row padding-25">
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Food.png" class="" width="20" height="20" /> <br />
-                                    <span>Food</span>
-                                </div>
-                                <canvas id="Food"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Heart.png" class="" width="20" height="20" /> <br />
-                                    <span>Heart</span>
-                                </div>
-                                <canvas id="Heart"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Oxygen.png" class="" width="20" height="20" /> <br />
-                                    <span>Oxygen</span>
-                                </div>
-                                <canvas id="Oxygen"></canvas>
-                            </div>
-                        </div>
-                        <div class="row padding-25">
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Pain.png" class="" width="20" height="20" /> <br />
-                                    <span>Pain Monitor</span>
-                                </div>
-                                <canvas id="Pain"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Pulse.png" class="" width="20" height="20" /> <br />
-                                    <span>Pulse Rate</span>
-                                </div>
-                                <canvas id="Pulse"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Wound.png" class="" width="20" height="20" /> <br />
-                                    <span>Wound Care</span>
-                                </div>
-                                <canvas id="Wound"></canvas>
-                            </div>
-                        </div>
-                        <div class="row padding-25">
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Seizure.png" class="" width="20" height="20" /> <br />
-                                    <span>Seizure Monitor</span>
-                                </div>
-                                <canvas id="Seizure"></canvas>
-                            </div>
-                        </div>
+                        <canvas id="Pressure"></canvas>
                     </div>
-                    <div class="card-footer">
-
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Body.png" class="" width="20" height="20" /> <br />
+                            <span>Body Temp</span>
+                        </div>
+                        <canvas id="BodyTemp"></canvas>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Bowel.png" class="" width="20" height="20" /> <br />
+                            <span>Bowel</span>
+                        </div>
+                        <canvas id="Bowel"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/BMI.png" class="" width="20" height="20" /> <br />
+                            <span>BMI</span>
+                            <br />
+                        </div>
+                        <canvas id="BMI"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Eye.png" class="" width="20" height="20" /> <br />
+                            <span>Eye</span>
+                        </div>
+                        <canvas id="Eye"></canvas>
+                    </div>
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Food.png" class="" width="20" height="20" /> <br />
+                            <span>Food</span>
+                        </div>
+                        <canvas id="Food"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Heart.png" class="" width="20" height="20" /> <br />
+                            <span>Heart</span>
+                        </div>
+                        <canvas id="Heart"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Oxygen.png" class="" width="20" height="20" /> <br />
+                            <span>Oxygen</span>
+                        </div>
+                        <canvas id="Oxygen"></canvas>
+                    </div>
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Pain.png" class="" width="20" height="20" /> <br />
+                            <span>Pain Monitor</span>
+                        </div>
+                        <canvas id="Pain"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Pulse.png" class="" width="20" height="20" /> <br />
+                            <span>Pulse Rate</span>
+                        </div>
+                        <canvas id="Pulse"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Wound.png" class="" width="20" height="20" /> <br />
+                            <span>Wound Care</span>
+                        </div>
+                        <canvas id="Wound"></canvas>
+                    </div>
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Seizure.png" class="" width="20" height="20" /> <br />
+                            <span>Seizure Monitor</span>
+                        </div>
+                        <canvas id="Seizure"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1052,86 +1112,77 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Staff Matrix</h3>
+                <h3 class="card-title">Staff Matrix</h3>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Supervision.png" class="" width="20" height="20" />
+                            <br /><span>Super Vision</span>
+
+                        </div>
+                        <canvas id="Sup"></canvas>
                     </div>
-                    <div class="card-body">
-                        <div class="row padding-25">
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Supervision.png" class="" width="20" height="20" />
-                                    <br /><span>Super Vision</span>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/KeyworkerVoice.png" class="" width="20" height="20" />
+                            <br /><span>Key Worker</span>
 
-                                </div>
-                                <canvas id="Sup"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/KeyworkerVoice.png" class="" width="20" height="20" />
-                                    <br /><span>Key Worker</span>
-
-                                </div>
-                                <canvas id="Key"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/CompMedObs.png" class="" width="20" height="20" />
-                                    <br /><span>Med Comp</span>
-
-                                </div>
-                                <canvas id="Med"></canvas>
-                            </div>
                         </div>
-                        <div class="row padding-25">
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/OnetoOne.png" class="" width="20" height="20" />
-                                    <br /><span>One To One</span>
+                        <canvas id="Key"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/CompMedObs.png" class="" width="20" height="20" />
+                            <br /><span>Med Comp</span>
 
-                                </div>
-                                <canvas id="One"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Reference.png" class="" width="20" height="20" />
-                                    <br /><span>Reference</span>
-
-                                </div>
-                                <canvas id="Ref"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/SpotCheck.png" class="" width="20" height="20" />
-                                    <br /><span>Spot Check</span>
-
-                                </div>
-                                <canvas id="Spot"></canvas>
-                            </div>
                         </div>
-                        <div class="row padding-25">
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/AdlObservation.png" class="" width="20" height="20" />
-                                    <br /><span>Adl Obs</span>
-
-                                </div>
-                                <canvas id="Adl"></canvas>
-                            </div>
-                            <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                <div class="form-group align-center">
-                                    <img src="../assets/images/TeleHealthIcon/Survey.png" class="" width="20" height="20" />
-                                    <br /><span>Survey</span>
-
-                                </div>
-                                <canvas id="Sur"></canvas>
-                            </div>
-                        </div>
+                        <canvas id="Med"></canvas>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/OnetoOne.png" class="" width="20" height="20" />
+                            <br /><span>One To One</span>
 
+                        </div>
+                        <canvas id="One"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Reference.png" class="" width="20" height="20" />
+                            <br /><span>Reference</span>
+
+                        </div>
+                        <canvas id="Ref"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/SpotCheck.png" class="" width="20" height="20" />
+                            <br /><span>Spot Check</span>
+
+                        </div>
+                        <canvas id="Spot"></canvas>
+                    </div>
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/AdlObservation.png" class="" width="20" height="20" />
+                            <br /><span>Adl Obs</span>
+
+                        </div>
+                        <canvas id="Adl"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Survey.png" class="" width="20" height="20" />
+                            <br /><span>Survey</span>
+
+                        </div>
+                        <canvas id="Sur"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1146,80 +1197,71 @@
                 </button>
             </div>
             <div class="modal-body">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Client Matrix</h3>
+                <h3 class="card-title">Client Matrix</h3>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/LogAudit.png" class="" width="20" height="20" />
+                            <br /><span>Log Audit</span>
+
+                        </div>
+                        <canvas id="LogAudit"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/MedAudit.png" class="" width="20" height="20" />
+                            <br /><span>Med Audit</span>
+
+                        </div>
+                        <canvas id="MedAudit"></canvas>
+                    </div>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/ServiceWatch.png" class="" width="20" height="20" />
+                            <br /><span>Service Watch</span>
+
+                        </div>
+                        <canvas id="ServiceWatch"></canvas>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="row padding-25">
-                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group align-center">
-                                <img src="../assets/images/TeleHealthIcon/LogAudit.png" class="" width="20" height="20" />
-                                <br /><span>Log Audit</span>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/ManagementVisit.png" class="" width="20" height="20" />
+                            <br /><span>Mgt Visit</span>
 
-                            </div>
-                            <canvas id="LogAudit"></canvas>
                         </div>
-                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group align-center">
-                                <img src="../assets/images/TeleHealthIcon/MedAudit.png" class="" width="20" height="20" />
-                                <br /><span>Med Audit</span>
-
-                            </div>
-                            <canvas id="MedAudit"></canvas>
-                        </div>
-                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group align-center">
-                                <img src="../assets/images/TeleHealthIcon/ServiceWatch.png" class="" width="20" height="20" />
-                                <br /><span>Service Watch</span>
-
-                            </div>
-                            <canvas id="ServiceWatch"></canvas>
-                        </div>
+                        <canvas id="MgtVisit"></canvas>
                     </div>
-                    <div class="row padding-25">
-                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group align-center">
-                                <img src="../assets/images/TeleHealthIcon/ManagementVisit.png" class="" width="20" height="20" />
-                                <br /><span>Mgt Visit</span>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Program.png" class="" width="20" height="20" />
+                            <br /><span>Program</span>
 
-                            </div>
-                            <canvas id="MgtVisit"></canvas>
                         </div>
-                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group align-center">
-                                <img src="../assets/images/TeleHealthIcon/Program.png" class="" width="20" height="20" />
-                                <br /><span>Program</span>
-
-                            </div>
-                            <canvas id="Program"></canvas>
-                        </div>
-                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group align-center">
-                                <img src="../assets/images/TeleHealthIcon/Complain.png" class="" width="20" height="20" />
-                                <br /><span>Complain</span>
-
-                            </div>
-                            <canvas id="Complain"></canvas>
-                        </div>
+                        <canvas id="Program"></canvas>
                     </div>
-                    <div class="row padding-25">
-                        <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group align-center">
-                                <img src="../assets/images/TeleHealthIcon/Voice.png" class="" width="20" height="20" />
-                                <br /><span>Voice</span>
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Complain.png" class="" width="20" height="20" />
+                            <br /><span>Complain</span>
 
-                            </div>
-                            <canvas id="Voice"></canvas>
                         </div>
+                        <canvas id="Complain"></canvas>
+                    </div>
+                </div>
+                <div class="row padding-25">
+                    <div class="chart-container col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group align-center">
+                            <img src="../assets/images/TeleHealthIcon/Voice.png" class="" width="20" height="20" />
+                            <br /><span>Voice</span>
+
+                        </div>
+                        <canvas id="Voice"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-
-        </div>
-    </div>
     </div>
 </div>
 <!-- Tasks Modal -->
@@ -1236,15 +1278,15 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="card planned_task">
                             <div class="card-header">
-                                <h2>Task Created</h2>
+                                <h2 class="modal-title">Task Created</h2>
                                 <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                    <i class="icon-trash"></i>
+                                    <i class="fa fa-trash-o m-r-5"></i>
                                 </button>
                             </div>
                             <div class="card-body taskboard">
                                 <div class="dd" data-plugin="nestable">
-                                    <ol class="dd-list">
-                                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Created").Value)
+                                    <ol class="dd-list" id="createdTask">
+                                        @*@foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Created").Value)
                                         {
                                             <li class="dd-item" data-id="@item.TaskId">
                                                 <div class="dd-handle">
@@ -1269,13 +1311,13 @@
                                                     </ul>
                                                     <hr>
                                                     <div class="action">
-                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
+                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="fa fa-clock-o"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="fa fa-comment"></i></button>
                                                     </div>
                                                 </div>
                                             </li>
-                                        }
+                                        }*@
                                     </ol>
                                 </div>
                             </div>
@@ -1285,15 +1327,15 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="card progress_task">
                             <div class="card-header">
-                                <h2>Task In Progress</h2>
+                                <h2 class="modal-title">Task In Progress</h2>
                                 <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                    <i class="icon-trash"></i>
+                                    <i class="fa fa-trash-o m-r-5"></i>
                                 </button>
                             </div>
                             <div class="card-body taskboard">
                                 <div class="dd" data-plugin="nestable">
-                                    <ol class="dd-list">
-                                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "InProgress").Value)
+                                    <ol class="dd-list" id="inprogressTask">
+                                        @*@foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "InProgress").Value)
                                         {
                                             <li class="dd-item" data-id="@item.TaskId">
                                                 <div class="dd-handle">
@@ -1318,13 +1360,13 @@
                                                     </ul>
                                                     <hr>
                                                     <div class="action">
-                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
+                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="fa fa-clock-o"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="fa fa-comment"></i></button>
                                                     </div>
                                                 </div>
                                             </li>
-                                        }
+                                        }*@
                                     </ol>
                                 </div>
                             </div>
@@ -1334,15 +1376,15 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="card completed_task">
                             <div class="card-header">
-                                <h2>Task Completed</h2>
+                                <h2 class="modal-title">Task Completed</h2>
                                 <button type="button" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                                    <i class="icon-trash"></i>
+                                    <i class="fa fa-trash-o m-r-5"></i>
                                 </button>
                             </div>
                             <div class="card-body taskboard">
                                 <div class="dd" data-plugin="nestable">
-                                    <ol class="dd-list">
-                                        @foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Completed").Value)
+                                    <ol class="dd-list" id="completedTask">
+                                        @*@foreach (var item in Model.GetTaskBoard.LastOrDefault(s => s.Key == "Completed").Value)
                                         {
                                             <li class="dd-item" data-id="@item.TaskId">
 
@@ -1369,14 +1411,14 @@
                                                     </ul>
                                                     <hr>
                                                     <div class="action">
-                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="icon-note"></i></a>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="icon-clock"></i></button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="icon-bubbles"></i></button>
-                                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="icon-trash"></i></button>
+                                                        <a href="TaskBoard/Edit?taskId=@item.TaskId" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="fa fa-clock-o"></i></button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="fa fa-comment"></i></button>
+                                                        <button type="button" data-type="confirm" class="btn btn-sm btn-outline-danger float-right js-sweetalert" title="Delete"><i class="fa fa-trash-o m-r-5"></i></button>
                                                     </div>
                                                 </div>
                                             </li>
-                                        }
+                                        }*@
                                     </ol>
                                 </div>
                             </div>
@@ -1403,9 +1445,9 @@
                 <div class="modal-body">
                     <div class="card">
 
-                        <div class="header">
+                        <div class="card-header">
                         </div>
-                        <div class="body">
+                        <div class="card-body">
                             <p>Are you sure want to delete these task?</p>
 
                             <select class="form-control" id="Ids" name="Ids" multiple></select>
@@ -1438,116 +1480,123 @@
                 </button>
             </div>
             <div class="modal-body">
-                <ul class="header-dropdown nav nav-tabs-new2">
-                    <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#Star5">5-Star</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star4">4-Star</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star3">3-Star</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star2">2-Star</a></li>
-                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Star1">1-Star</a></li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="Star5">
-                        <table class="table m-b-0 datatables">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value)
-                                {
-                                    <tr>
-                                        <td>@table.Staff</td>
-                                        <td>@table.Rating</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                <div class="card tab-box">
+                    <div class="row user-tabs">
+                        <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
+                            <ul class="nav nav-tabs nav-tabs-bottom">
+                                <li class="nav-item col-sm-3"><a class="nav-link active" data-bs-toggle="tab" href="#Star5">5-Star</a></li>
+                                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#Star4">4-Star</a></li>
+                                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#Star3">3-Star</a></li>
+                                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#Star2">2-Star</a></li>
+                                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#Star1">1-Star</a></li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="tab-pane" id="Star4">
-                        <table class="table m-b-0 datatables">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value)
-                                {
-                                    <tr>
-                                        <td>@table.Staff</td>
-                                        <td>@table.Rating</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="tab-content profile-tab-content">
+                            <div class="tab-pane show active" id="Star5">
+                                <table class="table table-striped table-dark custom-table datatables" id="table5star">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="5starbody">
+                                        @*@foreach (var table in Model.StaffRating.Where(s => s.Key == "5-Star").FirstOrDefault().Value)
+                                        {
+                                            <tr>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
+                                            </tr>
+                                        }*@
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="Star4">
+                                <table class="table table-striped table-dark custom-table datatables" id="table4star">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="4starbody">
+                                        @*@foreach (var table in Model.StaffRating.Where(s => s.Key == "4-Star").FirstOrDefault().Value)
+                                        {
+                                            <tr>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
+                                            </tr>
+                                        }*@
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="Star3">
+                                <table class="table table-striped table-dark custom-table datatables" id="table3star">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="3starbody">
+                                      @*  @foreach (var table in Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value)
+                                        {
+                                            <tr>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
+                                            </tr>
+                                        }*@
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="Star2">
+                                <table class="table table-striped table-dark custom-table datatables" id="table2star">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="2starbody">
+                                        @*@foreach (var table in Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value)
+                                        {
+                                            <tr>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
+                                            </tr>
+                                        }*@
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="Star1">
+                                <table class="table table-striped table-dark custom-table datatables" id="table1star">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="1starbody">
+                                       @* @foreach (var table in Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value)
+                                        {
+                                            <tr>
+                                                <td>@table.Staff</td>
+                                                <td>@table.Rating</td>
+                                            </tr>
+                                        }*@
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                    <div class="tab-pane" id="Star3">
-                        <table class="table m-b-0 datatables">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "3-Star").FirstOrDefault().Value)
-                                {
-                                    <tr>
-                                        <td>@table.Staff</td>
-                                        <td>@table.Rating</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane" id="Star2">
-                        <table class="table m-b-0 datatables">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "2-Star").FirstOrDefault().Value)
-                                {
-                                    <tr>
-                                        <td>@table.Staff</td>
-                                        <td>@table.Rating</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="tab-pane" id="Star1">
-                        <table class="table m-b-0 datatables">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var table in Model.StaffRating.Where(s => s.Key == "1-Star").FirstOrDefault().Value)
-                                {
-                                    <tr>
-                                        <td>@table.Staff</td>
-                                        <td>@table.Rating</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 @section VendorScripts{
@@ -1570,30 +1619,110 @@
             }
 
         }
-        $(function () {
-            $('#deleteForm').submit(function () {
+        var chartTrackM = "AdlTracker";
+        var ctxTrackM = document.getElementById(chartTrackM).getContext('2d');
+        var trackerColor = [
+                'rgba(255, 193, 7, 1)',
+                'rgba(40, 167, 69, 1)',
+                'rgba(220, 53, 69, 1)',
+                'rgba(0, 123, 255, 1)',
+                'rgba(73,112,182,1)'
+                //'rgba(238, 124, 49, 1)',
+                //'rgba(165, 165, 165, 1)',
+                //'rgba(255, 193, 14, 1)'
+            ];
+        function getAdlMonthly()
+        {
+            console.log(ctxTrackM);
+            if(ctxTrackM.textAlign == "start")
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Dashboard/GetAdlTrackerM',
+                    success: function (response) {
+                        var types = [];
+                        var ontime = [];
+                        var early = [];
+                        var mild = [];
+                        var late = [];
+                        var missed = [];
 
-                const id = $('#Ids').val();
-                const pin = $('#pin').val();
-                console.log(id);
-                console.log(pin);
-                if (id.length == 0) {
-                shownotification("Please select at least one Task", "error");
-                    return false;
-                }
-                else {
-                    if (pin == undefined) {
+                        response.months.forEach(function (result, index) { types.push(result)});
+                        response.liveTrackerM["ONTIME"].forEach(function (result, index) { ontime.push(result.value)});
+                        response.liveTrackerM["EARLY"].forEach(function (result, index) { early.push(result.value)});
+                        response.liveTrackerM["MILD"].forEach(function (result, index) { mild.push(result.value)});
+                        response.liveTrackerM["LATE"].forEach(function (result, index) { late.push(result.value)});
+                        response.liveTrackerM["MISSED"].forEach(function (result, index) { missed.push(result.value)});
 
-                        return true;
+                        const trackM = {
+                            labels: types,
+                            datasets: [
+                                {
+                                    label: "ONTIME",
+                                    data: ontime,
+                                    borderColor: 'rgba(40, 167, 69, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label: "EARLY",
+                                    data: early,
+                                    borderColor: 'rgba(0, 123, 255, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label: "MILD",
+                                    data: mild,
+                                    borderColor: 'rgba(255, 193, 7, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label:"LATE",
+                                    data: late,
+                                    borderColor: 'rgba(220, 53, 69, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label: "MISSED",
+                                    data: missed,
+                                    borderColor: 'rgba(73,112,182,1)',
+                                    tension: 0.1
+                                }
+                            ]
+                        };
+                        var TrackerM = new Chart(ctxTrackM, {
+                            data: trackM,
+                            type: 'line',
+                            options: {
+                                        maintainAspectRatio: false,
+                                        legend: {
+                                            labels: {
+                                                fontColor: trackerColor
+                                            }
+                                        },
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    min: 0,
+                                                },
+                                                gridLines: {
+                                                    color: 'white'
+                                                }
+                                            }]
+                                        }
+                                    }
+
+                        });
+
+                        
+                    },
+                    error: function () {
+                        console.log('Failed ');
                     }
-                    else
-                    {
-                        shownotification("Please enter pin code", "error");
-                        return false;
-                    }
-
-                }
-            });
+                });
+            }
+        }
+        $(function () 
+        {
 
             var Color = [
                 'rgba(40, 167, 69, 1)',
@@ -1625,20 +1754,20 @@
                 //'rgba(165, 165, 165, 1)',
                 //'rgba(255, 193, 14, 1)'
             ];
-        var chartTele = "Tele";
-        var chartCoag = "Coag";
-        var chartPressure = "Pressure";
-        var chartBMI = "BMI";
-        var chartBodyTemp = "BodyTemp";
-        var chartBowel  = "Bowel";
-        var chartEye  = "Eye";
-        var chartFood  = "Food";
-        var chartHeart  = "Heart";
-        var chartOxygen  = "Oxygen";
-        var chartPain  = "Pain";
-        var chartPulse  = "Pulse";
-        var chartSeizure  = "Seizure";
-        var chartWound = "Wound";
+            var chartTele = "Tele";
+            var chartCoag = "Coag";
+            var chartPressure = "Pressure";
+            var chartBMI = "BMI";
+            var chartBodyTemp = "BodyTemp";
+            var chartBowel  = "Bowel";
+            var chartEye  = "Eye";
+            var chartFood  = "Food";
+            var chartHeart  = "Heart";
+            var chartOxygen  = "Oxygen";
+            var chartPain  = "Pain";
+            var chartPulse  = "Pulse";
+            var chartSeizure  = "Seizure";
+            var chartWound = "Wound";
             var chartClient = "ClientMetrics";
             var chartLog = "LogAudit";
             var chartMed = "MedAudit";
@@ -1647,151 +1776,32 @@
             var chartProg = "Program";
             var chartMgt = "MgtVisit";
             var chartWatch = "ServiceWatch";
-                var chartStaff = "StaffMetrics";
-                var chartAdl = "Adl";
-                var chartKey = "Key";
-                var chartMedC = "Med";
-                var chartOne = "One";
-                var chartRef = "Ref";
-                var chartSpot = "Spot";
-                var chartSup = "Sup";
+            var chartStaff = "StaffMetrics";
+            var chartAdl = "Adl";
+            var chartKey = "Key";
+            var chartMedC = "Med";
+            var chartOne = "One";
+            var chartRef = "Ref";
+            var chartSpot = "Spot";
+            var chartSup = "Sup";
             var chartSur = "Sur";
-            var chartTrackM = "AdlTracker";
+            
             var chartTrackW = "AdlWeekly";
             var chartTrackD = "AdlDaily";
-            var ctxTrackM = document.getElementById(chartTrackM).getContext('2d');
+            
+            
             var ctxTrackW = document.getElementById(chartTrackW).getContext('2d');
             var ctxTrackD = document.getElementById(chartTrackD).getContext('2d');
-
-            const trackM = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Months.ToList())),
-                datasets: [
-                    {
-                        label: "ONTIME",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerM.Where(s => s.Key=="ONTIME").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(40, 167, 69, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "EARLY",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerM.Where(s => s.Key == "EARLY").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(0, 123, 255, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "MILD",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerM.Where(s => s.Key == "MILD").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(255, 193, 7, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label:"LATE",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerM.Where(s => s.Key == "LATE").FirstOrDefault().Value.Select(s=>s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(220, 53, 69, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "MISSED",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerM.Where(s => s.Key == "MISSED").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(73,112,182,1)',
-                        tension: 0.1
-                    }
-                ]
-            };
-            const trackW = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Days.ToList())),
-                datasets: [
-                    {
-                        label: "ONTIME",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerW.Where(s => s.Key=="ONTIME").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(40, 167, 69, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "EARLY",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerW.Where(s => s.Key == "EARLY").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(0, 123, 255, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "MILD",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerW.Where(s => s.Key == "MILD").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(255, 193, 7, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label:"LATE",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerW.Where(s => s.Key == "LATE").FirstOrDefault().Value.Select(s=>s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(220, 53, 69, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "MISSED",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerW.Where(s => s.Key == "MISSED").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(73,112,182,1)',
-                        tension: 0.1
-                    }
-                ]
-            };
-            const trackD = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Types.ToList())),
-                datasets: [
-                    {
-                        label: "ONTIME",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerD.Where(s => s.Key=="ONTIME").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(40, 167, 69, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "EARLY",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerD.Where(s => s.Key == "EARLY").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(0, 123, 255, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "MILD",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerD.Where(s => s.Key == "MILD").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(255, 193, 7, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label:"LATE",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerD.Where(s => s.Key == "LATE").FirstOrDefault().Value.Select(s=>s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(220, 53, 69, 1)',
-                        tension: 0.1
-                    },
-                    {
-                        label: "MISSED",
-                        data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LiveTrackerD.Where(s => s.Key == "MISSED").FirstOrDefault().Value.Select(s => s.Value).ToList())),
-                        fill: false,
-                        borderColor: 'rgba(73,112,182,1)',
-                        tension: 0.1
-                    }
-                ]
-            };
-                var ctxStaff = document.getElementById(chartStaff).getContext('2d');
-                var ctxAdl = document.getElementById(chartAdl).getContext('2d');
-                var ctxKey = document.getElementById(chartKey).getContext('2d');
-                var ctxMedC = document.getElementById(chartMedC).getContext('2d');
-                var ctxOne = document.getElementById(chartOne).getContext('2d');
-                var ctxRef = document.getElementById(chartRef).getContext('2d');
-                var ctxSpot = document.getElementById(chartSpot).getContext('2d');
-                var ctxSup = document.getElementById(chartSup).getContext('2d');
-                var ctxSur = document.getElementById(chartSur).getContext('2d');
+            
+            var ctxStaff = document.getElementById(chartStaff).getContext('2d');
+            var ctxAdl = document.getElementById(chartAdl).getContext('2d');
+            var ctxKey = document.getElementById(chartKey).getContext('2d');
+            var ctxMedC = document.getElementById(chartMedC).getContext('2d');
+            var ctxOne = document.getElementById(chartOne).getContext('2d');
+            var ctxRef = document.getElementById(chartRef).getContext('2d');
+            var ctxSpot = document.getElementById(chartSpot).getContext('2d');
+            var ctxSup = document.getElementById(chartSup).getContext('2d');
+            var ctxSur = document.getElementById(chartSur).getContext('2d');
             var ctxClient = document.getElementById(chartClient).getContext('2d');
             var ctxLog = document.getElementById(chartLog).getContext('2d');
             var ctxMed = document.getElementById(chartMed).getContext('2d');
@@ -1801,178 +1811,6 @@
             var ctxMgt = document.getElementById(chartMgt).getContext('2d');
             var ctxWatch = document.getElementById(chartWatch).getContext('2d');
 
-            var staff = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.StaffMatrix.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.StaffMatrix.Select(s => s.Value).ToList()))
-                }]
-                };
-            var adl = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.AdlObs.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.AdlObs.Select(s => s.Value).ToList()))
-                }]
-            };
-            var key = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.KeyWorker.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.KeyWorker.Select(s => s.Value).ToList()))
-                }]
-            };
-            var medcomp = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MedComp.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MedComp.Select(s => s.Value).ToList()))
-                }]
-            };
-            var one = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OneToOne.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.OneToOne.Select(s => s.Value).ToList()))
-                }]
-            };
-            var refs = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Reference.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Reference.Select(s => s.Value).ToList()))
-                }]
-            };
-            var spot = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SpotCheck.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.SpotCheck.Select(s => s.Value).ToList()))
-                }]
-            };
-            var superv = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Supervision.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Supervision.Select(s => s.Value).ToList()))
-                }]
-            };
-            var survey = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Survey.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Survey.Select(s => s.Value).ToList()))
-                }]
-                };
-            //Client Matrix
-            var client = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ClientMatrix.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    bordercolor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ClientMatrix.Select(s => s.Value).ToList()))
-                }]
-            };
-            
-            var log = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LogAudit.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    borderColor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.LogAudit.Select(s => s.Value).ToList()))
-                }]
-            };
-            var med = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MedAudit.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    borderColor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MedAudit.Select(s => s.Value).ToList()))
-                }]
-            };
-            var comp = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Complain.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    borderColor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Complain.Select(s => s.Value).ToList()))
-                }]
-            };
-            var voice = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Voice.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    borderColor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Voice.Select(s => s.Value).ToList()))
-                }]
-            };
-            var prog = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Program.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    borderColor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Program.Select(s => s.Value).ToList()))
-                }]
-            };
-            var mgt = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MgtVisit.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    borderColor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.MgtVisit.Select(s => s.Value).ToList()))
-                }]
-            };
-            var watch = {
-                labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ServiceWatch.Select(s => s.Key).ToList())),
-                datasets: [{
-                    label: "Chart",
-                    backgroundColor: clientColor,
-                    borderColor: clientColor,
-                    borderWidth: 0,
-                    data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ServiceWatch.Select(s => s.Value).ToList()))
-                }]
-            };
             var ctxTele = document.getElementById(chartTele).getContext('2d');
             var ctxCoag = document.getElementById(chartCoag).getContext('2d');
             var ctxPressure = document.getElementById(chartPressure).getContext('2d');
@@ -1987,154 +1825,46 @@
             var ctxPulse = document.getElementById(chartPulse).getContext('2d');
             var ctxSeizure = document.getElementById(chartSeizure).getContext('2d');
             var ctxWound = document.getElementById(chartWound).getContext('2d');
-            var tele = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TeleHealth.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TeleHealth.Select(s => s.Value).ToList()))
-            }]
-        };
-            var coag = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.BloodCoag.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.BloodCoag.Select(s => s.Value).ToList()))
-            }]
-        };
-            var pressure = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Pressure.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Pressure.Select(s => s.Value).ToList()))
-            }]
-            };
-            var bmi = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.BMI.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.BMI.Select(s => s.Value).ToList()))
-            }]
-            };
-            var temp = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Body.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Body.Select(s => s.Value).ToList()))
-            }]
-            };
-            var bowel = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Bowel.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Bowel.Select(s => s.Value).ToList()))
-            }]
-            };
-            var eye = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.EyeHealth.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.EyeHealth.Select(s => s.Value).ToList()))
-            }]
-            };
-            var food = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Food.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Food.Select(s => s.Value).ToList()))
-            }]
-            };
-            var heart = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Heart.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Heart.Select(s => s.Value).ToList()))
-            }]
-            };
-            var oxygen = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Oxygen.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Oxygen.Select(s => s.Value).ToList()))
-            }]
-        };
-            var pain = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Pain.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Pain.Select(s => s.Value).ToList()))
-            }]
-            };
-            var pulse = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Pulse.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Pulse.Select(s => s.Value).ToList()))
-            }]
-                };
-            var seizure = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Seizure.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Seizure.Select(s => s.Value).ToList()))
-            }]
-            };
-            var wound = {
-            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Wound.Select(s => s.Key).ToList())),
-            datasets: [{
-                label: "Chart",
-                backgroundColor: Color,
-                borderColor: Color,
-                borderWidth: 0,
-                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Wound.Select(s => s.Value).ToList()))
-            }]
-            };
+            
+            $('#deleteForm').submit(function () 
+            {
 
-            var hidelabel = {
-                plugins: {
-                legend: {
-                    display: false //This will do the task
+                const id = $('#Ids').val();
+                const pin = $('#pin').val();
+                console.log(id);
+                console.log(pin);
+                if (id.length == 0) {
+                shownotification("Please select at least one Task", "error");
+                    return false;
+                }
+                else {
+                    if (pin == undefined) {
+
+                        return true;
                     }
+                    else
+                    {
+                        shownotification("Please enter pin code", "error");
+                        return false;
+                    }
+
+                }
+            });
+            
+            var hidelabel = {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false,
+                        }
+                    }]
                 }
             };
+
             var trackerOptions = {
                 maintainAspectRatio: false,
                 legend: {
@@ -2142,292 +1872,1277 @@
                         fontColor: trackerColor
                     }
                 },
-            };
-
-            var TrackerM = new Chart(ctxTrackM, {
-                data: trackM,
-                type: 'line',
-                options: trackerOptions
-
-            });
-            var TrackerW = new Chart(ctxTrackW, {
-                data: trackW,
-                type: 'line',
-                options: trackerOptions
-
-            });
-            var TrackerD = new Chart(ctxTrackD, {
-                data: trackD,
-                type: 'line',
-                options: trackerOptions
-
-            });
-            var Staff = new Chart(ctxStaff, {
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                min: 0,
-                                beginAtZero: true
-                            },
-                            gridLines: {
-                                display: false,
-                            }
-                        }]
-                    }
-                },
-                    data: staff,
-                    type: 'pie'
-
-                });
-
-            var Adl = new Chart(ctxAdl, {
-                options: hidelabel,
-                data: adl,
-                type: 'pie'
-
-            });
-            var Key = new Chart(ctxKey, {
-                options: hidelabel,
-                data: key,
-                type: 'pie'
-
-            });
-            var Comp = new Chart(ctxMedC, {
-                options: hidelabel,
-                data: medcomp,
-                type: 'pie'
-
-            });
-            var One = new Chart(ctxOne, {
-                options: hidelabel,
-                data: one,
-                type: 'pie'
-
-            });
-            var Ref = new Chart(ctxRef, {
-                options: hidelabel,
-                data: refs,
-                type: 'pie'
-
-            });
-            var Spot = new Chart(ctxSpot, {
-                options: hidelabel,
-                data: spot,
-                type: 'pie'
-
-            });
-            var Super = new Chart(ctxSup, {
-                options: hidelabel,
-                data: superv,
-                type: 'pie'
-
-            });
-            var Survey = new Chart(ctxSur, {
-                options: hidelabel,
-                data: survey,
-                type: 'pie'
-
-            });
-            var Client = new Chart(ctxClient, {
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                min: 0,
-                                beginAtZero: true
-                            },
-                            gridLines: {
-                                display: false,
-                            }
-                        }]
-                    }
-                },
-                data: client,
-                type: 'pie'
-
-            });
-            var Log = new Chart(ctxLog, {
-                options: hidelabel,
-                data: log,
-                type: 'pie'
-
-            });
-            var Med = new Chart(ctxMed, {
-                options: hidelabel,
-                data: med,
-                type:'pie'
-
-            });
-            var Comp = new Chart(ctxComp, {
-                options: hidelabel,
-                data: comp,
-                type: 'pie'
-
-            });
-            var Voice = new Chart(ctxVoice, {
-                options: hidelabel,
-                data: voice,
-                type:'pie'
-
-            });
-            var Prog = new Chart(ctxProg, {
-                options: hidelabel,
-                data: prog,
-                type:'pie'
-
-            });
-            var Mgt = new Chart(ctxMgt, {
-                options: hidelabel,
-                data: mgt,
-                type:'pie'
-
-            });
-            var Watch = new Chart(ctxWatch, {
-                options: hidelabel,
-                data: watch,
-                type: 'pie'
-
-            });
-            var Tele = new Chart(ctxTele, {
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                min: 0,
-                                beginAtZero: true
-                            },
-                            gridLines: {
-                                display: false,
-                            }
-                        }]
-                    }
-                },
-            data: tele,
-            type: 'pie'
-
-            });
-            var Coag = new Chart(ctxCoag, {
-                options: hidelabel,
-                data: coag,
-                type:'pie'
-
-            });
-            var BMI = new Chart(ctxBMI, {
-                options: hidelabel,
-                data: bmi,
-                type: 'pie'
-
-            });
-            var Press = new Chart(ctxPressure, {
-                options: hidelabel,
-                data: pressure,
-                type: 'pie'
-
-            });
-            var Body = new Chart(ctxTemp, {
-                options: hidelabel,
-                data: temp,
-                type: 'pie'
-
-            });
-            var Bowel = new Chart(ctxBowel, {
-                options: hidelabel,
-                data: bowel,
-                type: 'pie'
-
-            });
-            var Eye = new Chart(ctxEye, {
-                options: hidelabel,
-                data: eye,
-                type: 'pie'
-
-            });
-            var Food = new Chart(ctxFood, {
-                options: hidelabel,
-                data: food,
-                type: 'pie'
-
-            });
-            var Heart = new Chart(ctxHeart, {
-                options: hidelabel,
-                data: heart,
-                type: 'pie'
-
-            });
-            var Oxygen = new Chart(ctxOxygen, {
-                options: hidelabel,
-                data: oxygen,
-                type: 'pie'
-
-            });
-            var Pain = new Chart(ctxPain, {
-                options: hidelabel,
-                data: pain,
-                type: 'pie'
-
-            });
-            var Pulse = new Chart(ctxPulse, {
-                options: hidelabel,
-                data: pulse,
-                type: 'pie'
-
-            });
-            var Seizure = new Chart(ctxSeizure, {
-                options: hidelabel,
-                data: seizure,
-                type: 'pie'
-
-            });
-            var Wound = new Chart(ctxWound, {
-                options: hidelabel,
-                data: wound,
-                type: 'pie'
-
-            });
-
-            // Bar Chart
-            var chartMedBar = "med-bar-chart";
-            var ctxMedBar = document.getElementById(chartMedBar).getContext('2d');
-            var MedBarChart = new Chart(ctxMedBar, {
-                type: 'bar',
-                data: {
-                    labels: ["2017","2018","2019","2020", "2021", "2022"],
-                    datasets: [
-                        {
-                            label: "Total Income",
-                            backgroundColor: "#ff9b44",
-                            data: [55,45,80,95,75,65]
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
                         },
-                        {
-                            label: "Total Outcome",
-                            backgroundColor: "#fc6075",
-                            data: [80,95,75,65,45,55]
+                        gridLines: {
+                            color: 'white'
                         }
-                    ]
-                },
-                options: {
-                    barValueSpacing: 20,
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                min: 0,
-                            }
-                        }]
-                    }
+                    }]
                 }
-            });
+            };
+            getAdlDaily();
+            getRatting();
+            getTaskBoard();
+            getOnCall();
+            getConcern();
+            getClientMatrix();
+            getStaffMatrix();
+            getTeleMatrix();
+            getAdlWeekly();
+            getDashboard();
 
-});
+            function getDashboard()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) 
+                {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetDashboard',
+                        success: function (response) 
+                        {
+                            $('#ActiveUser').val(response.activeUser)
+                            $('#ActiveUsers').html(response.activeUser);
+                            $('#ApprovedStaff').html(response.approvedStaff);
+                            response.getClients.forEach(function (item, index) 
+                            {
+                                var client = '<tr>'+
+                                                '<td>'+
+                                                    '<h2 class="table-avatar">'+
+                                                        '<a href="#" class="avatar"><img alt="" src="'+item.passportFilePath+'" width="38" height="42"></a>'+
+                                                        '<a href="Client/HomeCareDetails?clientId='+item.clientId+'">'+ item.firstname+' '+ item.middlename+' '+item.surname+'</a>'+
+                                                    '</h2>'+
+                                                '</td>'+
+                                                '<td>'+item.dateOfBirth+'</td>'+
+                                                '<td>'+item.managerName+'</td>'+
+                                            '</tr>';
+
+                                $('#clientTbody').append(client);
+                            });
+                            response.getStaffPersonalInfos.forEach(function (item, index) 
+                            {
+                                var staff = '<tr>'+
+                                                '<td>'+
+                                                    '<h2 class="table-avatar">'+
+                                                        '<a href="#" class="avatar"><img alt="" src="'+item.profilePix+'" width="38" height="42"></a>'+
+                                                        '<a href="Staff/Details?staffId='+item.staffPersonalInfoId+'">'+ item.firstName+' '+ item.middleName+' '+item.lastName+'</a>'+
+                                                    '</h2>'+
+                                                '</td>'+
+                                                '<td>'+item.dateOfBirth+'</td>'+
+                                                '<td>'+item.workTeam+'</td>'+
+                                            '</tr>';
+
+                                $('#staffTbody').append(staff);
+                            });
+                        },
+                        error: function () 
+                        {
+                            console.log('Failed ');
+                        }
+                    });
+                }
+            }
+            function getRatting()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) 
+                {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetRatting',
+                        success: function (response) {
+                            console.log(response.staffRating["5-Star"]);
+                            var star5 = response.staffRating["5-Star"].length;
+                            var star4 = response.staffRating["4-Star"].length;
+                            var star3 = response.staffRating["3-Star"].length;
+                            var star2 = response.staffRating["2-Star"].length;
+                            var star1 = response.staffRating["1-Star"].length;
+                            var total = (star5+star4+star3+star2+star1);
+                            var p5 = (star5 / total) * 100;
+                            var p4 = (star4 / total) * 100;
+                            var p3 = (star3 / total) * 100;
+                            var p2 = (star2 / total) * 100;
+                            var p1 = (star1 / total) * 100;
+
+                            var div1 = '<div class="progress-bar bg-danger" role="progressbar" style="width: '+p1.toFixed()+'%" aria-valuenow="'+star1+'" aria-valuemin="0" aria-valuemax="'+total+'"></div>';
+                            var div2 = '<div class="progress-bar bg-purple" role="progressbar" style="width: '+p2.toFixed()+'%" aria-valuenow="'+star2+'" aria-valuemin="0" aria-valuemax="'+total+'"></div>';
+                            var div3 = '<div class="progress-bar bg-primary" role="progressbar" style="width: '+p3.toFixed()+'%" aria-valuenow="'+star3+'" aria-valuemin="0" aria-valuemax="'+total+'"></div>';
+                            var div4 = '<div class="progress-bar bg-info" role="progressbar" style="width: '+p4.toFixed()+'%" aria-valuenow="'+star4+'" aria-valuemin="0" aria-valuemax="'+total+'"></div>';
+                            var div5 = '<div class="progress-bar bg-success" role="progressbar" style="width: '+p5.toFixed()+'%" aria-valuenow="'+star5+'" aria-valuemin="0" aria-valuemax="'+total+'"></div>';
+
+                            $('#p1').append(div1);
+                            $('#star1').html(star1+'<small>/'+total+'</small>');
+                            $('#total1').html(total);
+
+                            $('#p2').append(div2);
+                            $('#star2').html(star2+'<small>/'+total+'</small>');
+                            $('#total2').html(total);
+
+                            $('#p3').append(div3);
+                            $('#star3').html(star3+'<small>/'+total+'</small>');
+                            $('#total3').html(total);
+
+                            $('#p4').append(div4);
+                            $('#star4').html(star4+'<small>/'+total+'</small>');
+                            $('#total4').html(total);
+
+                            $('#p5').append(div5);
+                            $('#star5').html(star5+'<small>/'+total+'</small>');
+                            $('#total5').html(total);
+
+                            var data5 = [];
+                            var data4 = [];
+                            var data3 = [];
+                            var data2 = [];
+                            var data1 = [];
+                            response.staffRating["5-Star"].forEach(function (table,index)
+                            {
+                                data5.push([table.staff,table.rating]);
+                            });
+                            response.staffRating["4-Star"].forEach(function (table,index)
+                            {
+                                data4.push([table.staff,table.rating]);
+                            });
+                            response.staffRating["3-Star"].forEach(function (table,index)
+                            {
+                                data3.push([table.staff,table.rating]);
+                            });
+                            response.staffRating["2-Star"].forEach(function (table,index)
+                            {
+                                data2.push([table.staff,table.rating]);
+                            });
+                            response.staffRating["1-Star"].forEach(function (table,index)
+                            {
+                                data1.push([table.staff,table.rating]);
+                            });
+                            $('#table5star').DataTable().clear().rows.add(data5).draw();
+                            $('#table4star').DataTable().clear().rows.add(data4).draw();
+                            $('#table3star').DataTable().clear().rows.add(data3).draw();
+                            $('#table2star').DataTable().clear().rows.add(data2).draw();
+                            $('#table1star').DataTable().clear().rows.add(data1).draw();
+                                                    
+                        },
+                        error: function () {
+                            console.log('Failed ');
+                        }
+                    });
+                }
+                
+            }
+            function getTaskBoard()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) 
+                {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetTask',
+                        success: function (response) {
+                            var created = response.getTaskBoard["Created"].length;
+                            var progress = response.getTaskBoard["InProgress"].length;
+                            var complete = response.getTaskBoard["Completed"].length;
+
+                            var total = (created+progress+complete);
+                            var preCr = (created / total) * 100;
+                            var prePr = (progress / total) * 100;
+                            var preCo = (complete / total) * 100;
 
 
-        var table = $('.datatables').DataTable({
-            pageLength: 5,
-            lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                            var div1 = '<div class="progress-bar bg-purple" role="progressbar" style="width: '+preCr.toFixed()+'%" aria-valuenow="'+created+'" aria-valuemin="0" aria-valuemax="'+total+'">'+preCr.toFixed()+'%</div>';
+                            var div2 = '<div class="progress-bar bg-warning" role="progressbar" style="width: '+prePr.toFixed()+'%" aria-valuenow="'+progress+'" aria-valuemin="0" aria-valuemax="'+total+'">'+prePr.toFixed()+'%</div>';
+                            var div3 = '<div class="progress-bar bg-success" role="progressbar" style="width: '+preCo.toFixed()+'%" aria-valuenow="'+complete+'" aria-valuemin="0" aria-valuemax="'+total+'">'+preCo.toFixed()+'%</div>';
+
+
+                            
+                            $('#totalTask').html(total);
+                            $('#inProgress').html(progress);
+                            $('#taskDetails').append(div1);
+                            $('#taskDetails').append(div2);
+                            $('#taskDetails').append(div3);
+
+
+                            $('#createTask').html(created);
+                            $('#progressTask').html(progress);
+                            $('#completeTask').html(complete);
+                            console.log(response);
+                            response.getTaskBoard.Created.forEach(function (item, index) 
+                            {
+                                var task = '<li class="dd-item" data-id="'+item.taskId+'">'+
+                                                '<div class="dd-handle">'+
+                                                    '<div class="fancy-checkbox">'+
+                                                        '<label>'+
+                                                            '<input type="checkbox" id="chkId" onchange="setId(this)" data-id="'+item.taskId+'">'+
+                                                            '<span>#L '+item.taskId+'</span>'+
+                                                        '</label>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                                '<div class="dd-content p-15">'+
+                                                    '<h5>'+item.taskName+'</h5>'+
+                                                    '<p>'+item.note+'</p>'+
+                                                    '<img src="'+item.taskImage+'" class="img-fluid" alt="Avatar">'+
+                                                    '<ul class="list-unstyled team-info m-t-20 m-b-20" id="assignToCreated">'+
+                                                        '<li class="m-r-15"><small class="text-muted">Team</small></li>'+
+                                                    '</ul>'+
+                                                    '<hr>'+
+                                                    '<div class="action">'+
+                                                        '<a href="TaskBoard/Edit?taskId='+item.taskId+'" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>'+
+                                                        '<button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="fa fa-clock-o"></i></button>'+
+                                                        '<button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="fa fa-comment"></i></button>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</li>';
+
+                                $('#createdTask').append(task);
+                                item.assignedTo.forEach(function(staff,index)
+                                {
+                                    var currentStaff = response.getAllStaff.find(s => s.staffPersonalInfoId == staff.staffPersonalInfoId);
+                                    var assignto = '<li class="table-avatar"><a href="#" class="avatar"><img src="'+currentStaff.profilePix+'" data-toggle="tooltip" data-placement="top" title="" alt="Avator" data-original-title="'+staff.staffName+'"></a></li>';
+                                    $('#assignToCreated').append(assignto);
+                                });
+                            });
+
+                            response.getTaskBoard.InProgress.forEach(function (item, index) 
+                            {
+                                var prog = '<li class="dd-item" data-id="'+item.taskId+'">'+
+                                                '<div class="dd-handle">'+
+                                                    '<div class="fancy-checkbox">'+
+                                                        '<label>'+
+                                                            '<input type="checkbox" id="chkId" onchange="setId(this)" data-id="'+item.taskId+'">'+
+                                                            '<span>#L '+item.taskId+'</span>'+
+                                                        '</label>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                                '<div class="dd-content p-15">'+
+                                                    '<h5>'+item.taskName+'</h5>'+
+                                                    '<p>'+item.note+'</p>'+
+                                                    '<img src="'+item.taskImage+'" class="img-fluid" alt="Avatar">'+
+                                                    '<ul class="list-unstyled team-info m-t-20 m-b-20" id="assignToInProgress">'+
+                                                        '<li class="m-r-15"><small class="text-muted">Team</small></li>'+
+                                                    '</ul>'+
+                                                    '<hr>'+
+                                                    '<div class="action">'+
+                                                        '<a href="TaskBoard/Edit?taskId='+item.taskId+'" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>'+
+                                                        '<button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="fa fa-clock-o"></i></button>'+
+                                                        '<button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="fa fa-comment"></i></button>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</li>';
+
+                                $('#inprogressTask').append(prog);
+                                item.assignedTo.forEach(function(staff,index)
+                                {
+                                    var currentStaff = response.getAllStaff.find(s => s.staffPersonalInfoId == staff.staffPersonalInfoId);
+                                    var assignto = '<li class="table-avatar"><a href="#" class="avatar"><img src="'+currentStaff.profilePix+'" data-toggle="tooltip" data-placement="top" title="" alt="Avator" data-original-title="'+staff.staffName+'"></a></li>';
+                                    $('#assignToInProgress').append(assignto);
+                                });
+                            });
+
+                            response.getTaskBoard.Completed.forEach(function (item, index) 
+                            {
+                                var comp = '<li class="dd-item" data-id="'+item.taskId+'">'+
+                                                '<div class="dd-handle">'+
+                                                    '<div class="fancy-checkbox">'+
+                                                        '<label>'+
+                                                            '<input type="checkbox" id="chkId" onchange="setId(this)" data-id="'+item.taskId+'">'+
+                                                            '<span>#L '+item.taskId+'</span>'+
+                                                        '</label>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                                '<div class="dd-content p-15">'+
+                                                    '<h5>'+item.taskName+'</h5>'+
+                                                    '<p>'+item.note+'</p>'+
+                                                    '<img src="'+item.taskImage+'" class="img-fluid" alt="Avatar">'+
+                                                    '<ul class="list-unstyled team-info m-t-20 m-b-20" id="assignToCompleted">'+
+                                                        '<li class="m-r-15"><small class="text-muted">Team</small></li>'+
+                                                    '</ul>'+
+                                                    '<hr>'+
+                                                    '<div class="action">'+
+                                                        '<a href="TaskBoard/Edit?taskId='+item.taskId+'" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>'+
+                                                        '<button type="button" class="btn btn-sm btn-outline-secondary" title="Time"><i class="fa fa-clock-o"></i></button>'+
+                                                        '<button type="button" class="btn btn-sm btn-outline-secondary" title="Comment"><i class="fa fa-comment"></i></button>'+
+                                                    '</div>'+
+                                                '</div>'+
+                                            '</li>';
+
+                                $('#completedTask').append(comp);
+                                item.assignedTo.forEach(function(staff,index)
+                                {
+                                    var currentStaff = response.getAllStaff.find(s => s.staffPersonalInfoId == staff.staffPersonalInfoId);
+                                    var assignto = '<li class="table-avatar"><a href="#" class="avatar"><img src="'+currentStaff.profilePix+'" data-toggle="tooltip" data-placement="top" title="" alt="Avator" data-original-title="'+staff.staffName+'"></a></li>';
+                                    $('#assignToCompleted').append(assignto);
+                                });
+                            });
+                        
+                        },
+                        error: function () {
+                            console.log('Failed ');
+                        }
+                    });
+                }
+                
+            }
+            function getOnCall()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) 
+                {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetOncall',
+                        success: function (response) {
+                            var pending = 0;
+                            var closed = 0;
+                            var open = 0;
+                            var total = 0;
+                            response.onCallGraph.forEach(function (result, index) 
+                            { 
+                                if(result.key == "Open")
+                                {
+                                    open =  result.value;
+                                }
+                                if(result.key == "Pending")
+                                {
+                                    pending =  result.value;
+                                }
+                                if(result.key == "Closed")
+                                {
+                                    closed =  result.value;
+                                }
+                                if(result.key == "Total")
+                                {
+                                    total =  result.value;
+                                }                                
+                            });
+
+                            var preP = (pending / total) * 100;
+                            var preC = (closed / total) * 100;
+                            var preO = (open / total) * 100;
+
+                                var div1 = '<div class="progress-bar bg-success" role="progressbar" style="width: '+preP.toFixed()+'%" aria-valuenow="'+pending+'" aria-valuemin="0" aria-valuemax="'+total+'">'+preP.toFixed()+'%</div>';
+                                var div2 = '<div class="progress-bar bg-warning" role="progressbar" style="width: '+preC.toFixed()+'%" aria-valuenow="'+closed+'" aria-valuemin="0" aria-valuemax="'+total+'">'+preC.toFixed()+'%</div>';
+                                var div3 = '<div class="progress-bar bg-purple" role="progressbar" style="width: '+preO.toFixed()+'%" aria-valuenow="'+open+'" aria-valuemin="0" aria-valuemax="'+total+'">'+preO.toFixed()+'%</div>';
+                            
+
+
+                            
+                            $('#oncallTotal').html(total);
+                            $('#oncallPending').html(pending);
+                            $('#oncallDetails').append(div3);
+                            $('#oncallDetails').append(div1);
+                            $('#oncallDetails').append(div2);
+                          
+                            $('#callOpen').html(open);
+                            $('#callPending').html(pending);
+                            $('#callClosed').html(closed);  
+                            
+                            var data = [];
+                            response.onCall.forEach(function (table,index)
+                            {
+                                data.push(['<a href="/DutyOnCall/Edit?DutyOnCallId='+table.dutyOnCallId+'" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>',table.date,table.staffName,table.clientName,table.concern,table.notificationStatusName,table.statusName]);
+                            });
+                            $('#oncallTable').DataTable().clear().rows.add(data).draw();
+                        },
+                        error: function () {
+                            console.log('Failed ');
+                        }
+                    });
+                }
+                
+            }
+            function getConcern()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) 
+                {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetConcern',
+                        success: function (response) {
+                            var pending = 0;
+                            var closed = 0;
+                            var open = 0;
+                            var total = 0;
+                            response.concernNoteGraph.forEach(function (result, index) 
+                            { 
+                                if(result.key == "Open")
+                                {
+                                    open =  result.value;
+                                }
+                                if(result.key == "Pending")
+                                {
+                                    pending =  result.value;
+                                }
+                                if(result.key == "Closed")
+                                {
+                                    closed =  result.value;
+                                }
+                                if(result.key == "Total")
+                                {
+                                    total =  result.value;
+                                }                                
+                            });
+
+                            var preP = (pending / total) * 100;
+                            var preC = (closed / total) * 100;
+                            var preO = (open / total) * 100;
+
+                                var div1 = '<div class="progress-bar bg-success" role="progressbar" style="width: '+preP.toFixed()+'%" aria-valuenow="'+pending+'" aria-valuemin="0" aria-valuemax="'+total+'">'+preP.toFixed()+'%</div>';
+                                var div2 = '<div class="progress-bar bg-warning" role="progressbar" style="width: '+preC.toFixed()+'%" aria-valuenow="'+closed+'" aria-valuemin="0" aria-valuemax="'+total+'">'+preC.toFixed()+'%</div>';
+                                var div3 = '<div class="progress-bar bg-purple" role="progressbar" style="width: '+preO.toFixed()+'%" aria-valuenow="'+open+'" aria-valuemin="0" aria-valuemax="'+total+'">'+preO.toFixed()+'%</div>';
+                            
+
+
+                            
+                            $('#concernTotal').html(total);
+                            $('#concernPending').html(pending);
+                            $('#concernDetails').append(div3);
+                            $('#concernDetails').append(div1);
+                            $('#concernDetails').append(div2);
+                            
+
+
+                            $('#conOpen').html(open);
+                            $('#conPending').html(pending);
+                            $('#conClosed').html(closed);
+
+                            var data = [];
+                            response.concernNotes.forEach(function (table,index)
+                            {
+                                var staff = [];
+                                var manager = [];
+                                table.staffInvolved.forEach(function(item,index){staff.push(item.staffName)});
+                                table.managerInvolved.forEach(function(item,index){manager.push(item.staffName)});
+                                data.push(['<a href="/TrackingConcernNote/Edit?TrackingConcernNoteId='+table.ref+'" title="Edit"><i class="fa fa-pencil m-r-5"></i></a>',
+                                table.ref,table.dateOfIncident,table.expectedDeadline,staff,manager,table.concernNote,table.actionRequired,table.statusName]);
+                            });
+                            $('#concernTable').DataTable().clear().rows.add(data).draw();
+                        },
+                        error: function () {
+                            console.log('Failed ');
+                        }
+                    });
+                }
+                
+            }
+            function getAdlDaily()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) {
+                    // Bar Chart
+                    var chartMedBar = "med-bar-chart";
+                    var ctxMedBar = document.getElementById(chartMedBar).getContext('2d');
+                    var MedBarChart = new Chart(ctxMedBar, {
+                        type: 'bar',
+                        data: {
+                            labels: ["2017","2018","2019","2020", "2021", "2022"],
+                            datasets: [
+                                {
+                                    label: "Total Income",
+                                    backgroundColor: "#ff9b44",
+                                    data: [55,45,80,95,75,65]
+                                },
+                                {
+                                    label: "Total Outcome",
+                                    backgroundColor: "#fc6075",
+                                    data: [80,95,75,65,45,55]
+                                }
+                            ]
+                        },
+                        options: {
+                            barValueSpacing: 20,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        min: 0,
+                                    },
+                                    gridLines: {
+                                        color: 'white'
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetAdlTrackerD',
+                        success: function (response) {
+                            var types = [];
+                            var ontimeD = [];
+                            var earlyD = [];
+                            var mildD = [];
+                            var lateD = [];
+                            var missedD = [];
+
+                            response.types.forEach(function (result, index) { types.push(result)});
+                            response.liveTrackerD["ONTIME"].forEach(function (result, index) { ontimeD.push(result.value)});
+                            response.liveTrackerD["EARLY"].forEach(function (result, index) { earlyD.push(result.value)});
+                            response.liveTrackerD["MILD"].forEach(function (result, index) { mildD.push(result.value)});
+                            response.liveTrackerD["LATE"].forEach(function (result, index) { lateD.push(result.value)});
+                            response.liveTrackerD["MISSED"].forEach(function (result, index) { missedD.push(result.value)});
+
+                            const trackD = {
+                                labels: types,
+                                datasets: [
+                                    {
+                                        label: "ONTIME",
+                                        data: ontimeD,
+                                        borderColor: 'rgba(40, 167, 69, 1)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: "EARLY",
+                                        data: earlyD,
+                                        borderColor: 'rgba(0, 123, 255, 1)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: "MILD",
+                                        data: mildD,
+                                        borderColor: 'rgba(255, 193, 7, 1)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label:"LATE",
+                                        data: lateD,
+                                        borderColor: 'rgba(220, 53, 69, 1)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: "MISSED",
+                                        data: missedD,
+                                        borderColor: 'rgba(73,112,182,1)',
+                                        tension: 0.1
+                                    }
+                                ]
+                            };
+                            var TrackerD = new Chart(ctxTrackD, {
+                                data: trackD,
+                                type: 'line',
+                                options: trackerOptions
+
+                            });
+
+                        
+                        },
+                        error: function () {
+                            alert('Failed to receive the Data');
+                            console.log('Failed ');
+                        }
+                    });
+                }
+            }
+            function getAdlWeekly()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetAdlTrackerW',
+                        success: function (response) {
+                            var types = [];
+                            var ontime = [];
+                            var early = [];
+                            var mild = [];
+                            var late = [];
+                            var missed = [];
+
+                            response.days.forEach(function (result, index) { types.push(result)});
+                            response.liveTrackerW["ONTIME"].forEach(function (result, index) { ontime.push(result.value)});
+                            response.liveTrackerW["EARLY"].forEach(function (result, index) { early.push(result.value)});
+                            response.liveTrackerW["MILD"].forEach(function (result, index) { mild.push(result.value)});
+                            response.liveTrackerW["LATE"].forEach(function (result, index) { late.push(result.value)});
+                            response.liveTrackerW["MISSED"].forEach(function (result, index) { missed.push(result.value)});
+
+                            const trackW = {
+                                labels: types,
+                                datasets: [
+                                    {
+                                        label: "ONTIME",
+                                        data: ontime,
+                                        borderColor: 'rgba(40, 167, 69, 1)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: "EARLY",
+                                        data: early,
+                                        borderColor: 'rgba(0, 123, 255, 1)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: "MILD",
+                                        data: mild,
+                                        borderColor: 'rgba(255, 193, 7, 1)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label:"LATE",
+                                        data: late,
+                                        borderColor: 'rgba(220, 53, 69, 1)',
+                                        tension: 0.1
+                                    },
+                                    {
+                                        label: "MISSED",
+                                        data: missed,
+                                        borderColor: 'rgba(73,112,182,1)',
+                                        tension: 0.1
+                                    }
+                                ]
+                            };
+                            var TrackerW = new Chart(ctxTrackW, {
+                                data: trackW,
+                                type: 'line',
+                                options: trackerOptions
+
+                            });
+
+                        
+                        },
+                        error: function () {
+                            alert('Failed to receive the Data');
+                            console.log('Failed ');
+                        }
+                    });
+                }
+            }
+
+            function getClientMatrix()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetClientMatrix',
+                        success: function (response) {
+                            //Client Matrix
+                            var labelsC = [];
+                            var dataC = [];
+                            response.clientMatrix.forEach(function (result, index) { labelsC.push(result.key) });
+                            response.clientMatrix.forEach(function (result, index) { dataC.push(result.value) });
+                            var client = {
+                                labels: labelsC,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: dataC
+                                }]
+                            };
+                            var dataC1 = [];
+                            response.logAudit.forEach(function (result, index) { dataC1.push(result.value) });
+                            var log = {
+                                labels: labelsC,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    borderColor: clientColor,
+                                    borderWidth: 0,
+                                    data: dataC1
+                                }]
+                            };
+                            var dataC2 = [];
+                            response.medAudit.forEach(function (result, index) { dataC2.push(result.value) });
+                            var med = {
+                                labels: labelsC,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    borderColor: clientColor,
+                                    borderWidth: 0,
+                                    data: dataC2
+                                }]
+                            };
+                            var dataC3 = [];
+                            response.complain.forEach(function (result, index) { dataC3.push(result.value) });
+                            var comp = {
+                                labels: labelsC,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    borderColor: clientColor,
+                                    borderWidth: 0,
+                                    data: dataC3
+                                }]
+                            };
+                            var dataC4 = [];
+                            response.voice.forEach(function (result, index) { dataC4.push(result.value) });
+                            var voice = {
+                                labels: labelsC,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    borderColor: clientColor,
+                                    borderWidth: 0,
+                                    data: dataC4
+                                }]
+                            };
+                            var dataC5 = [];
+                            response.program.forEach(function (result, index) { dataC5.push(result.value) });
+                            var prog = {
+                                labels: labelsC,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    borderColor: clientColor,
+                                    borderWidth: 0,
+                                    data: dataC5
+                                }]
+                            };
+                            var dataC6 = [];
+                            response.mgtVisit.forEach(function (result, index) { dataC6.push(result.value) });
+                            var mgt = {
+                                labels: labelsC,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    borderColor: clientColor,
+                                    borderWidth: 0,
+                                    data: dataC6
+                                }]
+                            };
+                            var dataC7 = [];
+                            response.serviceWatch.forEach(function (result, index) { dataC7.push(result.value) });
+                            var watch = {
+                                labels: labelsC,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    borderColor: clientColor,
+                                    borderWidth: 0,
+                                    data: dataC7
+                                }]
+                            };
+
+                            var Client = new Chart(ctxClient, {
+                                options: hidelabel,
+                                data: client,
+                                type: 'pie'
+
+                            });
+                            var Log = new Chart(ctxLog, {
+                                options: hidelabel,
+                                data: log,
+                                type: 'pie'
+
+                            });
+                            var Med = new Chart(ctxMed, {
+                                options: hidelabel,
+                                data: med,
+                                type:'pie'
+
+                            });
+                            var Comp = new Chart(ctxComp, {
+                                options: hidelabel,
+                                data: comp,
+                                type: 'pie'
+
+                            });
+                            var Voice = new Chart(ctxVoice, {
+                                options: hidelabel,
+                                data: voice,
+                                type:'pie'
+
+                            });
+                            var Prog = new Chart(ctxProg, {
+                                options: hidelabel,
+                                data: prog,
+                                type:'pie'
+
+                            });
+                            var Mgt = new Chart(ctxMgt, {
+                                options: hidelabel,
+                                data: mgt,
+                                type:'pie'
+
+                            });
+                            var Watch = new Chart(ctxWatch, {
+                                options: hidelabel,
+                                data: watch,
+                                type: 'pie'
+
+                            });
+                            },
+                        error: function () {
+                            console.log('Failed ');
+                        }
+                    });
+                }
+            }
+
+            function getStaffMatrix()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetStaffMatrix',
+                        success: function (response) {
+                            //Staff Matrix
+                            var labels = [];
+                            var data = [];
+                            response.staffMatrix.forEach(function (result, index) { labels.push(result.key) });
+                            response.staffMatrix.forEach(function (result, index) { data.push(result.value) });
+                            var staff = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+
+                            var Staff = new Chart(ctxStaff, {
+                                options: hidelabel,
+                                data: staff,
+                                type: 'pie'
+
+                            });
+                            var dataS1 = [];
+                            response.adlObs.forEach(function (result, index) { dataS1.push(result.value) });
+                            var adl = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+                            var dataS2 = [];
+                            response.keyWorker.forEach(function (result, index) { dataS2.push(result.value) });
+                            var key = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+                            var dataS3 = [];
+                            response.medComp.forEach(function (result, index) { dataS3.push(result.value) });
+                            var medcomp = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+                            var dataS4 = [];
+                            response.oneToOne.forEach(function (result, index) { dataS4.push(result.value) });
+                            var one = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+                            var dataS5 = [];
+                            response.reference.forEach(function (result, index) { dataS5.push(result.value) });
+                            var refs = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+                            var dataS6 = [];
+                            response.spotCheck.forEach(function (result, index) { dataS6.push(result.value) });
+                            var spot = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+                            var dataS7 = [];
+                            response.supervision.forEach(function (result, index) { dataS7.push(result.value) });
+                            var superv = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+                            var dataS8 = [];
+                            response.survey.forEach(function (result, index) { dataS8.push(result.value) });
+                            var survey = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: clientColor,
+                                    bordercolor: clientColor,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+
+                            var Adl = new Chart(ctxAdl, {
+                                options: hidelabel,
+                                data: adl,
+                                type: 'pie'
+
+                            });
+                            var Key = new Chart(ctxKey, {
+                                options: hidelabel,
+                                data: key,
+                                type: 'pie'
+
+                            });
+                            var Comp = new Chart(ctxMedC, {
+                                options: hidelabel,
+                                data: medcomp,
+                                type: 'pie'
+
+                            });
+                            var One = new Chart(ctxOne, {
+                                options: hidelabel,
+                                data: one,
+                                type: 'pie'
+
+                            });
+                            var Ref = new Chart(ctxRef, {
+                                options: hidelabel,
+                                data: refs,
+                                type: 'pie'
+
+                            });
+                            var Spot = new Chart(ctxSpot, {
+                                options: hidelabel,
+                                data: spot,
+                                type: 'pie'
+
+                            });
+                            var Super = new Chart(ctxSup, {
+                                options: hidelabel,
+                                data: superv,
+                                type: 'pie'
+
+                            });
+                            var Survey = new Chart(ctxSur, {
+                                options: hidelabel,
+                                data: survey,
+                                type: 'pie'
+
+                            });
+                            },
+                        error: function () {
+                            console.log('Failed ');
+                        }
+                    });
+                }
+            }
+            
+            function getTeleMatrix()
+            {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetTeleHealth',
+                        success: function (response) {
+                            
+                            var labels = [];
+                            var data = [];
+                            var dataT1 = [];
+                            var dataT2 = [];
+                            var dataT3 = [];
+                            var dataT4 = [];
+                            var dataT5 = [];
+                            var dataT6 = [];
+                            var dataT7 = [];
+                            var dataT8 = [];
+                            var dataT9 = [];
+                            var dataT10 = [];
+                            var dataT11 = [];
+                            var dataT12 = [];
+                            var dataT13 = [];
+                            
+                            response.teleHealth.forEach(function (result, index) { labels.push(result.key) });
+                            response.teleHealth.forEach(function (result, index) { data.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT1.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT2.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT3.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT4.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT5.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT6.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT7.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT8.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT9.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT10.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT11.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT12.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT13.push(result.value) });
+                            
+                            var tele = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: data
+                                }]
+                            };
+                                var coag = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT1
+                                }]
+                            };
+                                var pressure = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT2
+                                }]
+                                };
+                                var bmi = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT3
+                                }]
+                                };
+                                var temp = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT4
+                                }]
+                                };
+                                var bowel = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT5
+                                }]
+                                };
+                                var eye = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT6
+                                }]
+                                };
+                                var food = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT7
+                                }]
+                                };
+                                var heart = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT8
+                                }]
+                                };
+                                var oxygen = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT9
+                                }]
+                            };
+                                var pain = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT10
+                                }]
+                                };
+                                var pulse = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT11
+                                }]
+                                    };
+                                var seizure = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT12
+                                }]
+                                };
+                                var wound = {
+                                labels: labels,
+                                datasets: [{
+                                    label: "Chart",
+                                    backgroundColor: Color,
+                                    borderColor: Color,
+                                    borderWidth: 0,
+                                    data: dataT13
+                                }]
+                                };
+
+                                var Tele = new Chart(ctxTele, {
+                                    options: {
+                                        maintainAspectRatio: false,
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    min: 0,
+                                                    beginAtZero: true
+                                                },
+                                                gridLines: {
+                                                    display: false,
+                                                }
+                                            }]
+                                        }
+                                    },
+                                data: tele,
+                                type: 'pie'
+
+                                });
+                                var Coag = new Chart(ctxCoag, {
+                                    options: hidelabel,
+                                    data: coag,
+                                    type:'pie'
+
+                                });
+                                var BMI = new Chart(ctxBMI, {
+                                    options: hidelabel,
+                                    data: bmi,
+                                    type: 'pie'
+
+                                });
+                                var Press = new Chart(ctxPressure, {
+                                    options: hidelabel,
+                                    data: pressure,
+                                    type: 'pie'
+
+                                });
+                                var Body = new Chart(ctxTemp, {
+                                    options: hidelabel,
+                                    data: temp,
+                                    type: 'pie'
+
+                                });
+                                var Bowel = new Chart(ctxBowel, {
+                                    options: hidelabel,
+                                    data: bowel,
+                                    type: 'pie'
+
+                                });
+                                var Eye = new Chart(ctxEye, {
+                                    options: hidelabel,
+                                    data: eye,
+                                    type: 'pie'
+
+                                });
+                                var Food = new Chart(ctxFood, {
+                                    options: hidelabel,
+                                    data: food,
+                                    type: 'pie'
+
+                                });
+                                var Heart = new Chart(ctxHeart, {
+                                    options: hidelabel,
+                                    data: heart,
+                                    type: 'pie'
+
+                                });
+                                var Oxygen = new Chart(ctxOxygen, {
+                                    options: hidelabel,
+                                    data: oxygen,
+                                    type: 'pie'
+
+                                });
+                                var Pain = new Chart(ctxPain, {
+                                    options: hidelabel,
+                                    data: pain,
+                                    type: 'pie'
+
+                                });
+                                var Pulse = new Chart(ctxPulse, {
+                                    options: hidelabel,
+                                    data: pulse,
+                                    type: 'pie'
+
+                                });
+                                var Seizure = new Chart(ctxSeizure, {
+                                    options: hidelabel,
+                                    data: seizure,
+                                    type: 'pie'
+
+                                });
+                                var Wound = new Chart(ctxWound, {
+                                    options: hidelabel,
+                                    data: wound,
+                                    type: 'pie'
+
+                                });
+                        
+                        },
+                        error: function () {
+                            alert('Failed to receive the Data');
+                            console.log('Failed ');
+                        }
+                    });
+                }
+            }
         });
     </script>
-    <script src="~/assets/vendor/nestable/jquery.nestable.js"></script>
 }

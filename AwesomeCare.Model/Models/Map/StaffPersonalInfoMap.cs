@@ -207,6 +207,10 @@ namespace AwesomeCare.Model.Models.Map
            .HasColumnName("IsTeamLeader")
            .IsRequired(false);
 
+            builder.Property(p => p.IsKeyWorker)
+           .HasColumnName("IsKeyWorker")
+           .IsRequired(false);
+
             builder.Property(p => p.HasUniform)
           .HasColumnName("HasUniform")
           .IsRequired(false);

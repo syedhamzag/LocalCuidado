@@ -14,13 +14,20 @@ using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.StaffCommunication;
+using AwesomeCare.Admin.Services.StaffHoliday;
 using AwesomeCare.Admin.Services.StaffWorkTeam;
 using AwesomeCare.Admin.ViewModels.Client;
 using AwesomeCare.Admin.ViewModels.Staff;
 using AwesomeCare.Admin.ViewModels.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.Staff.InfectionControl;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
+using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
+using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
+using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
+using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 using AwesomeCare.DataTransferObject.DTOs.User;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -55,6 +62,7 @@ namespace AwesomeCare.Admin.Controllers
         const string educationFolder = "staffeductaion";
         const string trainingFolder = "stafftraining";
         const string refereeFolder = "staffreferee";
+        private ISetupStaffHolidayService _setupStaff;
 
         public StaffController(IStaffService staffService,
             IClientService clientService,
@@ -65,7 +73,7 @@ namespace AwesomeCare.Admin.Controllers
             IStaffCommunication staffCommunication,
             IClientRotaTypeService clientRotaTypeService,
             IRotaTaskService rotaTaskService, IBaseRecordService baseService,
-            IStaffWorkTeamService staffWorkTeamService) : base(fileUpload)
+            IStaffWorkTeamService staffWorkTeamService, ISetupStaffHolidayService setupStaff) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
@@ -78,6 +86,7 @@ namespace AwesomeCare.Admin.Controllers
             this.staffWorkTeamService = staffWorkTeamService;
             this.rotaTaskService = rotaTaskService;
             _baseService = baseService;
+            _setupStaff = setupStaff;
         }
         public async Task<IActionResult> Index()
         {
@@ -94,6 +103,11 @@ namespace AwesomeCare.Admin.Controllers
                 throw;
             }
 
+        }
+        public async Task<IActionResult> StaffRate()
+        {
+            var entities = await _staffService.GetAsync();
+            return View(entities);
         }
         public async Task<IActionResult> OtherStaff()
         {
@@ -625,6 +639,266 @@ namespace AwesomeCare.Admin.Controllers
             var feedbacks = await _staffService.GetClientFeedback(staffpersonalInfoId);
             staffFeedback.StaffRatings = feedbacks;
             staffFeedback.ClientSelectLists = clients.Select(c => new SelectListItem(string.Concat(c.Firstname, " ", c.Middlename, " ", c.Surname), c.ClientId.ToString())).ToList();
+        }
+        #endregion
+
+        #region StaffDetails
+        [HttpGet]
+        public JsonResult Staffholiday(int staffId)
+        {
+            var staff = _staffService.GetStaffs();
+            var staffHoliday = _staffService.StaffHoliday(staffId);
+            var holiday = staffHoliday.Result.GetStaffHoliday.FirstOrDefault();
+            CreateStaffHoliday report = new CreateStaffHoliday();
+                var Adays = Math.Round(holiday.AllocatedDays, 0);
+                int Allocated = int.Parse(Adays.ToString());
+                var setup = _setupStaff.Get();
+                var days = setup.Result.Where(s => s.StaffPersonalInfoId == staffHoliday.Result.StaffPersonalInfoId && s.TypeOfHoliday == holiday.Class).FirstOrDefault().NumberOfDays;
+
+                report.StaffHolidayId = holiday.StaffHolidayId;
+                report.StartDate = holiday.StartDate;
+                report.EndDate = holiday.EndDate;
+                report.AllocatedDays = holiday.AllocatedDays;
+                report.Balance = (Allocated - days);
+                report.StaffName = staff.Result.Where(s => s.StaffPersonalInfoId == staffHoliday.Result.StaffPersonalInfoId).FirstOrDefault().Fullname;
+                report.ClassName = _baseService.GetBaseRecordItemById(holiday.Class).Result.ValueName;
+            return Json(report);
+        }
+
+        [HttpGet]
+        public JsonResult Staffeducation(int staffId)
+        {
+            var StaffEducation = _staffService.StaffEducation(staffId);
+            return Json(StaffEducation.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Stafftrainingmatrix(int staffId)
+        {
+            var StaffTrainingMatrix = _staffService.StaffTrainingMatrix(staffId);
+            return Json(StaffTrainingMatrix.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Stafftrainings(int staffId)
+        {
+            var StaffTraining = _staffService.StaffTraining(staffId);
+            return Json(StaffTraining.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffreferee(int staffId)
+        {
+            var StaffReferee = _staffService.StaffReferee(staffId);
+            return Json(StaffReferee.Result);
+        }
+
+        [HttpGet]
+        public JsonResult StaffemergencyContact(int staffId)
+        {
+            var StaffEmergencyContact = _staffService.StaffEmergencyContact(staffId);
+            return Json(StaffEmergencyContact.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffspotcheck(int staffId)
+        {
+            var StaffSpotCheck = _staffService.StaffSpotCheck(staffId);
+            return Json(StaffSpotCheck.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffadlobs(int staffId)
+        {
+            var StaffAdlObs = _staffService.StaffAdlObs(staffId);
+            return Json(StaffAdlObs.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffmedcomp(int staffId)
+        {
+            var StaffMedComp = _staffService.StaffMedComp(staffId);
+            return Json(StaffMedComp.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffkeyworker(int staffId)
+        {
+            var StaffKeyWorker = _staffService.StaffKeyWorker(staffId);
+            return Json(StaffKeyWorker.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffsurvey(int staffId)
+        {
+            var StaffSurvey = _staffService.StaffSurvey(staffId);
+            return Json(StaffSurvey.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffonetoone(int staffId)
+        {
+            var StaffOneToOne = _staffService.StaffOneToOne(staffId);
+            return Json(StaffOneToOne.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffsupervision(int staffId)
+        {
+            var StaffSupervision = _staffService.StaffSupervision(staffId);
+            return Json(StaffSupervision.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffreference(int staffId)
+        {
+            var StaffReference = _staffService.StaffReference(staffId);
+            return Json(StaffReference.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffpersonalitytest(int staffId)
+        {
+            var StaffPersonalityTest = _staffService.StaffPersonalityTest(staffId);
+            List<GetStaffPersonalityTest> reports = new List<GetStaffPersonalityTest>();
+            foreach (var item in StaffPersonalityTest.Result.GetStaffPersonalityTest)
+            {
+                GetStaffPersonalityTest report = new GetStaffPersonalityTest();
+                    report.QuestionName = _baseService.GetBaseRecordItemById(item.Question).Result.ValueName;
+                    report.AnswerName = _baseService.GetBaseRecordItemById(item.Answer).Result.ValueName;
+                    reports.Add(report);
+
+            }
+            return Json(reports);
+        }
+
+        [HttpGet]
+        public JsonResult Staffinfection(int staffId)
+        {
+            var StaffInfectionControl = _staffService.StaffInfectionControl(staffId);
+            List<CreateStaffInfectionControl> reports = new List<CreateStaffInfectionControl>();
+            foreach (var item in StaffInfectionControl.Result.GetStaffInfectionControl)
+            {
+                CreateStaffInfectionControl report = new CreateStaffInfectionControl();
+                report.InfectionName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
+                report.VaccName = _baseService.GetBaseRecordItemById(item.VaccStatus).Result.ValueName;
+                report.TypeName = _baseService.GetBaseRecordItemById(item.Type).Result.ValueName;
+                report.TestDate = item.TestDate;
+                report.Guideline = item.Guideline;
+                report.Remarks = item.Remarks;
+                reports.Add(report);
+
+            }
+            return Json(reports);
+        }
+
+        [HttpGet]
+        public JsonResult Staffcompetence(int staffId)
+        {
+            var StaffCompetenceTest = _staffService.StaffCompetenceTest(staffId);
+            List<GetStaffCompetenceTestTask> reports = new List<GetStaffCompetenceTestTask>();
+            foreach (var item in StaffCompetenceTest.Result.GetStaffCompetenceTest)
+            {
+                foreach (var task in item.GetStaffCompetenceTestTask)
+                {
+                    GetStaffCompetenceTestTask report = new GetStaffCompetenceTestTask();
+                    report.AnswerName = _baseService.GetBaseRecordItemById(task.Answer).Result.ValueName;
+                    report.TitleName = _baseService.GetBaseRecordItemById(task.Title).Result.ValueName;
+                    report.Comment = task.Comment;
+                    report.Point = task.Point;
+                    report.Score = task.Score;
+                    reports.Add(report);
+                }
+                
+            }
+            return Json(reports);
+        }
+
+        [HttpGet]
+        public JsonResult Staffhealth(int staffId)
+        {
+            var StaffHealth = _staffService.StaffHealth(staffId);
+            List<GetStaffHealthTask> reports = new List<GetStaffHealthTask>();
+            foreach (var item in StaffHealth.Result.GetStaffHealth)
+            {
+                foreach (var task in item.GetStaffHealthTask)
+                {
+                    GetStaffHealthTask report = new GetStaffHealthTask();
+                    report.AnswerName = _baseService.GetBaseRecordItemById(task.Answer).Result.ValueName;
+                    report.TitleName = _baseService.GetBaseRecordItemById(task.Title).Result.ValueName;
+                    report.Comment = task.Comment;
+                    report.Point = task.Point;
+                    report.Score = task.Score;
+                    reports.Add(report);
+                }
+
+            }
+            return Json(reports);
+        }
+
+        [HttpGet]
+        public JsonResult Staffinterview(int staffId)
+        {
+            var StaffInterview = _staffService.StaffInterview(staffId);
+            List<GetStaffInterviewTask> reports = new List<GetStaffInterviewTask>();
+            foreach (var item in StaffInterview.Result.GetStaffInterview)
+            {
+                foreach (var task in item.GetStaffInterviewTask)
+                {
+                    GetStaffInterviewTask report = new GetStaffInterviewTask();
+                    report.AnswerName = _baseService.GetBaseRecordItemById(task.Answer).Result.ValueName;
+                    report.TitleName = _baseService.GetBaseRecordItemById(task.Title).Result.ValueName;
+                    report.Comment = task.Comment;
+                    report.Point = task.Point;
+                    report.Score = task.Score;
+                    reports.Add(report);
+                }
+
+            }
+            return Json(reports);
+        }
+
+        [HttpGet]
+        public JsonResult Staffshadowing(int staffId)
+        {
+            var StaffShadowing = _staffService.StaffShadowing(staffId);
+            List<GetStaffShadowingTask> reports = new List<GetStaffShadowingTask>();
+            foreach (var item in StaffShadowing.Result.GetStaffShadowing)
+            {
+                foreach (var task in item.GetStaffShadowingTask)
+                {
+                    GetStaffShadowingTask report = new GetStaffShadowingTask();
+                    report.AnswerName = _baseService.GetBaseRecordItemById(task.Answer).Result.ValueName;
+                    report.TitleName = _baseService.GetBaseRecordItemById(task.Title).Result.ValueName;
+                    report.Comment = task.Comment;
+                    report.Point = task.Point;
+                    report.Score = task.Score;
+                    reports.Add(report);
+                }
+
+            }
+            return Json(reports);
+        }
+
+        [HttpGet]
+        public JsonResult Staffsalaryallowance(int staffId)
+        {
+            var StaffAllowance = _staffService.StaffAllowance(staffId);
+            return Json(StaffAllowance.Result);
+        }
+
+        [HttpGet]
+        public JsonResult Staffsalarydeduction(int staffId)
+        {
+            var StaffDeduction = _staffService.StaffDeduction(staffId);
+            return Json(StaffDeduction.Result);
+        }
+
+        [HttpGet]
+        public JsonResult StaffTeamLead(int staffId)
+        {
+            var StaffTeamLead = _staffService.StaffTeamLead(staffId);
+            return Json(StaffTeamLead.Result);
         }
         #endregion
     }

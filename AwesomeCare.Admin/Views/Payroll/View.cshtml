@@ -1,0 +1,154 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Staff;
+@model GetStaffProfile
+@{
+    ViewData["Title"] = "Payroll Items";
+}
+<div class="page-menu">
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+			<ul class="nav nav-tabs nav-tabs-bottom">
+										<li class="nav-item">
+											<a class="nav-link active" data-bs-toggle="tab" href="#tab_additions">Additions</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" data-bs-toggle="tab" href="#tab_overtime">Staff Tax</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" data-bs-toggle="tab" href="#tab_deductions">Deductions</a>
+										</li>
+									</ul>
+		</div>
+	</div>
+</div>
+<!-- Tab Content -->
+					<div class="tab-content">
+					
+						<!-- Additions Tab -->
+						<div class="tab-pane show active" id="tab_additions">
+						
+							<!-- Add Addition Button -->
+							<div class="text-end mb-4 clearfix">
+								<a asp-controller="SalaryAllowance" asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" class="btn btn-primary add-btn"><i class="fa fa-plus"></i> Add Addition</a>
+							</div>
+							<!-- /Add Addition Button -->
+
+							<!-- Payroll Additions Table -->
+							<div class="payroll-table card">
+			
+								<div class="table-responsive">
+									<table class="table table-hover table-radius">
+										<thead>
+											<tr>
+												<th>Allowance Type</th>
+												<th>%</th>
+												<th>Reoccurent</th>
+												<th>Amount</th>
+												<th class="text-end">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											@if (Model.GetSalaryAllowance.Count > 0)
+											{
+												@foreach(var addition in Model.GetSalaryAllowance)
+												{
+													<tr>
+														<th>@addition.AllowanceType</th>
+														<td>@addition.Percentage</td>
+														<td>@addition.Reoccurent</td>
+														<td>@addition.Amount</td>
+													</tr>
+
+												}
+											}
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- /Payroll Additions Table -->
+							
+						</div>
+						<!-- Additions Tab -->
+						
+						<!-- Overtime Tab -->
+						<div class="tab-pane" id="tab_overtime">
+						
+							<!-- Add Overtime Button -->
+							<div class="text-end mb-4 clearfix">
+								<a asp-controller="StaffTax" asp-action="Index" class="btn btn-primary add-btn"><i class="fa fa-plus"></i> Add Tax</a>
+							</div>
+							<!-- /Add Overtime Button -->
+
+							<!-- Payroll Overtime Table -->
+							<div class="payroll-table card">
+								<div class="table-responsive">
+									<table class="table table-hover table-radius">
+										<thead>
+											<tr>
+												<th>Tax</th>
+												<th>NI</th>
+												<th>Remarks</th>
+											</tr>
+										</thead>
+										<tbody>
+											@if (Model.GetStaffTax.Count > 0)
+											{
+												@foreach(var tax in Model.GetStaffTax)
+												{
+													<tr>
+														<th>@tax.Tax</th>
+														<td>@tax.NI</td>
+														<td>@tax.Remarks</td>
+													</tr>
+
+												}
+											}
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- /Payroll Overtime Table -->
+							
+						</div>
+						<!-- /Overtime Tab -->
+						
+						<!-- Deductions Tab -->
+						<div class="tab-pane" id="tab_deductions">
+						
+							<!-- Add Deductions Button -->
+							<div class="text-end mb-4 clearfix">
+								<a asp-controller="SalaryDeduction" asp-action="Index" asp-route-staffId="@Model.StaffPersonalInfoId" class="btn btn-primary add-btn"><i class="fa fa-plus"></i> Add Deduction</a>
+							</div>
+							<!-- /Add Deductions Button -->
+
+							<!-- Payroll Deduction Table -->
+							<div class="payroll-table card">
+								<div class="table-responsive">
+									<table class="table table-hover table-radius">
+										<thead>
+											<tr>
+												<th>Allowance Type</th>
+												<th>%</th>
+												<th>Reoccurent</th>
+												<th>Amount</th>
+											</tr>
+										</thead>
+										<tbody>
+											@if (Model.GetSalaryDeduction.Count > 0)
+											{
+												@foreach(var deduction in Model.GetSalaryDeduction)
+												{
+													<tr>
+														<th>@deduction.AllowanceType</th>
+														<td>@deduction.Percentage</td>
+														<td>@deduction.Reoccurent</td>
+														<td>@deduction.Amount</td>
+													</tr>
+
+												}
+											}
+										</tbody>
+									</table>
+								</div>
+							</div>							
+						</div>					
+					</div>

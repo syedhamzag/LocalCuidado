@@ -48,20 +48,16 @@ namespace AwesomeCare.Admin.Controllers
             _clientRotaService = clientRotaService;
             this.logger = logger;
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int client, string pin)
+        public async Task<IActionResult> Index(int clientId)
         {
-            if (pin != "3107")
-                return RedirectToAction("HomeCare", "Client"); 
             RoteringViewModel model = new RoteringViewModel();
-            model.ClientId = client;
+            model.ClientId = clientId;
             var rotaTypes = await _clientRotaTypeService.Get();
             var rotas = await _clientRotaNameService.Get();
             var rotaTasks = await _rotaTaskService.Get();
             var weekDays = await _rotaDayOfWeekService.Get();
 
-            var clientRotas = await _clientRotaService.GetForEdit(client);
+            var clientRotas = await _clientRotaService.GetForEdit(clientId);
 
             model.Rotas = rotas.Select(r => new SelectListItem { Text = r.RotaName, Value = r.RotaId.ToString() }).ToList();
             model.RotaTasks = rotaTasks.Select(r => new SelectListItem { Text = r.TaskName, Value = r.RotaTaskId.ToString() }).ToList();
@@ -77,7 +73,29 @@ namespace AwesomeCare.Admin.Controllers
             HttpContext.Session.Set<List<GetClientRotaType>>("rotaTypes", rotaTypes);
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(int clientId, string pin)
+        {
+            var getmodal = await _clientRotaService.GetPin();
+            if (pin != getmodal.Pin)
+                return RedirectToAction("HomeCare", "Client"); 
+            return RedirectToAction("Index", new { clientId = clientId });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePin(string newPin, string oldPin)
+        {
+            var getmodal = await _clientRotaService.GetPin();
+            if (getmodal.Pin != oldPin)
+                return RedirectToAction("HomeCare", "Client");
+            var model = new PostRotaPin();
+            model.PinId = getmodal.PinId;
+            model.Pin = newPin;
+            var result = await _clientRotaService.ChangePin(model);
 
+            return RedirectToAction("BaseRecord", "Admin");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _Index(RoteringViewModel model, IFormCollection formsCollection)
@@ -175,7 +193,7 @@ namespace AwesomeCare.Admin.Controllers
                 }
 
             }
-            return RedirectToAction("Index", new { client = model.ClientId });
+            return RedirectToAction("Index", new { clientId = model.ClientId });
         }
         [HttpGet]
         public async Task<IActionResult> RotaAdmin(string startDate, string stopDate)
@@ -203,10 +221,25 @@ namespace AwesomeCare.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> LiveRota(string startDate, string stopDate)
         {
+            LiveRota rota = await GetLiveRota(startDate, stopDate);
+            return View(rota);
+        }
+        public IActionResult OfficeAttendance()
+        {
+            LiveRota rota = new LiveRota();
+            return View(rota);
+        }
+        [HttpPost]
+        public async Task<IActionResult> OfficeAttendance(string startDate, string stopDate)
+        {
+            LiveRota rota = await GetLiveRota(startDate, stopDate);
+            return View(rota);
+        }
+        public async Task<LiveRota> GetLiveRota(string startDate, string stopDate)
+        {
             var liveRotaViewModel = new LiveRota();
-            // var date =DateTime.Now.ToString("yyyy-MM-dd");
-            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
-            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : stopDate;
             var rotaAdmin = await _rotaTaskService.LiveRota(sdate, edate);
 
             var clockDifferences = new List<LiveRotaClockDifference>();
@@ -230,10 +263,8 @@ namespace AwesomeCare.Admin.Controllers
             }
 
             List<GroupLiveRota> groupedRota = null;
-            var todaysDate = DateTime.Now.ToString("yyyy-MM-dd");
-            //if (todaysDate.Equals(sdate))
-            //{
-            var currentTime = DateTimeOffset.UtcNow.AddHours(1).TimeOfDay;
+            var todaysDate = DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd");
+            var currentTime = DateTimeOffset.UtcNow.DateTime.ToPortalDateTime().TimeOfDay;
             groupedRota = (from rt in rotaAdmin
                            group rt by rt.Staff into rtGrp
                            select new GroupLiveRota
@@ -242,28 +273,13 @@ namespace AwesomeCare.Admin.Controllers
                                Trackers = rtGrp.Where(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
 
                            }).ToList();
-            // }
-            //else
-            //{
-            //groupedRota = (from rt in rotaAdmin
-            //                       group rt by rt.Staff into rtGrp
-            //                       select new GroupLiveRota
-            //                       {
-            //                           StaffName = rtGrp.Key,
-            //                           Trackers = rtGrp.OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
-
-            //                       }).ToList();
-            //}
-
-
-
 
             liveRotaViewModel.GroupLiveRotas = groupedRota;
             liveRotaViewModel.ClockDifferences = clockDifferences;
 
 
 
-            return View(liveRotaViewModel);
+            return liveRotaViewModel;
         }
 
         [HttpGet]
@@ -271,8 +287,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             var liveRotaViewModel = new LiveRota();
             // var date =DateTime.Now.ToString("yyyy-MM-dd");
-            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
-            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : stopDate;
             var rotaAdmin = await _rotaTaskService.LiveRota(sdate, edate);
 
             var clockDifferences = new List<LiveRotaClockDifference>();
@@ -317,8 +333,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             string startDate = formCollection["startDate"];
             string stopDate = formCollection["stopDate"];
-            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
-            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : stopDate;
             // var date = DateTime.Now.ToString("yyyy-MM-dd");
             //var rotaAdmin = await _rotaTaskService.LiveRota(date);
 
@@ -361,8 +377,8 @@ namespace AwesomeCare.Admin.Controllers
         {
             string startDate = formCollection["startDate"];
             string stopDate = formCollection["stopDate"];
-            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.Now.ToString("yyyy-MM-dd") : startDate;
-            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.Now.ToString("yyyy-MM-dd") : stopDate;
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : stopDate;
             // var date = DateTime.Now.ToString("yyyy-MM-dd");
             //var rotaAdmin = await _rotaTaskService.LiveRota(date);
 
@@ -406,6 +422,83 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
 
             return RedirectToAction("LiveRota");
+        }
+        [HttpPost]
+        public async Task<IActionResult> TrackerReport(string startDate, string stopDate)
+        {
+            var rotaList = new List<TrackerReport>();
+            var rotaAdmin = await _rotaTaskService.LiveRota(startDate, stopDate);
+
+
+             foreach (var day in rotaAdmin.OrderBy(s => s.RotaDate).GroupBy(d => d.RotaDate).ToList())
+            {
+                TimeSpan hours = default;
+                int missed = 0;
+                int late = 0;
+                var live = new TrackerReport();
+
+                    foreach (var r in day.ToList())
+                    {
+                        live.RotaDate = r.RotaDate;
+                        live.Staff = r.Staff;
+                        live.Rota = r.Rota;
+                        live.Remark = r.Remark;
+                        bool isClockInTimeValid = false;
+                        bool isClockOutTimeValid = false;
+                        TimeSpan clockIn = default;
+                        TimeSpan clockOut = default;
+                        if (r.ClockInTime.HasValue && r.ClockOutTime.HasValue)
+                        {
+                            if (string.IsNullOrEmpty(live.StartTime))
+                                live.StartTime = r.ClockInTime.Value.AddHours(1).ToString("hh:mm");
+                            live.StopTime = r.ClockOutTime.Value.AddHours(1).ToString("hh:mm");
+                            isClockInTimeValid = TimeSpan.TryParseExact(r.ClockInTime.Value.AddHours(1).ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockIn);
+                            isClockOutTimeValid = TimeSpan.TryParseExact(r.ClockOutTime.Value.AddHours(1).ToString("hh:mm"), "hh\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out clockOut);
+                            if (isClockInTimeValid && isClockOutTimeValid)
+                            {
+                                var clockDiff = clockOut.Subtract(clockIn);
+
+                                hours += clockDiff;
+                            }
+                        }
+                        if (r.ClockInTime.HasValue)
+                        {
+                            var st = TimeSpan.TryParseExact(r.StartTime, "h\\:mm", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan d) ? d : default(TimeSpan);
+                            var ct = TimeSpan.TryParseExact(r.ClockInTime.Value.AddHours(1).DateTime.TimeOfDay.ToString(), "hh\\:mm\\:ss", CultureInfo.CurrentCulture, TimeSpanStyles.None, out TimeSpan c) ? c : default(TimeSpan);
+                            var df = st.Subtract(ct).TotalMinutes;
+                            if (df <= 15 && df >= -15)
+                            {
+                            }
+                            else if (df > 15 && df <= 30)
+                            {
+                            }
+                            else if (df >= -30)
+                            {
+
+                            }
+                            else
+                            {
+                                late += 1;
+                            }
+                        }
+                        else
+                        {
+                            missed += 1;
+                        }
+                    }
+
+                live.Hours = Math.Round(hours.TotalHours,0);
+                live.Missed = missed;
+                live.Late = late;
+                rotaList.Add(live);
+
+            }
+            return View(rotaList);
+        }
+
+        public IActionResult TrackerReport()
+        {
+            return View();
         }
     }
 }

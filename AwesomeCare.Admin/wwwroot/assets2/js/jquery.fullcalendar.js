@@ -1,4 +1,4 @@
-
+var defaultEvent = getData();
 !function($) {
     "use strict";
 
@@ -10,7 +10,8 @@
         this.$saveCategoryBtn = $('.save-category'),
         this.$categoryForm = $('#add-category form'),
         this.$extEvents = $('#external-events'),
-        this.$calendarObj = null
+            this.$calendarObj = null,
+            this.defaultEvent = defaultEvent
     };
 
 
@@ -84,14 +85,14 @@
             });
             $this.$modal.find('form').on('submit', function () {
                 var title = form.find("input[name='title']").val();
-                var beginning = form.find("input[name='beginning']").val();
+                var status = form.find("input[name='status']").val();
                 var ending = form.find("input[name='ending']").val();
                 var categoryClass = form.find("select[name='category'] option:checked").val();
                 if (title !== null && title.length != 0) {
                     $this.$calendarObj.fullCalendar('renderEvent', {
                         title: title,
-                        start:start,
-                        end: end,
+                        start: start,
+                        status: status,
                         allDay: false,
                         className: categoryClass
                     }, true);  
@@ -134,28 +135,6 @@
         var form = '';
         var today = new Date($.now());
 
-        var defaultEvents =  [{
-                title: 'Event Name 4',
-                start: new Date($.now() + 148000000),
-                className: 'bg-purple'
-            },
-            {
-                title: 'Test Event 1',
-                start: today,
-                end: today,
-                className: 'bg-success'
-            },
-            {
-                title: 'Test Event 2',
-                start: new Date($.now() + 168000000),
-                className: 'bg-info'
-            },
-            {
-                title: 'Test Event 3',
-                start: new Date($.now() + 338000000),
-                className: 'bg-primary'
-            }];
-
         var $this = this;
         $this.$calendarObj = $this.$calendar.fullCalendar({
             slotDuration: '00:15:00', /* If we want to split day time each 15minutes */
@@ -169,7 +148,7 @@
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
-            events: defaultEvents,
+            events: this.defaultEvent,
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
             eventLimit: true, // allow "more" link when too many events

@@ -98,5 +98,97 @@ namespace AwesomeCare.Admin.Controllers
 
             return RedirectToAction("Reports");
         }
+        public async Task<IActionResult> Edit(int staffHolidayId)
+        {
+            var model = await _StaffHoliday.Get(staffHolidayId);
+            var staff = await _staffService.GetStaffs();
+
+            var putEntity = new CreateSetupStaffHoliday
+            {
+            SetupHolidayId = model.SetupHolidayId,
+            StaffPersonalInfoId = model.StaffPersonalInfoId,
+            Remark = model.Remark,
+            Attachment = model.Attachment,
+            IncrementalDailyHolidayByHrs = model.IncrementalDailyHolidayByHrs,
+            HoursSoFar = model.HoursSoFar,
+            NumberOfDays = model.NumberOfDays,
+            TypeOfHoliday = model.TypeOfHoliday,
+            YearEndPeriodStartDate = model.YearEndPeriodStartDate,
+            YearOfEmployment = model.YearOfEmployment,
+            StaffList = staff.Select(s => new SelectListItem { Text = s.Fullname, Value = s.StaffPersonalInfoId.ToString() }).ToList()
+            };
+            return View(putEntity);
+        }
+        public async Task<IActionResult> View(int staffHolidayId)
+        {
+            var model = await _StaffHoliday.Get(staffHolidayId);
+            var staff = await _staffService.GetStaffs();
+
+            var putEntity = new CreateSetupStaffHoliday
+            {
+                SetupHolidayId = model.SetupHolidayId,
+                StaffPersonalInfoId = model.StaffPersonalInfoId,
+                Remark = model.Remark,
+                Attachment = model.Attachment,
+                IncrementalDailyHolidayByHrs = model.IncrementalDailyHolidayByHrs,
+                HoursSoFar = model.HoursSoFar,
+                NumberOfDays = model.NumberOfDays,
+                TypeOfHoliday = model.TypeOfHoliday,
+                YearEndPeriodStartDate = model.YearEndPeriodStartDate,
+                YearOfEmployment = model.YearOfEmployment,
+                StaffList = staff.Select(s => new SelectListItem { Text = s.Fullname, Value = s.StaffPersonalInfoId.ToString() }).ToList()
+            };
+            return View(putEntity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(CreateSetupStaffHoliday model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            #region Evidence
+            if (model.Attach != null)
+            {
+                string extention = model.StaffPersonalInfoId + System.IO.Path.GetExtension(model.Attach.FileName);
+                string folder = "setupstaffholiday";
+                string filename = string.Concat(folder, "_Attachment_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                model.Attachment = path;
+
+            }
+            else
+            {
+                model.Attachment = model.Attachment;
+            }
+            #endregion
+
+            var put = new PutSetupStaffHoliday();
+            put.SetupHolidayId = model.SetupHolidayId;
+            put.StaffPersonalInfoId = model.StaffPersonalInfoId;
+            put.Remark = model.Remark;
+            put.Attachment = model.Attachment;
+            put.IncrementalDailyHolidayByHrs = model.IncrementalDailyHolidayByHrs;
+            put.HoursSoFar = model.HoursSoFar;
+            put.NumberOfDays = model.NumberOfDays;
+            put.TypeOfHoliday = model.TypeOfHoliday;
+            put.YearEndPeriodStartDate = model.YearEndPeriodStartDate;
+            put.YearOfEmployment = model.YearOfEmployment;
+
+            var entity = await _StaffHoliday.Put(put);
+            SetOperationStatus(new OperationStatus
+            {
+                IsSuccessful = entity.IsSuccessStatusCode,
+                Message = entity.IsSuccessStatusCode ? "Successful" : "Operation failed"
+            });
+            if (entity.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Reports");
+            }
+            return View(model);
+
+        }
     }
 }

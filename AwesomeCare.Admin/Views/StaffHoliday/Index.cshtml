@@ -20,6 +20,7 @@
                     <div class="row">
                         <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
                         <input type="hidden" asp-for="@Model.StaffHolidayId" />
+                        <input type="hidden" asp-for="@Model.maxDays" />
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -39,7 +40,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">Class</label>
-                                        <baserecord asp-items="null" asp-for="@Model.Class" asp-key="Staff_Holiday_Class" />
+                                        <select asp-for="Class" asp-items="@Model.SetupStaffHoliday" class="selectpicker form-control"></select>
                                         <span asp-validation-for="Class" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -100,12 +101,12 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="card">
-                                <div class="header">
+                                <div class="card-header">
                                     <h2>Attachment<small></small></h2>
                                 </div>
-                                <div class="body">
-                                    <input type="file" asp-for="Attachment" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
-                                    <span asp-validation-for="Attachment" class="text-danger"></span>
+                                <div class="card-body">
+                                    <input type="file" asp-for="Attach" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
+                                    <span asp-validation-for="Attach" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -124,14 +125,48 @@
         </div>
     </div>
 </div>
-@section VendorScripts{
-    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
-    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-}
 
 @section Scripts{
-    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
-    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script>
+        $('#Class').on('change',function(){
+            var setupId = $('#Class').val();
+            var holidayId = $('#StaffHolidayId').val();
+
+            $.ajax({
+                type: 'GET',
+                url: '/StaffHoliday/GetDays',
+                data: {'setupId':setupId, 'holidayId':holidayId},
+                success: function (result) {
+                    var bal = 0;
+                    $('#AllocatedDays').val(result[0]);
+                    if(result[1] > 0)
+                    {
+                        bal = (result[0]-result[1]);
+                        $('#maxDays').val(bal);
+                    }
+                    $('#Days').val(bal);
+                },
+                error: function () {
+                    alert('Failed to receive the Data');
+                    console.log('Failed ');
+                }
+            });
+        });
+
+        $('#Days').on('change',function(){
+            
+            var max = $('#maxDays').val();
+            var current = $('#Days').val();
+
+            if(max > 0)
+            {
+                if(current > max)
+                {
+                    alert("You can't avail beyond your limit");
+                    $('#Days').val(max);
+                }
+            }
+        });
+    </script>
 }
 

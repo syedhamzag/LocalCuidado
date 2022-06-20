@@ -101,6 +101,10 @@ namespace AwesomeCare.Model.Models
         public string Address { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
+        public int ClientManager { get; set; }
+        public int Denture { get; set; }
+        public int Aid { get; set; }
+
         public virtual ICollection<ClientInvolvingParty> InvolvingParties { get; set; }
         public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<ClientRota> ClientRota { get; set; }
@@ -113,6 +117,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<StaffTeamLead> StaffTeamLead { get; set; }
         public virtual ICollection<BestInterestAssessment> BestInterestAssessment { get; set; }
         public virtual ICollection<FilesAndRecord> FilesAndRecord { get; set; }
+        public virtual ICollection<ClientCareObj> ClientCareObj { get; set; } = new HashSet<ClientCareObj>();
 
         #region Client
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }

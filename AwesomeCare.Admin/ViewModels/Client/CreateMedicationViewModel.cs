@@ -2,6 +2,7 @@
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.Medication;
 using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,9 @@ namespace AwesomeCare.Admin.ViewModels.Client
                     Gaps.Add(new SelectListItem($"{i} Hours", i.ToString()));
             }
         }
-       // public List<GetRotaDayofWeek> WeekDays { get; set; }
+        [DataType(DataType.Upload)]
+        public IFormFile Evidence { get; set; }
+        // public List<GetRotaDayofWeek> WeekDays { get; set; }
         public List<SelectListItem> Medications { get; set; }
         public List<SelectListItem> MedicationManufacturers { get; set; }
         //public List<GetClientRotaType> RotaTypes { get; set; }

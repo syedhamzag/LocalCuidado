@@ -1,0 +1,100 @@
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+
+@model CreateSetupStaffHoliday
+@{
+    ViewData["Title"] = "Staff Holiday";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="col-lg-12">
+    <div class="accordion" id="accordion">
+        <div>
+            <div class="card-header">
+
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <input type="hidden" asp-for="@Model.SetupHolidayId" />
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Start Date</label>
+                                        <input type="text" class="form-control" asp-for="@Model.YearEndPeriodStartDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        <span asp-validation-for="YearEndPeriodStartDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Year Of Employment</label>
+                                        <input type="text" class="form-control" asp-for="@Model.YearOfEmployment" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        <span asp-validation-for="YearOfEmployment" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Type Of Holiday</label>
+                                        <baserecord asp-items="null" asp-for="@Model.TypeOfHoliday" asp-key="Staff_Holiday_Class" />
+                                        <span asp-validation-for="TypeOfHoliday" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Number Of Days</label>
+                                        <input type="number" class="form-control" asp-for="@Model.NumberOfDays" />
+                                        <span asp-validation-for="NumberOfDays" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Hours So Far</label>
+                                        <input type="number" class="form-control" asp-for="@Model.HoursSoFar" />
+                                        <span asp-validation-for="HoursSoFar" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Incremental Daily Holiday</label>
+                                        <input type="number" class="form-control" asp-for="@Model.IncrementalDailyHolidayByHrs" />
+                                        <span asp-validation-for="IncrementalDailyHolidayByHrs" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="control-label">Staff Name</label>
+                                    <select asp-for="StaffPersonalInfoId" asp-items="Model.StaffList" class="selectpicker form-control" data-live-search="true">
+                                    </select>
+                                    <span asp-validation-for="StaffPersonalInfoId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="control-label">Remarks</label>
+                                    <input type="text" class="form-control" asp-for="@Model.Remark" />
+                                    <span asp-validation-for="Remark" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <img src="@Model.Attachment" class="img-fluid" />
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+}
+

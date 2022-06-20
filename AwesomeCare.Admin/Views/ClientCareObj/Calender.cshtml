@@ -1,0 +1,83 @@
+﻿@using AwesomeCare.Admin.ViewModels.Client;
+@model CreateClientCareObjCalender
+@{
+    ViewData["Title"] = "Detail Client Care Objectives";
+}
+@section HeaderScripts{
+	<!-- Select2 CSS -->
+		<link rel="stylesheet" href="~/assets2/css/select2.min.css">
+		
+		<!-- Datetimepicker CSS -->
+		<link rel="stylesheet" href="~/assets2/css/bootstrap-datetimepicker.min.css">
+		
+		<!-- Calendar CSS -->
+		<link rel="stylesheet" href="~/assets2/css/fullcalendar.min.css">
+		<link rel="stylesheet" href="~/assets2/css/style.css">
+}
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card mb-0">
+			<div class="card-header">
+				<div class="col-auto float-end ms-auto">
+					<a asp-action="Index" asp-route-clientId="@Model.ClientId" class="btn add-btn"><i class="fa fa-plus"></i> Add Event</a>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+										
+						<!-- Calendar -->
+						<div id="calendar"></div>
+						<!-- /Calendar -->
+											
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Event Modal -->
+				<div class="modal custom-modal fade" id="event-modal">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Event</h5>
+								<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body"></div>
+							<div class="modal-footer text-center">
+								<button type="button" class="btn btn-success submit-btn save-event">Create event</button>
+								<button type="button" class="btn btn-danger submit-btn delete-event" data-bs-dismiss="modal">Delete</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Event Modal -->
+@section Scripts{
+	<script>
+		function getData()
+		{
+			var dbdata = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetClientCareObj.ToList()));
+			var data = [];
+			dbdata.forEach(function(value,index){
+				console.log(value)
+				data.push({title : value.StatusName+' '+value.Note, start : new Date(value.Date),className : 'bg-primary'});
+			});
+			return data;
+		};
+	</script>
+		<!-- Slimscroll JS -->
+		<script src="assets/js/jquery.slimscroll.min.js"></script>
+		<!-- Select2 JS -->
+		<script src="assets/js/select2.min.js"></script>
+		<script src="~/assets2/js/moment.min.js"></script>
+		<script src="~/assets2/js/bootstrap-datetimepicker.min.js"></script>
+        <script src="~/assets2/js/jquery-ui.min.js"></script>
+        <script src="~/assets2/js/fullcalendar.min.js"></script>
+        <script src="~/assets2/js/jquery.fullcalendar.js"></script>	
+		<script>
+			
+		</script>
+}

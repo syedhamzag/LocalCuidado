@@ -136,7 +136,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
 
        [Display(Name ="Is Team Lead?")]
         public bool? IsTeamLeader { get; set; }
-      
+
+        public bool? IsKeyWorker { get; set; }
+
         [Display(Name ="Has Uniform?")]
         public bool? HasUniform { get; set; }
 

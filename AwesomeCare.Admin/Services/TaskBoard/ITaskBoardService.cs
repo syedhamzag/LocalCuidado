@@ -1,4 +1,5 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
+﻿using AwesomeCare.DataTransferObject.DTOs.Rotering;
+using AwesomeCare.DataTransferObject.DTOs.TaskBoard;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,12 @@ namespace AwesomeCare.Admin.Services.TaskBoard
     {
         [Get("/TaskBoard")]
         Task<List<GetTaskBoard>> Get();
+
+        [Get("/TaskBoard/GetPin")]
+        Task<GetRotaPin> GetPin();
+
+        [Post("/TaskBoard/ChangePin")]
+        Task<HttpResponseMessage> ChangePin([Body] PostRotaPin model);
 
         [Get("/TaskBoard/GetWithStaff")]
         Task<List<GetTaskBoard>> GetWithStaff();

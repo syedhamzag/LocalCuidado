@@ -1,0 +1,175 @@
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+
+@model CreateStaffHoliday
+@{
+    ViewData["Title"] = "Staff Holiday";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+}
+<div class="col-lg-12">
+    <div class="accordion" id="accordion">
+        <div>
+            <div class="card-header">
+
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
+                        <input type="hidden" asp-for="@Model.StaffHolidayId" />
+                        <input type="hidden" asp-for="@Model.Attachment" />
+                        <input type="hidden" asp-for="@Model.maxDays" />
+
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Start Date</label>
+                                        <input type="text" class="form-control" asp-for="@Model.StartDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">End Date</label>
+                                        <input type="text" class="form-control" asp-for="@Model.EndDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Class</label>
+                                        <select asp-for="Class" asp-items="@Model.SetupStaffHoliday" class="selectpicker form-control"></select>
+                                        <span asp-validation-for="Class" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Year Of Service</label>
+                                        <input type="number" class="form-control" asp-for="@Model.YearOfService" />
+                                        <span asp-validation-for="YearOfService" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Allocated Days</label>
+                                        <input type="number" class="form-control" asp-for="@Model.AllocatedDays" />
+                                        <span asp-validation-for="AllocatedDays" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Days</label>
+                                        <input type="number" class="form-control" asp-for="@Model.Days" />
+                                        <span asp-validation-for="Days" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Purpose</label>
+                                        <input type="text" class="form-control" asp-for="@Model.Purpose" />
+                                        <span asp-validation-for="Purpose" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Person On Responsibility</label>
+                                        <input type="text" class="form-control" asp-for="@Model.PersonOnResponsibility" />
+                                        <span asp-validation-for="PersonOnResponsibility" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Copy Of Handover</label>
+                                        <input type="text" class="form-control" asp-for="@Model.CopyOfHandover" />
+                                        <span asp-validation-for="CopyOfHandover" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="control-label">Remarks</label>
+                                    <input type="text" class="form-control" asp-for="@Model.Remark" />
+                                    <span asp-validation-for="Remark" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2>Attachment<small></small></h2>
+                                </div>
+                                <div class="card-body">
+                                    <input type="file" asp-for="Attach" class="dropify" accept=".png, .jpg, .jpeg, .pdf, .xlsx, .docx">
+                                    <span asp-validation-for="Attach" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <a asp-action="Index" asp-route-staffId="StaffPersonalInfoId" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('#Class').on('change',function(){
+            var setupId = $('#Class').val();
+            var holidayId = $('#StaffHolidayId').val();
+
+            $.ajax({
+                type: 'GET',
+                url: '/StaffHoliday/GetDays',
+                data: {'setupId':setupId, 'holidayId':holidayId},
+                success: function (result) {
+                    var bal = 0;
+                    $('#AllocatedDays').val(result[0]);
+                    if(result[1] > 0)
+                    {
+                        bal = (result[0]-result[1]);
+                        $('#maxDays').val(bal);
+                    }
+                    $('#Days').val(bal);
+                },
+                error: function () {
+                    alert('Failed to receive the Data');
+                    console.log('Failed ');
+                }
+            });
+        });
+
+        $('#Days').on('change',function(){
+            
+            var max = $('#maxDays').val();
+            var current = $('#Days').val();
+
+            if(max > 0)
+            {
+                if(current > max)
+                {
+                    alert("You can't avail beyond your limit");
+                    $('#Days').val(max);
+                }
+            }
+        });
+    </script>
+}
+
+

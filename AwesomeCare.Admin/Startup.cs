@@ -118,6 +118,10 @@ using AwesomeCare.Admin.Services.BestInterestAssessment;
 using AwesomeCare.Admin.Services.FilesAndRecord;
 using AwesomeCare.Admin.Services.SalaryAllowance;
 using AwesomeCare.Admin.Services.SalaryDeduction;
+using AwesomeCare.Admin.Services.ClientCareObj;
+using AwesomeCare.Admin.Services.Payroll;
+using AwesomeCare.Admin.Services.Chat;
+using static AwesomeCare.Admin.Controllers.ChatController;
 
 namespace AwesomeCare.Admin
 {
@@ -207,179 +211,179 @@ namespace AwesomeCare.Admin
             //       };
             //   })
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(apipolicyname, policy =>
-                {
-                    policy.AddAuthenticationSchemes("OpenIdConnect", "Identity.Application");
-                    policy.RequireAuthenticatedUser();
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy(apipolicyname, policy =>
+            //    {
+            //        policy.AddAuthenticationSchemes("OpenIdConnect", "Identity.Application");
+            //        policy.RequireAuthenticatedUser();
 
-                });
-            });
-            services.AddAuthentication("OpenIdConnect")
-                .AddCookie("Identity.Application", options =>
-                {
-                    options.Events = new CookieAuthenticationEvents
-                    {
-                        OnRedirectToAccessDenied = ctx =>
-                         {
-                             var tt = ctx;
-                             logger.LogInformation($"OnRedirectToAccessDenied");
-                             return Task.CompletedTask;
-                         },
-                        OnRedirectToLogin = ctx =>
-                         {
-                             var tt = ctx;
-                             logger.LogInformation($"OnRedirectToLogin");
-                             return Task.CompletedTask;
-                         },
-                        OnRedirectToLogout = ctx =>
-                         {
-                             var tt = ctx;
-                             logger.LogInformation($"OnRedirectToLogout");
-                             return Task.CompletedTask;
-                         },
-                        OnRedirectToReturnUrl = ctx =>
-                         {
-                             var tt = ctx;
-                             logger.LogInformation($"OnRedirectToReturnUrl");
-                             return Task.CompletedTask;
-                         },
-                        OnSignedIn = ctx =>
-                         {
-                             var tt = ctx;
-                             logger.LogInformation($"OnSignedIn");
-                             return Task.CompletedTask;
-                         },
-                        OnSigningOut = ctx =>
-                         {
-                             var tt = ctx;
-                             logger.LogInformation($"OnSigningOut");
-                             return Task.CompletedTask;
-                         },
-                        OnValidatePrincipal = ctx =>
-                         {
-                             var tt = ctx;
-                             logger.LogInformation($"OnValidatePrincipal");
-                             return Task.CompletedTask;
-                         }
-                    };
-                })
-               .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
-               {
+            //    });
+            //});
+            //services.AddAuthentication("OpenIdConnect")
+            //    .AddCookie("Identity.Application", options =>
+            //    {
+            //        options.Events = new CookieAuthenticationEvents
+            //        {
+            //            OnRedirectToAccessDenied = ctx =>
+            //             {
+            //                 var tt = ctx;
+            //                 logger.LogInformation($"OnRedirectToAccessDenied");
+            //                 return Task.CompletedTask;
+            //             },
+            //            OnRedirectToLogin = ctx =>
+            //             {
+            //                 var tt = ctx;
+            //                 logger.LogInformation($"OnRedirectToLogin");
+            //                 return Task.CompletedTask;
+            //             },
+            //            OnRedirectToLogout = ctx =>
+            //             {
+            //                 var tt = ctx;
+            //                 logger.LogInformation($"OnRedirectToLogout");
+            //                 return Task.CompletedTask;
+            //             },
+            //            OnRedirectToReturnUrl = ctx =>
+            //             {
+            //                 var tt = ctx;
+            //                 logger.LogInformation($"OnRedirectToReturnUrl");
+            //                 return Task.CompletedTask;
+            //             },
+            //            OnSignedIn = ctx =>
+            //             {
+            //                 var tt = ctx;
+            //                 logger.LogInformation($"OnSignedIn");
+            //                 return Task.CompletedTask;
+            //             },
+            //            OnSigningOut = ctx =>
+            //             {
+            //                 var tt = ctx;
+            //                 logger.LogInformation($"OnSigningOut");
+            //                 return Task.CompletedTask;
+            //             },
+            //            OnValidatePrincipal = ctx =>
+            //             {
+            //                 var tt = ctx;
+            //                 logger.LogInformation($"OnValidatePrincipal");
+            //                 return Task.CompletedTask;
+            //             }
+            //        };
+            //    })
+            //   .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            //   {
                  
-                   var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
-                   options.SignInScheme = "Identity.Application";//  CookieAuthenticationDefaults.AuthenticationScheme;
-                   options.Authority = Configuration["idp_url"].ToString();
-                   options.ClientId = settings.ClientId;
-                   options.ResponseType = "code";
-                   options.SignedOutRedirectUri = Configuration["app_url"];// + "/signout-callback-oidc";
-                  // options.SignedOutCallbackPath = new PathString("/signout-callback-oidc");
-                   foreach (string scope in settings.Scopes)
-                   {
-                       options.Scope.Add(scope);
-                   }
-                   options.SaveTokens = true;
-                   options.ClientSecret = settings.ClientSecret;
-                   options.GetClaimsFromUserInfoEndpoint = true;
-                   //Remove Unnecessary claims
-                   options.ClaimActions.DeleteClaim("s_hash");
-                   options.ClaimActions.DeleteClaim("auth_time");
-                   options.ClaimActions.DeleteClaim("sid");
-                   options.ClaimActions.DeleteClaim("idp");
+            //       var settings = Configuration.GetSection("IDPClientSettings").Get<IDPClientSettings>();
+            //       options.SignInScheme = "Identity.Application";//  CookieAuthenticationDefaults.AuthenticationScheme;
+            //       options.Authority = Configuration["idp_url"].ToString();
+            //       options.ClientId = settings.ClientId;
+            //       options.ResponseType = "code";
+            //       options.SignedOutRedirectUri = Configuration["app_url"];// + "/signout-callback-oidc";
+            //      // options.SignedOutCallbackPath = new PathString("/signout-callback-oidc");
+            //       foreach (string scope in settings.Scopes)
+            //       {
+            //           options.Scope.Add(scope);
+            //       }
+            //       options.SaveTokens = true;
+            //       options.ClientSecret = settings.ClientSecret;
+            //       options.GetClaimsFromUserInfoEndpoint = true;
+            //       //Remove Unnecessary claims
+            //       options.ClaimActions.DeleteClaim("s_hash");
+            //       options.ClaimActions.DeleteClaim("auth_time");
+            //       options.ClaimActions.DeleteClaim("sid");
+            //       options.ClaimActions.DeleteClaim("idp");
 
-                   //Mapp Additional Claims as Configured in IProfileService in Identity Server Project
-                   // options.ClaimActions.MapUniqueJsonKey("hasStaffInfo", "hasStaffInfo");
-                   options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Email, JwtClaimTypes.Email);
-                   options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
-                   options.TokenValidationParameters = new TokenValidationParameters
-                   {
-                       NameClaimType = JwtClaimTypes.Name,
-                       RoleClaimType = JwtClaimTypes.Role
-                   };
-                   options.Events = new OpenIdConnectEvents
-                   {
-                       OnAccessDenied = ctx =>
-                       {
-                           var tt = ctx;
-                           logger.LogInformation($"OnAccessDenied");
-                           return Task.CompletedTask;
-                       },
-                       OnAuthenticationFailed = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation($"OnAuthenticationFailed {ctx.Exception?.Message}");
-                            return Task.CompletedTask;
-                        },
-                       OnAuthorizationCodeReceived = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnAuthorizationCodeReceived");
-                            return Task.CompletedTask;
-                        },
-                       OnMessageReceived = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnMessageReceived");
-                            return Task.CompletedTask;
-                        },
-                       OnRedirectToIdentityProvider = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnRedirectToIdentityProvider");
-                            return Task.CompletedTask;
-                        },
-                       OnRedirectToIdentityProviderForSignOut = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnRedirectToIdentityProviderForSignOut");
-                            return Task.CompletedTask;
-                        },
-                       OnRemoteFailure = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation($"OnRemoteFailure {ctx.Failure?.Message}");
-                            return Task.CompletedTask;
-                        },
-                       OnRemoteSignOut = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnRemoteSignOut");
-                            return Task.CompletedTask;
-                        },
-                       OnSignedOutCallbackRedirect = ctx =>
-                        {
-                            var tt = ctx;
+            //       //Mapp Additional Claims as Configured in IProfileService in Identity Server Project
+            //       // options.ClaimActions.MapUniqueJsonKey("hasStaffInfo", "hasStaffInfo");
+            //       options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Email, JwtClaimTypes.Email);
+            //       options.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
+            //       options.TokenValidationParameters = new TokenValidationParameters
+            //       {
+            //           NameClaimType = JwtClaimTypes.Name,
+            //           RoleClaimType = JwtClaimTypes.Role
+            //       };
+            //       options.Events = new OpenIdConnectEvents
+            //       {
+            //           OnAccessDenied = ctx =>
+            //           {
+            //               var tt = ctx;
+            //               logger.LogInformation($"OnAccessDenied");
+            //               return Task.CompletedTask;
+            //           },
+            //           OnAuthenticationFailed = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnAuthenticationFailed {ctx.Exception?.Message}");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnAuthorizationCodeReceived = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnAuthorizationCodeReceived");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnMessageReceived = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnMessageReceived");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnRedirectToIdentityProvider = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnRedirectToIdentityProvider");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnRedirectToIdentityProviderForSignOut = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnRedirectToIdentityProviderForSignOut");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnRemoteFailure = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation($"OnRemoteFailure {ctx.Failure?.Message}");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnRemoteSignOut = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnRemoteSignOut");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnSignedOutCallbackRedirect = ctx =>
+            //            {
+            //                var tt = ctx;
                            
-                            return Task.CompletedTask;
-                        },
-                       OnTicketReceived = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnTicketReceived");
-                            return Task.CompletedTask;
-                        },
-                       OnTokenResponseReceived = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnTokenResponseReceived");
-                            return Task.CompletedTask;
-                        },
-                       OnTokenValidated = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnTokenValidated");
-                            return Task.CompletedTask;
-                        },
-                       OnUserInformationReceived = ctx =>
-                        {
-                            var tt = ctx;
-                            logger.LogInformation("OnUserInformationReceived");
-                            return Task.CompletedTask;
-                        }
-                   };
+            //                return Task.CompletedTask;
+            //            },
+            //           OnTicketReceived = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnTicketReceived");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnTokenResponseReceived = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnTokenResponseReceived");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnTokenValidated = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnTokenValidated");
+            //                return Task.CompletedTask;
+            //            },
+            //           OnUserInformationReceived = ctx =>
+            //            {
+            //                var tt = ctx;
+            //                logger.LogInformation("OnUserInformationReceived");
+            //                return Task.CompletedTask;
+            //            }
+            //       };
 
-               });
+            //   });
 
             services.AddScoped(typeof(QRCodeGenerator));
             services.AddScoped(typeof(DropboxClient), c => new DropboxClient(Configuration["dropboxApiKey"]));
@@ -396,7 +400,7 @@ namespace AwesomeCare.Admin
             //AutoMapper
             AutoMapperConfiguration.Configure();
             //  MapperConfig.AutoMapperConfiguration.Configure();
-
+            services.AddSignalR();
             services.AddHttpContextAccessor();
             services.AddTransient<AuthenticatedHttpClientHandler>();
 
@@ -444,9 +448,10 @@ namespace AwesomeCare.Admin
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapControllerRoute(
                     name: "default",
-                     "{controller=Dashboard}/{action=Dashboard}").RequireAuthorization(apipolicyname);
+                    pattern: "{controller=Dashboard}/{action=Dashboard}");
             });
         }
 
@@ -463,7 +468,7 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICompanyService>(r))
-         .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+;
 
 
 
@@ -471,620 +476,638 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICompanyContactService>(r))
-          .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+ ;
 
             services.AddHttpClient("baserecordservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IBaseRecordService>(r))
-           .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+  ;
 
             services.AddHttpClient("clientservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientserviceparty", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientInvolvingParty>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientservicepartybase", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientInvolvingPartyBase>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientregulatorycontactservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientRegulatoryContactService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientrotanameservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientRotaNameService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientrotaservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientRotaService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
 
             services.AddHttpClient("clientrotatypeservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientRotaTypeService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientrotataskservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IRotaTaskService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("rotadayofweekservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IRotaDayofWeekService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientcaredetails", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientCareDetails>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffcommunication", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffCommunication>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("untowardsService", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IUntowardsService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("shiftbookingservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IShiftBookingService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffworkteamservie", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffWorkTeamService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("medicationservie", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IMedicationService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("complainservie", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IComplainService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("nutritionservie", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<INutritionService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffblacklistservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffBlackListService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("communicationService", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICommunicationService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("incidentreportService", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IIncidentReportService>(r))
-           .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+  ;
 
             services.AddHttpClient("investigationService", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IInvestigationService>(r))
-          .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+ ;
 
             services.AddHttpClient("userservice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IUserService>(r))
-         .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+;
 
             services.AddHttpClient("clientlogservie", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientLogAuditService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientmedservie", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientMedAuditService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientvoice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientVoiceService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientmgtvisit", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientMgtVisitService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientprogram", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientProgramService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientservicewatch", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientServiceWatchService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffspotcheck", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffSpotCheckService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffadlobs", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffAdlObsService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffmedcomp", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffMedCompService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffkeyworkervoice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffKeyWorkerVoiceService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffsurvey", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffSurveyService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffonetoone", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffOneToOneService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffsupervisionappraisal", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffSupervisionAppraisalService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffreference", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffReferenceService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("enotice", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IEnoticeService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("resources", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IResourcesService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("incomingmeds", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IIncomingMedsService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("whisttleblower", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IWhisttleBlowerService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientbloodcoagulationrecord", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientBloodCoagulationRecordService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientbloodpressure", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientBloodPressureService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientbmichart", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientBMIChartService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientbodytemp", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientBodyTempService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientbowelmovement", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientBowelMovementService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clienteyehealth", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientEyeHealthMonitoringService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientfoodintake", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientFoodIntakeService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientheartrate", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientHeartRateService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientoxygenlvl", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientOxygenLvlService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientpainchart", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientPainChartService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientpulserate", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientPulseRateService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientseizure", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientSeizureService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientwoundcare", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientWoundCareService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("capacity", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICapacityService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("consentcare", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IConsentCareService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("consentdata", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IConsentDataService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("consentlandline", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IConsentLandLineService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("equipment", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IEquipmentService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("keyindicators", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IKeyIndicatorsService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("personal", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IPersonalService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("personcentred", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IPersonCentredService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("review", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IReviewService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("personaldetail", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IPersonalDetailService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("healthliving", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IHealthAndLivingService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("specialhealthandmedication", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ISpecialHealthAndMedicationService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("balance", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IBalanceService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("physicalability", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IPhysicalAbilityService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("specialhealthcondition", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ISpecialHealthConditionService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("historyoffall", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IHistoryOfFallService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("careplannutrition", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICarePlanNutritionService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("careplanhygiene", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IPersonalHygieneService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("infectioncontrol", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IInfectionControlService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("officelocation", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IOfficeLocationService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
-            
+   ;
+
             services.AddHttpClient("managingtask", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IManagingTasksService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("dashboard", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IDashboardService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("interestandobjective", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IInterestAndObjectiveService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("pets", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IPetsService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("taskboard", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ITaskBoardService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("hospitalentry", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IHospitalEntryService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("hospitalexit", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IHospitalExitServices>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffpersonalitytest", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffPersonalityTest>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("homeriskassessment", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IHomeRiskAssessmentService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffinfectioncontrol", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffInfectionControlService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("dutyoncallt", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IDutyOnCallService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("trackingconcernnote", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ITrackingConcernNote>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("competencetest", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffCompetenceTestService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffhealth", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffHealthService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffinterview", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffInterviewService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffshadowing", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffShadowingService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("performanceindicator", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IPerformanceIndicatorService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("clientdailytask", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IClientDailyTaskService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffholiday", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffHolidayService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("setupstaffholiday", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ISetupStaffHolidayService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("staffteamlead", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffTeamLeadService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("bestinterestassessment", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IBestInterestAssessmentService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("stafftrainingmatrix", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffTrainingMatrixService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("FilesAndRecord", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IFilesAndRecordService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("SalaryAllowance", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ISalaryAllowanceService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("SalaryDeduction", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ISalaryDeductionService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
 
             services.AddHttpClient("StaffTax", c =>
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<IStaffTaxService>(r))
-            .AddHttpMessageHandler<AuthenticatedHttpClientHandler>();
+   ;
+
+            services.AddHttpClient("chat", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IChatService>(r))
+   ;
+
+            services.AddHttpClient("payroll", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IPayrollService>(r))
+   ;
+
+            services.AddHttpClient("careobj", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientCareObjService>(r))
+   ;
         }
     }
 }

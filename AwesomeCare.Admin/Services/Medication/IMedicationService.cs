@@ -36,5 +36,13 @@ namespace AwesomeCare.Admin.Services.Medication
         [Put("/Medication/Manufacturer")]
         Task<GetMedication> PutManufacturer([Body]PutMedicationManufacturer model);
         #endregion
+
+        #region Tracker
+        [Post("/Medication/Create")]
+        Task<GetStaffMedTracker> Create([Body] PostStaffMedTracker model);
+
+        [Get("/Medication/MedTracker/{startDate}/{stopDate}")]
+        Task<List<MedTracker>> MedTracker(string startDate, string stopDate);
+        #endregion
     }
 }

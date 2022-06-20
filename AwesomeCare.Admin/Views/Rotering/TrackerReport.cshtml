@@ -1,0 +1,93 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs.Rotering;
+@using System.Globalization;
+@model List<TrackerReport>
+@{ ViewData["Title"] = "Tracker Report"; }
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="card-header">
+                <h2>Tracker Report</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-4 col-xs-4 col-lg-4">
+                            <div class="row">
+
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label> Start Date</label>
+                                    <input type="text" id="startDate" name="startDate" class="form-control datepickerbeforeOrtoday" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <label> Stop Date</label>
+                                    <input type="text" id="stopDate" name="stopDate" class="form-control datepickerbeforeOrtoday" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+
+                                </div>
+
+                            </div>
+                            <button type="submit" asp-action="TrackerReport" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+
+
+
+       @if (Model != null)
+        {
+
+        <table id="liveRotaTable" class="table table-condensed table-hover table-bordered datatablesExportExcel table-responsive">
+            <thead>
+                <tr>
+                    <th>Staff Name</th>
+                    <th>Date</th>
+                    <th>Rota Name</th>
+                    <th>StartTime</th>
+                    <th>StopTime</th>
+                    <th>Total Hours Logged </th>
+                    <th>Late Calls</th>
+                    <th>Missed Calls</th>
+                    <th>Log Location</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+               @foreach (var rota in Model.ToList())
+                {
+                    <tr>
+                        <td>@rota.Staff</td>
+                        <td>@rota.RotaDate.ToString("dd/MM/yyyy")</td>
+                        <td>@rota.Rota</td>
+                        <td>@rota.StartTime</td>
+                        <td>@rota.StopTime</td>
+                        <td>@rota.Hours</td>
+                        <td>@rota.Late</td>
+                        <td>@rota.Missed</td>
+                        <td>@rota.LogLocation</td>
+                        <td>@rota.Remark</td>
+                    </tr>
+                }
+            
+            </tbody>
+        </table>
+        }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+        });</script>
+
+}

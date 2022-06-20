@@ -55,6 +55,8 @@ using AwesomeCare.DataTransferObject.DTOs.DutyOnCall;
 using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 using AwesomeCare.DataTransferObject.DTOs.FilesAndRecord;
+using AwesomeCare.DataTransferObject.DTOs.Chat;
+using AwesomeCare.DataTransferObject.DTOs.Client.CareObj;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -177,6 +179,10 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string Gender { get; set; }
         public byte[] QRCode { get; set; }
         public string PassportFilePath { get; set; }
+        public int ClientManager { get; set; }
+        public string ManagerName { get; set; }
+        public int Denture { get; set; }
+        public int Aid { get; set; }
 
         public virtual ICollection<GetClientComplainRegister> GetClientComplain { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
@@ -230,5 +236,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetClientDailyTask> GetClientDailyTask { get; set; }
         public virtual ICollection<GetBestInterestAssessment> GetBestInterestAssessment { get; set; }
         public virtual ICollection<GetFilesAndRecord> GetFilesAndRecord { get; set; }
+        public virtual GetChat GetChat { get; set; }
+
+        public virtual ICollection<GetClientCareObj> GetClientCareObj { get; set; } = new HashSet<GetClientCareObj>();
     }
 }

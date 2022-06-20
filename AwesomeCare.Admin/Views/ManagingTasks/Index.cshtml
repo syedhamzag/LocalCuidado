@@ -10,12 +10,12 @@
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
-            <div class="header">
+            <div class="card-header">
 
                 <h2></h2>
 
             </div>
-            <div class="body">
+            <div class="card-body">
                 <form asp-route="ManagingTasks" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -41,11 +41,31 @@
                                             {
                                                 @foreach (var type in Model.GetManagingTasks)
                                                 {
+                                                    int i = 0;
                                                     <tr>
+                                                        @if(type.TaskId > 0)
+                                                        {
+                                                             <td>
+                                                                <div class="fancy-checkbox">
+                                                                    <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" checked /><span><small> </small></span></label>
+                                                                    <input type="hidden" id="@string.Concat("TaskId",i)" name="@string.Concat("TaskId",i)" value="@type.TaskId" />
+                                                                </div>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                <div class="fancy-checkbox">
+                                                                    <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" /><span><small> </small></span></label>
+                                                                    <input type="hidden" id="@string.Concat("TaskId",i)" name="@string.Concat("TaskId",i)" value="0" />
+                                                                </div>
+                                                            </td>
+                                                        }
                                                         <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Task" asp-items="null" /></td>
                                                         <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault().Help" value="@type.Help" class="form-control" /></td>
-                                                        <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Status" asp-items="null" /><input type="hidden" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).TaskId" value="@type.TaskId" /></td>
+                                                        <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Status" asp-items="null" /></td>
                                                     </tr>
+                                                    i++;
                                                 }
                                             }
                                         </tbody>

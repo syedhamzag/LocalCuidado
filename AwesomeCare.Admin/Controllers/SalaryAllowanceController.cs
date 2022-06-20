@@ -36,6 +36,9 @@ namespace AwesomeCare.Admin.Controllers
                 var report = new CreateSalaryAllowance();
                 report.SalaryAllowanceId = item.SalaryAllowanceId;
                 report.StartDate = item.StartDate;
+                report.EndDate = item.EndDate;
+                report.Percentage = item.Percentage;
+                report.Amount = item.Amount;
                 report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
                 reports.Add(report);
             }
@@ -49,6 +52,40 @@ namespace AwesomeCare.Admin.Controllers
             var staff = await _staffService.GetStaffs();
             model.StaffName = staff.Where(s => s.StaffPersonalInfoId == staffId).FirstOrDefault().Fullname;
             return View(model);
+
+        }
+        public async Task<IActionResult> Edit(int salaryId)
+        {
+            var item = await _SalaryAllowance.Get(salaryId);
+            var staff = await _staffService.GetStaffs();
+            var report = new CreateSalaryAllowance();
+            report.SalaryAllowanceId = item.SalaryAllowanceId;
+            report.StartDate = item.StartDate;
+            report.EndDate = item.EndDate;
+            report.Percentage = item.Percentage;
+            report.Amount = item.Amount;
+            report.StaffPersonalInfoId = item.StaffPersonalInfoId;
+            report.Reoccurent = item.Reoccurent;
+            report.AllowanceType = item.AllowanceType;
+            report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
+            return View(report);
+
+        }
+        public async Task<IActionResult> View(int salaryId)
+        {
+            var item = await _SalaryAllowance.Get(salaryId);
+            var staff = await _staffService.GetStaffs();
+            var report = new CreateSalaryAllowance();
+            report.SalaryAllowanceId = item.SalaryAllowanceId;
+            report.StartDate = item.StartDate;
+            report.EndDate = item.EndDate;
+            report.Percentage = item.Percentage;
+            report.Amount = item.Amount;
+            report.StaffPersonalInfoId = item.StaffPersonalInfoId;
+            report.Reoccurent = item.Reoccurent;
+            report.AllowanceType = item.AllowanceType;
+            report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffPersonalInfoId).FirstOrDefault().Fullname;
+            return View(report);
 
         }
         [HttpPost]

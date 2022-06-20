@@ -613,5 +613,187 @@ namespace AwesomeCare.Admin.Controllers
         //    return View(model);
         //}
 
+        public async Task<IActionResult> ShiftSchedule()
+        {
+            var model = new ViewShiftViewModel();
+            var rotas = await _clientRotaNameService.Get();
+            model.Rotas = rotas?.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
+            HttpContext.Session.Set<List<GetClientRotaName>>("rotas", rotas);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ShiftSchedule(int rota, DateTime startDate, DateTime endDate)
+        {
+            var model = new ViewShiftViewModel();
+            model.StaffList = await _staffService.GetStaffs();
+            var daysInMonth = (endDate.Date - startDate.Date);
+            model.DaysInMonth = (daysInMonth.Days + 1);
+            CultureInfo cul = CultureInfo.CurrentCulture;
+            var firstDayWeek = cul.Calendar.GetDayOfWeek(startDate);
+            string selectedMonth;
+            string selectedYear;
+            if (string.IsNullOrEmpty(startDate.ToString()))
+            { 
+                selectedMonth = model.Months[DateTime.Now.Month - 1].Text;
+                selectedYear = model.Months[DateTime.Now.Year].Text;
+            }
+            else {
+                model.FirstDay = startDate;
+                model.LastDay = endDate;
+                selectedMonth = startDate.ToString("MM");
+                selectedYear = startDate.ToString("yyyy");
+            }
+
+            model.SelectedMonth = selectedMonth;
+
+            var months = DateTimeFormatInfo.CurrentInfo.MonthNames;
+            var monthId = Array.IndexOf(months, selectedMonth) + 1;
+
+            var rotas = await _clientRotaNameService.Get();
+            model.Rotas = rotas?.Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
+            var rotaId = rotas?.Where(s => s.RotaId == rota).FirstOrDefault()?.RotaId;
+            HttpContext.Session.Set<List<GetClientRotaName>>("rotas", rotas);
+
+            var staffShiftBookings = await _shiftBookingService.GetShiftBookByDate(rotaId);
+            if (staffShiftBookings != null)
+            {
+                var team = await _staffWorkTeamService.Get();
+                model.ShiftBookingId = staffShiftBookings.ShiftBookingId;
+                model.Team = team.Select(s => new SelectListItem(s.WorkTeam, s.StaffWorkTeamId.ToString())).ToList();
+                model.Staffs = staffShiftBookings.Staffs;
+                model.ShiftDate = staffShiftBookings.ShiftDate;
+                model.RotaId = staffShiftBookings.RotaId;
+                model.NumberOfStaffRequired = staffShiftBookings.NumberOfStaffRequired;
+                model.TeamId = staffShiftBookings.TeamId;
+                model.DriverRequired = staffShiftBookings.DriverRequired;   
+                model.PublishTo = staffShiftBookings?.PublishTo;
+                model.Remark = staffShiftBookings.Remark;
+                model.StartTime = staffShiftBookings.StartTime;
+                model.StopTime = staffShiftBookings.StopTime;
+                model.RequiresDriver = staffShiftBookings.DriverRequired == true ? "Yes" : "No";
+            }
+                
+                
+
+            HttpContext.Session.Set<ViewShiftViewModel>("shiftModel", model);
+            return View(model);
+        }
+        [HttpGet]
+        public string PostDays(DateTime date, int shiftId)
+        {
+            var post = new PostStaffShiftBookingDay();
+            post.Day = date.Day.ToString("D2");
+            post.Date = date.Date;
+            post.StaffShiftBookingId = shiftId;
+            post.WeekDay = date.DayOfWeek.ToString();
+
+            var result = _shiftBookingService.BookDays(post);
+            var content = result.Result.Content.ReadAsStringAsync();
+
+
+            if (result.Result.IsSuccessStatusCode)
+            {
+                SetOperationStatus(new OperationStatus { IsSuccessful = result.Result.IsSuccessStatusCode, Message = "Operation Successful" });
+                return "OK";
+            }
+            else
+            {
+                SetOperationStatus(new OperationStatus { IsSuccessful = result.Result.IsSuccessStatusCode, Message = "An error occurred" });
+                return "Error";
+            }
+        }
+        public async Task<IActionResult> EditStaff(int shiftId)
+        {
+            var model = new ViewShiftViewModel();
+            var staff = await _staffService.GetStaffs(); 
+            model.Rotas = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+            var shift = _shiftBookingService.GetStaffShift(shiftId);
+            model.Staffs = shift.Result;
+            model.ShiftBookingId = shiftId;
+            model.Ids = model.Staffs.Select(s =>s.StaffPersonalInfoId).ToArray();
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditStaff(ViewShiftViewModel model, IFormCollection form)
+        {
+            List<PutStaffShiftBooking> staffs = new List<PutStaffShiftBooking>();
+            int count = int.Parse(form["StaffCount"]);
+            for (int i=1; i<= count; i++)
+            {
+                PutStaffShiftBooking staff = new PutStaffShiftBooking();
+                string sname = $"staff{i}";
+                string name = form[sname];
+                if (!string.IsNullOrWhiteSpace(name))
+                { 
+                    staff.StaffPersonalInfoId = int.Parse(name);
+                    staff.ShiftBookingId = int.Parse(form["ShiftBookingId"]);
+                    staff.StaffShiftBookingId = int.Parse(form[$"staffShiftId{i}"]);
+                    staffs.Add(staff);
+                }
+            }
+            var result = await _shiftBookingService.EditStaff(staffs);
+            var content = await result.Content.ReadAsStringAsync();
+
+
+            if (result.IsSuccessStatusCode)
+            {
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = "Operation Successful" });
+                return RedirectToAction("ShiftSchedule");
+            }
+            else
+            {
+                _logger.LogInformation(content);
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = "An error occurred" });
+                return View(model);
+            }
+        }
+        [HttpGet]
+        public string RemoveDay(int dayId)
+        {
+            var result = _shiftBookingService.DeleteStaffShift(dayId);
+            var content = result.Result.Content.ReadAsStringAsync();
+
+
+            if (result.Result.IsSuccessStatusCode)
+            {
+                SetOperationStatus(new OperationStatus { IsSuccessful = result.Result.IsSuccessStatusCode, Message = "Operation Successful" });
+                return "OK";
+            }
+            else
+            {
+                SetOperationStatus(new OperationStatus { IsSuccessful = result.Result.IsSuccessStatusCode, Message = "An error occurred" });
+                return "Error";
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ViewShiftViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Rotas = HttpContext.Session.Get<List<GetClientRotaName>>("rotas").Select(s => new SelectListItem(s.RotaName, s.RotaId.ToString())).ToList();
+
+                return View(ModelState);
+            }
+            model.DriverRequired = string.Equals(model.RequiresDriver, "yes", StringComparison.InvariantCultureIgnoreCase) ? true : false;
+            var put = new PutShiftBooking();
+            put.ShiftBookingId = model.ShiftBookingId;
+            put.Rota = model.RotaId;
+            put.NumberOfStaff = model.NumberOfStaffRequired;
+            put.Team = model.TeamId;
+            put.ShiftDate = model.ShiftDate;
+            put.StartTime = model.StartTime;
+            put.StopTime = model.StopTime;
+            put.DriverRequired = model.DriverRequired;
+            put.PublishTo = model.PublishTo;
+            put.Remark = model.Remark;
+
+            var result = await _shiftBookingService.Put(put);
+            var content = await result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Shift Booking successfully updated" : "An Error Occurred" });
+            return RedirectToAction("ShiftSchedule");
+        }
     }
 }
