@@ -33,14 +33,14 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">End Date</label>
-                                        <input type="text" class="form-control" asp-for="@Model.EndDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                        <input type="text" class="form-control" asp-for="@Model.EndDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" onclick="getDays(this)" />
                                         <span asp-validation-for="EndDate" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">Class</label>
-                                        <select asp-for="Class" asp-items="@Model.SetupStaffHoliday" class="selectpicker form-control"></select>
+                                        @Html.DropDownListFor(s => s.Class, Model.SetupStaffHoliday, "--Select--", new { @class = "selectpicker form-control" })
                                         <span asp-validation-for="Class" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -127,21 +127,34 @@
 </div>
 
 @section Scripts{
+    <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
     <script>
-        $('#Class').on('change',function(){
+        function getDays()
+        {
+            var start = new Date($('#StartDate').val());
+            var end = new Date($('#EndDate').val());
+            const days = (date_1, date_2) => {
+                let difference = date_1.getTime() - date_2.getTime();
+                let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
+                return TotalDays;
+            }
+            $('#Days').val(days(end,start));
+
+
+        }
+        $('#Class').on('change', function () {
             var setupId = $('#Class').val();
             var holidayId = $('#StaffHolidayId').val();
 
             $.ajax({
                 type: 'GET',
                 url: '/StaffHoliday/GetDays',
-                data: {'setupId':setupId, 'holidayId':holidayId},
+                data: { 'setupId': setupId, 'holidayId': holidayId },
                 success: function (result) {
                     var bal = 0;
                     $('#AllocatedDays').val(result[0]);
-                    if(result[1] > 0)
-                    {
-                        bal = (result[0]-result[1]);
+                    if (result[1] > 0) {
+                        bal = (result[0] - result[1]);
                         $('#maxDays').val(bal);
                     }
                     $('#Days').val(bal);
@@ -153,15 +166,13 @@
             });
         });
 
-        $('#Days').on('change',function(){
-            
+        $('#Days').on('change', function () {
+
             var max = $('#maxDays').val();
             var current = $('#Days').val();
 
-            if(max > 0)
-            {
-                if(current > max)
-                {
+            if (max > 0) {
+                if (current > max) {
                     alert("You can't avail beyond your limit");
                     $('#Days').val(max);
                 }

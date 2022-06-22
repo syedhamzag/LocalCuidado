@@ -12,7 +12,7 @@
     <div class="accordion" id="accordion">
         <div class="card">
             <div class="card-body">
-                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <form asp-action="Index" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <input type="hidden" asp-for="@Model.SetupHolidayId" />
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -26,48 +26,49 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <div class="form-group">
-                                        <label class="control-label">Year Of Employment</label>
-                                        <input type="text" class="form-control" asp-for="@Model.YearOfEmployment" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
-                                        <span asp-validation-for="YearOfEmployment" class="text-danger"></span>
+                                        <label class="control-label">Staff Name</label>
+                                        <select asp-for="StaffPersonalInfoId" asp-items="Model.StaffList" class="selectpicker form-control" data-live-search="true" onchange="getDate(this)">
+                                        </select>
+                                        <span asp-validation-for="StaffPersonalInfoId" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Year Of Employment</label>
+                                        <input type="text" class="form-control" asp-for="@Model.YearOfEmployment" />
+                                        <span asp-validation-for="YearOfEmployment" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                    
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">Type Of Holiday</label>
                                         <baserecord asp-items="null" asp-for="@Model.TypeOfHoliday" asp-key="Staff_Holiday_Class" />
                                         <span asp-validation-for="TypeOfHoliday" class="text-danger"></span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">Number Of Days</label>
                                         <input type="number" class="form-control" asp-for="@Model.NumberOfDays" />
                                         <span asp-validation-for="NumberOfDays" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">Hours So Far</label>
                                         <input type="number" class="form-control" asp-for="@Model.HoursSoFar" />
                                         <span asp-validation-for="HoursSoFar" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">Incremental Daily Holiday</label>
                                         <input type="number" class="form-control" asp-for="@Model.IncrementalDailyHolidayByHrs" />
                                         <span asp-validation-for="IncrementalDailyHolidayByHrs" class="text-danger"></span>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="control-label">Staff Name</label>
-                                    <select asp-for="StaffPersonalInfoId" asp-items="Model.StaffList" class="selectpicker form-control" data-live-search="true">
-                                    </select>
-                                    <span asp-validation-for="StaffPersonalInfoId" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -104,14 +105,33 @@
         </div>
     </div>
 </div>
-@section VendorScripts{
-    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
-    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-}
 
 @section Scripts{
-    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
-    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        function getDate(element)
+        {
+            var Id = element.value;
+            $.ajax({
+                type: 'GET',
+                url: '/Staff/StaffDetailJson',
+                data: { 'staffId': Id },
+                success: function (response) {
+                    var date = new Date(response.employmentDate);
+                    var newDateOptions = {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit"
+                    }
+                    var newDate = date.toLocaleString("en-US", newDateOptions);
+                    $('#YearOfEmployment').val(newDate);
+                },
+                error: function () {
+                    alert('Failed to receive the Data');
+                    console.log('Failed ');
+                }
+            });
+        }
+    </script>
 }
 

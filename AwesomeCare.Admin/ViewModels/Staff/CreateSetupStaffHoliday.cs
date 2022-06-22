@@ -17,13 +17,21 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [DataType(DataType.Upload)]
         public IFormFile Attach { get; set; }
         public int SetupHolidayId { get; set; }
+        [Required]
         public int StaffPersonalInfoId { get; set; }
+        [Required]
         public DateTime YearOfEmployment { get; set; }
+        [Required]
         public int TypeOfHoliday { get; set; }
+        [Required]
         public DateTime YearEndPeriodStartDate { get; set; }
+        [Required]
         public int HoursSoFar { get; set; }
+        [Required]
         public int IncrementalDailyHolidayByHrs { get; set; }
+        [Required]
         public int NumberOfDays { get; set; }
+        [Required]
         public string Remark { get; set; }
 
         public string Attachment { get; set; }

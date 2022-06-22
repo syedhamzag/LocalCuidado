@@ -53,12 +53,14 @@ using AwesomeCare.DataTransferObject.DTOs.BaseRecord;
 using AwesomeCare.Admin.Services.TrackingConcernNote;
 using AwesomeCare.DataTransferObject.DTOs.TrackingConcernNote;
 using AwesomeCare.Admin.Services.ClientCareObj;
+using AwesomeCare.Admin.Services.PerformanceIndicator;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class DashboardController : BaseController
     {
         #region declare Service
+        private IPerformanceIndicatorService _performanceIndicator;
         private IDashboardService _dashboardService;
         private IRotaTaskService _rotaTaskService;
         private IClientLogAuditService _clientLogAuditService;
@@ -109,9 +111,10 @@ namespace AwesomeCare.Admin.Controllers
         IStaffKeyWorkerVoiceService staffKeyWorkerService, IStaffMedCompService staffMedCompService, IStaffOneToOneService staffOneToOneService,
         IStaffReferenceService staffReferenceService, IStaffSpotCheckService staffSpotCheckService, IStaffSupervisionAppraisalService staffSupervisionService,
         IStaffSurveyService staffSurveyService, IStaffService staffService, IClientService clientService, IDutyOnCallService oncallService, IBaseRecordService baseService, ITaskBoardService taskService,
-        ITrackingConcernNote concernNote, IClientCareObjService clientCareObj) : base(fileUpload)
+        ITrackingConcernNote concernNote, IClientCareObjService clientCareObj, IPerformanceIndicatorService performanceIndicator) : base(fileUpload)
         {
             #region Services
+            _performanceIndicator = performanceIndicator;
             _dashboardService = dashboardService;
             _rotaTaskService = rotaTaskService;
             _clientLogAuditService = clientLogAuditService;
@@ -1301,24 +1304,25 @@ namespace AwesomeCare.Admin.Controllers
             dashboard.ClientId = 0;
             return View(dashboard);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Client(int clientId)
+        [HttpGet]
+        public JsonResult ClientDashboard(int clientId)
         {
-            var clients = await _clientService.GetClients();
-            var staffs = await _staffService.GetAsync();
-            var client = clients.Where(s => s.ClientId == clientId).FirstOrDefault();
-            var manager = staffs.Where(s => s.StaffPersonalInfoId == client.ClientManager).FirstOrDefault();
-            var keyworker = staffs.Where(s => s.FirstName.Contains(client.Keyworker) || s.MiddleName.Contains(client.Keyworker) || s.LastName.Contains(client.Keyworker)).FirstOrDefault();
-            var teamleader = staffs.Where(s => s.FirstName.Contains(client.TeamLeader) || s.MiddleName.Contains(client.TeamLeader) || s.LastName.Contains(client.TeamLeader)).FirstOrDefault();
-            var dashboard = await _dashboardService.Get();
-            dashboard.ClientId = clientId;
-            dashboard.ClientName = client.Firstname +" "+ client.Middlename +" "+ client.Surname;
-            dashboard.GetClients = clients.ToList();
-            dashboard.ClientManager = manager != null ? manager : new GetStaffPersonalInfo();
-            dashboard.TeamLeader = teamleader != null ? teamleader : new GetStaffPersonalInfo();
-            dashboard.KWorker = keyworker != null ? keyworker : new GetStaffPersonalInfo();
-            return View(dashboard);
+            var clients = _clientService.GetClients();
+            var staffs = _staffService.GetAsync();
+            var client = clients.Result.Where(s => s.ClientId == clientId).FirstOrDefault();
+            var manager = staffs.Result.Where(s => s.StaffPersonalInfoId == client.ClientManager).FirstOrDefault();
+            var keyworker = new GetStaffPersonalInfo();
+            //var keyworker = staffs.Result.Where(s => s.FirstName.Contains(client.Keyworker) || s.MiddleName.Contains(client.Keyworker) || s.LastName.Contains(client.Keyworker)).FirstOrDefault();
+            //var teamleader = staffs.Result.Where(s => s.FirstName.Contains(client.TeamLeader) || s.MiddleName.Contains(client.TeamLeader) || s.LastName.Contains(client.TeamLeader)).FirstOrDefault();
+            var teamleader = new GetStaffPersonalInfo();
+            var dashboard =  _dashboardService.Get();
+            dashboard.Result.ClientId = clientId;
+            dashboard.Result.ClientName = client.Firstname +" "+ client.Middlename +" "+ client.Surname;
+            dashboard.Result.GetClients = clients.Result.ToList();
+            dashboard.Result.ClientManager = manager != null ? manager : new GetStaffPersonalInfo();
+            dashboard.Result.TeamLeader = teamleader != null ? teamleader : new GetStaffPersonalInfo();
+            dashboard.Result.KWorker = keyworker != null ? keyworker : new GetStaffPersonalInfo();
+            return Json(dashboard.Result);
         }
         public async Task<IActionResult> Employee(int staffId)
         {
@@ -1738,9 +1742,9 @@ namespace AwesomeCare.Admin.Controllers
         #endregion
 
         [HttpGet]
-        public JsonResult CareObj(int carePId, int careCId, int careLId)
+        public JsonResult CareObj(int carePId, int careCId, int careLId, int clientId)
         {
-            var care = _clientCareObj.Get();
+            var care = _clientCareObj.GetByClient(clientId);
             var pending = care.Result.Where(j => j.Status == carePId).Count();
             var closed = care.Result.Where(j => j.Status == careCId).Count();
             var late = care.Result.Where(j => j.Status == careLId).Count();
@@ -1763,6 +1767,721 @@ namespace AwesomeCare.Admin.Controllers
             return Json(careObj);
         }
 
+        [HttpGet]
+        public JsonResult Telehealth(int nId, int oId, int aId, int rId, int clientId)
+        {
+            int TeleNormal = 0;
+            int TeleObservation = 0;
+            int TeleAttention = 0;
+            int TeleReceived = 0;
+
+            var coag = _clientBloodCoagService.Get();
+            var bmi = _clientBMIService.Get();
+            var body = _clientBodyService.Get();
+            var bowel = _clientBowelService.Get();
+            var eye = _clientEyeService.Get();
+            var food = _clientFoodService.Get();
+            var heart = _clientHeartService.Get();
+            var oxygen = _clientOxygenService.Get();
+            var pain = _clientPainService.Get();
+            var pulse = _clientPulseService.Get();
+            var pressure = _clientPressureService.Get();
+            var seizure = _clientSeizureService.Get();
+            var wound = _clientWoundService.Get();
+
+            var dashboard = _dashboardService.Get();
+            var TeleHeath = new List<Status>();
+
+            #region BloodCoag
+            var normal = coag.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var observation = coag.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var attention = coag.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var received = coag.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += normal;
+            TeleObservation += observation;
+            TeleAttention += attention;
+            TeleReceived += received;
+            var BloodCoag = new List<Status>();
+            BloodCoag.Add(new Status
+            {
+                Key = "N",
+                Value = normal
+            });
+            BloodCoag.Add(new Status
+            {
+                Key = "O",
+                Value = observation
+            });
+            BloodCoag.Add(new Status
+            {
+                Key = "A",
+                Value = attention
+            });
+            BloodCoag.Add(new Status
+            {
+                Key = "R",
+                Value = received
+            });
+            dashboard.Result.BloodCoag = BloodCoag;
+            #endregion
+            #region BloodPressure
+            var pnormal = pressure.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var pobservation = pressure.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var pattention = pressure.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var preceived = pressure.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += pnormal;
+            TeleObservation += pobservation;
+            TeleAttention += pattention;
+            TeleReceived += preceived;
+            var Pressure = new List<Status>();
+            Pressure.Add(new Status
+            {
+                Key = "N",
+                Value = pnormal
+            });
+            Pressure.Add(new Status
+            {
+                Key = "O",
+                Value = pobservation
+            });
+            Pressure.Add(new Status
+            {
+                Key = "A",
+                Value = pattention
+            });
+            Pressure.Add(new Status
+            {
+                Key = "R",
+                Value = preceived
+            });
+            dashboard.Result.Pressure = Pressure;
+            #endregion
+            #region BMI
+            var bmi_normal = bmi.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var bmi_observation = bmi.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var bmi_attention = bmi.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var bmi_received = bmi.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += bmi_normal;
+            TeleObservation += bmi_observation;
+            TeleAttention += bmi_attention;
+            TeleReceived += bmi_received;
+            var BMI = new List<Status>();
+            BMI.Add(new Status
+            {
+                Key = "N",
+                Value = bmi_normal
+            });
+            BMI.Add(new Status
+            {
+                Key = "O",
+                Value = bmi_observation
+            });
+            BMI.Add(new Status
+            {
+                Key = "A",
+                Value = bmi_attention
+            });
+            BMI.Add(new Status
+            {
+                Key = "R",
+                Value = bmi_received
+            });
+            dashboard.Result.BMI = BMI;
+            #endregion
+            #region Body
+            var Body_normal = body.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Body_observation = body.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Body_attention = body.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Body_received = body.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Body_normal;
+            TeleObservation += Body_observation;
+            TeleAttention += Body_attention;
+            TeleReceived += Body_received;
+            var Body = new List<Status>();
+            Body.Add(new Status
+            {
+                Key = "N",
+                Value = Body_normal
+            });
+            Body.Add(new Status
+            {
+                Key = "O",
+                Value = Body_observation
+            });
+            Body.Add(new Status
+            {
+                Key = "A",
+                Value = Body_attention
+            });
+            Body.Add(new Status
+            {
+                Key = "R",
+                Value = Body_received
+            });
+            dashboard.Result.Body = Body;
+            #endregion
+            #region Bowel
+            var Bowel_normal = bowel.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Bowel_observation = bowel.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Bowel_attention = bowel.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Bowel_received = bowel.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Bowel_normal;
+            TeleObservation += Bowel_observation;
+            TeleAttention += Bowel_attention;
+            TeleReceived += Bowel_received;
+            var Bowel = new List<Status>();
+            Bowel.Add(new Status
+            {
+                Key = "N",
+                Value = Bowel_normal
+            });
+            Bowel.Add(new Status
+            {
+                Key = "O",
+                Value = Bowel_observation
+            });
+            Bowel.Add(new Status
+            {
+                Key = "A",
+                Value = Bowel_attention
+            });
+            Bowel.Add(new Status
+            {
+                Key = "R",
+                Value = Bowel_received
+            });
+            dashboard.Result.Bowel = Bowel;
+            #endregion
+            #region Eye
+            var Eye_normal = eye.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Eye_observation = eye.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Eye_attention = eye.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Eye_received = eye.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Eye_normal;
+            TeleObservation += Eye_observation;
+            TeleAttention += Eye_attention;
+            TeleReceived += Eye_received;
+            var Eye = new List<Status>();
+            Eye.Add(new Status
+            {
+                Key = "N",
+                Value = Eye_normal
+            });
+            Eye.Add(new Status
+            {
+                Key = "O",
+                Value = Eye_observation
+            });
+            Eye.Add(new Status
+            {
+                Key = "A",
+                Value = Eye_attention
+            });
+            Eye.Add(new Status
+            {
+                Key = "R",
+                Value = Eye_received
+            });
+            dashboard.Result.EyeHealth = Eye;
+            #endregion
+            #region Food
+            var Food_normal = food.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Food_observation = food.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Food_attention = food.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Food_received = food.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Food_normal;
+            TeleObservation += Food_observation;
+            TeleAttention += Food_attention;
+            TeleReceived += Food_received;
+            var Food = new List<Status>();
+            Food.Add(new Status
+            {
+                Key = "N",
+                Value = Food_normal
+            });
+            Food.Add(new Status
+            {
+                Key = "O",
+                Value = Food_observation
+            });
+            Food.Add(new Status
+            {
+                Key = "A",
+                Value = Food_attention
+            });
+            Food.Add(new Status
+            {
+                Key = "R",
+                Value = Food_received
+            });
+            dashboard.Result.Food = Food;
+            #endregion
+            #region Heart
+            var Heart_normal = heart.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Heart_observation = heart.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Heart_attention = heart.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Heart_received = heart.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Heart_normal;
+            TeleObservation += Heart_observation;
+            TeleAttention += Heart_attention;
+            TeleReceived += Heart_received;
+            var Heart = new List<Status>();
+            Heart.Add(new Status
+            {
+                Key = "N",
+                Value = Heart_normal
+            });
+            Heart.Add(new Status
+            {
+                Key = "O",
+                Value = Heart_observation
+            });
+            Heart.Add(new Status
+            {
+                Key = "A",
+                Value = Heart_attention
+            });
+            Heart.Add(new Status
+            {
+                Key = "R",
+                Value = Heart_received
+            });
+            dashboard.Result.Heart = Heart;
+            #endregion
+            #region Oxygen
+            var Oxygen_normal = oxygen.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Oxygen_observation = oxygen.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Oxygen_attention = oxygen.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Oxygen_received = oxygen.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Oxygen_normal;
+            TeleObservation += Oxygen_observation;
+            TeleAttention += Oxygen_attention;
+            TeleReceived += Oxygen_received;
+            var Oxygen = new List<Status>();
+            Oxygen.Add(new Status
+            {
+                Key = "N",
+                Value = Oxygen_normal
+            });
+            Oxygen.Add(new Status
+            {
+                Key = "O",
+                Value = Oxygen_observation
+            });
+            Oxygen.Add(new Status
+            {
+                Key = "A",
+                Value = Oxygen_attention
+            });
+            Oxygen.Add(new Status
+            {
+                Key = "R",
+                Value = Oxygen_received
+            });
+            dashboard.Result.Oxygen = Oxygen;
+            #endregion
+            #region Pain
+            var Pain_normal = pain.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Pain_observation = pain.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Pain_attention = pain.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Pain_received = pain.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Pain_normal;
+            TeleObservation += Pain_observation;
+            TeleAttention += Pain_attention;
+            TeleReceived += Pain_received;
+            var Pain = new List<Status>();
+            Pain.Add(new Status
+            {
+                Key = "N",
+                Value = Pain_normal
+            });
+            Pain.Add(new Status
+            {
+                Key = "O",
+                Value = Pain_observation
+            });
+            Pain.Add(new Status
+            {
+                Key = "A",
+                Value = Pain_attention
+            });
+            Pain.Add(new Status
+            {
+                Key = "R",
+                Value = Pain_received
+            });
+            dashboard.Result.Pain = Pain;
+            #endregion
+            #region Pulse
+            var Pulse_normal = pulse.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Pulse_observation = pulse.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Pulse_attention = pulse.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Pulse_received = pulse.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Pulse_normal;
+            TeleObservation += Pulse_observation;
+            TeleAttention += Pulse_attention;
+            TeleReceived += Pulse_received;
+            var Pulse = new List<Status>();
+            Pulse.Add(new Status
+            {
+                Key = "N",
+                Value = Pulse_normal
+            });
+            Pulse.Add(new Status
+            {
+                Key = "O",
+                Value = Pulse_observation
+            });
+            Pulse.Add(new Status
+            {
+                Key = "A",
+                Value = Pulse_attention
+            });
+            Pulse.Add(new Status
+            {
+                Key = "R",
+                Value = Pulse_received
+            });
+            dashboard.Result.Pulse = Pulse;
+            #endregion
+            #region Seizure
+            var Seizure_normal = seizure.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Seizure_observation = seizure.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Seizure_attention = seizure.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Seizure_received = seizure.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Seizure_normal;
+            TeleObservation += Seizure_observation;
+            TeleAttention += Seizure_attention;
+            TeleReceived += Seizure_received;
+            var Seizure = new List<Status>();
+            Seizure.Add(new Status
+            {
+                Key = "N",
+                Value = Seizure_normal
+            });
+            Seizure.Add(new Status
+            {
+                Key = "O",
+                Value = Seizure_observation
+            });
+            Seizure.Add(new Status
+            {
+                Key = "A",
+                Value = Seizure_attention
+            });
+            Seizure.Add(new Status
+            {
+                Key = "R",
+                Value = Seizure_received
+            });
+            dashboard.Result.Seizure = Seizure;
+            #endregion
+            #region Wound
+            var Wound_normal = wound.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Wound_observation = wound.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Wound_attention = wound.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Wound_received = wound.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            TeleNormal += Wound_normal;
+            TeleObservation += Wound_observation;
+            TeleAttention += Wound_attention;
+            TeleReceived += Wound_received;
+            var Wound = new List<Status>();
+            Wound.Add(new Status
+            {
+                Key = "N",
+                Value = Wound_normal
+            });
+            Wound.Add(new Status
+            {
+                Key = "O",
+                Value = Wound_observation
+            });
+            Wound.Add(new Status
+            {
+                Key = "A",
+                Value = Wound_attention
+            });
+            Wound.Add(new Status
+            {
+                Key = "R",
+                Value = Wound_received
+            });
+            dashboard.Result.Wound = Wound;
+            #endregion
+            #region TeleHealth
+            TeleHeath.Add(new Status
+            {
+                Key = "N",
+                Value = TeleNormal
+            });
+            TeleHeath.Add(new Status
+            {
+                Key = "O",
+                Value = TeleObservation
+            });
+            TeleHeath.Add(new Status
+            {
+                Key = "A",
+                Value = TeleAttention
+            });
+            TeleHeath.Add(new Status
+            {
+                Key = "R",
+                Value = TeleReceived
+            });
+            dashboard.Result.TeleHealth = TeleHeath;
+            #endregion
+            return Json(dashboard.Result);
+        }
+        [HttpGet]
+        public JsonResult Ongoing(int carePId, int careCId, int careLId, int clientId)
+        {
+            var care = _clientServiceWatchService.Get();
+            var pending = care.Result.Where(j => j.Status == carePId && j.ClientId == clientId).Count();
+            var closed = care.Result.Where(j => j.Status == careCId && j.ClientId == clientId).Count();
+            var late = care.Result.Where(j => j.Status == careLId && j.ClientId == clientId).Count();
+            var careObj = new List<Status>();
+            careObj.Add(new Status
+            {
+                Key = "Pending",
+                Value = pending
+            });
+            careObj.Add(new Status
+            {
+                Key = "Progressing",
+                Value = closed
+            });
+            careObj.Add(new Status
+            {
+                Key = "Achieved",
+                Value = late
+            });
+            return Json(careObj);
+        }
+        [HttpGet]
+        public JsonResult Performance(int carePId, int careCId, int careLId, int clientId)
+        {
+            var dashboard = _dashboardService.Get();
+            #region variables
+            var endDate = DateTime.Now.ToString("yyyy-MM-dd");
+            bool isStopDateValid = DateTime.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
+
+            int clientPending = 0;
+            int clientClosed = 0;
+            int clientLate = 0;
+
+            var pId = carePId;
+            var cId = careCId;
+            var lId = careLId;
+
+            var getClient = _clientService.GetClients();
+            var log = _clientLogAuditService.Get();
+            var med = _clientMedAuditService.Get();
+            var complain = _clientComplainService.Get();
+            var voice = _clientVoiceService.Get();
+            var watch = _clientServiceWatchService.Get();
+            var mgt = _clientMgtVisitService.Get();
+            var prog = _clientProgramService.Get();
+
+            var baserecordItem = _baseService.GetBaseRecordsWithItems();
+            #endregion
+            var Client = new List<Status>();
+
+            #region LogAudit
+            var log_pending = log.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var log_closed = log.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var log_late = log.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            clientPending += log_pending;
+            clientClosed += log_closed;
+            clientLate += log_late;
+            var LogAudit = new List<Status>();
+            LogAudit.Add(new Status
+            {
+                Key = "Pending",
+                Value = log_pending
+            });
+            LogAudit.Add(new Status
+            {
+                Key = "Closed",
+                Value = log_closed
+            });
+            LogAudit.Add(new Status
+            {
+                Key = "Late",
+                Value = log_late
+            });
+            dashboard.Result.LogAudit = LogAudit;
+            #endregion
+            #region MedAudit
+            var med_pending = med.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var med_closed = med.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var med_late = med.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            clientPending += med_pending;
+            clientClosed += med_closed;
+            clientLate += med_late;
+            var MedAudit = new List<Status>();
+            MedAudit.Add(new Status
+            {
+                Key = "Pending",
+                Value = med_pending
+            });
+            MedAudit.Add(new Status
+            {
+                Key = "Closed",
+                Value = med_closed
+            });
+            MedAudit.Add(new Status
+            {
+                Key = "Late",
+                Value = med_late
+            });
+            dashboard.Result.MedAudit = MedAudit;
+            #endregion
+            #region CompAudit
+            var Comp_pending = complain.Result.Where(j => j.StatusId == pId && (j.DUEDATE.Year >= stopDate.Year && j.DUEDATE.Month >= stopDate.Month && j.DUEDATE.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var Comp_closed = complain.Result.Where(j => j.StatusId == cId && j.ClientId == clientId).Count();
+            var Comp_late = complain.Result.Where(j => j.StatusId == pId && (j.DUEDATE.Year <= stopDate.Year && j.DUEDATE.Month <= stopDate.Month && j.DUEDATE.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            clientPending += Comp_pending;
+            clientClosed += Comp_closed;
+            clientLate += Comp_late;
+            var Comp = new List<Status>();
+            Comp.Add(new Status
+            {
+                Key = "Pending",
+                Value = Comp_pending
+            });
+            Comp.Add(new Status
+            {
+                Key = "Closed",
+                Value = Comp_closed
+            });
+            Comp.Add(new Status
+            {
+                Key = "Late",
+                Value = Comp_late
+            });
+            dashboard.Result.Complain = Comp;
+            #endregion
+            #region Voice
+            var voice_pending = voice.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var voice_closed = voice.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var voice_late = voice.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            clientPending += voice_pending;
+            clientClosed += voice_closed;
+            clientLate += voice_late;
+            var Voice = new List<Status>();
+            Voice.Add(new Status
+            {
+                Key = "Pending",
+                Value = voice_pending
+            });
+            Voice.Add(new Status
+            {
+                Key = "Closed",
+                Value = voice_closed
+            });
+            Voice.Add(new Status
+            {
+                Key = "Late",
+                Value = voice_late
+            });
+            dashboard.Result.Voice = Voice;
+            #endregion
+            #region Program
+            var prog_pending = prog.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var prog_closed = prog.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var prog_late = prog.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            clientPending += prog_pending;
+            clientClosed += prog_closed;
+            clientLate += prog_late;
+            var Program = new List<Status>();
+            Program.Add(new Status
+            {
+                Key = "Pending",
+                Value = prog_pending
+            });
+            Program.Add(new Status
+            {
+                Key = "Closed",
+                Value = prog_closed
+            });
+            Program.Add(new Status
+            {
+                Key = "Late",
+                Value = prog_late
+            });
+            dashboard.Result.Program = Program;
+            #endregion
+            #region Watch
+            var watch_pending = watch.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var watch_closed = watch.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var watch_late = watch.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            clientPending += watch_pending;
+            clientClosed += watch_closed;
+            clientLate += watch_late;
+            var Watch = new List<Status>();
+            Watch.Add(new Status
+            {
+                Key = "Pending",
+                Value = watch_pending
+            });
+            Watch.Add(new Status
+            {
+                Key = "Closed",
+                Value = watch_closed
+            });
+            Watch.Add(new Status
+            {
+                Key = "Late",
+                Value = watch_late
+            });
+            dashboard.Result.ServiceWatch = Watch;
+            #endregion
+            #region MgtVisit
+            var mgt_pending = mgt.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var mgt_closed = mgt.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var mgt_late = mgt.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            clientPending += mgt_pending;
+            clientClosed += mgt_closed;
+            clientLate += mgt_late;
+            var MgtVisit = new List<Status>();
+            MgtVisit.Add(new Status
+            {
+                Key = "Pending",
+                Value = mgt_pending
+            });
+            MgtVisit.Add(new Status
+            {
+                Key = "Closed",
+                Value = mgt_closed
+            });
+            MgtVisit.Add(new Status
+            {
+                Key = "Late",
+                Value = mgt_late
+            });
+            dashboard.Result.MgtVisit = MgtVisit;
+            #endregion
+            #region ClientMatrix
+            Client.Add(new Status
+            {
+                Key = "Pending",
+                Value = clientPending
+            });
+            Client.Add(new Status
+            {
+                Key = "Closed",
+                Value = clientClosed
+            });
+            Client.Add(new Status
+            {
+                Key = "Late",
+                Value = clientLate
+            });
+            dashboard.Result.ClientMatrix = Client;
+            #endregion
+            return Json(dashboard.Result);
+        }
         [HttpGet]
         public JsonResult Supervision(int pId, int cId, int lId)
         {

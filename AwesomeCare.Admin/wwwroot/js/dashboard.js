@@ -19,12 +19,15 @@ var hidelabel = {
 };
 
 
-function getcareobj(carePId, careCId, careLId,ctxCare) {
+function getcareobj(carePId, careCId, careLId, ctxChart, clientId) {
         $.ajax({
             type: 'GET',
             url: '/Dashboard/CareObj',
-            data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId },
+            data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId, 'clientId': clientId },
             success: function (response) {
+                var canvas = document.getElementById(ctxChart);
+                var ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
                 var labels = [];
                 var data = [];
                 response.forEach(function (result, index) { labels.push(result.key) });
@@ -39,13 +42,13 @@ function getcareobj(carePId, careCId, careLId,ctxCare) {
                         data: data
                     }]
                 };
-                console.log(care);
-                var Care = new Chart(ctxCare, {
+                var cChart = new Chart(ctx, {
                     options: hidelabel,
                     data: care,
                     type: 'pie'
 
                 });
+                cChart.render();
             },
             error: function () {
                 alert('Failed to receive the Data');
@@ -54,16 +57,20 @@ function getcareobj(carePId, careCId, careLId,ctxCare) {
         });
 }
 
-function gettelehealth(carePId, careCId, careLId, ctxCare) {
+function gettelehealth(nId, oId, aId, rId, ctxChart, clientId) {
     $.ajax({
         type: 'GET',
-        url: '/Dashboard/CareObj',
-        data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId },
+        url: '/Dashboard/Telehealth',
+        data: { 'nId': nId, 'oId': oId, 'aId': aId, 'rId': rId, 'clientId': clientId },
         success: function (response) {
+            var ctx = document.getElementById(ctxChart).getContext('2d');
+            if (ctx != undefined) {
+                ctx.destroy();
+            }
             var labels = [];
             var data = [];
-            response.forEach(function (result, index) { labels.push(result.key) });
-            response.forEach(function (result, index) { data.push(result.value) });
+            response.teleHealth.forEach(function (result, index) { labels.push(result.key) });
+            response.teleHealth.forEach(function (result, index) { data.push(result.value) });
             var care = {
                 labels: labels,
                 datasets: [{
@@ -74,8 +81,7 @@ function gettelehealth(carePId, careCId, careLId, ctxCare) {
                     data: data
                 }]
             };
-            console.log(care);
-            var Care = new Chart(ctxCare, {
+            var Care = new Chart(ctx, {
                 options: hidelabel,
                 data: care,
                 type: 'pie'
@@ -89,12 +95,16 @@ function gettelehealth(carePId, careCId, careLId, ctxCare) {
     });
 }
 
-function getongoing(carePId, careCId, careLId, ctxCare) {
+function getongoing(carePId, careCId, careLId, ctxChart, clientId) {
     $.ajax({
         type: 'GET',
-        url: '/Dashboard/CareObj',
-        data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId },
+        url: '/Dashboard/Ongoing',
+        data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId, 'clientId': clientId },
         success: function (response) {
+            var ctx = document.getElementById(ctxChart).getContext('2d');
+            if (ctx != undefined) {
+                ctx.destroy();
+            }
             var labels = [];
             var data = [];
             response.forEach(function (result, index) { labels.push(result.key) });
@@ -109,8 +119,7 @@ function getongoing(carePId, careCId, careLId, ctxCare) {
                     data: data
                 }]
             };
-            console.log(care);
-            var Care = new Chart(ctxCare, {
+            var Care = new Chart(ctx, {
                 options: hidelabel,
                 data: care,
                 type: 'pie'
@@ -124,16 +133,21 @@ function getongoing(carePId, careCId, careLId, ctxCare) {
     });
 }
 
-function getpindicator(carePId, careCId, careLId, ctxCare) {
+function getpindicator(carePId, careCId, careLId, ctxChart, clientId) {
     $.ajax({
         type: 'GET',
-        url: '/Dashboard/CareObj',
-        data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId },
+        url: '/Dashboard/Performance',
+        data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId, 'clientId': clientId },
         success: function (response) {
+            var ctx = document.getElementById(ctxChart).getContext('2d');
+            if (ctx != undefined)
+            {
+                ctx.destroy();
+            }
             var labels = [];
             var data = [];
-            response.forEach(function (result, index) { labels.push(result.key) });
-            response.forEach(function (result, index) { data.push(result.value) });
+            response.clientMatrix.forEach(function (result, index) { labels.push(result.key) });
+            response.clientMatrix.forEach(function (result, index) { data.push(result.value) });
             var care = {
                 labels: labels,
                 datasets: [{
@@ -144,8 +158,7 @@ function getpindicator(carePId, careCId, careLId, ctxCare) {
                     data: data
                 }]
             };
-            console.log(care);
-            var Care = new Chart(ctxCare, {
+            var Care = new Chart(ctx, {
                 options: hidelabel,
                 data: care,
                 type: 'pie'

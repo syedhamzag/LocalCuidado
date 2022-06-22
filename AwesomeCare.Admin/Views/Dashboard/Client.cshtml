@@ -176,25 +176,39 @@
 <script src="~/assets2/js/StackedChart.js"></script>
 <script src="~/js/dashboard.js"></script>
 <script type="text/javascript">
-    $(function () 
+    $(function ()
     {
         $('#ClientId').on("change",function(){
             var element = this;
             var Id = element.value;
 
-        
+            $.ajax({
+                type: 'GET',
+                url: '/Dashboard/ClientDashboard',
+                data: { 'clientId': Id },
+                success: function (response) {
+                    //console.log(response.clientName);
+                    //console.log(response.getClients);
+                    //console.log(response.clientManager);
+                    //console.log(response.teamLeader);
+                    //console.log(response.kWorker);
+                },
+                error: function () {
+                    alert('Failed to receive the Data');
+                    console.log('Failed ');
+                }
+            });
         var careChart = "careChart";
         var telehealth = "telehealth";
         var ongoing = "ongoing";
         var pindicator = "pindicator";
-        var ctxCare = document.getElementById(careChart).getContext('2d');
-        var ctxtele = document.getElementById(telehealth).getContext('2d');
-        var ctxongoing = document.getElementById(ongoing).getContext('2d');
-        var ctxindicator = document.getElementById(pindicator).getContext('2d');
-            getcareobj(@Model.carePId,@Model.careCId,@Model.careLId,ctxCare);
-            gettelehealth(@Model.carePId,@Model.careCId,@Model.careLId,ctxtele);
-            getongoing(@Model.carePId,@Model.careCId,@Model.careLId,ctxongoing);
-            getpindicator(@Model.carePId,@Model.careCId,@Model.careLId,ctxindicator);
+            
+            
+            console.log(@Model.nId+"-"+@Model.oId+"-"+@Model.aId+"-"+@Model.rId);
+            getcareobj(@Model.carePId,@Model.careCId,@Model.careLId, careChart, Id);
+            gettelehealth(@Model.nId,@Model.oId,@Model.aId, @Model.rId, telehealth, Id);
+            getongoing(@Model.carePId,@Model.careCId,@Model.careLId,ongoing, Id);
+            getpindicator(@Model.carePId,@Model.careCId,@Model.careLId,pindicator, Id);
         });
     });
 </script>

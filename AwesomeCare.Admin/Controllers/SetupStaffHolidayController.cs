@@ -53,10 +53,12 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateSetupStaffHoliday model)
+        public async Task<IActionResult> Index(CreateSetupStaffHoliday model)
         {
             if (model == null || !ModelState.IsValid)
             {
+                var staff = await _staffService.GetStaffs();
+                model.StaffList = staff.Select(s => new SelectListItem { Text = s.Fullname, Value = s.StaffPersonalInfoId.ToString() }).ToList();
                 return View(model);
             }
             #region Attachment

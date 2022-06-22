@@ -644,6 +644,12 @@ namespace AwesomeCare.Admin.Controllers
 
         #region StaffDetails
         [HttpGet]
+        public JsonResult StaffDetailJson(int staffId)
+        {
+            var Staff = _staffService.Profile(staffId);
+            return Json(Staff.Result);
+        }
+        [HttpGet]
         public JsonResult Staffholiday(int staffId)
         {
             var staff = _staffService.GetStaffs();
