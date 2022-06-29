@@ -62,6 +62,25 @@ namespace AwesomeCare.Admin.Controllers
             model.StaffPersonalInfoId = staffId;
             var staff = await _staffService.GetStaffs();
             model.StaffName = staff.Where(s => s.StaffPersonalInfoId == staffId).FirstOrDefault().Fullname;
+            var holidays = await _StaffHoliday.Get();
+            var holiday = holidays.Where(s => s.StaffPersonalInfoId == staffId).FirstOrDefault();
+            if (holiday != null)
+            {
+                model.AllocatedDays = holiday.AllocatedDays;
+                model.Attachment = holiday.Attachment;
+                model.Class = holiday.Class;
+                model.CopyOfHandover = holiday.CopyOfHandover;
+                model.Days = holiday.Days;
+                model.EndDate = holiday.EndDate;
+                model.PersonOnResponsibility = holiday.PersonOnResponsibility;
+                model.Purpose = holiday.Purpose;
+                model.Remark = holiday.Remark;
+                model.StartDate = holiday.StartDate;
+                model.YearOfService = holiday.YearOfService;
+                model.StaffPersonalInfoId = holiday.StaffPersonalInfoId;
+                model.StaffHolidayId = holiday.StaffHolidayId;
+                model.StaffName = staff.Where(s => s.StaffPersonalInfoId == staffId).FirstOrDefault().Fullname;
+            }
             return View(model);
 
         }
@@ -241,6 +260,20 @@ namespace AwesomeCare.Admin.Controllers
             }
             
             return Json(list);
+
+        }
+        [HttpGet]
+        public JsonResult GetHoliday(DateTime sdate, DateTime edate)
+        {
+            int days = 0;
+            int difference = (edate.Day - sdate.Day);
+            for (int i = 0; i <= difference; i++)
+            {
+                string day = sdate.AddDays(i).DayOfWeek.ToString();
+                if(day != "Sunday" && day != "Saturday")
+                    days++;
+            }
+            return Json(days);
 
         }
     }

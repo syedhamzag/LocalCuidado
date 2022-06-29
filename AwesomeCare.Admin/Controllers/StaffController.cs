@@ -659,13 +659,13 @@ namespace AwesomeCare.Admin.Controllers
                 var Adays = Math.Round(holiday.AllocatedDays, 0);
                 int Allocated = int.Parse(Adays.ToString());
                 var setup = _setupStaff.Get();
-                var days = setup.Result.Where(s => s.StaffPersonalInfoId == staffHoliday.Result.StaffPersonalInfoId && s.TypeOfHoliday == holiday.Class).FirstOrDefault().NumberOfDays;
-
+                var days = setup.Result.Where(s => s.StaffPersonalInfoId == staffHoliday.Result.StaffPersonalInfoId && s.TypeOfHoliday == holiday.Class).FirstOrDefault();
+                var day = days != null ? days.NumberOfDays : 0;
                 report.StaffHolidayId = holiday.StaffHolidayId;
                 report.StartDate = holiday.StartDate;
                 report.EndDate = holiday.EndDate;
                 report.AllocatedDays = holiday.AllocatedDays;
-                report.Balance = (Allocated - days);
+                report.Balance = (Allocated - day);
                 report.StaffName = staff.Result.Where(s => s.StaffPersonalInfoId == staffHoliday.Result.StaffPersonalInfoId).FirstOrDefault().Fullname;
                 report.ClassName = _baseService.GetBaseRecordItemById(holiday.Class).Result.ValueName;
             return Json(report);

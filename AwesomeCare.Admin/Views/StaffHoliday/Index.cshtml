@@ -20,7 +20,7 @@
                     <div class="row">
                         <input type="hidden" asp-for="@Model.StaffPersonalInfoId" />
                         <input type="hidden" asp-for="@Model.StaffHolidayId" />
-                        <input type="hidden" asp-for="@Model.maxDays" />
+                        
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -33,7 +33,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <div class="form-group">
                                         <label class="control-label">End Date</label>
-                                        <input type="text" class="form-control" asp-for="@Model.EndDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" onclick="getDays(this)" />
+                                        <input type="text" class="form-control" asp-for="@Model.EndDate" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" onchange="getDays()" />
                                         <span asp-validation-for="EndDate" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -110,6 +110,11 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+                                    <input type="hidden" asp-for="@Model.maxDays" />
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
                                     <button type="submit" class="btn btn-primary pull-right">Submit</button>
                                 </div>
@@ -131,14 +136,23 @@
     <script>
         function getDays()
         {
-            var start = new Date($('#StartDate').val());
-            var end = new Date($('#EndDate').val());
-            const days = (date_1, date_2) => {
-                let difference = date_1.getTime() - date_2.getTime();
-                let TotalDays = Math.ceil(difference / (1000 * 3600 * 24));
-                return TotalDays;
-            }
-            $('#Days').val(days(end,start));
+            var start = $('#StartDate').val();
+            var end = $('#EndDate').val();
+            $.ajax({
+                type: 'GET',
+                url: '/StaffHoliday/GetHoliday',
+                data: { 'sdate': start, 'edate': end },
+                success: function (result)
+                {
+                    console.log(result);
+                    $('#Days').val(result);
+                },
+                error: function () {
+                    alert('Failed to receive the Data');
+                    console.log('Failed ');
+                }
+            });
+            
 
 
         }
@@ -152,12 +166,16 @@
                 data: { 'setupId': setupId, 'holidayId': holidayId },
                 success: function (result) {
                     var bal = 0;
-                    $('#AllocatedDays').val(result[0]);
-                    if (result[1] > 0) {
-                        bal = (result[0] - result[1]);
+                    var allocated = result[0];
+                    var availed = result[1];
+                    $('#AllocatedDays').val(allocated);
+                    if (availed > 0)
+                    {
+
+                        bal = (allocated - availed);
                         $('#maxDays').val(bal);
                     }
-                    $('#Days').val(bal);
+                    $('#Days').val(allocated);
                 },
                 error: function () {
                     alert('Failed to receive the Data');
