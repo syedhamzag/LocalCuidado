@@ -27,14 +27,7 @@
                 <h5 class="card-title mb-0">Activities</h5>
                 <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#ratingModal" style="font-size: .75em; margin-top: -25px;">See More</button>
             </div>
-            <div class="card-body">
-                @if (Model.ClientId > 0)
-                { 
-                    <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="logaudit" class="btn btn-success form-control mt-5">Log Audit</a>
-                    <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="medaudit" class="btn btn-danger form-control mt-5">Medication Audit</a>
-                    <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="careobj" class="btn btn-primary form-control mt-5">Live Care Tracker</a>
-                    <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="mgtvisit" class="btn btn-info form-control mt-5">Message/Request</a>
-                }
+            <div class="card-body" id="activity">
             </div>
         </div>
     </div>
@@ -44,45 +37,27 @@
                 <h5 class="card-title mb-0">Your Office Team</h5>
             </div>
             <div class="card-body">
-                @if (Model.ClientId > 0)
-                {
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 col-lg-12">
                             <h5>Client Manager</h5>
-                            <h5 class="table-avatar">
-                                @if (Model.ClientManager.StaffPersonalInfoId > 0)
-                                { 
-                                    <a href="#" class="avatar"><img alt="" src="@Model.ClientManager.ProfilePix" width="38" height="42"></a>
-                                    <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@Model.ClientManager.StaffPersonalInfoId">@string.Concat(Model.ClientManager.FirstName, " ", Model.ClientManager.MiddleName, " ", Model.ClientManager.LastName)</a>
-                                }
+                            <h5 class="table-avatar" id="managar">
                             </h5>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 col-lg-12">
                             <h5>Team Leader</h5>
-                            <h5 class="table-avatar">
-                                @if (Model.TeamLeader.StaffPersonalInfoId > 0)
-                                {
-                                    <a href="#" class="avatar"><img alt="" src="@Model.TeamLeader.ProfilePix" width="38" height="42"></a>
-                                    <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@Model.TeamLeader.StaffPersonalInfoId">@string.Concat(Model.TeamLeader.FirstName, " ", Model.TeamLeader.MiddleName, " ", Model.TeamLeader.LastName)</a>
-                                }
+                            <h5 class="table-avatar" id="leader">
                             </h5>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 col-lg-12">
                             <h5>Key Worker</h5>
-                            <h5 class="table-avatar">
-                                @if (Model.KWorker.StaffPersonalInfoId > 0)
-                                {
-                                    <a href="#" class="avatar"><img alt="" src="@Model.KWorker.ProfilePix" width="38" height="42"></a>
-                                    <a asp-controller="Staff" asp-action="Details" asp-route-staffId="@Model.KWorker.StaffPersonalInfoId">@string.Concat(Model.KWorker.FirstName, " ", Model.KWorker.MiddleName, " ", Model.KWorker.LastName)</a>
-                                }
+                            <h5 class="table-avatar" id="kWorker">
                             </h5>
                         </div>
                     </div>
-                }
             </div>
         </div>
     </div>
@@ -141,33 +116,8 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    @if (Model.ClientId > 0)
-                    {
-                        <div class="col-md-1">
-
-                        </div>
-                        <div class="col-md-2">
-                            <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="mgtvisit" class="btn btn-success form-control mt-1" style="padding: 100px 0;text-align: center;">Visits</a>
-                        </div>
-                        <div class="col-md-2 center-align">
-                             <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="careplan" class="btn btn-danger form-control mt-1" style="padding: 100px 0;text-align: center;">Care Plan & Risk Assessment</a>
-                        </div>
-                        <div class="col-md-2 center-align">
-                            <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="careplan" class="btn btn-primary form-control mt-1" style="padding: 100px 0;text-align: center;">Invoicing</a>
-                        </div>
-                        <div class="col-md-2 center-align">
-                            <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="complaintregister" class="btn btn-info form-control mt-1" style="padding: 100px 0;text-align: center;">Complaint</a>
-                        </div>
-                        <div class="col-md-2 center-align">
-                            <a asp-action="HomeCareDetails" asp-controller="Client" asp-route-clientId="@Model.ClientId" asp-route-ActiveTab="telehealth" class="btn btn-secondary form-control mt-1" style="padding: 100px 0;text-align: center;">Telehealth</a>
-                        </div>
-                        <div class="col-md-1">
-
-                        </div>
-                    }
-                 </div>  
+            <div class="card-body" id="reference">
+                
             </div>
         </div>
     </div>
@@ -176,6 +126,47 @@
 <script src="~/assets2/js/StackedChart.js"></script>
 <script src="~/js/dashboard.js"></script>
 <script type="text/javascript">
+    function getDashboard(response)
+    {
+        console.log(response);
+        var activity = '<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=logaudit" class="btn btn-success form-control mt-5">Log Audit</a>'
+                    +'<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=medaudit" class="btn btn-danger form-control mt-5">Medication Audit</a>'
+                    +'<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=careobj" class="btn btn-primary form-control mt-5">Live Care Tracker</a>'
+                    +'<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=mgtvisit" class="btn btn-info form-control mt-5">Message/Request</a>';
+                    $('#activity').html('');
+                    $('#activity').append(activity);
+
+                    if(response.clientManager.StaffPersonalInfoId > 0)
+                    {
+                        var manager = '<a href="#" class="avatar"><img alt="" src="'+response.clientManager.ProfilePix+'" width="38" height="42"></a>'+
+                        '<a href="/Staff/Details?staffId='+response.clientManager.StaffPersonalInfoId+'">'+response.clientManager.FirstName+' '+response.clientManager.MiddleName+' '+response.clientManager.LastName+'</a>';
+                        $('#manager').html('');
+                        $('#manager').append(manager);
+                    }
+                    if(response.teamLeader.StaffPersonalInfoId > 0)
+                    {
+                        var leader = '<a href="#" class="avatar"><img alt="" src="'+response.teamLeader.ProfilePix+'" width="38" height="42"></a>'+
+                        '<a href="/Staff/Details?staffId='+response.teamLeader.StaffPersonalInfoId+'">'+response.teamLeader.FirstName+' '+response.teamLeader.MiddleName+' '+response.teamLeader.LastName+'</a>';
+                        $('#leader').html('');
+                        $('#leader').append(leader);
+                    }
+                    if(response.kWorker.StaffPersonalInfoId > 0)
+                    {
+                        var kWorker = '<a href="#" class="avatar"><img alt="" src="'+response.kWorker.ProfilePix+'" width="38" height="42"></a>'+
+                        '<a href="/Staff/Details?staffId='+response.kWorker.StaffPersonalInfoId+'">'+response.kWorker.FirstName+' '+response.kWorker.MiddleName+' '+response.kWorker.LastName+'</a>';
+                        $('#kWorker').html('');
+                        $('#kWorker').append(kWorker);
+                    }
+
+                    var reference = '<div class="row"><div class="col-md-1"></div><div class="col-md-2">'+
+                    '<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=mgtvisit" class="btn btn-success form-control mt-1" style="padding: 100px 0;text-align: center;">Visits</a></div><div class="col-md-2 center-align">'+
+                    '<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=careplan" class="btn btn-danger form-control mt-1" style="padding: 100px 0;text-align: center;">Care Plan</a></div><div class="col-md-2 center-align">'+
+                    '<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=careplan" class="btn btn-primary form-control mt-1" style="padding: 100px 0;text-align: center;">Invoicing</a></div><div class="col-md-2 center-align">'+
+                    '<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=complaintregister" class="btn btn-info form-control mt-1" style="padding: 100px 0;text-align: center;">Complaint</a></div><div class="col-md-2 center-align">'+
+                    '<a href="/Client/HomeCareDetails?clientId='+response.clientId+'&ActiveTab=telehealth" class="btn btn-secondary form-control mt-1" style="padding: 100px 0;text-align: center;">Telehealth</a></div><div class="col-md-1"></div></div>';
+                    $('#reference').html('');
+                    $('#reference').append(reference);
+    }
     $(function ()
     {
         $('#ClientId').on("change",function(){
@@ -187,6 +178,7 @@
                 url: '/Dashboard/ClientDashboard',
                 data: { 'clientId': Id },
                 success: function (response) {
+                    getDashboard(response);
                     //console.log(response.clientName);
                     //console.log(response.getClients);
                     //console.log(response.clientManager);
