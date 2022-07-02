@@ -39,6 +39,9 @@ using AwesomeCare.DataTransferObject.DTOs.ClientMedicationPeriod;
 using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
 using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Staff;
+using AwesomeCare.Admin.Services.ClientRotaName;
+using AwesomeCare.Admin.Services.RotaTask;
+using AwesomeCare.Admin.Services.ClientRota;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -57,14 +60,20 @@ namespace AwesomeCare.Admin.Controllers
         private readonly IClientRotaTypeService _clientRotaTypeService;
         private readonly IRotaDayofWeekService _rotaDayofWeekService;
         private readonly IBaseRecordService _baseRecordService;
+        IClientRotaNameService _clientRotaNameService;
+        IRotaTaskService _rotaTaskService;
+        IClientRotaService _clientRotaService;
         private IStaffService _staffService;
 
         public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
-            IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IStaffService staffService,
-        IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger, IBaseRecordService baseRecordService,
+            IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IStaffService staffService, IClientRotaService clientRotaService,
+        IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger, IBaseRecordService baseRecordService, IRotaTaskService rotaTaskService, IClientRotaNameService clientRotaNameService,
             IClientCareDetails clientCareDetails, IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) : base(fileUpload)
         {
             _dropboxClient = dropboxClient;
+            _clientRotaService = clientRotaService;
+            _clientRotaNameService = clientRotaNameService;
+            _rotaTaskService = rotaTaskService;
             _baseRecordService = baseRecordService;
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
@@ -497,8 +506,12 @@ namespace AwesomeCare.Admin.Controllers
             var medManufacturers = await _medicationService.GetManufacturers();
             var weekdays = await _rotaDayofWeekService.Get();
             var rotaTypes = await _clientRotaTypeService.Get();
+            var rotas = await _clientRotaNameService.Get();
+            var rotaTasks = await _rotaTaskService.Get();
+            var clientRotas = await _clientRotaService.GetForEdit(clientId.Value);
             model.ClientId = clientId.Value;
-
+            model.Rotas = rotas.Select(r => new SelectListItem { Text = r.RotaName, Value = r.RotaId.ToString() }).ToList();
+            model.ClientRotas = clientRotas;
             model.Medications = medNames.Select(s => new SelectListItem(string.Concat(s.MedicationName, " (", s.Strength, ")"), s.MedicationId.ToString())).ToList();
             model.MedicationManufacturers = medManufacturers.Select(s => new SelectListItem(s.Manufacturer, s.MedicationManufacturerId.ToString())).ToList();
             model.Days = weekdays.Select(d => new CreateMedicationDay()

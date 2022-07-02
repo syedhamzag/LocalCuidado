@@ -1,4 +1,5 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.ClientMedication;
+using AwesomeCare.DataTransferObject.DTOs.ClientRota;
 using AwesomeCare.DataTransferObject.DTOs.ClientRotaType;
 using AwesomeCare.DataTransferObject.DTOs.Medication;
 using AwesomeCare.DataTransferObject.DTOs.RotaDayofWeek;
@@ -44,6 +45,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public List<SelectListItem> Gaps { get; set; }
 
         public List<CreateMedicationDay> Days { get; set; }
-       
+        public List<GetClientRota> ClientRotas { get; set; } = new List<GetClientRota>();
+        public List<SelectListItem> Rotas { get; set; } = new List<SelectListItem>();
+
     }
 }
