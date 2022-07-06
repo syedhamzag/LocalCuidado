@@ -493,8 +493,8 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Medications(int clientId)
         {
             ViewBag.ClientId = clientId;
-            var medications = await _clientService.GetMedications(clientId);
-            return View(medications);
+            var med = await _clientService.GetMedications(clientId);
+            return View(med);
         }
 
 
@@ -521,7 +521,7 @@ namespace AwesomeCare.Admin.Controllers
                 RotaTypes = rotaTypes.Select(r => new CreateMedicationPeriod()
                 {
                     RotaType = r.RotaType,
-                    ClientRotaTypeId = r.ClientRotaTypeId
+                    ClientRotaTypeId = r.ClientRotaTypeId,
                 }).ToList()
             }).ToList();
 
@@ -554,7 +554,10 @@ namespace AwesomeCare.Admin.Controllers
                     RotaDayofWeekId = item.RotaDayofWeekId,
                     ClientMedicationPeriod = item.RotaTypes.Where(s => s.IsSelected).Select(n => new PostClientMedicationPeriod
                     {
-                        ClientRotaTypeId = n.ClientRotaTypeId
+                        ClientRotaTypeId = n.ClientRotaTypeId,
+                        RotaId = n.CRotaId,
+                        StartTime = n.CStartTime,
+                        StopTime = n.CStopTime
                     }).ToList()
                 });
             }

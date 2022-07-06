@@ -387,7 +387,11 @@ namespace AwesomeCare.API.Controllers
                                                                                              ClientRotaTypeId = cltp.ClientRotaTypeId,
                                                                                              ClientMedicationDayId = pd.ClientMedicationDayId,
                                                                                              ClientMedicationPeriodId = pd.ClientMedicationPeriodId,
-                                                                                             RotaType = cltp.RotaType
+                                                                                             RotaType = cltp.RotaType,
+                                                                                             RotaId = pd.RotaId,
+                                                                                             StopTime = pd.StopTime,
+                                                                                             StartTime = pd.StartTime
+                                                                                             
                                                                                          }).ToList(),
                                                            }).ToList(),
                                     Dossage = clmd.Dossage,
@@ -450,7 +454,10 @@ namespace AwesomeCare.API.Controllers
                                                                                              ClientRotaTypeId = cltp.ClientRotaTypeId,
                                                                                              ClientMedicationDayId = pd.ClientMedicationDayId,
                                                                                              ClientMedicationPeriodId = pd.ClientMedicationPeriodId,
-                                                                                             RotaType = cltp.RotaType
+                                                                                             RotaType = cltp.RotaType,
+                                                                                             RotaId = pd.RotaId,
+                                                                                             StartTime = pd.StartTime,
+                                                                                             StopTime = pd.StopTime
                                                                                          }).ToList(),
                                                            }).ToList(),
                                     Dossage = clmd.Dossage,

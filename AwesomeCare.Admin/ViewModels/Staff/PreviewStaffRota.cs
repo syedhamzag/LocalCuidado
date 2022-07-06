@@ -21,6 +21,7 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         public List<SelectListItem> Selections { get; set; }
         public string StartDate { get; set; }
         public string StopDate { get; set; }
+        public bool IsMedication { get; set; }
     }
 
     public class PreviewStaffRotaDate

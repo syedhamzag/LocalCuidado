@@ -48,6 +48,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<StaffRotaPeriod> _staffRotaPeriodRepository;
         private IGenericRepository<StaffRotaPartner> _staffRotaPartnerRepository;
         private IGenericRepository<StaffRota> _staffRotaRepository;
+        private IGenericRepository<StaffMedRota> _staffMedRotaRepository;
         private IGenericRepository<StaffRotaDynamicAddition> _staffDynamicAdditionRepository;
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
         private IGenericRepository<Client> _clientRepository;
@@ -59,7 +60,7 @@ namespace AwesomeCare.API.Controllers
 
         public StaffInfoController(IGenericRepository<StaffPersonalInfo> staffInfoRepository,
             IGenericRepository<StaffRotaDynamicAddition> staffDynamicAdditionRepository,
-            IGenericRepository<StaffRota> staffRotaRepository, ILogger<StaffInfoController> logger,
+            IGenericRepository<StaffRota> staffRotaRepository, IGenericRepository<StaffMedRota> staffMedRotaRepository, ILogger<StaffInfoController> logger,
             AwesomeCareDbContext dbContext, IGenericRepository<StaffRotaPartner> staffRotaPartnerRepository,
             IGenericRepository<StaffRotaPeriod> staffRotaPeriodRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository,
             IGenericRepository<StaffRating> staffRatingRepository,
@@ -79,6 +80,7 @@ namespace AwesomeCare.API.Controllers
             _clientRepository = clientRepository;
             this.applicationUserRepository = applicationUserRepository;
             this.staffWorkTeamRepository = staffWorkTeamRepository;
+            _staffMedRotaRepository = staffMedRotaRepository;
         }
 
         [HttpGet("{id}", Name = "GetStaffById")]
@@ -458,8 +460,22 @@ namespace AwesomeCare.API.Controllers
 
             return Ok();
         }
+        [HttpPost("MedicationRota/Create")]
+        [ProducesResponseType(statusCode: StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreateStaffMedRota([FromBody] List<PostStaffMedRota> model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(model);
+            }
+            var postEntity = Mapper.Map<List<StaffMedRota>>(model);
 
-       
+            await _staffMedRotaRepository.InsertEntities(postEntity);
+
+
+            return Ok();
+        }
+
 
         [HttpGet("Rota/Get/{id}")]
         [ProducesResponseType(statusCode: StatusCodes.Status200OK)]

@@ -10,5 +10,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
     {
         public bool IsSelected { get; set; } 
         public string RotaType { get; set; }
+        public int CRotaId { get; set; }
+        public string CStartTime { get; set; }
+        public string CStopTime { get; set; }
     }
 }

@@ -9,6 +9,9 @@ namespace AwesomeCare.Model.Models
         public int ClientMedicationPeriodId { get; set; }
         public int ClientRotaTypeId { get; set; }
         public int ClientMedicationDayId { get; set; }
+        public int RotaId { get; set; }
+        public string StartTime { get; set; }
+        public string StopTime { get; set; }
 
 
         public virtual ClientMedicationDay ClientMedicationDay { get; set; }

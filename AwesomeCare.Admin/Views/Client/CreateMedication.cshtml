@@ -171,20 +171,20 @@
                                                 var rotasList = new List<SelectListItem>();
                                                 if (rotaDywk != null)
                                                 {
-                                                    <label class="fancy-checkbox">
-                                                        <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
-                                                        <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox" checked>
-                                                        <span> @Model.Days[i].RotaTypes[j].RotaType</span>
-                                                    </label>
-                                                    <br />
                                                     foreach (var m in Model.Rotas)
                                                     {
                                                         var sl = new SelectListItem(m.Text, m.Value);
                                                         sl.Selected = sl.Value == rotaDywk.RotaId.ToString();
                                                         rotasList.Add(sl);
                                                     }
-                                                    @Html.DropDownList("rota", rotasList, "select rota", new { @class = "form-control" })
-                                                    <label>@string.Concat("Start: ", rotaDywk.StartTime, " Stop:", rotaDywk.StopTime)</label>
+                                                    <label class="fancy-checkbox">
+                                                        <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
+                                                        <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox" checked>
+                                                        <span> @Model.Days[i].RotaTypes[j].RotaType</span>
+                                                        <select asp-for="@Model.Days[i].RotaTypes[j].CRotaId" asp-items="rotasList" class="form-control"></select>
+                                                    <input type="text" value="@rotaDywk.StartTime" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                    <input type="text" value="@rotaDywk.StopTime"  asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                    </label>                                                                                                      
                                                 }
                                                 else
                                                 {
@@ -192,8 +192,10 @@
                                                         <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
                                                         <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox">
                                                         <span> @Model.Days[i].RotaTypes[j].RotaType</span>
+                                                        <select asp-for="@Model.Days[i].RotaTypes[j].CRotaId" asp-items="@Model.Rotas" class="form-control"></select>
+                                                    <input type="text" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                    <input type="text" asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
                                                     </label>
-
                                                 }
                                             }
                                         </div>

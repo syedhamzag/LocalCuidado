@@ -30,6 +30,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 using AwesomeCare.DataTransferObject.DTOs.User;
 using AwesomeCare.Services.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -285,82 +286,135 @@ namespace AwesomeCare.Admin.Controllers
         [Route("[Controller]/Rota/Preview", Name = "PreviewRota")]
         public async Task<IActionResult> PreviewRota(PreviewStaffRota model)
         {
-            List<PostStaffRota> rotas = new List<PostStaffRota>();
-            var rotaDayofWeeks = await _rotaDayofWeekService.Get();
-
-            foreach (var day in model.RotaDays)
+            if (model.IsMedication)
             {
-                string dayOfWeek = day.Date.DayOfWeek.ToString();
-                int? dayOfWeekId = rotaDayofWeeks.FirstOrDefault(d => d.DayofWeek.Equals(dayOfWeek, StringComparison.InvariantCultureIgnoreCase))?.RotaDayofWeekId;
+                List<PostStaffMedRota> rotas = new List<PostStaffMedRota>();
+                var rotaDayofWeeks = await _rotaDayofWeekService.Get();
 
-
-                var rotaId = day.RotaId;
-
-
-                foreach (var staff in day.SelectedStaffs)
+                foreach (var day in model.RotaDays)
                 {
-                    if (dayOfWeekId.HasValue)
+                    string dayOfWeek = day.Date.DayOfWeek.ToString();
+                    int? dayOfWeekId = rotaDayofWeeks.FirstOrDefault(d => d.DayofWeek.Equals(dayOfWeek, StringComparison.InvariantCultureIgnoreCase))?.RotaDayofWeekId;
+
+
+                    var rotaId = day.RotaId;
+
+
+                    foreach (var staff in day.SelectedStaffs)
                     {
-                        var rota = new PostStaffRota();
-                        rota.Remark = day.Remark;
-                        rota.ReferenceNumber = DateTime.Now.ToString("yyyyMMddhhmmssms") + day.SelectedStaffs.IndexOf(staff);
-                        rota.RotaDate = day.Date;//.ToString("MM/dd/yyyy");
-                        rota.RotaId = day.RotaId;
-                        rota.RotaDayofWeekId = dayOfWeekId;
-
-                        foreach (var rp in day.RotaTypes)
+                        if (dayOfWeekId.HasValue)
                         {
-                            var attachedRotaClients = await rotaTaskService.GetAttachRotaClientAsync(rotaId, dayOfWeekId.Value, rp.ClientRotaTypeId);
-                            foreach (var rotaClient in attachedRotaClients)
-                            {
-                                rota.StaffRotaPeriods.Add(new PostStaffRotaPeriod
-                                {
-                                    ClientRotaTypeId = rp.ClientRotaTypeId,
-                                    ClientId = rotaClient.ClientId
-                                });
-                            }
+                            var rota = new PostStaffMedRota();
+                            rota.Remark = day.Remark;
+                            rota.ReferenceNumber = DateTime.Now.ToString("yyyyMMddhhmmssms") + day.SelectedStaffs.IndexOf(staff);
+                            rota.RotaDate = day.Date;//.ToString("MM/dd/yyyy");
+                            rota.RotaId = day.RotaId;
+                            rota.RotaDayofWeekId = dayOfWeekId;
+                            rota.Staff = staff;
+                            rotas.Add(rota);
                         }
-
-
-                        rota.Staff = staff;
-                        rota.StaffRotaPartners = (from pt in day.SelectedStaffs
-                                                  where pt != staff
-                                                  select new PostStaffRotaPartner
-                                                  {
-                                                      StaffId = pt
-                                                  }).ToList();
-
-                        rota.StaffRotaItem = (from item in day.Items
-                                              select new PostStaffRotaItem
-                                              {
-                                                  StaffRotaDynamicAdditionId = item
-                                              }).ToList();
-                        rotas.Add(rota);
                     }
+
+
                 }
 
 
+                var result = await _staffService.CreateMedRota(rotas);
+                var content = await result.Content.ReadAsStringAsync();
+                SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Staff Rota Successfully saved" : "An Error Occurred" });
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    _logger.LogError(content, "PreviewRota");
+                    var staffs = await _staffService.GetStaffs();
+                    model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                    return View(model);
+                }
+
+
+                string sdate = DateTime.TryParseExact(model.StartDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime sdatetime) ? sdatetime.ToString("yyyy-MM-dd") : model.StartDate;
+                string edate = DateTime.TryParseExact(model.StopDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime edatetime) ? edatetime.ToString("yyyy-MM-dd") : model.StopDate;
+
+                return RedirectToAction("RotaAdmin", "Rotering", new { startDate = sdate, stopDate = edate });
             }
+            else
+            { 
+                List<PostStaffRota> rotas = new List<PostStaffRota>();
+                var rotaDayofWeeks = await _rotaDayofWeekService.Get();
+
+                foreach (var day in model.RotaDays)
+                {
+                    string dayOfWeek = day.Date.DayOfWeek.ToString();
+                    int? dayOfWeekId = rotaDayofWeeks.FirstOrDefault(d => d.DayofWeek.Equals(dayOfWeek, StringComparison.InvariantCultureIgnoreCase))?.RotaDayofWeekId;
 
 
-            var result = await _staffService.CreateRota(rotas);
-            var content = await result.Content.ReadAsStringAsync();
-            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Staff Rota Successfully saved" : "An Error Occurred" });
+                    var rotaId = day.RotaId;
 
-            if (!result.IsSuccessStatusCode)
-            {
-                _logger.LogError(content, "PreviewRota");
-                var staffs = await _staffService.GetStaffs();
-                model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-                return View(model);
+
+                    foreach (var staff in day.SelectedStaffs)
+                    {
+                        if (dayOfWeekId.HasValue)
+                        {
+                            var rota = new PostStaffRota();
+                            rota.Remark = day.Remark;
+                            rota.ReferenceNumber = DateTime.Now.ToString("yyyyMMddhhmmssms") + day.SelectedStaffs.IndexOf(staff);
+                            rota.RotaDate = day.Date;//.ToString("MM/dd/yyyy");
+                            rota.RotaId = day.RotaId;
+                            rota.RotaDayofWeekId = dayOfWeekId;
+
+                            foreach (var rp in day.RotaTypes)
+                            {
+                                var attachedRotaClients = await rotaTaskService.GetAttachRotaClientAsync(rotaId, dayOfWeekId.Value, rp.ClientRotaTypeId);
+                                foreach (var rotaClient in attachedRotaClients)
+                                {
+                                    rota.StaffRotaPeriods.Add(new PostStaffRotaPeriod
+                                    {
+                                        ClientRotaTypeId = rp.ClientRotaTypeId,
+                                        ClientId = rotaClient.ClientId
+                                    });
+                                }
+                            }
+
+
+                            rota.Staff = staff;
+                            rota.StaffRotaPartners = (from pt in day.SelectedStaffs
+                                                      where pt != staff
+                                                      select new PostStaffRotaPartner
+                                                      {
+                                                          StaffId = pt
+                                                      }).ToList();
+
+                            rota.StaffRotaItem = (from item in day.Items
+                                                  select new PostStaffRotaItem
+                                                  {
+                                                      StaffRotaDynamicAdditionId = item
+                                                  }).ToList();
+                            rotas.Add(rota);
+                        }
+                    }
+
+
+                }
+
+
+                var result = await _staffService.CreateRota(rotas);
+                var content = await result.Content.ReadAsStringAsync();
+                SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Staff Rota Successfully saved" : "An Error Occurred" });
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    _logger.LogError(content, "PreviewRota");
+                    var staffs = await _staffService.GetStaffs();
+                    model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+                    return View(model);
+                }
+            
+
+                string sdate = DateTime.TryParseExact(model.StartDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime sdatetime) ? sdatetime.ToString("yyyy-MM-dd") : model.StartDate;
+                string edate = DateTime.TryParseExact(model.StopDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime edatetime) ? edatetime.ToString("yyyy-MM-dd") : model.StopDate;
+
+                return RedirectToAction("RotaAdmin", "Rotering", new { startDate = sdate, stopDate = edate });
             }
-
-
-            string sdate = DateTime.TryParseExact(model.StartDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime sdatetime) ? sdatetime.ToString("yyyy-MM-dd") : model.StartDate;
-            string edate = DateTime.TryParseExact(model.StopDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime edatetime) ? edatetime.ToString("yyyy-MM-dd") : model.StopDate;
-
-            return RedirectToAction("RotaAdmin", "Rotering", new { startDate = sdate, stopDate = edate });
-
         }
 
         [HttpGet("Profile/Edit", Name = "EditProfile")]

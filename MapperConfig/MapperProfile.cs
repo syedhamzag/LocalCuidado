@@ -1101,7 +1101,11 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
                 .ForMember(dto => dto.Rota, mem => mem.Ignore());
             #endregion
-
+            #region StaffMedRota
+            CreateMap<PostStaffMedRota, StaffMedRota>()
+                .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
+                .ForMember(dto => dto.Rota, mem => mem.Ignore());
+            #endregion
             #region StaffRotaPeriod
             CreateMap<PostStaffRotaPeriod, StaffRotaPeriod>()
                 .ForMember(dto => dto.StaffRotaPeriodId, mem => mem.Ignore())
@@ -1139,7 +1143,6 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
             //  CreateMap<StaffRotaPeriod, GetStaffRotaPeriod>();
             #endregion
-
             #region StaffRotaPartner
             CreateMap<PostStaffRotaPartner, StaffRotaPartner>()
                 .ForMember(dto => dto.StaffRotaPartnerId, mem => mem.Ignore())

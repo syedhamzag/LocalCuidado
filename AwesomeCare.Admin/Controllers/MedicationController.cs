@@ -164,29 +164,6 @@ namespace AwesomeCare.Admin.Controllers
             var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : stopDate;
             var medTracker = await _medicationService.MedTracker(sdate, edate);
 
-
-            //var groupedByPeriod = (from rt in rotaAdmin
-            //                       group rt by rt.Period into rtGrp
-            //                       select new
-            //                       {
-            //                           Period = rtGrp.Key,
-            //                           Trackers = rtGrp.ToList()
-            //                       }).ToList();
-
-            //List<GroupLiveMed> groupedRota = null;
-            //var todaysDate = DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd");
-            //var currentTime = DateTimeOffset.UtcNow.DateTime.ToPortalDateTime().TimeOfDay;
-            //groupedRota = (from rt in rotaAdmin
-            //               group rt by rt.Staff into rtGrp
-            //               select new GroupLiveMed
-            //               {
-            //                   StaffName = rtGrp.Key,
-            //                   medTrackers = rtGrp.Where(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None) <= currentTime).OrderBy(t => TimeSpan.ParseExact(t.StartTime, "h\\:mm", System.Globalization.CultureInfo.CurrentCulture, System.Globalization.TimeSpanStyles.None)).ToList()
-
-            //               }).ToList();
-
-            //liveRotaViewModel.groupLiveMeds = groupedRota;
-
             return View(medTracker);
         }
     }

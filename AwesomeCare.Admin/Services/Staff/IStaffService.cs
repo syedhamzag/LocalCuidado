@@ -37,6 +37,9 @@ namespace AwesomeCare.Admin.Services.Staff
         [Post("/StaffInfo/Rota/Create")]
         Task<HttpResponseMessage> CreateRota([Body]List<PostStaffRota> postStaffRotas);
 
+        [Post("/StaffInfo/MedicationRota/Create")]
+        Task<HttpResponseMessage> CreateMedRota([Body] List<PostStaffMedRota> postStaffRotas);
+
         [Post("/StaffInfo/Rota/Dynamic")]
         Task<HttpResponseMessage> CreateRotaSelection([Body]PostStaffRotaDynamicAddition model);
 
