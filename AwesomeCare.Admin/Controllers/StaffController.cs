@@ -335,7 +335,7 @@ namespace AwesomeCare.Admin.Controllers
                 string sdate = DateTime.TryParseExact(model.StartDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime sdatetime) ? sdatetime.ToString("yyyy-MM-dd") : model.StartDate;
                 string edate = DateTime.TryParseExact(model.StopDate, "MM/dd/yyyy", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime edatetime) ? edatetime.ToString("yyyy-MM-dd") : model.StopDate;
 
-                return RedirectToAction("RotaAdmin", "Rotering", new { startDate = sdate, stopDate = edate });
+                return RedirectToAction("MedTracker", "Medication", new { startDate = sdate, stopDate = edate });
             }
             else
             { 

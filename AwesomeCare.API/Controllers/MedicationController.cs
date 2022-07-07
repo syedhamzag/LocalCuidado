@@ -8,6 +8,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Medication;
 using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
+using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.EqualityComparers;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,7 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<ClientMedicationPeriod> _medicationPeriodRepository;
         private IGenericRepository<ClientMedicationDay> _medicationDayRepository;
         private IGenericRepository<ClientRotaDays> _clientRotaDaysRepository;
-        private IGenericRepository<StaffMedTracker> _staffMedTrackerRepository;
+        private IGenericRepository<StaffMedRota> _staffMedRotaRepository;
         private IGenericRepository<ClientRotaType> _clientRotaTypeRepository;
         private IGenericRepository<Client> _clientRepository;
         private IGenericRepository<StaffPersonalInfo> _staffPersonalInfoRepository;
@@ -36,7 +37,7 @@ namespace AwesomeCare.API.Controllers
             IGenericRepository<ClientMedicationPeriod> medicationPeriodRepository, IGenericRepository<ClientMedicationDay> medicationDayRepository, 
             IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<ClientRotaDays> clientRotaDaysRepository, 
             IGenericRepository<Client> clientRepository, IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<Rota> rotaRepository,
-            IGenericRepository<StaffMedTracker> staffMedTrackerRepository, IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository)
+            IGenericRepository<StaffMedRota> staffMedRotaRepository, IGenericRepository<StaffPersonalInfo> staffPersonalInfoRepository)
         {
             _medicationRepository = medicationRepository;
             _medicationManufacturerRepository = medicationManufacturerRepository;
@@ -47,10 +48,10 @@ namespace AwesomeCare.API.Controllers
             _clientRepository = clientRepository;
             _clientRotaTypeRepository = clientRotaTypeRepository;
             _staffPersonalInfoRepository = staffPersonalInfoRepository;
-            _staffMedTrackerRepository = staffMedTrackerRepository;
+            _staffMedRotaRepository = staffMedRotaRepository;
             _rotaRepository = rotaRepository;
         }
-
+        #region Medication
         /// <summary>
         /// Get Medication by id
         /// </summary>
@@ -139,7 +140,7 @@ namespace AwesomeCare.API.Controllers
 
         }
 
-
+        #endregion
         #region Manufacturer
         /// <summary>
         /// Get Manufacturer by id
@@ -240,19 +241,19 @@ namespace AwesomeCare.API.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("[action]")]
-        [ProducesResponseType(type: typeof(GetStaffMedTracker), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(type: typeof(GetStaffMedRota), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] PostStaffMedTracker model)
+        public async Task<IActionResult> Create([FromBody] PostStaffMedRota model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var postEntity = Mapper.Map<StaffMedTracker>(model);
-            var newEntity = await _staffMedTrackerRepository.InsertEntity(postEntity);
-            var getEntity = Mapper.Map<GetStaffMedTracker>(newEntity);
+            var postEntity = Mapper.Map<StaffMedRota>(model);
+            var newEntity = await _staffMedRotaRepository.InsertEntity(postEntity);
+            var getEntity = Mapper.Map<GetStaffMedRota>(newEntity);
 
             return Ok(getEntity);
         }
@@ -277,18 +278,18 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest($"Invalid StopDate format, Format is {format}");
             }
 
-            var tracker = (from smt in _staffMedTrackerRepository.Table
-                           join med in _clientMedicationRepository.Table on smt.ClientMedId equals med.ClientMedicationId
-                           join day in _medicationDayRepository.Table on med.ClientMedicationId equals day.ClientMedicationId
-                           join period in _medicationPeriodRepository.Table on day.ClientMedicationDayId equals period.ClientMedicationDayId
+            var tracker = (from smt in _staffMedRotaRepository.Table
+                           join period in _medicationPeriodRepository.Table on smt.RotaId equals period.RotaId
+                           join day in _medicationDayRepository.Table on period.ClientMedicationDayId equals day.ClientMedicationDayId
+                           join med in _clientMedicationRepository.Table on day.ClientMedicationId equals med.ClientMedicationId
                            join c in _clientRepository.Table on med.ClientId equals c.ClientId
                            join crt in _clientRotaTypeRepository.Table on period.ClientRotaTypeId equals crt.ClientRotaTypeId
-                           join st in _staffPersonalInfoRepository.Table on smt.StaffPersonalInfoId equals st.StaffPersonalInfoId
                            join r in _rotaRepository.Table on smt.RotaId equals r.RotaId
-                           where smt.MedTrackDate >= startDate && smt.MedTrackDate <= stopDate
+                           join st in _staffPersonalInfoRepository.Table on smt.Staff equals st.StaffPersonalInfoId
+                           where smt.RotaDate >= startDate && smt.RotaDate <= stopDate
                          select new MedTracker
                          {
-                             RotaDate = smt.MedTrackDate,
+                             RotaDate = smt.RotaDate,
                              RotaName = r.RotaName,
                              ClientId = med.ClientId,
                              ClientIdNumber = c.IdNumber,
