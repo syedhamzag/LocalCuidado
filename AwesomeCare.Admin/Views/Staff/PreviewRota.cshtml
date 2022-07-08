@@ -23,7 +23,10 @@
             </div>
             <div class="card-body">
                 <form asp-route="PreviewRota" method="post">
-                    <input type="checkbox" asp-for="IsMedication" />
+                    <label>
+                        <input type="checkbox" asp-for="IsMedication" checked="checked" />
+                        Medication
+                    </label>
                    <input type="hidden" asp-for="StartDate" />
                    <input type="hidden" asp-for="StopDate" />
 

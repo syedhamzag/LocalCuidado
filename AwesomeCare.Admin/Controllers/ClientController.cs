@@ -510,6 +510,8 @@ namespace AwesomeCare.Admin.Controllers
             var rotaTasks = await _rotaTaskService.Get();
             var clientRotas = await _clientRotaService.GetForEdit(clientId.Value);
             model.ClientId = clientId.Value;
+            var client = await _clientService.GetClient(model.ClientId);
+            model.ClientName = client.Firstname + " " + client.Middlename + " " + client.Surname;
             model.Rotas = rotas.Select(r => new SelectListItem { Text = r.RotaName, Value = r.RotaId.ToString() }).ToList();
             model.ClientRotas = clientRotas;
             model.Medications = medNames.Select(s => new SelectListItem(string.Concat(s.MedicationName, " (", s.Strength, ")"), s.MedicationId.ToString())).ToList();

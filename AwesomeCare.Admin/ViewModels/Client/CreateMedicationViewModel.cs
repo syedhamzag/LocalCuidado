@@ -48,5 +48,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public List<GetClientRota> ClientRotas { get; set; } = new List<GetClientRota>();
         public List<SelectListItem> Rotas { get; set; } = new List<SelectListItem>();
 
+        public string ClientName { get; set; }
+
     }
 }

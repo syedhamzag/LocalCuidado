@@ -9,7 +9,7 @@
     <div class="col-lg-12 col-md-12">
         <div class="card planned_task">
             <div class="card-header">
-                <h2>Create Medication</h2>
+                <h2>@Model.ClientName</h2>
 
             </div>
             <div class="card-body">
@@ -167,7 +167,7 @@
 
 
 
-                                                var rotaDywk = Model.ClientRotas.FirstOrDefault(c => c.ClientRotaTypeId == Model.Days[i].RotaTypes[j].ClientRotaTypeId)?.ClientRotaDays?.FirstOrDefault(d => d.RotaDayofWeekId == Model.Days[i].RotaDayofWeekId);
+                                                var rotaDywk = Model.ClientRotas.Where(c => c.ClientRotaTypeId == Model.Days[i].RotaTypes[j].ClientRotaTypeId).FirstOrDefault().ClientRotaDays?.Where(d => d.RotaDayofWeekId == Model.Days[i].RotaDayofWeekId).FirstOrDefault();
                                                 var rotasList = new List<SelectListItem>();
                                                 if (rotaDywk != null)
                                                 {
@@ -181,9 +181,10 @@
                                                         <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
                                                         <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox" checked>
                                                         <span> @Model.Days[i].RotaTypes[j].RotaType</span>
-                                                        <select asp-for="@Model.Days[i].RotaTypes[j].CRotaId" asp-items="rotasList" class="form-control"></select>
-                                                    <input type="text" value="@rotaDywk.StartTime" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
-                                                    <input type="text" value="@rotaDywk.StopTime"  asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                        @Html.DropDownList($"{string.Concat(Model.Days[i].RotaDayofWeekId,Model.Days[i].RotaTypes[j].ClientRotaTypeId)}-rota", rotasList, "select rota", new { @class = "form-control" })
+                                                        <input type="hidden" asp-for="@Model.Days[i].RotaTypes[j].CRotaId" value="@rotaDywk.RotaId" />
+                                                        <input type="text" value="@rotaDywk.StartTime" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                        <input type="text" value="@rotaDywk.StopTime"  asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
                                                     </label>                                                                                                      
                                                 }
                                                 else
