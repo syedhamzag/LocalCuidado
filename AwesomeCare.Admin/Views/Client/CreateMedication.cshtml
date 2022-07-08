@@ -165,39 +165,44 @@
                                             @for (int j = 0; j < Model.Days[i].RotaTypes.Count; j++)
                                             {
 
-
-
-                                                var rotaDywk = Model.ClientRotas.Where(c => c.ClientRotaTypeId == Model.Days[i].RotaTypes[j].ClientRotaTypeId).FirstOrDefault().ClientRotaDays?.Where(d => d.RotaDayofWeekId == Model.Days[i].RotaDayofWeekId).FirstOrDefault();
-                                                var rotasList = new List<SelectListItem>();
-                                                if (rotaDywk != null)
-                                                {
-                                                    foreach (var m in Model.Rotas)
+                                                if (Model.ClientRotas.Where(c => c.ClientRotaTypeId == Model.Days[i].RotaTypes[j].ClientRotaTypeId).FirstOrDefault() != null)
+                                                { 
+                                                    if (Model.ClientRotas.Where(c => c.ClientRotaTypeId == Model.Days[i].RotaTypes[j].ClientRotaTypeId).FirstOrDefault().ClientRotaDays?.FirstOrDefault().RotaDayofWeekId != null)
                                                     {
-                                                        var sl = new SelectListItem(m.Text, m.Value);
-                                                        sl.Selected = sl.Value == rotaDywk.RotaId.ToString();
-                                                        rotasList.Add(sl);
+                                                        var rotaDywk = Model.ClientRotas.Where(c => c.ClientRotaTypeId == Model.Days[i].RotaTypes[j].ClientRotaTypeId).FirstOrDefault().ClientRotaDays?.Where(d => d.RotaDayofWeekId == Model.Days[i].RotaDayofWeekId).FirstOrDefault();
+                                                        var rotasList = new List<SelectListItem>();
+                                                        if (rotaDywk != null)
+                                                        {
+                                                            foreach (var m in Model.Rotas)
+                                                            {
+                                                                var sl = new SelectListItem(m.Text, m.Value);
+                                                                sl.Selected = sl.Value == rotaDywk.RotaId.ToString();
+                                                                rotasList.Add(sl);
+                                                            }
+                                                            <label class="fancy-checkbox">
+                                                                <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
+                                                                <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox" checked>
+                                                                <span> @Model.Days[i].RotaTypes[j].RotaType</span>
+                                                                @Html.DropDownList($"{string.Concat(Model.Days[i].RotaDayofWeekId,Model.Days[i].RotaTypes[j].ClientRotaTypeId)}-rota", rotasList, "select rota", new { @class = "form-control" })
+                                                                <input type="hidden" asp-for="@Model.Days[i].RotaTypes[j].CRotaId" value="@rotaDywk.RotaId" />
+                                                                <input type="text" value="@rotaDywk.StartTime" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                                <input type="text" value="@rotaDywk.StopTime"  asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                            </label>                                                                                                      
+                                                        }
                                                     }
-                                                    <label class="fancy-checkbox">
-                                                        <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
-                                                        <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox" checked>
-                                                        <span> @Model.Days[i].RotaTypes[j].RotaType</span>
-                                                        @Html.DropDownList($"{string.Concat(Model.Days[i].RotaDayofWeekId,Model.Days[i].RotaTypes[j].ClientRotaTypeId)}-rota", rotasList, "select rota", new { @class = "form-control" })
-                                                        <input type="hidden" asp-for="@Model.Days[i].RotaTypes[j].CRotaId" value="@rotaDywk.RotaId" />
-                                                        <input type="text" value="@rotaDywk.StartTime" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
-                                                        <input type="text" value="@rotaDywk.StopTime"  asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
-                                                    </label>                                                                                                      
+                                                    
                                                 }
                                                 else
-                                                {
-                                                    <label class="fancy-checkbox">
-                                                        <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
-                                                        <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox">
-                                                        <span> @Model.Days[i].RotaTypes[j].RotaType</span>
-                                                        <select asp-for="@Model.Days[i].RotaTypes[j].CRotaId" asp-items="@Model.Rotas" class="form-control"></select>
-                                                    <input type="text" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
-                                                    <input type="text" asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
-                                                    </label>
-                                                }
+                                                    {
+                                                        <label class="fancy-checkbox">
+                                                            <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
+                                                            <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox">
+                                                            <span> @Model.Days[i].RotaTypes[j].RotaType</span>
+                                                            <select asp-for="@Model.Days[i].RotaTypes[j].CRotaId" asp-items="@Model.Rotas" class="form-control"></select>
+                                                        <input type="text" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                        <input type="text" asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                        </label>
+                                                    }
                                             }
                                         </div>
                                     </td>
