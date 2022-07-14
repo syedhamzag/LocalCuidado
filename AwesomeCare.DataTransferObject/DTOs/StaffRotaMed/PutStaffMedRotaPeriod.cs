@@ -4,11 +4,12 @@ using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.StaffRotaMed
 {
-   public class GetStaffMedRotaPeriod
+    public class PutStaffMedRotaPeriod
     {
-        public int StaffRotaPeriodId { get; set; }
         public int StaffRotaId { get; set; }
         public int ClientRotaTypeId { get; set; }
-        public string RotaType { get; set; }
+        public string StartTime { get; set; }
+        public string StopTime { get; set; }
+        public int? ClientId { get; set; }
     }
 }

@@ -607,8 +607,20 @@ namespace AwesomeCare.Admin.Controllers
             var medManufacturers = await _medicationService.GetManufacturers();
             var weekdays = await _rotaDayofWeekService.Get();
             var rotaTypes = await _clientRotaTypeService.Get();
+            var rotas = await _clientRotaNameService.Get();
             if (medication != null)
             {
+                model.Days = weekdays.Select(d => new CreateMedicationDay()
+                {
+                    DayOfWeek = d.DayofWeek,
+                    RotaDayofWeekId = d.RotaDayofWeekId,
+                    RotaTypes = rotaTypes.Select(r => new CreateMedicationPeriod()
+                    {
+                        RotaType = r.RotaType,
+                        ClientRotaTypeId = r.ClientRotaTypeId,
+                    }).ToList()
+                }).ToList();
+
                 model.ClientId = clientId;
                 model.ClientMedicationId = medication.ClientMedicationId;
                 model.TimeCritical = medication.TimeCritical;
@@ -626,17 +638,27 @@ namespace AwesomeCare.Admin.Controllers
                 model.Route = medication.Route;
                 model.Remark = medication.Remark;
                 model.ClientMedImage = medication.ClientMedImage;
+                model.Rotas = rotas.Select(r => new SelectListItem { Text = r.RotaName, Value = r.RotaId.ToString() }).ToList();
                 var daysPeriods = medication.ClientMedicationDay.ToList();
                 foreach (var item in daysPeriods)
                 {
+                    
                     model.ClientMedicationDay.Add(new PutClientMedicationDay()
                     {
                         RotaDayofWeekId = item.RotaDayofWeekId,
-                        ClientMedicationPeriod = rotaTypes.Select(n => new PutClientMedicationPeriod
+                        ClientMedicationId = item.ClientMedicationId,
+                        ClientMedicationDayId = item.ClientMedicationDayId,
+                        ClientMedicationPeriod = item.ClientMedicationPeriod.Select(s => new PutClientMedicationPeriod
                         {
-                            ClientRotaTypeId = n.ClientRotaTypeId
+                            ClientMedicationDayId = s.ClientMedicationDayId,
+                            ClientMedicationPeriodId = s.ClientMedicationPeriodId,
+                            ClientRotaTypeId = s.ClientRotaTypeId,
+                            RotaId = s.RotaId,
+                            StartTime = s.StartTime,
+                            StopTime = s.StopTime
+
                         }).ToList()
-                    });
+                });
                 }
             }
 
@@ -655,17 +677,24 @@ namespace AwesomeCare.Admin.Controllers
             }
 
             var daysPeriods = model.Days.Where(d => d.IsSelected).ToList();
-            foreach (var item in daysPeriods)
-            {
-                model.ClientMedicationDay.Add(new PutClientMedicationDay()
-                {
-                    RotaDayofWeekId = item.RotaDayofWeekId,
-                    ClientMedicationPeriod = item.RotaTypes.Where(s => s.IsSelected).Select(n => new PutClientMedicationPeriod
-                    {
-                        ClientRotaTypeId = n.ClientRotaTypeId
-                    }).ToList()
-                });
-            }
+            //foreach (var item in daysPeriods)
+            //{
+            //    model.ClientMedicationDay.Add(new PutClientMedicationDay()
+            //    {
+            //        RotaDayofWeekId = item.RotaDayofWeekId,
+            //        ClientMedicationDayId = item.RotaTypes.Where(s => s.IsSelected).Select(n => n.ClientMedicationDayId).FirstOrDefault(),
+            //        ClientMedicationId = model.ClientMedicationId,
+            //        ClientMedicationPeriod = item.RotaTypes.Where(s => s.IsSelected).Select(n => new PutClientMedicationPeriod
+            //        {
+            //            ClientRotaTypeId = n.ClientRotaTypeId,
+            //            RotaId = n.RotaId,
+            //            StartTime = n.StartTime,
+            //            StopTime = n.StopTime,
+            //            ClientMedicationDayId = n.ClientMedicationDayId,
+            //            ClientMedicationPeriodId = n.
+            //        }).ToList()
+            //    }); 
+            //}
             if (model.Evidence != null)
             {
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);

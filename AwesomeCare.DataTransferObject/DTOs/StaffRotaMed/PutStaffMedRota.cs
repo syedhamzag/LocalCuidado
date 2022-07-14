@@ -4,19 +4,20 @@ using System.Text;
 
 namespace AwesomeCare.DataTransferObject.DTOs.StaffRotaMed
 {
-   public class GetStaffMedRota
+    public class PutStaffMedRota
     {
-        public GetStaffMedRota()
+        public PutStaffMedRota()
         {
-            Periods = new List<GetStaffMedRotaPeriod>();
+            StaffMedRotaPeriods = new List<PutStaffMedRotaPeriod>();
         }
+        public int StaffRotaId { get; set; }
         public DateTime RotaDate { get; set; }
-        public int StaffId { get; set; }
-        public string Staff { get; set; }
+        public int Staff { get; set; }
         public int RotaId { get; set; }
+        public int? RotaDayofWeekId { get; set; }
         public string Remark { get; set; }
         public string ReferenceNumber { get; set; }
 
-        public List<GetStaffMedRotaPeriod> Periods { get; set; }
+        public List<PutStaffMedRotaPeriod> StaffMedRotaPeriods { get; set; }
     }
 }

@@ -39,5 +39,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public List<SelectListItem> Gaps { get; set; }
 
         public List<CreateMedicationDay> Days { get; set; }
+        public List<SelectListItem> Rotas { get; set; } = new List<SelectListItem>();
+
+        public string ClientName { get; set; }
     }
 }

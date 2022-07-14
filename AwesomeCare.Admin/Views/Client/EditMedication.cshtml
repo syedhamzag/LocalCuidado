@@ -137,7 +137,8 @@
                                     <th>
                                         <label class="fancy-checkbox">
                                             <input asp-for="@Model.Days[i].RotaDayofWeekId" type="hidden">
-                                            <input asp-for="@Model.Days[i].IsSelected" type="checkbox">
+                                            <input asp-for="@Model.ClientMedicationDay[i]." type="hidden">
+                                            <input asp-for="@Model.Days[i].IsSelected" checked="checked" type="checkbox">
                                             <span>@Model.Days[i].DayOfWeek</span>
                                         </label>
                                     </th>
@@ -149,16 +150,33 @@
                             <tr>
                                 @for (int i = 0; i < Model.Days.Count; i++)
                                 {
+                                    <input type="hidden" asp-for="@Model.ClientMedicationDay[i].ClientMedicationDayId" />
+                                    <input type="hidden" asp-for="@Model.ClientMedicationDay[i].ClientMedicationId" />
+                                    <input type="hidden" asp-for="@Model.ClientMedicationDay[i].RotaDayofWeekId" />
                                     <td>
                                         <div>
                                             @for (int j = 0; j < Model.Days[i].RotaTypes.Count; j++)
                                             {
-                                                <label class="fancy-checkbox">
-                                                    <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
-                                                    <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox">
-                                                    <span> @Model.Days[i].RotaTypes[j].RotaType</span>
-                                                </label>
-                                                <br />
+                                                        var rotasList = new List<SelectListItem>();
+                                                        foreach (var m in Model.Rotas)
+                                                        {
+                                                                var sl = new SelectListItem(m.Text, m.Value);
+                                                                sl.Selected = sl.Value == Model.ClientMedicationDay[i].ClientMedicationPeriod[j].RotaId.ToString();
+                                                                rotasList.Add(sl);
+                                                        }
+                                                        <label class="fancy-checkbox">
+                                                                <input type="hidden" asp-for="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].ClientMedicationDayId" />
+                                                                <input type="hidden" asp-for="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].ClientMedicationPeriodId" />
+                                                                <input asp-for="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].ClientRotaTypeId" type="hidden">
+                                                                <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox" checked="checked">
+                                                                <span> @Model.Days[i].RotaTypes[j].RotaType</span>
+                                                                <span>
+                                                                    @Html.DropDownList($"{string.Concat(Model.Days[i].RotaDayofWeekId,Model.Days[i].RotaTypes[j].ClientRotaTypeId)}-rota", rotasList, "select rota", new { @class = "form-control", @onchange="getRotaId(this)" })
+                                                                    <input type="hidden" asp-for="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].RotaId" value="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].RotaId" />
+                                                                </span>
+                                                                <input type="text" value="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].StartTime" asp-for="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].StartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                                <input type="text" value="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].StopTime"  asp-for="@Model.ClientMedicationDay[i].ClientMedicationPeriod[j].StopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                                        </label>
                                             }
                                         </div>
                                     </td>
@@ -173,5 +191,13 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function getRotaId(element)
+    {
+        var rotaId = element.value;
+        var rota = $(element).siblings('input');
+        $(rota).val(rotaId);
+    }
+</script>
 
 

@@ -35,6 +35,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffBlackList;
 using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaMed;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaPeriod;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaTask;
 using AwesomeCare.DataTransferObject.DTOs.StaffShiftBooking;

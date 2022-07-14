@@ -25,6 +25,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffReference;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaMed;
 using AwesomeCare.DataTransferObject.DTOs.StaffShadowing;
 using AwesomeCare.DataTransferObject.DTOs.StaffSpotCheck;
 using AwesomeCare.DataTransferObject.DTOs.StaffSupervision;

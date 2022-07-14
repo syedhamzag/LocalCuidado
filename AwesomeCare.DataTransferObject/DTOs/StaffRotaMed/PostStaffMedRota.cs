@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AwesomeCare.DataTransferObject.DTOs.StaffRota
+namespace AwesomeCare.DataTransferObject.DTOs.StaffRotaMed
 {
   public  class PostStaffMedRota
     {

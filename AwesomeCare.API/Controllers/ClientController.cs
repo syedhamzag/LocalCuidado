@@ -347,7 +347,34 @@ namespace AwesomeCare.API.Controllers
             }
 
         }
+        /// <summary>
+        /// Update Client Medication
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("Medication")]
+        [ProducesResponseType(type: typeof(GetClientMedication), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> PutMedication([FromBody] PutClientMedication model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(model);
+                }
+                var entity = Mapper.Map<ClientMedication>(model);
+                var newEntity = await _clientMedicationRepository.UpdateEntity(entity);
+                var getEntity = Mapper.Map<GetClientMedication>(newEntity);
+                return CreatedAtAction("GetMedication", new { id = newEntity.ClientMedicationId, clientId = newEntity.ClientId }, getEntity);
+            }
+            catch (Exception ex)
+            {
 
+                throw;
+            }
+
+        }
         /// <summary>
         ///  Get Client Medication By clientId and Id
         /// </summary>

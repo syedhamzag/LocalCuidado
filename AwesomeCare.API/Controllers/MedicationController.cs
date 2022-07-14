@@ -8,7 +8,7 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Medication;
 using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
-using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaMed;
 using AwesomeCare.DataTransferObject.EqualityComparers;
 using AwesomeCare.Model.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -238,7 +238,6 @@ namespace AwesomeCare.API.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [AllowAnonymous]
         [HttpPost]
         [Route("[action]")]
         [ProducesResponseType(type: typeof(GetStaffMedRota), statusCode: StatusCodes.Status201Created)]
@@ -257,7 +256,29 @@ namespace AwesomeCare.API.Controllers
 
             return Ok(getEntity);
         }
-        [AllowAnonymous]
+        /// <summary>
+        /// Update Staff Medication Tracker
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("[action]")]
+        [ProducesResponseType(type: typeof(GetStaffMedRota), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put([FromBody] PutStaffMedRota model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var postEntity = Mapper.Map<StaffMedRota>(model);
+            var newEntity = await _staffMedRotaRepository.UpdateEntity(postEntity);
+            var getEntity = Mapper.Map<GetStaffMedRota>(newEntity);
+
+            return Ok(getEntity);
+        }
         [HttpGet]
         [Route("MedTracker/{sdate}/{edate}")]
         [ProducesResponseType(typeof(List<MedTracker>), StatusCodes.Status200OK)]

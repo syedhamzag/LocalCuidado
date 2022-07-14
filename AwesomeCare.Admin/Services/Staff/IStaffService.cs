@@ -7,6 +7,7 @@ using AwesomeCare.Admin.ViewModels.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Staff;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaMed;
 using AwesomeCare.DataTransferObject.DTOs.User;
 using Refit;
 

@@ -183,8 +183,9 @@
                                                                 <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
                                                                 <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox" checked>
                                                                 <span> @Model.Days[i].RotaTypes[j].RotaType</span>
-                                                                @Html.DropDownList($"{string.Concat(Model.Days[i].RotaDayofWeekId,Model.Days[i].RotaTypes[j].ClientRotaTypeId)}-rota", rotasList, "select rota", new { @class = "form-control" })
-                                                                <input type="hidden" asp-for="@Model.Days[i].RotaTypes[j].CRotaId" value="@rotaDywk.RotaId" />
+                                                                <span>
+                                                                @Html.DropDownList($"{string.Concat(Model.Days[i].RotaDayofWeekId,Model.Days[i].RotaTypes[j].ClientRotaTypeId)}-rota", rotasList, "select rota", new { @class = "form-control", @onchange="getRotaId(this)" })
+                                                                <input type="hidden" asp-for="@Model.Days[i].RotaTypes[j].CRotaId" value="@rotaDywk.RotaId" /></span>
                                                                 <input type="text" value="@rotaDywk.StartTime" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
                                                                 <input type="text" value="@rotaDywk.StopTime"  asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
                                                             </label>                                                                                                      
@@ -198,6 +199,7 @@
                                                             <input asp-for="@Model.Days[i].RotaTypes[j].ClientRotaTypeId" type="hidden">
                                                             <input asp-for="@Model.Days[i].RotaTypes[j].IsSelected" type="checkbox">
                                                             <span> @Model.Days[i].RotaTypes[j].RotaType</span>
+                                                            
                                                             <select asp-for="@Model.Days[i].RotaTypes[j].CRotaId" asp-items="@Model.Rotas" class="form-control"></select>
                                                         <input type="text" asp-for="@Model.Days[i].RotaTypes[j].CStartTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
                                                         <input type="text" asp-for="@Model.Days[i].RotaTypes[j].CStopTime" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
@@ -217,4 +219,12 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function getRotaId(element)
+    {
+        var rotaId = element.value;
+        var rota = $(element).siblings('input');
+        $(rota).val(rotaId);
+    }
+</script>
 
