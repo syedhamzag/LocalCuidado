@@ -16,6 +16,9 @@ namespace AwesomeCare.Admin.Services.SpecialHealthCondition
         [Get("/SpecialHealthCondition/Get/{id}")]
         Task<GetSpecialHealthCondition> Get(int id);
 
+        [Get("/SpecialHealthCondition/GetbyClient/{id}")]
+        Task<GetSpecialHealthCondition> GetbyClient(int id);
+
         [Post("/SpecialHealthCondition/Create")]
         Task<HttpResponseMessage> Create([Body] PostSpecialHealthCondition model);
 

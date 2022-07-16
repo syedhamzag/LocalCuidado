@@ -7,6 +7,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
 {
     public class CreatePhysicalAbility
     {
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Physical Ability";
         public int PhysicalId { get; set; }
         public int ClientId { get; set; }
         public string ClientName { get; set; }

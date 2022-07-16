@@ -81,7 +81,7 @@ namespace AwesomeCare.API.Controllers
 
         }
         /// <summary>
-        /// Get CarePlanHealth by ProgramId
+        /// Get by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -96,6 +96,56 @@ namespace AwesomeCare.API.Controllers
 
             var getCarePlanHealth = await (from c in _spmedsRepository.Table
                                            where c.SHMId == id.Value
+                                           select new GetSpecialHealthAndMedication
+                                           {
+                                               AccessMedication = c.AccessMedication,
+                                               AdminLvl = c.AdminLvl,
+                                               By = c.By,
+                                               Consent = c.Consent,
+                                               Date = c.Date,
+                                               FamilyMeds = c.FamilyMeds,
+                                               FamilyReturnMed = c.FamilyReturnMed,
+                                               ClientId = c.ClientId,
+                                               LeftoutMedicine = c.LeftoutMedicine,
+                                               MedAccessDenial = c.MedAccessDenial,
+                                               MedicationAllergy = c.MedicationAllergy,
+                                               MedicationStorage = c.MedicationStorage,
+                                               MedKeyCode = c.MedKeyCode,
+                                               MedsGPOrder = c.MedsGPOrder,
+                                               NameFormMedicaiton = c.NameFormMedicaiton,
+                                               NoMedAccess = c.NoMedAccess,
+                                               OverdoseContact = c.OverdoseContact,
+                                               PharmaMARChart = c.PharmaMARChart,
+                                               PNRDoses = c.PNRDoses,
+                                               PNRMedList = c.PNRMedList,
+                                               PNRMedReq = c.PNRMedReq,
+                                               PNRMedsAdmin = c.PNRMedsAdmin,
+                                               PNRMedsMissing = c.PNRMedsMissing,
+                                               SHMId = c.SHMId,
+                                               SpecialStorage = c.SpecialStorage,
+                                               TempMARChart = c.TempMARChart,
+                                               Type = c.Type,
+                                               WhoAdminister = c.WhoAdminister
+                                           }
+                      ).FirstOrDefaultAsync();
+            return Ok(getCarePlanHealth);
+        }
+        /// <summary>
+        /// Get by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetSpecialHealthAndMedication), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getCarePlanHealth = await (from c in _spmedsRepository.Table
+                                           where c.ClientId == id.Value
                                            select new GetSpecialHealthAndMedication
                                            {
                                                AccessMedication = c.AccessMedication,

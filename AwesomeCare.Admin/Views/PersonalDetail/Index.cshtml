@@ -475,12 +475,10 @@
                     var counter = $('#PersonCentreCount').val();
                     if (Id == "trClass1" && Pid <= 0) 
                     {
-                        if (counter == 0)
-                        {
-                            $('#' + Id).show(1000);
-                            counter++;
-                            $('#PersonCentreCount').val(counter);
-                        }
+                        $('#' + Id).show(1000);
+                        counter++;
+                        $('#PersonCentreCount').val(counter);
+
                     }
                 });
             });
@@ -491,11 +489,9 @@
                     var counter = $('#PersonCentreCount').val();
                     if (Id == "trClass2" && Pid <= 0) 
                     {
-                        if (counter <= 1) {
-                            $('#' + Id).show(1000);
-                            counter++;
-                            $('#PersonCentreCount').val(counter);
-                        }
+                        $('#' + Id).show(1000);
+                        counter++;
+                        $('#PersonCentreCount').val(counter);
                     }
                 });
             });
@@ -504,14 +500,11 @@
                     var Id = $(this)[0].id;
                     var Pid = $('#PersonCentredId3').val();
                     var counter = $('#PersonCentreCount').val();
-                    if (Id == "trClass3" && Pid <= 0)  {
-                        alert(counter);
-                        if (counter <= 2) {
-                            $('#' + Id).show(1000);
-                            counter++;
-                            alert(counter);
-                            $('#PersonCentreCount').val(counter);
-                        }
+                    if (Id == "trClass3" && Pid <= 0)  
+                    {
+                        $('#' + Id).show(1000);
+                        counter++;
+                        $('#PersonCentreCount').val(counter);
                     }
                 });
             });
@@ -520,13 +513,11 @@
                     var Id = $(this)[0].id;
                     var Pid = $('#PersonCentredId4').val();
                     var counter = $('#PersonCentreCount').val();
-                    if (Id == "trClass4" && Pid <= 0)  {
-                        
-                        if (counter <= 3) {
-                            $('#' + Id).show(1000);
-                            counter++;
-                            $('#PersonCentreCount').val(counter);
-                        }
+                    if (Id == "trClass4" && Pid <= 0)  
+                    {
+                        $('#' + Id).show(1000);
+                        counter++;
+                        $('#PersonCentreCount').val(counter);
                     }
                 });
             });
@@ -535,13 +526,11 @@
                     var Id = $(this)[0].id;
                     var Pid = $('#PersonCentredId5').val();
                     var counter = $('#PersonCentreCount').val();
-                    if (Id == "trClass5" && Pid <= 0)  {
-                        
-                        if (counter <= 4) {
-                            $('#' + Id).show(1000);
-                            counter++;
-                            $('#PersonCentreCount').val(counter);
-                        }
+                    if (Id == "trClass5" && Pid <= 0)  
+                    {
+                        $('#' + Id).show(1000);
+                        counter++;
+                        $('#PersonCentreCount').val(counter);
                     }
                 });
             });

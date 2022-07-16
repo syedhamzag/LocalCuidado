@@ -75,7 +75,7 @@ namespace AwesomeCare.API.Controllers
 
         }
         /// <summary>
-        /// Get CarePlanHealth by ProgramId
+        /// Get CarePlanHealth by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -90,6 +90,41 @@ namespace AwesomeCare.API.Controllers
 
             var getCarePlanHealth = await (from c in _spmedsRepository.Table
                                            where c.HealthCondId == id.Value
+                                           select new GetSpecialHealthCondition
+                                           {
+                                               ClientAction = c.ClientAction,
+                                               ClinicRecommendation = c.ClinicRecommendation,
+                                               ConditionName = c.ConditionName,
+                                               ClientId = c.ClientId,
+                                               FeelingAfterIncident = c.FeelingAfterIncident,
+                                               FeelingBeforeIncident = c.FeelingBeforeIncident,
+                                               Frequency = c.Frequency,
+                                               HealthCondId = c.HealthCondId,
+                                               LifestyleSupport = c.LifestyleSupport,
+                                               LivingActivities = c.LivingActivities,
+                                               PlanningHealthCondition = c.PlanningHealthCondition,
+                                               SourceInformation = c.SourceInformation,
+                                               Trigger = c.Trigger
+                                           }
+                      ).FirstOrDefaultAsync();
+            return Ok(getCarePlanHealth);
+        }
+        /// <summary>
+        /// Get CarePlanHealth by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetSpecialHealthCondition), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getCarePlanHealth = await (from c in _spmedsRepository.Table
+                                           where c.ClientId == id.Value
                                            select new GetSpecialHealthCondition
                                            {
                                                ClientAction = c.ClientAction,

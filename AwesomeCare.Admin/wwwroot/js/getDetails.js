@@ -720,7 +720,6 @@ function getnutrition(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
     var client = $('#tbl_' + name).children().length;
-    console.log(client);
     if (client <= 0) {
         $.ajax({
             type: 'GET',
@@ -728,7 +727,7 @@ function getnutrition(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getCarePlanNutrition.forEach(function (result, index) {
-                    var row = '<tr><td>' + result.specialDiet + '</td><td>' + result.avoidFood + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td></tr>';
+                    var row = '<tr><td>' + result.specialDiet + '</td><td>' + result.avoidFood + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -937,14 +936,12 @@ function getmcabest(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
     var client = $('#tbl_' + name).children().length;
-    console.log(name);
     if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
             data: { 'clientId': clientId },
             success: function (response) {
-                console.log(response.getBestInterestAssessment);
                 response.getBestInterestAssessment.forEach(function (result, index) {
                     var row = '<tr><td>' + result.date + '</td><td>' + result.name + '</td><td>' + result.signature + '</td><td>' + result.position + '</td></tr>';
                     $('#tbl_' + name).append(row);

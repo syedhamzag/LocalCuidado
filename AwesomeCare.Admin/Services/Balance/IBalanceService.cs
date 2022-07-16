@@ -16,6 +16,9 @@ namespace AwesomeCare.Admin.Services.Balance
         [Get("/Balance/Get/{id}")]
         Task<GetBalance> Get(int id);
 
+        [Get("/Balance/GetbyClient/{id}")]
+        Task<GetBalance> GetbyClient(int id);
+
         [Post("/Balance/Create")]
         Task<HttpResponseMessage> Create([Body] PostBalance model);
 

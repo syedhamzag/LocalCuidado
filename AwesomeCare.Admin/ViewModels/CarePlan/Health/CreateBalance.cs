@@ -7,6 +7,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
 {
     public class CreateBalance
     {
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Balance";
         public int BalanceId { get; set; }
         public int ClientId { get; set; }
         public string ClientName { get; set; }

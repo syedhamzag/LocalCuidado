@@ -16,6 +16,9 @@ namespace AwesomeCare.Admin.Services.HealthAndLiving
         [Get("/HealthAndLiving/Get/{id}")]
         Task<GetHealthAndLiving> Get(int id);
 
+        [Get("/HealthAndLiving/GetbyClient/{id}")]
+        Task<GetHealthAndLiving> GetbyClient(int id);
+
         [Post("/HealthAndLiving/Create")]
         Task<HttpResponseMessage> Create([Body] PostHealthAndLiving model);
 

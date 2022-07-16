@@ -309,13 +309,6 @@ namespace AwesomeCare.API
                 //else
                 endpoints.MapControllers();
             });
-
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetService<AwesomeCareDbContext>();
-                context.Database.Migrate();
-            }
-
         }
     }
 }

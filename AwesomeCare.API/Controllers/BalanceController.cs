@@ -74,7 +74,7 @@ namespace AwesomeCare.API.Controllers
 
         }
         /// <summary>
-        /// Get CarePlanHealth by ProgramId
+        /// Get by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -89,6 +89,35 @@ namespace AwesomeCare.API.Controllers
 
             var getCarePlanHealth = await (from c in _balanceRepository.Table
                                            where c.BalanceId == id.Value
+                                           select new GetBalance
+                                           {
+                                               BalanceId = c.BalanceId,
+                                               Description = c.Description,
+                                               ClientId = c.ClientId,
+                                               Mobility = c.Mobility,
+                                               Name = c.Name,
+                                               Status = c.Status
+
+                                           }
+                      ).FirstOrDefaultAsync();
+            return Ok(getCarePlanHealth);
+        }
+        /// <summary>
+        /// Get by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetBalance), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getCarePlanHealth = await (from c in _balanceRepository.Table
+                                           where c.ClientId == id.Value
                                            select new GetBalance
                                            {
                                                BalanceId = c.BalanceId,

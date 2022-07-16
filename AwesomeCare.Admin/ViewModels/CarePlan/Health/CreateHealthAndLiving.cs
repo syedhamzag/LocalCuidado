@@ -14,6 +14,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
         
         public IFormFile Attach { get; set; }
 
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Health And Living";
         public string ActiveTab { get; set; } = "careplan";
         public int HLId { get; set; }
         public int ClientId { get; set; }

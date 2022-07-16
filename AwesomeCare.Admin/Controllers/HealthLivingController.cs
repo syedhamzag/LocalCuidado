@@ -57,23 +57,29 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
-           // model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
+            var getHealth = await _healthAndLivingService.GetbyClient(clientId);
+            if (getHealth != null)
+            {
+                model = GetHealth(getHealth);
+            }
             return View(model);
 
         }
         public async Task<IActionResult> View(int healthLivingId)
         {
-            var putEntity = await GetHealth(healthLivingId);
+            var getHealth = await _healthAndLivingService.Get(healthLivingId);
+            var putEntity = GetHealth(getHealth);
             return View(putEntity);
         }
         public async Task<IActionResult> Edit(int healthLivingId)
         {
-            var putEntity = await GetHealth(healthLivingId);
+            var getHealth = await _healthAndLivingService.Get(healthLivingId);
+            var putEntity = GetHealth(getHealth);
             return View(putEntity);
         }
-        public async Task<CreateHealthAndLiving> GetHealth(int healthLivingId)
+        public CreateHealthAndLiving GetHealth(GetHealthAndLiving getHealth)
         {
-            var getHealth = await _healthAndLivingService.Get(healthLivingId);
+
             var putEntity = new CreateHealthAndLiving
             {
                 AbilityToRead = getHealth.AbilityToRead,
@@ -112,7 +118,9 @@ namespace AwesomeCare.Admin.Controllers
                 TextFontSize = getHealth.TextFontSize,
                 TVandMusic = getHealth.TVandMusic,
                 VideoCallRequired = getHealth.VideoCallRequired,
-                WakeUp = getHealth.WakeUp
+                WakeUp = getHealth.WakeUp,
+                ActionName = "Update",
+                Title = "Update Health And Living"
             };
             return putEntity;
         }

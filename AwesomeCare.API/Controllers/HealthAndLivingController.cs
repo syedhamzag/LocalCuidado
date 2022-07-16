@@ -138,6 +138,65 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getCarePlanHealth);
         }
+        /// <summary>
+        /// Get CarePlanHealth by ProgramId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetHealthAndLiving), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getCarePlanHealth = await (from c in _healthlivingRepository.Table
+                                           where c.ClientId == id.Value
+                                           select new GetHealthAndLiving
+                                           {
+                                               AbilityToRead = c.AbilityToRead,
+                                               AlcoholicDrink = c.AlcoholicDrink,
+                                               AllowChats = c.AllowChats,
+                                               BriefHealth = c.BriefHealth,
+                                               CareSupport = c.CareSupport,
+                                               ConstraintAttachment = c.ConstraintAttachment,
+                                               ConstraintDetails = c.ConstraintDetails,
+                                               ConstraintRequired = c.ConstraintRequired,
+                                               ContinenceIssue = c.ContinenceIssue,
+                                               ContinenceNeeds = c.ContinenceNeeds,
+                                               ContinenceSource = c.ContinenceSource,
+                                               DehydrationRisk = c.DehydrationRisk,
+                                               EatingWithStaff = c.EatingWithStaff,
+                                               Email = c.Email,
+                                               FamilyUpdate = c.FamilyUpdate,
+                                               FinanceManagement = c.FinanceManagement,
+                                               ClientId = c.ClientId,
+                                               HLId = c.HLId,
+                                               LaundaryRequired = c.LaundaryRequired,
+                                               LetterOpening = c.LetterOpening,
+                                               LifeStyle = c.LifeStyle,
+                                               MeansOfComm = c.MeansOfComm,
+                                               MovingAndHandling = c.MovingAndHandling,
+                                               NeighbourInvolment = c.NeighbourInvolment,
+                                               ObserveHealth = c.ObserveHealth,
+                                               PostalService = c.PostalService,
+                                               PressureSore = c.PressureSore,
+                                               ShoppingRequired = c.ShoppingRequired,
+                                               Smoking = c.Smoking,
+                                               SpecialCaution = c.SpecialCaution,
+                                               SpecialCleaning = c.SpecialCleaning,
+                                               SupportToBed = c.SupportToBed,
+                                               TeaChocolateCoffee = c.TeaChocolateCoffee,
+                                               TextFontSize = c.TextFontSize,
+                                               TVandMusic = c.TVandMusic,
+                                               VideoCallRequired = c.VideoCallRequired,
+                                               WakeUp = c.WakeUp
+                                           }
+                      ).FirstOrDefaultAsync();
+            return Ok(getCarePlanHealth);
+        }
         #endregion
     }
 }

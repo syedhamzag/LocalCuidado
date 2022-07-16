@@ -50,22 +50,29 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var sp = await _spmedsService.GetbyClient(clientId);
+            if (sp != null)
+            {
+                model = GetSpecialHealthAndMedication(sp);
+            }
             return View(model);
 
         }
         public async Task<IActionResult> View(int SpecialHealthAndMedicationId)
         {
-            var putEntity = await GetSpecialHealthAndMedication(SpecialHealthAndMedicationId);
+            var sp = await _spmedsService.Get(SpecialHealthAndMedicationId);
+            var putEntity = GetSpecialHealthAndMedication(sp);
             return View(putEntity);
         }
         public async Task<IActionResult> Edit(int SpecialHealthAndMedicationId)
         {
-            var putEntity = await GetSpecialHealthAndMedication(SpecialHealthAndMedicationId);
+            var sp = await _spmedsService.Get(SpecialHealthAndMedicationId);
+            var putEntity = GetSpecialHealthAndMedication(sp);
             return View(putEntity);
         }
-        public async Task<CreateSpecialHealthAndMedication> GetSpecialHealthAndMedication(int SpecialHealthAndMedicationId)
+        public CreateSpecialHealthAndMedication GetSpecialHealthAndMedication(GetSpecialHealthAndMedication sp)
         {
-            var sp = await _spmedsService.Get(SpecialHealthAndMedicationId);
+            
             var putEntity = new CreateSpecialHealthAndMedication
             {
                 AccessMedication = sp.AccessMedication,
@@ -96,6 +103,8 @@ namespace AwesomeCare.Admin.Controllers
                 FamilyReturnMed = sp.FamilyReturnMed,
                 PNRMedReq = sp.PNRMedReq,
                 Type = sp.Type,
+                ActionName = "Update",
+                Title = "Update Special Health And Medication"
             };
             return putEntity;
         }

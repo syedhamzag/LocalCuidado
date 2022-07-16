@@ -291,8 +291,8 @@ namespace AwesomeCare.Admin.Controllers
             });
             dashboard.Result.OnCallGraph = Oncall;
             #endregion
-
-            dashboard.Result.OnCall = GetOnCall(oncall.Result, getClient.Result);
+            var onCallResult = oncall.Result.TakeLast(5).ToList();
+            dashboard.Result.OnCall = GetOnCall(onCallResult, getClient.Result);
 
             return Json(dashboard.Result);
         }

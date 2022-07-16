@@ -74,7 +74,7 @@ namespace AwesomeCare.API.Controllers
 
         }
         /// <summary>
-        /// Get PhysicalAbility by ProgramId
+        /// Get PhysicalAbility by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -98,6 +98,34 @@ namespace AwesomeCare.API.Controllers
                                                 Mobility = c.Mobility,
                                                 Status = c.Status
                                            }
+                      ).FirstOrDefaultAsync();
+            return Ok(getPhysicalAbility);
+        }
+        /// <summary>
+        /// Get PhysicalAbility by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetPhysicalAbility), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getPhysicalAbility = await (from c in _physicalAbilityRepository.Table
+                                            where c.ClientId == id.Value
+                                            select new GetPhysicalAbility
+                                            {
+                                                ClientId = c.ClientId,
+                                                PhysicalId = c.PhysicalId,
+                                                Description = c.Description,
+                                                Name = c.Name,
+                                                Mobility = c.Mobility,
+                                                Status = c.Status
+                                            }
                       ).FirstOrDefaultAsync();
             return Ok(getPhysicalAbility);
         }

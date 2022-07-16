@@ -48,22 +48,29 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var getHealth = await _sphealthService.GetbyClient(clientId);
+            if (getHealth != null)
+            {
+                model = GetSpecialHealthCondition(getHealth);
+            }
             return View(model);
 
         }
         public async Task<IActionResult> View(int SpecialHealthConditionId)
         {
-            var putEntity = await GetSpecialHealthCondition(SpecialHealthConditionId);
+            var sphealth = await _sphealthService.Get(SpecialHealthConditionId);
+            var putEntity = GetSpecialHealthCondition(sphealth);
             return View(putEntity);
         }
         public async Task<IActionResult> Edit(int SpecialHealthConditionId)
         {
-            var putEntity = await GetSpecialHealthCondition(SpecialHealthConditionId);
+            var sphealth = await _sphealthService.Get(SpecialHealthConditionId);
+            var putEntity = GetSpecialHealthCondition(sphealth);
             return View(putEntity);
         }
-        public async Task<CreateSpecialHealthCondition> GetSpecialHealthCondition(int SpecialHealthConditionId)
+        public CreateSpecialHealthCondition GetSpecialHealthCondition(GetSpecialHealthCondition sphealth)
         {
-            var sphealth = await _sphealthService.Get(SpecialHealthConditionId);
+            
             var putEntity = new CreateSpecialHealthCondition
             {
                 ClientAction = sphealth.ClientAction,
@@ -79,6 +86,8 @@ namespace AwesomeCare.Admin.Controllers
                 PlanningHealthCondition = sphealth.PlanningHealthCondition,
                 SourceInformation = sphealth.SourceInformation,
                 Trigger = sphealth.Trigger,
+                ActionName = "Update",
+                Title = "Update Special Health Condition"
             };
             return putEntity;
         }

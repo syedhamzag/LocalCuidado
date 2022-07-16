@@ -16,6 +16,9 @@ namespace AwesomeCare.Admin.Services.HistoryOfFall
         [Get("/HistoryOfFall/Get/{id}")]
         Task<GetHistoryOfFall> Get(int id);
 
+        [Get("/HistoryOfFall/GetbyClient/{id}")]
+        Task<GetHistoryOfFall> GetbyClient(int id);
+
         [Post("/HistoryOfFall/Create")]
         Task<HttpResponseMessage> Create([Body] PostHistoryOfFall model);
 

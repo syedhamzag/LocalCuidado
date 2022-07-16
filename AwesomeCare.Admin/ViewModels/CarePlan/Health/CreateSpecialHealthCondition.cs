@@ -7,6 +7,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
 {
     public class CreateSpecialHealthCondition
     {
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Special Health Condition";
         public int HealthCondId { get; set; }
         public int ClientId { get; set; }
         public string ClientName { get; set; }

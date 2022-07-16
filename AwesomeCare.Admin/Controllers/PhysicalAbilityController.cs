@@ -50,23 +50,30 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var physicalAbility = await _physicalService.GetbyClient(clientId);
+            if (physicalAbility != null)
+            {
+                model = GetPhysicalAbility(physicalAbility);
+            }
             return View(model);
 
         }
 
         public async Task<IActionResult> View(int PhysicalAbilityId)
         {
-            var putEntity = await GetPhysicalAbility(PhysicalAbilityId);
+            var PhysicalAbility = await _physicalService.Get(PhysicalAbilityId);
+            var putEntity = GetPhysicalAbility(PhysicalAbility);
             return View(putEntity);
         }
         public async Task<IActionResult> Edit(int PhysicalAbilityId)
         {
-            var putEntity = await GetPhysicalAbility(PhysicalAbilityId);
+            var PhysicalAbility = await _physicalService.Get(PhysicalAbilityId);
+            var putEntity = GetPhysicalAbility(PhysicalAbility);
             return View(putEntity);
         }
-        public async Task<CreatePhysicalAbility> GetPhysicalAbility(int PhysicalAbilityId)
+        public CreatePhysicalAbility GetPhysicalAbility(GetPhysicalAbility PhysicalAbility)
         {
-            var PhysicalAbility = await _physicalService.Get(PhysicalAbilityId);
+            
             var putEntity = new CreatePhysicalAbility
             {
                 Description = PhysicalAbility.Description,
@@ -75,6 +82,8 @@ namespace AwesomeCare.Admin.Controllers
                 ClientId = PhysicalAbility.ClientId,
                 Name = PhysicalAbility.Name,
                 Status = PhysicalAbility.Status,
+                ActionName = "Update",
+                Title = "Update Physical Ability"
             };
             return putEntity;
         }

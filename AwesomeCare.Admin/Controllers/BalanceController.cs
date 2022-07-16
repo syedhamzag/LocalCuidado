@@ -51,25 +51,32 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var balance = await _balanceService.GetbyClient(clientId);
+            if (balance != null)
+            {
+                model = GetBalance(balance);
+            }
             return View(model);
 
         }
 
         public async Task<IActionResult> View(int balanceId)
         {
-            var putEntity = await GetBalance(balanceId);
+            var balance = await _balanceService.Get(balanceId);
+            var putEntity = GetBalance(balance);
             return View(putEntity);
         }
 
         public async Task<IActionResult> Edit(int balanceId)
         {
-            var putEntity = await GetBalance(balanceId);
+            var balance = await _balanceService.Get(balanceId);
+            var putEntity = GetBalance(balance);
             return View(putEntity);
         }
 
-        public async Task<CreateBalance> GetBalance(int balanceId)
+        public CreateBalance GetBalance(GetBalance balance)
         {
-            var balance = await _balanceService.Get(balanceId);
+            
             var putEntity = new CreateBalance
             {
                 Description = balance.Description,
@@ -78,6 +85,8 @@ namespace AwesomeCare.Admin.Controllers
                 ClientId = balance.ClientId,
                 Name = balance.Name,
                 Status = balance.Status,
+                ActionName = "Update",
+                Title = "Update Balance"
             };
             return putEntity;
         }

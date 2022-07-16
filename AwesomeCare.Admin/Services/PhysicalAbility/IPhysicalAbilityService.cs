@@ -16,6 +16,9 @@ namespace AwesomeCare.Admin.Services.PhysicalAbility
         [Get("/PhysicalAbility/Get/{id}")]
         Task<GetPhysicalAbility> Get(int id);
 
+        [Get("/PhysicalAbility/GetbyClient/{id}")]
+        Task<GetPhysicalAbility> GetbyClient(int id);
+
         [Post("/PhysicalAbility/Create")]
         Task<HttpResponseMessage> Create([Body] PostPhysicalAbility model);
 

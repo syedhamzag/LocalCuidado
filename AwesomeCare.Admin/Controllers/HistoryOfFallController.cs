@@ -46,22 +46,29 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var historyOfFall = await _historyService.GetbyClient(clientId);
+            if (historyOfFall != null)
+            {
+                model = GetHistoryOfFall(historyOfFall);
+            }
             return View(model);
 
         }
         public async Task<IActionResult> View(int HistoryOfFallId)
         {
-            var putEntity = await GetHistoryOfFall(HistoryOfFallId);
+            var HistoryOfFall = await _historyService.Get(HistoryOfFallId);
+            var putEntity = GetHistoryOfFall(HistoryOfFall);
             return View(putEntity);
         }
         public async Task<IActionResult> Edit(int HistoryOfFallId)
         {
-            var putEntity = await GetHistoryOfFall(HistoryOfFallId);
+            var HistoryOfFall = await _historyService.Get(HistoryOfFallId);
+            var putEntity = GetHistoryOfFall(HistoryOfFall);
             return View(putEntity);
         }
-        public async Task<CreateHistoryOfFall> GetHistoryOfFall(int HistoryOfFallId)
+        public CreateHistoryOfFall GetHistoryOfFall(GetHistoryOfFall HistoryOfFall)
         {
-            var HistoryOfFall = await _historyService.Get(HistoryOfFallId);
+            
             var putEntity = new CreateHistoryOfFall
             {
                 HistoryId = HistoryOfFall.HistoryId,
@@ -70,6 +77,8 @@ namespace AwesomeCare.Admin.Controllers
                 ClientId = HistoryOfFall.ClientId,
                 Details = HistoryOfFall.Details,
                 Prevention = HistoryOfFall.Prevention,
+                ActionName = "Update",
+                Title = "Update History Of Fall"
             };
             return putEntity;
         }
