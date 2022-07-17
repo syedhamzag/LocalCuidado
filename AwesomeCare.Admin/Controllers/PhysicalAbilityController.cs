@@ -58,10 +58,15 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-
-        public async Task<IActionResult> View(int PhysicalAbilityId)
+        public async Task<IActionResult> Delete(int clientId)
         {
-            var PhysicalAbility = await _physicalService.Get(PhysicalAbilityId);
+            var sp = await _physicalService.GetbyClient(clientId);
+            await _physicalService.Delete(sp.PhysicalId);
+            return RedirectToAction("Reports");
+        }
+        public async Task<IActionResult> View(int clientId)
+        {
+            var PhysicalAbility = await _physicalService.GetbyClient(clientId);
             var putEntity = GetPhysicalAbility(PhysicalAbility);
             return View(putEntity);
         }

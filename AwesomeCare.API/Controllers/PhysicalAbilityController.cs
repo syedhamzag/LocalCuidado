@@ -129,6 +129,16 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getPhysicalAbility);
         }
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _physicalAbilityRepository.GetEntity(id);
+            await _physicalAbilityRepository.DeleteEntity(entity);
+            return Ok();
+        }
         #endregion
     }
 }

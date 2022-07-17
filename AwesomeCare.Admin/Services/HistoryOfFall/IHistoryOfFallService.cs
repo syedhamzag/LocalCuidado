@@ -24,5 +24,8 @@ namespace AwesomeCare.Admin.Services.HistoryOfFall
 
         [Put("/HistoryOfFall/Put")]
         Task<HttpResponseMessage> Put([Body] PutHistoryOfFall model);
+
+        [Delete("/HistoryOfFall/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

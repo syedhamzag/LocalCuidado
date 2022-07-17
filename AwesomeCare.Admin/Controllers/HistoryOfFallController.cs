@@ -54,9 +54,15 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-        public async Task<IActionResult> View(int HistoryOfFallId)
+        public async Task<IActionResult> Delete(int clientId)
         {
-            var HistoryOfFall = await _historyService.Get(HistoryOfFallId);
+            var sp = await _historyService.GetbyClient(clientId);
+            await _historyService.Delete(sp.HistoryId);
+            return RedirectToAction("Reports");
+        }
+        public async Task<IActionResult> View(int clientId)
+        {
+            var HistoryOfFall = await _historyService.GetbyClient(clientId);
             var putEntity = GetHistoryOfFall(HistoryOfFall);
             return View(putEntity);
         }

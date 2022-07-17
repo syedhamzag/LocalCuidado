@@ -24,5 +24,8 @@ namespace AwesomeCare.Admin.Services.Balance
 
         [Put("/Balance/Put")]
         Task<HttpResponseMessage> Put([Body] PutBalance model);
+
+        [Delete("/Balance/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

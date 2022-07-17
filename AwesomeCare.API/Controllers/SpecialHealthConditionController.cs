@@ -144,6 +144,16 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getCarePlanHealth);
         }
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _spmedsRepository.GetEntity(id);
+            await _spmedsRepository.DeleteEntity(entity);
+            return Ok();
+        }
         #endregion
     }
 }

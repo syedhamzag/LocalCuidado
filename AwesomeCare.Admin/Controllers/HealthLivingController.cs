@@ -65,9 +65,9 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-        public async Task<IActionResult> View(int healthLivingId)
+        public async Task<IActionResult> View(int clientId)
         {
-            var getHealth = await _healthAndLivingService.Get(healthLivingId);
+            var getHealth = await _healthAndLivingService.GetbyClient(clientId);
             var putEntity = GetHealth(getHealth);
             return View(putEntity);
         }
@@ -76,6 +76,12 @@ namespace AwesomeCare.Admin.Controllers
             var getHealth = await _healthAndLivingService.Get(healthLivingId);
             var putEntity = GetHealth(getHealth);
             return View(putEntity);
+        }
+        public async Task<IActionResult> Delete(int clientId)
+        {
+            var sp = await _healthAndLivingService.GetbyClient(clientId);
+            await _healthAndLivingService.Delete(sp.HLId);
+            return RedirectToAction("Reports");
         }
         public CreateHealthAndLiving GetHealth(GetHealthAndLiving getHealth)
         {

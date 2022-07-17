@@ -58,11 +58,17 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-        public async Task<IActionResult> View(int SpecialHealthAndMedicationId)
+        public async Task<IActionResult> View(int clientId)
         {
-            var sp = await _spmedsService.Get(SpecialHealthAndMedicationId);
+            var sp = await _spmedsService.GetbyClient(clientId);
             var putEntity = GetSpecialHealthAndMedication(sp);
             return View(putEntity);
+        }
+        public async Task<IActionResult> Delete(int clientId)
+        {
+            var sp = await _spmedsService.GetbyClient(clientId);
+            await _spmedsService.Delete(sp.SHMId);
+            return RedirectToAction("Reports");
         }
         public async Task<IActionResult> Edit(int SpecialHealthAndMedicationId)
         {

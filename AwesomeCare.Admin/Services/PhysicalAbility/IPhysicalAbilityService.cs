@@ -24,5 +24,8 @@ namespace AwesomeCare.Admin.Services.PhysicalAbility
 
         [Put("/PhysicalAbility/Put")]
         Task<HttpResponseMessage> Put([Body] PutPhysicalAbility model);
+
+        [Delete("/PhysicalAbility/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

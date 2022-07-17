@@ -37,7 +37,7 @@
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                             @Html.ActionLink("Edit", "Edit", "HealthLiving", new { healthLivingId = item.data.HLId }, new { @class = "dropdown-item" })
-                                            @Html.ActionLink("View", "View", "HealthLiving", new { healthLivingId = item.data.HLId }, new { @class = "dropdown-item" })
+                                            @Html.ActionLink("View", "View", "HealthLiving", new { clientId = item.data.ClientId }, new { @class = "dropdown-item" })
                                         </div>
                                     </div>
                                 </td>

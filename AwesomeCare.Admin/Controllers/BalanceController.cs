@@ -59,10 +59,15 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
-
-        public async Task<IActionResult> View(int balanceId)
+        public async Task<IActionResult> Delete(int clientId)
         {
-            var balance = await _balanceService.Get(balanceId);
+            var sp = await _balanceService.GetbyClient(clientId);
+            await _balanceService.Delete(sp.BalanceId);
+            return RedirectToAction("Reports");
+        }
+        public async Task<IActionResult> View(int clientId)
+        {
+            var balance = await _balanceService.GetbyClient(clientId);
             var putEntity = GetBalance(balance);
             return View(putEntity);
         }

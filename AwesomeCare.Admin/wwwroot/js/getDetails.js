@@ -753,6 +753,14 @@ function getbalance(element) {
                 response.getBalance.forEach(function (result, index) {
                     var row = '<tr><td>' + result.name + '</td><td>' + result.description + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/Balance/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/Balance/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/Balance/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -777,6 +785,14 @@ function getphysicalability(element) {
                 response.getPhysicalAbility.forEach(function (result, index) {
                     var row = '<tr><td>' + result.name + '</td><td>' + result.description + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/PhysicalAbility/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/PhysicalAbility/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/PhysicalAbility/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -801,7 +817,15 @@ function gethealthliving(element) {
                 response.getHealthAndLiving.forEach(function (result, index) {
                     var row = '<tr><td>' + result.briefHealth + '</td><td>' + result.wakeUp + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/HealthLiving/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/HealthLiving/View?clientId=' + clientId + '">View</a>';
+                    var del = '<a class="dropdown-item" href="/HealthLiving/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
 
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
                 });
             },
             error: function () {
@@ -825,6 +849,14 @@ function getspecialhealthmed(element) {
                 response.getSpecialHealthAndMedication.forEach(function (result, index) {
                     var row = '<tr><td>' + result.date + '</td><td>' + result.by + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/SpecialHealthAndMedication/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/SpecialHealthAndMedication/View?clientId=' + clientId + '">View</a>';
+                    var del = '<a class="dropdown-item" href="/SpecialHealthAndMedication/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -849,6 +881,14 @@ function getspecialhealthcond(element) {
                 response.getSpecialHealthCondition.forEach(function (result, index) {
                     var row = '<tr><td>' + result.conditionName + '</td><td>' + result.sourceInformation + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/SpecialHealthCondition/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/SpecialHealthCondition/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/SpecialHealthCondition/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -873,6 +913,14 @@ function gethistoryoffall(element) {
                 response.getHistoryOfFall.forEach(function (result, index) {
                     var row = '<tr><td>' + result.date + '</td><td>' + result.cause + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/SpecialHealthAndMedication/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/SpecialHealthAndMedication/View?clientId=' + clientId + '">View</a>';
+                    var del = '<a class="dropdown-item" href="/SpecialHealthAndMedication/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },

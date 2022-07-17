@@ -24,5 +24,8 @@ namespace AwesomeCare.Admin.Services.SpecialHealthCondition
 
         [Put("/SpecialHealthCondition/Put")]
         Task<HttpResponseMessage> Put([Body] PutSpecialHealthCondition model);
+
+        [Delete("/SpecialHealthCondition/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

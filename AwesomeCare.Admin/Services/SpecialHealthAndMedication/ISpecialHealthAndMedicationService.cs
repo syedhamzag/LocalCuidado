@@ -24,5 +24,9 @@ namespace AwesomeCare.Admin.Services.SpecialHealthAndMedication
 
         [Put("/SpecialHealthAndMedication/Put")]
         Task<HttpResponseMessage> Put([Body] PutSpecialHealthAndMedication model);
+
+        [Delete("/SpecialHealthAndMedication/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
+
     }
 }
