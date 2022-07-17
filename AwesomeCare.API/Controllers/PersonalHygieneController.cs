@@ -109,6 +109,52 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getCarePlanHygiene);
         }
+        /// <summary>
+        /// Get CarePlanHygiene by ProgramId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetPersonalHygiene), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getCarePlanHygiene = await (from c in _phygieneRepository.Table
+                                            where c.ClientId == id.Value
+                                            select new GetPersonalHygiene
+                                            {
+                                                HygieneId = c.HygieneId,
+                                                Cleaning = c.Cleaning,
+                                                ClientId = c.ClientId,
+                                                CleaningFreq = c.CleaningFreq,
+                                                WhoClean = c.WhoClean,
+                                                WashingMachine = c.WashingMachine,
+                                                LaundrySupport = c.LaundrySupport,
+                                                LaundryGuide = c.LaundryGuide,
+                                                Ironing = c.Ironing,
+                                                DryLaundry = c.DryLaundry,
+                                                CleaningTools = c.CleaningTools,
+                                                DirtyLaundry = c.DirtyLaundry,
+                                                GeneralAppliance = c.GeneralAppliance,
+                                                DesiredCleaning = c.DesiredCleaning,
+                                            }
+                      ).FirstOrDefaultAsync();
+            return Ok(getCarePlanHygiene);
+        }
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _phygieneRepository.GetEntity(id);
+            await _phygieneRepository.DeleteEntity(entity);
+            return Ok();
+        }
         #endregion
     }
 }

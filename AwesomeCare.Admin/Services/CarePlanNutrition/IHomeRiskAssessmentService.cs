@@ -25,5 +25,8 @@ namespace AwesomeCare.Admin.Services.CarePlanNutrition
 
         [Put("/HomeRiskAssessment/Put")]
         Task<HttpResponseMessage> Put([Body] PostHomeRiskAssessment model);
+
+        [Delete("/HomeRiskAssessment/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

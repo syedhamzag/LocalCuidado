@@ -16,10 +16,16 @@ namespace AwesomeCare.Admin.Services.Pets
         [Get("/Pets/Get/{id}")]
         Task<GetPets> Get(int id);
 
+        [Get("/Pets/GetbyClient/{id}")]
+        Task<GetPets> GetbyClient(int id);
+
         [Post("/Pets/Create")]
         Task<HttpResponseMessage> Create([Body] PostPets model);
 
         [Put("/Pets/Put")]
         Task<HttpResponseMessage> Put([Body] PutPets model);
+
+        [Delete("/Pets/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

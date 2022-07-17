@@ -16,10 +16,16 @@ namespace AwesomeCare.Admin.Services.PersonalHygiene
         [Get("/PersonalHygiene/Get/{id}")]
         Task<GetPersonalHygiene> Get(int id);
 
+        [Get("/PersonalHygiene/GetbyClient/{id}")]
+        Task<GetPersonalHygiene> GetbyClient(int id);
+
         [Post("/PersonalHygiene/Create")]
         Task<HttpResponseMessage> Create([Body] PostPersonalHygiene model);
 
         [Put("/PersonalHygiene/Put")]
         Task<HttpResponseMessage> Put([Body] PutPersonalHygiene model);
+
+        [Delete("/PersonalHygiene/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

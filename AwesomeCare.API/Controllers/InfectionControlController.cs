@@ -103,6 +103,46 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getCarePlanHygiene);
         }
+        /// <summary>
+        /// Get CarePlanHygiene by ProgramId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetInfectionControl), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getCarePlanHygiene = await (from c in _infectionRepository.Table
+                                            where c.ClientId == id.Value
+                                            select new GetInfectionControl
+                                            {
+                                                ClientId = c.ClientId,
+                                                Status = c.Status,
+                                                InfectionId = c.InfectionId,
+                                                Guideline = c.Guideline,
+                                                VaccStatus = c.VaccStatus,
+                                                Type = c.Type,
+                                                TestDate = c.TestDate,
+                                                Remarks = c.Remarks,
+                                            }
+                      ).FirstOrDefaultAsync();
+            return Ok(getCarePlanHygiene);
+        }
         #endregion
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _infectionRepository.GetEntity(id);
+            await _infectionRepository.DeleteEntity(entity);
+            return Ok();
+        }
     }
 }

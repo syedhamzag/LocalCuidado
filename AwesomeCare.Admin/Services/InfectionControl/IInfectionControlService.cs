@@ -16,10 +16,16 @@ namespace AwesomeCare.Admin.Services.InfectionControl
         [Get("/InfectionControl/Get/{id}")]
         Task<GetInfectionControl> Get(int id);
 
+        [Get("/InfectionControl/GetbyClient/{id}")]
+        Task<GetInfectionControl> GetbyClient(int id);
+
         [Post("/InfectionControl/Create")]
         Task<HttpResponseMessage> Create([Body] PostInfectionControl model);
 
         [Put("/InfectionControl/Put")]
         Task<HttpResponseMessage> Put([Body] PutInfectionControl model);
+
+        [Delete("/InfectionControl/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

@@ -127,6 +127,64 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getCarePlanInterests);
         }
+        /// <summary>
+        /// Get CarePlanInterests by ProgramId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetInterestAndObjective), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getCarePlanInterests = await (from c in _interestRepository.Table
+                                              where c.ClientId == id.Value
+                                              select new GetInterestAndObjective
+                                              {
+                                                  GoalId = c.GoalId,
+                                                  CareGoal = c.CareGoal,
+                                                  ClientId = c.ClientId,
+                                                  Brief = c.Brief,
+                                                  Interest = (from p in _inteRepository.Table
+                                                              where p.GoalId == c.GoalId
+                                                              select new GetInterest
+                                                              {
+                                                                  CommunityActivity = p.CommunityActivity,
+                                                                  EventAwarness = p.EventAwarness,
+                                                                  GoalAndObjective = p.GoalAndObjective,
+                                                                  InformalActivity = p.InformalActivity,
+                                                                  InterestId = p.InterestId,
+                                                                  LeisureActivity = p.LeisureActivity,
+                                                                  MaintainContact = p.MaintainContact,
+                                                                  GoalId = p.GoalId,
+                                                              }).ToList(),
+                                                  PersonalityTest = (from p in _ptestRepository.Table
+                                                                     where p.GoalId == c.GoalId
+                                                                     select new GetPersonalityTest
+                                                                     {
+                                                                         Question = p.Question,
+                                                                         Answer = p.Answer,
+                                                                         TestId = p.TestId,
+                                                                         GoalId = p.GoalId,
+                                                                     }).ToList(),
+                                              }
+                      ).FirstOrDefaultAsync();
+            return Ok(getCarePlanInterests);
+        }
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _interestRepository.GetEntity(id);
+            await _interestRepository.DeleteEntity(entity);
+            return Ok();
+        }
         #endregion
     }
 }

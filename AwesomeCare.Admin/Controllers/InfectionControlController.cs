@@ -53,22 +53,28 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
             return View(model);
         }
-
-        public async Task<IActionResult> View(int InfectionControlId)
+        public async Task<IActionResult> Delete(int clientId)
         {
-            var putEntity = await GetInfectionControl(InfectionControlId);
+            var sp = await _infectionService.GetbyClient(clientId);
+            await _infectionService.Delete(sp.InfectionId);
+            return RedirectToAction("Reports");
+        }
+        public async Task<IActionResult> View(int clientId)
+        {
+            var InfectionControl = await _infectionService.GetbyClient(clientId);
+            var putEntity = GetInfectionControl(InfectionControl);
             return View(putEntity);
         }
 
         public async Task<IActionResult> Edit(int InfectionControlId)
         {
-            var putEntity = await GetInfectionControl(InfectionControlId);
+            var InfectionControl = await _infectionService.Get(InfectionControlId);
+            var putEntity = GetInfectionControl(InfectionControl);
             return View(putEntity);
         }
 
-        public async Task<CreateInfectionControl> GetInfectionControl(int InfectionControlId)
+        public CreateInfectionControl GetInfectionControl(GetInfectionControl infection)
         {
-            var infection = await _infectionService.Get(InfectionControlId);
             var putEntity = new CreateInfectionControl
             {
             ClientId = infection.ClientId,

@@ -54,21 +54,30 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
-        public async Task<IActionResult> View(int petsId)
+        public async Task<IActionResult> Delete(int clientId)
         {
-            var putEntity = await GetPets(petsId);
+            var sp = await _petsService.GetbyClient(clientId);
+            await _petsService.Delete(sp.PetsId);
+            return RedirectToAction("Reports");
+        }
+
+        public async Task<IActionResult> View(int clientId)
+        {
+            var pets = await _petsService.GetbyClient(clientId);
+            var putEntity = GetPets(pets);
             return View(putEntity);
         }
 
         public async Task<IActionResult> Edit(int petsId)
         {
-            var putEntity = await GetPets(petsId);
+            var pets = await _petsService.Get(petsId);
+            var putEntity = GetPets(pets);
             return View(putEntity);
         }
 
-        public async Task<CreatePets> GetPets(int petsId)
+        public CreatePets GetPets(GetPets Pets)
         {
-            var Pets = await _petsService.Get(petsId);
+            
             var putEntity = new CreatePets
             {
                 Age = Pets.Age,

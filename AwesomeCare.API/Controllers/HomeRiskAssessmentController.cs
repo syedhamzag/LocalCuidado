@@ -166,6 +166,17 @@ namespace AwesomeCare.API.Controllers
                 await _HomeRiskAssessmentRepository.UpdateEntity(postEntity);
                 return Ok();
             }
+
+        }
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _HomeRiskAssessmentRepository.GetEntity(id);
+            await _HomeRiskAssessmentRepository.DeleteEntity(entity);
+            return Ok();
         }
     }
 }

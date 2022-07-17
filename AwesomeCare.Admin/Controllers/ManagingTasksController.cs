@@ -69,6 +69,12 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
+        public async Task<IActionResult> Delete(int clientId)
+        {
+            var sp = await _taskService.GetbyClient(clientId);
+            await _taskService.Delete(sp.TaskId);
+            return RedirectToAction("Reports");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -136,10 +142,9 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 
-        public async Task<IActionResult> View(int clientId)
+        public IActionResult View(int clientId)
         {
-            CreateManagingTasks model = new CreateManagingTasks();
-            model = GetTask(clientId);
+            var model = GetTask(clientId);
             return View(model);
         }
 

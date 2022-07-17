@@ -62,6 +62,12 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
+        public async Task<IActionResult> Delete(int clientId)
+        {
+            var sp = await _clientHomeRiskAssessment.GetByClient(clientId);
+            await _clientHomeRiskAssessment.Delete(sp.FirstOrDefault().HomeRiskAssessmentId);
+            return RedirectToAction("Reports");
+        }
         public async Task<IActionResult> View(int clientId, int homeRiskId, string heading)
         {
             var model = new CreateHomeRiskAssessment();

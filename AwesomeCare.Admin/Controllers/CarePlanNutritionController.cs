@@ -33,6 +33,13 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Delete(int clientId)
+        {
+            var sp = await _nutritionService.GetbyClient(clientId);
+            await _nutritionService.Delete(sp.NutritionId);
+            return RedirectToAction("Reports");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(CreateCarePlanNutrition model)
@@ -65,21 +72,22 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 
-        public async Task<IActionResult> View(int NutritionId)
+        public async Task<IActionResult> View(int clientId)
         {
-            var putEntity = await GetNutrition(NutritionId);
+            var NutritionId = await _nutritionService.GetbyClient(clientId);
+            var putEntity = GetNutrition(NutritionId);
             return View(putEntity);
         }
 
         public async Task<IActionResult> Edit(int NutritionId)
         {
-            var putEntity = await GetNutrition(NutritionId);
+            var nutrition = await _nutritionService.Get(NutritionId);
+            var putEntity = GetNutrition(nutrition);
             return View(putEntity);
         }
 
-        public async Task<CreateCarePlanNutrition> GetNutrition(int NutritionId)
+        public CreateCarePlanNutrition GetNutrition(GetCarePlanNutrition nutrition)
         {
-            var nutrition = await _nutritionService.Get(NutritionId);
             var putEntity = new CreateCarePlanNutrition
             {
                 AvoidFood = nutrition.AvoidFood,

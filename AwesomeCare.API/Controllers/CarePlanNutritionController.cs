@@ -111,6 +111,52 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getnutrition);
         }
+        /// <summary>
+        /// Get CarePlanNutrition by ProgramId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetCarePlanNutrition), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getnutrition = await (from c in _nutritionRepository.Table
+                                      where c.ClientId == id
+                                      select new GetCarePlanNutrition
+                                      {
+                                          NutritionId = c.NutritionId,
+                                          ClientId = c.ClientId,
+                                          AvoidFood = c.AvoidFood,
+                                          DrinkType = c.DrinkType,
+                                          EatingDifficulty = c.EatingDifficulty,
+                                          FoodIntake = c.FoodIntake,
+                                          FoodStorage = c.FoodStorage,
+                                          MealPreparation = c.MealPreparation,
+                                          RiskMitigations = c.RiskMitigations,
+                                          ServingMeal = c.ServingMeal,
+                                          SpecialDiet = c.SpecialDiet,
+                                          ThingsILike = c.ThingsILike,
+                                          WhenRestock = c.WhenRestock,
+                                          WhoRestock = c.WhoRestock,
+                                      }
+                      ).FirstOrDefaultAsync();
+            return Ok(getnutrition);
+        }
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _nutritionRepository.GetEntity(id);
+            await _nutritionRepository.DeleteEntity(entity);
+            return Ok();
+        }
         #endregion
     }
 }

@@ -16,10 +16,16 @@ namespace AwesomeCare.Admin.Services.CarePlanNutrition
         [Get("/CarePlanNutrition/Get/{id}")]
         Task<GetCarePlanNutrition> Get(int id);
 
+        [Get("/CarePlanNutrition/GetbyClient/{id}")]
+        Task<GetCarePlanNutrition> GetbyClient(int id);
+
         [Post("/CarePlanNutrition/Create")]
         Task<HttpResponseMessage> Create([Body] PostCarePlanNutrition model);
 
         [Put("/CarePlanNutrition/Put")]
         Task<HttpResponseMessage> Put([Body] PutCarePlanNutrition model);
+
+        [Delete("/CarePlanNutrition/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }

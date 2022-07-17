@@ -107,6 +107,50 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getPets);
         }
+        /// <summary>
+        /// Get Pets by ProgramId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetPets), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getPets = await (from c in _petsRepository.Table
+                                 where c.ClientId == id.Value
+                                 select new GetPets
+                                 {
+                                     PetsId = c.PetsId,
+                                     Age = c.Age,
+                                     ClientId = c.ClientId,
+                                     Gender = c.Gender,
+                                     Name = c.Name,
+                                     MealPattern = c.MealPattern,
+                                     MealStorage = c.MealStorage,
+                                     PetCare = c.PetCare,
+                                     PetInsurance = c.PetInsurance,
+                                     Type = c.Type,
+                                     PetActivities = c.PetActivities,
+                                     VetVisit = c.VetVisit
+                                 }
+                      ).FirstOrDefaultAsync();
+            return Ok(getPets);
+        }
         #endregion
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _petsRepository.GetEntity(id);
+            await _petsRepository.DeleteEntity(entity);
+            return Ok();
+        }
     }
 }

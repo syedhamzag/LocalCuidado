@@ -104,6 +104,44 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getCarePlanHygiene);
         }
+        /// <summary>
+        /// Get CarePlanHygiene by ProgramId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetbyClient/{id}")]
+        [ProducesResponseType(type: typeof(GetManagingTasks), statusCode: StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetbyClient(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var getCarePlanHygiene = await (from c in _taskRepository.Table
+                                            where c.ClientId == id.Value
+                                            select new GetManagingTasks
+                                            {
+                                                TaskId = c.TaskId,
+                                                Help = c.Help,
+                                                ClientId = c.ClientId,
+                                                Task = c.Task,
+                                                Status = c.Status
+
+                                            }
+                      ).FirstOrDefaultAsync();
+            return Ok(getCarePlanHygiene);
+        }
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _taskRepository.GetEntity(id);
+            await _taskRepository.DeleteEntity(entity);
+            return Ok();
+        }
         #endregion
     }
 }

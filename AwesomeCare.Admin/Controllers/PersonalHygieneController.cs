@@ -53,6 +53,12 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
         }
+        public async Task<IActionResult> Delete(int clientId)
+        {
+            var sp = await _phygieneService.GetbyClient(clientId);
+            await _phygieneService.Delete(sp.HygieneId);
+            return RedirectToAction("Reports");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -91,7 +97,8 @@ namespace AwesomeCare.Admin.Controllers
 
         public async Task<IActionResult> Edit(int hygieneId)
         {
-            var putEntity = await GetHygiene(hygieneId);
+            var hygiene = await _phygieneService.Get(hygieneId);
+            var putEntity = GetHygiene(hygiene);
             return View(putEntity);
         }
 
@@ -137,15 +144,15 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
-        public async Task<IActionResult> View(int hygieneId)
+        public async Task<IActionResult> View(int clientId)
         {
-            var putEntity = await GetHygiene(hygieneId);
+            var hygieneId = await _phygieneService.GetbyClient(clientId);
+            var putEntity = GetHygiene(hygieneId);
             return View(putEntity);
         }
 
-        public async Task<CreatePersonalHygiene> GetHygiene(int hygieneId)
+        public CreatePersonalHygiene GetHygiene(GetPersonalHygiene hygiene)
         {
-            var hygiene = await _phygieneService.Get(hygieneId);
             var putEntity = new CreatePersonalHygiene
             {
             HygieneId = hygiene.HygieneId,

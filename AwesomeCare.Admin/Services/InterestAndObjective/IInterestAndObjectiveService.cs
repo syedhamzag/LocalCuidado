@@ -16,10 +16,16 @@ namespace AwesomeCare.Admin.Services.InterestAndObjective
         [Get("/InterestAndObjective/Get/{id}")]
         Task<GetInterestAndObjective> Get(int id);
 
+        [Get("/InterestAndObjective/GetbyClient/{id}")]
+        Task<GetInterestAndObjective> GetbyClient(int id);
+
         [Post("/InterestAndObjective/Create")]
         Task<HttpResponseMessage> Create([Body] PostInterestAndObjective model);
 
         [Put("/InterestAndObjective/Put")]
         Task<HttpResponseMessage> Put([Body] PostInterestAndObjective model);
+
+        [Delete("/InterestAndObjective/Delete/{id}")]
+        Task<HttpResponseMessage> Delete(int id);
     }
 }
