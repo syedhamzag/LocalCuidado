@@ -7,6 +7,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene
 {
     public class CreateInfectionControl
     {
+        public string Method { get; set; } = "Index";
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Infection Control";
         public int InfectionId { get; set; }
         public int ClientId { get; set; }
         public int Type { get; set; }

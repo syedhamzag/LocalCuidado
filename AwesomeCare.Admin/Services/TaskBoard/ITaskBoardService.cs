@@ -17,6 +17,9 @@ namespace AwesomeCare.Admin.Services.TaskBoard
         [Get("/TaskBoard/GetPin")]
         Task<GetRotaPin> GetPin();
 
+        [Get("/TaskBoard/GetPin/{id}")]
+        Task<GetRotaPin> GetPin(int id);
+
         [Post("/TaskBoard/ChangePin")]
         Task<HttpResponseMessage> ChangePin([Body] PostRotaPin model);
 

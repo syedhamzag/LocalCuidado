@@ -199,7 +199,7 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int clientId, string pin)
+        public async Task<IActionResult> Index(int clientId, int pin)
         {
             var getmodal = await _taskService.GetPin();
             if (pin != getmodal.Pin)
@@ -208,7 +208,7 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string pin, List<int> Ids)
+        public async Task<IActionResult> Delete(int pin, List<int> Ids)
         {
             var getmodal = await _taskService.GetPin();
             if (pin != getmodal.Pin)
@@ -228,14 +228,15 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePin(string newPin, string oldPin)
+        public async Task<IActionResult> ChangePin(int newPin, string oldPin)
         {
             var getmodal = await _taskService.GetPin();
-            if (getmodal.Pin != oldPin)
+            if (getmodal.Pin.ToString() != oldPin)
                 return RedirectToAction("BaseRecord", "Admin");
             var model = new PostRotaPin();
             model.PinId = getmodal.PinId;
             model.Pin = newPin;
+            model.Key = getmodal.Key;
             var result = await _taskService.ChangePin(model);
 
             return RedirectToAction("Dashboard", "Dashboard");

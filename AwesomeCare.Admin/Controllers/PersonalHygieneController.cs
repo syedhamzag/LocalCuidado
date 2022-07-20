@@ -50,6 +50,11 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var entity = await _phygieneService.GetbyClient(clientId);
+            if (entity != null)
+            {
+                model = GetHygiene(entity);
+            }
             return View(model);
 
         }
@@ -155,21 +160,24 @@ namespace AwesomeCare.Admin.Controllers
         {
             var putEntity = new CreatePersonalHygiene
             {
-            HygieneId = hygiene.HygieneId,
-            ClientId = hygiene.ClientId,
-            Cleaning = hygiene.Cleaning,
-            CleaningFreq = hygiene.CleaningFreq,
-            CleaningTools = hygiene.CleaningTools,
-            DesiredCleaning = hygiene.DesiredCleaning,
-            DirtyLaundry = hygiene.DirtyLaundry,
-            DryLaundry = hygiene.DryLaundry,
-            GeneralAppliance = hygiene.GeneralAppliance,
-            Ironing = hygiene.Ironing,
-            LaundryGuide = hygiene.LaundryGuide,
-            LaundrySupport = hygiene.LaundrySupport,
-            WashingMachine = hygiene.WashingMachine,
-            WhoClean = hygiene.WhoClean,
-        };
+                HygieneId = hygiene.HygieneId,
+                ClientId = hygiene.ClientId,
+                Cleaning = hygiene.Cleaning,
+                CleaningFreq = hygiene.CleaningFreq,
+                CleaningTools = hygiene.CleaningTools,
+                DesiredCleaning = hygiene.DesiredCleaning,
+                DirtyLaundry = hygiene.DirtyLaundry,
+                DryLaundry = hygiene.DryLaundry,
+                GeneralAppliance = hygiene.GeneralAppliance,
+                Ironing = hygiene.Ironing,
+                LaundryGuide = hygiene.LaundryGuide,
+                LaundrySupport = hygiene.LaundrySupport,
+                WashingMachine = hygiene.WashingMachine,
+                WhoClean = hygiene.WhoClean,
+                Title = "Update Personal Hygiene",
+                ActionName = "Update",
+                Method = "Edit"
+            };
             return putEntity;
         }
 

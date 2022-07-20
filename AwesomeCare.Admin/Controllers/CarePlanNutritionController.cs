@@ -30,6 +30,11 @@ namespace AwesomeCare.Admin.Controllers
             var client = await _clientService.GetClientDetail();
             var model = new CreateCarePlanNutrition();
             model.ClientId = clientId;
+            var entity = await _nutritionService.GetbyClient(clientId);
+            if (entity != null)
+            {
+                model = GetNutrition(entity);
+            }
             return View(model);
         }
 
@@ -104,6 +109,9 @@ namespace AwesomeCare.Admin.Controllers
                 ThingsILike = nutrition.ThingsILike,
                 WhenRestock = nutrition.WhenRestock,
                 WhoRestock = nutrition.WhoRestock,
+                Title = "Update Care Plan Nutrition",
+                ActionName = "Update",
+                Method = "Edit"
             };
             return putEntity;
         }

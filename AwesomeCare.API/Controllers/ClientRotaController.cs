@@ -315,13 +315,39 @@ namespace AwesomeCare.API.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> AddPin([FromBody] PostRotaPin model)
+        {
+            var postEntity = Mapper.Map<RotaPin>(model);
+            await _rotaPinRepository.InsertEntity(postEntity);
+            return Ok();
+        }
+
         [HttpGet("GetPin")]
-        [ProducesResponseType(type: typeof(GetClientRota), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(type: typeof(List<GetClientRota>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetPin()
         {
-            var getEntity = _rotaPinRepository.Table.ProjectTo<GetRotaPin>().FirstOrDefault();
+            var getEntity = _rotaPinRepository.Table.ProjectTo<GetRotaPin>().ToList();
+
+            return Ok(getEntity);
+        }
+        [HttpGet("GetPin/{id}")]
+        [ProducesResponseType(type: typeof(GetClientRota), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetPin(int id)
+        {
+            var getEntity = (from rotapin in _rotaPinRepository.Table
+                             where rotapin.PinId == id
+                             select new GetRotaPin
+                             {
+                                 PinId = rotapin.PinId,
+                                 Pin   = rotapin.Pin,
+                                 Key = rotapin.Key
+                             }).FirstOrDefault();
 
             return Ok(getEntity);
         }

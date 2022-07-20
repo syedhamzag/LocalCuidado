@@ -7,6 +7,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
     public class PostRotaPin
     {
         public int PinId { get; set; }
-        public string Pin { get; set; }
+        public int Pin { get; set; }
+        public string Key { get; set; }
     }
 }

@@ -17,8 +17,14 @@ namespace AwesomeCare.Admin.Services.ClientRota
         [Post("/ClientRota/ChangePin")]
         Task<HttpResponseMessage> ChangePin([Body] PostRotaPin model);
 
+        [Post("/ClientRota/AddPin")]
+        Task<HttpResponseMessage> AddPin([Body] PostRotaPin model);
+
+        [Get("/ClientRota/GetPin/{id}")]
+        Task<GetRotaPin> GetPin(int id);
+
         [Get("/ClientRota/GetPin")]
-        Task<GetRotaPin> GetPin();
+        Task<List<GetRotaPin>> GetPin();
 
         [Get("/ClientRota/GetForEdit/{id}")]
         Task<List<GetClientRota>> GetForEdit(int id);

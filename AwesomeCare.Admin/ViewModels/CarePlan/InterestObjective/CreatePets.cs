@@ -7,6 +7,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.InterestObjective
 {
     public class CreatePets
     {
+        public string Method { get; set; } = "Index";
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Pets";
         public int PetsId { get; set; }
         public int ClientId { get; set; }
         public string ClientName { get; set; }

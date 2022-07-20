@@ -75,24 +75,42 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int clientId, string pin)
+        public async Task<IActionResult> Index(int clientId, int pin, int pinId)
         {
-            var getmodal = await _clientRotaService.GetPin();
+            var getmodal = await _clientRotaService.GetPin(pinId);
             if (pin != getmodal.Pin)
                 return RedirectToAction("HomeCare", "Client"); 
             return RedirectToAction("Index", new { clientId = clientId });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePin(string newPin, string oldPin)
+        public async Task<IActionResult> ChangePin(int newPin, int oldPin, int pinId)
         {
-            var getmodal = await _clientRotaService.GetPin();
+            var getmodal = await _clientRotaService.GetPin(pinId);
             if (getmodal.Pin != oldPin)
                 return RedirectToAction("HomeCare", "Client");
             var model = new PostRotaPin();
             model.PinId = getmodal.PinId;
             model.Pin = newPin;
+            model.Key = getmodal.Key;
             var result = await _clientRotaService.ChangePin(model);
+
+            return RedirectToAction("BaseRecord", "Admin");
+        }
+        public IActionResult AddPin()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPin(PostRotaPin model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _clientRotaService.AddPin(model);
 
             return RedirectToAction("BaseRecord", "Admin");
         }

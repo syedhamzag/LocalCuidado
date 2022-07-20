@@ -169,6 +169,8 @@ namespace AwesomeCare.Admin.Controllers
 
             var putEntity = new CreateInterestAndObjective
             {
+                Title = "Update Interest And Objective",
+                ActionName = "Update",
                 #region Personal Details
                 GoalId = obj.Result.GoalId,
                 ClientId = clientId,

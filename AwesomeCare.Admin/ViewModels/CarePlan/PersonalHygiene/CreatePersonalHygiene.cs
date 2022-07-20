@@ -25,5 +25,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene
 
         public string WhoCleanName { get; set; }
         public string CleanFreqName { get; set; }
+        public string Method { get; set; } = "Index";
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Personal Hygiene";
     }
 }

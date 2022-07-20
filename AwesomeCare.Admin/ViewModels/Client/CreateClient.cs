@@ -62,7 +62,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        [MaxLength(255)]
+        [MaxLength(200)]
         public string About { get; set; }
 
         [Required]
@@ -78,7 +78,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public DateTime? EndDate { get; set; }
         [Required]
         [MaxLength(50)]
-        public string Keyworker { get; set; }
+        public string Keyworker { get; set; } = "old";
         [Required]
         [MaxLength(50)]
         public string IdNumber { get; set; }
@@ -109,7 +109,7 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [Required]
         [MaxLength(50)]
         [Display(Name = "Team Leader")]
-        public string TeamLeader { get; set; }
+        public string TeamLeader { get; set; } = "old";
         [Required]
         [MaxLength(15)]
         [Display(Name = "Date of Birth")]
@@ -150,6 +150,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public int ClientManager { get; set; }
         public int Denture { get; set; }
         public int Aid { get; set; }
+        public string TeamLeaderId { get; set; }
+        public string KeyworkerId { get; set; }
         #endregion
         public List<SelectListItem> StaffList {get;set;}
         public List<ClientInvolvingParty> InvolvingParties { get; set; }

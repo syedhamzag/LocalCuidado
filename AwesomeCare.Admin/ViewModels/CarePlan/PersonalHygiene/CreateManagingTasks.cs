@@ -13,6 +13,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene
             GetManagingTasks = new List<GetManagingTasks>();
         }
 
+        public string Method { get; set; } = "Index";
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Managing Tasks";
         public List<GetManagingTasks> GetManagingTasks { get; set; }
 
         public string ClientName { get; set; }

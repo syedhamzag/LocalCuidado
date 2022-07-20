@@ -586,6 +586,14 @@ function getpersonaldetail(element) {
                 response.getReview.forEach(function (result, index) {
                     var row = '<tr><td>' + result.cP_PreDate + '</td><td>' + result.cP_ReviewDate + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/PersonalDetail/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/PersonalDetail/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/PersonalDetail/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -610,11 +618,18 @@ function getpets(element) {
                 response.getPets.forEach(function (result, index) {
                     var row = '<tr><td>' + result.name + '</td><td>' + result.age + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/Pets/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/Pets/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/Pets/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
             error: function () {
-                alert('Failed to receive the Data');
                 console.log('Failed ');
             }
         });
@@ -624,7 +639,6 @@ function getintandobj(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
     var client = $('#tbl_' + name).children().length;
-    console.log(client);
     if (client <= 0) {
         $.ajax({
             type: 'GET',
@@ -634,6 +648,14 @@ function getintandobj(element) {
                 response.getInterestAndObjective.forEach(function (result, index) {
                     var row = '<tr><td>' + result.careGoal + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/InterestAndObjective/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/InterestAndObjective/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/InterestAndObjective/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -658,6 +680,14 @@ function getpersonalhygiene(element) {
                 response.getPersonalHygiene.forEach(function (result, index) {
                     var row = '<tr><td>' + result.laundrySupport + '</td><td>' + result.laundrySupport + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/PersonalHygiene/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/PersonalHygiene/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/PersonalHygiene/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -682,6 +712,14 @@ function getinfectioncontrol(element) {
                 response.getInfectionControl.forEach(function (result, index) {
                     var row = '<tr><td>' + result.testDate + '</td><td>' + result.remarks + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/InfectionControl/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/InfectionControl/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/InfectionControl/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -706,6 +744,14 @@ function getmtask(element) {
                 response.getManagingTasks.forEach(function (result, index) {
                     var row = '<tr><td>' + result.help + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/ManagingTasks/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/ManagingTasks/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/ManagingTasks/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },
@@ -729,6 +775,14 @@ function getnutrition(element) {
                 response.getCarePlanNutrition.forEach(function (result, index) {
                     var row = '<tr><td>' + result.specialDiet + '</td><td>' + result.avoidFood + '</td></tr>';
                     $('#tbl_' + name).append(row);
+                    var edit = '<a class="dropdown-item" href="/CarePlanNutrition/Index?clientId=' + clientId + '">Edit</a>';
+                    var view = '<a class="dropdown-item" href="/CarePlanNutrition/View?clientId=' + clientId + '">View</a>';
+                    var del =  '<a class="dropdown-item" href="/CarePlanNutrition/Delete?clientId=' + clientId + '">Delete</a>';
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                    $(menu).append(edit);
+                    $(menu).append(view);
+                    $(menu).append(del);
 
                 });
             },

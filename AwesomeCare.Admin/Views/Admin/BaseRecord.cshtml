@@ -74,35 +74,40 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h2>Base Record PIN</h2>
+                <h2 class="mb-0 row">
+                    <span class="col-sm-10">Base Record PIN</span>
+                    <small class="col-sm-offset-1 col-sm-1"><a class="col-sm-offset-1 col-sm-1" title="Add" asp-controller="Rotering" asp-action="AddPin"><span class="sr-only">Add</span> <i class="fa fa-plus"></i></a> </small>
+                </h2>
             </div>
             <div class="card-body">
-                <div class="accordion" id="pin">
+                @foreach (var rota in ViewBag.Pin)
+                {
+                <div class="accordion" id="@string.Concat(rota.Key,rota.PinId,rota.PinId)">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 row">
-                                <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#rottering" aria-expanded="false" aria-controls="rottering">
-                                    Rottering
+                                <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="@string.Concat("#",rota.Key)" aria-expanded="false" aria-controls="@string.Concat(rota.Key)">
+                                    @string.Concat(rota.Key)
                                 </button>
                             </h5>
                         </div>
-                        <div id="rottering" class="collapse" aria-labelledby="rottering" data-parent="#pin">
+                        <div id="@string.Concat(rota.Key)" class="collapse" aria-labelledby="@string.Concat(rota.Key)" data-parent="@string.Concat("#",rota.Key,rota.PinId,rota.PinId)">
                             <div class="card-body">
                                 <div class="card">
                                     <div class="card-header">
                                         <h5 class="mb-0 row">
-                                            <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#rotaId" aria-expanded="false" aria-controls="rotaId">
-                                                <small>(Key: Rottering PIN)</small>
+                                            <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="@string.Concat("#",rota.Key,rota.PinId)" aria-expanded="false" aria-controls="@string.Concat(rota.Key,rota.PinId)">
+                                                <small> @string.Concat("(Key: ",rota.Key," PIN)") </small>
                                             </button>
                                         </h5>
                                     </div>
-                                    <div id="rotaId" class="collapse" aria-labelledby="RotteringPIN" data-parent="#rottering">
+                                    <div id="@string.Concat(rota.Key,rota.PinId)" class="collapse" aria-labelledby="RotteringPIN" data-parent="@string.Concat("#",rota.Key)">
                                         <div class="card-body">
                                             <table class="table table-condensed table-borderless table-hover">
                                                 <tr>
                                                     <td> ********</td>
                                                     <td>
-                                                        <button type="button" class="btn btn-primary fa fa-pencil m-r-5" data-bs-toggle="modal" data-bs-target="#roteringModal">
+                                                        <button type="button" class="btn btn-primary fa fa-pencil m-r-5" data-bs-toggle="modal" data-bs-target="@string.Concat("#",rota.Key,"Modal")">
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -115,84 +120,50 @@
                     </div>
 
                 </div>
-                <div class="accordion" id="taskpin">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0 row">
-                                <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#taskboard" aria-expanded="false" aria-controls="taskboard">
-                                    Task Board
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="taskboard" class="collapse" aria-labelledby="taskboard" data-parent="#taskpin">
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@foreach (var rota in ViewBag.Pin)
+{
+    <div class="modal fade" id="@string.Concat(rota.Key,"Modal")" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="RoteringForm" asp-controller="Rotering" asp-action="ChangePin" method="post">
+                    <div class="modal-body">
+                        <div class="card">
+                            <input type="hidden" name="pinId" value="@rota.PinId" />
+                            <div class="card-header">
+                            </div>
                             <div class="card-body">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0 row">
-                                            <button class="btn btn-link col-sm-10" type="button" data-toggle="collapse" data-target="#taskId" aria-expanded="false" aria-controls="taskId">
-                                                <small>(Key: Task Board PIN)</small>
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div id="taskId" class="collapse" aria-labelledby="TaskboardPIN" data-parent="#taskboard">
-                                        <div class="card-body">
-                                            <table class="table table-condensed table-borderless table-hover">
-                                                <tr>
-                                                    <td> ********</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-primary fa fa-pencil m-r-5" data-bs-toggle="modal" data-bs-target="#taskModal">
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label>Please Enter Old Pin</label>
+                                    <input type="password" class="form-control" name="oldPin" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Please Enter New pin</label>
+                                    <input type="password" class="form-control" name="newPin" />
                                 </div>
                             </div>
+
                         </div>
                     </div>
-                </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-primary" value="Submit" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
-
-<div class="modal fade" id="roteringModal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="RoteringForm" asp-controller="Rotering" asp-action="ChangePin" method="post">
-                <div class="modal-body">
-                    <div class="card">
-
-                        <div class="card-header">
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label>Please Enter Old Pin</label>
-                                <input type="password" class="form-control" name="oldPin" />
-                            </div>
-                            <div class="form-group">
-                                <label>Please Enter New pin</label>
-                                <input type="password" class="form-control" name="newPin" />
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit" class="btn btn-primary" value="Submit" />
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="taskModal" role="dialog">
+    }
+@*<div class="modal fade" id="taskboardModal" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -203,7 +174,7 @@
             <form id="TaskBoardForm" asp-controller="TaskBoard" asp-action="ChangePin" method="post">
                 <div class="modal-body">
                     <div class="card">
-
+                        <input type="hidden" name="pinId" value="2" />
                         <div class="card-header">
                         </div>
                         <div class="card-body">
@@ -226,7 +197,7 @@
             </form>
         </div>
     </div>
-</div>
+</div>*@
 @section VendorScripts{
     <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">

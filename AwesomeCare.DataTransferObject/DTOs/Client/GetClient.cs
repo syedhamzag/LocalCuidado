@@ -183,6 +183,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string ManagerName { get; set; }
         public int Denture { get; set; }
         public int Aid { get; set; }
+        public int TeamLeaderId { get; set; }
+        public int KeyworkerId { get; set; }
 
         public virtual ICollection<GetClientComplainRegister> GetClientComplain { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }

@@ -14,6 +14,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.InterestObjective
             GetInterest = new List<GetInterest>();
             GetPersonalityTest = new List<GetPersonalityTest>();
         }
+        public string Method { get; set; } = "Index";
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Interest And Objective";
 
         public List<GetInterest> GetInterest { get; set; }
         public List<GetPersonalityTest> GetPersonalityTest { get; set; }

@@ -18,24 +18,29 @@ using AwesomeCare.Admin.Services.ClientCareDetails;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsHeading;
 using AwesomeCare.DataTransferObject.DTOs.ClientCareDetailsTask;
 using AwesomeCare.Services.Services;
+using AwesomeCare.Admin.Services.ClientRota;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class AdminController : BaseController
     {
         private readonly IBaseRecordService _baseRecordService;
+        private readonly IClientRotaService _clientRotaService;
         private readonly IClientInvolvingPartyBase _clientInvolvingPartyBaseService;
         private readonly IClientCareDetails _clientCareDetails;
-        public AdminController(IBaseRecordService baseRecordService, IFileUpload fileUpload, IClientInvolvingPartyBase clientInvolvingPartyBaseService, IClientCareDetails clientCareDetails):base(fileUpload)
+        public AdminController(IBaseRecordService baseRecordService, IFileUpload fileUpload, IClientInvolvingPartyBase clientInvolvingPartyBaseService, IClientCareDetails clientCareDetails,
+            IClientRotaService clientRotaService):base(fileUpload)
         {
             _baseRecordService = baseRecordService;
             _clientInvolvingPartyBaseService = clientInvolvingPartyBaseService;
             _clientCareDetails = clientCareDetails;
+            _clientRotaService = clientRotaService;
         }
         #region BaseRecord
         public async Task<IActionResult> BaseRecord()
         {
             var baseRecordsWithItems = await _baseRecordService.GetBaseRecordsWithItems();
+            ViewBag.Pin = await _clientRotaService.GetPin();
             return View(baseRecordsWithItems);
         }
 

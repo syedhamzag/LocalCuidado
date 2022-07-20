@@ -7,6 +7,9 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
 {
     public class CreateCarePlanNutrition
     {
+        public string Method { get; set; } = "Index";
+        public string ActionName { get; set; } = "Save";
+        public string Title { get; set; } = "Create Care Plan Nutrition";
         public int NutritionId { get; set; }
         public int ClientId { get; set; }
         public string ClientName { get; set; }

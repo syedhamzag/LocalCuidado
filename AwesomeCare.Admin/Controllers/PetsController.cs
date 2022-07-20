@@ -50,6 +50,11 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var entity = await _petsService.GetbyClient(clientId);
+            if (entity != null)
+            {
+                model = GetPets(entity);
+            }
             return View(model);
 
         }
@@ -92,6 +97,9 @@ namespace AwesomeCare.Admin.Controllers
                 PetInsurance = Pets.PetInsurance,
                 MealStorage = Pets.MealStorage,
                 VetVisit = Pets.VetVisit,
+                Title = "Update Pets",
+                ActionName = "Update",
+                Method = "Edit"
             };
             return putEntity;
         }
@@ -107,7 +115,6 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
             PostPets post = new PostPets();
-
             post.PetsId = model.PetsId;
             post.ClientId = model.ClientId;
             post.Name = model.Name;
@@ -121,7 +128,6 @@ namespace AwesomeCare.Admin.Controllers
             post.PetCare = model.PetCare;
             post.MealPattern = model.MealPattern;
 
-            var json = JsonConvert.SerializeObject(post);
             var result = await _petsService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 

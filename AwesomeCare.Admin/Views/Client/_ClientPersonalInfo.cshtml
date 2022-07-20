@@ -179,8 +179,8 @@
     <div class="col-xs-12 col-sm-4 col-md-4">
         <div class="form-group">
             <label asp-for="TeamLeader" class="control-label"></label>
-            <input type="text" class="form-control" asp-for="TeamLeader">
-            <span asp-validation-for="TeamLeader" class="text-danger"></span>
+            <select asp-for="TeamLeaderId" asp-items="@Model.StaffList" class="selectpicker form-control" data-live-search="true"></select>
+            <span asp-validation-for="TeamLeaderId" class="text-danger"></span>
         </div>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4">
@@ -269,8 +269,8 @@
     <div class="col-xs-12 col-sm-4 col-md-4">
         <div class="form-group">
             <label asp-for="Keyworker" class="control-label"></label>
-            <input type="text" class="form-control" asp-for="Keyworker">
-            <span asp-validation-for="Keyworker" class="text-danger"></span>
+            <select asp-for="KeyworkerId" asp-items="@Model.StaffList" class="selectpicker form-control" data-live-search="true"></select>
+            <span asp-validation-for="KeyworkerId" class="text-danger"></span>
         </div>
     </div>
     <div class="col-xs-12 col-sm-4 col-md-4">

@@ -187,6 +187,14 @@ namespace AwesomeCare.Model.Models.Map
           .HasColumnName("Aid")
           .HasDefaultValue(0);
 
+            builder.Property(p => p.TeamLeaderId)
+          .HasColumnName("TeamLeaderId")
+          .HasDefaultValue(0);
+
+            builder.Property(p => p.KeyworkerId)
+          .HasColumnName("KeyworkerId")
+          .HasDefaultValue(0);
+
 
             builder.HasMany(p => p.RegulatoryContact)
                 .WithOne(p => p.Client)

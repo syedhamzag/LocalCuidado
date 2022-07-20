@@ -17,6 +17,11 @@ namespace AwesomeCare.Model.Models.Map
             builder.Property(p => p.Pin)
                 .HasColumnName("Pin")
                 .IsRequired();
+
+            builder.Property(p => p.Key)
+                .HasColumnName("Key")
+                .HasMaxLength(50)
+                .IsRequired();
             #endregion
         }
     }

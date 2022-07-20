@@ -39,7 +39,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public string Address { get; set; }
 
         [Required]
-        [MaxLength(255)]
+        [MaxLength(200)]
         public string About { get; set; }
         [Required]
         [MaxLength(255)]
@@ -119,6 +119,8 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public int ClientManager { get; set; }
         public int Denture { get; set; }
         public int Aid { get; set; }
+        public int TeamLeaderId { get; set; }
+        public int KeyworkerId { get; set; }
 
         public List<PostClientInvolvingParty> InvolvingParties { get; set; }
         public List<PostClientRegulatoryContact> RegulatoryContacts { get; set; }

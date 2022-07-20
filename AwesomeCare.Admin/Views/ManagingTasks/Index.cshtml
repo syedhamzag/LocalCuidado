@@ -1,7 +1,7 @@
 ﻿@using AwesomeCare.Admin.ViewModels.CarePlan.PersonalHygiene;
 @model CreateManagingTasks
 @{
-    ViewData["Title"] = "Create Managing Tasks";
+    ViewData["Title"] = @Model.Title;
 }
 @section HeaderScripts{
     <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
@@ -16,7 +16,7 @@
 
             </div>
             <div class="card-body">
-                <form asp-route="ManagingTasks" method="post" enctype="multipart/form-data">
+                <form asp-action="@Model.Method" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="row">
@@ -31,6 +31,7 @@
                                     <table class="table table-hover table-bordered" id="tblMTasks">
                                         <thead>
                                             <tr>
+                                                <th></th>
                                                 <th>Task</th>
                                                 <th>Help Required</th>
                                                 <th>Status</th>
@@ -42,7 +43,7 @@
                                                 @foreach (var type in Model.GetManagingTasks)
                                                 {
                                                     int i = 0;
-                                                    <tr>
+                                                    <tr id="@string.Concat("row-",(i+1))">
                                                         @if(type.TaskId > 0)
                                                         {
                                                              <td>
@@ -73,7 +74,7 @@
 
                                     <div class="row">
                                         <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
-                                            <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                            <button type="submit" class="btn btn-primary pull-right">@Model.ActionName</button>
                                         </div>
                                         <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
                                             <a asp-action="Index" asp-route-clientId="ClientId" class="btn btn-primary pull-left">Cancel</a>
@@ -83,6 +84,7 @@
                                     <table class="table table-hover table-bordered" id="ManagingTask" style="display:none;">
                                         <thead>
                                             <tr>
+                                                <th></th>
                                                 <th>Task</th>
                                                 <th>Help Required</th>
                                                 <th>Status</th>
@@ -90,6 +92,12 @@
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td>
+                                                    <div class="fancy-checkbox">
+                                                        <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",Model.TaskCount)" id="@string.Concat("isChecked",Model.TaskCount)" /><span><small> </small></span></label>
+                                                        <input type="hidden" id="@string.Concat("TaskId",Model.TaskCount)" name="@string.Concat("TaskId",Model.TaskCount)" value="0" />
+                                                    </div>
+                                                </td>
                                                 <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault().Task" asp-items="null" /></td>
                                                 <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault().Help" class="form-control" /></td>
                                                 <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault().Status" asp-items="null" /><input type="hidden" asp-for="@Model.GetManagingTasks.FirstOrDefault().TaskId" value="0" /></td>
@@ -106,15 +114,9 @@
         </div>
     </div>
 </div>
-@section VendorScripts{
-    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
-    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-}
 
 @section Scripts{
-    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
-    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
     <script>
         $(function () {
 

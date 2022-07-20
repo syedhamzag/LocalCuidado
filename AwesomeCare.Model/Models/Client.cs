@@ -104,6 +104,8 @@ namespace AwesomeCare.Model.Models
         public int ClientManager { get; set; }
         public int Denture { get; set; }
         public int Aid { get; set; }
+        public int TeamLeaderId { get; set; }
+        public int KeyworkerId { get; set; }
 
         public virtual ICollection<ClientInvolvingParty> InvolvingParties { get; set; }
         public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }

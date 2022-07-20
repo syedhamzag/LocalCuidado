@@ -64,8 +64,7 @@ namespace AwesomeCare.Admin.Controllers
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
             var mtask = await _taskService.Get();
-            model.GetManagingTasks = mtask;
-            model.TaskCount = mtask.Count();
+            model = GetTask(clientId,mtask);
             return View(model);
 
         }
@@ -142,21 +141,22 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 
-        public IActionResult View(int clientId)
+        public async Task<IActionResult> View(int clientId)
         {
-            var model = GetTask(clientId);
+            var mtask = await _taskService.Get();
+            var model = GetTask(clientId,mtask);
             return View(model);
         }
 
-        public CreateManagingTasks GetTask(int clientId)
+        public CreateManagingTasks GetTask(int clientId, List<GetManagingTasks> mtask)
         {
-            var client = _clientService.GetClient(clientId);
-            var mtask =  _taskService.Get();
-
             var putEntity = new CreateManagingTasks
             {
                 ClientId = clientId,
-                GetManagingTasks = mtask.Result,
+                GetManagingTasks = mtask.Where(s=>s.ClientId==clientId).ToList(),
+                Title = "Update Managing Tasks",
+                ActionName = "Update",
+                TaskCount = mtask.Where(s => s.ClientId == clientId).Count()
             };
             return putEntity;
 

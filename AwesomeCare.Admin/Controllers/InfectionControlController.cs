@@ -51,6 +51,11 @@ namespace AwesomeCare.Admin.Controllers
             model.ClientId = clientId;
             var client = await _clientService.GetClientDetail();
             model.ClientName = client.Where(s => s.ClientId == clientId).FirstOrDefault().FullName;
+            var entity = await _infectionService.GetbyClient(clientId);
+            if (entity != null)
+            {
+                model = GetInfectionControl(entity);
+            }
             return View(model);
         }
         public async Task<IActionResult> Delete(int clientId)
@@ -77,14 +82,17 @@ namespace AwesomeCare.Admin.Controllers
         {
             var putEntity = new CreateInfectionControl
             {
-            ClientId = infection.ClientId,
-            Guideline = infection.Guideline,
-            InfectionId = infection.InfectionId,
-            Remarks = infection.Remarks,
-            Status = infection.Status,
-            TestDate = infection.TestDate,
-            Type = infection.Type,
-            VaccStatus = infection.VaccStatus,
+                ClientId = infection.ClientId,
+                Guideline = infection.Guideline,
+                InfectionId = infection.InfectionId,
+                Remarks = infection.Remarks,
+                Status = infection.Status,
+                TestDate = infection.TestDate,
+                Type = infection.Type,
+                VaccStatus = infection.VaccStatus,
+                Title = "Update Infection Control",
+                ActionName = "Update",
+                Method = "Edit"
             };
             return putEntity;
         }
