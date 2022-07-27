@@ -57,6 +57,10 @@ using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 using AwesomeCare.DataTransferObject.DTOs.FilesAndRecord;
 using AwesomeCare.DataTransferObject.DTOs.Chat;
 using AwesomeCare.DataTransferObject.DTOs.Client.CareObj;
+using AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition;
+using AwesomeCare.DataTransferObject.DTOs.ClientHobbies;
+using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
+using AwesomeCare.DataTransferObject.DTOs.ClientPerformanceIndicator;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -185,6 +189,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public int Aid { get; set; }
         public int TeamLeaderId { get; set; }
         public int KeyworkerId { get; set; }
+        public string Pin { get; set; }
 
         public virtual ICollection<GetClientComplainRegister> GetClientComplain { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
@@ -241,5 +246,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual GetChat GetChat { get; set; }
 
         public virtual ICollection<GetClientCareObj> GetClientCareObj { get; set; } = new HashSet<GetClientCareObj>();
+        public virtual ICollection<GetClientHealthCondition> GetClientHealthCondition { get; set; } = new HashSet<GetClientHealthCondition>();
+        public virtual ICollection<GetClientHobbies> GetClientHobbies { get; set; } = new HashSet<GetClientHobbies>();
+        public virtual ICollection<GetCuidiBuddy> GetCuidiBuddy { get; set; } = new HashSet<GetCuidiBuddy>();
+        public virtual ICollection<GetClientPerformanceIndicator> GetClientPerformanceIndicators { get; set; } = new HashSet<GetClientPerformanceIndicator>();
     }
 }

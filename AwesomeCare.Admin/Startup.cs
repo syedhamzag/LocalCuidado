@@ -122,6 +122,12 @@ using AwesomeCare.Admin.Services.ClientCareObj;
 using AwesomeCare.Admin.Services.Payroll;
 using AwesomeCare.Admin.Services.Chat;
 using static AwesomeCare.Admin.Controllers.ChatController;
+using AwesomeCare.Admin.Services.CuidiBuddy;
+using AwesomeCare.Admin.Services.Hobbies;
+using AwesomeCare.Admin.Services.HealthCondition;
+using AwesomeCare.Admin.Services.ClientHealthCondition;
+using AwesomeCare.Admin.Services.ClientHobbies;
+using AwesomeCare.Admin.Services.ClientPerformanceIndicator;
 
 namespace AwesomeCare.Admin
 {
@@ -1028,32 +1034,32 @@ namespace AwesomeCare.Admin
             services.AddHttpClient("performanceindicator", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IPerformanceIndicatorService>(r))
-   ;
+            }).AddTypedClient(r => RestService.For<IPerformanceIndicatorService>(r));
+
+            services.AddHttpClient("clientperformanceindicator", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientPerformanceIndicatorService>(r));
 
             services.AddHttpClient("clientdailytask", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IClientDailyTaskService>(r))
-   ;
+            }).AddTypedClient(r => RestService.For<IClientDailyTaskService>(r));
 
             services.AddHttpClient("staffholiday", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IStaffHolidayService>(r))
-   ;
+            }).AddTypedClient(r => RestService.For<IStaffHolidayService>(r));
 
             services.AddHttpClient("setupstaffholiday", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<ISetupStaffHolidayService>(r))
-   ;
+            }).AddTypedClient(r => RestService.For<ISetupStaffHolidayService>(r));
 
             services.AddHttpClient("staffteamlead", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IStaffTeamLeadService>(r))
-   ;
+            }).AddTypedClient(r => RestService.For<IStaffTeamLeadService>(r));
 
             services.AddHttpClient("bestinterestassessment", c =>
             {
@@ -1100,14 +1106,37 @@ namespace AwesomeCare.Admin
             services.AddHttpClient("payroll", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IPayrollService>(r))
-   ;
+            }).AddTypedClient(r => RestService.For<IPayrollService>(r));
 
             services.AddHttpClient("careobj", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IClientCareObjService>(r))
-   ;
+            }).AddTypedClient(r => RestService.For<IClientCareObjService>(r));
+
+            services.AddHttpClient("cuidi", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<ICuidiBuddyServices>(r));
+
+            services.AddHttpClient("hobby", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IHobbiesServices>(r));
+
+            services.AddHttpClient("healthcon", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IHealthConditionServices>(r));
+
+            services.AddHttpClient("clienthealthcon", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientHealthConditionServices>(r));
+
+            services.AddHttpClient("clienthobby", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IClientHobbiesServices>(r));
         }
     }
 }

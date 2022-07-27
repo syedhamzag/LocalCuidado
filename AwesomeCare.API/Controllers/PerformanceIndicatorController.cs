@@ -21,13 +21,15 @@ namespace AwesomeCare.API.Controllers
     public class PerformanceIndicatorController : ControllerBase
     {
         private IGenericRepository<PerformanceIndicator> _PerformanceIndicatorRepository;
+        private IGenericRepository<PerformanceIndicatorTask> _PerformanceIndicatorTaskRepository;
         private ILogger<PerformanceIndicatorController> _logger;
         private AwesomeCareDbContext _dbContext;
-        public PerformanceIndicatorController(AwesomeCareDbContext dbContext, IGenericRepository<PerformanceIndicator> PerformanceIndicatorRepository, ILogger<PerformanceIndicatorController> logger)
+        public PerformanceIndicatorController(AwesomeCareDbContext dbContext, IGenericRepository<PerformanceIndicator> PerformanceIndicatorRepository, IGenericRepository<PerformanceIndicatorTask> PerformanceIndicatorTaskRepository,ILogger<PerformanceIndicatorController> logger)
         {
             _PerformanceIndicatorRepository = PerformanceIndicatorRepository;
             _logger = logger;
             _dbContext = dbContext;
+            _PerformanceIndicatorTaskRepository = PerformanceIndicatorTaskRepository;
         }
 
         [HttpGet("Get/{id}")]
@@ -49,18 +51,23 @@ namespace AwesomeCare.API.Controllers
                                        Deleted = h.Deleted,
                                        Heading = h.Heading,
                                        PerformanceIndicatorId = h.PerformanceIndicatorId,
-                                       GetPerformanceIndicatorTask = (from t in h.PerformanceIndicatorTask
-                                                                select new GetPerformanceIndicatorTask
-                                                                {
-                                                                    PerformanceIndicatorTaskId = t.PerformanceIndicatorTaskId,
-                                                                    Title = t.Title,
-                                                                    Score = t.Score,
-                                                                }).ToList()
+                                       Date = h.Date,
+                                       DueDate = h.DueDate,
+                                       Rating = h.Rating,
+                                       Remarks = h.Remarks,
+                                       GetPerformanceIndicatorTask =    (from t in h.PerformanceIndicatorTask
+                                                                        where !t.Deleted
+                                                                        select new GetPerformanceIndicatorTask
+                                                                        {
+                                                                            PerformanceIndicatorTaskId = t.PerformanceIndicatorTaskId,
+                                                                            Title = t.Title,
+                                                                            Score = t.Score,
+                                                                            Deleted = t.Deleted,
+                                                                        }).ToList()
                                    }).FirstOrDefaultAsync();
 
             return Ok(getEntity);
         }
-        [AllowAnonymous]
         [HttpGet()]
         [ProducesResponseType(type: typeof(List<GetPerformanceIndicator>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -74,7 +81,12 @@ namespace AwesomeCare.API.Controllers
                                       Deleted = h.Deleted,
                                       Heading = h.Heading,
                                       PerformanceIndicatorId = h.PerformanceIndicatorId,
+                                      Date = h.Date,
+                                      DueDate = h.DueDate,
+                                      Rating = h.Rating,
+                                      Remarks = h.Remarks,
                                       GetPerformanceIndicatorTask = (from t in h.PerformanceIndicatorTask
+                                                                     where !t.Deleted
                                                                      select new GetPerformanceIndicatorTask
                                                                      {
                                                                          PerformanceIndicatorTaskId = t.PerformanceIndicatorTaskId,
@@ -102,38 +114,46 @@ namespace AwesomeCare.API.Controllers
             await _PerformanceIndicatorRepository.InsertEntity(postEntity);
             return Ok();
         }
-        [HttpPut]
+        [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Put([FromBody] PostPerformanceIndicator model)
+        public async Task<IActionResult> Edit([FromBody] PostPerformanceIndicator model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            if (model.Deleted)
+            bool isEntityRegistered = _PerformanceIndicatorRepository.Table.Any(r => r.Heading.Equals(model.Heading));
+            if (isEntityRegistered)
             {
-                //get all corresponding tasks and mark as deleted
-                var TaskEntity = _dbContext.Set<PerformanceIndicatorTask>();
-
-                var Tasks = TaskEntity.Where(c => c.PerformanceIndicatorId == model.PerformanceIndicatorId).ToList();
-                var putEntity = Mapper.Map<PerformanceIndicator>(model);
-
-                foreach (var task in Tasks)
-                {
-                    task.Deleted = true;
-                    _dbContext.Entry(task).State = EntityState.Modified;
-                }
-                _dbContext.Entry(putEntity).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-                var getEntity = Mapper.Map<GetPerformanceIndicator>(putEntity);
-                return Ok(getEntity);
+                return BadRequest($"Performance Indicator {model.Heading} already exist");
             }
-            else
+            var postEntity = Mapper.Map<PerformanceIndicator>(model);
+            await _PerformanceIndicatorRepository.UpdateEntity(postEntity);
+            return Ok();
+        }
+        [HttpPut]
+        [Route("[action]")]
+        public async Task<IActionResult> Put([FromBody] PutPerformanceIndicator model)
+        {
+            if (!ModelState.IsValid)
             {
-                var postEntity = Mapper.Map<PerformanceIndicator>(model);
-                await _PerformanceIndicatorRepository.UpdateEntity(postEntity);
-                return Ok();
+                return BadRequest(ModelState);
             }
+            var postEntity = Mapper.Map<PerformanceIndicator>(model);
+            await _PerformanceIndicatorRepository.UpdateEntity(postEntity);
+            return Ok();
+
+        }
+        [HttpDelete("DeleteTask/{id}")]
+        public async Task<IActionResult> DeleteTask(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            var entity = await _PerformanceIndicatorTaskRepository.GetEntity(id);
+            entity.Deleted = true;
+            await _PerformanceIndicatorTaskRepository.UpdateEntity(entity);
+            return Ok();
         }
     }
 }

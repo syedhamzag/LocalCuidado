@@ -42,6 +42,9 @@ using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.ClientRota;
+using AwesomeCare.Admin.Services.HealthCondition;
+using AwesomeCare.Admin.Services.Hobbies;
+using AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -63,10 +66,12 @@ namespace AwesomeCare.Admin.Controllers
         IClientRotaNameService _clientRotaNameService;
         IRotaTaskService _rotaTaskService;
         IClientRotaService _clientRotaService;
+        private IHealthConditionServices _healthConService;
+        private IHobbiesServices _hobbyService;
         private IStaffService _staffService;
 
-        public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache,
-            IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IStaffService staffService, IClientRotaService clientRotaService,
+        public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IHobbiesServices hobbyService, IHealthConditionServices healthConService,
+        IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IStaffService staffService, IClientRotaService clientRotaService,
         IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger, IBaseRecordService baseRecordService, IRotaTaskService rotaTaskService, IClientRotaNameService clientRotaNameService,
             IClientCareDetails clientCareDetails, IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) : base(fileUpload)
         {
@@ -77,6 +82,8 @@ namespace AwesomeCare.Admin.Controllers
             _baseRecordService = baseRecordService;
             _clientService = clientService;
             _clientInvolvingPartyService = clientInvolvingPartyService;
+            _healthConService = healthConService;
+            _hobbyService = hobbyService;
             _env = env;
             _logger = logger;
             _cache = cache;
@@ -469,6 +476,7 @@ namespace AwesomeCare.Admin.Controllers
                 return NotFound();
             }
             var staffs = await _staffService.GetStaffs();
+            var clients = await _clientService.GetClients();
             GetClient result = await _clientService.GetClient(clientId.Value);
             var baserecords = await _baseRecordService.GetBaseRecordItem();
             QRCodeData qrCodeData = _qRCodeGenerator.CreateQrCode(result.UniqueId, QRCodeGenerator.ECCLevel.Q);
@@ -479,6 +487,7 @@ namespace AwesomeCare.Admin.Controllers
             result.Status = baserecords.Where(s => s.BaseRecordItemId == result.StatusId).FirstOrDefault().ValueName;
             result.Gender = baserecords.Where(s => s.KeyName == "Gender" && s.BaseRecordItemId == result.GenderId).FirstOrDefault().ValueName;
             ViewBag.staffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString()));
+            ViewBag.Clients = clients.ToList();
             return View(result);
         }
         //public List<GetClient> GetCarePlan(int clientId)
@@ -765,6 +774,12 @@ namespace AwesomeCare.Admin.Controllers
         #endregion
 
         #region Client_Details
+        [HttpGet]
+        public JsonResult personalInfo(int clientId)
+        {
+            var getClient = _clientService.GetHealthHobby(clientId);
+            return Json(getClient.Result);
+        }
         [HttpGet]
         public JsonResult involvingparties(int clientId)
         {

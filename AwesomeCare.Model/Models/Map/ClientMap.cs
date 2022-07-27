@@ -152,6 +152,10 @@ namespace AwesomeCare.Model.Models.Map
               .HasColumnName("NumberOfStaff")
               .IsRequired();
 
+            builder.Property(p => p.Pin)
+              .HasColumnName("Pin")
+              .IsRequired();
+
             builder.Property(p => p.UniqueId)
               .HasColumnName("UniqueId")
               .IsRequired(false);

@@ -59,6 +59,9 @@ using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
 using AwesomeCare.DataTransferObject.DTOs.FilesAndRecord;
 using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 using AwesomeCare.DataTransferObject.DTOs.Client.CareObj;
+using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
+using AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition;
+using AwesomeCare.DataTransferObject.DTOs.ClientHobbies;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -75,11 +78,13 @@ namespace AwesomeCare.API.Controllers
         private IGenericRepository<Medication> _medicationRepository;
         private IGenericRepository<MedicationManufacturer> _medicationManufacturerRepository;
         private IGenericRepository<StaffPersonalInfo> _staffRepository;
+        private IGenericRepository<HealthCondition> _healthconRepository;
+        private IGenericRepository<Hobbies> _hobbyRepository;
 
 
         private AwesomeCareDbContext _dbContext;
-        public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<StaffPersonalInfo> staffRepository,
-            IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, 
+        public ClientController(AwesomeCareDbContext dbContext, IGenericRepository<Client> clientRepository, IGenericRepository<ClientMedication> clientMedicationRepository, IGenericRepository<StaffPersonalInfo> staffRepository, IGenericRepository<HealthCondition> healthconRepository,
+            IGenericRepository<BaseRecordItemModel> baseRecordItemRepository, IGenericRepository<BaseRecordModel> baseRecordRepository, IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository, IGenericRepository<Hobbies> hobbyRepository,
             IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<Medication> medicationRepository, IGenericRepository<MedicationManufacturer> medicationManufacturerRepository)
         {
             _clientRepository = clientRepository;
@@ -92,6 +97,8 @@ namespace AwesomeCare.API.Controllers
             _medicationRepository = medicationRepository;
             _medicationManufacturerRepository = medicationManufacturerRepository;
             _staffRepository = staffRepository;
+            _healthconRepository = healthconRepository;
+            _hobbyRepository = hobbyRepository;
         }
         /// <summary>
         /// Create Client
@@ -129,7 +136,6 @@ namespace AwesomeCare.API.Controllers
 
 
         }
-        [AllowAnonymous]
         /// <summary>
         /// Get Client by Id
         /// </summary>
@@ -157,7 +163,7 @@ namespace AwesomeCare.API.Controllers
                                        Hobbies = client.Hobbies,
                                        StartDate = client.StartDate,
                                        EndDate = client.EndDate,
-                                       Keyworker = client.Keyworker,
+                                       KeyworkerId = client.KeyworkerId,
                                        IdNumber = client.IdNumber,
                                        GenderId = client.GenderId,
                                        NumberOfCalls = client.NumberOfCalls,
@@ -167,7 +173,7 @@ namespace AwesomeCare.API.Controllers
                                        ProvisionVenue = client.ProvisionVenue,
                                        PostCode = client.PostCode,
                                        Rate = client.Rate,
-                                       TeamLeader = client.TeamLeader,
+                                       TeamLeaderId = client.TeamLeaderId,
                                        DateOfBirth = client.DateOfBirth,
                                        Telephone = client.Telephone,
                                        LanguageId = client.LanguageId,
@@ -185,6 +191,7 @@ namespace AwesomeCare.API.Controllers
                                        PreferredName = client.PreferredName,
                                        ClientManager = client.ClientManager,
                                        Aid = client.Aid,
+                                       Pin = client.Pin,
                                        Denture = client.Denture,
                                        InvolvingParties = (from inv in client.InvolvingParties
                                                            select new GetClientInvolvingPartyForEdit
@@ -197,7 +204,24 @@ namespace AwesomeCare.API.Controllers
                                                                Name = inv.Name,
                                                                Relationship = inv.Relationship,
                                                                Telephone = inv.Telephone
-                                                           }).ToList()
+                                                           }).ToList(),
+                                       GetCuidiBuddy = (from cu in client.CuidiBuddy
+                                                        select new GetCuidiBuddy
+                                                        {
+                                                            CuidiBuddyId = cu.CuidiBuddyId,
+                                                        }).ToList(),
+                                       GetClientHealthCondition = (from hc in client.ClientHealthCondition
+                                                                   select new GetClientHealthCondition
+                                                                   {
+                                                                       HCId = hc.HCId,
+                                                                   
+                                                                   }).ToList(),
+                                       GetClientHobbies = (from hc in client.ClientHobbies
+                                                                   select new GetClientHobbies
+                                                                   {
+                                                                       HId = hc.HId,
+
+                                                                   }).ToList(),
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);
@@ -528,6 +552,47 @@ namespace AwesomeCare.API.Controllers
         #endregion
 
         #region Client_Details
+        /// <summary>
+        /// Get Client by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetHealthHobby/{id}")]
+        [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetHealthHobby(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            //var client = await _clientRepository.GetEntity(id);
+            // var getClient = Mapper.Map<GetClient>(client);
+            var getClient = await (from client in _clientRepository.Table
+                                   where client.ClientId == id.Value
+                                   select new GetClient
+                                   {
+                                       ClientId = client.ClientId,
+                                       GetClientHealthCondition = (from chc in client.ClientHealthCondition
+                                                                   join hc in _healthconRepository.Table on chc.HCId equals hc.HCId
+                                                                   select new GetClientHealthCondition
+                                                                   {
+                                                                       HCId = chc.HCId,
+                                                                       Name = hc.Name
+                                                                   }).ToList(),
+                                       GetClientHobbies =       (from ch in client.ClientHobbies
+                                                                   join h in _hobbyRepository.Table on ch.HId equals h.HId
+                                                                   select new GetClientHobbies
+                                                                   {
+                                                                       HId = ch.HId,
+                                                                       Name = h.Name
+                                                                   }).ToList(),
+
+
+                                   }
+                      ).FirstOrDefaultAsync();
+            return Ok(getClient);
+        }
         /// <summary>
         /// Get Client by Id
         /// </summary>

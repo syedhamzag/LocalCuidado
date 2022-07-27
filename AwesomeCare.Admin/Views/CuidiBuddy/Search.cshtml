@@ -1,0 +1,87 @@
+﻿@using AwesomeCare.Admin.ViewModels.CuidiBuddy;
+@model CreateCuidiBuddy
+
+@{
+    ViewData["Title"] = "Create CuidiBuddy";
+}
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card planned_task">
+                <div class="card-body">
+
+                    <form asp-action="Search" method="post">
+                        <div class="row">
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label>Gender</label>
+                                <select class="form-control" asp-for="Gender">
+                                    <option>Select</option>
+                                    <option value="1">Male</option>
+                                    <option value="2">Female</option>
+                                </select>
+
+                            </div>
+
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label>Age</label>
+                                <input type="number" asp-for="AgeFrom" class="form-control" step="1" /> and <input type="number"  asp-for="AgeTo" class="form-control" step="1" />
+                            </div>
+                            <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                <label>Location</label>
+                                <baserecord asp-key="Teritory" asp-for="Location" asp-items="null" />
+
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a asp-action="Index" asp-controller="Hobbies" class="btn btn-primary pull-right">Cancel</a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @if (Model.getClients.Count > 0)
+        {
+            foreach (var client in Model.getClients)
+            {
+                <div class="col-md-4 col-lg-4 col-sm-4 col-xs-12">
+                    <div class="profile-view">
+                        <div class="profile-img-wrap">
+                            <div class="profile-img">
+                                <a href="">
+                                    <img src="@client.PassportFilePath" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="profile-basic">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="profile-info-left">
+                                        <h5 class="user-name m-t-0">@string.Concat(client.Firstname, " ", client.Middlename, " ", client.Surname)</h5>
+                                        <ul class="personal-info">
+                                            <li>
+                                                <span class="title">Birthday:</span>
+                                                <span class="text">@client.DateOfBirth</span>
+                                            </li>
+                                            <li>
+                                                <span class="title">Post Code:</span>
+                                                <span class="text">@client.PostCode</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+            }
+        }
+    </div>
+
+
+

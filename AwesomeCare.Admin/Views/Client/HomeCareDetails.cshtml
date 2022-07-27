@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-md-5">
                                 <ul class="personal-info">
                                     <li>
                                         <span class="title">Phone:</span>
@@ -69,8 +69,18 @@
                                     </li>
                                 </ul>
                             </div>
+                            <div class="col-md-2">
+                                <div class="profile-img-wrap">
+                                    <div class="profile-img">
+                                        <a href="">
+                                            <img alt="QR Code" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -98,12 +108,17 @@
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#dailytask" id="@Model.ClientId" onclick="getdailytask(this)">Daily Task</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#mcabest" id="@Model.ClientId" onclick="getmcabest(this)">MCA Best Interest</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#careobj" id="@Model.ClientId" onclick="getcareobj(this)">Care Objectives</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#performance" id="@Model.ClientId" onclick="getclientperformance(this)">Performance Indicator</a></li>
             </ul>
         </div>
     </div>
 </div>
 <script type="text/javascript" src="~/assets2/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src=~/js/getDetails.js>
+    
+</script>
+<script>
+    window.onload = function get(){ getPersonalInfo(@Model.ClientId)}
 </script>
 <div class="row">
     <div class="col-lg-12">
@@ -114,72 +129,43 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-xs-7 col-sm-7 col-md-7">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-4 col-md-4">
-                                        <div class="form-group">
-                                            <label asp-for="Firstname" class="control-label"></label>
-                                            <input type="text" class="form-control" asp-for="Firstname" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-4 col-md-4">
-                                        <div class="form-group">
-                                            <label asp-for="Middlename" class="control-label"></label>
-                                            <input type="text" class="form-control" asp-for="Middlename" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-4 col-md-4">
-                                        <div class="form-group">
-                                            <label asp-for="Surname" class="control-label"></label>
-                                            <input type="text" class="form-control" asp-for="Surname" readonly>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-4 col-md-4">
-                                        <div class="form-group">
-                                            <label asp-for="Gender" class="control-label"></label>
-                                            <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-4 col-md-4">
-                                        <div class="form-group">
-                                            <label asp-for="DateOfBirth" class="control-label"></label>
-                                            <input asp-for="DateOfBirth" class="form-control" readonly>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-4 col-md-4">
-                                        <div class="form-group">
-                                            <label asp-for="IdNumber" class="control-label"></label>
-                                            <input type="text" class="form-control" asp-for="IdNumber" readonly>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-                            <div class="col-xs-2 col-sm-2 col-md-2">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h2>QR Code<small></small></h2>
-                                    </div>
-                                    <div class="card-body">
-                                        <img alt="clientimage" src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.QRCode))">
-                                    </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Firstname" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Firstname" readonly>
                                 </div>
                             </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h2>Image<small></small></h2>
-                                    </div>
-                                    <div class="card-body">
-                                        <img alt="clientimage" src="@Model.PassportFilePath" height="150" width="150">
-                                    </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Middlename" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Middlename" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Surname" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="Surname" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="Gender" class="control-label"></label>
+                                    <baserecord asp-key="Gender" asp-for="GenderId" asp-items="null" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="DateOfBirth" class="control-label"></label>
+                                    <input asp-for="DateOfBirth" class="form-control" readonly>
+
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    <label asp-for="IdNumber" class="control-label"></label>
+                                    <input type="text" class="form-control" asp-for="IdNumber" readonly>
                                 </div>
                             </div>
                         </div>
@@ -227,9 +213,7 @@
 
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
@@ -249,7 +233,6 @@
                                     <baserecord asp-key="Teritory" asp-for="TeritoryId" asp-items="null" />
                                 </div>
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
@@ -270,9 +253,7 @@
                                     <input type="text" class="form-control" asp-for="PostCode" readonly>
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
@@ -283,7 +264,7 @@
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
                                     <label asp-for="TeamLeader" class="control-label"></label>
-                                    <input type="text" class="form-control" asp-for="TeamLeader" readonly>
+                                    <select asp-for="TeamLeaderId" asp-items="@ViewBag.staffList" class="selectpicker form-control"></select>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4">
@@ -292,9 +273,7 @@
                                     <input type="text" class="form-control" asp-for="Telephone" readonly>
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
@@ -314,9 +293,7 @@
                                     <baserecord asp-key="Client_ChoiceOfStaff" asp-for="ChoiceOfStaffId" asp-items="null" />
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
@@ -336,14 +313,12 @@
                                     <input type="number" class="form-control" asp-for="NumberOfStaff" readonly>
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
                                     <label asp-for="Keyworker" class="control-label"></label>
-                                    <input type="text" class="form-control" asp-for="Keyworker" readonly>
+                                     <select asp-for="KeyworkerId" asp-items="@ViewBag.staffList" class="selectpicker form-control"></select>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4">
@@ -358,9 +333,7 @@
                                     <input type="text" class="form-control" asp-for="Longitude" readonly>
                                 </div>
                             </div>
-
                         </div>
-
                         <div class="row">
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
@@ -380,7 +353,123 @@
                                     <textarea class="form-control" asp-for="Hobbies" readonly></textarea>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            CuidiBuddy
+                                        </h3>
+                                        <div class="dropdown profile-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                <a asp-action="Index" asp-controller="CuidiBuddy">Add CuidiBuddy</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>Name</th>
+                                                    <th>Birhday</th>
+                                                    <th>Post Code</th>
+                                                    <th>About</th>
+                                                    <th>Chat</th>
+                                                    <th>Call</th>
+                                                    <th>Block</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_cuidi">
+                                                @{
+                                                    var clients = (List<GetClient>)ViewBag.Clients;
+                                                    foreach(var cuidi in Model.GetCuidiBuddy)
+                                                    {
+                                                        var client = clients.Where(s => s.ClientId == cuidi.CuidiBuddyId).SingleOrDefault();
+                                                        <tr>
+                                                            <td>
+                                                                <h2 class="table-avatar">
+                                                                    <a class="avatar" href=""><img src="@client.PassportFilePath" alt="" width="38" height="42"></a>
+                                                                </h2>
+                                                            </td>
+                                                            <td>@string.Concat(client.Firstname, " ", client.Middlename, " ", client.Surname)</td>
+                                                            <td>@client.DateOfBirth</td>
+                                                            <td>@client.PostCode</td>
+                                                            <td>@client.About</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                
+                                                        </tr>
 
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            Health Condition
+                                        </h3>
+                                        <div class="dropdown profile-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientHealthCondition">Create</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                            <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_healthcon">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">
+                                            Hobbies
+                                        </h3>
+                                        <div class="dropdown profile-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientHobbies">Create</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_hobby">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1471,6 +1560,28 @@
                                 </tr>
                             </thead>
                             <tbody id="tbl_careobj">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="performance">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="ListHeading" asp-route-clientId="@Model.ClientId" asp-controller="ClientPerformanceIndicator">Create</a>
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbl_performance">
                             </tbody>
                         </table>
                     </div>

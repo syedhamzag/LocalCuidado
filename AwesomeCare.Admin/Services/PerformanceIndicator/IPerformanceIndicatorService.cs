@@ -19,7 +19,13 @@ namespace AwesomeCare.Admin.Services.PerformanceIndicator
         [Post("/PerformanceIndicator/Create")]
         Task<HttpResponseMessage> Create([Body] PostPerformanceIndicator model);
 
+        [Post("/PerformanceIndicator/Edit")]
+        Task<HttpResponseMessage> Edit([Body] PostPerformanceIndicator model);
+
         [Put("/PerformanceIndicator/Put")]
-        Task<HttpResponseMessage> Put([Body] PostPerformanceIndicator model);
+        Task<HttpResponseMessage> Put([Body] PutPerformanceIndicator model);
+
+        [Delete("/PerformanceIndicator/DeleteTask/{id}")]
+        Task<HttpResponseMessage> DeleteTask(int id);
     }
 }

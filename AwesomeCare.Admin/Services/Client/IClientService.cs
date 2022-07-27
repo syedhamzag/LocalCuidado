@@ -50,6 +50,9 @@ namespace AwesomeCare.Admin.Services.Client
         #endregion
 
         #region Client Details
+        [Get("/Client/GetHealthHobby/{id}")]
+        Task<GetClient> GetHealthHobby(int id);
+
         [Get("/Client/GetInvolvingParty/{id}")]
         Task<GetClient> GetInvolvingParty(int id);
 

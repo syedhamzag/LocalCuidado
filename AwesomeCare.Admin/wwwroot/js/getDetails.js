@@ -1082,7 +1082,79 @@ function getcareobj(element) {
         });
     }
 }
+function getPersonalInfo(clientId)
+{
+    var hobby = $('#tbl_hobby').children().length;
+    var health = $('#tbl_healthcon').children().length;
+    if (hobby <= 0)
+    {
+        $.ajax({
+            type: 'GET',
+            url: '/Client/personalInfo',
+            data: { 'clientId': clientId },
+            success: function (response) {
+                response.getClientHobbies.forEach(function (result, index) {
+                    var row = '<tr><td>' + result.name + '</td></tr>';
+                    $('#tbl_hobby').append(row);
+                });
+                if (health <= 0)
+                { 
+                    response.getClientHealthCondition.forEach(function (result, index) {
+                        var row = '<tr><td>' + result.name + '</td></tr>';
+                        $('#tbl_healthcon').append(row);
+                    
+                        //var edit = '<a class="dropdown-item" href="/ManagingTasks/Index?clientId=' + clientId + '">Edit</a>';
+                        //var view = '<a class="dropdown-item" href="/ManagingTasks/View?clientId=' + clientId + '">View</a>';
+                        //var del = '<a class="dropdown-item" href="/ManagingTasks/Delete?clientId=' + clientId + '">Delete</a>';
+                        //var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                        //$(menu).children().remove();
+                        //$(menu).append(edit);
+                        //$(menu).append(view);
+                        //$(menu).append(del);
 
+                    });
+                }
+            },
+            error: function () {
+                alert('Failed to receive the Data');
+                console.log('Failed ');
+            }
+        });
+    }
+}
+function getclientperformance(element)
+{
+    var clientId = element.id;
+    var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    //if (client <= 0) {
+    //    $.ajax({
+    //        type: 'GET',
+    //        url: '/Client/' + name,
+    //        data: { 'clientId': clientId },
+    //        success: function (response) {
+    //            response.getPerformanceIndicator.forEach(function (result, index) {
+    //                var row = '<tr><td>' + result.help + '</td></tr>';
+    //                $('#tbl_' + name).append(row);
+    //                //var edit = '<a class="dropdown-item" href="/ManagingTasks/Index?clientId=' + clientId + '">Edit</a>';
+    //                //var view = '<a class="dropdown-item" href="/ManagingTasks/View?clientId=' + clientId + '">View</a>';
+    //                //var del = '<a class="dropdown-item" href="/ManagingTasks/Delete?clientId=' + clientId + '">Delete</a>';
+    //                //var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+    //                //$(menu).children().remove();
+    //                //$(menu).append(edit);
+    //                //$(menu).append(view);
+    //                //$(menu).append(del);
+
+    //            });
+    //        },
+    //        error: function () {
+    //            alert('Failed to receive the Data');
+    //            console.log('Failed ');
+    //        }
+    //    });
+    //}
+
+}
 
 var url_string = window.location.href;
 var url = new URL(url_string);

@@ -67,6 +67,7 @@ namespace AwesomeCare.Model.Models
         }
 
         public int ClientId { get; set; }
+        public string Pin { get; set; }
         public string Firstname { get; set; }
         public string Middlename { get; set; }
         public string Surname { get; set; }
@@ -120,6 +121,9 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<BestInterestAssessment> BestInterestAssessment { get; set; }
         public virtual ICollection<FilesAndRecord> FilesAndRecord { get; set; }
         public virtual ICollection<ClientCareObj> ClientCareObj { get; set; } = new HashSet<ClientCareObj>();
+        public virtual ICollection<ClientHealthCondition> ClientHealthCondition { get; set; } = new HashSet<ClientHealthCondition>();
+        public virtual ICollection<ClientHobbies> ClientHobbies { get; set; } = new HashSet<ClientHobbies>();
+        public virtual ICollection<CuidiBuddy> CuidiBuddy { get; set; } = new HashSet<CuidiBuddy>();
 
         #region Client
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }

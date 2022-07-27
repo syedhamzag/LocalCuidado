@@ -40,16 +40,21 @@ namespace AwesomeCare.Admin.Controllers
             return View(reports);
         }
 
-        public async Task<IActionResult> Index(int PerformanceIndicatorId, string heading)
+        public async Task<IActionResult> Index(int PerformanceIndicatorId)
         {
+            var performance = await _PerformanceIndicator.Get(PerformanceIndicatorId);
             var model = new CreatePerformanceIndicator();
             model.PerformanceIndicatorId = PerformanceIndicatorId;
-            model.Heading = heading;
-            if (PerformanceIndicatorId > 0)
+            
+            if (performance != null)
             {
-                var task = await _PerformanceIndicator.Get(PerformanceIndicatorId);
-                model.TaskCount = task.GetPerformanceIndicatorTask.Count;
-                model.Tasks = task.GetPerformanceIndicatorTask;
+                model.Heading = performance.Heading;
+                model.Rating = performance.Rating;
+                model.Date = performance.Date;
+                model.DueDate = performance.DueDate;
+                model.Remarks = performance.Remarks;
+                model.TaskCount = performance.GetPerformanceIndicatorTask.Count;
+                model.Tasks = performance.GetPerformanceIndicatorTask;
             }
             return View(model);
 
@@ -98,7 +103,7 @@ namespace AwesomeCare.Admin.Controllers
             var result = new HttpResponseMessage();
             if (post.PerformanceIndicatorId > 0)
             {
-                result = await _PerformanceIndicator.Put(post);
+                result = await _PerformanceIndicator.Edit(post);
                 var content = await result.Content.ReadAsStringAsync();
             }
             else
@@ -108,39 +113,47 @@ namespace AwesomeCare.Admin.Controllers
             }
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "PerformanceIndicator successfully added to staff" : "An Error Occurred" });
 
-            return RedirectToAction("Index", new { PerformanceIndicatorId = post.PerformanceIndicatorId, heading = post.Heading });
+            return RedirectToAction("Index", new { PerformanceIndicatorId = post.PerformanceIndicatorId });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePerformanceIndicator model, IFormCollection formcollection)
         {
-            List<PostPerformanceIndicatorTask> tasks = new List<PostPerformanceIndicatorTask>();
+            List<PutPerformanceIndicatorTask> tasks = new List<PutPerformanceIndicatorTask>();
             for (int i = 0; i < model.TaskCount; i++)
             {
-                PostPerformanceIndicatorTask task = new PostPerformanceIndicatorTask();
+                PutPerformanceIndicatorTask task = new PutPerformanceIndicatorTask();
                 var TaskId = int.Parse(formcollection["PerformanceIndicatorTaskId"][i]);
                 var Title = int.Parse(formcollection["Title"][i]);
-                var Answer = int.Parse(formcollection["Answer"][i]);
-                var Comment = formcollection["Comment"][i];
-                var Point = int.Parse(formcollection["Point"][i]);
                 var Score = int.Parse(formcollection["Score"][i]);
                 task.PerformanceIndicatorId = model.PerformanceIndicatorId;
                 task.PerformanceIndicatorTaskId = TaskId;
                 task.Title = Title;
                 task.Score = Score;
+                
                 tasks.Add(task);
             }
-            PostPerformanceIndicator post = new PostPerformanceIndicator();
+            PutPerformanceIndicator post = new PutPerformanceIndicator();
             post.PerformanceIndicatorId = model.PerformanceIndicatorId;
             post.Heading = model.Heading;
-            post.PostPerformanceIndicatorTask = tasks;
+            post.Date = model.Date;
+            post.DueDate = model.DueDate;
+            post.Rating = model.Rating;
+            post.Remarks = model.Remarks;
+            post.PutPerformanceIndicatorTask = tasks;
 
             var result = await _PerformanceIndicator.Put(post);
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "PerformanceIndicator successfully added to staff" : "An Error Occurred" });
 
-            return RedirectToAction("Index", new { PerformanceIndicatorId = post.PerformanceIndicatorId, heading = post.Heading });
+            return RedirectToAction("Index", new { PerformanceIndicatorId = post.PerformanceIndicatorId });
+        }
+        [HttpGet]
+        public JsonResult DeleteTask(int taskId)
+        {
+            var getClient = _PerformanceIndicator.DeleteTask(taskId);
+            return Json(getClient.Result);
         }
     }
 }

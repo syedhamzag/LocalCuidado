@@ -70,6 +70,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public int Aid { get; set; }
         public int TeamLeaderId { get; set; }
         public int KeyworkerId { get; set; }
+        public string Pin { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
         public virtual ICollection<GetClientRegulatoryContactForEdit> RegulatoryContact { get; set; }
     }

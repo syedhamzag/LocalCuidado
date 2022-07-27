@@ -137,6 +137,12 @@ using AwesomeCare.DataTransferObject.DTOs.Staff.StaffTax;
 using AwesomeCare.DataTransferObject.DTOs.Chat;
 using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using AwesomeCare.DataTransferObject.DTOs.Client.CareObj;
+using AwesomeCare.DataTransferObject.DTOs.HealthCondition;
+using AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition;
+using AwesomeCare.DataTransferObject.DTOs.Hobbies;
+using AwesomeCare.DataTransferObject.DTOs.ClientHobbies;
+using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
+using AwesomeCare.DataTransferObject.DTOs.ClientPerformanceIndicator;
 
 namespace MapperConfig
 {
@@ -289,6 +295,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
                 .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore())
                 .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore())
+                .ForMember(dto => dto.CuidiBuddy, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientHealthCondition, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientHobbies, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareObj, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -339,6 +348,10 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetBestInterestAssessment, mem => mem.Ignore())
                 .ForMember(dto => dto.GetFilesAndRecord, mem => mem.Ignore())
                 .ForMember(dto => dto.GetChat, mem => mem.Ignore())
+                .ForMember(dto => dto.GetClientHealthCondition, mem => mem.Ignore())
+                .ForMember(dto => dto.GetClientHobbies, mem => mem.Ignore())
+                .ForMember(dto => dto.GetCuidiBuddy, mem => mem.Ignore())
+                .ForMember(dto => dto.GetClientPerformanceIndicators, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientCareObj, mem => mem.Ignore()); 
 
             CreateMap<Client, GetClientDetail>()
@@ -413,6 +426,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffTeamLead, mem => mem.Ignore())
                 .ForMember(dto => dto.BestInterestAssessment, mem => mem.Ignore())
                 .ForMember(dto => dto.FilesAndRecord, mem => mem.Ignore())
+                .ForMember(dto => dto.CuidiBuddy, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientHealthCondition, mem => mem.Ignore())
+                .ForMember(dto => dto.ClientHobbies, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareObj, mem => mem.Ignore());
             #endregion
 
@@ -2727,8 +2743,14 @@ namespace MapperConfig
                 .ForMember(dto => dto.PerformanceIndicator, mem => mem.Ignore());
             CreateMap<PerformanceIndicatorTask, GetPerformanceIndicatorTask>()
                 .ForMember(dto => dto.TitleName, mem => mem.Ignore());
-            #endregion
 
+            CreateMap<PutPerformanceIndicator, PerformanceIndicator>()
+                 .ForMember(dto => dto.PerformanceIndicatorTask, mem => mem.MapFrom(src => src.PutPerformanceIndicatorTask));
+
+            CreateMap<PutPerformanceIndicatorTask, PerformanceIndicatorTask>()
+                .ForMember(dto => dto.PerformanceIndicator, mem => mem.Ignore());
+            #endregion
+            
             #region DailyTask
             CreateMap<PutClientDailyTask, ClientDailyTask>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
@@ -2908,6 +2930,64 @@ namespace MapperConfig
             CreateMap<PutStaffMedTracker, StaffMedTracker>();
             CreateMap<PostStaffMedTracker, StaffMedTracker>();
             CreateMap<StaffMedTracker, GetStaffMedTracker>();
+            #endregion
+
+            #region Health Condition
+            CreateMap<PutHealthCondition, HealthCondition>();
+            CreateMap<PostHealthCondition, HealthCondition>();
+            CreateMap<HealthCondition, GetHealthCondition>();
+
+            CreateMap<PutClientHealthCondition, ClientHealthCondition>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientHealthCondition, ClientHealthCondition>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<ClientHealthCondition, GetClientHealthCondition>()
+                .ForMember(dto => dto.Name, mem => mem.Ignore());
+            #endregion
+
+            #region Hobbies
+            CreateMap<PutHobbies, Hobbies>();
+            CreateMap<PostHobbies, Hobbies>();
+            CreateMap<Hobbies, GetHobbies>();
+
+            CreateMap<PutClientHobbies, ClientHobbies>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostClientHobbies, ClientHobbies>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<ClientHobbies, GetClientHobbies>()
+                .ForMember(dto => dto.Name, mem => mem.Ignore());
+            #endregion
+
+            #region CuidiBuddy
+            CreateMap<PutCuidiBuddy, CuidiBuddy>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<PostCuidiBuddy, CuidiBuddy>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+            CreateMap<CuidiBuddy, GetCuidiBuddy>();
+            #endregion
+
+            #region ClientPerformanceIndicator
+            CreateMap<PostClientPerformanceIndicator, ClientPerformanceIndicator>()
+                 .ForMember(dto => dto.ClientPerformanceIndicatorTask, mem => mem.MapFrom(src => src.PostClientPerformanceIndicatorTask));
+
+            CreateMap<PutClientPerformanceIndicator, ClientPerformanceIndicator>()
+                 .ForMember(dto => dto.ClientPerformanceIndicatorTask, mem => mem.MapFrom(src => src.PutClientPerformanceIndicatorTask));
+
+            CreateMap<ClientPerformanceIndicator, GetClientPerformanceIndicator>()
+                 .ForMember(dto => dto.GetClientPerformanceIndicatorTask, mem => mem.Ignore());
+
+            CreateMap<PostClientPerformanceIndicatorTask, ClientPerformanceIndicatorTask>()
+                .ForMember(dto => dto.ClientPerformanceIndicator, mem => mem.Ignore());
+
+            CreateMap<PutClientPerformanceIndicatorTask, ClientPerformanceIndicatorTask>()
+                .ForMember(dto => dto.ClientPerformanceIndicator, mem => mem.Ignore());
+
+            CreateMap<ClientPerformanceIndicatorTask, GetClientPerformanceIndicatorTask>()
+                .ForMember(dto => dto.TitleName, mem => mem.Ignore());
+
+            
+
+            
             #endregion
         }
     }

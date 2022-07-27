@@ -12,17 +12,10 @@
     <div class="accordion" id="accordion">
         <div>
             <div class="card-header">
-
-            </div>
-
-            <div class="card-body">
-                <form asp-action="Create" method="post" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="@Model.PerformanceIndicatorId" />
-                    <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
-                    <div class="row">
+                <div class="row">
                         <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                             <div class="form-group">
-                                <input type="text" class="form-control" asp-for="@Model.Heading" />
+                                <input type="text" class="form-control" asp-for="@Model.Heading" readonly="readonly" />
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -32,6 +25,18 @@
                             </div>
                         </div>
                     </div>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="@Model.PerformanceIndicatorId" />
+                    <input type="hidden" asp-for="@Model.Heading" />
+                    <input type="hidden" asp-for="@Model.Date" />
+                    <input type="hidden" asp-for="@Model.DueDate" />
+                    <input type="hidden" asp-for="@Model.Rating" />
+                    <input type="hidden" asp-for="@Model.Remarks" />
+                    <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
+                    
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <table class="table table-bordered table-hover" name="@Model.Tasks" id="tbl_Task">
@@ -46,11 +51,12 @@
                                     {
                                         foreach (var item in Model.Tasks)
                                         {
-                                            <tr>
+                                            <tr id="@item.PerformanceIndicatorTaskId">
                                                 <td>
                                                     <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.PerformanceIndicatorTaskId==item.PerformanceIndicatorTaskId).PerformanceIndicatorTaskId" />
                                                     <baserecord asp-key="@Model.Heading" asp-for="@Model.Tasks.FirstOrDefault(s=>s.PerformanceIndicatorTaskId==item.PerformanceIndicatorTaskId).Title" asp-items="null" />
                                                     <span asp-validation-for="@Model.Tasks.FirstOrDefault().Title" class="text-danger"></span>
+                                                    <input type="hidden" asp-for="@Model.Tasks.FirstOrDefault(s=>s.PerformanceIndicatorTaskId==item.PerformanceIndicatorTaskId).Deleted" />
                                                 </td>
                                                 <td>
                                                     <input asp-for="@Model.Tasks.FirstOrDefault(s=>s.PerformanceIndicatorTaskId==item.PerformanceIndicatorTaskId).Score" type="text" class="form-control" onchange="Calc()" />
@@ -180,10 +186,25 @@
             });
             $('#Delrow').click(function () {
                 const id = table.row('.selected').id();
-                if (table.row('.selected').length > 0) {
-                    const row = table.rows('.selected').remove().draw();
-                    counter--;
-                    $('#TaskCount').val(counter);
+                if (table.row('.selected').length > 0) 
+                {
+                    if(id > 0)
+                    {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/PerformanceIndicator/DeleteTask',
+                            data: { 'taskId': id },
+                            success: function (response) {
+                                const row = table.rows('.selected').remove().draw();
+                                counter--;
+                                $('#TaskCount').val(counter);
+                                Calc();
+                            },
+                            error: function () {
+                                console.log('Failed ');
+                            }
+                        });
+                    }
                 }
                 else {
                     alert("Please select row for delete !");
