@@ -26,6 +26,7 @@ using AutoMapper;
 using System.Globalization;
 using AwesomeCare.DataTransferObject.DTOs.Rotering;
 using Microsoft.Extensions.Logging;
+using AwesomeCare.Admin.Services.Client;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -36,10 +37,12 @@ namespace AwesomeCare.Admin.Controllers
         IRotaTaskService _rotaTaskService;
         IRotaDayofWeekService _rotaDayOfWeekService;
         IClientRotaService _clientRotaService;
+        IClientService _clientServices;
         private readonly ILogger<RoteringController> logger;
 
         public RoteringController(ILogger<RoteringController> logger,
-            IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
+            IClientRotaService clientRotaService, IFileUpload fileUpload, IRotaDayofWeekService rotaDayOfWeekService, IRotaTaskService rotaTaskService, IClientRotaTypeService clientRotaTypeService, 
+            IClientRotaNameService clientRotaNameService, IClientService clientServices) : base(fileUpload)
         {
             _clientRotaTypeService = clientRotaTypeService;
             _clientRotaNameService = clientRotaNameService;
@@ -47,6 +50,7 @@ namespace AwesomeCare.Admin.Controllers
             _rotaDayOfWeekService = rotaDayOfWeekService;
             _clientRotaService = clientRotaService;
             this.logger = logger;
+            _clientServices = clientServices;
         }
         public async Task<IActionResult> Index(int clientId)
         {
@@ -518,5 +522,24 @@ namespace AwesomeCare.Admin.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> Invoice()
+        {
+            var client = await _clientServices.GetClients();
+            ViewBag.GetClients = client.Select(s => new SelectListItem(s.Firstname + " " + s.Surname, s.ClientId.ToString())).ToList();
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Invoice(int clientId, string startDate, string stopDate)
+        {
+            var client = await _clientServices.GetClients();
+            ViewBag.GetClients = client.Select(s => new SelectListItem(s.Firstname + " " + s.Surname, s.ClientId.ToString())).ToList();
+            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : startDate;
+            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : stopDate;
+            var rotaAdmin = await _rotaTaskService.LiveRota(sdate, edate);
+            var filterRota = rotaAdmin.Where(s=>s.ClientId==clientId).ToList();
+            return View(filterRota);
+        }
+
     }
 }

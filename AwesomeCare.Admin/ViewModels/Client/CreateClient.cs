@@ -152,6 +152,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public int Aid { get; set; }
         public string TeamLeaderId { get; set; }
         public string KeyworkerId { get; set; }
+        [Required]
+        [MaxLength(4)]
         public string Pin { get; set; }
         #endregion
         public List<SelectListItem> StaffList {get;set;}

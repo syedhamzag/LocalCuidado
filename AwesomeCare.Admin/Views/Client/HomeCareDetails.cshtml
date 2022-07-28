@@ -109,6 +109,9 @@
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#mcabest" id="@Model.ClientId" onclick="getmcabest(this)">MCA Best Interest</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#careobj" id="@Model.ClientId" onclick="getcareobj(this)">Care Objectives</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#performance" id="@Model.ClientId" onclick="getclientperformance(this)">Performance Indicator</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" asp-action="Index" asp-controller="Nutrition" asp-route-clientId="@Model.ClientId">Nutrition</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#rotering" id="@Model.ClientId" onclick="getrotering(this)">Rotering</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" asp-action="Medications" asp-controller="Client" asp-route-clientId="@Model.ClientId">Medications</a></li>
             </ul>
         </div>
     </div>
@@ -1584,6 +1587,33 @@
                             <tbody id="tbl_performance">
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="rotering">
+                <div class="card">
+                    <div class="card-body">
+                        <form asp-controller="Rotering" asp-action="Index" method="post">
+                            <div class="modal-body">
+                                <div class="card">
+
+                                    <div class="card-header">
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <input type="hidden" id="clientId" name="clientId" value="@Model.ClientId" />
+                                            <input type="hidden" id="pinId" name="pinId" value="1" />
+                                            <label>Please enter pin code</label>
+                                            <input type="password" class="form-control" name="pin" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-primary" value="View" />
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

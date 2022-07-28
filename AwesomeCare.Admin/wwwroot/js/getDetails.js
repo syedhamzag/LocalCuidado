@@ -1082,6 +1082,11 @@ function getcareobj(element) {
         });
     }
 }
+function setPin(element)
+{
+    var pin = element.value;
+    $('#Pin').val(pin);
+}
 function getPersonalInfo(clientId)
 {
     var hobby = $('#tbl_hobby').children().length;
