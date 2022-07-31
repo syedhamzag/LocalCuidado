@@ -134,6 +134,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientMgtVisit> ClientMgtVisit { get; set; }
         public virtual ICollection<ClientProgram> ClientProgram { get; set; }
         public virtual ICollection<ClientServiceWatch> ClientServiceWatch { get; set; }
+        public virtual ICollection<CareReview> CareReview { get; set; }
         #endregion
 
         #region Staff

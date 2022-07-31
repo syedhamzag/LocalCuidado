@@ -62,6 +62,7 @@ using AwesomeCare.DataTransferObject.DTOs.Client.CareObj;
 using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
 using AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition;
 using AwesomeCare.DataTransferObject.DTOs.ClientHobbies;
+using AwesomeCare.DataTransferObject.DTOs.CareReview;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -2100,6 +2101,42 @@ namespace AwesomeCare.API.Controllers
                                                            {
                                                                Date = o.Date,
                                                                Note = o.Note,
+                                                           }).ToList()
+                                   }
+                      ).FirstOrDefaultAsync();
+            return Ok(getClient);
+        }
+        /// <summary>
+        /// Get Client by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetCareReview/{id}")]
+        [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCareReview(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            //var client = await _clientRepository.GetEntity(id);
+            // var getClient = Mapper.Map<GetClient>(client);
+            var getClient = await (from client in _clientRepository.Table
+                                   where client.ClientId == id.Value
+                                   select new GetClient
+                                   {
+                                       ClientId = client.ClientId,
+                                       GetCareReview = (from o in client.CareReview
+                                                           select new GetCareReview
+                                                           {
+                                                               Date = o.Date,
+                                                               Name = o.Name,
+                                                               Note = o.Note,
+                                                               Action = o.Action,
+                                                               CareReviewId = o.CareReviewId,
+                                                               ClientName = client.Firstname +" "+ client.Surname
+
                                                            }).ToList()
                                    }
                       ).FirstOrDefaultAsync();

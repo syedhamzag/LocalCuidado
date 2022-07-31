@@ -1082,6 +1082,32 @@ function getcareobj(element) {
         });
     }
 }
+function getcarereview(element)
+{
+    var clientId = element.id;
+    var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
+        $.ajax({
+            type: 'GET',
+            url: '/Client/' + name,
+            data: { 'clientId': clientId },
+            success: function (response) {
+                response.getCareReview.forEach(function (result, index) {
+                    var row = '<tr><td>' + result.name + '</td><td>' + result.note + '</td><td>'+
+                        '<a href="/CareReview/Edit?Id=' + result.careReviewId +'"><i class="fa fa-pencil"></i></a>'+
+                            '</td></tr>';
+                    $('#tbl_' + name).append(row);
+
+                });
+            },
+            error: function () {
+                alert('Failed to receive the Data');
+                console.log('Failed ');
+            }
+        });
+    }
+}
 function setPin(element)
 {
     var pin = element.value;

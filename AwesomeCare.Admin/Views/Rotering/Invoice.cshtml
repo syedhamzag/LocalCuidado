@@ -1,99 +1,151 @@
-﻿@using AwesomeCare.DataTransferObject.DTOs.Rotering;
-@model List<LiveTracker>
+﻿@using AwesomeCare.Admin.ViewModels.Rotering;
+@using System.Globalization;
+@model ClientInvoice
 @{
     ViewData["Title"] = "Client Invoice";
 }
 <form asp-action="Invoice" method="post">
     <div class="row">
-        <div class="col-sm-6 col-xs-12 col-lg-6 col-md-6">
-            <div class="row">
-
-                <div class="form-group col-sm-12 col-xs-12 col-md-12 col-lg-12">
+        <div class="col-sm-3 col-xs-12 col-lg-3 col-md-3 mt-3">
+                <div class="form-group">
                     <label>Select Client</label>
-                    <select name="clientId" asp-items="@ViewBag.GetClients" class="selectpicker form-control" data-live-search="true"></select>
+                    <select name="ClientIds" asp-items="@Model.ClientList" class="selectpicker form-control" data-live-search="true" multiple></select>
                 </div>
-
-            </div>
         </div>
-        <div class="col-sm-6 col-xs-6 col-lg-6">
-            <div class="row">
-                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+        <div class="col-sm-3 col-xs-12 col-lg-3 col-md-3 mt-3">
+                <div class="form-group">
                     <label> Start Date</label>
-                    <input type="text" id="startDate" name="startDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
+                    <input type="text" asp-for="startDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
                 </div>
-                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+        </div>
+        <div class="col-sm-3 col-xs-12 col-lg-3 col-md-3 mt-3">
+                <div class="form-group">
                     <label> Stop Date</label>
-                    <input type="text" id="stopDate" name="stopDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
+                    <input type="text" asp-for="stopDate" class="form-control datepickerbeforeOrtoday" data-date-format="yyyy-mm-dd">
                 </div>
-            </div>
         </div>
-        <button type="submit" class="btn btn-primary" id="btnInvoice">Search</button>
+        <div class="col-sm-3 col-xs-12 col-lg-3 col-md-3">
+            <button type="submit" class="btn btn-primary mt-5" id="btnInvoice">Search</button>
+        </div>
+        
     </div>
-    @*CSS*@
-     <style>
-            #c2{
-                width: 50%;
-                float: right;
-                margin-bottom: 50px;
-                height: 250px;
-                text-align: end;
-            }
-            #c1{
-                width: 50%;
-                float: left;
-                margin-bottom: 50px;
-                height: 250px;
-                
-            }
-            #c3{
-                width: 100%;
-            }
-        </style>
-    <div class"row"> 
-        <div id="c1">
-            <img src="Desktop/test.jpg">
-            <h4 class="test2">Street Address</h4>
-            <h4 class="test2">Company Address</h4>
-            <h4 class="test2">Post Code</h4>
-            <h4 class="test2">Tel</h4>
-            <h4 class="test2">testemail@gmail.com</h4>
-        </div>
-        <div id="c2">
-            <h2 class="test">INVOICE</h2>
-            <h4 class="test">Date From To.</h4>
-            <h4 class="test">Invoice#   1111</h4>
-            <h4 class="test">For    PO # 123456</h4>
-        </div>
-        <div id="headingtest">
-            <header >Bill To:</header>
-        </div>
-            <div id="c1">
-            <h4>Customer Name</h4>
-            <h4>Company Name</h4>
-            <h4> City, ST ZIP Code</h4>
-            <h4>(206) 555-1163</h4>  
-        </div>
-        <div id="c2">
-            <h5>items over this amount quality for an</h5>
-            <h5>additional discount     $100</h5>
-            <h5>% discount      10%</h5>
-        </div>
-
-        <div id="c1">
-            <p>Make all checks payable to Company Name.</p>
-            <p>If you have any questions concerning this</p>
-            <p>invoice,contact Name at phone or email.</p>
-            <h4>Thank you for you business!</h4>
-        </div>
-        <div id="c2">
-            <p>Credit   $ test</p>
-            <p>Tax      99%</p>
-            <p>Additional discount  12%</p>
-            <p>Balance due  $ (992.20)</p>
-        </div>
-    </div>
-    
 </form>
+    
+    @if (Model.ClientIds.Count() > 0)
+    {
+        @if (Model.Invoices.Count() > 0)
+        {
+            @foreach (var clientId in Model.ClientIds)
+            {
+                decimal? amt_comm = 0;
+                    decimal total = 0;
+
+                <div class="row"> 
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                        <h5>Street Address</h5>
+                        <h5>Company Address</h5>
+                        <h5>Post Code</h5>
+                        <h5>Tel</h5>
+                        <h5>testemail@gmail.com</h5>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                        <h2 class="test">INVOICE</h2>
+                        <h5>Date From @Model.startDate.ToString() To @Model.stopDate.ToString()</h5>
+                        <h5>Invoice#  </h5>
+                        <h5>For    PO # </h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12" style="background-color:#b55338;">
+                        <h3>Bill To:</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                        @{
+                            var Currentclient = Model.Clients.Where(s=>s.ClientId == clientId).FirstOrDefault(); 
+                            <h5>Customer Name: @string.Concat(Currentclient.Firstname," ",Currentclient.Surname)</h5>
+                        <h5>Company Name: </h5>
+                        <h5> @Currentclient.Address, @Currentclient.PostCode</h5>
+                        <h5>@Currentclient.Telephone</h5> 
+                        }
+                         
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                        <h5>items over this amount quality for an</h5>
+                        <h5>additional discount     $100</h5>
+                        <h5>% discount      10%</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-dark custom-table datatable">
+                                <thead>
+                                    <tr style="background-color:#b55338;">
+                                        <td>Staff</td>
+                                        <td>Period</td>
+                                        <td>Date</td>
+                                        <td>Unit Price</td>
+                                        <td>Amount</td>
+                                        <td>Discount</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Invoices.Where(s => s.ClientId == clientId))
+                                    {
+
+                                        <tr>
+                                            <td>@item.NumberOfStaff</td>
+                                            <td>@item.Period</td>
+                                            <td>@item.RotaDate</td>
+                                            <td>@item.StaffRate</td>
+                                            <td>
+                                                @{
+                                                    bool isStartTimeValid = TimeSpan.TryParseExact(item.StartTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan startTime);
+                                                    bool isStopTimeValid = TimeSpan.TryParseExact(item.StopTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan stopTime);
+                                                    if (isStartTimeValid && isStopTimeValid)
+                                                    {
+                                                        var diff = stopTime.Subtract(startTime).TotalMinutes;
+
+                                                        amt_comm = item.StaffRate * decimal.Parse(diff.ToString()) * 24 * 60;
+                                                        total += decimal.Parse(amt_comm.ToString());
+                                                        @Math.Round(decimal.Parse(amt_comm.ToString()),0).ToString("N")
+                                                    }
+                                                }
+                                            </td>
+                                            <td></td>
+
+                                        </tr>
+                                    }                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                        <h5>Make all checks payable to Company Name.</h5>
+                        <h5>If you have any questions concerning this</h5>
+                        <h5>invoice,contact Name at phone or email.</h5>
+                        <h5>Thank you for you business!</h5>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                        <h5>Credit   $</h5>
+                        <h5>Tax      %</h5>
+                        <h5>Additional discount %</h5>
+                        <h5>Balance due  $ @Math.Round(total,0).ToString("N")</h5>
+                    </div>
+                </div>
+            }
+        }
+    }
 <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 

@@ -1140,6 +1140,7 @@
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#hygiene">Hygiene</a></li>
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#interests">Interest And Objectives</a></li>
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#homerisk" id="@Model.ClientId" onclick="gethomerisk(this)">Home Risk Assessment</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#carereview" id="@Model.ClientId" onclick="getcarereview(this)">Care Review</a></li>
                             </ul>
                         </div>
                         <div class="tab-content profile-tab-content">
@@ -1489,6 +1490,29 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbl_homerisk">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="carereview">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="dropdown profile-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CareReview">Create</a>
+                                            </div>
+                                        </div>
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Note</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbl_carereview">
                                             </tbody>
                                         </table>
                                     </div>

@@ -181,6 +181,9 @@ namespace AwesomeCare.Admin.Services.Client
 
         [Get("/Client/GetClientDetails/{id}")]
         Task<GetClient> GetClientDetails(int id);
+
+        [Get("/Client/GetCareReview/{id}")]
+        Task<GetClient> GetCareReview(int id);
         #endregion
     }
 }

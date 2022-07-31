@@ -375,7 +375,13 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCareDetails", new { clientId = createClient.ClientId });
         }
         #endregion
-
+        #region Client Matrix
+        public async Task<IActionResult> ClientMatrix()
+        {
+            var clients = await _clientService.GetClients();
+            return View(clients);
+        }
+        #endregion
         #region Edit
         public async Task<IActionResult> EditRegistration(int? clientId)
         {
@@ -1031,6 +1037,12 @@ namespace AwesomeCare.Admin.Controllers
         public JsonResult homerisk(int clientId)
         {
             var getClient = _clientService.GetHomeRisk(clientId);
+            return Json(getClient.Result);
+        }
+        [HttpGet]
+        public JsonResult carereview(int clientId)
+        {
+            var getClient = _clientService.GetCareReview(clientId);
             return Json(getClient.Result);
         }
         #endregion

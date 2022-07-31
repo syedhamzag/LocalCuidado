@@ -526,19 +526,21 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Invoice()
         {
             var client = await _clientServices.GetClients();
-            ViewBag.GetClients = client.Select(s => new SelectListItem(s.Firstname + " " + s.Surname, s.ClientId.ToString())).ToList();
-            return View();
+            var model = new ClientInvoice();
+            model.Clients = client.ToList();
+            model.ClientList = client.Select(s => new SelectListItem(s.Firstname + " " + s.Surname, s.ClientId.ToString())).ToList();
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Invoice(int clientId, string startDate, string stopDate)
+        public async Task<IActionResult> Invoice(ClientInvoice model)
         {
             var client = await _clientServices.GetClients();
-            ViewBag.GetClients = client.Select(s => new SelectListItem(s.Firstname + " " + s.Surname, s.ClientId.ToString())).ToList();
-            var sdate = string.IsNullOrWhiteSpace(startDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : startDate;
-            var edate = string.IsNullOrWhiteSpace(stopDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : stopDate;
-            var rotaAdmin = await _rotaTaskService.LiveRota(sdate, edate);
-            var filterRota = rotaAdmin.Where(s=>s.ClientId==clientId).ToList();
-            return View(filterRota);
+            model.Clients = client.ToList();
+            model.ClientList = client.Select(s => new SelectListItem(s.Firstname + " " + s.Surname, s.ClientId.ToString())).ToList();
+            var sdate = string.IsNullOrWhiteSpace(model.startDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : model.startDate;
+            var edate = string.IsNullOrWhiteSpace(model.stopDate) ? DateTime.UtcNow.ToPortalDateTime().ToString("yyyy-MM-dd") : model.stopDate;
+            model.Invoices = await _rotaTaskService.LiveRota(sdate, edate);
+            return View(model);
         }
 
     }

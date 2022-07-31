@@ -143,6 +143,7 @@ using AwesomeCare.DataTransferObject.DTOs.Hobbies;
 using AwesomeCare.DataTransferObject.DTOs.ClientHobbies;
 using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
 using AwesomeCare.DataTransferObject.DTOs.ClientPerformanceIndicator;
+using AwesomeCare.DataTransferObject.DTOs.CareReview;
 
 namespace MapperConfig
 {
@@ -298,6 +299,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.CuidiBuddy, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientHealthCondition, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientHobbies, mem => mem.Ignore())
+                .ForMember(dto => dto.CareReview, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareObj, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -352,6 +354,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetClientHobbies, mem => mem.Ignore())
                 .ForMember(dto => dto.GetCuidiBuddy, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientPerformanceIndicators, mem => mem.Ignore())
+                .ForMember(dto => dto.GetCareReview, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientCareObj, mem => mem.Ignore()); 
 
             CreateMap<Client, GetClientDetail>()
@@ -429,6 +432,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.CuidiBuddy, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientHealthCondition, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientHobbies, mem => mem.Ignore())
+                .ForMember(dto => dto.CareReview, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareObj, mem => mem.Ignore());
             #endregion
 
@@ -2984,10 +2988,17 @@ namespace MapperConfig
 
             CreateMap<ClientPerformanceIndicatorTask, GetClientPerformanceIndicatorTask>()
                 .ForMember(dto => dto.TitleName, mem => mem.Ignore());
+            #endregion
 
-            
+            #region CareReview
+            CreateMap<PostCareReview, CareReview>()
+             .ForMember(dto => dto.Client, mem => mem.Ignore());
 
-            
+            CreateMap<PutCareReview, CareReview>()
+                 .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<CareReview, GetCareReview>()
+                 .ForMember(dto => dto.ClientName, mem => mem.Ignore());
             #endregion
         }
     }

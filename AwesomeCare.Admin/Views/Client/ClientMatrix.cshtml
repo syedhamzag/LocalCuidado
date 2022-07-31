@@ -1,0 +1,61 @@
+﻿@using  AwesomeCare.DataTransferObject.DTOs.Client;
+@model List<GetClient>
+@{
+    ViewData["Title"] = "Client Matrix";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped table-dark custom-table datatable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Client ID</th>
+                        <th>DOB</th>
+                        <th>GENDER</th>
+                        <th>NEXT OF KIN</th>
+                        <th>NO OF STAFF</th>
+                        <th>START DATE</th>
+                        <th>RISK ASSESSMENT 6 MONTHS</th>
+                        <th>CARE PLAN 6 MONTHS</th>
+                        <th>INITIAL CARE PLAN STATUS</th>
+                        <th>COMP CARE PLAN STATUS</th>
+                        <th>NUM OF</th>
+                        <th>PRACTICAL SUPPORT</th>
+                        <th>MEDICATION AUDIT (2 month int)</th>
+                        <th>LOG AUDIT (2 month int)</th>
+                        <th>CLIENT VOICE (2 month int)</th>
+                        <th>KEYWORKER</th>
+                        <th>KEYWORKER VOICE (2 month int)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var client in Model)
+                    {
+                        <tr>
+                            <td>@string.Concat(client.Firstname," ",client.Surname)</td>
+                            <td>@client.IdNumber</td>
+                            <td>@client.DateOfBirth</td>
+                            <td>@if(client.GenderId==1){ <span>Male</span> } else if (client.GenderId == 2) { <span>Female</span>} else {<span>Both</span>}</td>
+                            <td></td>
+                            <td>@client.NumberOfStaff</td>
+                            <td>@client.StartDate.ToString("dd/MM/yyyy")</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>@client.Keyworker</td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
