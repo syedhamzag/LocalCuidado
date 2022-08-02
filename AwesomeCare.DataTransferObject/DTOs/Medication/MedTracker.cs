@@ -32,7 +32,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.Medication
         public int TimeCritical { get; set; }
         public string ClientMedImage { get; set; }
         public string StaffName { get; set; }
-        public string Feedback { get; set; }
         public int NoOfStaff { get; set; }
+        public string DoseGiven { get; set; }
+        public string Time { get; set; }
+        public string Measurement { get; set; }
+        public string Location { get; set; }
+        public string Feedback { get; set; }
     }
 }

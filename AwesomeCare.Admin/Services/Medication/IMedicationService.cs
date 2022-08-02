@@ -1,5 +1,6 @@
 ﻿using AwesomeCare.DataTransferObject.DTOs.Medication;
 using AwesomeCare.DataTransferObject.DTOs.MedicationManufacturer;
+using AwesomeCare.DataTransferObject.DTOs.StaffRotaMed;
 using Refit;
 using System;
 using System.Collections.Generic;
@@ -38,8 +39,15 @@ namespace AwesomeCare.Admin.Services.Medication
         #endregion
 
         #region Tracker
-        [Post("/Medication/Create")]
-        Task<GetStaffMedTracker> Create([Body] PostStaffMedTracker model);
+
+        [Get("/Medication/GetStaffMedTracker/{id}")]
+        Task<GetStaffMedRota> GetStaffMedTracker(int id);
+
+        [Post("/Medication/Post")]
+        Task<HttpResponseMessage> Post([Body] List<PostStaffMedRota> model);
+
+        [Put("/Medication/Put")]
+        Task<HttpResponseMessage> Put([Body] PutStaffMedRota model);
 
         [Get("/Medication/MedTracker/{startDate}/{stopDate}")]
         Task<List<MedTracker>> MedTracker(string startDate, string stopDate);

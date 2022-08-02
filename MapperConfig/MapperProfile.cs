@@ -1126,6 +1126,9 @@ namespace MapperConfig
             CreateMap<PostStaffMedRota, StaffMedRota>()
                 .ForMember(dto => dto.StaffRotaId, mem => mem.Ignore())
                 .ForMember(dto => dto.Rota, mem => mem.Ignore());
+            CreateMap<PutStaffMedRota, StaffMedRota>()
+                .ForMember(dto => dto.Rota, mem => mem.Ignore());
+
             #endregion
             #region StaffRotaPeriod
             CreateMap<PostStaffRotaPeriod, StaffRotaPeriod>()

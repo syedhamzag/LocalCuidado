@@ -10,12 +10,18 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffRotaMed
         {
             Periods = new List<GetStaffMedRotaPeriod>();
         }
+        public int StaffRotaId { get; set; }
         public DateTime RotaDate { get; set; }
-        public int StaffId { get; set; }
-        public string Staff { get; set; }
+        public int Staff { get; set; }
+        public int RotaDayofWeekId { get; set; }
         public int RotaId { get; set; }
         public string Remark { get; set; }
         public string ReferenceNumber { get; set; }
+        public string DoseGiven { get; set; }
+        public string Time { get; set; }
+        public string Measurement { get; set; }
+        public string Location { get; set; }
+        public string Feedback { get; set; }
 
         public List<GetStaffMedRotaPeriod> Periods { get; set; }
     }

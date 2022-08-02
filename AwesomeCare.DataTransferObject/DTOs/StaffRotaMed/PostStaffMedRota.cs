@@ -17,6 +17,11 @@ namespace AwesomeCare.DataTransferObject.DTOs.StaffRotaMed
         public int? RotaDayofWeekId { get; set; }
         public string Remark { get; set; }
         public string ReferenceNumber { get; set; }
+        public string DoseGiven { get; set; }
+        public string Time { get; set; }
+        public string Measurement { get; set; }
+        public string Location { get; set; }
+        public string Feedback { get; set; }
 
         public  List<PostStaffMedRotaPeriod> StaffMedRotaPeriods { get; set; }
     }

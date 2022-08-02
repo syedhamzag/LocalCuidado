@@ -127,27 +127,27 @@ namespace AwesomeCare.Admin.Controllers
 
                 return View(model);
             }
-            var post = new PostStaffMedTracker
-            {
-                ClientMedId = model.ClientMedId,
-                DoseGiven = model.DoseGiven,
-                MedTrackDate = model.MedTrackDate,
-                RotaId = model.RotaId,
-                StaffMedTrackerId = model.StaffMedTrackerId,    
-                StaffPersonalInfoId = model.StaffPersonalInfoId,
-                Status = model.Status
-            };
-            var entity = await _medicationService.Create(post);
+            //var post = new PostStaffMedTracker
+            //{
+            //    ClientMedId = model.ClientMedId,
+            //    DoseGiven = model.DoseGiven,
+            //    MedTrackDate = model.MedTrackDate,
+            //    RotaId = model.RotaId,
+            //    StaffMedTrackerId = model.StaffMedTrackerId,    
+            //    StaffPersonalInfoId = model.StaffPersonalInfoId,
+            //    Status = model.Status
+            //};
+            //var entity = await _medicationService.Create(post);
 
-            SetOperationStatus(new Models.OperationStatus
-            {
-                IsSuccessful = entity.StaffMedTrackerId > 0,
-                Message = entity.StaffMedTrackerId > 0 ? "Successful" : "Error"
-            });
-            if (entity != null)
-            {
-                return RedirectToAction("MedTracker");
-            }
+            //SetOperationStatus(new Models.OperationStatus
+            //{
+            //    IsSuccessful = entity.StaffMedTrackerId > 0,
+            //    Message = entity.StaffMedTrackerId > 0 ? "Successful" : "Error"
+            //});
+            //if (entity != null)
+            //{
+            //    return RedirectToAction("MedTracker");
+            //}
             return View(model);
 
         }

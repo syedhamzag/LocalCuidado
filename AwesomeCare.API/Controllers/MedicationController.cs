@@ -234,27 +234,44 @@ namespace AwesomeCare.API.Controllers
 
         #region Tracker
         /// <summary>
+        /// Get Staff Medication Tracker by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetStaffMedTracker/{id}")]
+        [ProducesResponseType(type: typeof(GetStaffMedRota), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetStaffMedTracker(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return BadRequest("Parameter id is required");
+            }
+
+            var getEntity = _staffMedRotaRepository.Table.ProjectTo<GetStaffMedRota>().FirstOrDefault(d => d.StaffRotaId == id);
+
+            return Ok(getEntity);
+        }
+        /// <summary>
         /// Create Staff Medication Tracker
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        [ProducesResponseType(type: typeof(GetStaffMedRota), statusCode: StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] PostStaffMedRota model)
+        public async Task<IActionResult> Post([FromBody] List<PostStaffMedRota> model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var postEntity = Mapper.Map<StaffMedRota>(model);
-            var newEntity = await _staffMedRotaRepository.InsertEntity(postEntity);
-            var getEntity = Mapper.Map<GetStaffMedRota>(newEntity);
+            var postEntity = Mapper.Map<List<StaffMedRota>>(model);
+            await _staffMedRotaRepository.InsertEntities(postEntity);
 
-            return Ok(getEntity);
+
+            return Ok();
         }
         /// <summary>
         /// Update Staff Medication Tracker
@@ -263,9 +280,6 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
-        [ProducesResponseType(type: typeof(GetStaffMedRota), statusCode: StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Put([FromBody] PutStaffMedRota model)
         {
             if (!ModelState.IsValid)
@@ -275,9 +289,8 @@ namespace AwesomeCare.API.Controllers
 
             var postEntity = Mapper.Map<StaffMedRota>(model);
             var newEntity = await _staffMedRotaRepository.UpdateEntity(postEntity);
-            var getEntity = Mapper.Map<GetStaffMedRota>(newEntity);
 
-            return Ok(getEntity);
+            return Ok(newEntity);
         }
         [HttpGet]
         [Route("MedTracker/{sdate}/{edate}")]
@@ -336,7 +349,11 @@ namespace AwesomeCare.API.Controllers
                              Status = med.Status,
                              Type = med.Type,
                              StaffName = string.Concat(st.FirstName, st.LastName),
-                             //Feedback = c.Feedback,
+                             DoseGiven = smt.DoseGiven,
+                             Time = smt.Time,
+                             Location = smt.Location,
+                             Measurement = smt.Measurement,
+                             Feedback = smt.Feedback,
                              NoOfStaff = c.NumberOfStaff
                              
                          }).OrderBy(o => o.ClientId).ToList();

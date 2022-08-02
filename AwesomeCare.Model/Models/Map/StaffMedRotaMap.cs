@@ -41,6 +41,26 @@ namespace AwesomeCare.Model.Models.Map
               .HasMaxLength(50)
              .IsRequired();
 
+            builder.Property(p => p.DoseGiven)
+             .HasColumnName("DoseGiven")
+              .HasMaxLength(50);
+
+            builder.Property(p => p.Time)
+             .HasColumnName("Time")
+              .HasMaxLength(50);
+
+            builder.Property(p => p.Measurement)
+             .HasColumnName("Measurement")
+              .HasMaxLength(50);
+
+            builder.Property(p => p.Location)
+             .HasColumnName("Location")
+              .HasMaxLength(250);
+
+            builder.Property(p => p.Feedback)
+             .HasColumnName("Feedback")
+              .HasMaxLength(250);
+
 
             builder.Property(p => p.Remark)
                .HasColumnName("Remark")

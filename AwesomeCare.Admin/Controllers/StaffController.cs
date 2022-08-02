@@ -10,6 +10,7 @@ using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
+using AwesomeCare.Admin.Services.Medication;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.Staff;
@@ -46,6 +47,7 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<StaffController> _logger;
         private IFileUpload _fileUpload;
         private IStaffCommunication _staffCommunication;
+        private IMedicationService _medicationServices;
         private IClientRotaTypeService _clientRotaTypeService;
         private IClientRotaNameService _clientRotaNameService;
         private IRotaDayofWeekService _rotaDayofWeekService;
@@ -67,7 +69,7 @@ namespace AwesomeCare.Admin.Controllers
         private ISetupStaffHolidayService _setupStaff;
 
         public StaffController(IStaffService staffService,
-            IClientService clientService,
+            IClientService clientService, IMedicationService medicationServices,
             IRotaDayofWeekService rotaDayofWeekService,
             IClientRotaNameService clientRotaNameService,
             ILogger<StaffController> logger,
@@ -89,6 +91,7 @@ namespace AwesomeCare.Admin.Controllers
             this.rotaTaskService = rotaTaskService;
             _baseService = baseService;
             _setupStaff = setupStaff;
+            _medicationServices = medicationServices;
         }
         public async Task<IActionResult> Index()
         {
@@ -312,6 +315,11 @@ namespace AwesomeCare.Admin.Controllers
                             rota.RotaId = day.RotaId;
                             rota.RotaDayofWeekId = dayOfWeekId;
                             rota.Staff = staff;
+                            rota.DoseGiven = "";
+                            rota.Time = "";
+                            rota.Measurement = "";
+                            rota.Location = "";
+                            rota.Feedback = "";
                             rotas.Add(rota);
                         }
                     }
@@ -320,7 +328,7 @@ namespace AwesomeCare.Admin.Controllers
                 }
 
 
-                var result = await _staffService.CreateMedRota(rotas);
+                var result = await _medicationServices.Post(rotas);
                 var content = await result.Content.ReadAsStringAsync();
                 SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Staff Rota Successfully saved" : "An Error Occurred" });
 
