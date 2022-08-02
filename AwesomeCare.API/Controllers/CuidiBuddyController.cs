@@ -32,7 +32,7 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetCuidi()
         {
-            var getEntities = _clientRepository.Table.Include(s => s.CuidiBuddy).ToList();
+            var getEntities = _clientRepository.Table.ToList();
             return Ok(getEntities);
         }
         [HttpGet()]

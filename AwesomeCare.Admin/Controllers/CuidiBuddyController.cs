@@ -16,11 +16,9 @@ namespace AwesomeCare.Admin.Controllers
     public class CuidiBuddyController : BaseController
     {
         private ICuidiBuddyServices _cuidiBuddyServices;
-        private IClientService _clientServices;
-        public CuidiBuddyController(ICuidiBuddyServices cuidiBuddyServices, IFileUpload fileUpload, IClientService clientServices) : base(fileUpload)
+        public CuidiBuddyController(ICuidiBuddyServices cuidiBuddyServices, IFileUpload fileUpload) : base(fileUpload)
         {
             _cuidiBuddyServices = cuidiBuddyServices;
-            _clientServices = clientServices;
         }
 
         public async Task<IActionResult> Reports()
@@ -53,7 +51,8 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Index(CreateCuidiBuddy model)
         {
             var clients = await _cuidiBuddyServices.GetCuidi();
-            List<int> CuidiIds = clients.Where(s => s.ClientId == model.ClientId).SingleOrDefault().GetCuidiBuddy.Select(s => s.CuidiBuddyId).ToList();
+            var cuidiBuddy = await _cuidiBuddyServices.Get();
+            List<int> CuidiIds = cuidiBuddy.Where(s => s.ClientId == model.ClientId).Select(s => s.CuidiBuddyId).ToList();
             foreach (GetClient client in clients)
             {
                 DateTime bday = DateTime.Parse(client.DateOfBirth);
@@ -61,7 +60,7 @@ namespace AwesomeCare.Admin.Controllers
                 if (client.TeritoryId == model.Location && client.GenderId == model.Gender && age >= model.AgeFrom && age <= model.AgeTo)
                 {
 
-                    if (CuidiIds.Any(s => s != client.ClientId))
+                    if (CuidiIds.All(s => s != client.ClientId))
                     {
                         model.getClients.Add(client);
                     }
@@ -70,14 +69,24 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
         }
         [HttpGet]
-        public JsonResult Add(int clientId, int cuidiId)
+        public async Task<JsonResult> Add(int clientId, int cuidiId)
         {
             PostCuidiBuddy entity = new PostCuidiBuddy();
             entity.CuidiBuddyId = cuidiId;
             entity.ClientId = clientId;
 
-            var result = _cuidiBuddyServices.Post(entity);
-            var content = result.Result.Content.ReadAsStringAsync();
+            var result = await _cuidiBuddyServices.Post(entity);
+            var content = result.Content.ReadAsStringAsync();
+
+            SetOperationStatus(new Models.OperationStatus
+            {
+                IsSuccessful = result.IsSuccessStatusCode,
+                Message = result.IsSuccessStatusCode ? "Successful" : "Operation failed"
+            });
+            if (result.IsSuccessStatusCode)
+            {
+                return Json("CuidiBuddy");
+            }
             return Json(content);
         }
         [HttpPost]

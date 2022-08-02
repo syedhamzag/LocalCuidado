@@ -1769,7 +1769,7 @@
                     yAxes: [{
                         ticks: {
                             min: 0,
-                            beginAtZero: true
+                            beginAtZero: false
                         },
                         gridLines: {
                             display: false,
@@ -2501,17 +2501,17 @@
 
             function getClientMatrix()
             {
-                //var dashboard = $('#ActiveUser').val();
-                //if (dashboard <= 0) {
-                //    $.ajax({
-                //        type: 'GET',
-                //        url: '/Dashboard/GetClientMatrix',
-                //        success: function (response) {
+                var dashboard = $('#ActiveUser').val();
+                if (dashboard <= 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetClientMatrix',
+                        success: function (response) {
                             //Client Matrix
-                            var labelsC = ['Pending','Closed','Open'];
-                            var dataC = [30,28,14];
-                            //response.clientMatrix.forEach(function (result, index) { labelsC.push(result.key) });
-                            //response.clientMatrix.forEach(function (result, index) { dataC.push(result.value) });
+                            var labelsC = [];
+                            var dataC = [];
+                            response.clientMatrix.forEach(function (result, index) { labelsC.push(result.key) });
+                            response.clientMatrix.forEach(function (result, index) { dataC.push(result.value) });
                             var client = {
                                 labels: labelsC,
                                 datasets: [{
@@ -2522,8 +2522,8 @@
                                     data: dataC
                                 }]
                             };
-                            var dataC1 = [5,0,1];
-                            //response.logAudit.forEach(function (result, index) { dataC1.push(result.value) });
+                            var dataC1 = [];
+                            response.logAudit.forEach(function (result, index) { dataC1.push(result.value) });
                             var log = {
                                 labels: labelsC,
                                 datasets: [{
@@ -2534,8 +2534,8 @@
                                     data: dataC1
                                 }]
                             };
-                            var dataC2 = [1,5,9];
-                            //response.medAudit.forEach(function (result, index) { dataC2.push(result.value) });
+                            var dataC2 = [];
+                            response.medAudit.forEach(function (result, index) { dataC2.push(result.value) });
                             var med = {
                                 labels: labelsC,
                                 datasets: [{
@@ -2546,8 +2546,8 @@
                                     data: dataC2
                                 }]
                             };
-                            var dataC3 = [7,5,3];
-                            //response.complain.forEach(function (result, index) { dataC3.push(result.value) });
+                            var dataC3 = [];
+                            response.complain.forEach(function (result, index) { dataC3.push(result.value) });
                             var comp = {
                                 labels: labelsC,
                                 datasets: [{
@@ -2558,8 +2558,8 @@
                                     data: dataC3
                                 }]
                             };
-                            var dataC4 = [9,5,1];
-                            //response.voice.forEach(function (result, index) { dataC4.push(result.value) });
+                            var dataC4 = [];
+                            response.voice.forEach(function (result, index) { dataC4.push(result.value) });
                             var voice = {
                                 labels: labelsC,
                                 datasets: [{
@@ -2570,8 +2570,8 @@
                                     data: dataC4
                                 }]
                             };
-                            var dataC5 = [4,0,0];
-                            //response.program.forEach(function (result, index) { dataC5.push(result.value) });
+                            var dataC5 = [];
+                            response.program.forEach(function (result, index) { dataC5.push(result.value) });
                             var prog = {
                                 labels: labelsC,
                                 datasets: [{
@@ -2582,8 +2582,8 @@
                                     data: dataC5
                                 }]
                             };
-                            var dataC6 = [3,7,0];
-                            //response.mgtVisit.forEach(function (result, index) { dataC6.push(result.value) });
+                            var dataC6 = [];
+                            response.mgtVisit.forEach(function (result, index) { dataC6.push(result.value) });
                             var mgt = {
                                 labels: labelsC,
                                 datasets: [{
@@ -2594,8 +2594,8 @@
                                     data: dataC6
                                 }]
                             };
-                            var dataC7 = [1,6,0];
-                            //response.serviceWatch.forEach(function (result, index) { dataC7.push(result.value) });
+                            var dataC7 = [];
+                            response.serviceWatch.forEach(function (result, index) { dataC7.push(result.value) });
                             var watch = {
                                 labels: labelsC,
                                 datasets: [{
@@ -2655,27 +2655,27 @@
                                 type: 'pie'
 
                             });
-                    //        },
-                    //    error: function () {
-                    //        console.log('Failed ');
-                    //    }
-                    //});
-                //}
+                            },
+                        error: function () {
+                            console.log('Failed ');
+                        }
+                    });
+                }
             }
 
             function getStaffMatrix()
             {
                 var dashboard = $('#ActiveUser').val();
-                //if (dashboard <= 0) {
-                //    $.ajax({
-                //        type: 'GET',
-                //        url: '/Dashboard/GetStaffMatrix',
-                //        success: function (response) {
-                            //Staff Matrix
-                            var labels = ['Pending','Closed','Open'];
-                            var data = [19,34,55];
-                            //response.staffMatrix.forEach(function (result, index) { labels.push(result.key) });
-                            //response.staffMatrix.forEach(function (result, index) { data.push(result.value) });
+                if (dashboard <= 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetStaffMatrix',
+                        success: function (response) {
+                            Staff Matrix
+                            var labels = [];
+                            var data = [];
+                            response.staffMatrix.forEach(function (result, index) { labels.push(result.key) });
+                            response.staffMatrix.forEach(function (result, index) { data.push(result.value) });
                             var staff = {
                                 labels: labels,
                                 datasets: [{
@@ -2693,8 +2693,8 @@
                                 type: 'polarArea'
 
                             });
-                            var dataS1 = [0,3,9];
-                            //response.adlObs.forEach(function (result, index) { dataS1.push(result.value) });
+                            var dataS1 = [];
+                            response.adlObs.forEach(function (result, index) { dataS1.push(result.value) });
                             var adl = {
                                 labels: labels,
                                 datasets: [{
@@ -2705,8 +2705,8 @@
                                     data: dataS1
                                 }]
                             };
-                            var dataS2 = [0,4,9];
-                            //response.keyWorker.forEach(function (result, index) { dataS2.push(result.value) });
+                            var dataS2 = [];
+                            response.keyWorker.forEach(function (result, index) { dataS2.push(result.value) });
                             var key = {
                                 labels: labels,
                                 datasets: [{
@@ -2717,8 +2717,8 @@
                                     data: dataS2
                                 }]
                             };
-                            var dataS3 = [6,3,7];
-                            //response.medComp.forEach(function (result, index) { dataS3.push(result.value) });
+                            var dataS3 = [];
+                            response.medComp.forEach(function (result, index) { dataS3.push(result.value) });
                             var medcomp = {
                                 labels: labels,
                                 datasets: [{
@@ -2729,8 +2729,8 @@
                                     data: dataS3
                                 }]
                             };
-                            var dataS4 = [5,2,8];
-                            //response.oneToOne.forEach(function (result, index) { dataS4.push(result.value) });
+                            var dataS4 = [];
+                            response.oneToOne.forEach(function (result, index) { dataS4.push(result.value) });
                             var one = {
                                 labels: labels,
                                 datasets: [{
@@ -2741,8 +2741,8 @@
                                     data: dataS4
                                 }]
                             };
-                            var dataS5 = [3,8,9];
-                            //response.reference.forEach(function (result, index) { dataS5.push(result.value) });
+                            var dataS5 = [];
+                            response.reference.forEach(function (result, index) { dataS5.push(result.value) });
                             var refs = {
                                 labels: labels,
                                 datasets: [{
@@ -2753,8 +2753,8 @@
                                     data: dataS5
                                 }]
                             };
-                            var dataS6 = [1,5,4];
-                            //response.spotCheck.forEach(function (result, index) { dataS6.push(result.value) });
+                            var dataS6 = [];
+                            response.spotCheck.forEach(function (result, index) { dataS6.push(result.value) });
                             var spot = {
                                 labels: labels,
                                 datasets: [{
@@ -2765,8 +2765,8 @@
                                     data: dataS6
                                 }]
                             };
-                            var dataS7 = [3,4,4];
-                            //response.supervision.forEach(function (result, index) { dataS7.push(result.value) });
+                            var dataS7 = [];
+                            response.supervision.forEach(function (result, index) { dataS7.push(result.value) });
                             var superv = {
                                 labels: labels,
                                 datasets: [{
@@ -2777,8 +2777,8 @@
                                     data: dataS7
                                 }]
                             };
-                            var dataS8 = [1,5,5];
-                            //response.survey.forEach(function (result, index) { dataS8.push(result.value) });
+                            var dataS8 = [];
+                            response.survey.forEach(function (result, index) { dataS8.push(result.value) });
                             var survey = {
                                 labels: labels,
                                 datasets: [{
@@ -2838,12 +2838,12 @@
                                 type: 'pie'
 
                             });
-                //            },
-                //        error: function () {
-                //            console.log('Failed ');
-                //        }
-                //    });
-                //}
+                            },
+                        error: function () {
+                            console.log('Failed ');
+                        }
+                    });
+                }
             }
             
             function getTeleMatrix()

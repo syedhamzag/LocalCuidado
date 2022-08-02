@@ -18,7 +18,7 @@ namespace AwesomeCare.Admin.Services.CuidiBuddy
         [Get("/CuidiBuddy/Get/{id}")]
         Task<GetCuidiBuddy> Get(int id);
 
-        [Post("/CuidiBuddy/Create")]
+        [Post("/CuidiBuddy/Post")]
         Task<HttpResponseMessage> Post([Body] PostCuidiBuddy model);
 
         [Put("/CuidiBuddy/Put")]
