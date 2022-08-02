@@ -367,7 +367,7 @@
                                         <div class="dropdown profile-action">
                                             <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                             <div class="dropdown-menu dropdown-menu-right" style="">
-                                                <a asp-action="Index" asp-controller="CuidiBuddy">Add CuidiBuddy</a>
+                                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="CuidiBuddy">Add CuidiBuddy</a>
                                             </div>
                                         </div>
                                     </div>

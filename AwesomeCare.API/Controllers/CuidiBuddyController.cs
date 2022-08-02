@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using AwesomeCare.DataTransferObject.DTOs.Client;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -16,13 +17,24 @@ namespace AwesomeCare.API.Controllers
     public class CuidiBuddyController : ControllerBase
     {
         private IGenericRepository<CuidiBuddy> _CuidiBuddyRepository;
+        private IGenericRepository<Client> _clientRepository;
 
-        public CuidiBuddyController(IGenericRepository<CuidiBuddy> CuidiBuddyRepository)
+        public CuidiBuddyController(IGenericRepository<CuidiBuddy> CuidiBuddyRepository, IGenericRepository<Client> clientRepository)
         {
 
             _CuidiBuddyRepository = CuidiBuddyRepository;
+            _clientRepository = clientRepository;
         }
-
+        
+        [HttpGet("GetCuidi")]
+        [ProducesResponseType(type: typeof(List<GetClient>), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetCuidi()
+        {
+            var getEntities = _clientRepository.Table.Include(s => s.CuidiBuddy).ToList();
+            return Ok(getEntities);
+        }
         [HttpGet()]
         [ProducesResponseType(type: typeof(List<GetCuidiBuddy>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

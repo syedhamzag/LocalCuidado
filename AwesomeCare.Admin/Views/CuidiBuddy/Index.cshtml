@@ -10,7 +10,8 @@
             <div class="card planned_task">
                 <div class="card-body">
 
-                    <form asp-action="Search" method="post">
+                    <form asp-action="Index" method="post">
+                        <input type="hidden" asp-for="ClientId" />
                         <div class="row">
                             <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
                                 <label>Gender</label>
@@ -35,7 +36,7 @@
 
 
                         <button type="submit" class="btn btn-primary">Submit</button>
-                        <a asp-action="Index" asp-controller="Hobbies" class="btn btn-primary pull-right">Cancel</a>
+                        <a asp-action="Index" asp-controller="CuidiBuddy" asp-route-clientId="Model.ClientId" class="btn btn-primary pull-right">Cancel</a>
                     </form>
 
                 </div>
@@ -43,3 +44,69 @@
         </div>
     </div>
 
+     <div class="row">
+        @if (Model.getClients.Count > 0)
+        {
+            foreach (var client in Model.getClients)
+            {
+                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                    <div class="profile-view">
+                        <div class="profile-img-wrap">
+                            <div class="profile-img">
+                                <a href="">
+                                    <img src="@client.PassportFilePath" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="profile-basic">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="profile-info-left">
+                                        <h5 class="user-name m-t-0">@string.Concat(client.Firstname, " ", client.Middlename, " ", client.Surname)</h5>
+                                        <ul class="personal-info">
+                                            <li>
+                                                <span class="title">Birthday:</span>
+                                                <span class="text">@client.DateOfBirth</span>
+                                            </li>
+                                            <li>
+                                                <span class="title">Post Code:</span>
+                                                <span class="text">@client.PostCode</span>
+                                            </li>
+                                        </ul>
+                                        <div class="small text-muted"> <a href="#" id="@string.Concat("btnAdd",client.ClientId)" onclick="addfriend(this)">Add</a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+            }
+        }
+    </div>
+    <script type="text/javascript">
+        function addfriend(element)
+        {
+            $(element).attr("disabled", "disabled");
+            var cuidiId = element.href.split('btnAdd')[1];
+            var clientId = @Model.ClientId;
+            if(cuidiId > 0)
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '/CuidiBuddy/Add',
+                    data: { 'clientId': clientId, 'cuidiId' : cuidiId },
+                    success: function (response) {
+                        $(element).removeAttr("disabled");
+                    },
+                    error: function () {
+                        alert('Failed to receive the Data');
+                        console.log('Failed ');
+                    }
+                });
+            }
+
+        }
+        
+    </script>

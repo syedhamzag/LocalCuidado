@@ -8,6 +8,7 @@ using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
@@ -28,14 +29,10 @@ namespace AwesomeCare.Admin.Controllers
             return View(entities);
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int clientId)
         {
             var model = new CreateCuidiBuddy();
-            return View(model);
-        }
-        public IActionResult Search()
-        {
-            var model = new CreateCuidiBuddy();
+            model.ClientId = clientId;
             return View(model);
         }
         public async Task<IActionResult> View(int hobbiesId)
@@ -53,46 +50,36 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Search(CreateCuidiBuddy model)
+        public async Task<IActionResult> Index(CreateCuidiBuddy model)
         {
-            var clients = await _clientServices.GetClients();
+            var clients = await _cuidiBuddyServices.GetCuidi();
+            List<int> CuidiIds = clients.Where(s => s.ClientId == model.ClientId).SingleOrDefault().GetCuidiBuddy.Select(s => s.CuidiBuddyId).ToList();
             foreach (GetClient client in clients)
             {
                 DateTime bday = DateTime.Parse(client.DateOfBirth);
                 int age = (int)((DateTime.Now - bday).TotalDays / 365.242199);
                 if (client.TeritoryId == model.Location && client.GenderId == model.Gender && age >= model.AgeFrom && age <= model.AgeTo)
                 {
-                    model.getClients.Add(client);
+
+                    if (CuidiIds.Any(s => s != client.ClientId))
+                    {
+                        model.getClients.Add(client);
+                    }
                 }
-
             }
-            
             return View(model);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(CreateCuidiBuddy model)
+        [HttpGet]
+        public JsonResult Add(int clientId, int cuidiId)
         {
-            if (model == null || !ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             PostCuidiBuddy entity = new PostCuidiBuddy();
-            entity.CuidiBuddyId = model.CuidiBuddyId;
-            entity.ClientId = model.ClientId;
+            entity.CuidiBuddyId = cuidiId;
+            entity.ClientId = clientId;
 
-            var result = await _cuidiBuddyServices.Post(entity);
-            var content = await result.Content.ReadAsStringAsync();
-
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Duty On Call successfully registered" : "An Error Occurred" });
-            if (result.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Reports");
-            }
-            return View(model);
+            var result = _cuidiBuddyServices.Post(entity);
+            var content = result.Result.Content.ReadAsStringAsync();
+            return Json(content);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CreateCuidiBuddy model)

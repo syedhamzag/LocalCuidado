@@ -1,4 +1,5 @@
-﻿using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
+﻿using AwesomeCare.DataTransferObject.DTOs.Client;
+using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
 using Refit;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -10,6 +11,9 @@ namespace AwesomeCare.Admin.Services.CuidiBuddy
     {
         [Get("/CuidiBuddy")]
         Task<List<GetCuidiBuddy>> Get();
+        
+        [Get("/CuidiBuddy/GetCuidi")]    
+        Task<List<GetClient>> GetCuidi();
 
         [Get("/CuidiBuddy/Get/{id}")]
         Task<GetCuidiBuddy> Get(int id);
