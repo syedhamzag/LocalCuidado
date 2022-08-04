@@ -14,5 +14,7 @@ namespace AwesomeCare.Model.Models
         public string ContactPersonFullName { get; set; }
         public string ContactPersonEmail { get; set; }
         public string ContactPersonPhoneNumber { get; set; }
+
+        public virtual ICollection<StaffOfficeLocation> StaffOfficeLocation { get; set; } = new HashSet<StaffOfficeLocation>();
     }
 }

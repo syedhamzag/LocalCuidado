@@ -159,6 +159,8 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<SalaryAllowance> SalaryAllowance { get; set; }
         public virtual ICollection<SalaryDeduction> SalaryDeduction { get; set; }
         public virtual ICollection<StaffTax> StaffTax { get; set; }
+        public virtual ICollection<StaffOfficeLocation> StaffOfficeLocation { get; set; } = new HashSet<StaffOfficeLocation>();
+
 
     }
 }

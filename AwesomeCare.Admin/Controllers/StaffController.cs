@@ -11,6 +11,7 @@ using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.ClientRotaType;
 using AwesomeCare.Admin.Services.Medication;
+using AwesomeCare.Admin.Services.OfficeLocation;
 using AwesomeCare.Admin.Services.RotaDayofWeek;
 using AwesomeCare.Admin.Services.RotaTask;
 using AwesomeCare.Admin.Services.Staff;
@@ -26,6 +27,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffCommunication;
 using AwesomeCare.DataTransferObject.DTOs.StaffCompetenceTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
 using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
+using AwesomeCare.DataTransferObject.DTOs.StaffOfficeLocation;
 using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
 using AwesomeCare.DataTransferObject.DTOs.StaffRotaMed;
@@ -67,12 +69,14 @@ namespace AwesomeCare.Admin.Controllers
         const string trainingFolder = "stafftraining";
         const string refereeFolder = "staffreferee";
         private ISetupStaffHolidayService _setupStaff;
+        IOfficeLocationService _officelocationService;
 
         public StaffController(IStaffService staffService,
             IClientService clientService, IMedicationService medicationServices,
             IRotaDayofWeekService rotaDayofWeekService,
             IClientRotaNameService clientRotaNameService,
             ILogger<StaffController> logger,
+            IOfficeLocationService officelocationService,
             IFileUpload fileUpload,
             IStaffCommunication staffCommunication,
             IClientRotaTypeService clientRotaTypeService,
@@ -92,6 +96,7 @@ namespace AwesomeCare.Admin.Controllers
             _baseService = baseService;
             _setupStaff = setupStaff;
             _medicationServices = medicationServices;
+            _officelocationService = officelocationService;
         }
         public async Task<IActionResult> Index()
         {
@@ -133,6 +138,7 @@ namespace AwesomeCare.Admin.Controllers
 
         public async Task<IActionResult> Details(int staffId)
         {
+            var location = await _officelocationService.GetAsync();
             var profile = await _staffService.Profile(staffId);
             foreach (var item in profile.GetStaffPersonalityTest)
             {
@@ -149,6 +155,8 @@ namespace AwesomeCare.Admin.Controllers
                 if (s.Value == profile.Status.ToString() || s.Text == profile.Status.ToString())
                     s.Selected = true;
             });
+            profile.StaffOfficeLocation = profile.GetStaffOfficeLocation.Select(s => s.Location).ToList();
+            profile.OfficeLocation = location.Select(s => new SelectListItem(s.Address, s.OfficeLocationId.ToString())).ToList();
             return View(profile);
         }
 
@@ -162,9 +170,10 @@ namespace AwesomeCare.Admin.Controllers
 
                 return RedirectToAction("Details", new { staffId = staff.StaffPersonalInfoId });
             }
-
+            
             var postApproval = new PostStaffApproval
             {
+                PostStaffOfficeLocation = staff.StaffOfficeLocation.Select(o => new PostStaffOfficeLocation { Location = o, Staff = staff.StaffPersonalInfoId }).ToList(),
                 Comment = staff.Comment,
                 Rate = staff.Rate,
                 StaffPersonalInfoId = staff.StaffPersonalInfoId,

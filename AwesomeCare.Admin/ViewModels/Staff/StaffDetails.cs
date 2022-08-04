@@ -41,5 +41,8 @@ namespace AwesomeCare.Admin.ViewModels.Staff
         [Required]
         [Display(Name = "Employment Date")]
         public DateTime? EmploymentDate { get; set; }
+
+        public List<int> StaffOfficeLocation { get; set; } = new List<int>();
+        public List<SelectListItem> OfficeLocation { get; set; } = new List<SelectListItem>();
     }
 }

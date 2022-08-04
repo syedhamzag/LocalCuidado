@@ -20,6 +20,7 @@ using AwesomeCare.DataTransferObject.DTOs.StaffHealth;
 using AwesomeCare.DataTransferObject.DTOs.StaffInterview;
 using AwesomeCare.DataTransferObject.DTOs.StaffKeyWorker;
 using AwesomeCare.DataTransferObject.DTOs.StaffMedComp;
+using AwesomeCare.DataTransferObject.DTOs.StaffOfficeLocation;
 using AwesomeCare.DataTransferObject.DTOs.StaffOneToOne;
 using AwesomeCare.DataTransferObject.DTOs.StaffPersonalityTest;
 using AwesomeCare.DataTransferObject.DTOs.StaffRating;
@@ -256,6 +257,11 @@ namespace AwesomeCare.API.Controllers
                                     TeamLeader = st.TeamLeader,
                                     Telephone = st.Telephone,
                                     WorkTeam = wk == null ? string.Empty : wk.WorkTeam,
+                                    GetStaffOfficeLocation = (from ol in st.StaffOfficeLocation
+                                                              select new GetStaffOfficeLocation
+                                                              {
+                                                                Location = ol.Location,
+                                                              }).ToList()
 
                                 }).FirstOrDefault();
 
@@ -430,7 +436,14 @@ namespace AwesomeCare.API.Controllers
             staff.IsTeamLeader = model.IsTeamLeader;
             staff.HasIdCard = model.HasIdCard;
             staff.EmploymentDate = model.EmploymentDate;
-
+            foreach (var item in model.PostStaffOfficeLocation)
+            {
+                staff.StaffOfficeLocation.Add(new StaffOfficeLocation
+                {
+                    Location = item.Location,
+                    Staff = staff.StaffPersonalInfoId
+                });
+            }
             staff.StaffPersonalInfoComments.Add(new StaffPersonalInfoComment
             {
                 Comment = model.Comment,

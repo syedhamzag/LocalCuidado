@@ -233,10 +233,14 @@ namespace AwesomeCare.Model.Models.Map
           .IsRequired(false);
             #endregion
 
-
             builder.HasIndex(p => p.RegistrationId)
                          .HasName("IX_tbl_StaffPersonalInfo_RegistrationId")
                          .IsUnique(true);
+
+            builder.HasMany<StaffOfficeLocation>(p => p.StaffOfficeLocation)
+                .WithOne(p => p.StaffPersonalInfo)
+                .HasForeignKey(p => p.Staff)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne<ApplicationUser>(p => p.ApplicationUser)
                 .WithOne(p => p.StaffPersonalInfo)

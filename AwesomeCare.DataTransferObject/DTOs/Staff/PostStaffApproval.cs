@@ -1,4 +1,5 @@
-﻿using AwesomeCare.DataTransferObject.Enums;
+﻿using AwesomeCare.DataTransferObject.DTOs.StaffOfficeLocation;
+using AwesomeCare.DataTransferObject.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.Text;
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
   public  class PostStaffApproval
-    {
+  {
         public int StaffPersonalInfoId { get; set; }
         public int? CommentBy_UserId { get; set; }
         [Required]
@@ -21,5 +22,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public bool? HasUniform { get; set; }
         public bool? HasIdCard { get; set; }
         public DateTime? EmploymentDate { get; set; }
-    }
+        public List<PostStaffOfficeLocation> PostStaffOfficeLocation { get; set; } = new List<PostStaffOfficeLocation>();
+  }
 }

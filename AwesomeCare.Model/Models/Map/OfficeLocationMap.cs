@@ -54,6 +54,11 @@ namespace AwesomeCare.Model.Models.Map
              .HasMaxLength(255)
              .IsRequired(false);
             #endregion
+
+            builder.HasMany<StaffOfficeLocation>(p => p.StaffOfficeLocation)
+                .WithOne(p => p.OfficeLocation)
+                .HasForeignKey(p => p.Location)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

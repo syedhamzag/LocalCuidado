@@ -129,6 +129,7 @@ using AwesomeCare.Admin.Services.ClientHealthCondition;
 using AwesomeCare.Admin.Services.ClientHobbies;
 using AwesomeCare.Admin.Services.ClientPerformanceIndicator;
 using AwesomeCare.Admin.Services.CareReview;
+using AwesomeCare.Admin.Services.OfficeAttendance;
 
 namespace AwesomeCare.Admin
 {
@@ -1143,6 +1144,11 @@ namespace AwesomeCare.Admin
             {
                 c.BaseAddress = new Uri(uri);
             }).AddTypedClient(r => RestService.For<ICareReviewService>(r));
+
+            services.AddHttpClient("attendance", c =>
+            {
+                c.BaseAddress = new Uri(uri);
+            }).AddTypedClient(r => RestService.For<IOfficeAttendanceService>(r));
         }
     }
 }
