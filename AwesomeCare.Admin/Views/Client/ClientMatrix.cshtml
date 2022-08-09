@@ -42,15 +42,40 @@
                             <td>@client.NumberOfStaff</td>
                             <td>@client.StartDate.ToString("dd/MM/yyyy")</td>
                             <td></td>
+                            <td>
+                                @if(client.GetReview != null)
+                                {
+                                    if(client.GetReview.Count() > 0)
+                                    {
+                                        @string.Concat(client.GetReview.FirstOrDefault().CP_PreDate.ToString("dd/MM/yyyy"), " ", client.GetReview.FirstOrDefault().CP_ReviewDate.ToString("dd/MM/yyyy"));
+                                    }
+                                }
+                            </td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>@client.Keyworker</td>
+                            
+                            <td>
+                                @if (client.GetClientMedAudit.Count() > 0)
+                                {
+                                        @string.Concat(client.GetClientMedAudit.FirstOrDefault().Date.ToString("dd/MM/yyyy")," ",@client.GetClientMedAudit.FirstOrDefault().NextDueDate.ToString("dd/MM/yyyy"));
+                                }
+                            </td>
+
+                            <td>
+                                @if(client.GetClientLogAudit.Count() > 0)
+                                {
+                                        @string.Concat(client.GetClientLogAudit.FirstOrDefault().Date.ToString("dd/MM/yyyy")," ",@client.GetClientLogAudit.FirstOrDefault().NextDueDate.ToString("dd/MM/yyyy"));
+                                }
+                            </td>
+                            <td>
+                                @if(client.GetClientVoice.Count() > 0)
+                                {
+                                        @string.Concat(client.GetClientVoice.FirstOrDefault().Date.ToString("dd/MM/yyyy")," ",@client.GetClientVoice.FirstOrDefault().NextCheckDate.ToString("dd/MM/yyyy"));
+                                }
+                            </td>
+                                <td>@client.Keyworker</td>
                             <td></td>
                         </tr>
                     }

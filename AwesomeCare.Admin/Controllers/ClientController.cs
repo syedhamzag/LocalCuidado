@@ -45,12 +45,25 @@ using AwesomeCare.Admin.Services.ClientRota;
 using AwesomeCare.Admin.Services.HealthCondition;
 using AwesomeCare.Admin.Services.Hobbies;
 using AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition;
+using AwesomeCare.Admin.Services.CarePlanNutrition;
+using AwesomeCare.Admin.Services.Review;
+using AwesomeCare.Admin.Services.ClientMedAudit;
+using AwesomeCare.Admin.Services.ClientLogAudit;
+using AwesomeCare.Admin.Services.ClientVoice;
+using AwesomeCare.Admin.Services.CareReview;
+using AwesomeCare.Admin.Services.PersonalDetail;
 
 namespace AwesomeCare.Admin.Controllers
 {
     public class ClientController : BaseController
     {
         private readonly IClientService _clientService;
+        private readonly IHomeRiskAssessmentService _homeRiskService;
+        private readonly IReviewService _carePlanService;
+        private readonly IPersonalDetailService _persnoalDetailService;
+        private readonly IClientMedAuditService _medAuditService;
+        private readonly IClientLogAuditService _logAuditService;
+        private readonly IClientVoiceService _voiceService;
         private IClientInvolvingParty _clientInvolvingPartyService;
         private readonly IClientRegulatoryContactService _clientRegulatoryContactService;
         private readonly IClientCareDetails _clientCareDetails;
@@ -73,7 +86,9 @@ namespace AwesomeCare.Admin.Controllers
         public ClientController(DropboxClient dropboxClient, IFileUpload fileUpload, QRCodeGenerator qRCodeGenerator, IMemoryCache cache, IHobbiesServices hobbyService, IHealthConditionServices healthConService,
         IClientRegulatoryContactService clientRegulatoryContactService, IClientInvolvingParty clientInvolvingPartyService, IStaffService staffService, IClientRotaService clientRotaService,
         IClientService clientService, IWebHostEnvironment env, ILogger<ClientController> logger, IBaseRecordService baseRecordService, IRotaTaskService rotaTaskService, IClientRotaNameService clientRotaNameService,
-            IClientCareDetails clientCareDetails, IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService) : base(fileUpload)
+            IClientCareDetails clientCareDetails, IMedicationService medicationService, IClientRotaTypeService clientRotaTypeService, IRotaDayofWeekService rotaDayofWeekService, IHomeRiskAssessmentService homeRiskService,
+            IReviewService carePlanService, IClientMedAuditService medAuditService, IClientLogAuditService logAuditService, IClientVoiceService voiceService, IPersonalDetailService persnoalDetailService
+            ) : base(fileUpload)
         {
             _dropboxClient = dropboxClient;
             _clientRotaService = clientRotaService;
@@ -94,6 +109,11 @@ namespace AwesomeCare.Admin.Controllers
             _clientRotaTypeService = clientRotaTypeService;
             _rotaDayofWeekService = rotaDayofWeekService;
             _staffService = staffService;
+            _homeRiskService = homeRiskService;
+            _medAuditService = medAuditService;
+            _logAuditService = logAuditService;
+            _voiceService = voiceService;
+            _persnoalDetailService = persnoalDetailService;
         }
         public async Task<IActionResult> HomeCare()
         {
@@ -378,7 +398,23 @@ namespace AwesomeCare.Admin.Controllers
         #region Client Matrix
         public async Task<IActionResult> ClientMatrix()
         {
+            var riskMang = await _homeRiskService.Get();
+            var personal = await _persnoalDetailService.Get();
+            var medAudit = await _medAuditService.Get();
+            var logAudit  = await _logAuditService.Get();
+            var voice = await _voiceService.Get();
             var clients = await _clientService.GetClients();
+            
+            foreach (var client in clients)
+            {
+                var personalDetail = await _persnoalDetailService.Get(client.ClientId);
+                client.GetHomeRiskAssessment = riskMang.Where(s => s.ClientId == client.ClientId).ToList();
+                if (personalDetail != null)
+                    client.GetReview = personalDetail.Review;
+                client.GetClientMedAudit = medAudit.Where(s => s.ClientId == client.ClientId).ToList();
+                client.GetClientLogAudit = logAudit.Where(s => s.ClientId == client.ClientId).ToList();
+                client.GetClientVoice = voice.Where(s => s.ClientId == client.ClientId).ToList();
+            }
             return View(clients);
         }
         #endregion
@@ -780,6 +816,15 @@ namespace AwesomeCare.Admin.Controllers
         #endregion
 
         #region Client_Details
+        [HttpGet]
+        public JsonResult CheckPIN(string pin)
+        {
+            var getmodal = _clientRotaService.GetPin();
+            if(getmodal.Result.Where(s=>s.Key == "CarePlan").FirstOrDefault().Pin.ToString() == pin)
+                return Json("OK");
+            return Json("Error");
+        }
+
         [HttpGet]
         public JsonResult personalInfo(int clientId)
         {

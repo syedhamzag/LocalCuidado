@@ -572,6 +572,30 @@ function getwoundcare(element) {
         });
     }
 }
+
+function checkPIN(element)
+{
+    var pin = element.value;
+    var name = element.id.split('-')[0];
+    var clientId = element.id.split('-')[1];
+    $.ajax({
+        type: 'GET',
+        url: '/Client/CheckPIN',
+        data: { 'pin': pin },
+        success: function (response) {
+            if (response == "OK")
+            {
+                $('#' + name + 'edit').attr('href', '/' + name + '/' + 'Index?clientId=' + clientId + '');
+                $('#' + name + '-' + clientId).remove();
+            }
+        },
+        error: function () {
+            alert('Failed to receive the Data');
+            console.log('Failed ');
+        }
+    });
+}
+
 function getpersonaldetail(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
@@ -586,11 +610,13 @@ function getpersonaldetail(element) {
                 response.getReview.forEach(function (result, index) {
                     var row = '<tr><td>' + result.cP_PreDate + '</td><td>' + result.cP_ReviewDate + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/PersonalDetail/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="personaldetail-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="personaldetailedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/PersonalDetail/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/PersonalDetail/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -618,11 +644,13 @@ function getpets(element) {
                 response.getPets.forEach(function (result, index) {
                     var row = '<tr><td>' + result.name + '</td><td>' + result.age + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/Pets/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="pets-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="petsedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/Pets/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/Pets/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -648,11 +676,13 @@ function getintandobj(element) {
                 response.getInterestAndObjective.forEach(function (result, index) {
                     var row = '<tr><td>' + result.careGoal + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/InterestAndObjective/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="interestandobjective-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="interestandobjectiveedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/InterestAndObjective/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/InterestAndObjective/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -680,11 +710,13 @@ function getpersonalhygiene(element) {
                 response.getPersonalHygiene.forEach(function (result, index) {
                     var row = '<tr><td>' + result.laundrySupport + '</td><td>' + result.laundrySupport + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/PersonalHygiene/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="personalhygiene-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="personalhygieneedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/PersonalHygiene/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/PersonalHygiene/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -712,11 +744,13 @@ function getinfectioncontrol(element) {
                 response.getInfectionControl.forEach(function (result, index) {
                     var row = '<tr><td>' + result.testDate + '</td><td>' + result.remarks + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/InfectionControl/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="infectioncontrol-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="infectioncontroledit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/InfectionControl/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/InfectionControl/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -744,11 +778,13 @@ function getmtask(element) {
                 response.getManagingTasks.forEach(function (result, index) {
                     var row = '<tr><td>' + result.help + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/ManagingTasks/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="managingtasks-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="managingtasksedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/ManagingTasks/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/ManagingTasks/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -775,11 +811,13 @@ function getnutrition(element) {
                 response.getCarePlanNutrition.forEach(function (result, index) {
                     var row = '<tr><td>' + result.specialDiet + '</td><td>' + result.avoidFood + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/CarePlanNutrition/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="careplannutrition-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="careplannutritionedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/CarePlanNutrition/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/CarePlanNutrition/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -807,11 +845,13 @@ function getbalance(element) {
                 response.getBalance.forEach(function (result, index) {
                     var row = '<tr><td>' + result.name + '</td><td>' + result.description + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/Balance/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="balance-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="balanceedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/Balance/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/Balance/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -839,11 +879,13 @@ function getphysicalability(element) {
                 response.getPhysicalAbility.forEach(function (result, index) {
                     var row = '<tr><td>' + result.name + '</td><td>' + result.description + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/PhysicalAbility/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="physicalability-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="physicalabilityedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/PhysicalAbility/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/PhysicalAbility/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -871,12 +913,14 @@ function gethealthliving(element) {
                 response.getHealthAndLiving.forEach(function (result, index) {
                     var row = '<tr><td>' + result.briefHealth + '</td><td>' + result.wakeUp + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/HealthLiving/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="healthliving-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="healthlivingedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/HealthLiving/View?clientId=' + clientId + '">View</a>';
                     var del = '<a class="dropdown-item" href="/HealthLiving/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
 
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -903,11 +947,13 @@ function getspecialhealthmed(element) {
                 response.getSpecialHealthAndMedication.forEach(function (result, index) {
                     var row = '<tr><td>' + result.date + '</td><td>' + result.by + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/SpecialHealthAndMedication/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="specialhealthandmedication-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="specialhealthandmedicationedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/SpecialHealthAndMedication/View?clientId=' + clientId + '">View</a>';
                     var del = '<a class="dropdown-item" href="/SpecialHealthAndMedication/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -935,11 +981,13 @@ function getspecialhealthcond(element) {
                 response.getSpecialHealthCondition.forEach(function (result, index) {
                     var row = '<tr><td>' + result.conditionName + '</td><td>' + result.sourceInformation + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/SpecialHealthCondition/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="specialhealthcondition-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="specialhealthconditionedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/SpecialHealthCondition/View?clientId=' + clientId + '">View</a>';
                     var del =  '<a class="dropdown-item" href="/SpecialHealthCondition/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -967,11 +1015,13 @@ function gethistoryoffall(element) {
                 response.getHistoryOfFall.forEach(function (result, index) {
                     var row = '<tr><td>' + result.date + '</td><td>' + result.cause + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var edit = '<a class="dropdown-item" href="/SpecialHealthAndMedication/Index?clientId=' + clientId + '">Edit</a>';
+                    var pin = '<input id="historyoffall-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="historyoffalledit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/SpecialHealthAndMedication/View?clientId=' + clientId + '">View</a>';
                     var del = '<a class="dropdown-item" href="/SpecialHealthAndMedication/Delete?clientId=' + clientId + '">Delete</a>';
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
+                    $(menu).append(pin);
                     $(menu).append(edit);
                     $(menu).append(view);
                     $(menu).append(del);
@@ -1158,32 +1208,32 @@ function getclientperformance(element)
     var clientId = element.id;
     var name = element.href.split('#')[1];
     var client = $('#tbl_' + name).children().length;
-    //if (client <= 0) {
-    //    $.ajax({
-    //        type: 'GET',
-    //        url: '/Client/' + name,
-    //        data: { 'clientId': clientId },
-    //        success: function (response) {
-    //            response.getPerformanceIndicator.forEach(function (result, index) {
-    //                var row = '<tr><td>' + result.help + '</td></tr>';
-    //                $('#tbl_' + name).append(row);
-    //                //var edit = '<a class="dropdown-item" href="/ManagingTasks/Index?clientId=' + clientId + '">Edit</a>';
-    //                //var view = '<a class="dropdown-item" href="/ManagingTasks/View?clientId=' + clientId + '">View</a>';
-    //                //var del = '<a class="dropdown-item" href="/ManagingTasks/Delete?clientId=' + clientId + '">Delete</a>';
-    //                //var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
-    //                //$(menu).children().remove();
-    //                //$(menu).append(edit);
-    //                //$(menu).append(view);
-    //                //$(menu).append(del);
+    if (client <= 0) {
+        $.ajax({
+            type: 'GET',
+            url: '/Client/' + name,
+            data: { 'clientId': clientId },
+            success: function (response) {
+                response.getPerformanceIndicator.forEach(function (result, index) {
+                    var row = '<tr><td>' + result.help + '</td></tr>';
+                    $('#tbl_' + name).append(row);
+                    //var edit = '<a class="dropdown-item" href="/ManagingTasks/Index?clientId=' + clientId + '">Edit</a>';
+                    //var view = '<a class="dropdown-item" href="/ManagingTasks/View?clientId=' + clientId + '">View</a>';
+                    //var del = '<a class="dropdown-item" href="/ManagingTasks/Delete?clientId=' + clientId + '">Delete</a>';
+                    //var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    //$(menu).children().remove();
+                    //$(menu).append(edit);
+                    //$(menu).append(view);
+                    //$(menu).append(del);
 
-    //            });
-    //        },
-    //        error: function () {
-    //            alert('Failed to receive the Data');
-    //            console.log('Failed ');
-    //        }
-    //    });
-    //}
+                });
+            },
+            error: function () {
+                alert('Failed to receive the Data');
+                console.log('Failed ');
+            }
+        });
+    }
 
 }
 

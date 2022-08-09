@@ -98,29 +98,35 @@
                                 <tbody>
                                     @foreach (var item in Model.Invoices.Where(s => s.ClientId == clientId))
                                     {
-
+                                        if (item != null)
+                                        {
                                         <tr>
                                             <td>@item.NumberOfStaff</td>
                                             <td>@item.Period</td>
                                             <td>@item.RotaDate</td>
                                             <td>@item.StaffRate</td>
                                             <td>
-                                                @{
-                                                    bool isStartTimeValid = TimeSpan.TryParseExact(item.StartTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan startTime);
-                                                    bool isStopTimeValid = TimeSpan.TryParseExact(item.StopTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan stopTime);
-                                                    if (isStartTimeValid && isStopTimeValid)
+                                            @{
+                                                bool isStartTimeValid = TimeSpan.TryParseExact(item.StartTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan startTime);
+                                                bool isStopTimeValid = TimeSpan.TryParseExact(item.StopTime, "h\\:mm", CultureInfo.GetCultureInfo("en-US"), TimeSpanStyles.None, out TimeSpan stopTime);
+                                                if (isStartTimeValid && isStopTimeValid)
+                                                {
+                                                    var diff = stopTime.Subtract(startTime).TotalMinutes;
+                                                    if (item.StaffRate > 0)
                                                     {
-                                                        var diff = stopTime.Subtract(startTime).TotalMinutes;
-
                                                         amt_comm = item.StaffRate * decimal.Parse(diff.ToString()) * 24 * 60;
                                                         total += decimal.Parse(amt_comm.ToString());
                                                         @Math.Round(decimal.Parse(amt_comm.ToString()),0).ToString("N")
                                                     }
+                                                    
                                                 }
+                                            }
                                             </td>
                                             <td></td>
 
-                                        </tr>
+                                        </tr> 
+                                        }
+
                                     }                
                                 </tbody>
                             </table>

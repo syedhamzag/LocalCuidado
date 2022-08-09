@@ -25,6 +25,7 @@
 
             </div>
             <div class="card-body">
+                <form id="NutritionForm" asp-action="Index" enctype="multipart/form-data" asp-controller="Nutrition" method="post">
                 <div class="row">
                     <div class="form-group col-sm-2 col-xs-12 col-md-2 col-lg-2">
                         <label>Client Image</label>
@@ -57,11 +58,10 @@
                         </div>
                     </div>
                 </div>
-                <form id="NutritionForm" asp-action="Index" enctype="multipart/form-data" asp-controller="Nutrition" method="post">
+                
 
                     @Html.HiddenFor(m => m.ClientId)
                     @Html.HiddenFor(m => m.ActionName)
-                    @Html.HiddenFor(m => m.StaffId)
                     @Html.HiddenFor(m => m.NutritionId)
 
                     <table class="table table-hover table-bordered" id="tblMeal">
@@ -354,7 +354,7 @@
                                             <input type="text" class="form-control" asp-for="@Model.ClientShopping.FirstOrDefault().DATETO" id="DATETO" value="@Shopping.DATETO" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
                                         </td>
                                         <td>
-                                            <image alt="Image" class="ImagePreviewBox" name="@Model.ClientShopping.FirstOrDefault().Image" id="Image" src="@Shopping.Image" style="width: 100px !important; height: 100px !important;" />
+                                            <image alt="Image" class="ImagePreviewBox" name="@Model.ClientShopping.FirstOrDefault().Image" id="ClientShopping.Image" src="@Shopping.Image" style="width: 100px !important; height: 100px !important;" />
                                         </td>
                                     </tr>
                                 }
