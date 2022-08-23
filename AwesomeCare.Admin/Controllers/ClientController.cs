@@ -452,10 +452,10 @@ namespace AwesomeCare.Admin.Controllers
 
             var putClient = Mapper.Map<PutClient>(model);
             var result = await _clientService.PutClient(putClient, model.ClientId);
-            // var content = await result.Content.ReadAsStringAsync();
+            var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new OperationStatus { IsSuccessful = result >= 1, Message = result >= 1 ? "Client Personal Information successfully updated" : "An Error Occurred" });
-            if (result < 1)
+            SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "Client Personal Information successfully updated" : "An Error Occurred" });
+            if (!result.IsSuccessStatusCode)
             {
                 // model.DeleteFileFromDisk(_env);
                 return View("EditRegistration", model);

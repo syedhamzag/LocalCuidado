@@ -321,9 +321,6 @@ namespace AwesomeCare.API.Controllers
         }
 
         [HttpPut("{clientId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> PutClient([FromBody] PutClient model, int? clientId)
         {
             if (model == null || !ModelState.IsValid)
