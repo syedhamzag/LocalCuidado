@@ -673,9 +673,10 @@ function getintandobj(element) {
             url: '/Client/' + name,
             data: { 'clientId': clientId },
             success: function (response) {
+                var row = '';
                 response.getInterestAndObjective.forEach(function (result, index) {
-                    var row = '<tr><td>' + result.careGoal + '</td></tr>';
-                    $('#tbl_' + name).append(row);
+                    row = '<tr><td>' + result.careGoal + '</td></tr>';
+                    
                     var pin = '<input id="interestandobjective-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="interestandobjectiveedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/InterestAndObjective/View?clientId=' + clientId + '">View</a>';
@@ -688,6 +689,7 @@ function getintandobj(element) {
                     $(menu).append(del);
 
                 });
+                $('#tbl_' + name).append(row);
             },
             error: function () {
                 alert('Failed to receive the Data');
@@ -775,9 +777,10 @@ function getmtask(element) {
             url: '/Client/' + name,
             data: { 'clientId': clientId },
             success: function (response) {
+                var row = "";
                 response.getManagingTasks.forEach(function (result, index) {
-                    var row = '<tr><td>' + result.help + '</td></tr>';
-                    $('#tbl_' + name).append(row);
+                    row = '<tr><td>' + result.help + '</td></tr>';
+                    
                     var pin = '<input id="managingtasks-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="managingtasksedit" class="dropdown-item" href="#">Edit</a>';
                     var view = '<a class="dropdown-item" href="/ManagingTasks/View?clientId=' + clientId + '">View</a>';
@@ -790,6 +793,7 @@ function getmtask(element) {
                     $(menu).append(del);
 
                 });
+                $('#tbl_' + name).append(row);
             },
             error: function () {
                 alert('Failed to receive the Data');

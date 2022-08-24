@@ -23,24 +23,26 @@
         </tr>
     </thead>
     <tbody>
-        @for (int r = 0; r < Model.InvolvingParties.Count; r++)
+        @if(Model.InvolvingParties != null)
         {
-            <tr>
-                <td>
-                    @*@Model.ElementAt(r).ItemName*@
-                    <input type="hidden" asp-for="@Model.InvolvingParties.ElementAt(r).ClientInvolvingPartyId" />
-                    <input type="hidden" asp-for="@Model.InvolvingParties.ElementAt(r).ClientInvolvingPartyItemId" />
-                    @*<input type="hidden" asp-for="@Model.ElementAt(r).ItemName" />*@
+            for (int r = 0; r < Model.InvolvingParties.Count; r++)
+            {
+                <tr>
+                    <td>
+                        @*@Model.ElementAt(r).ItemName*@
+                        <input type="hidden" asp-for="@Model.InvolvingParties.ElementAt(r).ClientInvolvingPartyId" />
+                        <input type="hidden" asp-for="@Model.InvolvingParties.ElementAt(r).ClientInvolvingPartyItemId" />
+                        @*<input type="hidden" asp-for="@Model.ElementAt(r).ItemName" />*@
 
-                </td>
-                <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Name" type="text" class="form-control" /></td>
-                <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Address" type="text" class="form-control" /></td>
-                <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Email" type="text" class="form-control" /></td>
-                <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Telephone" type="text" class="form-control" /></td>
-                <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Relationship" type="text" class="form-control" /></td>
-            </tr>
+                    </td>
+                    <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Name" type="text" class="form-control" /></td>
+                    <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Address" type="text" class="form-control" /></td>
+                    <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Email" type="text" class="form-control" /></td>
+                    <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Telephone" type="text" class="form-control" /></td>
+                    <td><input asp-for="@Model.InvolvingParties.ElementAt(r).Relationship" type="text" class="form-control" /></td>
+                </tr>
+            }
         }
-
     </tbody>
 </table>
 <table class="table table-bordered table-hover" id="Involving" style="display:none;">

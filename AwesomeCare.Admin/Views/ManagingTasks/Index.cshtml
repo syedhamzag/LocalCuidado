@@ -27,11 +27,11 @@
                                     </div>
 
                                     <input type="hidden" asp-for="@Model.TaskCount" value="@Model.TaskCount" />
+                                    <input type="hidden" asp-for="@Model.ClientId" />
 
                                     <table class="table table-hover table-bordered" id="tblMTasks">
                                         <thead>
                                             <tr>
-                                                <th></th>
                                                 <th>Task</th>
                                                 <th>Help Required</th>
                                                 <th>Status</th>
@@ -42,31 +42,11 @@
                                             {
                                                 @foreach (var type in Model.GetManagingTasks)
                                                 {
-                                                    int i = 0;
-                                                    <tr id="@string.Concat("row-",(i+1))">
-                                                        @if(type.TaskId > 0)
-                                                        {
-                                                             <td>
-                                                                <div class="fancy-checkbox">
-                                                                    <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" checked /><span><small> </small></span></label>
-                                                                    <input type="hidden" id="@string.Concat("TaskId",i)" name="@string.Concat("TaskId",i)" value="@type.TaskId" />
-                                                                </div>
-                                                            </td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                <div class="fancy-checkbox">
-                                                                    <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",i)" id="@string.Concat("isChecked",i)" /><span><small> </small></span></label>
-                                                                    <input type="hidden" id="@string.Concat("TaskId",i)" name="@string.Concat("TaskId",i)" value="0" />
-                                                                </div>
-                                                            </td>
-                                                        }
-                                                        <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Task" asp-items="null" /></td>
-                                                        <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault().Help" value="@type.Help" class="form-control" /></td>
+                                                    <tr id="@type.TaskId">
+                                                        <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).TaskId" /><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Task" asp-items="null" /></td>
+                                                        <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Help" class="form-control" /></td>
                                                         <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault(s=>s.TaskId==type.TaskId).Status" asp-items="null" /></td>
                                                     </tr>
-                                                    i++;
                                                 }
                                             }
                                         </tbody>
@@ -84,7 +64,6 @@
                                     <table class="table table-hover table-bordered" id="ManagingTask" style="display:none;">
                                         <thead>
                                             <tr>
-                                                <th></th>
                                                 <th>Task</th>
                                                 <th>Help Required</th>
                                                 <th>Status</th>
@@ -92,13 +71,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>
-                                                    <div class="fancy-checkbox">
-                                                        <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked",Model.TaskCount)" id="@string.Concat("isChecked",Model.TaskCount)" /><span><small> </small></span></label>
-                                                        <input type="hidden" id="@string.Concat("TaskId",Model.TaskCount)" name="@string.Concat("TaskId",Model.TaskCount)" value="0" />
-                                                    </div>
-                                                </td>
-                                                <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault().Task" asp-items="null" /></td>
+                                                <td><baserecord asp-key="MTask_Task" asp-for="@Model.GetManagingTasks.FirstOrDefault().Task" asp-items="null" /><input type="hidden" asp-for="@Model.GetManagingTasks.FirstOrDefault().TaskId" value="0" /></td>
                                                 <td><input type="text" asp-for="@Model.GetManagingTasks.FirstOrDefault().Help" class="form-control" /></td>
                                                 <td><baserecord asp-key="MTask_Status" asp-for="@Model.GetManagingTasks.FirstOrDefault().Status" asp-items="null" /><input type="hidden" asp-for="@Model.GetManagingTasks.FirstOrDefault().TaskId" value="0" /></td>
                                             </tr>
@@ -156,6 +129,21 @@
                     const row = table.rows('.selected').remove().draw();
                     counter--;
                     $('#TaskCount').val(counter);
+                    if(id > 0)
+                    {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/ManagingTasks/DeleteRow',
+                            data: { 'Id': id },
+                            success: function (response) {
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert('Failed to receive the Data');
+                                console.log('Failed ');
+                            }
+                        }); 
+                    }
                 }
                 else {
                     alert("Please select row for delete !");

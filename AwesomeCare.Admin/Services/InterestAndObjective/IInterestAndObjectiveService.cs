@@ -25,7 +25,7 @@ namespace AwesomeCare.Admin.Services.InterestAndObjective
         [Put("/InterestAndObjective/Put")]
         Task<HttpResponseMessage> Put([Body] PostInterestAndObjective model);
 
-        [Delete("/InterestAndObjective/Delete/{id}")]
-        Task<HttpResponseMessage> Delete(int id);
+        [Delete("/InterestAndObjective/Delete/{id}/{name}")]
+        Task<HttpResponseMessage> Delete(int id, string name);
     }
 }

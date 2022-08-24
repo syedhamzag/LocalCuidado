@@ -20,7 +20,6 @@ namespace AwesomeCare.Admin.Controllers
     { 
         private IClientService _clientService;
         private IInterestAndObjectiveService _interestService;
-
         public InterestAndObjectiveController(IFileUpload fileUpload, IClientService clientService, IInterestAndObjectiveService interestService) : base(fileUpload)
         {
             _clientService = clientService;
@@ -59,11 +58,12 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
         }
-        public async Task<IActionResult> Delete(int clientId)
+        [HttpGet]
+        public JsonResult Delete(int Id, string name)
         {
-            var sp = await _interestService.GetbyClient(clientId);
-            await _interestService.Delete(sp.GoalId);
-            return RedirectToAction("Reports");
+                var delEntity = _interestService.Delete(Id,name);
+                return Json(delEntity.Result);
+
         }
 
         [HttpPost]
@@ -93,6 +93,7 @@ namespace AwesomeCare.Admin.Controllers
             for (int i = 0; i < model.InterestCount; i++)
             {
                 PostInterest eq = new PostInterest();
+                var interest = int.Parse(formcollection["InterestId"][i]);
                 var Leisure = int.Parse(formcollection["LeisureActivity"][i]);
                 var Informal = int.Parse(formcollection["InformalActivity"][i]);
                 var Contact = int.Parse(formcollection["MaintainContact"][i]);
@@ -101,6 +102,7 @@ namespace AwesomeCare.Admin.Controllers
                 var Objective = int.Parse(formcollection["GoalAndObjective"][i]);
 
                 eq.GoalId = model.GoalId;
+                eq.InterestId = interest;
                 eq.LeisureActivity = Leisure;
                 eq.InformalActivity = Informal;
                 eq.MaintainContact = Contact;
@@ -117,12 +119,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 PostPersonalityTest test = new PostPersonalityTest();
 
-                var TestId = 0;
-                if (model.GoalId > 0)
-                {
-                    TestId = int.Parse(formcollection["TestId"][i]);
-                }
-
+                var TestId = int.Parse(formcollection["TestId"][i]);
                 var Question = int.Parse(formcollection["Question"][i]);
                 var Answr = int.Parse(formcollection["Answer"][i]);
 

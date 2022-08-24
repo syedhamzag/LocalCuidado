@@ -127,6 +127,7 @@ namespace AwesomeCare.Admin.Controllers
             var active = result.Where(s => s.Status != "Active").OrderBy(s => s.ClientId).ToList();
             return View(active);
         }
+        
         #region Registration
 
 
@@ -395,6 +396,7 @@ namespace AwesomeCare.Admin.Controllers
             return RedirectToAction("HomeCareDetails", new { clientId = createClient.ClientId });
         }
         #endregion
+        
         #region Client Matrix
         public async Task<IActionResult> ClientMatrix()
         {
@@ -418,12 +420,15 @@ namespace AwesomeCare.Admin.Controllers
             return View(clients);
         }
         #endregion
+        
         #region Edit
         public async Task<IActionResult> EditRegistration(int? clientId)
         {
             var staffs = await _staffService.GetStaffs();
             var result = await _clientService.GetClientForEdit(clientId.Value);
             result.InvolvingPartyCount = result.InvolvingParties.Count;
+            if(result.About.Length > 200)
+                result.About.Substring(0, 199);
             ViewBag.staffList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString()));
             return View(result);
         }

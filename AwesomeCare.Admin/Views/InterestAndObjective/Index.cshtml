@@ -37,7 +37,7 @@
                                         <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
                                         <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
                                     </div>
-                                    <input type="hidden" asp-for="@Model.InterestCount" value="@Model.InterestCount" />
+                                    <input type="hidden" asp-for="@Model.InterestCount" />
 
                                     <table class="table table-hover table-bordered" id="tblInterest">
                                         <thead>
@@ -55,8 +55,8 @@
                                             {
                                                 @foreach (var type in Model.GetInterest)
                                                 {
-                                                    <tr>
-                                                        <td><baserecord asp-key="Interest_LeisureAct" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).LeisureActivity" asp-items="null" /></td>
+                                                    <tr id="@type.InterestId">
+                                                        <td><baserecord asp-key="Interest_LeisureAct" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).LeisureActivity" asp-items="null" /> <input type="hidden" asp-for="GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).InterestId" /></td>
                                                         <td><baserecord asp-key="Interest_InformalAct" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).InformalActivity" asp-items="null" /></td>
                                                         <td><baserecord asp-key="Interest_MaintainContact" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).MaintainContact" asp-items="null" /></td>
                                                         <td><baserecord asp-key="Interest_CommunityActivity" asp-for="@Model.GetInterest.FirstOrDefault(s=>s.InterestId==type.InterestId).CommunityActivity" asp-items="null" /></td>
@@ -81,7 +81,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><baserecord asp-key="Interest_LeisureAct" asp-for="@Model.GetInterest.FirstOrDefault().LeisureActivity" asp-items="null" /></td>
+                                                <td><baserecord asp-key="Interest_LeisureAct" asp-for="@Model.GetInterest.FirstOrDefault().LeisureActivity" asp-items="null" /> <input type="hidden" asp-for="GetInterest.FirstOrDefault().InterestId" value="0" /></td>
                                                 <td><baserecord asp-key="Interest_InformalAct" asp-for="@Model.GetInterest.FirstOrDefault().InformalActivity" asp-items="null" /></td>
                                                 <td><baserecord asp-key="Interest_MaintainContact" asp-for="@Model.GetInterest.FirstOrDefault().MaintainContact" asp-items="null" /></td>
                                                 <td><baserecord asp-key="Interest_CommunityActivity" asp-for="@Model.GetInterest.FirstOrDefault().CommunityActivity" asp-items="null" /></td>
@@ -126,8 +126,7 @@
                                             {
                                                 @foreach (var type in Model.GetPersonalityTest)
                                                 {
-                                                    <tr>
-
+                                                    <tr id="@type.TestId">
                                                         <td><input type="hidden" asp-for="@Model.GetPersonalityTest.FirstOrDefault(s=>s.TestId==type.TestId).TestId" /><baserecord asp-key="PTest_Question" asp-for="@Model.GetPersonalityTest.FirstOrDefault(s=>s.TestId==type.TestId).Question" asp-items="null" /></td>
                                                         <td><baserecord asp-key="PTest_Answer" asp-for="@Model.GetPersonalityTest.FirstOrDefault(s=>s.TestId==type.TestId).Answer" asp-items="null" /></td>
                                                     </tr>
@@ -145,7 +144,7 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><baserecord asp-key="PTest_Question" asp-for="@Model.GetPersonalityTest.FirstOrDefault().Question" asp-items="null" /></td>
+                                                <td><baserecord asp-key="PTest_Question" asp-for="@Model.GetPersonalityTest.FirstOrDefault().Question" asp-items="null" /><input type="hidden" asp-for="@Model.GetPersonalityTest.FirstOrDefault().TestId" value="0" /></td>
                                                 <td><baserecord asp-key="PTest_Answer" asp-for="@Model.GetPersonalityTest.FirstOrDefault().Answer" asp-items="null" /></td>
                                             </tr>
                                         </tbody>
@@ -169,15 +168,8 @@
         </div>
     </div>
 </div>
-@section VendorScripts{
-    <script src="../../../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../../../assets/vendor/dropify/js/dropify.min.js"></script>
-    <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-}
-
 @section Scripts{
-    <script src="../../../assets/js/pages/forms/form-wizard.js"></script>
-    <script src="../../../assets/js/pages/forms/dropify.js"></script>
+    <script src="~/assets2/js/jquery-3.6.0.min.js"></script>
     <script>
         $(function () {
             
@@ -208,10 +200,26 @@
             });
             $('#Delrow').click(function () {
                 const id = table.row('.selected').id();
-                if (table.row('.selected').length > 0) {
+                if (table.row('.selected').length > 0) 
+                {
                     const row = table.rows('.selected').remove().draw();
                     counter--;
                     $('#InterestCount').val(counter);
+                    if(id > 0)
+                    {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/InterestAndObjective/Delete',
+                            data: { 'Id': id, 'name': 'Interest' },
+                            success: function (response) {
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert('Failed to receive the Data');
+                                console.log('Failed ');
+                            }
+                        });                    
+                    }
                 }
                 else {
                     alert("Please select row for delete !");
@@ -240,16 +248,31 @@
                     $(this).removeClass('selected');
                 }
                 else {
-                    table.$('tr.selected').removeClass('selected');
+                    tabletest.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                 }
             });
             $('#Delrow1').click(function () {
-                const id = table.row('.selected').id();
-                if (table.row('.selected').length > 0) {
-                    const row = table.rows('.selected').remove().draw();
+                const id = tabletest.row('.selected').id();
+                if (tabletest.row('.selected').length > 0) {
+                    const row = tabletest.rows('.selected').remove().draw();
                     counter1--;
                     $('#PersonalityCount').val(counter1);
+                    if(id > 0)
+                    {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/InterestAndObjective/Delete',
+                            data: { 'Id': id, 'name': 'PTest' },
+                            success: function (response) {
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert('Failed to receive the Data');
+                                console.log('Failed ');
+                            }
+                        });
+                    }
                 }
                 else {
                     alert("Please select row for delete !");
