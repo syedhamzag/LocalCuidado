@@ -500,7 +500,7 @@ namespace AwesomeCare.Admin.Controllers
                 put.ClientInvolvingPartyItemId = item;
                 puts.Add(put);
             }
-            var json = JsonConvert.SerializeObject(puts);
+
             var result = await _clientInvolvingPartyService.Put(puts);
             var content = await result.Content.ReadAsStringAsync();
 

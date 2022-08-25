@@ -6,6 +6,7 @@
 *@
 <h5>Involving Parties</h5>
 <input type="hidden" asp-for="@Model.ClientId" />
+<input type="hidden" asp-for="@Model.Pin" />
 <div class="form-group">
     <button type="button" id="Addrow" class="btn btn-primary pull-right mr-2 ml-5">Add</button>
     <button type="button" id="Delrow" class="btn btn-primary pull-right">Delete</button>
@@ -60,6 +61,7 @@
         <tr>
             <td>
                 <select class="form-control" id="itemIdcmb" name="itemIdcmb" onchange="getId(this)">
+                    <option value="0">--Select--</option>
                     <option value="1">Social Worker</option>
                     <option value="2">GP (General Practional)</option>
                     <option value="3">NOK (Next of Kin)</option>

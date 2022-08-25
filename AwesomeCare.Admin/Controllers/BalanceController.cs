@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
@@ -115,9 +116,18 @@ namespace AwesomeCare.Admin.Controllers
             post.Name = model.Name;
             post.Status = model.Status;
 
-            var json = JsonConvert.SerializeObject(post);
-            var result = await _balanceService.Create(post);
-            var content = await result.Content.ReadAsStringAsync();
+            var result = new HttpResponseMessage();
+            if (post.BalanceId > 0)
+            {
+                result = await _balanceService.Put(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                result = await _balanceService.Post(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
+            
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Balance successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
@@ -134,7 +144,7 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
 
-            PutBalance put = new PutBalance();
+            PostBalance put = new PostBalance();
 
             put.BalanceId = model.BalanceId;
             put.ClientId = model.ClientId;

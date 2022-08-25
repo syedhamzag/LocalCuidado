@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
@@ -107,8 +108,17 @@ namespace AwesomeCare.Admin.Controllers
             post.Prevention = model.Prevention;
             post.Date = model.Date;
 
-            var result = await _historyService.Create(post);
-            var content = await result.Content.ReadAsStringAsync();
+            var result = new HttpResponseMessage();
+            if (post.HistoryId > 0)
+            {
+                result = await _historyService.Put(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                result = await _historyService.Post(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Blood Pressure successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
@@ -125,7 +135,7 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
 
-            PutHistoryOfFall put = new PutHistoryOfFall();
+            PostHistoryOfFall put = new PostHistoryOfFall();
 
             put.HistoryId = model.HistoryId;
             put.ClientId = model.ClientId;

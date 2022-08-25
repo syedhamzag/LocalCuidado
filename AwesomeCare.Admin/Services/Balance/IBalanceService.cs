@@ -19,11 +19,11 @@ namespace AwesomeCare.Admin.Services.Balance
         [Get("/Balance/GetbyClient/{id}")]
         Task<GetBalance> GetbyClient(int id);
 
-        [Post("/Balance/Create")]
-        Task<HttpResponseMessage> Create([Body] PostBalance model);
+        [Post("/Balance/Post")]
+        Task<HttpResponseMessage> Post([Body] PostBalance model);
 
         [Put("/Balance/Put")]
-        Task<HttpResponseMessage> Put([Body] PutBalance model);
+        Task<HttpResponseMessage> Put([Body] PostBalance model);
 
         [Delete("/Balance/Delete/{id}")]
         Task<HttpResponseMessage> Delete(int id);

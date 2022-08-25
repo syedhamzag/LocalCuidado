@@ -32,10 +32,6 @@ namespace AwesomeCare.API.Controllers
 
         }
         #region CarePlanHealth
-        /// <summary>
-        /// Get All CarePlanHealth
-        /// </summary>
-        /// <returns></returns>
         [HttpGet()]
         [ProducesResponseType(type: typeof(List<GetSpecialHealthAndMedication>), statusCode: StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -45,14 +41,10 @@ namespace AwesomeCare.API.Controllers
             var getEntities = _spmedsRepository.Table.ToList();
             return Ok(getEntities);
         }
-        /// <summary>
-        /// Create CarePlanHealth
-        /// </summary>
-        /// <param name="postCarePlanHealth"></param>
-        /// <returns></returns>
+
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostSpecialHealthAndMedication postCarePlanHealth)
+        public async Task<IActionResult> Post([FromBody] PostSpecialHealthAndMedication postCarePlanHealth)
         {
             if (postCarePlanHealth == null || !ModelState.IsValid)
             {
@@ -62,10 +54,6 @@ namespace AwesomeCare.API.Controllers
             await _spmedsRepository.InsertEntity(CarePlanHealth);
             return Ok();
         }
-        /// <summary>
-        /// Update CarePlanHealth
-        /// </summary>
-        /// <returns></returns>
         [HttpPut]
         [Route("[action]")]
         public async Task<IActionResult> Put([FromBody] PostSpecialHealthAndMedication models)
@@ -80,11 +68,6 @@ namespace AwesomeCare.API.Controllers
             return Ok();
 
         }
-        /// <summary>
-        /// Get by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet("Get/{id}")]
         [ProducesResponseType(type: typeof(GetSpecialHealthAndMedication), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -130,11 +113,7 @@ namespace AwesomeCare.API.Controllers
                       ).FirstOrDefaultAsync();
             return Ok(getCarePlanHealth);
         }
-        /// <summary>
-        /// Get by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        
         [HttpGet("GetbyClient/{id}")]
         [ProducesResponseType(type: typeof(GetSpecialHealthAndMedication), statusCode: StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

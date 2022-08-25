@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
@@ -193,10 +194,18 @@ namespace AwesomeCare.Admin.Controllers
             post.TVandMusic = model.TVandMusic;
             post.VideoCallRequired = model.VideoCallRequired;
             post.WakeUp = model.WakeUp;
-
-            var result = await _healthAndLivingService.Create(post);
-            var content = await result.Content.ReadAsStringAsync();
-
+            
+            var result = new HttpResponseMessage();
+            if (post.HLId > 0)
+            {
+                result = await _healthAndLivingService.Put(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                result = await _healthAndLivingService.Post(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Blood Pressure successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
         }
@@ -225,7 +234,7 @@ namespace AwesomeCare.Admin.Controllers
                 model.ConstraintAttachment = model.ConstraintAttachment;
             }
             #endregion
-            PutHealthAndLiving put = new PutHealthAndLiving();
+            PostHealthAndLiving put = new PostHealthAndLiving();
             
             put.AbilityToRead = model.AbilityToRead;
             put.AlcoholicDrink = model.AlcoholicDrink;

@@ -45,7 +45,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostBalance postCarePlanHealth)
+        public async Task<IActionResult> Post([FromBody] PostBalance postCarePlanHealth)
         {
             if (postCarePlanHealth == null || !ModelState.IsValid)
             {

@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
@@ -111,9 +112,17 @@ namespace AwesomeCare.Admin.Controllers
             post.Name = model.Name;
             post.Status = model.Status;
 
-            var json = JsonConvert.SerializeObject(post);
-            var result = await _physicalService.Create(post);
-            var content = await result.Content.ReadAsStringAsync();
+            var result = new HttpResponseMessage();
+            if (post.PhysicalId > 0)
+            {
+                result = await _physicalService.Put(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                result = await _physicalService.Post(post);
+                var content = await result.Content.ReadAsStringAsync();
+            }
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Blood Pressure successfully registered" : "An Error Occurred" });
             return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
@@ -130,7 +139,7 @@ namespace AwesomeCare.Admin.Controllers
                 return View(model);
             }
 
-            PutPhysicalAbility put = new PutPhysicalAbility();
+            PostPhysicalAbility put = new PostPhysicalAbility();
 
             put.PhysicalId = model.PhysicalId;
             put.ClientId = model.ClientId;

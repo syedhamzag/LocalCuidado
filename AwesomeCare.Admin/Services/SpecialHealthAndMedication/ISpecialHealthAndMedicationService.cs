@@ -19,11 +19,11 @@ namespace AwesomeCare.Admin.Services.SpecialHealthAndMedication
         [Get("/SpecialHealthAndMedication/GetbyClient/{id}")]
         Task<GetSpecialHealthAndMedication> GetbyClient(int id);
 
-        [Post("/SpecialHealthAndMedication/Create")]
-        Task<HttpResponseMessage> Create([Body] PostSpecialHealthAndMedication model);
+        [Post("/SpecialHealthAndMedication/Post")]
+        Task<HttpResponseMessage> Post([Body] PostSpecialHealthAndMedication model);
 
         [Put("/SpecialHealthAndMedication/Put")]
-        Task<HttpResponseMessage> Put([Body] PutSpecialHealthAndMedication model);
+        Task<HttpResponseMessage> Put([Body] PostSpecialHealthAndMedication model);
 
         [Delete("/SpecialHealthAndMedication/Delete/{id}")]
         Task<HttpResponseMessage> Delete(int id);

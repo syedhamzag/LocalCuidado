@@ -19,11 +19,11 @@ namespace AwesomeCare.Admin.Services.PhysicalAbility
         [Get("/PhysicalAbility/GetbyClient/{id}")]
         Task<GetPhysicalAbility> GetbyClient(int id);
 
-        [Post("/PhysicalAbility/Create")]
-        Task<HttpResponseMessage> Create([Body] PostPhysicalAbility model);
+        [Post("/PhysicalAbility/Post")]
+        Task<HttpResponseMessage> Post([Body] PostPhysicalAbility model);
 
         [Put("/PhysicalAbility/Put")]
-        Task<HttpResponseMessage> Put([Body] PutPhysicalAbility model);
+        Task<HttpResponseMessage> Put([Body] PostPhysicalAbility model);
 
         [Delete("/PhysicalAbility/Delete/{id}")]
         Task<HttpResponseMessage> Delete(int id);

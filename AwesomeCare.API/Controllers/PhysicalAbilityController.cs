@@ -45,7 +45,7 @@ namespace AwesomeCare.API.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Create([FromBody] PostPhysicalAbility postPhysicalAbility)
+        public async Task<IActionResult> Post([FromBody] PostPhysicalAbility postPhysicalAbility)
         {
             if (postPhysicalAbility == null || !ModelState.IsValid)
             {

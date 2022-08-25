@@ -19,11 +19,11 @@ namespace AwesomeCare.Admin.Services.HistoryOfFall
         [Get("/HistoryOfFall/GetbyClient/{id}")]
         Task<GetHistoryOfFall> GetbyClient(int id);
 
-        [Post("/HistoryOfFall/Create")]
-        Task<HttpResponseMessage> Create([Body] PostHistoryOfFall model);
+        [Post("/HistoryOfFall/Post")]
+        Task<HttpResponseMessage> Post([Body] PostHistoryOfFall model);
 
         [Put("/HistoryOfFall/Put")]
-        Task<HttpResponseMessage> Put([Body] PutHistoryOfFall model);
+        Task<HttpResponseMessage> Put([Body] PostHistoryOfFall model);
 
         [Delete("/HistoryOfFall/Delete/{id}")]
         Task<HttpResponseMessage> Delete(int id);
