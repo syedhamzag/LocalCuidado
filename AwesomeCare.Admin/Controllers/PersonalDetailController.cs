@@ -170,15 +170,15 @@ namespace AwesomeCare.Admin.Controllers
                 int i = 1;
                 foreach (var item in model.GetPersonCentred)
                 {
-                    if (i == 1)
+                    if (item.Class.ToString() == model.ClassList.Where(s=>s.Text == "Individuality").FirstOrDefault().Value)
                         model.Focus1 = item.Focus.Select(s=>s.BaseRecordId).ToList();
-                    if (i == 2)
+                    if (item.Class.ToString() == model.ClassList.Where(s => s.Text == "RightsAndRespect").FirstOrDefault().Value)
                         model.Focus2 = item.Focus.Select(s => s.BaseRecordId).ToList();
-                    if (i == 3)
+                    if (item.Class.ToString() == model.ClassList.Where(s => s.Text == "Choice").FirstOrDefault().Value)
                         model.Focus3 = item.Focus.Select(s => s.BaseRecordId).ToList();
-                    if (i == 4)
+                    if (item.Class.ToString() == model.ClassList.Where(s => s.Text == "DignityAndPrivacy").FirstOrDefault().Value)
                         model.Focus4 = item.Focus.Select(s => s.BaseRecordId).ToList();
-                    if (i == 5)
+                    if (item.Class.ToString() == model.ClassList.Where(s => s.Text == "Partnership").FirstOrDefault().Value)
                         model.Focus5 = item.Focus.Select(s => s.BaseRecordId).ToList();
                     i++;
                 }

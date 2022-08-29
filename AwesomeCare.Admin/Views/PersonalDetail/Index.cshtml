@@ -10,10 +10,8 @@
             </div>
             <div class="card-body">
                 <form asp-route="PersonalDetail" method="post" enctype="multipart/form-data">
-
                     <input type="hidden" asp-for="PersonalDetailId" />
                     <input type="hidden" asp-for="ClientId" />
-
                     <h4>Person Centredness</h4>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -50,105 +48,79 @@
                                         {
                                             int j = Model.GetPersonCentred.Count;
                                                 
-                                                foreach (var item in Model.GetPersonCentred)
+                                                foreach (var item in Model.GetPersonCentred.OrderBy(s=>s.Class))
                                                 {
-                                                    string key = @Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString();
-                                                    <tr id="@item.Class">
-                                                        @{
                                                             if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "Individuality")
                                                             {
+                                                                <tr id="@item.Class">
                                                                 <td>
                                                                     <div class="fancy-checkbox">
                                                                         <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked1")" id="@string.Concat("isChecked1")" checked /><span><small> </small></span></label>
                                                                         <input type="hidden" id="@string.Concat("PersonCentredId1")" name="@string.Concat("PersonCentredId1")" value="@item.PersonCentredId" />
                                                                     </div>
                                                                 </td>
+                                                                 <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class1")" name="@string.Concat("Class1")" value="@item.Class" /></td>
+                                                                 <td><select asp-for="@Model.Focus1" asp-items="@Model.FocusList.Where(s=>s.Key=="Individuality").Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                                 <td><textarea name="@string.Concat("ExpSupport1")" class="form-control">@item.ExpSupport</textarea></td>
+                                                                 </tr>
                                                             }
                                                             if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "RightsAndRespect")
                                                             {
+                                                                <tr id="@item.Class">
                                                                <td>
                                                                     <div class="fancy-checkbox">
                                                                         <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked2")" id="@string.Concat("isChecked2")" checked /><span><small> </small></span></label>
                                                                         <input type="hidden" id="@string.Concat("PersonCentredId2")" name="@string.Concat("PersonCentredId2")" value="@item.PersonCentredId" />
                                                                     </div>
                                                                 </td>
+                                                                <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class2")" name="@string.Concat("Class2")" value="@item.Class" /></td>
+                                                                <td><select asp-for="@Model.Focus2" asp-items="@Model.FocusList.Where(s=>s.Key=="RightsAndRespect").Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                                <td><textarea name="@string.Concat("ExpSupport2")" class="form-control">@item.ExpSupport</textarea></td>
+                                                                 </tr>
                                                             }
                                                             if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "Choice")
                                                             {
+                                                                <tr id="@item.Class">
                                                                 <td>
                                                                     <div class="fancy-checkbox">
                                                                         <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked3")" id="@string.Concat("isChecked3")" checked /><span><small> </small></span></label>
                                                                         <input type="hidden" id="@string.Concat("PersonCentredId3")" name="@string.Concat("PersonCentredId3")" value="@item.PersonCentredId" />
                                                                     </div>
                                                                 </td>
+                                                                <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class3")" name="@string.Concat("Class3")" value="@item.Class" /></td>
+                                                                <td><select asp-for="@Model.Focus3" asp-items="@Model.FocusList.Where(s=>s.Key=="Choice").Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                                <td><textarea name="@string.Concat("ExpSupport3")" class="form-control">@item.ExpSupport</textarea></td>
+                                                                 </tr>
                                                             }
                                                             if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "DignityAndPrivacy")
                                                             {
+                                                                <tr id="@item.Class">
                                                                 <td>
                                                                     <div class="fancy-checkbox">
                                                                         <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked4")" id="@string.Concat("isChecked4")" checked /><span><small> </small></span></label>
                                                                         <input type="hidden" id="@string.Concat("PersonCentredId4")" name="@string.Concat("PersonCentredId4")" value="@item.PersonCentredId" />
                                                                     </div>
                                                                 </td>
+                                                                <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class4")" name="@string.Concat("Class4")" value="@item.Class" /></td>
+                                                                <td><select asp-for="@Model.Focus4" asp-items="@Model.FocusList.Where(s=>s.Key== "DignityAndPrivacy").Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                                <td><textarea name="@string.Concat("ExpSupport4")" class="form-control">@item.ExpSupport</textarea></td>
+                                                                 </tr>
                                                             }
                                                             if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "Partnership")
                                                             {
+                                                                <tr id="@item.Class">
                                                                 <td>
                                                                     <div class="fancy-checkbox">
                                                                         <label><input type="checkbox" class="selectDay" name="@string.Concat("isChecked5")" id="@string.Concat("isChecked5")" checked /><span><small> </small></span></label>
                                                                         <input type="hidden" id="@string.Concat("PersonCentredId5")" name="@string.Concat("PersonCentredId5")" value="@item.PersonCentredId" />
                                                                     </div>
                                                                 </td>
-                                                            }
-                                                        }
-                                                        
-                                                        @{
-                                                            if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "Individuality")
-                                                            {
-                                                                <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class1")" name="@string.Concat("Class1")" value="@item.Class" /></td>
-                                                            }
-                                                            if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "RightsAndRespect")
-                                                            {
-                                                               <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class2")" name="@string.Concat("Class2")" value="@item.Class" /></td>
-                                                            }
-                                                            if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "Choice")
-                                                            {
-                                                                <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class3")" name="@string.Concat("Class3")" value="@item.Class" /></td>
-                                                            }
-                                                            if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "DignityAndPrivacy")
-                                                            {
-                                                                <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class4")" name="@string.Concat("Class4")" value="@item.Class" /></td>
-                                                            }
-                                                            if (Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault().ToString() == "Partnership")
-                                                            {
                                                                 <td>@Model.ClassList.Where(s => s.Value == item.Class.ToString()).Select(s => s.Text).FirstOrDefault() <input type="hidden" id="@string.Concat("Class5")" name="@string.Concat("Class5")" value="@item.Class" /></td>
-                                                            }
-                                                        }
-                                                        @{
-                                                            if (i == 1)
-                                                            {
-                                                                <td><select asp-for="@Model.Focus1" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                            }
-                                                            if (i == 2)
-                                                            {
-                                                                <td><select asp-for="@Model.Focus2" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                            }
-                                                            if (i == 3)
-                                                            {
-                                                                <td><select asp-for="@Model.Focus3" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                            }
-                                                            if (i == 4)
-                                                            {
-                                                                <td><select asp-for="@Model.Focus4" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                            }
-                                                            if (i == 5)
-                                                            {
-                                                                <td><select asp-for="@Model.Focus5" asp-items="@Model.FocusList.Where(s=>s.Key==key).Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
-                                                            }
-
-                                                        }
-                                                        <td><textarea name="@string.Concat("ExpSupport",i)" class="form-control">@item.ExpSupport</textarea></td>
-                                                    </tr>
+                                                                <td><select asp-for="@Model.Focus5" asp-items="@Model.FocusList.Where(s=>s.Key=="Partnership").Select(s=>s.Value).FirstOrDefault()" class="selectpicker form-control" multiple></select></td>
+                                                                <td><textarea name="@string.Concat("ExpSupport5")" class="form-control">@item.ExpSupport</textarea></td>
+                                                                 </tr>
+                                                            }                                                       
+                                                   
                                                     i++;
                                                 }
                                                 var k = 0;

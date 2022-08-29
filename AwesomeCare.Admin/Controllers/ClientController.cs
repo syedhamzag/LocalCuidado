@@ -405,8 +405,8 @@ namespace AwesomeCare.Admin.Controllers
             var medAudit = await _medAuditService.Get();
             var logAudit  = await _logAuditService.Get();
             var voice = await _voiceService.Get();
-            var clients = await _clientService.GetClients();
-            
+            var _clients = await _clientService.GetClients();
+            var clients = _clients.Where(s=>s.Status != "Active").OrderBy(s=>s.ClientId).ToList();
             foreach (var client in clients)
             {
                 var personalDetail = await _persnoalDetailService.Get(client.ClientId);
