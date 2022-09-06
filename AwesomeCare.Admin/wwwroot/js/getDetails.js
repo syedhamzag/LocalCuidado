@@ -608,19 +608,15 @@ function getpersonaldetail(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getReview.forEach(function (result, index) {
-                    var row = '<tr><td>' + result.cP_PreDate + '</td><td>' + result.cP_ReviewDate + '</td></tr>';
-                    $('#tbl_' + name).append(row);
+                    
                     var pin = '<input id="personaldetail-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="personaldetailedit" class="dropdown-item" href="#">Edit</a>';
-                    var view = '<a class="dropdown-item" href="/PersonalDetail/View?clientId=' + clientId + '">View</a>';
-                    var del =  '<a class="dropdown-item" href="/PersonalDetail/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="personaldetailedit" class="btn btn-primary" href="#">Edit</a>';
+                    var view = '<a class="btn btn-secondary" href="/PersonalDetail/View?clientId=' + clientId + '">View</a>';
+                    var del = '<a class="btn btn-warning" href="/PersonalDetail/Delete?clientId=' + clientId + '">Delete</a>';
+                    var row = '<tr><td>' + result.cP_PreDate + '</td><td>' + result.cP_ReviewDate + '</td><td>'+pin + edit + view + del +'</td></tr>';
+                    $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
-                    $(menu).append(pin);
-                    $(menu).append(edit);
-                    $(menu).append(view);
-                    $(menu).append(del);
-
                 });
             },
             error: function () {
