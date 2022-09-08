@@ -1,0 +1,65 @@
+﻿@using AwesomeCare.DataTransferObject.DTOs;
+@model List<GetIncidentReport>
+
+@{
+    ViewData["Title"] = "Client Incident Report";
+}
+
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="card-header">
+                <h2>Index</h2>
+                <ul class="header-dropdown">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a asp-controller="IncidentReporting" asp-action="AddReport">Add Report</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <table class="table m-b-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Incident Type</th>
+                            <th>Staff Involved</th>
+                            <th>Reporting Staff</th>
+                            <th>Client</th>
+                            <th>Date</th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Select((d, i) => new { index = i + 1, data = d }))
+                        {
+                            <tr>
+                                <td>@item.index </td>
+                                <td>@item.data.IncidentType</td>
+                                <td>@item.data.StaffInvolved</td>
+                                <td>@item.data.ReportingStaff</td>
+                                <td>@item.data.Client</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            @Html.ActionLink("Edit", "Edit", "ClientIncident", new { id = item.data.IncidentReportingId }, new { @class = "dropdown-item" })
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

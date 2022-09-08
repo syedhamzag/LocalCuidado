@@ -112,6 +112,8 @@
                 <li class="nav-item col-sm-3"><a class="nav-link" asp-action="Index" asp-controller="Nutrition" asp-route-clientId="@Model.ClientId">Nutrition</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#rotering" id="@Model.ClientId" onclick="getrotering(this)">Rotering</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" asp-action="Medications" asp-controller="Client" asp-route-clientId="@Model.ClientId">Medications</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#incident" id="@Model.ClientId" onclick="getincident(this)">Incident Report</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#audit" id="@Model.ClientId" onclick="getaudit(this)">Audit Trail</a></li>
             </ul>
         </div>
     </div>
@@ -1639,6 +1641,56 @@
                                 <input type="submit" class="btn btn-primary" value="View" />
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="incident">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="dropdown profile-action">
+                            <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                            <div class="dropdown-menu dropdown-menu-right" style="">
+                                <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="ClientIncident">Create</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-hover" id="tbl_incident">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Incident Type</th>
+                                    <th>Staff Involved</th>
+                                    <th>Reporting Staff</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="audit">
+                <div class="card">
+                    <div class="card-body">
+                        
+                        <table class="table table-bordered table-hover" id="tbl_audit">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

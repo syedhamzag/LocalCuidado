@@ -124,7 +124,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<ClientHealthCondition> ClientHealthCondition { get; set; } = new HashSet<ClientHealthCondition>();
         public virtual ICollection<ClientHobbies> ClientHobbies { get; set; } = new HashSet<ClientHobbies>();
         public virtual ICollection<CuidiBuddy> CuidiBuddy { get; set; } = new HashSet<CuidiBuddy>();
-
+        public virtual ICollection<IncidentReporting> IncidentReporting { get; set; } = new HashSet<IncidentReporting>();
         #region Client
         public virtual ICollection<ClientComplainRegister> ComplainRegister { get; set; }
         public virtual ICollection<ClientNutrition> ClientNutrition { get; set; }

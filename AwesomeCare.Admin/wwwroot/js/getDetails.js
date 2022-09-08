@@ -595,7 +595,36 @@ function checkPIN(element)
         }
     });
 }
+function getincident(element) {
+    var clientId = element.id;
+    var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
+        $.ajax({
+            type: 'GET',
+            url: '/Client/' + name,
+            data: { 'clientId': clientId },
+            success: function (response) {
+                response.getReview.forEach(function (result, index) {
 
+                    var pin = '<input id="incident-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="incidentedit" class="btn btn-primary" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/IncidentReporting/Print?clientId=' + clientId + '">View</a>';
+                    var download = '<a class="btn btn-warning" href="/IncidentReporting/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-warning" href="/IncidentReporting/Delete?clientId=' + clientId + '">Delete</a>';
+                    var row = '<tr><td>' + result.incidentType + '</td><td>' + result.staffInvolved + '</td><td>' + result.reportingStaff + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    $('#tbl_' + name).append(row);
+                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                    $(menu).children().remove();
+                });
+            },
+            error: function () {
+                alert('Failed to receive the Data');
+                console.log('Failed ');
+            }
+        });
+    }
+}
 function getpersonaldetail(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
@@ -610,10 +639,13 @@ function getpersonaldetail(element) {
                 response.getReview.forEach(function (result, index) {
                     
                     var pin = '<input id="personaldetail-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="personaldetailedit" class="btn btn-primary" href="#">Edit</a>';
-                    var view = '<a class="btn btn-secondary" href="/PersonalDetail/View?clientId=' + clientId + '">View</a>';
-                    var del = '<a class="btn btn-warning" href="/PersonalDetail/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.cP_PreDate + '</td><td>' + result.cP_ReviewDate + '</td><td>'+pin + edit + view + del +'</td></tr>';
+                    var edit = '<a id="personaldetailedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/PersonalDetail/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/PersonalDetail/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/PersonalDetail/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/PersonalDetail/Delete?clientId=' + clientId + '">Delete</a>';
+                    
+                    var row = '<tr><td>' + result.cP_PreDate + '</td><td>' + result.cP_ReviewDate + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();

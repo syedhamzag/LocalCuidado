@@ -146,6 +146,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientPerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.CareReview;
 using AwesomeCare.DataTransferObject.DTOs.OfficeAttendance;
 using AwesomeCare.DataTransferObject.DTOs.StaffOfficeLocation;
+using AwesomeCare.DataTransferObject.DTOs.IncidentReporting;
 
 namespace MapperConfig
 {
@@ -302,6 +303,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientHealthCondition, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientHobbies, mem => mem.Ignore())
                 .ForMember(dto => dto.CareReview, mem => mem.Ignore())
+                .ForMember(dto => dto.IncidentReporting, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareObj, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -357,6 +359,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetCuidiBuddy, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientPerformanceIndicators, mem => mem.Ignore())
                 .ForMember(dto => dto.GetCareReview, mem => mem.Ignore())
+                .ForMember(dto => dto.GetIncidentReports, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientCareObj, mem => mem.Ignore()); 
 
             CreateMap<Client, GetClientDetail>()
@@ -435,6 +438,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientHealthCondition, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientHobbies, mem => mem.Ignore())
                 .ForMember(dto => dto.CareReview, mem => mem.Ignore())
+                .ForMember(dto => dto.IncidentReporting, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareObj, mem => mem.Ignore());
             #endregion
 
@@ -1235,6 +1239,18 @@ namespace MapperConfig
                 .ForMember(dto => dto.StaffIncidentReportingId, mem => mem.Ignore())
                 .ForMember(dto => dto.LoggedById, mem => mem.Ignore())
                 .ForMember(dto => dto.LoggedDate, mem => mem.MapFrom(src => DateTimeOffset.Now));
+
+            CreateMap<PostIncidentReport, IncidentReporting>()
+                .ForMember(dto => dto.IncidentReportingId, mem => mem.Ignore())
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<PutIncidentReport, IncidentReporting>()
+               .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<IncidentReporting, GetIncidentReport>()
+                .ForMember(dto => dto.ReportingStaff, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffInvolved, mem => mem.Ignore())
+                .ForMember(dto => dto.IncidentType, mem => mem.Ignore());
             #endregion
 
             #region ClientServiceDetail

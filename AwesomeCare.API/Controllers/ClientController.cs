@@ -63,6 +63,7 @@ using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
 using AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition;
 using AwesomeCare.DataTransferObject.DTOs.ClientHobbies;
 using AwesomeCare.DataTransferObject.DTOs.CareReview;
+using AwesomeCare.DataTransferObject.DTOs;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -2135,6 +2136,43 @@ namespace AwesomeCare.API.Controllers
                                                                ClientName = client.Firstname +" "+ client.Surname
 
                                                            }).ToList()
+                                   }
+                      ).FirstOrDefaultAsync();
+            return Ok(getClient);
+        }
+
+        /// <summary>
+        /// Get Client by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("GetIncidentReport/{id}")]
+        [ProducesResponseType(type: typeof(GetClient), statusCode: StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetIncidentReport(int? id)
+        {
+            if (!id.HasValue)
+                return BadRequest("id Parameter is required");
+
+            //var client = await _clientRepository.GetEntity(id);
+            // var getClient = Mapper.Map<GetClient>(client);
+            var getClient = await (from client in _clientRepository.Table
+                                   where client.ClientId == id.Value
+                                   select new GetClient
+                                   {
+                                       ClientId = client.ClientId,
+                                       GetIncidentReports = (from o in client.IncidentReporting
+                                                             join staff in _staffRepository.Table on o.ReportingStaffId equals staff.StaffPersonalInfoId
+                                                             join involved in _staffRepository.Table on o.StaffInvolvedId equals involved.StaffPersonalInfoId
+                                                             join bases in _baseRecordItemRepository.Table on o.IncidentTypeId equals bases.BaseRecordItemId
+                                                        select new GetIncidentReport
+                                                        {
+                                                            IncidentType = bases.ValueName,
+                                                            ReportingStaff = staff.FirstName +" "+ staff.LastName,
+                                                            StaffInvolved = involved.FirstName +" "+ involved.LastName,
+
+                                                        }).ToList()
                                    }
                       ).FirstOrDefaultAsync();
             return Ok(getClient);

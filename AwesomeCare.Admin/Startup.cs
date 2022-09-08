@@ -616,7 +616,7 @@ namespace AwesomeCare.Admin
             services.AddHttpClient("incidentreportService", c =>
             {
                 c.BaseAddress = new Uri(uri);
-            }).AddTypedClient(r => RestService.For<IIncidentReportService>(r))
+            }).AddTypedClient(r => RestService.For<IncidentReportService>(r))
   ;
 
             services.AddHttpClient("investigationService", c =>

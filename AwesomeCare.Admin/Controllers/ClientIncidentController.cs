@@ -1,31 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using AwesomeCare.Admin.Extensions;
+using AwesomeCare.Admin.Models;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.IncidentReport;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.IncidentReport;
-using AwesomeCare.DataTransferObject.DTOs.Client;
-using AwesomeCare.DataTransferObject.DTOs.Staff;
+using AwesomeCare.DataTransferObject.DTOs.IncidentReporting;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using AwesomeCare.Admin.Extensions;
-using AwesomeCare.Admin.Models;
 using Microsoft.Extensions.Logging;
-using System.Security.Claims;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AwesomeCare.Admin.Controllers
 {
-    public class IncidentReportingController : BaseController
+    public class ClientIncidentController : BaseController
     {
         private readonly IncidentReportService incidentReportService;
         private readonly IStaffService staffService;
         private readonly IClientService clientService;
         private readonly ILogger<IncidentReportingController> logger;
 
-        public IncidentReportingController(IFileUpload fileUpload,
+        public ClientIncidentController(IFileUpload fileUpload,
             IncidentReportService incidentReportService,
             IStaffService staffService,
             IClientService clientService,
@@ -39,39 +38,29 @@ namespace AwesomeCare.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Reports()
         {
-            var incidents = await incidentReportService.GetStaffReports();
+            var incidents = await incidentReportService.Get();
             return View(incidents);
         }
 
         [HttpGet]
-        public async Task<IActionResult> AddReport()
+        public async Task<IActionResult> Index(int clientId)
         {
-            var model = new PostStaffIncidentReportViewModel();
+            var model = new PostIncidentReportViewModel();
             var staffs = await staffService.GetStaffs();
-            var clients = await clientService.GetClientDetail();
 
-         
+            model.ClientId = clientId;
             model.Staffs = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-            model.Clients = clients.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
-
             model.Staffs.Insert(0, new SelectListItem("", ""));
-            model.Clients.Insert(0, new SelectListItem("", ""));
-
             HttpContext.Session.Set<List<SelectListItem>>("staffs", model.Staffs);
-            HttpContext.Session.Set<List<SelectListItem>>("clients", model.Clients);
-
-
-
 
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddReport(PostStaffIncidentReportViewModel model)
+        public async Task<IActionResult> Index(PostIncidentReportViewModel model)
         {
             model.Staffs = HttpContext.Session.Get<List<SelectListItem>>("staffs");
-            model.Clients = HttpContext.Session.Get<List<SelectListItem>>("clients");
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -84,27 +73,23 @@ namespace AwesomeCare.Admin.Controllers
 
                 model.Attachment = filepath;
             }
-            var result = await incidentReportService.PostStaffReport(model);
+            else
+            {
+                model.Attachment = "No Image";
+            }
+            var post = Mapper.Map<PostIncidentReport>(model);
+            var result = await incidentReportService.Post(post);
             var content = await result.Content.ReadAsStringAsync();
 
 
             SetOperationStatus(new OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "Operation Successful" : "An Error Occurred" });
             if (!result.IsSuccessStatusCode)
             {
-                logger.LogError($"IncidentReport AddReport: {content}");
+                logger.LogError($"Incident Report Index: {content}");
                 return View(model);
             }
 
             return RedirectToAction("Reports");
         }
-
-
-        [HttpGet]
-        public async Task<IActionResult> ReportDetails(int id)
-        {
-            var incident = await incidentReportService.GetStaffReportById(id);
-            return View(incident);
-        }
-
     }
 }

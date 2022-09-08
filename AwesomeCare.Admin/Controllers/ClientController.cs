@@ -1095,6 +1095,12 @@ namespace AwesomeCare.Admin.Controllers
             var getClient = _clientService.GetCareReview(clientId);
             return Json(getClient.Result);
         }
+        [HttpGet]
+        public JsonResult incident(int clientId)
+        {
+            var getClient = _clientService.GetIncidentReport(clientId);
+            return Json(getClient.Result);
+        }
         #endregion
     }
 }

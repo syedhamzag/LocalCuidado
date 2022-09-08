@@ -252,5 +252,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetCuidiBuddy> GetCuidiBuddy { get; set; } = new HashSet<GetCuidiBuddy>();
         public virtual ICollection<GetCareReview> GetCareReview { get; set; } = new HashSet<GetCareReview>();
         public virtual ICollection<GetClientPerformanceIndicator> GetClientPerformanceIndicators { get; set; } = new HashSet<GetClientPerformanceIndicator>();
+
+        public virtual ICollection<GetIncidentReport> GetIncidentReports { get; set; } = new HashSet<GetIncidentReport>();
     }
 }
