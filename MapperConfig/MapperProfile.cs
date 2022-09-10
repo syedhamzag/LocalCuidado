@@ -147,6 +147,7 @@ using AwesomeCare.DataTransferObject.DTOs.CareReview;
 using AwesomeCare.DataTransferObject.DTOs.OfficeAttendance;
 using AwesomeCare.DataTransferObject.DTOs.StaffOfficeLocation;
 using AwesomeCare.DataTransferObject.DTOs.IncidentReporting;
+using AwesomeCare.DataTransferObject.DTOs.AuditTrail;
 
 namespace MapperConfig
 {
@@ -304,6 +305,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientHobbies, mem => mem.Ignore())
                 .ForMember(dto => dto.CareReview, mem => mem.Ignore())
                 .ForMember(dto => dto.IncidentReporting, mem => mem.Ignore())
+                .ForMember(dto => dto.AuditTrail, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareObj, mem => mem.Ignore());
 
             CreateMap<Client, GetClient>()
@@ -360,6 +362,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetClientPerformanceIndicators, mem => mem.Ignore())
                 .ForMember(dto => dto.GetCareReview, mem => mem.Ignore())
                 .ForMember(dto => dto.GetIncidentReports, mem => mem.Ignore())
+                .ForMember(dto => dto.GetAuditTrail, mem => mem.Ignore())
                 .ForMember(dto => dto.GetClientCareObj, mem => mem.Ignore()); 
 
             CreateMap<Client, GetClientDetail>()
@@ -439,6 +442,7 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClientHobbies, mem => mem.Ignore())
                 .ForMember(dto => dto.CareReview, mem => mem.Ignore())
                 .ForMember(dto => dto.IncidentReporting, mem => mem.Ignore())
+                .ForMember(dto => dto.AuditTrail, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientCareObj, mem => mem.Ignore());
             #endregion
 
@@ -3051,6 +3055,16 @@ namespace MapperConfig
 
             CreateMap<StaffOfficeLocation, GetStaffOfficeLocation>()
                  .ForMember(dto => dto.LocationName, mem => mem.Ignore());
+            #endregion
+
+            #region AuditTrail
+            CreateMap<PostAuditTrail, AuditTrail>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<PutAuditTrail, AuditTrail>()
+                .ForMember(dto => dto.Client, mem => mem.Ignore());
+
+            CreateMap<AuditTrail, GetAuditTrail>();
             #endregion
         }
     }

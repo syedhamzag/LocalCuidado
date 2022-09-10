@@ -69,7 +69,7 @@ namespace AwesomeCare.Admin.Controllers
             {
 
                 var filename = model.Staffs.FirstOrDefault(s => s.Value == model.StaffInvolvedId.ToString())?.Text + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + model.UploadAttachment.FileName;
-                string filepath = await this._fileUpload.UploadFile("incidentreport", true, filename, model.UploadAttachment.OpenReadStream());
+                string filepath = await _fileUpload.UploadFile("incidentreport", true, filename, model.UploadAttachment.OpenReadStream());
 
                 model.Attachment = filepath;
             }

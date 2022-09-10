@@ -62,6 +62,7 @@ using AwesomeCare.DataTransferObject.DTOs.ClientHobbies;
 using AwesomeCare.DataTransferObject.DTOs.CuidiBuddy;
 using AwesomeCare.DataTransferObject.DTOs.ClientPerformanceIndicator;
 using AwesomeCare.DataTransferObject.DTOs.CareReview;
+using AwesomeCare.DataTransferObject.DTOs.AuditTrail;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Client
 {
@@ -254,5 +255,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public virtual ICollection<GetClientPerformanceIndicator> GetClientPerformanceIndicators { get; set; } = new HashSet<GetClientPerformanceIndicator>();
 
         public virtual ICollection<GetIncidentReport> GetIncidentReports { get; set; } = new HashSet<GetIncidentReport>();
+        public virtual ICollection<GetAuditTrail> GetAuditTrail { get; set; } = new HashSet<GetAuditTrail>();
     }
 }
