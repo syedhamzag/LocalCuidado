@@ -35,10 +35,11 @@ function getdutyoncall(element) {
             success: function (response) {
                 response.getDutyOnCall.forEach(function (result, index) {
                     var pin = '<input id="dutyoncall-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="dutyoncalledit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/DutyOnCall/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/DutyOnCall/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/DutyOnCall/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="dutyoncalledit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/DutyOnCall/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/DutyOnCall/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/DutyOnCall/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/DutyOnCall/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.dateOfCall + '</td><td>' + result.refNo + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment +'" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
@@ -65,10 +66,11 @@ function gethospitalentry(element) {
             success: function (response) {
                 response.getHospitalEntry.forEach(function (result, index) {
                     var pin = '<input id="hospitalentry-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="hospitalentryedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/HospitalEntry/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/HospitalEntry/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/HospitalEntry/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="hospitalentryedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/HospitalEntry/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/HospitalEntry/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/HospitalEntry/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/HospitalEntry/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.reference + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -94,10 +96,11 @@ function gethospitalexit(element) {
             success: function (response) {
                 response.getHospitalExit.forEach(function (result, index) {
                     var pin = '<input id="hospitalexit-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="hospitalexitedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/HospitalExit/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/HospitalExit/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/HospitalExit/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="hospitalexitedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/HospitalExit/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/HospitalExit/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/HospitalExit/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/HospitalExit/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.reference + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -150,10 +153,11 @@ function getcomplaintregister(element) {
                 var data = [];
                 response.getClientComplain.forEach(function (result, index) {
                     var pin = '<input id="complain-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="complainedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/Complain/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/Complain/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/Complain/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="complainedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/Complain/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/Complain/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/Complain/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/Complain/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.dATERECIEVED, result.dUEDATE, result.iNCIDENTDATE, result.reference, result.rEMARK, result.cOMPLAINANTCONTACT, result.aCTIONTAKEN, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceFilePath + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
@@ -178,10 +182,11 @@ function getlogaudit(element) {
                 var data = [];
                 response.getClientLogAudit.forEach(function (result, index) {
                     var pin = '<input id="clientlogaudit-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientlogauditedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientLogAudit/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientLogAudit/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientLogAudit/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientlogauditedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientLogAudit/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientLogAudit/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientLogAudit/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientLogAudit/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextDueDate, result.deadline, result.reference, result.remarks,result.actionTaken ,result.actionRecommended,'<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
@@ -205,10 +210,11 @@ function getmedaudit(element) {
                 var data = [];
                 response.getClientMedAudit.forEach(function (result, index) {
                     var pin = '<input id="clientmedaudit-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientmedauditedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientMedAudit/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientMedAudit/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientMedAudit/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientmedauditedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientMedAudit/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientMedAudit/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientMedAudit/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientMedAudit/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextDueDate, result.deadline, result.reference, result.remarks, result.actionTaken, result.actionRecommended, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
@@ -232,10 +238,11 @@ function getvoice(element) {
                 var data = [];
                 response.getClientVoice.forEach(function (result, index) {
                     var pin = '<input id="clientvoice-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientvoiceedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientVoice/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientVoice/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientVoice/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientvoiceedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientVoice/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientVoice/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientVoice/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientVoice/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
@@ -259,10 +266,11 @@ function getmgtvisit(element) {
                 var data = [];
                 response.getClientMgtVisit.forEach(function (result, index) {
                     var pin = '<input id="clientmgtvisit-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientmgtvisitedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientMgtVisit/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientMgtVisit/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientMgtVisit/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientmgtvisitedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientMgtVisit/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientMgtVisit/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientMgtVisit/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientMgtVisit/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
@@ -286,10 +294,11 @@ function getprogram(element) {
                 var data = [];
                 response.getClientProgram.forEach(function (result, index) {
                     var pin = '<input id="clientprogram-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientprogramedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientProgram/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientProgram/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientProgram/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientprogramedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientProgram/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientProgram/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientProgram/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientProgram/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
@@ -313,10 +322,11 @@ function getservicewatch(element) {
                 var data = [];
                 response.getClientServiceWatch.forEach(function (result, index) {
                     var pin = '<input id="clientservicewatch-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientservicewatchedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientServiceWatch/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientServiceWatch/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientServiceWatch/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientservicewatchedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientServiceWatch/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientServiceWatch/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientServiceWatch/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientServiceWatch/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
@@ -343,10 +353,11 @@ function getbloodcoag(element) {
             success: function (response) {
                 response.getClientBloodCoagulationRecord.forEach(function (result, index) {
                     var pin = '<input id="clientbloodcoagulationrecord-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientbloodcoagulationrecordedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientBloodCoagulationRecord/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientBloodCoagulationRecord/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientBloodCoagulationRecord/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientbloodcoagulationrecordedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientBloodCoagulationRecord/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientBloodCoagulationRecord/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientBloodCoagulationRecord/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientBloodCoagulationRecord/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -372,10 +383,11 @@ function getbloodpressure(element) {
             success: function (response) {
                 response.getClientBloodPressure.forEach(function (result, index) {
                     var pin = '<input id="clientbloodpressure-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientbloodpressureedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientBloodPressure/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientBloodPressure/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientBloodPressure/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientbloodpressureedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientBloodPressure/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientBloodPressure/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientBloodPressure/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientBloodPressure/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -401,10 +413,11 @@ function getbmichart(element) {
             success: function (response) {
                 response.getClientBMIChart.forEach(function (result, index) {
                     var pin = '<input id="clientbmichart-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientbmichartedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientBMIChart/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientBMIChart/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientBMIChart/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientbmichartedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientBMIChart/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientBMIChart/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientBMIChart/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientBMIChart/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -430,10 +443,11 @@ function getbodytemp(element) {
             success: function (response) {
                 response.getClientBodyTemp.forEach(function (result, index) {
                     var pin = '<input id="clientbodytemp-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientbodytempedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientBodyTemp/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientBodyTemp/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientBodyTemp/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientbodytempedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientBodyTemp/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientBodyTemp/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientBodyTemp/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientBodyTemp/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -459,10 +473,11 @@ function getbowel(element) {
             success: function (response) {
                 response.getClientBowelMovement.forEach(function (result, index) {
                     var pin = '<input id="clientbowelmovement-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientbowelmovementedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientBowelMovement/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientBowelMovement/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientBowelMovement/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientbowelmovementedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientBowelMovement/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientBowelMovement/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientBowelMovement/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientBowelMovement/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -488,10 +503,11 @@ function geteyehealth(element) {
             success: function (response) {
                 response.getClientEyeHealthMonitoring.forEach(function (result, index) {
                     var pin = '<input id="clienteyehealthmonitoring-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clienteyehealthmonitoringedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientEyeHealthMonitoring/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientEyeHealthMonitoring/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientEyeHealthMonitoring/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clienteyehealthmonitoringedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientEyeHealthMonitoring/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientEyeHealthMonitoring/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientEyeHealthMonitoring/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientEyeHealthMonitoring/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -517,10 +533,11 @@ function getfoodintake(element) {
             success: function (response) {
                 response.getClientFoodIntake.forEach(function (result, index) {
                     var pin = '<input id="clientfoodintake-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientfoodintakeedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientFoodIntake/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientFoodIntake/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientFoodIntake/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientfoodintakeedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientFoodIntake/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientFoodIntake/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientFoodIntake/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientFoodIntake/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -546,10 +563,11 @@ function getheartrate(element) {
             success: function (response) {
                 response.getClientHeartRate.forEach(function (result, index) {
                     var pin = '<input id="clientheartrate-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientheartrateedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientHeartRate/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientHeartRate/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientHeartRate/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientheartrateedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientHeartRate/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientHeartRate/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientHeartRate/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientHeartRate/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -575,10 +593,11 @@ function getoxygen(element) {
             success: function (response) {
                 response.getClientOxygenLvl.forEach(function (result, index) {
                     var pin = '<input id="clientoxygenlvl-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientoxygenlvledit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientOxygenLvl/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientOxygenLvl/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientOxygenLvl/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientoxygenlvledit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientOxygenLvl/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientOxygenLvl/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientOxygenLvl/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientOxygenLvl/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -604,10 +623,11 @@ function getpainchart(element) {
             success: function (response) {
                 response.getClientPainChart.forEach(function (result, index) {
                     var pin = '<input id="clientpainchart-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientpainchartedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientPainChart/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientPainChart/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientPainChart/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientpainchartedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientPainChart/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientPainChart/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientPainChart/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientPainChart/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -633,10 +653,11 @@ function getpulserate(element) {
             success: function (response) {
                 response.getClientPulseRate.forEach(function (result, index) {
                     var pin = '<input id="clientpulserate-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientpulserateedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientPulseRate/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientPulseRate/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientPulseRate/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientpulserateedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientPulseRate/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientPulseRate/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientPulseRate/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientPulseRate/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -661,11 +682,12 @@ function getseizure(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientSeizure.forEach(function (result, index) {
-                    var pin = '<input id="clientseizure-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientseizureedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientSeizure/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientSeizure/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientSeizure/Delete?clientId=' + clientId + '">Delete</a>';
+                var pin = '<input id="clientseizure-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                var edit = '<a id="clientseizureedit" class="btn btn-warning" href="#">Edit</a>';
+                var print = '<a class="btn btn-secondary" href="/ClientSeizure/Print?clientId=' + clientId + '">Print</a>';
+                var email = '<a class="btn btn-success" href="/ClientSeizure/Email?clientId=' + clientId + '">Email</a>';
+                var download = '<a class="btn btn-info" href="/ClientSeizure/Download?clientId=' + clientId + '">Download</a>';
+                var del = '<a class="btn btn-danger" href="/ClientSeizure/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.remarks + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -691,10 +713,11 @@ function getwoundcare(element) {
             success: function (response) {
                 response.getClientWoundCare.forEach(function (result, index) {
                     var pin = '<input id="clientwoundcare-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="clientwoundcareedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientWoundCare/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/ClientWoundCare/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/ClientWoundCare/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="clientwoundcareedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientWoundCare/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientWoundCare/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientWoundCare/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientWoundCare/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -741,12 +764,12 @@ function getincident(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getReview.forEach(function (result, index) {
-
                     var pin = '<input id="incident-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
-                    var edit = '<a id="incidentedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/IncidentReporting/Print?clientId=' + clientId + '">View</a>';
-                    var download = '<a class="btn btn-warning" href="/IncidentReporting/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/IncidentReporting/Delete?clientId=' + clientId + '">Delete</a>';
+                    var edit = '<a id="incidentedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/IncidentReporting/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/IncidentReporting/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/IncidentReporting/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/IncidentReporting/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>' + result.incidentType + '</td><td>' + result.staffInvolved + '</td><td>' + result.reportingStaff + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
