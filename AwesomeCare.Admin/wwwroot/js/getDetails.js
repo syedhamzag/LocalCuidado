@@ -40,7 +40,7 @@ function getdutyoncall(element) {
                     var email = '<a class="btn btn-success" href="/DutyOnCall/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/DutyOnCall/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/DutyOnCall/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.dateOfCall + '</td><td>' + result.refNo + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment +'" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.dateOfCall + '</td><td>' + result.refNo + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
@@ -71,7 +71,7 @@ function gethospitalentry(element) {
                     var email = '<a class="btn btn-success" href="/HospitalEntry/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/HospitalEntry/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/HospitalEntry/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.reference + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.reference + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -101,7 +101,7 @@ function gethospitalexit(element) {
                     var email = '<a class="btn btn-success" href="/HospitalExit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/HospitalExit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/HospitalExit/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.reference + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.reference + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -130,7 +130,7 @@ function getfilesrecord(element) {
                     var print = '<a class="btn btn-secondary" href="/FilesAndRecord/Print?clientId=' + clientId + '">View</a>';
                     var download = '<a class="btn btn-warning" href="/FilesAndRecord/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-warning" href="/FilesAndRecord/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -158,7 +158,7 @@ function getcomplaintregister(element) {
                     var email = '<a class="btn btn-success" href="/Complain/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/Complain/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/Complain/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.dATERECIEVED, result.dUEDATE, result.iNCIDENTDATE, result.reference, result.rEMARK, result.cOMPLAINANTCONTACT, result.aCTIONTAKEN, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceFilePath + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
 
@@ -187,7 +187,7 @@ function getlogaudit(element) {
                     var email = '<a class="btn btn-success" href="/ClientLogAudit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientLogAudit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientLogAudit/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';wnload + del + email '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextDueDate, result.deadline, result.reference, result.remarks,result.actionTaken ,result.actionRecommended,'<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
                 });
@@ -215,7 +215,7 @@ function getmedaudit(element) {
                     var email = '<a class="btn btn-success" href="/ClientMedAudit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientMedAudit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientMedAudit/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextDueDate, result.deadline, result.reference, result.remarks, result.actionTaken, result.actionRecommended, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
                 });
@@ -243,7 +243,7 @@ function getvoice(element) {
                     var email = '<a class="btn btn-success" href="/ClientVoice/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientVoice/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientVoice/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
                 });
@@ -299,7 +299,7 @@ function getprogram(element) {
                     var email = '<a class="btn btn-success" href="/ClientProgram/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientProgram/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientProgram/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
                 });
@@ -327,7 +327,7 @@ function getservicewatch(element) {
                     var email = '<a class="btn btn-success" href="/ClientServiceWatch/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientServiceWatch/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientServiceWatch/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
                 });
@@ -358,7 +358,7 @@ function getbloodcoag(element) {
                     var email = '<a class="btn btn-success" href="/ClientBloodCoagulationRecord/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBloodCoagulationRecord/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBloodCoagulationRecord/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -388,7 +388,7 @@ function getbloodpressure(element) {
                     var email = '<a class="btn btn-success" href="/ClientBloodPressure/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBloodPressure/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBloodPressure/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -418,7 +418,7 @@ function getbmichart(element) {
                     var email = '<a class="btn btn-success" href="/ClientBMIChart/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBMIChart/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBMIChart/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -448,7 +448,7 @@ function getbodytemp(element) {
                     var email = '<a class="btn btn-success" href="/ClientBodyTemp/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBodyTemp/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBodyTemp/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -478,7 +478,7 @@ function getbowel(element) {
                     var email = '<a class="btn btn-success" href="/ClientBowelMovement/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBowelMovement/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBowelMovement/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -508,7 +508,7 @@ function geteyehealth(element) {
                     var email = '<a class="btn btn-success" href="/ClientEyeHealthMonitoring/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientEyeHealthMonitoring/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientEyeHealthMonitoring/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -538,7 +538,7 @@ function getfoodintake(element) {
                     var email = '<a class="btn btn-success" href="/ClientFoodIntake/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientFoodIntake/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientFoodIntake/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -568,7 +568,7 @@ function getheartrate(element) {
                     var email = '<a class="btn btn-success" href="/ClientHeartRate/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientHeartRate/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientHeartRate/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -598,7 +598,7 @@ function getoxygen(element) {
                     var email = '<a class="btn btn-success" href="/ClientOxygenLvl/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientOxygenLvl/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientOxygenLvl/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -628,7 +628,7 @@ function getpainchart(element) {
                     var email = '<a class="btn btn-success" href="/ClientPainChart/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientPainChart/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientPainChart/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -658,7 +658,7 @@ function getpulserate(element) {
                     var email = '<a class="btn btn-success" href="/ClientPulseRate/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientPulseRate/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientPulseRate/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -688,7 +688,7 @@ function getseizure(element) {
                 var email = '<a class="btn btn-success" href="/ClientSeizure/Email?clientId=' + clientId + '">Email</a>';
                 var download = '<a class="btn btn-info" href="/ClientSeizure/Download?clientId=' + clientId + '">Download</a>';
                 var del = '<a class="btn btn-danger" href="/ClientSeizure/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.remarks + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.remarks + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -718,7 +718,7 @@ function getwoundcare(element) {
                     var email = '<a class="btn btn-success" href="/ClientWoundCare/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientWoundCare/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientWoundCare/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -770,7 +770,7 @@ function getincident(element) {
                     var email = '<a class="btn btn-success" href="/IncidentReporting/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/IncidentReporting/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/IncidentReporting/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.incidentType + '</td><td>' + result.staffInvolved + '</td><td>' + result.reportingStaff + '</td><td>' + pin + edit + print + download + del + '</td></tr>';
+                    var row = '<tr><td>' + result.incidentType + '</td><td>' + result.staffInvolved + '</td><td>' + result.reportingStaff + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
