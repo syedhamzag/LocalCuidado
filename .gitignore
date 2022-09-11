@@ -259,7 +259,7 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
-
+*.json
 */Uploads/*
 AwesomeCare.IdentityServer/appsettings.Development.json
 AwesomeCare.Admin/appsettings.Development.json
