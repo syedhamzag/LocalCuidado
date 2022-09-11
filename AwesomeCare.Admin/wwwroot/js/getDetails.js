@@ -34,13 +34,14 @@ function getdutyoncall(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getDutyOnCall.forEach(function (result, index) {
+                    var dateOfCall = new Date(result.dateOfCall);
                     var pin = '<input id="dutyoncall-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="dutyoncalledit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/DutyOnCall/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/DutyOnCall/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/DutyOnCall/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/DutyOnCall/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.dateOfCall + '</td><td>' + result.refNo + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + dateOfCall.toLocaleDateString() + '</td><td>' + result.refNo + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
@@ -65,13 +66,14 @@ function gethospitalentry(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getHospitalEntry.forEach(function (result, index) {
+                    var date = new Date(result.date);
                     var pin = '<input id="hospitalentry-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="hospitalentryedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/HospitalEntry/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/HospitalEntry/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/HospitalEntry/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/HospitalEntry/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.reference + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.reference + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -95,13 +97,14 @@ function gethospitalexit(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getHospitalExit.forEach(function (result, index) {
+                    var date = new Date(result.date);
                     var pin = '<input id="hospitalexit-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="hospitalexitedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/HospitalExit/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/HospitalExit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/HospitalExit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/HospitalExit/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.reference + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -124,13 +127,16 @@ function getfilesrecord(element) {
             url: '/Client/' + name,
             data: { 'clientId': clientId },
             success: function (response) {
+                
                 response.getFilesAndRecord.forEach(function (result, index) {
+                    var date = new Date(result.date);
                     var pin = '<input id="filesandrecord-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="filesandrecordedit" class="btn btn-primary" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/FilesAndRecord/Print?clientId=' + clientId + '">View</a>';
+                    var print = '<a class="btn btn-secondary" href="/FilesAndRecord/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/FilesAndRecord/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-warning" href="/FilesAndRecord/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-warning" href="/FilesAndRecord/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var del = '<a class="btn btn-danger" href="/FilesAndRecord/Delete?clientId=' + clientId + '">Delete</a>';
+                    var row = '<tr><td>'+ date.toLocaleDateString() + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -152,16 +158,16 @@ function getcomplaintregister(element) {
             success: function (response) {
                 var data = [];
                 response.getClientComplain.forEach(function (result, index) {
+                    var daterecieved = new Date(result.daterecieved);
+                    var duedate = new Date(result.duedate);
+                    var incidentdate = new Date(result.incidentdate);
                     var pin = '<input id="complain-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="complainedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/Complain/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/Complain/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/Complain/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/Complain/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
-                    $('#tbl_' + name).append(row);
-                    data.push([result.dATERECIEVED, result.dUEDATE, result.iNCIDENTDATE, result.reference, result.rEMARK, result.cOMPLAINANTCONTACT, result.aCTIONTAKEN, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceFilePath + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
-
+                    data.push([daterecieved.toLocaleDateString(), duedate.toLocaleDateString(), incidentdate.toLocaleDateString(), result.reference, result.remark, result.complainantcontact, result.actiontaken, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceFilePath + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
                 });
                 $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
@@ -181,15 +187,16 @@ function getlogaudit(element) {
             success: function (response) {
                 var data = [];
                 response.getClientLogAudit.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextDueDate = new Date(result.nextDueDate);
+                    var deadline = new Date(result.deadline);
                     var pin = '<input id="clientlogaudit-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientlogauditedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientLogAudit/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientLogAudit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientLogAudit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientLogAudit/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';wnload + del + email '</td></tr>';
-                    $('#tbl_' + name).append(row);
-                    data.push([result.date, result.nextDueDate, result.deadline, result.reference, result.remarks,result.actionTaken ,result.actionRecommended,'<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
+                    data.push([date.toLocaleDateString(), nextDueDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionTaken, result.actionRecommended, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
                 });
                 $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
@@ -209,15 +216,16 @@ function getmedaudit(element) {
             success: function (response) {
                 var data = [];
                 response.getClientMedAudit.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextDueDate = new Date(result.nextDueDate);
+                    var deadline = new Date(result.deadline);
                     var pin = '<input id="clientmedaudit-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientmedauditedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientMedAudit/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientMedAudit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientMedAudit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientMedAudit/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
-                    $('#tbl_' + name).append(row);
-                    data.push([result.date, result.nextDueDate, result.deadline, result.reference, result.remarks, result.actionTaken, result.actionRecommended, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
+                    data.push([date.toLocaleDateString(), nextDueDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionTaken, result.actionRecommended, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
                 });
                 $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
@@ -237,15 +245,16 @@ function getvoice(element) {
             success: function (response) {
                 var data = [];
                 response.getClientVoice.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
                     var pin = '<input id="clientvoice-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientvoiceedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientVoice/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientVoice/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientVoice/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientVoice/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
-                    $('#tbl_' + name).append(row);
-                    data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
+                    data.push([date.toLocaleDateString(), nextCheckDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
                 });
                 $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
@@ -265,15 +274,16 @@ function getmgtvisit(element) {
             success: function (response) {
                 var data = [];
                 response.getClientMgtVisit.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
                     var pin = '<input id="clientmgtvisit-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientmgtvisitedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientMgtVisit/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientMgtVisit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientMgtVisit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientMgtVisit/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + download + del + '</td></tr>';
-                    $('#tbl_' + name).append(row);
-                    data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
+                    data.push([date.toLocaleDateString(), nextCheckDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
                 });
                 $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
@@ -293,15 +303,16 @@ function getprogram(element) {
             success: function (response) {
                 var data = [];
                 response.getClientProgram.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
                     var pin = '<input id="clientprogram-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientprogramedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientProgram/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientProgram/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientProgram/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientProgram/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
-                    $('#tbl_' + name).append(row);
-                    data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
+                    data.push([date.toLocaleDateString(), nextCheckDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
                 });
                 $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
@@ -321,15 +332,16 @@ function getservicewatch(element) {
             success: function (response) {
                 var data = [];
                 response.getClientServiceWatch.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
                     var pin = '<input id="clientservicewatch-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientservicewatchedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientServiceWatch/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientServiceWatch/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientServiceWatch/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientServiceWatch/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
-                    $('#tbl_' + name).append(row);
-                    data.push([result.date, result.nextCheckDate, result.deadline, result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>']);
+                    data.push([date.toLocaleDateString(), nextCheckDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
                 });
                 $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
@@ -352,13 +364,15 @@ function getbloodcoag(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientBloodCoagulationRecord.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientbloodcoagulationrecord-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientbloodcoagulationrecordedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientBloodCoagulationRecord/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientBloodCoagulationRecord/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBloodCoagulationRecord/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBloodCoagulationRecord/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -382,13 +396,15 @@ function getbloodpressure(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientBloodPressure.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientbloodpressure-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientbloodpressureedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientBloodPressure/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientBloodPressure/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBloodPressure/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBloodPressure/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -412,13 +428,15 @@ function getbmichart(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientBMIChart.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientbmichart-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientbmichartedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientBMIChart/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientBMIChart/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBMIChart/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBMIChart/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -442,13 +460,15 @@ function getbodytemp(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientBodyTemp.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientbodytemp-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientbodytempedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientBodyTemp/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientBodyTemp/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBodyTemp/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBodyTemp/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -472,13 +492,15 @@ function getbowel(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientBowelMovement.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientbowelmovement-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientbowelmovementedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientBowelMovement/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientBowelMovement/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientBowelMovement/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientBowelMovement/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -502,13 +524,15 @@ function geteyehealth(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientEyeHealthMonitoring.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                       
                     var pin = '<input id="clienteyehealthmonitoring-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clienteyehealthmonitoringedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientEyeHealthMonitoring/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientEyeHealthMonitoring/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientEyeHealthMonitoring/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientEyeHealthMonitoring/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -532,13 +556,15 @@ function getfoodintake(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientFoodIntake.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientfoodintake-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientfoodintakeedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientFoodIntake/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientFoodIntake/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientFoodIntake/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientFoodIntake/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -562,13 +588,15 @@ function getheartrate(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientHeartRate.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientheartrate-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientheartrateedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientHeartRate/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientHeartRate/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientHeartRate/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientHeartRate/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -592,13 +620,15 @@ function getoxygen(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientOxygenLvl.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientoxygenlvl-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientoxygenlvledit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientOxygenLvl/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientOxygenLvl/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientOxygenLvl/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientOxygenLvl/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -622,13 +652,15 @@ function getpainchart(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientPainChart.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientpainchart-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientpainchartedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientPainChart/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientPainChart/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientPainChart/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientPainChart/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -652,13 +684,15 @@ function getpulserate(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientPulseRate.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientpulserate-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientpulserateedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientPulseRate/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientPulseRate/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientPulseRate/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientPulseRate/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -682,13 +716,15 @@ function getseizure(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientSeizure.forEach(function (result, index) {
+                var date = new Date(result.date);
+
                 var pin = '<input id="clientseizure-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                 var edit = '<a id="clientseizureedit" class="btn btn-warning" href="#">Edit</a>';
                 var print = '<a class="btn btn-secondary" href="/ClientSeizure/Print?clientId=' + clientId + '">Print</a>';
                 var email = '<a class="btn btn-success" href="/ClientSeizure/Email?clientId=' + clientId + '">Email</a>';
                 var download = '<a class="btn btn-info" href="/ClientSeizure/Download?clientId=' + clientId + '">Download</a>';
                 var del = '<a class="btn btn-danger" href="/ClientSeizure/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.remarks + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.remarks + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -712,13 +748,15 @@ function getwoundcare(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getClientWoundCare.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientwoundcare-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientwoundcareedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientWoundCare/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientWoundCare/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientWoundCare/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientWoundCare/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -757,13 +795,16 @@ function getincident(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
     var client = $('#tbl_' + name).children().length;
+    console.log(client);
     if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
             data: { 'clientId': clientId },
             success: function (response) {
-                response.getReview.forEach(function (result, index) {
+                console.log(response);
+                response.getIncidentReports.forEach(function (result, index) {
+                    console.log(result);
                     var pin = '<input id="incident-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="incidentedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/IncidentReporting/Print?clientId=' + clientId + '">Print</a>';
@@ -795,6 +836,8 @@ function getpersonaldetail(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getReview.forEach(function (result, index) {
+                    var cP_PreDate = new Date(result.cP_PreDate);
+                    var cP_ReviewDate = new Date(result.cP_ReviewDate);
                     
                     var pin = '<input id="personaldetail-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="personaldetailedit" class="btn btn-warning" href="#">Edit</a>';
@@ -803,7 +846,7 @@ function getpersonaldetail(element) {
                     var download = '<a class="btn btn-info" href="/PersonalDetail/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/PersonalDetail/Delete?clientId=' + clientId + '">Delete</a>';
                     
-                    var row = '<tr><td>' + result.cP_PreDate + '</td><td>' + result.cP_ReviewDate + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + cP_PreDate.toLocaleDateString() + '</td><td>' + cP_ReviewDate.toLocaleDateString() + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
@@ -925,13 +968,15 @@ function getinfectioncontrol(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getInfectionControl.forEach(function (result, index) {
+                    var testDate = new Date(result.testDate);
+
                     var pin = '<input id="infectioncontrol-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="infectioncontroledit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/InfectionControl/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/InfectionControl/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/InfectionControl/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/InfectionControl/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.testDate + '</td><td>' + result.remarks + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + testDate.toLocaleDateString() + '</td><td>' + result.remarks + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
@@ -1123,13 +1168,15 @@ function getspecialhealthmed(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getSpecialHealthAndMedication.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="specialhealthandmedication-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="specialhealthandmedicationedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/SpecialHealthAndMedication/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/SpecialHealthAndMedication/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/SpecialHealthAndMedication/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/SpecialHealthAndMedication/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.by + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.by + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
@@ -1189,13 +1236,15 @@ function gethistoryoffall(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getHistoryOfFall.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="historyoffall-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="historyoffalledit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/HistoryOfFall/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/HistoryOfFall/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/HistoryOfFall/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/HistoryOfFall/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.cause + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.cause + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
@@ -1254,13 +1303,16 @@ function getdailytask(element) {
             success: function (response) {
                 console.log(response.getClientDailyTask);
                 response.getClientDailyTask.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var amendmentDate = new Date(result.amendmentDate);
+
                     var pin = '<input id="clientdailytask-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientdailytaskedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/DailyTask/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/DailyTask/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/DailyTask/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/DailyTask/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.amendmentDate + '</td><td style="text-align:justify; white-space:normal;">' + result.dailyTaskName + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + amendmentDate.toLocaleDateString() + '</td><td style="text-align:justify; white-space:normal;">' + result.dailyTaskName + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1283,8 +1335,9 @@ function getmcabest(element) {
             data: { 'clientId': clientId },
             success: function (response) {
                 response.getBestInterestAssessment.forEach(function (result, index) {
+                    var date = new Date(result.date);
 
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.name + '</td><td>' + result.signature + '</td><td>' + result.position + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.name + '</td><td>' + result.signature + '</td><td>' + result.position + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1309,13 +1362,15 @@ function getcareobj(element) {
             success: function (response) {
                 console.log(response.getClientCareObj);
                 response.getClientCareObj.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="clientcareobj-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientcareobjedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/ClientCareObj/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/ClientCareObj/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientCareObj/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientCareObj/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.note + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.note + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
 
@@ -1473,7 +1528,10 @@ function geteducation(element) {
             success: function (response) {
                 console.log(response.certificateAttachment);
                 response.education.forEach(function (result, index) {
-                    var row = '<tr><td>' + result.institution + '</td><td>' + result.certificate + '</td><td>' + result.location + '</td><td>' + result.address + '</td><td>' + result.startDate + '</td><td>' + result.endDate + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.certificateAttachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td></tr>';
+                    var startDate = new Date(result.startDate);
+                    var endDate = new Date(result.endDate);
+
+                    var row = '<tr><td>' + result.institution + '</td><td>' + result.certificate + '</td><td>' + result.location + '</td><td>' + result.address + '</td><td>' + startDate.toLocaleDateString() + '</td><td>' + endDate.toLocaleDateString() + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.certificateAttachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1498,13 +1556,15 @@ function gettrainingmatrix(element){
             success: function (response) {
                 console.log(response);
                 response.getStaffTrainingMatrix[0].getTrainingMatrixList.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
                     var pin = '<input id="stafftrainingmatrix-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="stafftrainingmatrixedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/StaffTrainingMatrix/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/StaffTrainingMatrix/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/StaffTrainingMatrix/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/StaffTrainingMatrix/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1528,7 +1588,10 @@ function gettrainings(element) {
             success: function (response) {
                 console.log(response);
                 response.trainings.forEach(function (result, index) {
-                    var row = '<tr><td>' + result.training + '</td><td>' + result.certificate + '</td><td>' + result.location + '</td><td>' + result.trainer + '</td><td>' + result.startDate + '</td><td>' + result.expiredDate + '</td></tr>';
+                    var startDate = new Date(result.startDate);
+                    var expiredDate = new Date(result.expiredDate);
+
+                    var row = '<tr><td>' + result.training + '</td><td>' + result.certificate + '</td><td>' + result.location + '</td><td>' + result.trainer + '</td><td>' + startDate.toLocaleDateString() + '</td><td>' + expiredDate.toLocaleDateString() + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1600,13 +1663,16 @@ function getspotcheck(element) {
             success: function (response) {
                 console.log(response);
                 response.getStaffSpotCheck.forEach(function (result, index) {
+                    var date = new Date(result.date);
+
+                    var nextCheckDate = new Date(result.nextCheckDate);
                     var pin = '<input id="staffspotcheck-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="staffspotcheckedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/StaffSpotCheck/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/StaffSpotCheck/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/StaffSpotCheck/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/StaffSpotCheck/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.nextCheckDate + '</td><td>' + result.deadline + '</td><td>' + result.areaComments + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.nextCheckDate + '</td><td>' + result.deadline + '</td><td>' + result.areaComments + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1630,13 +1696,17 @@ function getadlobs(element) {
             success: function (response) {
                 console.log(response);
                 response.getStaffAdlObs.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
+
                     var pin = '<input id="staffadlobs-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="staffadlobsedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/StaffAdlObs/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/StaffAdlObs/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/StaffAdlObs/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/StaffAdlObs/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.nextCheckDate + '</td><td>' + result.deadline + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1660,13 +1730,17 @@ function getmedcomp(element) {
             success: function (response) {
                 console.log(response);
                 response.getStaffMedComp.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
+
                     var pin = '<input id="staffmedcomp-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="staffmedcompedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/StaffMedComp/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/StaffMedComp/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/StaffMedComp/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/StaffMedComp/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.nextCheckDate + '</td><td>' + result.deadline + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1690,13 +1764,17 @@ function getkeyworker(element) {
             success: function (response) {
                 console.log(response);
                 response.getStaffKeyWorkerVoice.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
+
                     var pin = '<input id="staffkeyworkervoice-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="staffkeyworkervoiceedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/StaffKeyWorkerVoice/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/StaffKeyWorkerVoice/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/StaffKeyWorkerVoice/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/StaffKeyWorkerVoice/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.nextCheckDate + '</td><td>' + result.deadline + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1720,13 +1798,17 @@ function getsurvey(element) {
             success: function (response) {
                 console.log(response);
                 response.getStaffSurvey.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
+
                     var pin = '<input id="staffsurvey-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="staffsurveyedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/StaffSurvey/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/StaffSurvey/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/StaffSurvey/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/StaffSurvey/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.nextCheckDate + '</td><td>' + result.deadline + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1750,13 +1832,17 @@ function getonetoone(element) {
             success: function (response) {
                 console.log(response);
                 response.getStaffOneToOne.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var nextCheckDate = new Date(result.nextCheckDate);
+                    var deadline = new Date(result.deadline);
+
                     var pin = '<input id="staffonetoone-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="staffonetooneedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/StaffOneToOne/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/StaffOneToOne/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/StaffOneToOne/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/StaffOneToOne/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.nextCheckDate + '</td><td>' + result.deadline + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -1778,6 +1864,10 @@ function getsupervision(element) {
             url: '/Staff/Staff' + name,
             data: { 'staffId': staffId },
             success: function (response) {
+                var date = new Date(result.date);
+                var nextCheckDate = new Date(result.nextCheckDate);
+                var deadline = new Date(result.deadline);
+
                 var pin = '<input id="staffsupervisionappraisal-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                 var edit = '<a id="staffsupervisionappraisaledit" class="btn btn-warning" href="#">Edit</a>';
                 var print = '<a class="btn btn-secondary" href="/StaffSupervisionAppraisal/Print?clientId=' + clientId + '">Print</a>';
@@ -1786,7 +1876,7 @@ function getsupervision(element) {
                 var del = '<a class="btn btn-danger" href="/StaffSupervisionAppraisal/Delete?clientId=' + clientId + '">Delete</a>';
                 console.log(response);
                 response.getStaffSupervisionAppraisal.forEach(function (result, index) {
-                var row = '<tr><td>' + result.date + '</td><td>' + result.nextCheckDate + '</td><td>' + result.deadline + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.details + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                 $('#tbl_' + name).append(row);
 
                 });
@@ -1810,13 +1900,16 @@ function getreference(element) {
             success: function (response) {
                 console.log(response);
                 response.getStaffReference.forEach(function (result, index) {
+                    var date = new Date(result.date);
+                    var dateofEmployement = new Date(result.dateofEmployement);
+
                     var pin = '<input id="staffreference-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="staffreferenceedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/StaffReference/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/StaffReference/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/StaffReference/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/StaffReference/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.date + '</td><td>' + result.dateofEmployement + '</td><td>' + result.contact + '</td><td>' + result.email + '</td><td>' + result.address + '</td><td>' + result.rehireStaff + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + dateofEmployement.toLocaleDateString() + '</td><td>' + result.contact + '</td><td>' + result.email + '</td><td>' + result.address + '</td><td>' + result.rehireStaff + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
 
@@ -1872,13 +1965,15 @@ function getinfection(element) {
             success: function (response) {
                 console.log(response);
                 response.forEach(function (result, index) {
+                    var testDate = new Date(result.testDate);
+
                     var pin = '<input id="infectioncontrol-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="infectioncontroledit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/InfectionControl/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/InfectionControl/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/InfectionControl/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/InfectionControl/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.testDate + '</td><td>' + result.guideline + '</td><td>' + result.remarks + '</td><td>' + result.infectionName + '</td><td>' + result.vaccName + '</td><td>' + result.typeName + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + testDate.toLocaleDateString() + '</td><td>' + result.guideline + '</td><td>' + result.remarks + '</td><td>' + result.infectionName + '</td><td>' + result.vaccName + '</td><td>' + result.typeName + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
 
@@ -2024,13 +2119,16 @@ function getstaffholiday(element) {
             url: '/Staff/Staff' + name,
             data: { 'staffId': staffId },
             success: function (result) {
+                var startDate = new Date(result.startDate);
+                var endDate = new Date(result.endDate);
+
                 var pin = '<input id="staffholiday-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                 var edit = '<a id="staffholidayedit" class="btn btn-warning" href="#">Edit</a>';
                 var print = '<a class="btn btn-secondary" href="/StaffHoliday/Print?clientId=' + clientId + '">Print</a>';
                 var email = '<a class="btn btn-success" href="/StaffHoliday/Email?clientId=' + clientId + '">Email</a>';
                 var download = '<a class="btn btn-info" href="/StaffHoliday/Download?clientId=' + clientId + '">Download</a>';
                 var del = '<a class="btn btn-danger" href="/StaffHoliday/Delete?clientId=' + clientId + '">Delete</a>';
-                var row = '<tr><td>' + result.staffName + '</td><td>' + result.className + '</td><td>' + result.startDate + '</td><td>' + result.endDate + '</td><td>' + result.allocatedDays + '</td><td>' + result.balance + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                var row = '<tr><td>' + result.staffName + '</td><td>' + result.className + '</td><td>' + startDate.toLocaleDateString() + '</td><td>' + endDate.toLocaleDateString() + '</td><td>' + result.allocatedDays + '</td><td>' + result.balance + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                 $('#tbl_' + name).append(row);
 
             },
@@ -2053,13 +2151,16 @@ function getsalaryallowance(element) {
             success: function (response) {
                 console.log(response);
                 response.getStaffTrainingMatrix.forEach(function (result, index) {
+                    var startDate = new Date(result.startDate);
+                    var endDate = new Date(result.endDate);
+
                     var pin = '<input id="salaryallowance-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="salaryallowanceedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/SalaryAllowance/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/SalaryAllowance/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/SalaryAllowance/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/SalaryAllowance/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.startDate + '</td><td>' + result.endDate + '</td><td>' + result.percentage + '</td><td>' + result.amount + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + startDate.toLocaleDateString() + '</td><td>' + endDate.toLocaleDateString() + '</td><td>' + result.percentage + '</td><td>' + result.amount + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });
@@ -2083,13 +2184,16 @@ function getsalarydeduction(element) {
             success: function (response) {
                 console.log(response);
                 response.getSalaryDeduction.forEach(function (result, index) {
+                    var startDate = new Date(result.startDate);
+                    var endDate = new Date(result.endDate);
+
                     var pin = '<input id="salarydeduction-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="salarydeductionedit" class="btn btn-warning" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/SalaryDeduction/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/SalaryDeduction/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/SalaryDeduction/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/SalaryDeduction/Delete?clientId=' + clientId + '">Delete</a>';
-                    var row = '<tr><td>' + result.startDate + '</td><td>' + result.endDate + '</td><td>' + result.percentage + '</td><td>' + result.amount + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    var row = '<tr><td>' + startDate.toLocaleDateString() + '</td><td>' + endDate.toLocaleDateString() + '</td><td>' + result.percentage + '</td><td>' + result.amount + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });

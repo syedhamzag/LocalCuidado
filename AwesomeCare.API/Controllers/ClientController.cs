@@ -751,6 +751,8 @@ namespace AwesomeCare.API.Controllers
                                                                 LessonLearntAndShared = med.LessonLearntAndShared,
                                                                 Observations = med.Observations,
                                                                 MedAuditId = med.MedAuditId,
+                                                                Reference = med.Reference,
+                                                                Remarks = med.Remarks,
                                                                 Status = med.Status
                                                             }).ToList()
                                    }

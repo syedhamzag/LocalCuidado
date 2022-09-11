@@ -108,11 +108,11 @@
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#dailytask" id="@Model.ClientId" onclick="getdailytask(this)">Daily Task</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#mcabest" id="@Model.ClientId" onclick="getmcabest(this)">MCA Best Interest</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#careobj" id="@Model.ClientId" onclick="getcareobj(this)">Care Objectives</a></li>
+                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#incident" id="@Model.ClientId" onclick="getincident(this)">Incident Report</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#performance" id="@Model.ClientId" onclick="getclientperformance(this)">Performance Indicator</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" asp-action="Index" asp-controller="Nutrition" asp-route-clientId="@Model.ClientId">Nutrition</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#rotering" id="@Model.ClientId" onclick="getrotering(this)">Rotering</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" asp-action="Medications" asp-controller="Client" asp-route-clientId="@Model.ClientId">Medications</a></li>
-                <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#incident" id="@Model.ClientId" onclick="getincident(this)">Incident Report</a></li>
                 <li class="nav-item col-sm-3"><a class="nav-link" data-bs-toggle="tab" href="#audit" id="@Model.ClientId" onclick="getaudit(this)">Audit Trail</a></li>
             </ul>
         </div>
@@ -486,7 +486,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-
+                                     <th></th>
                                     <th>NAME</th>
                                     <th>ADDRESS</th>
                                     <th>EMAIL</th>
@@ -517,6 +517,7 @@
                                     <th>RefNo</th>
                                     <th>Subject</th>
                                     <th>Attachment</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbl_dutyoncall">
@@ -539,6 +540,7 @@
                                 <tr>
                                     <th>Reference</th>
                                     <th>Attachment</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbl_hospitalentry">
@@ -562,6 +564,7 @@
                                 <tr>
                                     <th>Reference</th>
                                     <th>Date</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbl_hospitalexit">
@@ -585,6 +588,7 @@
                                     <th>Date</th>
                                     <th>Subject</th>
                                     <th>Attachment</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbl_filesrecord">
@@ -616,6 +620,7 @@
                                     <th>Complain Contact</th>
                                     <th>Action Taken</th>
                                     <th>Evidence</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -649,6 +654,7 @@
                                     <th>Action Taken</th>
                                     <th>Action Recommended</th>
                                     <th>Evidence of Action Taken</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -681,7 +687,9 @@
                                     <th>Reference</th> 
                                     <th>Remarks</th> 
                                     <th>Action Taken</th>
-                                    <th>Evidence of Action Taken</th>
+                                    <th>Action Recommended</th>
+                                     <th></th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -713,6 +721,7 @@
                                     <th>Remarks</th> 
                                     <th>Action Required</th>
                                     <th>Attachment</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -744,6 +753,7 @@
                                     <th>Remarks</th> 
                                     <th>Action Required</th>
                                     <th>Attachment</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -776,6 +786,7 @@
                                     <th>Remarks</th> 
                                     <th>Action Required</th>
                                     <th>Attachment</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -808,6 +819,7 @@
                                     <th>Remarks</th> 
                                     <th>Action Required</th>
                                     <th>Attachment</th>
+                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -851,6 +863,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_bloodcoag">
@@ -874,6 +887,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_bloodpressure">
@@ -896,6 +910,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_bmichart">
@@ -918,6 +933,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_bodytemp">
@@ -940,6 +956,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_bowel">
@@ -963,6 +980,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_eyehealth">
@@ -986,6 +1004,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_foodintake">
@@ -1009,6 +1028,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_heartrate">
@@ -1032,6 +1052,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_oxygen">
@@ -1054,6 +1075,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_painchart">
@@ -1077,6 +1099,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_pulserate">
@@ -1099,6 +1122,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Remarks</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_seizure">
@@ -1121,6 +1145,7 @@
                                                     <tr>
                                                         <th>Date</th>
                                                         <th>Comments</th>
+                                                         <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="tbl_woundcare">
@@ -1539,6 +1564,7 @@
                                     <th>Date</th>
                                     <th>Amendment Date</th>
                                     <th>Task</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbl_dailytask">
@@ -1564,6 +1590,7 @@
                                     <th>Name</th>
                                     <th>Signature</th>
                                     <th>Position</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbl_mcabest">
@@ -1587,6 +1614,7 @@
                                 <tr>
                                     <th>Date</th>
                                     <th>Note</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="tbl_careobj">
@@ -1656,7 +1684,7 @@
                     </div>
                     <div class="card-body">
                         
-                        <table class="table table-bordered table-hover" id="tbl_incident">
+                        <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -1666,7 +1694,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbl_incident">
 
                             </tbody>
                         </table>
@@ -1685,6 +1713,7 @@
                                     <th>Email</th>
                                     <th>Duration</th>
                                     <th>Action</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
