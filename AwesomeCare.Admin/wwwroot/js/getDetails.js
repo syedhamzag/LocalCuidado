@@ -37,10 +37,11 @@ function getdutyoncall(element) {
                     var dateOfCall = new Date(result.dateOfCall);
                     var pin = '<input id="dutyoncall-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="dutyoncalledit" class="btn btn-warning" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/DutyOnCall/Print?clientId=' + clientId + '">Print</a>';
-                    var email = '<a class="btn btn-success" href="/DutyOnCall/Email?clientId=' + clientId + '">Email</a>';
-                    var download = '<a class="btn btn-info" href="/DutyOnCall/Download?clientId=' + clientId + '">Download</a>';
-                    var del = '<a class="btn btn-danger" href="/DutyOnCall/Delete?clientId=' + clientId + '">Delete</a>';
+                    var print = '<a class="btn btn-secondary" href="/DutyOnCall/Print?DutyOnCallId=' + result.dutyOnCallId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/DutyOnCall/Email?DutyOnCallId=' + result.dutyOnCallId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/DutyOnCall/Download?DutyOnCallId=' + result.dutyOnCallId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/DutyOnCall/Delete?DutyOnCallId=' + result.dutyOnCallId
+                        + '">Delete</a>';
                     var row = '<tr><td>' + dateOfCall.toLocaleDateString() + '</td><td>' + result.refNo + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
@@ -120,7 +121,6 @@ function getfilesrecord(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
     var client = $('#tbl_' + name).children().length;
-    console.log(client);
     if (client <= 0) {
         $.ajax({
             type: 'GET',
@@ -134,7 +134,7 @@ function getfilesrecord(element) {
                     var edit = '<a id="filesandrecordedit" class="btn btn-primary" href="#">Edit</a>';
                     var print = '<a class="btn btn-secondary" href="/FilesAndRecord/Print?clientId=' + clientId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/FilesAndRecord/Email?clientId=' + clientId + '">Email</a>';
-                    var download = '<a class="btn btn-warning" href="/FilesAndRecord/Download?clientId=' + clientId + '">Download</a>';
+                    var download = '<a class="btn btn-info" href="/FilesAndRecord/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/FilesAndRecord/Delete?clientId=' + clientId + '">Delete</a>';
                     var row = '<tr><td>'+ date.toLocaleDateString() + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
@@ -151,6 +151,8 @@ function getfilesrecord(element) {
 function getcomplaintregister(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
@@ -167,19 +169,23 @@ function getcomplaintregister(element) {
                     var email = '<a class="btn btn-success" href="/Complain/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/Complain/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/Complain/Delete?clientId=' + clientId + '">Delete</a>';
-                    data.push([daterecieved.toLocaleDateString(), duedate.toLocaleDateString(), incidentdate.toLocaleDateString(), result.reference, result.remark, result.complainantcontact, result.actiontaken, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceFilePath + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
+                    var row = '<tr><td>' + daterecieved.toLocaleDateString() + '</td><td>' + duedate.toLocaleDateString() + '</td><td>' + incidentdate.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.remark + '</td><td>' + result.complainantcontact + '</td><td>' + result.actiontaken + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceFilePath + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>' + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    $('#tbl_' + name).append(row);
                 });
-                $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
+
             },
             error: function () {
                 alert('Failed to receive the Data');
                 console.log('Failed ');
             }
         });
+    }
 }
 function getlogaudit(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
@@ -196,19 +202,23 @@ function getlogaudit(element) {
                     var email = '<a class="btn btn-success" href="/ClientLogAudit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientLogAudit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientLogAudit/Delete?clientId=' + clientId + '">Delete</a>';
-                    data.push([date.toLocaleDateString(), nextDueDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionTaken, result.actionRecommended, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextDueDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.remarks + '</td><td>' + result.actionTaken + '</td><td>' + result.actionRecommended + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    $('#tbl_' + name).append(row);
                 });
-                $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
+
             },
             error: function () {
                 alert('Failed to receive the Data');
                 console.log('Failed ');
             }
         });
+    }
 }
 function getmedaudit(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
@@ -225,19 +235,23 @@ function getmedaudit(element) {
                     var email = '<a class="btn btn-success" href="/ClientMedAudit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientMedAudit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientMedAudit/Delete?clientId=' + clientId + '">Delete</a>';
-                    data.push([date.toLocaleDateString(), nextDueDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionTaken, result.actionRecommended, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextDueDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.remarks + '</td><td>' + result.actionTaken + '</td><td>' + result.actionRecommended + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.evidenceOfActionTaken + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td> <td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    $('#tbl_' + name).append(row);
                 });
-                $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
+
             },
             error: function () {
                 alert('Failed to receive the Data');
                 console.log('Failed ');
             }
         });
+    }
 }
 function getvoice(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
@@ -254,19 +268,22 @@ function getvoice(element) {
                     var email = '<a class="btn btn-success" href="/ClientVoice/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientVoice/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientVoice/Delete?clientId=' + clientId + '">Delete</a>';
-                    data.push([date.toLocaleDateString(), nextCheckDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.remarks + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    $('#tbl_' + name).append(row);
                 });
-                $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
             error: function () {
                 alert('Failed to receive the Data');
                 console.log('Failed ');
             }
         });
+    }
 }
 function getmgtvisit(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
@@ -283,19 +300,22 @@ function getmgtvisit(element) {
                     var email = '<a class="btn btn-success" href="/ClientMgtVisit/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientMgtVisit/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientMgtVisit/Delete?clientId=' + clientId + '">Delete</a>';
-                    data.push([date.toLocaleDateString(), nextCheckDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.remarks + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    $('#tbl_' + name).append(row);
                 });
-                $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
             error: function () {
                 alert('Failed to receive the Data');
                 console.log('Failed ');
             }
         });
+    }
 }
 function getprogram(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
@@ -312,19 +332,22 @@ function getprogram(element) {
                     var email = '<a class="btn btn-success" href="/ClientProgram/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientProgram/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientProgram/Delete?clientId=' + clientId + '">Delete</a>';
-                    data.push([date.toLocaleDateString(), nextCheckDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.remarks + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    $('#tbl_' + name).append(row);
                 });
-                $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
             error: function () {
                 alert('Failed to receive the Data');
                 console.log('Failed ');
             }
         });
+    }
 }
 function getservicewatch(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
+    var client = $('#tbl_' + name).children().length;
+    if (client <= 0) {
         $.ajax({
             type: 'GET',
             url: '/Client/' + name,
@@ -341,15 +364,16 @@ function getservicewatch(element) {
                     var email = '<a class="btn btn-success" href="/ClientServiceWatch/Email?clientId=' + clientId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/ClientServiceWatch/Download?clientId=' + clientId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/ClientServiceWatch/Delete?clientId=' + clientId + '">Delete</a>';
-                    data.push([date.toLocaleDateString(), nextCheckDate.toLocaleDateString(), deadline.toLocaleDateString(), result.reference, result.remarks, result.actionRequired, '<a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a>', pin + edit + print + email + download + del]);
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + nextCheckDate.toLocaleDateString() + '</td><td>' + deadline.toLocaleDateString() + '</td><td>' + result.reference + '</td><td>' + result.remarks + '</td><td>' + result.actionRequired + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    $('#tbl_' + name).append(row);
                 });
-                $('#tbl_' + name).DataTable().clear().rows.add(data).draw();
             },
             error: function () {
                 alert('Failed to receive the Data');
                 console.log('Failed ');
             }
         });
+    }
 
 }
 function getbloodcoag(element) {
@@ -1336,8 +1360,13 @@ function getmcabest(element) {
             success: function (response) {
                 response.getBestInterestAssessment.forEach(function (result, index) {
                     var date = new Date(result.date);
-
-                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.name + '</td><td>' + result.signature + '</td><td>' + result.position + '</td></tr>';
+                    var pin = '<input id="bestinterestassessment-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
+                    var edit = '<a id="bestinterestassessmentedit" class="btn btn-warning" href="#">Edit</a>';
+                    var print = '<a class="btn btn-secondary" href="/BestInterestAssessment/Print?clientId=' + clientId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/BestInterestAssessment/Email?clientId=' + clientId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/BestInterestAssessment/Download?clientId=' + clientId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/DailyTask/Delete?clientId=' + clientId + '">Delete</a>';
+                    var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.name + '</td><td>' + result.signature + '</td><td>' + result.position + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
                 });

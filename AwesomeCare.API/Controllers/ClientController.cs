@@ -654,6 +654,7 @@ namespace AwesomeCare.API.Controllers
                                        GetClientComplain = (from com in client.ComplainRegister
                                                             select new GetClientComplainRegister
                                                             {
+                                                                ComplainId = com.ComplainId,
                                                                 COMPLAINANTCONTACT = com.COMPLAINANTCONTACT,
                                                                 EvidenceFilePath = com.EvidenceFilePath,
                                                                 ACTIONTAKEN = com.ACTIONTAKEN,
@@ -692,6 +693,7 @@ namespace AwesomeCare.API.Controllers
                                        GetClientLogAudit = (from log in client.ClientLogAudit
                                                             select new GetClientLogAudit
                                                             {
+                                                                
                                                                 ActionRecommended = log.ActionRecommended,
                                                                 EvidenceOfActionTaken = log.EvidenceOfActionTaken,
                                                                 ActionTaken = log.ActionTaken,
@@ -1501,6 +1503,7 @@ namespace AwesomeCare.API.Controllers
                                        GetInterestAndObjective = (from iao in client.InterestAndObjective
                                                                   select new GetInterestAndObjective
                                                                   {
+                                                                      GoalId = iao.GoalId,
                                                                       CareGoal = iao.CareGoal,
                                                                   }).ToList()
                                    }
@@ -1531,6 +1534,7 @@ namespace AwesomeCare.API.Controllers
                                        GetPersonalHygiene = (from ph in client.PersonalHygiene
                                                              select new GetPersonalHygiene
                                                              {
+                                                                 HygieneId = ph.HygieneId,
                                                                  LaundrySupport = ph.LaundrySupport,
                                                                  LaundryGuide = ph.LaundryGuide,
                                                                  
@@ -1563,6 +1567,7 @@ namespace AwesomeCare.API.Controllers
                                        GetInfectionControl = (from ic in client.InfectionControl
                                                               select new GetInfectionControl
                                                               {
+                                                                  InfectionId = ic.InfectionId,
                                                                   TestDate = ic.TestDate,
                                                                   Remarks = ic.Remarks
                                                               }).ToList()
@@ -1594,6 +1599,7 @@ namespace AwesomeCare.API.Controllers
                                        GetManagingTasks = (from mt in client.ManagingTasks
                                                            select new GetManagingTasks
                                                            {
+                                                               TaskId = mt.TaskId,
                                                                Help = mt.Help,
                                                            }).ToList(),
                                    }
@@ -1624,6 +1630,7 @@ namespace AwesomeCare.API.Controllers
                                        GetCarePlanNutrition = (from cpn in client.CarePlanNutrition
                                                                select new GetCarePlanNutrition
                                                                {
+                                                                   NutritionId = cpn.NutritionId,
                                                                    SpecialDiet = cpn.SpecialDiet,
                                                                    AvoidFood = cpn.AvoidFood
                                                                }).ToList()
@@ -1655,6 +1662,7 @@ namespace AwesomeCare.API.Controllers
                                        GetBalance = (from bln in client.Balance
                                                      select new GetBalance
                                                      {
+                                                         BalanceId = bln.BalanceId,
                                                          Name = bln.Name,
                                                          Description = bln.Description
                                                      }).ToList()
@@ -1686,6 +1694,7 @@ namespace AwesomeCare.API.Controllers
                                        GetPhysicalAbility = (from pab in client.PhysicalAbility
                                                              select new GetPhysicalAbility
                                                              {
+                                                                 PhysicalId = pab.PhysicalId,
                                                                  Name = pab.Name,
                                                                  Description = pab.Description
                                                              }).ToList()
@@ -1717,6 +1726,7 @@ namespace AwesomeCare.API.Controllers
                                        GetHealthAndLiving = (from hal in client.HealthAndLiving
                                                              select new GetHealthAndLiving
                                                              {
+                                                                 HLId = hal.HLId,
                                                                  BriefHealth = hal.BriefHealth,
                                                                  WakeUp = hal.WakeUp
                                                              }).ToList()
@@ -1912,6 +1922,7 @@ namespace AwesomeCare.API.Controllers
                                        GetHospitalExit = (from hex in client.HospitalExit
                                                           select new GetHospitalExit
                                                           {
+                                                              HospitalExitId = hex.HospitalExitId,
                                                               Date = hex.Date,
                                                               Reference = hex.Reference
                                                           }).ToList()
@@ -1942,6 +1953,7 @@ namespace AwesomeCare.API.Controllers
                                        GetHomeRiskAssessment = (from hra in client.HomeRiskAssessment
                                                                 select new GetHomeRiskAssessment
                                                                 {
+                                                                    HomeRiskAssessmentId = hra.HomeRiskAssessmentId,
                                                                     Heading = hra.Heading
                                                                 }).ToList()
                                    }
@@ -1971,6 +1983,7 @@ namespace AwesomeCare.API.Controllers
                                        GetDutyOnCall = (from doc in client.DutyOnCall
                                                         select new GetDutyOnCall
                                                         {
+                                                            DutyOnCallId = doc.DutyOnCallId,
                                                             Attachment = doc.Attachment,
                                                             Subject = doc.Subject,
                                                             RefNo = doc.RefNo,
@@ -2004,6 +2017,7 @@ namespace AwesomeCare.API.Controllers
                                        GetClientDailyTask = (from cdt in client.ClientDailyTask
                                                              select new GetClientDailyTask
                                                              {
+                                                                 DailyTaskId = cdt.DailyTaskId,
                                                                  Date = cdt.Date,
                                                                  AmendmentDate = cdt.AmendmentDate,
                                                                  DailyTaskName = cdt.DailyTaskName
@@ -2035,6 +2049,7 @@ namespace AwesomeCare.API.Controllers
                                        GetBestInterestAssessment = (from mca in client.BestInterestAssessment
                                                                     select new GetBestInterestAssessment
                                                                     {
+                                                                        BestId = mca.BestId,
                                                                         Date = mca.Date,
                                                                         Name = mca.Name,
                                                                         Signature = mca.Signature,
@@ -2067,6 +2082,7 @@ namespace AwesomeCare.API.Controllers
                                        GetFilesAndRecord = (from f in client.FilesAndRecord
                                                             select new GetFilesAndRecord
                                                             {
+                                                                FilesAndRecordId = f.FilesAndRecordId,
                                                                 Date = f.Date,
                                                                 Subject = f.Subject,
                                                                 Attachment = f.Attachment
@@ -2099,6 +2115,7 @@ namespace AwesomeCare.API.Controllers
                                        GetClientCareObj = (from o in client.ClientCareObj
                                                            select new GetClientCareObj
                                                            {
+                                                               CareObjId = o.CareObjId,
                                                                Date = o.Date,
                                                                Note = o.Note,
                                                            }).ToList()
@@ -2170,6 +2187,7 @@ namespace AwesomeCare.API.Controllers
                                                              join bases in _baseRecordItemRepository.Table on o.IncidentTypeId equals bases.BaseRecordItemId
                                                         select new GetIncidentReport
                                                         {
+                                                            IncidentReportingId = o.IncidentReportingId,
                                                             IncidentType = bases.ValueName,
                                                             ReportingStaff = staff.FirstName +" "+ staff.LastName,
                                                             StaffInvolved = involved.FirstName +" "+ involved.LastName,
