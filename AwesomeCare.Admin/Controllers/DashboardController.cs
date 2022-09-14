@@ -1312,8 +1312,6 @@ namespace AwesomeCare.Admin.Controllers
             var client = clients.Result.Where(s => s.ClientId == clientId).FirstOrDefault();
             var manager = staffs.Result.Where(s => s.StaffPersonalInfoId == client.ClientManager).FirstOrDefault();
             var keyworker = new GetStaffPersonalInfo();
-            //var keyworker = staffs.Result.Where(s => s.FirstName.Contains(client.Keyworker) || s.MiddleName.Contains(client.Keyworker) || s.LastName.Contains(client.Keyworker)).FirstOrDefault();
-            //var teamleader = staffs.Result.Where(s => s.FirstName.Contains(client.TeamLeader) || s.MiddleName.Contains(client.TeamLeader) || s.LastName.Contains(client.TeamLeader)).FirstOrDefault();
             var teamleader = new GetStaffPersonalInfo();
             var dashboard =  _dashboardService.Get();
             dashboard.Result.ClientId = clientId;

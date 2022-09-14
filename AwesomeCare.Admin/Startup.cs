@@ -459,7 +459,7 @@ namespace AwesomeCare.Admin
                 endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Client}/{action=HomeCare}");
+                    pattern: "{controller=Dashboard}/{action=Dashboard}");
             });
         }
 

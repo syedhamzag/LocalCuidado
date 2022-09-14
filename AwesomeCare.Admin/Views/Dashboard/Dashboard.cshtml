@@ -75,7 +75,7 @@
                             <ul class="nav nav-tabs nav-tabs-bottom">
                                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#daily">Daily</a></li>
                                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#weekly">Weekly</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#monthly">Monthly</a></li>
+                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#monthly" onclick="getAdlMonthly()">Monthly</a></li>
                             </ul>
                         </div>
                     </div>
@@ -91,65 +91,6 @@
                         <canvas id="AdlTracker"></canvas>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
-        <div class="card flex-fill">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Staff Matrix</h5>
-                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#staffModal" style="
-    font-size: .75em;
-    margin-top: -25px;
-">
-                    Show Details
-                </button>
-            </div>
-            <div class="card-body">
-                <canvas id="StaffMetrics"></canvas>
-            </div>
-            <div class="card-footer">
-
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
-        <div class="card flex-fill">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Client Matrix</h5>
-                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#clientModal" style="
-    font-size: .75em;
-    margin-top: -25px;
-">
-                    Show Details
-                </button>
-            </div>
-            <div class="card-body">
-                <canvas id="ClientMetrics"></canvas>
-            </div>
-            <div class="card-footer">
-
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
-        <div class="card flex-fill">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Tele Health</h5>
-                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#teleModal" style="
-    font-size: .75em;
-    margin-top: -25px;
-">
-                    Show Details
-                </button>
-            </div>
-            <div class="card-body">
-                <canvas id="Tele"></canvas>
-            </div>
-            <div class="card-footer">
-
             </div>
         </div>
     </div>
@@ -359,7 +300,65 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Staff Matrix</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#staffModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <canvas id="StaffMetrics"></canvas>
+            </div>
+            <div class="card-footer">
 
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Client Matrix</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#clientModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <canvas id="ClientMetrics"></canvas>
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-12 col-xl-4 d-flex">
+        <div class="card flex-fill">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Tele Health</h5>
+                <button type="button" class="btn btn-primary pull-right" data-bs-toggle="modal" data-bs-target="#teleModal" style="
+    font-size: .75em;
+    margin-top: -25px;
+">
+                    Show Details
+                </button>
+            </div>
+            <div class="card-body">
+                <canvas id="Tele"></canvas>
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12 col-lg-6 col-xl-4 d-flex">
         <div class="card flex-fill">
@@ -1620,7 +1619,8 @@
             }
 
         }
-        
+        var chartTrackM = "AdlTracker";
+        var ctxTrackM = document.getElementById(chartTrackM).getContext('2d');
         var trackerColor = [
                 'rgba(255, 193, 7, 1)',
                 'rgba(40, 167, 69, 1)',
@@ -1631,7 +1631,96 @@
                 //'rgba(165, 165, 165, 1)',
                 //'rgba(255, 193, 14, 1)'
             ];
+        function getAdlMonthly()
+        {
+            console.log(ctxTrackM);
+            if(ctxTrackM.textAlign == "start")
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '/Dashboard/GetAdlTrackerM',
+                    success: function (response) {
+                        var types = [];
+                        var ontime = [];
+                        var early = [];
+                        var mild = [];
+                        var late = [];
+                        var missed = [];
 
+                        response.months.forEach(function (result, index) { types.push(result)});
+                        response.liveTrackerM["ONTIME"].forEach(function (result, index) { ontime.push(result.value)});
+                        response.liveTrackerM["EARLY"].forEach(function (result, index) { early.push(result.value)});
+                        response.liveTrackerM["MILD"].forEach(function (result, index) { mild.push(result.value)});
+                        response.liveTrackerM["LATE"].forEach(function (result, index) { late.push(result.value)});
+                        response.liveTrackerM["MISSED"].forEach(function (result, index) { missed.push(result.value)});
+
+                        const trackM = {
+                            labels: types,
+                            datasets: [
+                                {
+                                    label: "ONTIME",
+                                    data: ontime,
+                                    borderColor: 'rgba(40, 167, 69, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label: "EARLY",
+                                    data: early,
+                                    borderColor: 'rgba(0, 123, 255, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label: "MILD",
+                                    data: mild,
+                                    borderColor: 'rgba(255, 193, 7, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label:"LATE",
+                                    data: late,
+                                    borderColor: 'rgba(220, 53, 69, 1)',
+                                    tension: 0.1
+                                },
+                                {
+                                    label: "MISSED",
+                                    data: missed,
+                                    borderColor: 'rgba(73,112,182,1)',
+                                    tension: 0.1
+                                }
+                            ]
+                        };
+                        var TrackerM = new Chart(ctxTrackM, {
+                            data: trackM,
+                            type: 'line',
+                            options: {
+                                        maintainAspectRatio: false,
+                                        legend: {
+                                            labels: {
+                                                fontColor: trackerColor
+                                            }
+                                        },
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    min: 0,
+                                                },
+                                                gridLines: {
+                                                    color: 'white'
+                                                }
+                                            }]
+                                        }
+                                    }
+
+                        });
+
+                        
+                    },
+                    error: function () {
+                        console.log('Failed ');
+                    }
+                });
+            }
+        }
         $(function () 
         {
 
@@ -1699,9 +1788,8 @@
             
             var chartTrackW = "AdlWeekly";
             var chartTrackD = "AdlDaily";
-            var chartTrackM = "AdlTracker";
-        
-            var ctxTrackM = document.getElementById(chartTrackM).getContext('2d');
+            
+            
             var ctxTrackW = document.getElementById(chartTrackW).getContext('2d');
             var ctxTrackD = document.getElementById(chartTrackD).getContext('2d');
             
@@ -1764,12 +1852,11 @@
             });
             
             var hidelabel = {
-                maintainAspectRatio: false,
                 scales: {
                     yAxes: [{
                         ticks: {
                             min: 0,
-                            beginAtZero: false
+                            beginAtZero: true
                         },
                         gridLines: {
                             display: false,
@@ -1806,7 +1893,7 @@
             getTeleMatrix();
             getAdlWeekly();
             getDashboard();
-            getAdlMonthly();
+
             function getDashboard()
             {
                 var dashboard = $('#ActiveUser').val();
@@ -2243,7 +2330,7 @@
             function getAdlDaily()
             {
                 var dashboard = $('#ActiveUser').val();
-
+                if (dashboard <= 0) {
                     // Bar Chart
                     var chartMedBar = "med-bar-chart";
                     var ctxMedBar = document.getElementById(chartMedBar).getContext('2d');
@@ -2278,19 +2365,23 @@
                             }
                         }
                     });
-                            var types = ['AM','LUNCH','TEA','BED'];
-                            var ontimeD = [191,13,119,7];
-                            var earlyD = [172,34,99,28];
-                            var mildD = [151,57,78,45];
-                            var lateD = [134,79,59,62];
-                            var missedD = [116,96,37,84];
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetAdlTrackerD',
+                        success: function (response) {
+                            var types = [];
+                            var ontimeD = [];
+                            var earlyD = [];
+                            var mildD = [];
+                            var lateD = [];
+                            var missedD = [];
 
-                            //response.types.forEach(function (result, index) { types.push(result)});
-                            //response.liveTrackerD["ONTIME"].forEach(function (result, index) { ontimeD.push(result.value)});
-                            //response.liveTrackerD["EARLY"].forEach(function (result, index) { earlyD.push(result.value)});
-                            //response.liveTrackerD["MILD"].forEach(function (result, index) { mildD.push(result.value)});
-                            //response.liveTrackerD["LATE"].forEach(function (result, index) { lateD.push(result.value)});
-                            //response.liveTrackerD["MISSED"].forEach(function (result, index) { missedD.push(result.value)});
+                            response.types.forEach(function (result, index) { types.push(result)});
+                            response.liveTrackerD["ONTIME"].forEach(function (result, index) { ontimeD.push(result.value)});
+                            response.liveTrackerD["EARLY"].forEach(function (result, index) { earlyD.push(result.value)});
+                            response.liveTrackerD["MILD"].forEach(function (result, index) { mildD.push(result.value)});
+                            response.liveTrackerD["LATE"].forEach(function (result, index) { lateD.push(result.value)});
+                            response.liveTrackerD["MISSED"].forEach(function (result, index) { missedD.push(result.value)});
 
                             const trackD = {
                                 labels: types,
@@ -2333,28 +2424,37 @@
                                 options: trackerOptions
 
                             });
+
+                        
+                        },
+                        error: function () {
+                            alert('Failed to receive the Data');
+                            console.log('Failed ');
+                        }
+                    });
+                }
             }
             function getAdlWeekly()
             {
                 var dashboard = $('#ActiveUser').val();
-                //if (dashboard <= 0) {
-                //    $.ajax({
-                //        type: 'GET',
-                //        url: '/Dashboard/GetAdlTrackerW',
-                //        success: function (response) {
-                            var types = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
-                            var ontime = [5,4,3,1,8];
-                            var early = [11,8,9,13,0];
-                            var mild = [1,5,9,3,7];
-                            var late = [2,4,6,8,0];
-                            var missed = [4,5,6,8,9];
+                if (dashboard <= 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetAdlTrackerW',
+                        success: function (response) {
+                            var types = [];
+                            var ontime = [];
+                            var early = [];
+                            var mild = [];
+                            var late = [];
+                            var missed = [];
 
-                            //response.days.forEach(function (result, index) { types.push(result)});
-                            //response.liveTrackerW["ONTIME"].forEach(function (result, index) { ontime.push(result.value)});
-                            //response.liveTrackerW["EARLY"].forEach(function (result, index) { early.push(result.value)});
-                            //response.liveTrackerW["MILD"].forEach(function (result, index) { mild.push(result.value)});
-                            //response.liveTrackerW["LATE"].forEach(function (result, index) { late.push(result.value)});
-                            //response.liveTrackerW["MISSED"].forEach(function (result, index) { missed.push(result.value)});
+                            response.days.forEach(function (result, index) { types.push(result)});
+                            response.liveTrackerW["ONTIME"].forEach(function (result, index) { ontime.push(result.value)});
+                            response.liveTrackerW["EARLY"].forEach(function (result, index) { early.push(result.value)});
+                            response.liveTrackerW["MILD"].forEach(function (result, index) { mild.push(result.value)});
+                            response.liveTrackerW["LATE"].forEach(function (result, index) { late.push(result.value)});
+                            response.liveTrackerW["MISSED"].forEach(function (result, index) { missed.push(result.value)});
 
                             const trackW = {
                                 labels: types,
@@ -2399,105 +2499,14 @@
                             });
 
                         
-                //        },
-                //        error: function () {
-                //            alert('Failed to receive the Data');
-                //            console.log('Failed ');
-                //        }
-                //    });
-                //}
+                        },
+                        error: function () {
+                            alert('Failed to receive the Data');
+                            console.log('Failed ');
+                        }
+                    });
+                }
             }
-
-                    function getAdlMonthly()
-        {
-            console.log(ctxTrackM);
-            //if(ctxTrackM.textAlign == "start")
-            //{
-            //    $.ajax({
-            //        type: 'GET',
-            //        url: '/Dashboard/GetAdlTrackerM',
-            //        success: function (response) {
-                        var types = ['Jan-22','Feb-22','Mar-22','Apr-22','May-22','Jun-22','Jul-22','Aug-22','Sep-22','Oct-22','Nov-22','Dec-22'];
-                        var ontime = [122,65,555,175,65,95,450,0,0,0,0,0];
-                        var early = [22,235,85,51,6,9,80,0,0,0,0,0];
-                        var mild = [66,0,35,15,305,395,40,0,0,0,0,0];
-                        var late = [322,365,255,17,15,195,150,0,0,0,0,0];
-                        var missed = [222,605,55,75,165,245,50,0,0,0,0,0];
-
-                        //response.months.forEach(function (result, index) { types.push(result)});
-                        //response.liveTrackerM["ONTIME"].forEach(function (result, index) { ontime.push(result.value)});
-                        //response.liveTrackerM["EARLY"].forEach(function (result, index) { early.push(result.value)});
-                        //response.liveTrackerM["MILD"].forEach(function (result, index) { mild.push(result.value)});
-                        //response.liveTrackerM["LATE"].forEach(function (result, index) { late.push(result.value)});
-                        //response.liveTrackerM["MISSED"].forEach(function (result, index) { missed.push(result.value)});
-
-                        const trackM = {
-                            labels: types,
-                            datasets: [
-                                {
-                                    label: "ONTIME",
-                                    data: ontime,
-                                    borderColor: 'rgba(40, 167, 69, 1)',
-                                    tension: 0.1
-                                },
-                                {
-                                    label: "EARLY",
-                                    data: early,
-                                    borderColor: 'rgba(0, 123, 255, 1)',
-                                    tension: 0.1
-                                },
-                                {
-                                    label: "MILD",
-                                    data: mild,
-                                    borderColor: 'rgba(255, 193, 7, 1)',
-                                    tension: 0.1
-                                },
-                                {
-                                    label:"LATE",
-                                    data: late,
-                                    borderColor: 'rgba(220, 53, 69, 1)',
-                                    tension: 0.1
-                                },
-                                {
-                                    label: "MISSED",
-                                    data: missed,
-                                    borderColor: 'rgba(73,112,182,1)',
-                                    tension: 0.1
-                                }
-                            ]
-                        };
-                        var TrackerM = new Chart(ctxTrackM, {
-                            data: trackM,
-                            type: 'line',
-                            options: {
-                                        maintainAspectRatio: false,
-                                        legend: {
-                                            labels: {
-                                                fontColor: trackerColor
-                                            }
-                                        },
-                                        scales: {
-                                            yAxes: [{
-                                                ticks: {
-                                                    min: 0,
-                                                },
-                                                gridLines: {
-                                                    color: 'white'
-                                                }
-                                            }]
-                                        }
-                                    }
-
-                        });
-
-                        
-            //        },
-            //        error: function () {
-            //            console.log('Failed ');
-            //        }
-            //    });
-            //}
-        }
 
             function getClientMatrix()
             {
@@ -2610,7 +2619,7 @@
                             var Client = new Chart(ctxClient, {
                                 options: hidelabel,
                                 data: client,
-                                type: 'doughnut'
+                                type: 'pie'
 
                             });
                             var Log = new Chart(ctxLog, {
@@ -2671,7 +2680,7 @@
                         type: 'GET',
                         url: '/Dashboard/GetStaffMatrix',
                         success: function (response) {
-                            Staff Matrix
+                            //Staff Matrix
                             var labels = [];
                             var data = [];
                             response.staffMatrix.forEach(function (result, index) { labels.push(result.key) });
@@ -2690,7 +2699,7 @@
                             var Staff = new Chart(ctxStaff, {
                                 options: hidelabel,
                                 data: staff,
-                                type: 'polarArea'
+                                type: 'pie'
 
                             });
                             var dataS1 = [];
@@ -2849,43 +2858,43 @@
             function getTeleMatrix()
             {
                 var dashboard = $('#ActiveUser').val();
-                //if (dashboard <= 0) {
-                //    $.ajax({
-                //        type: 'GET',
-                //        url: '/Dashboard/GetTeleHealth',
-                //        success: function (response) {
+                if (dashboard <= 0) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Dashboard/GetTeleHealth',
+                        success: function (response) {
                             
-                            var labels = ['Open','Closed','Late'];
-                            var data = [78,78,78];
-                            var dataT1 = [3,0,2];
-                            var dataT2 = [0,1,3];
-                            var dataT3 = [2,2,1];
-                            var dataT4 = [1,3,0];
-                            var dataT5 = [6,5,4];
-                            var dataT6 = [4,6,5];
-                            var dataT7 = [5,4,6];
-                            var dataT8 = [7,9,8];
-                            var dataT9 = [9,8,7];
-                            var dataT10 = [8,7,9];
-                            var dataT11 = [12,11,10];
-                            var dataT12 = [10,12,11];
-                            var dataT13 = [11,10,12];
+                            var labels = [];
+                            var data = [];
+                            var dataT1 = [];
+                            var dataT2 = [];
+                            var dataT3 = [];
+                            var dataT4 = [];
+                            var dataT5 = [];
+                            var dataT6 = [];
+                            var dataT7 = [];
+                            var dataT8 = [];
+                            var dataT9 = [];
+                            var dataT10 = [];
+                            var dataT11 = [];
+                            var dataT12 = [];
+                            var dataT13 = [];
                             
-                            //response.teleHealth.forEach(function (result, index) { labels.push(result.key) });
-                            //response.teleHealth.forEach(function (result, index) { data.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT1.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT2.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT3.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT4.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT5.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT6.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT7.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT8.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT9.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT10.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT11.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT12.push(result.value) });
-                            //response.teleHealth.forEach(function (result, index) { dataT13.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { labels.push(result.key) });
+                            response.teleHealth.forEach(function (result, index) { data.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT1.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT2.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT3.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT4.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT5.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT6.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT7.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT8.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT9.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT10.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT11.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT12.push(result.value) });
+                            response.teleHealth.forEach(function (result, index) { dataT13.push(result.value) });
                             
                             var tele = {
                                 labels: labels,
@@ -3126,13 +3135,13 @@
 
                                 });
                         
-                //        },
-                //        error: function () {
-                //            alert('Failed to receive the Data');
-                //            console.log('Failed ');
-                //        }
-                //    });
-                //}
+                        },
+                        error: function () {
+                            alert('Failed to receive the Data');
+                            console.log('Failed ');
+                        }
+                    });
+                }
             }
         });
     </script>

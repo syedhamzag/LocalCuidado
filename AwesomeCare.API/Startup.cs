@@ -277,11 +277,11 @@ namespace AwesomeCare.API
             {
                 if (env.IsStaging())
                 {
-                    c.SwaggerEndpoint("/awesomecareapi/swagger/v1/swagger.json", "AwesomeCare API V1");
+                    c.SwaggerEndpoint("/apicare/swagger/v1/swagger.json", "AwesomeCare API V1");
                 }
                 else
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwesomeCare API V1");
+                    c.SwaggerEndpoint("/apicare/swagger/v1/swagger.json", "AwesomeCare API V1");
                 }
                 c.RoutePrefix = string.Empty;
                 //if (env.IsDevelopment())
