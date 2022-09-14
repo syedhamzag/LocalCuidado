@@ -275,9 +275,9 @@ namespace AwesomeCare.API
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                if (env.IsStaging())
+                if (env.IsDevelopment())
                 {
-                    c.SwaggerEndpoint("/apicare/swagger/v1/swagger.json", "AwesomeCare API V1");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "AwesomeCare API V1");
                 }
                 else
                 {

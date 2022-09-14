@@ -107,8 +107,12 @@ namespace AwesomeCare.Admin.Controllers
             var result = await _hospitalService.Create(post);
             var content = await result.Content.ReadAsStringAsync();
 
-            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode != false ? "New Hospital Exit successfully registered" : "An Error Occurred" });
-            return RedirectToAction("Dashboard", "Dashboard");
+            SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "New Hospital Exit successfully registered" : "An Error Occurred" });
+            if (result.IsSuccessStatusCode)
+            {
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
+            }
+            return View(model);
 
         }
     }

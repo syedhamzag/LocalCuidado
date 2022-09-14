@@ -206,7 +206,7 @@ namespace AwesomeCare.Admin.Controllers
 
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode ? "BestInterestAssessment successfully added" : "An Error Occurred" });
 
-            return RedirectToAction("Reports");
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 
         private CreateBestInterestAssessment Get(GetBestInterestAssessment mcaBest)

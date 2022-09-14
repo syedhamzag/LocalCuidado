@@ -156,7 +156,7 @@ namespace AwesomeCare.Admin.Controllers
             });
             if (entity.IsSuccessStatusCode)
             {
-                return RedirectToAction("Reports");
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
 

@@ -62,7 +62,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var sp = await _infectionService.GetbyClient(clientId);
             await _infectionService.Delete(sp.InfectionId);
-            return RedirectToAction("Reports");
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = clientId });
         }
         public async Task<IActionResult> View(int clientId)
         {
@@ -157,7 +157,7 @@ namespace AwesomeCare.Admin.Controllers
             });
             if (entity.IsSuccessStatusCode)
             {
-                return RedirectToAction("Reports");
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
 

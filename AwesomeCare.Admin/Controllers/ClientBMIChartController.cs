@@ -235,7 +235,7 @@ namespace AwesomeCare.Admin.Controllers
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New BMI Chart successfully registered" : "An Error Occurred" });
-            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
 
         }
         [HttpPost]
@@ -295,7 +295,7 @@ namespace AwesomeCare.Admin.Controllers
             });
             if (entity.IsSuccessStatusCode)
             {
-                return RedirectToAction("Reports");
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
 

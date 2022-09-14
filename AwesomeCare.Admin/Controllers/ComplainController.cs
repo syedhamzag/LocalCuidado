@@ -173,7 +173,7 @@ namespace AwesomeCare.Admin.Controllers
                 var content = await result.Content.ReadAsStringAsync();
 
                 SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode , Message = result.Content.ReadAsStringAsync().Result != null ? "New Complain successfully registered" : "An Error Occurred" });
-                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             catch (Exception ex)
             {
@@ -273,9 +273,9 @@ namespace AwesomeCare.Admin.Controllers
                 IsSuccessful = entity.IsSuccessStatusCode,
                 Message = entity.IsSuccessStatusCode == true ? "Successful" : "Operation failed"
             });
-            if (entity.IsSuccessStatusCode != false)
+            if (entity.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             else
             {

@@ -63,7 +63,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var sp = await _petsService.GetbyClient(clientId);
             await _petsService.Delete(sp.PetsId);
-            return RedirectToAction("Reports");
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = clientId });
         }
 
         public async Task<IActionResult> View(int clientId)

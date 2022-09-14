@@ -82,7 +82,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var sp = await _healthAndLivingService.GetbyClient(clientId);
             await _healthAndLivingService.Delete(sp.HLId);
-            return RedirectToAction("Reports");
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = clientId });
         }
         public CreateHealthAndLiving GetHealth(GetHealthAndLiving getHealth)
         {
@@ -207,7 +207,7 @@ namespace AwesomeCare.Admin.Controllers
                 var content = await result.Content.ReadAsStringAsync();
             }
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.IsSuccessStatusCode == true ? "New Blood Pressure successfully registered" : "An Error Occurred" });
-            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
         }
 
         [HttpPost]
@@ -282,7 +282,7 @@ namespace AwesomeCare.Admin.Controllers
             });
             if (entity.IsSuccessStatusCode)
             {
-                return RedirectToAction("Reports");
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
 

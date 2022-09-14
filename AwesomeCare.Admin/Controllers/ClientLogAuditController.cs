@@ -284,7 +284,7 @@ namespace AwesomeCare.Admin.Controllers
             var content = await result.Content.ReadAsStringAsync();
 
             SetOperationStatus(new Models.OperationStatus { IsSuccessful = result != null ? true : false, Message = result != null ? "New Log Audit successfully registered" : "An Error Occurred" });
-            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId, ActiveTab = model.ActiveTab });
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
 
         }
         [HttpPost]
@@ -364,7 +364,7 @@ namespace AwesomeCare.Admin.Controllers
             });
             if (entity.IsSuccessStatusCode)
             {
-                return RedirectToAction("Reports");
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
 

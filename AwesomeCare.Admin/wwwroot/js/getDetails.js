@@ -43,8 +43,6 @@ function getdutyoncall(element) {
                         + '">Delete</a>';
                     var row = '<tr><td>' + dateOfCall.toLocaleDateString() + '</td><td>' + result.refNo + '</td><td>' + result.subject + '</td><td><a href="#" class="on-default showfile-btn" title="Download" data-id="' + result.attachment + '" style="margin-left:5px;"><i class="fa fa-file"></i></a></td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
-                    $(menu).children().remove();
                 });
             },
             error: function () {
@@ -803,7 +801,6 @@ function getincident(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];
     var client = $('#tbl_' + name).children().length;
-    console.log(client);
     if (client <= 0) {
         $.ajax({
             type: 'GET',
@@ -821,8 +818,6 @@ function getincident(element) {
                     var del = '<a class="btn btn-danger" href="/IncidentReporting/Delete?Id=' + result.incidentReportingId + '">Delete</a>';
                     var row = '<tr><td>' + result.incidentType + '</td><td>' + result.staffInvolved + '</td><td>' + result.reportingStaff + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
-                    var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
-                    $(menu).children().remove();
                 });
             },
             error: function () {
@@ -1311,6 +1306,8 @@ function getdailytask(element) {
                     $('#tbl_' + name).append(row);
 
                 });
+                var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                $(menu).children().remove();
             },
             error: function () {
                 alert('Failed to receive the Data');
@@ -1339,8 +1336,9 @@ function getmcabest(element) {
                     var del = '<a class="btn btn-danger" href="/DailyTask/Delete?clientId=' + result.bestId + '">Delete</a>';
                     var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.name + '</td><td>' + result.signature + '</td><td>' + result.position + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
-
                 });
+                var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
+                $(menu).children().remove();
             },
             error: function () {
                 alert('Failed to receive the Data');
@@ -1371,8 +1369,6 @@ function getcareobj(element) {
                     var del = '<a class="btn btn-danger" href="/ClientCareObj/Delete?CareObjId=' + result.careObjId + '">Delete</a>';
                     var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.note + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
-
-
                 });
             },
             error: function () {

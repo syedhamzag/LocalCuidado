@@ -206,14 +206,21 @@ namespace AwesomeCare.Admin.Controllers
 
 
                 #region PersonalInfo
-                string folder = "clientpassport";
-                string filename = string.Concat(folder, "_", model.Telephone);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.ClientImage.OpenReadStream());
+                if (model.ClientImage != null)
+                {
+                    string folder = "clientpassport";
+                    string filename = string.Concat(folder, "_", model.Telephone);
+                    string path = await _fileUpload.UploadFile(folder, true, filename, model.ClientImage.OpenReadStream());
 
-                model.PassportFilePath = path;
+                    model.PassportFilePath = path;
+                }
+                else
+                {
+                    model.PassportFilePath = "No Image";
+                }
                 #endregion
 
-               
+
 
                 var postClient = Mapper.Map<PostClient>(model);
                 var json = JsonConvert.SerializeObject(postClient);
