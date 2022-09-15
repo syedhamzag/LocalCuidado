@@ -463,7 +463,7 @@ function getbmichart(element) {
             }
         });
     }
-}s
+}
 function getbodytemp(element) {
     var clientId = element.id;
     var name = element.href.split('#')[1];

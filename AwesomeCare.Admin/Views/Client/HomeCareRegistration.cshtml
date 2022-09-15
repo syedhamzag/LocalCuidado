@@ -6,8 +6,8 @@
 }
 
 @section HeaderScripts{
-    <link rel="stylesheet" href="../assets/vendor/jquery-steps/jquery.steps.css">
-    <link rel="stylesheet" href="../assets/vendor/dropify/css/dropify.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="~/assets/vendor/dropify/css/dropify.min.css">
 }
 
 <div class="row clearfix">
@@ -27,14 +27,14 @@
     </div>
 </div>
 @section VendorScripts{
-    <script src="../assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
-    <script src="../assets/vendor/dropify/js/dropify.min.js"></script>
-    <script src="../assets/bundles/mainscripts.bundle.js"></script>
+    <script src="~/assets/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="~/assets/vendor/dropify/js/dropify.min.js"></script>
+    <script src="~/assets/bundles/mainscripts.bundle.js"></script>
 }
 
 @section Scripts{
-    <script src="../assets/js/pages/forms/form-wizard.js"></script>
-    <script src="../assets/js/pages/forms/dropify.js"></script>
+    <script src="~/assets/js/pages/forms/form-wizard.js"></script>
+    <script src="~/assets/js/pages/forms/dropify.js"></script>
     <script>
         $(document).ready(function () {
              $('a[href="#@Model.ActiveTab"]').tab('show');
