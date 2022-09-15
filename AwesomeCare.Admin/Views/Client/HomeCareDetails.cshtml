@@ -1180,7 +1180,7 @@
                                                 <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PersonalDetail">Create</a>
                                             </div>
                                         </div>
-                                        <table class="table table-bordered table-hover" id="GetReview">
+                                        <table class="table table-hover table-bordered table-striped table-dark" id="GetReview">
                                             <thead>
                                                 <tr>
                                                     <th>Prepare Date</th>
@@ -1216,11 +1216,12 @@
                                                                 <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HealthLiving">Create</a>
                                                             </div>
                                                         </div>
-                                                        <table class="table table-bordered table-hover" id="GetHealthAndLiving">
+                                                        <table class="table table-hover table-bordered table-striped table-dark" id="GetHealthAndLiving">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Health Brief</th>
                                                                     <th>How I Want To Wake Up</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_healthliving">
@@ -1238,11 +1239,12 @@
                                                                 <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthAndMedication">Create</a>
                                                             </div>
                                                         </div>
-                                                        <table class="table table-bordered table-hover" id="GetSpecialHealthAndMedication">
+                                                        <table class="table table-hover table-bordered table-striped table-dark" id="GetSpecialHealthAndMedication">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Date</th>
                                                                     <th>By</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_specialhealthmed">
@@ -1260,11 +1262,12 @@
                                                                 <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="Balance">Create</a>
                                                             </div>
                                                         </div>
-                                                        <table class="table table-bordered table-hover" id="GetBalance">
+                                                        <table class="table table-hover table-bordered table-striped table-dark" id="GetBalance">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Name</th>
                                                                     <th>Description</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_balance">
@@ -1282,11 +1285,12 @@
                                                                 <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="PhysicalAbility">Create</a>
                                                             </div>
                                                         </div>
-                                                        <table class="table table-bordered table-hover" id="GetPhysicalAbility">
+                                                        <table class="table table-hover table-bordered table-striped table-dark" id="GetPhysicalAbility">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Name</th>
                                                                     <th>Description</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_physicalability">
@@ -1304,11 +1308,12 @@
                                                                 <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="SpecialHealthCondition">Create</a>
                                                             </div>
                                                         </div>
-                                                        <table class="table table-bordered table-hover" id="GetSpecialHealthCondition">
+                                                        <table class="table table-hover table-bordered table-striped table-dark" id="GetSpecialHealthCondition">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Name Of Condition</th>
                                                                     <th>Source Of Information</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_specialhealthcond">
@@ -1326,11 +1331,12 @@
                                                                 <a asp-action="Index" asp-route-clientId="@Model.ClientId" asp-controller="HistoryOfFall">Create</a>
                                                             </div>
                                                         </div>
-                                                        <table class="table table-bordered table-hover" id="GetHistoryOfFall">
+                                                        <table class="table table-hover table-bordered table-striped table-dark" id="GetHistoryOfFall">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Date</th>
                                                                     <th>Cause</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_historyoffall">
@@ -1358,6 +1364,7 @@
                                                 <tr>
                                                     <th>Special Diet</th>
                                                     <th>Food To Avoid</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbl_nutrition">
@@ -1390,6 +1397,7 @@
                                                                 <tr>
                                                                     <th>Practical Laundry Support</th>
                                                                     <th>Laundry Guide</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_personalhygiene">
@@ -1412,6 +1420,7 @@
                                                                 <tr>
                                                                     <th>Test Date</th>
                                                                     <th>Remarks</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_infectioncontrol">
@@ -1433,6 +1442,7 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th>Help Required</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_mtask">
@@ -1467,6 +1477,7 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th>Goal/Objective of Care</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_intandobj">
@@ -1489,6 +1500,7 @@
                                                                 <tr>
                                                                     <th>Name</th>
                                                                     <th>Age</th>
+                                                                    <th></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="tbl_pets">
@@ -1515,6 +1527,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Heading</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="tbl_homerisk">
@@ -1705,7 +1718,7 @@
                 <div class="card">
                     <div class="card-body">
                         
-                        <table class="table table-bordered table-hover" id="tbl_audit">
+                        <table class="table table-hover table-bordered table-striped table-dark">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -1716,7 +1729,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tbl_audit">
 
                             </tbody>
                         </table>
