@@ -34,7 +34,7 @@ using IdentityExpress.Manager.BusinessLogic.Interfaces.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography.X509Certificates;
 
-namespace AwesomeCare.IdentityServer
+namespace HealthCare.IdentityServer
 {
     public class Startup
     {
@@ -80,7 +80,7 @@ category == DbLoggerCategory.Database.Command.Name
             services.AddDbContext<AwesomeCareDbContext>(options =>
             {
                 options.UseLoggerFactory(DbLoggerFactory);
-                options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
+                options.UseSqlServer(Configuration.GetConnectionString("HealthCareConnectionString"));
                 options.EnableSensitiveDataLogging(true);
             });
 
@@ -103,7 +103,7 @@ category == DbLoggerCategory.Database.Command.Name
                 .AddDefaultTokenProviders();
 
 
-            var connectionString = Configuration.GetConnectionString("AwesomeCareConnectionString");
+            var connectionString = Configuration.GetConnectionString("HealthCareConnectionString");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             var builder = services.AddIdentityServer(options =>
@@ -163,7 +163,7 @@ category == DbLoggerCategory.Database.Command.Name
             //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             //    {
             //        //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-            //        options.Cookie.Name = ".AwesomeCare.Cookie";
+            //        options.Cookie.Name = ".HealthCare.Cookie";
             //        options.Events = new CookieAuthenticationEvents
             //        {
             //            OnRedirectToAccessDenied = ctx =>
