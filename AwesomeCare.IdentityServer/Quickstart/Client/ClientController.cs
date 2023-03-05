@@ -18,7 +18,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.IdentityServer.Quickstart.Client
 {
-    // [Authorize(AuthenticationSchemes = "Cookies")]
+    //[Authorize(Roles =  "SuperAdmin")]
     public class ClientController : Controller
     {
         private ConfigurationDbContext _dbContext;
@@ -161,7 +161,7 @@ namespace AwesomeCare.IdentityServer.Quickstart.Client
         {
             model.SharedSecret = GetKey(32);
             model.ProtectedResourcesListItems = _dbContext.ApiResources.Where(r => r.Enabled).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
-            model.IdentityResourceListItems = _dbContext.IdentityResources.Where(r => r.Enabled && !r.NonEditable).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
+            model.IdentityResourceListItems = _dbContext.IdentityResources.Where(r => r.Enabled ).Select(a => new SelectListItem(a.DisplayName, a.Name)).ToList();
 
         }
 

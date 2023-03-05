@@ -4,6 +4,7 @@ using AwesomeCare.DataAccess.Database;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.BestInterestAssessment;
 using AwesomeCare.Model.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,7 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest("Parameter id is required");
             }
 
-            var getEntity = await (from h in _BestInterestAssessmentRepository.Table
+            var getEntity =  (from h in _BestInterestAssessmentRepository.Table
                                    where h.ClientId == id && !h.Deleted
                                    select new GetBestInterestAssessment
                                    {
@@ -91,7 +92,7 @@ namespace AwesomeCare.API.Controllers
                                                              Answer = t.Answer,
                                                              Remark = t.Remark
                                                          }).ToList()
-                                   }).FirstOrDefaultAsync();
+                                   }).FirstOrDefault();
 
             return Ok(getEntity);
         }

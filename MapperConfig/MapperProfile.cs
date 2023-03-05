@@ -148,6 +148,7 @@ using AwesomeCare.DataTransferObject.DTOs.OfficeAttendance;
 using AwesomeCare.DataTransferObject.DTOs.StaffOfficeLocation;
 using AwesomeCare.DataTransferObject.DTOs.IncidentReporting;
 using AwesomeCare.DataTransferObject.DTOs.AuditTrail;
+using AwesomeCare.DataTransferObject.DTOs.Staff.Lateness;
 
 namespace MapperConfig
 {
@@ -778,7 +779,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.SalaryAllowance, mem => mem.Ignore())
                 .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffOfficeLocation, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffTax, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffTax, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffLateness, mem => mem.Ignore());
 
 
             CreateMap<PutStaffPersonalInfo, StaffPersonalInfo>()
@@ -832,7 +834,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.SalaryAllowance, mem => mem.Ignore())
                 .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffOfficeLocation, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffTax, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffTax, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffLateness, mem => mem.Ignore());
 
             CreateMap<PutStaffEducation, StaffEducation>()
                   .ForMember(dto => dto.Staff, mem => mem.Ignore());
@@ -894,7 +897,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.SalaryAllowance, mem => mem.Ignore())
                 .ForMember(dto => dto.StaffOfficeLocation, mem => mem.Ignore())
                 .ForMember(dto => dto.SalaryDeduction, mem => mem.Ignore())
-                .ForMember(dto => dto.StaffTax, mem => mem.Ignore());
+                .ForMember(dto => dto.StaffTax, mem => mem.Ignore())
+                .ForMember(dto => dto.StaffLateness, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffProfile>()
                 .ForMember(dto => dto.GetStaffSpotCheck, mem => mem.Ignore())
@@ -918,7 +922,8 @@ namespace MapperConfig
                 .ForMember(dto => dto.GetSalaryAllowance, mem => mem.Ignore())
                 .ForMember(dto => dto.GetSalaryDeduction, mem => mem.Ignore())
                 .ForMember(dto => dto.GetStaffOfficeLocation, mem => mem.Ignore())
-                .ForMember(dto => dto.GetStaffTax, mem => mem.Ignore());
+                .ForMember(dto => dto.GetStaffTax, mem => mem.Ignore())
+                .ForMember(dto => dto.GetStaffLateness, mem => mem.Ignore());
 
             CreateMap<StaffPersonalInfo, GetStaffs>()
                 .ForMember(dto => dto.Fullname, mem => mem.MapFrom(src => string.Concat(src.FirstName, " ", src.MiddleName, " ", src.LastName)))
@@ -1152,7 +1157,9 @@ namespace MapperConfig
                 .ForMember(dto => dto.ClockInTime, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockOutTime, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockInAddress, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInGeolocation, mem => mem.Ignore())
                 .ForMember(dto => dto.ClockOutAddress, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutGeolocation, mem => mem.Ignore())
                 .ForMember(dto => dto.Feedback, mem => mem.Ignore())
                 .ForMember(dto => dto.Comment, mem => mem.Ignore())
                 .ForMember(dto => dto.HandOver, mem => mem.Ignore())
@@ -1162,6 +1169,12 @@ namespace MapperConfig
                 .ForMember(dto => dto.BowelMovement, mem => mem.Ignore())
                 .ForMember(dto => dto.FluidIntake, mem => mem.Ignore())
                 .ForMember(dto => dto.OralCare, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInClientTelephone, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutClientTelephone, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInDistance, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutDistance, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInCount, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutCount, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
 
             CreateMap<StaffRotaPeriod, GetStaffRotaPeriodForEdit>();
@@ -1178,6 +1191,14 @@ namespace MapperConfig
                 .ForMember(dto => dto.BowelMovement, mem => mem.Ignore())
                 .ForMember(dto => dto.FluidIntake, mem => mem.Ignore())
                 .ForMember(dto => dto.OralCare, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInClientTelephone, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutClientTelephone, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInGeolocation, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutGeolocation, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInDistance, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutDistance, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockInCount, mem => mem.Ignore())
+                .ForMember(dto => dto.ClockOutCount, mem => mem.Ignore())
                 .ForMember(dto => dto.ClientRotaType, mem => mem.Ignore());
             //  CreateMap<StaffRotaPeriod, GetStaffRotaPeriod>();
             #endregion
@@ -2977,7 +2998,8 @@ namespace MapperConfig
             CreateMap<PostClientHealthCondition, ClientHealthCondition>()
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
             CreateMap<ClientHealthCondition, GetClientHealthCondition>()
-                .ForMember(dto => dto.Name, mem => mem.Ignore());
+                .ForMember(dto => dto.Name, mem => mem.Ignore())
+                .ForMember(dto => dto.Desc, mem => mem.Ignore());
             #endregion
 
             #region Hobbies
@@ -3065,6 +3087,15 @@ namespace MapperConfig
                 .ForMember(dto => dto.Client, mem => mem.Ignore());
 
             CreateMap<AuditTrail, GetAuditTrail>();
+            #endregion
+
+            #region StaffLateness
+            CreateMap<PutStaffLateness, StaffLateness>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+            CreateMap<PostStaffLateness, StaffLateness>()
+                .ForMember(dto => dto.StaffPersonalInfo, mem => mem.Ignore());
+
+            CreateMap<StaffLateness, GetStaffLateness>();
             #endregion
         }
     }

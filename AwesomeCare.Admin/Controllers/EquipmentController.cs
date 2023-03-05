@@ -51,7 +51,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "Attachment", model.ClientId);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
 
             }

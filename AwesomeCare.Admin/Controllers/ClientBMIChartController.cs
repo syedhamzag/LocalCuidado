@@ -122,14 +122,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int BMIId)
-        {
-            var BMIChart = await _clientBMIChartService.Get(BMIId);
-            var json = JsonConvert.SerializeObject(BMIChart);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientBMIChart.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -204,7 +196,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
                 string folder = "clientbmi";
                 string filename = string.Concat(folder, "_SeeChart_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream(), model.SeeChartAttachment.ContentType);
                 model.SeeChartAttach = path;
             }
             else
@@ -257,7 +249,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
                 string folder = "clientbmi";
                 string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream(), model.SeeChartAttachment.ContentType);
                 model.SeeChartAttach = path;
             }
             else
@@ -299,6 +291,50 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int BMIId)
+        {
+            var entity = await GetDownload(BMIId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientBMIChart> GetDownload(int Id)
+        {
+            var i = await _clientBMIChartService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientBMIChart
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                Weight = i.Weight,
+                SeeChartAttach = i.SeeChartAttach,
+                Comment = i.Comment,
+                PhysicianResponse = i.PhysicianResponse,
+                Remarks = i.Remarks,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                HeightName = _baseService.GetBaseRecordItemById(i.Height).Result.ValueName,
+                NumberRangeName = _baseService.GetBaseRecordItemById(i.NumberRange).Result.ValueName,
+                SeeChartName = _baseService.GetBaseRecordItemById(i.SeeChart).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

@@ -160,6 +160,7 @@ namespace AwesomeCare.Model.Models
         public virtual ICollection<SalaryDeduction> SalaryDeduction { get; set; }
         public virtual ICollection<StaffTax> StaffTax { get; set; }
         public virtual ICollection<StaffOfficeLocation> StaffOfficeLocation { get; set; } = new HashSet<StaffOfficeLocation>();
+        public virtual ICollection<StaffLateness> StaffLateness { get; set; } = new HashSet<StaffLateness>();
 
 
     }

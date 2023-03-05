@@ -326,8 +326,12 @@
         </div>
     </div>
 
-    <div class="col-xs-4 col-sm-4 col-md-4">
-
+     <div class="col-xs-12 col-sm-4 col-md-4">
+        <div class="form-group">
+            <label asp-for="LocationDistance" class="control-label"></label>
+            <input type="text" class="form-control" asp-for="LocationDistance" />
+            <span asp-validation-for="LocationDistance" class="text-danger"></span>
+        </div>
     </div>
 </div>
 <script type="text/javascript" src="~/assets2/js/jquery-3.6.0.min.js"></script>

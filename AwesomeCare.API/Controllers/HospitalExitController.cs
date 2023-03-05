@@ -99,6 +99,7 @@ namespace AwesomeCare.API.Controllers
                                            select new GetHospitalExit
                                            {
                                                HospitalExitId= c.HospitalExitId,
+                                               ClientId = c.ClientId,
                                                Reference = c.Reference,
                                                Date = c.Date,
                                                Status = c.Status,

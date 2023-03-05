@@ -6,6 +6,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Medication
 {
     public class MedTracker
     {
+        public int StaffRotaPeriodId { get; set; }
         public string PERIOD { get; set; }
         public DateTime RotaDate { get; set; }
         public string RotaName { get; set; }

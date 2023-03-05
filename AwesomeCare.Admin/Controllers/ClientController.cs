@@ -206,21 +206,14 @@ namespace AwesomeCare.Admin.Controllers
 
 
                 #region PersonalInfo
-                if (model.ClientImage != null)
-                {
-                    string folder = "clientpassport";
-                    string filename = string.Concat(folder, "_", model.Telephone);
-                    string path = await _fileUpload.UploadFile(folder, true, filename, model.ClientImage.OpenReadStream());
+                string folder = "clientpassport";
+                string filename = string.Concat(folder, "_", model.Telephone);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ClientImage.OpenReadStream(), model.ClientImage.ContentType);
 
-                    model.PassportFilePath = path;
-                }
-                else
-                {
-                    model.PassportFilePath = "No Image";
-                }
+                model.PassportFilePath = path;
                 #endregion
 
-
+               
 
                 var postClient = Mapper.Map<PostClient>(model);
                 var json = JsonConvert.SerializeObject(postClient);
@@ -269,7 +262,7 @@ namespace AwesomeCare.Admin.Controllers
 
                 string folder = "clientregulatorycontact";
                 string filename = string.Concat(folder, "_", c.RegulatoryContact, "_", createClient.Telephone);
-                string path = await _fileUpload.UploadFile(folder, true, filename, c.EvidenceFile.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, c.EvidenceFile.OpenReadStream(), c.EvidenceFile.ContentType);
 
                 c.Evidence = path;
             }
@@ -350,7 +343,7 @@ namespace AwesomeCare.Admin.Controllers
                 string folder = "ClientRegulatoryContact".ToLower();
                 string filename = string.Concat(c.RegulatoryContact.Replace(" ", ""), "_", createClient.Firstname, "_", createClient.Surname, Path.GetExtension(c.EvidenceFile.FileName));
                // string path = await this.HttpContext.Request.UploadFileToDropboxAsync(_dropboxClient, c.EvidenceFile, folder, filename);
-                string path = await _fileUpload.UploadFile(folder, true, filename, c.EvidenceFile.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, c.EvidenceFile.OpenReadStream(), c.EvidenceFile.ContentType);
 
                 _logger.LogInformation("Uploaded file to Azure Blob Storage: {0}", path);
                 c.Evidence = path;
@@ -413,7 +406,7 @@ namespace AwesomeCare.Admin.Controllers
             var logAudit  = await _logAuditService.Get();
             var voice = await _voiceService.Get();
             var _clients = await _clientService.GetClients();
-            var clients = _clients.Where(s=>s.Status != "Active").OrderBy(s=>s.ClientId).ToList();
+            var clients = _clients.Where(s=>s.Status == "Active").OrderBy(s=>s.ClientId).ToList();
             foreach (var client in clients)
             {
                 var personalDetail = await _persnoalDetailService.Get(client.ClientId);
@@ -455,8 +448,8 @@ namespace AwesomeCare.Admin.Controllers
             {
               //  string folder = $"ClientPassport/{model.Telephone}";
                 string filename = string.Concat(model.Firstname, "_", model.Surname, Path.GetExtension(model.ClientImage.FileName));
-               // await this.HttpContext.Request.UpdateDropboxFileAsync(_dropboxClient, model.ClientImage, folder, filename);
-                var clientProfilePicture = await _fileUpload.UploadFile("clientpassport", true, filename, model.ClientImage.OpenReadStream());
+
+                var clientProfilePicture = await _fileUpload.UploadFile("clientpassport", true, filename, model.ClientImage.OpenReadStream(), model.ClientImage.ContentType);
                 model.PassportFilePath = clientProfilePicture;
             }
 
@@ -631,7 +624,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientmedication";
                 string filename = string.Concat(folder, "_Evidence_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream(), model.Evidence.ContentType);
                 model.ClientMedImage = path;
             }
             else
@@ -763,7 +756,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientmedication";
                 string filename = string.Concat(folder, "_Evidence_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream(), model.Evidence.ContentType);
                 model.ClientMedImage = path;
             }
             else
@@ -829,284 +822,284 @@ namespace AwesomeCare.Admin.Controllers
 
         #region Client_Details
         [HttpGet]
-        public JsonResult CheckPIN(string pin)
+        public async Task<JsonResult> CheckPIN(string pin)
         {
-            var getmodal = _clientRotaService.GetPin();
-            if(getmodal.Result.Where(s=>s.Key == "CarePlan").FirstOrDefault().Pin.ToString() == pin)
+            var getmodal = await _clientRotaService.GetPin();
+            if(getmodal.Where(s=>s.Key == "CarePlan").FirstOrDefault().Pin.ToString() == pin)
                 return Json("OK");
             return Json("Error");
         }
 
         [HttpGet]
-        public JsonResult personalInfo(int clientId)
+        public async Task<JsonResult> personalInfo(int clientId)
         {
-            var getClient = _clientService.GetHealthHobby(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHealthHobby(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult involvingparties(int clientId)
+        public async Task<JsonResult> involvingparties(int clientId)
         {
-            var getClient = _clientService.GetInvolvingParty(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetInvolvingParty(clientId);
+            return Json(getClient);
         }
 
         [HttpGet]
-        public JsonResult dutyoncall(int clientId)
+        public async Task<JsonResult> dutyoncall(int clientId)
         {
-            var getClient = _clientService.GetDutyOnCall(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetDutyOnCall(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult hospitalentry(int clientId)
+        public async Task<JsonResult> hospitalentry(int clientId)
         {
-            var getClient = _clientService.GetHospitalEntry(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHospitalEntry(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult hospitalexit(int clientId)
+        public async Task<JsonResult> hospitalexit(int clientId)
         {
-            var getClient = _clientService.GetHospitalExit(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHospitalExit(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult filesrecord(int clientId)
+        public async Task<JsonResult> filesrecord(int clientId)
         {
-            var getClient = _clientService.GetFilesAndRecord(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetFilesAndRecord(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult complaintregister(int clientId)
+        public async Task<JsonResult> complaintregister(int clientId)
         {
-            var getClient = _clientService.GetComplain(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetComplain(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult logaudit(int clientId)
+        public async Task<JsonResult> logaudit(int clientId)
         {
-            var getClient = _clientService.GetLogAudit(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetLogAudit(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult medaudit(int clientId)
+        public async Task<JsonResult> medaudit(int clientId)
         {
-            var getClient = _clientService.GetMedAudit(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetMedAudit(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult voice(int clientId)
+        public async Task<JsonResult> voice(int clientId)
         {
-            var getClient = _clientService.GetVoice(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetVoice(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult mgtvisit(int clientId)
+        public async Task<JsonResult> mgtvisit(int clientId)
         {
-            var getClient = _clientService.GetMgtVisit(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetMgtVisit(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult program(int clientId)
+        public async Task<JsonResult> program(int clientId)
         {
-            var getClient = _clientService.GetProgram(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetProgram(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult servicewatch(int clientId)
+        public async Task<JsonResult> servicewatch(int clientId)
         {
-            var getClient = _clientService.GetServiceWatch(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetServiceWatch(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult dailytask(int clientId)
+        public async Task<JsonResult> dailytask(int clientId)
         {
-            var getClient = _clientService.GetDailyTask(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetDailyTask(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult mcabest(int clientId)
+        public async Task<JsonResult> mcabest(int clientId)
         {
-            var getClient = _clientService.GetBestInterest(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetBestInterest(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult careobj(int clientId)
+        public async Task<JsonResult> careobj(int clientId)
         {
-            var getClient = _clientService.GetCarObj(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetCarObj(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult bloodcoag(int clientId)
+        public async Task<JsonResult> bloodcoag(int clientId)
         {
-            var getClient = _clientService.GetBloodCoag(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetBloodCoag(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult bloodpressure(int clientId)
+        public async Task<JsonResult> bloodpressure(int clientId)
         {
-            var getClient = _clientService.GetPressure(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetPressure(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult bmichart(int clientId)
+        public async Task<JsonResult> bmichart(int clientId)
         {
-            var getClient = _clientService.GetBMIChart(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetBMIChart(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult bodytemp(int clientId)
+        public async Task<JsonResult> bodytemp(int clientId)
         {
-            var getClient = _clientService.GetBodyTemp(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetBodyTemp(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult bowel(int clientId)
+        public async Task<JsonResult> bowel(int clientId)
         {
-            var getClient = _clientService.GetBowel(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetBowel(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult eyehealth(int clientId)
+        public async Task<JsonResult> eyehealth(int clientId)
         {
-            var getClient = _clientService.GetEyeHealth(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetEyeHealth(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult foodintake(int clientId)
+        public async Task<JsonResult> foodintake(int clientId)
         {
-            var getClient = _clientService.GetFoodIntake(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetFoodIntake(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult heartrate(int clientId)
+        public async Task<JsonResult> heartrate(int clientId)
         {
-            var getClient = _clientService.GetHeartRate(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHeartRate(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult oxygen(int clientId)
+        public async Task<JsonResult> oxygen(int clientId)
         {
-            var getClient = _clientService.GetOxygenLvl(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetOxygenLvl(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult painchart(int clientId)
+        public async Task<JsonResult> painchart(int clientId)
         {
-            var getClient = _clientService.GetPainChart(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetPainChart(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult pulserate(int clientId)
+        public async Task<JsonResult> pulserate(int clientId)
         {
-            var getClient = _clientService.GetPulseRate(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetPulseRate(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult seizure(int clientId)
+        public async Task<JsonResult> seizure(int clientId)
         {
-            var getClient = _clientService.GetSeizure(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetSeizure(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult woundcare(int clientId)
+        public async Task<JsonResult> woundcare(int clientId)
         {
-            var getClient = _clientService.GetWoundCare(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetWoundCare(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult personaldetail(int clientId)
+        public async Task<JsonResult> personaldetail(int clientId)
         {
-            var getClient = _clientService.GetReview(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetReview(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult healthliving(int clientId)
+        public async Task<JsonResult> healthliving(int clientId)
         {
-            var getClient = _clientService.GetHealthAndLiving(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHealthAndLiving(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult specialhealthmed(int clientId)
+        public async Task<JsonResult> specialhealthmed(int clientId)
         {
-            var getClient = _clientService.GetHealthAndMed(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHealthAndMed(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult balance(int clientId)
+        public async Task<JsonResult> balance(int clientId)
         {
-            var getClient = _clientService.GetBalance(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetBalance(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult physicalability(int clientId)
+        public async Task<JsonResult> physicalability(int clientId)
         {
-            var getClient = _clientService.GetPhysicalAbility(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetPhysicalAbility(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult specialhealthcond(int clientId)
+        public async Task<JsonResult> specialhealthcond(int clientId)
         {
-            var getClient = _clientService.GetHealthCondition(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHealthCondition(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult historyoffall(int clientId)
+        public async Task<JsonResult> historyoffall(int clientId)
         {
-            var getClient = _clientService.GetHistoryOfFall(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHistoryOfFall(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult nutrition(int clientId)
+        public async Task<JsonResult> nutrition(int clientId)
         {
-            var getClient = _clientService.GetCarePlanNut(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetCarePlanNut(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult personalhygiene(int clientId)
+        public async Task<JsonResult> personalhygiene(int clientId)
         {
-            var getClient = _clientService.GetPersonalHyg(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetPersonalHyg(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult infectioncontrol(int clientId)
+        public async Task<JsonResult> infectioncontrol(int clientId)
         {
-            var getClient = _clientService.GetInfectionControl(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetInfectionControl(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult mtask(int clientId)
+        public async Task<JsonResult> mtask(int clientId)
         {
-            var getClient = _clientService.GetManagingTask(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetManagingTask(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult intandobj(int clientId)
+        public async Task<JsonResult> intandobj(int clientId)
         {
-            var getClient = _clientService.GetInterestAndObj(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetInterestAndObj(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult pets(int clientId)
+        public async Task<JsonResult> pets(int clientId)
         {
-            var getClient = _clientService.GetPets(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetPets(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult homerisk(int clientId)
+        public async Task<JsonResult> homerisk(int clientId)
         {
-            var getClient = _clientService.GetHomeRisk(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetHomeRisk(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult carereview(int clientId)
+        public async Task<JsonResult> carereview(int clientId)
         {
-            var getClient = _clientService.GetCareReview(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetCareReview(clientId);
+            return Json(getClient);
         }
         [HttpGet]
-        public JsonResult incident(int clientId)
+        public async Task<JsonResult> incident(int clientId)
         {
-            var getClient = _clientService.GetIncidentReport(clientId);
-            return Json(getClient.Result);
+            var getClient = await _clientService.GetIncidentReport(clientId);
+            return Json(getClient);
         }
         #endregion
     }

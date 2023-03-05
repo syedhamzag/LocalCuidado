@@ -61,7 +61,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var sp = await _sphealthService.GetbyClient(clientId);
             await _sphealthService.Delete(sp.HealthCondId);
-            return RedirectToAction("Reports");
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = clientId });
         }
         public async Task<IActionResult> View(int clientId)
         {

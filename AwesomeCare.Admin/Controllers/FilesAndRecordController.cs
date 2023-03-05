@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -111,7 +112,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "filesandrecord";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(),model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -152,7 +153,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "filesandrecord";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(),model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -179,6 +180,36 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int FilesAndRecordId)
+        {
+            var entity = await GetDownload(FilesAndRecordId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateFilesAndRecord> GetDownload(int Id)
+        {
+            var i = await _FilesAndRecordService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateFilesAndRecord
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Subject = i.Subject,
+                Remarks = i.Remarks,
+                Attachment = i.Attachment,
+                Date = i.Date,
+
+            };
+            return putEntity;
         }
     }
 }

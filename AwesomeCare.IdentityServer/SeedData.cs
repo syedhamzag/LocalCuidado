@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using AwesomeCare.DataAccess.Database;
 
-namespace HealthCare.IdentityServer
+namespace AwesomeCare.IdentityServer
 {
     public class SeedData
     {

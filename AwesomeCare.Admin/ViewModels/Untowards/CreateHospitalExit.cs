@@ -14,8 +14,6 @@ namespace AwesomeCare.Admin.ViewModels.Untowards
             StaffList = new List<SelectListItem>();
         }
         public int ClientId { get; set; }
-        public string ClientName { get; set; }
-        public string StatusName { get; set; }
         public int HospitalExitId { get; set; }
         public string Reference { get; set; }
         public DateTime Date { get; set; }
@@ -41,7 +39,30 @@ namespace AwesomeCare.Admin.ViewModels.Untowards
         public string ContactIncaseOfReAdmission { get; set; }
         public string Remark { get; set; }
         public int Status { get; set; }
+
+        public string StatusName { get; set; }
+        public string ClientName { get; set; }
+        public string IdNumber { get; set; }
+        public string DOB { get; set; }
+        public string ConditionOnDischargeName { get; set; }
+        public string NumberOfStaffRequiredOnDischargeName { get; set; }
+        public string IsGrosSriesAvaibleName { get; set; }
+
+        public string IsHomeCleanedName { get; set; }
+        public string IsMedicationAvaialableName { get; set; }
+        public string IsServiceUseronRotaName { get; set; }
+
+        public string isRotaTeamInformedName { get; set; }
+        public string isLittleCashAvailableForServiceUserName { get; set; }
+        public string ModeOfMeansOfTrasportBackHomeName { get; set; }
+        public string AreEqipmentNeededAvailableName { get; set; }
+        public string AreStaffTrainnedOnEquipmentNeededName { get; set; }
+        public string AreContinentProductNeedAndAvailableName { get; set; }
+        public string AreLocalSupportOrProgramNeededName { get; set; }
+        public string IsCarePlanUpdatedName { get; set; }
+        public string ReablementRequiredName { get; set; }
         public List<SelectListItem> StaffList {get;set;}
         public List<int> OfficerToTakeAction { get; set; }
+        public string OfficerToTakeActionName { get;set; }
     }
 }

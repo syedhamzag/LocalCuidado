@@ -10,5 +10,6 @@ namespace AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition
         public int HCId { get; set; }
         public int ClientId { get; set; }
         public string Name { get; set; }
+        public string Desc { get; set; }
     }
 }

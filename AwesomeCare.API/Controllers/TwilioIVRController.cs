@@ -114,7 +114,7 @@ namespace AwesomeCare.API.Controllers
             var caller = forms["From"].FirstOrDefault();
 
             bool result;
-            result = await ClockIn(digits);
+            result = await ClockIn(digits,caller);
 
             if (result)
                 voiceResponse.Say("Thank you for contacting Cuidado, your request was successfully processed");
@@ -134,7 +134,7 @@ namespace AwesomeCare.API.Controllers
             var caller = forms["From"].FirstOrDefault();
 
             bool result;
-            result = await ClockOut(digits);
+            result = await ClockOut(digits,caller);
 
             if (result)
                 voiceResponse.Say("Thank you for contacting Cuidado, your request was successfully processed");
@@ -143,7 +143,7 @@ namespace AwesomeCare.API.Controllers
 
             return TwiML(voiceResponse);
         }
-        private async Task<bool> ClockIn(string rotaId)
+        private async Task<bool> ClockIn(string rotaId,string caller)
         {
             try
             {
@@ -156,6 +156,7 @@ namespace AwesomeCare.API.Controllers
                
                 rota.ClockInTime = DateTimeOffset.UtcNow;
                 rota.ClockInMode = ClockModeEnum.Twilio.ToString();
+                rota.ClockInClientTelephone = caller;
 
                 var id = await staffRotaPeriodRepository.UpdateEntity(rota);
                 return true;
@@ -167,7 +168,7 @@ namespace AwesomeCare.API.Controllers
             }
         }
 
-        private async Task<bool> ClockOut(string rotaId)
+        private async Task<bool> ClockOut(string rotaId,string caller)
         {
             try
             {
@@ -180,6 +181,7 @@ namespace AwesomeCare.API.Controllers
                
                 rota.ClockOutTime = DateTimeOffset.UtcNow;
                 rota.ClockOutMode = ClockModeEnum.Twilio.ToString();
+                rota.ClockOutClientTelephone = caller;
 
                 var id = await staffRotaPeriodRepository.UpdateEntity(rota);
                 return true;

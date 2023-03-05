@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AwesomeCare.DataAccess.Migrations
 {
-    public partial class Update_Medication : Migration
+    public partial class Updated_Medication : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,7 +44,7 @@ namespace AwesomeCare.DataAccess.Migrations
                         column: x => x.RotaId,
                         principalTable: "tbl_ClientRotaName",
                         principalColumn: "RotaId",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

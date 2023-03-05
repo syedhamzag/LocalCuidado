@@ -4,6 +4,7 @@ using AwesomeCare.DataTransferObject.DTOs.CarePlanHomeRiskAssessment;
 using AwesomeCare.DataTransferObject.DTOs.CarePlanHygiene.ManagingTasks;
 using AwesomeCare.DataTransferObject.DTOs.ClientCleaning;
 using AwesomeCare.DataTransferObject.DTOs.ClientDailyTask;
+using AwesomeCare.DataTransferObject.DTOs.ClientHealthCondition;
 using AwesomeCare.DataTransferObject.DTOs.ClientInvolvingParty;
 using AwesomeCare.DataTransferObject.DTOs.ClientMealDays;
 using AwesomeCare.DataTransferObject.DTOs.ClientNutrition;
@@ -464,6 +465,7 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan
         public List<GetClientShopping> ClientShopping { get; set; }
         public List<GetClientCleaning> ClientCleaning { get; set; }
 
+        public List<GetClientHealthCondition> GetClientHealthCondition { get; set; } = new List<GetClientHealthCondition>();
         public List<GetPhysicalAbility> PhysicalAbility { get; set; } = new List<GetPhysicalAbility> { };
     }
 }

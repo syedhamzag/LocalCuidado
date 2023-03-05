@@ -11,7 +11,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using NLog.Web;
 
-namespace HealthCare.IdentityServer
+namespace AwesomeCare.IdentityServer
 {
     public class Program
     {

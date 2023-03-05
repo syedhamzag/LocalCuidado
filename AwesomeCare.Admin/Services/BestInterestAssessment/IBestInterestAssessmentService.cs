@@ -14,7 +14,7 @@ namespace AwesomeCare.Admin.Services.BestInterestAssessment
         Task<List<GetBestInterestAssessment>> Get();
 
         [Get("/BestInterestAssessment/Get/{id}")]
-        Task<GetBestInterestAssessment> Get(int id);
+        Task<ApiResponse<GetBestInterestAssessment>> Get(int id);
 
         [Post("/BestInterestAssessment/Create")]
         Task<HttpResponseMessage> Create([Body] PostBestInterestAssessment model);

@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (User.IsAuthenticated() && User.IsInRole("SuperAdmin"))
+@if (User.IsAuthenticated())
 {
     <h2>Registration</h2>
 

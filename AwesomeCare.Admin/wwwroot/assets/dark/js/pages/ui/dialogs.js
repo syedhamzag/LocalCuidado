@@ -85,7 +85,7 @@ function showWithCustomIconMessage() {
     swal({
         title: "Sweet!",
         text: "Here's a custom image.",
-        imageUrl: "../assets/images/sm/avatar2.jpg"
+        imageUrl: "../assets2/images/sm/avatar2.jpg"
     });
 }
 

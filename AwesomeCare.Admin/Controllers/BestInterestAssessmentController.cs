@@ -57,25 +57,31 @@ namespace AwesomeCare.Admin.Controllers
             var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
             model.baseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
             model.HeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-            model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();           
+            model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
             model.BaseRecordList = baseRecord.ToList();
             model.ClientId = clientId;
             model.BelieveTaskCount = 1;
             model.CareIssuesTaskCount = model.baseRecordList.Count;
 
 
-            GetBestInterestAssessment mcaBest = await _BestInterestAssessment.Get(clientId);
-            if (mcaBest != null)
+            var bestInterest = await _BestInterestAssessment.Get(clientId);
+            if (bestInterest.IsSuccessStatusCode && bestInterest.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                model = Get(mcaBest);
-                model.baseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                model.HeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                model.BaseRecordList = baseRecord.ToList();
-                model.BelieveTaskCount = mcaBest.GetBelieveTask.Count;
-                model.CareIssuesTaskCount = model.baseRecordList.Count;
+                GetBestInterestAssessment mcaBest = bestInterest.Content as GetBestInterestAssessment;
 
+                if (mcaBest != null)
+                {
+                    model = Get(mcaBest);
+                    model.baseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                    model.HeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                    model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                    model.BaseRecordList = baseRecord.ToList();
+                    model.BelieveTaskCount = mcaBest.GetBelieveTask.Count;
+                    model.CareIssuesTaskCount = model.baseRecordList.Count;
+
+                }
             }
+
             return View(model);
 
         }
@@ -83,17 +89,22 @@ namespace AwesomeCare.Admin.Controllers
         {
             var model = new CreateBestInterestAssessment();
             var baseRecord = await _baseRecord.GetBaseRecordsWithItems();
-            GetBestInterestAssessment mcaBest = await _BestInterestAssessment.Get(clientId); ;
-            if (mcaBest != null)
-            {
-                model = Get(mcaBest);
-                model.baseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                model.HeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
-                model.BaseRecordList = baseRecord.ToList();
-                model.BelieveTaskCount = mcaBest.GetBelieveTask.Count;
-                model.CareIssuesTaskCount = model.baseRecordList.Count;
+            var bestInterest = await _BestInterestAssessment.Get(clientId);
 
+            if (bestInterest.IsSuccessStatusCode && bestInterest.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                GetBestInterestAssessment mcaBest = bestInterest.Content as GetBestInterestAssessment;
+                if (mcaBest != null)
+                {
+                    model = Get(mcaBest);
+                    model.baseRecordList = baseRecord.Where(s => s.KeyName == "MCA_Care_Issues").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                    model.HeadingList = baseRecord.Where(s => s.KeyName == "Health_Task_Heading").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                    model.Heading2List = baseRecord.Where(s => s.KeyName == "Health_Task_Heading2").Select(s => s.BaseRecordItems).FirstOrDefault().ToList();
+                    model.BaseRecordList = baseRecord.ToList();
+                    model.BelieveTaskCount = mcaBest.GetBelieveTask.Count;
+                    model.CareIssuesTaskCount = model.baseRecordList.Count;
+
+                }
             }
             return View(model);
 
@@ -117,10 +128,10 @@ namespace AwesomeCare.Admin.Controllers
                 var taskname = $"HealthTaskId{i}";
                 PostHealthTask htask = new PostHealthTask();
                 var taskId = int.Parse(formcollection[taskname]);
-                var headingId = int.Parse(formcollection[string.Concat("HeadingId" ,i)]);
-                var titleId = int.Parse(formcollection[string.Concat("Title" , i)]);
-                var answerId = int.Parse(formcollection[string.Concat("Answer" , i)]);
-                var remarks = formcollection[string.Concat("Remarks" , i)];
+                var headingId = int.Parse(formcollection[string.Concat("HeadingId", i)]);
+                var titleId = int.Parse(formcollection[string.Concat("Title", i)]);
+                var answerId = int.Parse(formcollection[string.Concat("Answer", i)]);
+                var remarks = formcollection[string.Concat("Remarks", i)];
 
                 htask.HealthTaskId = taskId;
                 htask.BestId = model.BestId;
@@ -199,7 +210,7 @@ namespace AwesomeCare.Admin.Controllers
                 var content = await result.Content.ReadAsStringAsync();
             }
             else
-            { 
+            {
                 result = await _BestInterestAssessment.Create(post);
                 var content = await result.Content.ReadAsStringAsync();
             }
@@ -223,19 +234,19 @@ namespace AwesomeCare.Admin.Controllers
                 model.Position = mcaBest.Position;
                 model.Signature = mcaBest.Signature;
                 model.GetBelieveTask = (from t in mcaBest.GetBelieveTask
-                                    select new GetBelieveTask
-                                    {
-                                        BelieveTaskId = t.BelieveTaskId,
-                                        BestId = t.BestId,
-                                        ReasonableBelieve = t.ReasonableBelieve,
-                                    }).ToList();
+                                        select new GetBelieveTask
+                                        {
+                                            BelieveTaskId = t.BelieveTaskId,
+                                            BestId = t.BestId,
+                                            ReasonableBelieve = t.ReasonableBelieve,
+                                        }).ToList();
                 model.GetCareIssuesTask = (from t in mcaBest.GetCareIssuesTask
-                                     select new GetCareIssuesTask
-                                     {
-                                         CareIssuesTaskId = t.CareIssuesTaskId,
-                                         BestId = t.BestId,
-                                         Issues = t.Issues,
-                                     }).ToList();
+                                           select new GetCareIssuesTask
+                                           {
+                                               CareIssuesTaskId = t.CareIssuesTaskId,
+                                               BestId = t.BestId,
+                                               Issues = t.Issues,
+                                           }).ToList();
                 model.GetHealthTask = (from t in mcaBest.GetHealthTask
                                        select new GetHealthTask
                                        {

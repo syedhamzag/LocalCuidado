@@ -1,6 +1,7 @@
 ﻿using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.Services.HealthAndLiving;
+using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.ViewModels.CarePlan.Health;
 using AwesomeCare.DataTransferObject.DTOs.Health.HealthAndLiving;
 using AwesomeCare.Services.Services;
@@ -24,13 +25,15 @@ namespace AwesomeCare.Admin.Controllers
         private IHealthAndLivingService _healthAndLivingService;
         private IClientService _clientService;
         private IBaseRecordService _baseService;
+        private IStaffService _staffService;
 
-        public HealthLivingController(IHealthAndLivingService healthLivingService, IFileUpload fileUpload, IClientService clientService,
+        public HealthLivingController(IHealthAndLivingService healthLivingService, IFileUpload fileUpload, IClientService clientService, IStaffService staffService,
                                       IBaseRecordService baseService) : base(fileUpload)
         {
             _healthAndLivingService = healthLivingService;
             _clientService = clientService;
             _baseService = baseService;
+            _staffService = staffService;
         }
 
         public async Task<IActionResult> Reports()
@@ -148,7 +151,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "_ConstraintAttachment_", DateTime.Now.ToString());
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.ConstraintAttachment = path;
             }
             else
@@ -226,7 +229,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "_ConstraintAttachment_", DateTime.Now.ToString());
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.ConstraintAttachment = path;
             }
             else
@@ -286,6 +289,65 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int id)
+        {
+            var entity = await GetDownload(id);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateHealthAndLiving> GetDownload(int Id)
+        {
+            var i = await _healthAndLivingService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateHealthAndLiving
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                BriefHealth = i.BriefHealth,
+                ObserveHealth = i.ObserveHealth,
+                WakeUp = i.WakeUp,
+                CareSupport = i.CareSupport,
+                MovingAndHandling = i.MovingAndHandling,
+                SupportToBed = i.SupportToBed,
+                ContinenceNeeds = i.ContinenceNeeds,
+                ContinenceSource = i.ContinenceSource,
+                ConstraintDetails = i.ConstraintDetails,
+                ConstraintAttachment = i.ConstraintAttachment,
+                SpecialCaution = i.SpecialCaution,
+                EmailName = _baseService.GetBaseRecordItemById(i.Email).Result.ValueName,
+                DehydrationRiskName = _baseService.GetBaseRecordItemById(i.DehydrationRisk).Result.ValueName,
+                LifeStyleName = _baseService.GetBaseRecordItemById(i.LifeStyle).Result.ValueName,
+                PressureSoreName = _baseService.GetBaseRecordItemById(i.PressureSore).Result.ValueName,
+                ContinenceIssueName = _baseService.GetBaseRecordItemById(i.ContinenceIssue).Result.ValueName,
+                ConstraintRequiredName = _baseService.GetBaseRecordItemById(i.ConstraintRequired).Result.ValueName,
+                MeansOfCommName = _baseService.GetBaseRecordItemById(i.MeansOfComm).Result.ValueName,
+                SmokingName = _baseService.GetBaseRecordItemById(i.Smoking).Result.ValueName,
+                TextFontSizeName = _baseService.GetBaseRecordItemById(i.TextFontSize).Result.ValueName,
+                FinanceManagementName = _baseService.GetBaseRecordItemById(i.FinanceManagement).Result.ValueName,
+                PostalServiceName = _baseService.GetBaseRecordItemById(i.PostalService).Result.ValueName,
+                LetterOpeningName = _baseService.GetBaseRecordItemById(i.LetterOpening).Result.ValueName,
+                ShoppingRequiredName = _baseService.GetBaseRecordItemById(i.ShoppingRequired).Result.ValueName,
+                SpecialCleaningName = _baseService.GetBaseRecordItemById(i.SpecialCleaning).Result.ValueName,
+                LaundaryRequiredName = _baseService.GetBaseRecordItemById(i.LaundaryRequired).Result.ValueName,
+                VideoCallRequiredName = _baseService.GetBaseRecordItemById(i.VideoCallRequired).Result.ValueName,
+                EatingWithStaffName = _baseService.GetBaseRecordItemById(i.EatingWithStaff).Result.ValueName,
+                AllowChatsName = _baseService.GetBaseRecordItemById(i.AllowChats).Result.ValueName,
+                TeaChocolateCoffeeName = _baseService.GetBaseRecordItemById(i.TeaChocolateCoffee).Result.ValueName,
+                NeighbourInvolmentName = _baseService.GetBaseRecordItemById(i.NeighbourInvolment).Result.ValueName,
+                FamilyUpdateName = _baseService.GetBaseRecordItemById(i.FamilyUpdate).Result.ValueName,
+                AlcoholicDrinkName = _baseService.GetBaseRecordItemById(i.AlcoholicDrink).Result.ValueName,
+                TVandMusicName = _baseService.GetBaseRecordItemById(i.TVandMusic).Result.ValueName,
+            };
+            return putEntity;
         }
     }
 }

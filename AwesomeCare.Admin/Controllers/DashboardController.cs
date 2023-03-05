@@ -160,66 +160,66 @@ namespace AwesomeCare.Admin.Controllers
             return View(dashboard);
         }
         [HttpGet]
-        public JsonResult GetDashboard()
+        public async Task<JsonResult> GetDashboard()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             #region variables
-            var getStaff =  _staffService.GetAsync();
-            var getClient =  _clientService.GetClients();
+            var getStaff =  await _staffService.GetAsync();
+            var getClient =  await _clientService.GetClients();
             #endregion
-            dashboard.Result.GetAllStaff = getStaff.Result;
-            dashboard.Result.ActiveUser = getClient.Result.Where(s => s.Status == "Active").Count();
-            dashboard.Result.ApprovedStaff = getStaff.Result.Where(s => s.Status == StaffRegistrationEnum.Approved).Count();
-            dashboard.Result.GetClients = GetClients(getClient.Result);
-            dashboard.Result.GetStaffPersonalInfos = GetStaffs(getStaff.Result);           
+            dashboard.GetAllStaff = getStaff;
+            dashboard.ActiveUser = getClient.Where(s => s.Status == "Active").Count();
+            dashboard.ApprovedStaff = getStaff.Where(s => s.Status == StaffRegistrationEnum.Approved).Count();
+            dashboard.GetClients = GetClients(getClient);
+            dashboard.GetStaffPersonalInfos = GetStaffs(getStaff);           
 
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetTask()
+        public async Task<JsonResult> GetTask()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             #region variables
-            var getStaff = _staffService.GetAsync();
-            var task = _taskService.GetWithStaff();
-            var baserecordItem = _baseService.GetBaseRecordsWithItems();
+            var getStaff = await _staffService.GetAsync();
+            var task = await _taskService.GetWithStaff();
+            var baserecordItem = await _baseService.GetBaseRecordsWithItems();
             #endregion
-            var taskitem = baserecordItem.Result.Where(s => s.KeyName == "Task_Board_Status").FirstOrDefault();
-            dashboard.Result.GetTaskBoard = GetTaskBoard(task.Result, taskitem);
-            dashboard.Result.GetAllStaff = getStaff.Result;
-            return Json(dashboard.Result);
+            var taskitem = baserecordItem.Where(s => s.KeyName == "Task_Board_Status").FirstOrDefault();
+            dashboard.GetTaskBoard = GetTaskBoard(task, taskitem);
+            dashboard.GetAllStaff = getStaff;
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetRatting()
+        public async Task<JsonResult> GetRatting()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             #region variables
-            var rating = _staffService.GetClientFeedback();
+            var rating = await _staffService.GetClientFeedback();
             #endregion
-            dashboard.Result.StaffRating = GetStaffRating(rating.Result);
-            return Json(dashboard.Result);
+            dashboard.StaffRating = GetStaffRating(rating);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetConcern()
+        public async Task<JsonResult> GetConcern()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
             bool isStopDateValid = DateTime.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
             #region variables
-            var ConcernIdP = dashboard.Result.ConcernIdP;
-            var ConcernIdC = dashboard.Result.ConcernIdC;
-            var ConcernIdO = dashboard.Result.ConcernIdO;
-            var concern = _concernNote.GetWithChild();
-            var baserecordItem = _baseService.GetBaseRecordsWithItems();
+            var ConcernIdP = dashboard.ConcernIdP;
+            var ConcernIdC = dashboard.ConcernIdC;
+            var ConcernIdO = dashboard.ConcernIdO;
+            var concern = await _concernNote.GetWithChild();
+            var baserecordItem = await _baseService.GetBaseRecordsWithItems();
             #endregion
             #region Concern
             var Concern = new List<Status>();
             var concernTotal = 0;
-            var Concernpending = concern.Result.Where(s => s.Status == ConcernIdP).Count();
+            var Concernpending = concern.Where(s => s.Status == ConcernIdP).Count();
             concernTotal += Concernpending;
-            var Concernclosed = concern.Result.Where(s => s.Status == ConcernIdC).Count();
+            var Concernclosed = concern.Where(s => s.Status == ConcernIdC).Count();
             concernTotal += Concernclosed;
-            var Concernopen = concern.Result.Where(s => s.Status == ConcernIdO).Count();
+            var Concernopen = concern.Where(s => s.Status == ConcernIdO).Count();
             concernTotal += Concernopen;
             Concern.Add(new Status
             {
@@ -241,33 +241,33 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Total",
                 Value = concernTotal
             });
-            dashboard.Result.concernNoteGraph = Concern;
+            dashboard.concernNoteGraph = Concern;
             #endregion
-            dashboard.Result.concernNotes = GetConcernNotes(concern.Result);
+            dashboard.concernNotes = GetConcernNotes(concern);
 
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetOncall()
+        public async Task<JsonResult> GetOncall()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
             bool isStopDateValid = DateTime.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
             #region variables
-            var oncallIdP = dashboard.Result.oncallP;
-            var oncallIdC = dashboard.Result.oncallC;
-            var oncallIdO = dashboard.Result.oncallO;
-            var getClient = _clientService.GetClients();
-            var oncall = _oncallService.GetWithPersonToAct();
+            var oncallIdP = dashboard.oncallP;
+            var oncallIdC = dashboard.oncallC;
+            var oncallIdO = dashboard.oncallO;
+            var getClient = await _clientService.GetClients();
+            var oncall = await _oncallService.GetWithPersonToAct();
             #endregion
             #region Oncall
             var Oncall = new List<Status>();
             var oncallTotal = 0;
-            var oncallpending = oncall.Result.Where(s => s.Status == oncallIdP).Count();
+            var oncallpending = oncall.Where(s => s.Status == oncallIdP).Count();
             oncallTotal += oncallpending;
-            var oncallclosed = oncall.Result.Where(s => s.Status == oncallIdC).Count();
+            var oncallclosed = oncall.Where(s => s.Status == oncallIdC).Count();
             oncallTotal += oncallclosed;
-            var oncallopen = oncall.Result.Where(s => s.Status == oncallIdO).Count();
+            var oncallopen = oncall.Where(s => s.Status == oncallIdO).Count();
             oncallTotal += oncallopen;
             Oncall.Add(new Status
             {
@@ -289,17 +289,17 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Total",
                 Value = oncallTotal
             });
-            dashboard.Result.OnCallGraph = Oncall;
+            dashboard.OnCallGraph = Oncall;
             #endregion
-            var onCallResult = oncall.Result.TakeLast(5).ToList();
-            dashboard.Result.OnCall = GetOnCall(onCallResult, getClient.Result);
+            var onCallResult = oncall.TakeLast(5).ToList();
+            dashboard.OnCall = GetOnCall(onCallResult, getClient);
 
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetClientMatrix()
+        public async Task<JsonResult> GetClientMatrix()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
             bool isStopDateValid = DateTime.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
             #region variables
@@ -308,27 +308,27 @@ namespace AwesomeCare.Admin.Controllers
             int clientClosed = 0;
             int clientLate = 0;
 
-            var pId = dashboard.Result.pId;
-            var cId = dashboard.Result.cId;
-            var lId = dashboard.Result.lId;
+            var pId = dashboard.pId;
+            var cId = dashboard.cId;
+            var lId = dashboard.lId;
 
-            var getClient = _clientService.GetClients();
-            var log = _clientLogAuditService.Get();
-            var med = _clientMedAuditService.Get();
-            var complain = _clientComplainService.Get();
-            var voice = _clientVoiceService.Get();
-            var watch = _clientServiceWatchService.Get();
-            var mgt = _clientMgtVisitService.Get();
-            var prog = _clientProgramService.Get();
+            var getClient = await _clientService.GetClients();
+            var log = await _clientLogAuditService.Get();
+            var med = await _clientMedAuditService.Get();
+            var complain = await _clientComplainService.Get();
+            var voice = await _clientVoiceService.Get();
+            var watch = await _clientServiceWatchService.Get();
+            var mgt = await _clientMgtVisitService.Get();
+            var prog = await _clientProgramService.Get();
 
             var baserecordItem = _baseService.GetBaseRecordsWithItems();
             #endregion
             var Client = new List<Status>();
 
             #region LogAudit
-            var log_pending = log.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var log_closed = log.Result.Where(j => j.Status == cId).Count();
-            var log_late = log.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var log_pending = log.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var log_closed = log.Where(j => j.Status == cId).Count();
+            var log_late = log.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += log_pending;
             clientClosed += log_closed;
             clientLate += log_late;
@@ -348,12 +348,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = log_late
             });
-            dashboard.Result.LogAudit = LogAudit;
+            dashboard.LogAudit = LogAudit;
             #endregion
             #region MedAudit
-            var med_pending = med.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var med_closed = med.Result.Where(j => j.Status == cId).Count();
-            var med_late = med.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var med_pending = med.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var med_closed = med.Where(j => j.Status == cId).Count();
+            var med_late = med.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += med_pending;
             clientClosed += med_closed;
             clientLate += med_late;
@@ -373,12 +373,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = med_late
             });
-            dashboard.Result.MedAudit = MedAudit;
+            dashboard.MedAudit = MedAudit;
             #endregion
             #region CompAudit
-            var Comp_pending = complain.Result.Where(j => j.StatusId == pId && (j.DUEDATE.Year >= stopDate.Year && j.DUEDATE.Month >= stopDate.Month && j.DUEDATE.Day > stopDate.Day)).Count();
-            var Comp_closed = complain.Result.Where(j => j.StatusId == cId).Count();
-            var Comp_late = complain.Result.Where(j => j.StatusId == pId && (j.DUEDATE.Year <= stopDate.Year && j.DUEDATE.Month <= stopDate.Month && j.DUEDATE.Day < stopDate.Day)).Count();
+            var Comp_pending = complain.Where(j => j.StatusId == pId && (j.DUEDATE.Year >= stopDate.Year && j.DUEDATE.Month >= stopDate.Month && j.DUEDATE.Day > stopDate.Day)).Count();
+            var Comp_closed = complain.Where(j => j.StatusId == cId).Count();
+            var Comp_late = complain.Where(j => j.StatusId == pId && (j.DUEDATE.Year <= stopDate.Year && j.DUEDATE.Month <= stopDate.Month && j.DUEDATE.Day < stopDate.Day)).Count();
             clientPending += Comp_pending;
             clientClosed += Comp_closed;
             clientLate += Comp_late;
@@ -398,12 +398,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = Comp_late
             });
-            dashboard.Result.Complain = Comp;
+            dashboard.Complain = Comp;
             #endregion
             #region Voice
-            var voice_pending = voice.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var voice_closed = voice.Result.Where(j => j.Status == cId).Count();
-            var voice_late = voice.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var voice_pending = voice.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var voice_closed = voice.Where(j => j.Status == cId).Count();
+            var voice_late = voice.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += voice_pending;
             clientClosed += voice_closed;
             clientLate += voice_late;
@@ -423,12 +423,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = voice_late
             });
-            dashboard.Result.Voice = Voice;
+            dashboard.Voice = Voice;
             #endregion
             #region Program
-            var prog_pending = prog.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var prog_closed = prog.Result.Where(j => j.Status == cId).Count();
-            var prog_late = prog.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var prog_pending = prog.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var prog_closed = prog.Where(j => j.Status == cId).Count();
+            var prog_late = prog.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += prog_pending;
             clientClosed += prog_closed;
             clientLate += prog_late;
@@ -448,12 +448,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = prog_late
             });
-            dashboard.Result.Program = Program;
+            dashboard.Program = Program;
             #endregion
             #region Watch
-            var watch_pending = watch.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var watch_closed = watch.Result.Where(j => j.Status == cId).Count();
-            var watch_late = watch.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var watch_pending = watch.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var watch_closed = watch.Where(j => j.Status == cId).Count();
+            var watch_late = watch.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += watch_pending;
             clientClosed += watch_closed;
             clientLate += watch_late;
@@ -473,12 +473,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = watch_late
             });
-            dashboard.Result.ServiceWatch = Watch;
+            dashboard.ServiceWatch = Watch;
             #endregion
             #region MgtVisit
-            var mgt_pending = mgt.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var mgt_closed = mgt.Result.Where(j => j.Status == cId).Count();
-            var mgt_late = mgt.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var mgt_pending = mgt.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var mgt_closed = mgt.Where(j => j.Status == cId).Count();
+            var mgt_late = mgt.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             clientPending += mgt_pending;
             clientClosed += mgt_closed;
             clientLate += mgt_late;
@@ -498,7 +498,7 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = mgt_late
             });
-            dashboard.Result.MgtVisit = MgtVisit;
+            dashboard.MgtVisit = MgtVisit;
             #endregion
             #region ClientMatrix
             Client.Add(new Status
@@ -516,14 +516,14 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = clientLate
             });
-            dashboard.Result.ClientMatrix = Client;
+            dashboard.ClientMatrix = Client;
             #endregion
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetStaffMatrix()
+        public async Task<JsonResult> GetStaffMatrix()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
             bool isStopDateValid = DateTime.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
             #region variables
@@ -532,26 +532,26 @@ namespace AwesomeCare.Admin.Controllers
             int staffClosed = 0;
             int staffLate = 0;
 
-            var pId = dashboard.Result.pId;
-            var cId = dashboard.Result.cId;
-            var lId = dashboard.Result.lId;
+            var pId = dashboard.pId;
+            var cId = dashboard.cId;
+            var lId = dashboard.lId;
 
 
-            var adl = _staffAdlObsService.Get();
-            var key = _staffKeyWorkerService.Get();
-            var comp = _staffMedCompService.Get();
-            var one = _staffOneToOneService.Get();
-            var refs = _staffReferenceService.Get();
-            var spot = _staffSpotCheckService.Get();
-            var super = _staffSupervisionService.Get();
-            var survey = _staffSurveyService.Get();
+            var adl = await _staffAdlObsService.Get();
+            var key = await _staffKeyWorkerService.Get();
+            var comp = await _staffMedCompService.Get();
+            var one = await _staffOneToOneService.Get();
+            var refs = await _staffReferenceService.Get();
+            var spot = await _staffSpotCheckService.Get();
+            var super = await _staffSupervisionService.Get();
+            var survey = await _staffSurveyService.Get();
             #endregion
 
             var Staff = new List<Status>();
             #region AdlObs
-            var obs_pending = adl.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var obs_closed = adl.Result.Where(j => j.Status == cId).Count();
-            var obs_late = adl.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var obs_pending = adl.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var obs_closed = adl.Where(j => j.Status == cId).Count();
+            var obs_late = adl.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += obs_pending;
             staffClosed += obs_closed;
             staffLate += obs_late;
@@ -571,12 +571,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = obs_late
             });
-            dashboard.Result.AdlObs = AdlObs;
+            dashboard.AdlObs = AdlObs;
             #endregion
             #region KeyWorker
-            var key_pending = key.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var key_closed = key.Result.Where(j => j.Status == cId).Count();
-            var key_late = key.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var key_pending = key.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var key_closed = key.Where(j => j.Status == cId).Count();
+            var key_late = key.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += key_pending;
             staffClosed += key_closed;
             staffLate += key_late;
@@ -596,12 +596,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = key_late
             });
-            dashboard.Result.KeyWorker = KeyWorker;
+            dashboard.KeyWorker = KeyWorker;
             #endregion
             #region MedComp
-            var md_pending = comp.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var md_closed = comp.Result.Where(j => j.Status == cId).Count();
-            var md_late = comp.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var md_pending = comp.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var md_closed = comp.Where(j => j.Status == cId).Count();
+            var md_late = comp.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += md_pending;
             staffClosed += md_closed;
             staffLate += md_late;
@@ -621,12 +621,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = md_late
             });
-            dashboard.Result.MedComp = MedComp;
+            dashboard.MedComp = MedComp;
             #endregion
             #region One
-            var one_pending = one.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var one_closed = one.Result.Where(j => j.Status == cId).Count();
-            var one_late = one.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var one_pending = one.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var one_closed = one.Where(j => j.Status == cId).Count();
+            var one_late = one.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += one_pending;
             staffClosed += one_closed;
             staffLate += one_late;
@@ -646,12 +646,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = one_late
             });
-            dashboard.Result.OneToOne = One;
+            dashboard.OneToOne = One;
             #endregion
             #region Ref
-            var ref_pending = refs.Result.Where(j => j.Status == pId).Count();
-            var ref_closed = refs.Result.Where(j => j.Status == cId).Count();
-            var ref_late = refs.Result.Where(j => j.Status == lId).Count();
+            var ref_pending = refs.Where(j => j.Status == pId).Count();
+            var ref_closed = refs.Where(j => j.Status == cId).Count();
+            var ref_late = refs.Where(j => j.Status == lId).Count();
             staffPending += ref_pending;
             staffClosed += ref_closed;
             staffLate += ref_late;
@@ -671,12 +671,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = ref_late
             });
-            dashboard.Result.Reference = Ref;
+            dashboard.Reference = Ref;
             #endregion
             #region Spot
-            var spot_pending = spot.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var spot_closed = spot.Result.Where(j => j.Status == cId).Count();
-            var spot_late = spot.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var spot_pending = spot.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var spot_closed = spot.Where(j => j.Status == cId).Count();
+            var spot_late = spot.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += spot_pending;
             staffClosed += spot_closed;
             staffLate += spot_late;
@@ -696,12 +696,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = spot_late
             });
-            dashboard.Result.SpotCheck = Spot;
+            dashboard.SpotCheck = Spot;
             #endregion
             #region Super
-            var sup_pending = super.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var sup_closed = super.Result.Where(j => j.Status == cId).Count();
-            var sup_late = super.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var sup_pending = super.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var sup_closed = super.Where(j => j.Status == cId).Count();
+            var sup_late = super.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += sup_pending;
             staffClosed += sup_closed;
             staffLate += sup_late;
@@ -721,12 +721,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = sup_late
             });
-            dashboard.Result.Supervision = Super;
+            dashboard.Supervision = Super;
             #endregion
             #region Survey
-            var sur_pending = survey.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
-            var sur_closed = survey.Result.Where(j => j.Status == cId).Count();
-            var sur_late = survey.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
+            var sur_pending = survey.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day)).Count();
+            var sur_closed = survey.Where(j => j.Status == cId).Count();
+            var sur_late = survey.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day)).Count();
             staffPending += sur_pending;
             staffClosed += sur_closed;
             staffLate += sur_late;
@@ -746,7 +746,7 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = sur_late
             });
-            dashboard.Result.Survey = Survey;
+            dashboard.Survey = Survey;
             #endregion
             #region StaffMatrix
             Staff.Add(new Status
@@ -764,52 +764,52 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = staffLate
             });
-            dashboard.Result.StaffMatrix = Staff;
+            dashboard.StaffMatrix = Staff;
             #endregion
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetTeleHealth()
+        public async Task<JsonResult> GetTeleHealth()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             #region variables
             int TeleNormal = 0;
             int TeleObservation = 0;
             int TeleAttention = 0;
             int TeleReceived = 0;
 
-            var nId = dashboard.Result.nId;
-            var oId = dashboard.Result.oId;
-            var aId = dashboard.Result.aId;
-            var rId = dashboard.Result.rId;
+            var nId = dashboard.nId;
+            var oId = dashboard.oId;
+            var aId = dashboard.aId;
+            var rId = dashboard.rId;
 
-            var pId = dashboard.Result.pId;
-            var cId = dashboard.Result.cId;
-            var lId = dashboard.Result.lId;
+            var pId = dashboard.pId;
+            var cId = dashboard.cId;
+            var lId = dashboard.lId;
 
 
 
-            var coag = _clientBloodCoagService.Get();
-            var bmi = _clientBMIService.Get();
-            var body = _clientBodyService.Get();
-            var bowel = _clientBowelService.Get();
-            var eye = _clientEyeService.Get();
-            var food = _clientFoodService.Get();
-            var heart = _clientHeartService.Get();
-            var oxygen = _clientOxygenService.Get();
-            var pain = _clientPainService.Get();
-            var pulse = _clientPulseService.Get();
-            var pressure = _clientPressureService.Get();
-            var seizure = _clientSeizureService.Get();
-            var wound = _clientWoundService.Get();
+            var coag = await _clientBloodCoagService.Get();
+            var bmi = await _clientBMIService.Get();
+            var body = await _clientBodyService.Get();
+            var bowel = await _clientBowelService.Get();
+            var eye = await _clientEyeService.Get();
+            var food = await _clientFoodService.Get();
+            var heart = await _clientHeartService.Get();
+            var oxygen = await _clientOxygenService.Get();
+            var pain = await _clientPainService.Get();
+            var pulse = await _clientPulseService.Get();
+            var pressure = await _clientPressureService.Get();
+            var seizure = await _clientSeizureService.Get();
+            var wound = await _clientWoundService.Get();
             #endregion
             var TeleHeath = new List<Status>();
 
             #region BloodCoag
-            var normal = coag.Result.Where(j => j.Status == nId).Count();
-            var observation = coag.Result.Where(j => j.Status == oId).Count();
-            var attention = coag.Result.Where(j => j.Status == aId).Count();
-            var received = coag.Result.Where(j => j.Status == rId).Count();
+            var normal = coag.Where(j => j.Status == nId).Count();
+            var observation = coag.Where(j => j.Status == oId).Count();
+            var attention = coag.Where(j => j.Status == aId).Count();
+            var received = coag.Where(j => j.Status == rId).Count();
             TeleNormal += normal;
             TeleObservation += observation;
             TeleAttention += attention;
@@ -835,13 +835,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = received
             });
-            dashboard.Result.BloodCoag = BloodCoag;
+            dashboard.BloodCoag = BloodCoag;
             #endregion
             #region BloodPressure
-            var pnormal = pressure.Result.Where(j => j.Status == nId).Count();
-            var pobservation = pressure.Result.Where(j => j.Status == oId).Count();
-            var pattention = pressure.Result.Where(j => j.Status == aId).Count();
-            var preceived = pressure.Result.Where(j => j.Status == rId).Count();
+            var pnormal = pressure.Where(j => j.Status == nId).Count();
+            var pobservation = pressure.Where(j => j.Status == oId).Count();
+            var pattention = pressure.Where(j => j.Status == aId).Count();
+            var preceived = pressure.Where(j => j.Status == rId).Count();
             TeleNormal += pnormal;
             TeleObservation += pobservation;
             TeleAttention += pattention;
@@ -867,13 +867,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = preceived
             });
-            dashboard.Result.Pressure = Pressure;
+            dashboard.Pressure = Pressure;
             #endregion
             #region BMI
-            var bmi_normal = bmi.Result.Where(j => j.Status == nId).Count();
-            var bmi_observation = bmi.Result.Where(j => j.Status == oId).Count();
-            var bmi_attention = bmi.Result.Where(j => j.Status == aId).Count();
-            var bmi_received = bmi.Result.Where(j => j.Status == rId).Count();
+            var bmi_normal = bmi.Where(j => j.Status == nId).Count();
+            var bmi_observation = bmi.Where(j => j.Status == oId).Count();
+            var bmi_attention = bmi.Where(j => j.Status == aId).Count();
+            var bmi_received = bmi.Where(j => j.Status == rId).Count();
             TeleNormal += bmi_normal;
             TeleObservation += bmi_observation;
             TeleAttention += bmi_attention;
@@ -899,13 +899,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = bmi_received
             });
-            dashboard.Result.BMI = BMI;
+            dashboard.BMI = BMI;
             #endregion
             #region Body
-            var Body_normal = body.Result.Where(j => j.Status == nId).Count();
-            var Body_observation = body.Result.Where(j => j.Status == oId).Count();
-            var Body_attention = body.Result.Where(j => j.Status == aId).Count();
-            var Body_received = body.Result.Where(j => j.Status == rId).Count();
+            var Body_normal = body.Where(j => j.Status == nId).Count();
+            var Body_observation = body.Where(j => j.Status == oId).Count();
+            var Body_attention = body.Where(j => j.Status == aId).Count();
+            var Body_received = body.Where(j => j.Status == rId).Count();
             TeleNormal += Body_normal;
             TeleObservation += Body_observation;
             TeleAttention += Body_attention;
@@ -931,13 +931,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Body_received
             });
-            dashboard.Result.Body = Body;
+            dashboard.Body = Body;
             #endregion
             #region Bowel
-            var Bowel_normal = bowel.Result.Where(j => j.Status == nId).Count();
-            var Bowel_observation = bowel.Result.Where(j => j.Status == oId).Count();
-            var Bowel_attention = bowel.Result.Where(j => j.Status == aId).Count();
-            var Bowel_received = bowel.Result.Where(j => j.Status == rId).Count();
+            var Bowel_normal = bowel.Where(j => j.Status == nId).Count();
+            var Bowel_observation = bowel.Where(j => j.Status == oId).Count();
+            var Bowel_attention = bowel.Where(j => j.Status == aId).Count();
+            var Bowel_received = bowel.Where(j => j.Status == rId).Count();
             TeleNormal += Bowel_normal;
             TeleObservation += Bowel_observation;
             TeleAttention += Bowel_attention;
@@ -963,13 +963,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Bowel_received
             });
-            dashboard.Result.Bowel = Bowel;
+            dashboard.Bowel = Bowel;
             #endregion
             #region Eye
-            var Eye_normal = eye.Result.Where(j => j.Status == nId).Count();
-            var Eye_observation = eye.Result.Where(j => j.Status == oId).Count();
-            var Eye_attention = eye.Result.Where(j => j.Status == aId).Count();
-            var Eye_received = eye.Result.Where(j => j.Status == rId).Count();
+            var Eye_normal = eye.Where(j => j.Status == nId).Count();
+            var Eye_observation = eye.Where(j => j.Status == oId).Count();
+            var Eye_attention = eye.Where(j => j.Status == aId).Count();
+            var Eye_received = eye.Where(j => j.Status == rId).Count();
             TeleNormal += Eye_normal;
             TeleObservation += Eye_observation;
             TeleAttention += Eye_attention;
@@ -995,13 +995,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Eye_received
             });
-            dashboard.Result.EyeHealth = Eye;
+            dashboard.EyeHealth = Eye;
             #endregion
             #region Food
-            var Food_normal = food.Result.Where(j => j.Status == nId).Count();
-            var Food_observation = food.Result.Where(j => j.Status == oId).Count();
-            var Food_attention = food.Result.Where(j => j.Status == aId).Count();
-            var Food_received = food.Result.Where(j => j.Status == rId).Count();
+            var Food_normal = food.Where(j => j.Status == nId).Count();
+            var Food_observation = food.Where(j => j.Status == oId).Count();
+            var Food_attention = food.Where(j => j.Status == aId).Count();
+            var Food_received = food.Where(j => j.Status == rId).Count();
             TeleNormal += Food_normal;
             TeleObservation += Food_observation;
             TeleAttention += Food_attention;
@@ -1027,13 +1027,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Food_received
             });
-            dashboard.Result.Food = Food;
+            dashboard.Food = Food;
             #endregion
             #region Heart
-            var Heart_normal = heart.Result.Where(j => j.Status == nId).Count();
-            var Heart_observation = heart.Result.Where(j => j.Status == oId).Count();
-            var Heart_attention = heart.Result.Where(j => j.Status == aId).Count();
-            var Heart_received = heart.Result.Where(j => j.Status == rId).Count();
+            var Heart_normal = heart.Where(j => j.Status == nId).Count();
+            var Heart_observation = heart.Where(j => j.Status == oId).Count();
+            var Heart_attention = heart.Where(j => j.Status == aId).Count();
+            var Heart_received = heart.Where(j => j.Status == rId).Count();
             TeleNormal += Heart_normal;
             TeleObservation += Heart_observation;
             TeleAttention += Heart_attention;
@@ -1059,13 +1059,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Heart_received
             });
-            dashboard.Result.Heart = Heart;
+            dashboard.Heart = Heart;
             #endregion
             #region Oxygen
-            var Oxygen_normal = oxygen.Result.Where(j => j.Status == nId).Count();
-            var Oxygen_observation = oxygen.Result.Where(j => j.Status == oId).Count();
-            var Oxygen_attention = oxygen.Result.Where(j => j.Status == aId).Count();
-            var Oxygen_received = oxygen.Result.Where(j => j.Status == rId).Count();
+            var Oxygen_normal = oxygen.Where(j => j.Status == nId).Count();
+            var Oxygen_observation = oxygen.Where(j => j.Status == oId).Count();
+            var Oxygen_attention = oxygen.Where(j => j.Status == aId).Count();
+            var Oxygen_received = oxygen.Where(j => j.Status == rId).Count();
             TeleNormal += Oxygen_normal;
             TeleObservation += Oxygen_observation;
             TeleAttention += Oxygen_attention;
@@ -1091,13 +1091,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Oxygen_received
             });
-            dashboard.Result.Oxygen = Oxygen;
+            dashboard.Oxygen = Oxygen;
             #endregion
             #region Pain
-            var Pain_normal = pain.Result.Where(j => j.Status == nId).Count();
-            var Pain_observation = pain.Result.Where(j => j.Status == oId).Count();
-            var Pain_attention = pain.Result.Where(j => j.Status == aId).Count();
-            var Pain_received = pain.Result.Where(j => j.Status == rId).Count();
+            var Pain_normal = pain.Where(j => j.Status == nId).Count();
+            var Pain_observation = pain.Where(j => j.Status == oId).Count();
+            var Pain_attention = pain.Where(j => j.Status == aId).Count();
+            var Pain_received = pain.Where(j => j.Status == rId).Count();
             TeleNormal += Pain_normal;
             TeleObservation += Pain_observation;
             TeleAttention += Pain_attention;
@@ -1123,13 +1123,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Pain_received
             });
-            dashboard.Result.Pain = Pain;
+            dashboard.Pain = Pain;
             #endregion
             #region Pulse
-            var Pulse_normal = pulse.Result.Where(j => j.Status == nId).Count();
-            var Pulse_observation = pulse.Result.Where(j => j.Status == oId).Count();
-            var Pulse_attention = pulse.Result.Where(j => j.Status == aId).Count();
-            var Pulse_received = pulse.Result.Where(j => j.Status == rId).Count();
+            var Pulse_normal = pulse.Where(j => j.Status == nId).Count();
+            var Pulse_observation = pulse.Where(j => j.Status == oId).Count();
+            var Pulse_attention = pulse.Where(j => j.Status == aId).Count();
+            var Pulse_received = pulse.Where(j => j.Status == rId).Count();
             TeleNormal += Pulse_normal;
             TeleObservation += Pulse_observation;
             TeleAttention += Pulse_attention;
@@ -1155,13 +1155,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Pulse_received
             });
-            dashboard.Result.Pulse = Pulse;
+            dashboard.Pulse = Pulse;
             #endregion
             #region Seizure
-            var Seizure_normal = seizure.Result.Where(j => j.Status == nId).Count();
-            var Seizure_observation = seizure.Result.Where(j => j.Status == oId).Count();
-            var Seizure_attention = seizure.Result.Where(j => j.Status == aId).Count();
-            var Seizure_received = seizure.Result.Where(j => j.Status == rId).Count();
+            var Seizure_normal = seizure.Where(j => j.Status == nId).Count();
+            var Seizure_observation = seizure.Where(j => j.Status == oId).Count();
+            var Seizure_attention = seizure.Where(j => j.Status == aId).Count();
+            var Seizure_received = seizure.Where(j => j.Status == rId).Count();
             TeleNormal += Seizure_normal;
             TeleObservation += Seizure_observation;
             TeleAttention += Seizure_attention;
@@ -1187,13 +1187,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Seizure_received
             });
-            dashboard.Result.Seizure = Seizure;
+            dashboard.Seizure = Seizure;
             #endregion
             #region Wound
-            var Wound_normal = wound.Result.Where(j => j.Status == nId).Count();
-            var Wound_observation = wound.Result.Where(j => j.Status == oId).Count();
-            var Wound_attention = wound.Result.Where(j => j.Status == aId).Count();
-            var Wound_received = wound.Result.Where(j => j.Status == rId).Count();
+            var Wound_normal = wound.Where(j => j.Status == nId).Count();
+            var Wound_observation = wound.Where(j => j.Status == oId).Count();
+            var Wound_attention = wound.Where(j => j.Status == aId).Count();
+            var Wound_received = wound.Where(j => j.Status == rId).Count();
             TeleNormal += Wound_normal;
             TeleObservation += Wound_observation;
             TeleAttention += Wound_attention;
@@ -1219,7 +1219,7 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Wound_received
             });
-            dashboard.Result.Wound = Wound;
+            dashboard.Wound = Wound;
             #endregion
             #region TeleHealth
             TeleHeath.Add(new Status
@@ -1242,29 +1242,29 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = TeleReceived
             });
-            dashboard.Result.TeleHealth = TeleHeath;
+            dashboard.TeleHealth = TeleHeath;
             #endregion
 
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetAdlTrackerD()
+        public async Task<JsonResult> GetAdlTrackerD()
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
             var types = new List<string> { "AM", "LUNCH", "TEA", "BED", "OTHERS1", "OTHERS2" };
-            var rotaAdmins = _rotaTaskService.LiveRota(endDate, endDate);
+            var rotaAdmins = await _rotaTaskService.LiveRota(endDate, endDate);
 
 
-            dashboard.Result.LiveTrackerD = GetTrackerDaily(endDate, types, rotaAdmins.Result);
-            dashboard.Result.Types = types.Distinct().ToList();
+            dashboard.LiveTrackerD = GetTrackerDaily(endDate, types, rotaAdmins);
+            dashboard.Types = types.Distinct().ToList();
 
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetAdlTrackerW()
+        public async Task<JsonResult> GetAdlTrackerW()
         {
-            var dashboard = new GetDashboard();
+            var dashboard = await _dashboardService.Get();
             var days = new List<string>();
             for (int day = 0; day < 7; day++)
             {
@@ -1273,13 +1273,13 @@ namespace AwesomeCare.Admin.Controllers
             days.Reverse();
             var startDate = DateTime.Now.AddDays(-7).Date.ToString("yyyy-MM-dd");
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
-            var rotaAdmins = _rotaTaskService.LiveRota(startDate, endDate);
-            dashboard.LiveTrackerW = GetTrackerWeekly(startDate, endDate, days, rotaAdmins.Result);
+            var rotaAdmins = await _rotaTaskService.LiveRota(startDate, endDate);
+            dashboard.LiveTrackerW = GetTrackerWeekly(startDate, endDate, days, rotaAdmins);
             dashboard.Days = days.Distinct().ToList();
             return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult GetAdlTrackerM()
+        public async Task<JsonResult> GetAdlTrackerM()
         {
             var dashboard = new GetDashboard();
             var months = new List<string>();
@@ -1290,8 +1290,8 @@ namespace AwesomeCare.Admin.Controllers
             months.Reverse();
             var startDate = DateTime.Now.AddDays(-365).Date.ToString("yyyy-MM-dd");
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
-            var rotaAdmins = _rotaTaskService.LiveRota(startDate, endDate);
-            dashboard.LiveTrackerM = GetTrackerMonthly(startDate, endDate, months, rotaAdmins.Result);
+            var rotaAdmins = await _rotaTaskService.LiveRota(startDate, endDate);
+            dashboard.LiveTrackerM = GetTrackerMonthly(startDate, endDate, months, rotaAdmins);
             dashboard.Months = months.Distinct().ToList();
             return Json(dashboard);
         }
@@ -1305,22 +1305,24 @@ namespace AwesomeCare.Admin.Controllers
             return View(dashboard);
         }
         [HttpGet]
-        public JsonResult ClientDashboard(int clientId)
+        public async Task<JsonResult> ClientDashboard(int clientId)
         {
             var clients = _clientService.GetClients();
             var staffs = _staffService.GetAsync();
             var client = clients.Result.Where(s => s.ClientId == clientId).FirstOrDefault();
             var manager = staffs.Result.Where(s => s.StaffPersonalInfoId == client.ClientManager).FirstOrDefault();
             var keyworker = new GetStaffPersonalInfo();
+            //var keyworker = staffs.Result.Where(s => s.FirstName.Contains(client.Keyworker) || s.MiddleName.Contains(client.Keyworker) || s.LastName.Contains(client.Keyworker)).FirstOrDefault();
+            //var teamleader = staffs.Result.Where(s => s.FirstName.Contains(client.TeamLeader) || s.MiddleName.Contains(client.TeamLeader) || s.LastName.Contains(client.TeamLeader)).FirstOrDefault();
             var teamleader = new GetStaffPersonalInfo();
-            var dashboard =  _dashboardService.Get();
-            dashboard.Result.ClientId = clientId;
-            dashboard.Result.ClientName = client.Firstname +" "+ client.Middlename +" "+ client.Surname;
-            dashboard.Result.GetClients = clients.Result.ToList();
-            dashboard.Result.ClientManager = manager != null ? manager : new GetStaffPersonalInfo();
-            dashboard.Result.TeamLeader = teamleader != null ? teamleader : new GetStaffPersonalInfo();
-            dashboard.Result.KWorker = keyworker != null ? keyworker : new GetStaffPersonalInfo();
-            return Json(dashboard.Result);
+            var dashboard = await _dashboardService.Get();
+            dashboard.ClientId = clientId;
+            dashboard.ClientName = client.Firstname +" "+ client.Middlename +" "+ client.Surname;
+            dashboard.GetClients = clients.Result.ToList();
+            dashboard.ClientManager = manager != null ? manager : new GetStaffPersonalInfo();
+            dashboard.TeamLeader = teamleader != null ? teamleader : new GetStaffPersonalInfo();
+            dashboard.KWorker = keyworker != null ? keyworker : new GetStaffPersonalInfo();
+            return Json(dashboard);
         }
         public async Task<IActionResult> Employee(int staffId)
         {
@@ -1740,12 +1742,12 @@ namespace AwesomeCare.Admin.Controllers
         #endregion
 
         [HttpGet]
-        public JsonResult CareObj(int carePId, int careCId, int careLId, int clientId)
+        public async Task<JsonResult> CareObj(int carePId, int careCId, int careLId, int clientId)
         {
-            var care = _clientCareObj.GetByClient(clientId);
-            var pending = care.Result.Where(j => j.Status == carePId).Count();
-            var closed = care.Result.Where(j => j.Status == careCId).Count();
-            var late = care.Result.Where(j => j.Status == careLId).Count();
+            var care = await _clientCareObj.GetByClient(clientId);
+            var pending = care.Where(j => j.Status == carePId).Count();
+            var closed = care.Where(j => j.Status == careCId).Count();
+            var late = care.Where(j => j.Status == careLId).Count();
             var careObj = new List<Status>();
             careObj.Add(new Status
             {
@@ -1766,35 +1768,35 @@ namespace AwesomeCare.Admin.Controllers
         }
 
         [HttpGet]
-        public JsonResult Telehealth(int nId, int oId, int aId, int rId, int clientId)
+        public async Task<JsonResult> Telehealth(int nId, int oId, int aId, int rId, int clientId)
         {
             int TeleNormal = 0;
             int TeleObservation = 0;
             int TeleAttention = 0;
             int TeleReceived = 0;
 
-            var coag = _clientBloodCoagService.Get();
-            var bmi = _clientBMIService.Get();
-            var body = _clientBodyService.Get();
-            var bowel = _clientBowelService.Get();
-            var eye = _clientEyeService.Get();
-            var food = _clientFoodService.Get();
-            var heart = _clientHeartService.Get();
-            var oxygen = _clientOxygenService.Get();
-            var pain = _clientPainService.Get();
-            var pulse = _clientPulseService.Get();
-            var pressure = _clientPressureService.Get();
-            var seizure = _clientSeizureService.Get();
-            var wound = _clientWoundService.Get();
+            var coag = await _clientBloodCoagService.Get();
+            var bmi = await _clientBMIService.Get();
+            var body = await _clientBodyService.Get();
+            var bowel = await _clientBowelService.Get();
+            var eye = await _clientEyeService.Get();
+            var food = await _clientFoodService.Get();
+            var heart = await _clientHeartService.Get();
+            var oxygen = await _clientOxygenService.Get();
+            var pain = await _clientPainService.Get();
+            var pulse = await _clientPulseService.Get();
+            var pressure = await _clientPressureService.Get();
+            var seizure = await _clientSeizureService.Get();
+            var wound = await _clientWoundService.Get();
 
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             var TeleHeath = new List<Status>();
 
             #region BloodCoag
-            var normal = coag.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var observation = coag.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var attention = coag.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var received = coag.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var normal = coag.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var observation = coag.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var attention = coag.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var received = coag.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += normal;
             TeleObservation += observation;
             TeleAttention += attention;
@@ -1820,13 +1822,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = received
             });
-            dashboard.Result.BloodCoag = BloodCoag;
+            dashboard.BloodCoag = BloodCoag;
             #endregion
             #region BloodPressure
-            var pnormal = pressure.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var pobservation = pressure.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var pattention = pressure.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var preceived = pressure.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var pnormal = pressure.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var pobservation = pressure.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var pattention = pressure.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var preceived = pressure.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += pnormal;
             TeleObservation += pobservation;
             TeleAttention += pattention;
@@ -1852,13 +1854,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = preceived
             });
-            dashboard.Result.Pressure = Pressure;
+            dashboard.Pressure = Pressure;
             #endregion
             #region BMI
-            var bmi_normal = bmi.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var bmi_observation = bmi.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var bmi_attention = bmi.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var bmi_received = bmi.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var bmi_normal = bmi.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var bmi_observation = bmi.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var bmi_attention = bmi.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var bmi_received = bmi.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += bmi_normal;
             TeleObservation += bmi_observation;
             TeleAttention += bmi_attention;
@@ -1884,13 +1886,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = bmi_received
             });
-            dashboard.Result.BMI = BMI;
+            dashboard.BMI = BMI;
             #endregion
             #region Body
-            var Body_normal = body.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Body_observation = body.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Body_attention = body.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Body_received = body.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Body_normal = body.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Body_observation = body.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Body_attention = body.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Body_received = body.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Body_normal;
             TeleObservation += Body_observation;
             TeleAttention += Body_attention;
@@ -1916,13 +1918,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Body_received
             });
-            dashboard.Result.Body = Body;
+            dashboard.Body = Body;
             #endregion
             #region Bowel
-            var Bowel_normal = bowel.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Bowel_observation = bowel.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Bowel_attention = bowel.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Bowel_received = bowel.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Bowel_normal = bowel.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Bowel_observation = bowel.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Bowel_attention = bowel.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Bowel_received = bowel.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Bowel_normal;
             TeleObservation += Bowel_observation;
             TeleAttention += Bowel_attention;
@@ -1948,13 +1950,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Bowel_received
             });
-            dashboard.Result.Bowel = Bowel;
+            dashboard.Bowel = Bowel;
             #endregion
             #region Eye
-            var Eye_normal = eye.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Eye_observation = eye.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Eye_attention = eye.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Eye_received = eye.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Eye_normal = eye.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Eye_observation = eye.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Eye_attention = eye.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Eye_received = eye.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Eye_normal;
             TeleObservation += Eye_observation;
             TeleAttention += Eye_attention;
@@ -1980,13 +1982,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Eye_received
             });
-            dashboard.Result.EyeHealth = Eye;
+            dashboard.EyeHealth = Eye;
             #endregion
             #region Food
-            var Food_normal = food.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Food_observation = food.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Food_attention = food.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Food_received = food.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Food_normal = food.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Food_observation = food.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Food_attention = food.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Food_received = food.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Food_normal;
             TeleObservation += Food_observation;
             TeleAttention += Food_attention;
@@ -2012,13 +2014,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Food_received
             });
-            dashboard.Result.Food = Food;
+            dashboard.Food = Food;
             #endregion
             #region Heart
-            var Heart_normal = heart.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Heart_observation = heart.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Heart_attention = heart.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Heart_received = heart.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Heart_normal = heart.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Heart_observation = heart.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Heart_attention = heart.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Heart_received = heart.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Heart_normal;
             TeleObservation += Heart_observation;
             TeleAttention += Heart_attention;
@@ -2044,13 +2046,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Heart_received
             });
-            dashboard.Result.Heart = Heart;
+            dashboard.Heart = Heart;
             #endregion
             #region Oxygen
-            var Oxygen_normal = oxygen.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Oxygen_observation = oxygen.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Oxygen_attention = oxygen.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Oxygen_received = oxygen.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Oxygen_normal = oxygen.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Oxygen_observation = oxygen.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Oxygen_attention = oxygen.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Oxygen_received = oxygen.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Oxygen_normal;
             TeleObservation += Oxygen_observation;
             TeleAttention += Oxygen_attention;
@@ -2076,13 +2078,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Oxygen_received
             });
-            dashboard.Result.Oxygen = Oxygen;
+            dashboard.Oxygen = Oxygen;
             #endregion
             #region Pain
-            var Pain_normal = pain.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Pain_observation = pain.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Pain_attention = pain.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Pain_received = pain.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Pain_normal = pain.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Pain_observation = pain.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Pain_attention = pain.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Pain_received = pain.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Pain_normal;
             TeleObservation += Pain_observation;
             TeleAttention += Pain_attention;
@@ -2108,13 +2110,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Pain_received
             });
-            dashboard.Result.Pain = Pain;
+            dashboard.Pain = Pain;
             #endregion
             #region Pulse
-            var Pulse_normal = pulse.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Pulse_observation = pulse.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Pulse_attention = pulse.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Pulse_received = pulse.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Pulse_normal = pulse.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Pulse_observation = pulse.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Pulse_attention = pulse.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Pulse_received = pulse.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Pulse_normal;
             TeleObservation += Pulse_observation;
             TeleAttention += Pulse_attention;
@@ -2140,13 +2142,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Pulse_received
             });
-            dashboard.Result.Pulse = Pulse;
+            dashboard.Pulse = Pulse;
             #endregion
             #region Seizure
-            var Seizure_normal = seizure.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Seizure_observation = seizure.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Seizure_attention = seizure.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Seizure_received = seizure.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Seizure_normal = seizure.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Seizure_observation = seizure.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Seizure_attention = seizure.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Seizure_received = seizure.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Seizure_normal;
             TeleObservation += Seizure_observation;
             TeleAttention += Seizure_attention;
@@ -2172,13 +2174,13 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Seizure_received
             });
-            dashboard.Result.Seizure = Seizure;
+            dashboard.Seizure = Seizure;
             #endregion
             #region Wound
-            var Wound_normal = wound.Result.Where(j => j.Status == nId && j.ClientId == clientId).Count();
-            var Wound_observation = wound.Result.Where(j => j.Status == oId && j.ClientId == clientId).Count();
-            var Wound_attention = wound.Result.Where(j => j.Status == aId && j.ClientId == clientId).Count();
-            var Wound_received = wound.Result.Where(j => j.Status == rId && j.ClientId == clientId).Count();
+            var Wound_normal = wound.Where(j => j.Status == nId && j.ClientId == clientId).Count();
+            var Wound_observation = wound.Where(j => j.Status == oId && j.ClientId == clientId).Count();
+            var Wound_attention = wound.Where(j => j.Status == aId && j.ClientId == clientId).Count();
+            var Wound_received = wound.Where(j => j.Status == rId && j.ClientId == clientId).Count();
             TeleNormal += Wound_normal;
             TeleObservation += Wound_observation;
             TeleAttention += Wound_attention;
@@ -2204,7 +2206,7 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = Wound_received
             });
-            dashboard.Result.Wound = Wound;
+            dashboard.Wound = Wound;
             #endregion
             #region TeleHealth
             TeleHeath.Add(new Status
@@ -2227,17 +2229,17 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "R",
                 Value = TeleReceived
             });
-            dashboard.Result.TeleHealth = TeleHeath;
+            dashboard.TeleHealth = TeleHeath;
             #endregion
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult Ongoing(int carePId, int careCId, int careLId, int clientId)
+        public async Task<JsonResult> Ongoing(int carePId, int careCId, int careLId, int clientId)
         {
-            var care = _clientServiceWatchService.Get();
-            var pending = care.Result.Where(j => j.Status == carePId && j.ClientId == clientId).Count();
-            var closed = care.Result.Where(j => j.Status == careCId && j.ClientId == clientId).Count();
-            var late = care.Result.Where(j => j.Status == careLId && j.ClientId == clientId).Count();
+            var care = await _clientServiceWatchService.Get();
+            var pending = care.Where(j => j.Status == carePId && j.ClientId == clientId).Count();
+            var closed = care.Where(j => j.Status == careCId && j.ClientId == clientId).Count();
+            var late = care.Where(j => j.Status == careLId && j.ClientId == clientId).Count();
             var careObj = new List<Status>();
             careObj.Add(new Status
             {
@@ -2257,9 +2259,9 @@ namespace AwesomeCare.Admin.Controllers
             return Json(careObj);
         }
         [HttpGet]
-        public JsonResult Performance(int carePId, int careCId, int careLId, int clientId)
+        public async Task<JsonResult> Performance(int carePId, int careCId, int careLId, int clientId)
         {
-            var dashboard = _dashboardService.Get();
+            var dashboard = await _dashboardService.Get();
             #region variables
             var endDate = DateTime.Now.ToString("yyyy-MM-dd");
             bool isStopDateValid = DateTime.TryParseExact(endDate, "yyyy-MM-dd", CultureInfo.GetCultureInfo("en-US"), DateTimeStyles.None, out DateTime stopDate);
@@ -2272,23 +2274,23 @@ namespace AwesomeCare.Admin.Controllers
             var cId = careCId;
             var lId = careLId;
 
-            var getClient = _clientService.GetClients();
-            var log = _clientLogAuditService.Get();
-            var med = _clientMedAuditService.Get();
-            var complain = _clientComplainService.Get();
-            var voice = _clientVoiceService.Get();
-            var watch = _clientServiceWatchService.Get();
-            var mgt = _clientMgtVisitService.Get();
-            var prog = _clientProgramService.Get();
+            var getClient = await _clientService.GetClients();
+            var log = await _clientLogAuditService.Get();
+            var med = await _clientMedAuditService.Get();
+            var complain = await _clientComplainService.Get();
+            var voice = await _clientVoiceService.Get();
+            var watch = await _clientServiceWatchService.Get();
+            var mgt = await _clientMgtVisitService.Get();
+            var prog = await _clientProgramService.Get();
 
-            var baserecordItem = _baseService.GetBaseRecordsWithItems();
+            var baserecordItem = await _baseService.GetBaseRecordsWithItems();
             #endregion
             var Client = new List<Status>();
 
             #region LogAudit
-            var log_pending = log.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
-            var log_closed = log.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
-            var log_late = log.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            var log_pending = log.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var log_closed = log.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var log_late = log.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
             clientPending += log_pending;
             clientClosed += log_closed;
             clientLate += log_late;
@@ -2308,12 +2310,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = log_late
             });
-            dashboard.Result.LogAudit = LogAudit;
+            dashboard.LogAudit = LogAudit;
             #endregion
             #region MedAudit
-            var med_pending = med.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
-            var med_closed = med.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
-            var med_late = med.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            var med_pending = med.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var med_closed = med.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var med_late = med.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
             clientPending += med_pending;
             clientClosed += med_closed;
             clientLate += med_late;
@@ -2333,12 +2335,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = med_late
             });
-            dashboard.Result.MedAudit = MedAudit;
+            dashboard.MedAudit = MedAudit;
             #endregion
             #region CompAudit
-            var Comp_pending = complain.Result.Where(j => j.StatusId == pId && (j.DUEDATE.Year >= stopDate.Year && j.DUEDATE.Month >= stopDate.Month && j.DUEDATE.Day > stopDate.Day) && j.ClientId == clientId).Count();
-            var Comp_closed = complain.Result.Where(j => j.StatusId == cId && j.ClientId == clientId).Count();
-            var Comp_late = complain.Result.Where(j => j.StatusId == pId && (j.DUEDATE.Year <= stopDate.Year && j.DUEDATE.Month <= stopDate.Month && j.DUEDATE.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            var Comp_pending = complain.Where(j => j.StatusId == pId && (j.DUEDATE.Year >= stopDate.Year && j.DUEDATE.Month >= stopDate.Month && j.DUEDATE.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var Comp_closed = complain.Where(j => j.StatusId == cId && j.ClientId == clientId).Count();
+            var Comp_late = complain.Where(j => j.StatusId == pId && (j.DUEDATE.Year <= stopDate.Year && j.DUEDATE.Month <= stopDate.Month && j.DUEDATE.Day < stopDate.Day) && j.ClientId == clientId).Count();
             clientPending += Comp_pending;
             clientClosed += Comp_closed;
             clientLate += Comp_late;
@@ -2358,12 +2360,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = Comp_late
             });
-            dashboard.Result.Complain = Comp;
+            dashboard.Complain = Comp;
             #endregion
             #region Voice
-            var voice_pending = voice.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
-            var voice_closed = voice.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
-            var voice_late = voice.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            var voice_pending = voice.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var voice_closed = voice.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var voice_late = voice.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
             clientPending += voice_pending;
             clientClosed += voice_closed;
             clientLate += voice_late;
@@ -2383,12 +2385,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = voice_late
             });
-            dashboard.Result.Voice = Voice;
+            dashboard.Voice = Voice;
             #endregion
             #region Program
-            var prog_pending = prog.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
-            var prog_closed = prog.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
-            var prog_late = prog.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            var prog_pending = prog.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var prog_closed = prog.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var prog_late = prog.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
             clientPending += prog_pending;
             clientClosed += prog_closed;
             clientLate += prog_late;
@@ -2408,12 +2410,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = prog_late
             });
-            dashboard.Result.Program = Program;
+            dashboard.Program = Program;
             #endregion
             #region Watch
-            var watch_pending = watch.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
-            var watch_closed = watch.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
-            var watch_late = watch.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            var watch_pending = watch.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var watch_closed = watch.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var watch_late = watch.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
             clientPending += watch_pending;
             clientClosed += watch_closed;
             clientLate += watch_late;
@@ -2433,12 +2435,12 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = watch_late
             });
-            dashboard.Result.ServiceWatch = Watch;
+            dashboard.ServiceWatch = Watch;
             #endregion
             #region MgtVisit
-            var mgt_pending = mgt.Result.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
-            var mgt_closed = mgt.Result.Where(j => j.Status == cId && j.ClientId == clientId).Count();
-            var mgt_late = mgt.Result.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
+            var mgt_pending = mgt.Where(j => j.Status == pId && (j.Deadline.Year >= stopDate.Year && j.Deadline.Month >= stopDate.Month && j.Deadline.Day > stopDate.Day) && j.ClientId == clientId).Count();
+            var mgt_closed = mgt.Where(j => j.Status == cId && j.ClientId == clientId).Count();
+            var mgt_late = mgt.Where(j => j.Status == pId && (j.Deadline.Year <= stopDate.Year && j.Deadline.Month <= stopDate.Month && j.Deadline.Day < stopDate.Day) && j.ClientId == clientId).Count();
             clientPending += mgt_pending;
             clientClosed += mgt_closed;
             clientLate += mgt_late;
@@ -2458,7 +2460,7 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = mgt_late
             });
-            dashboard.Result.MgtVisit = MgtVisit;
+            dashboard.MgtVisit = MgtVisit;
             #endregion
             #region ClientMatrix
             Client.Add(new Status
@@ -2476,17 +2478,17 @@ namespace AwesomeCare.Admin.Controllers
                 Key = "Late",
                 Value = clientLate
             });
-            dashboard.Result.ClientMatrix = Client;
+            dashboard.ClientMatrix = Client;
             #endregion
-            return Json(dashboard.Result);
+            return Json(dashboard);
         }
         [HttpGet]
-        public JsonResult Supervision(int pId, int cId, int lId)
+        public async Task<JsonResult> Supervision(int pId, int cId, int lId)
         {
-            var care = _staffSupervisionService.Get();
-            var pending = care.Result.Where(j => j.Status == pId).Count();
-            var closed = care.Result.Where(j => j.Status == cId).Count();
-            var late = care.Result.Where(j => j.Status == lId).Count();
+            var care = await _staffSupervisionService.Get();
+            var pending = care.Where(j => j.Status == pId).Count();
+            var closed = care.Where(j => j.Status == cId).Count();
+            var late = care.Where(j => j.Status == lId).Count();
             var careObj = new List<Status>();
             careObj.Add(new Status
             {

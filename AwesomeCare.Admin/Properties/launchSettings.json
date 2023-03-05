@@ -2,10 +2,6 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
-    "iis": {
-      "applicationUrl": "http://localhost/AwesomeCare.Admin",
-      "sslPort": 0
-    },
     "iisExpress": {
       "applicationUrl": "http://localhost:59906",
       "sslPort": 44372

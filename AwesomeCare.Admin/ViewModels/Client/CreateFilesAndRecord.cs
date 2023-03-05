@@ -27,6 +27,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
 
         public string StaffName { get; set; }
         public string ClientName { get; set; }
+        public string IdNumber { get; set; }
+        public string DOB { get; set; }
         public List<SelectListItem> StaffList { get; set; }
     }
 }

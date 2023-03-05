@@ -32,6 +32,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
         #endregion
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         public string ActiveTab { get; set; } = "mgtvisit";
         public int VisitId { get; set; }
         public string Reference { get; set; }
@@ -78,5 +80,10 @@ namespace AwesomeCare.Admin.ViewModels.ClientMgtVisit
         [Required]
         public string URL { get; set; }
         public string Attachment { get; set; }
+        public string RateServiceRecievingName { get; set; }
+        public string RateManagersName { get; set; }
+        public string HowToComplainName { get; set; }
+        public string ServiceRecommendedName { get; set; }
+        public string OfficerToActName { get; set; }
     }
 }

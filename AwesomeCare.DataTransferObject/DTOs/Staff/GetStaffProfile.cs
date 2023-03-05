@@ -24,6 +24,7 @@ using AwesomeCare.DataTransferObject.DTOs.Staff.SalaryAllowance;
 using AwesomeCare.DataTransferObject.DTOs.Staff.SalaryDeduction;
 using AwesomeCare.DataTransferObject.DTOs.Staff.StaffTax;
 using AwesomeCare.DataTransferObject.DTOs.StaffOfficeLocation;
+using AwesomeCare.DataTransferObject.DTOs.Staff.Lateness;
 
 namespace AwesomeCare.DataTransferObject.DTOs.Staff
 {
@@ -81,6 +82,7 @@ namespace AwesomeCare.DataTransferObject.DTOs.Staff
         public List<GetSalaryDeduction> GetSalaryDeduction { get; set; }
         public List<GetStaffTax> GetStaffTax { get; set; }
         public List<GetStaffOfficeLocation> GetStaffOfficeLocation { get; set; } = new List<GetStaffOfficeLocation>();
+        public List<GetStaffLateness> GetStaffLateness { get; set; } = new List<GetStaffLateness>();
         public int StaffPersonalInfoId { get; set; }
         public string ApplicationUserId { get; set; }
         [Display(Name ="Staff Number")]

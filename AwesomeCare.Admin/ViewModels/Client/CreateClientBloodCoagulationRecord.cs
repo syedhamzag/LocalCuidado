@@ -31,6 +31,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string ActiveTab { get; set; } = "bloodcoagrecord";
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         [Required]
         public int BloodRecordId { get; set; }
         [Required]
@@ -77,5 +79,12 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Remark { get; set; }
         [Required]
         public int Status { get; set; }
+        public string IndicationName { get; set; }
+        public string TargetINRName { get; set; }
+        public string CurrentDoseName { get; set; }
+        public string INRName { get; set; }
+        public string NewDoseName { get; set; }
+        public string NewINRName { get; set; }
+        public string BloodStatusName { get; set; }
     }
 }

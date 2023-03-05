@@ -9,14 +9,12 @@
         <div class="card planned_task">
             <div class="card-header">
                 <h2>All Task Board</h2>
-                <ul class="header-dropdown">
-                    <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a asp-action="Index">Create</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                <div class="dropdown profile-action">
+                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                    <div class="dropdown-menu dropdown-menu-right" style="">
+                        <a asp-action="Index">Create</a>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <table class="table m-b-0 datatables">

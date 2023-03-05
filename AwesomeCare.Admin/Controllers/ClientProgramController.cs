@@ -124,14 +124,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int progId)
-        {
-            var Program = await _clientProgramService.Get(progId);
-            var json = JsonConvert.SerializeObject(Program);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientProgram.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -207,7 +199,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "clientprogram";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -216,23 +208,23 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-                postlog.ClientId = model.ClientId;
-                postlog.Reference = model.Reference;
-                postlog.Attachment = model.Attachment;
-                postlog.Date = model.Date;
-                postlog.NextCheckDate = model.NextCheckDate;
-                postlog.Deadline = model.Deadline;
-                postlog.ProgramOfChoice = model.ProgramOfChoice;
-                postlog.URL = model.URL;
-                postlog.DaysOfChoice = model.DaysOfChoice;
-                postlog.OfficerToAct = model.OfficerToTakeAction.Select(o => new PostProgramOfficerToAct { StaffPersonalInfoId = o, ProgramId = model.ProgramId }).ToList();
-                postlog.Remarks = model.Remarks;
-                postlog.DetailsOfProgram = model.DetailsOfProgram;
-                postlog.Status = model.Status;
-                postlog.ActionRequired = model.ActionRequired;
-                postlog.Observation = model.Observation;
-                postlog.PlaceLocationProgram = model.PlaceLocationProgram;
-                    
+            postlog.ClientId = model.ClientId;
+            postlog.Reference = model.Reference;
+            postlog.Attachment = model.Attachment;
+            postlog.Date = model.Date;
+            postlog.NextCheckDate = model.NextCheckDate;
+            postlog.Deadline = model.Deadline;
+            postlog.ProgramOfChoice = model.ProgramOfChoice;
+            postlog.URL = model.URL;
+            postlog.DaysOfChoice = model.DaysOfChoice;
+            postlog.OfficerToAct = model.OfficerToTakeAction.Select(o => new PostProgramOfficerToAct { StaffPersonalInfoId = o, ProgramId = model.ProgramId }).ToList();
+            postlog.Remarks = model.Remarks;
+            postlog.DetailsOfProgram = model.DetailsOfProgram;
+            postlog.Status = model.Status;
+            postlog.ActionRequired = model.ActionRequired;
+            postlog.Observation = model.Observation;
+            postlog.PlaceLocationProgram = model.PlaceLocationProgram;
+
             var result = await _clientProgramService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -259,7 +251,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "clientprogram";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
 
             }
@@ -269,24 +261,24 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-                PutClientProgram put = new PutClientProgram();
-                put.ProgramId = model.ProgramId;
-                put.ClientId = model.ClientId;
-                put.Reference = model.Reference;
-                put.Attachment = model.Attachment;
-                put.Date = model.Date;
-                put.NextCheckDate = model.NextCheckDate;
-                put.Deadline = model.Deadline;
-                put.ProgramOfChoice = model.ProgramOfChoice;
-                put.URL = model.URL;
-                put.DaysOfChoice = model.DaysOfChoice;
-                put.OfficerToAct = model.OfficerToTakeAction.Select(o => new PutProgramOfficerToAct { StaffPersonalInfoId = o, ProgramId = model.ProgramId }).ToList();
-                put.Remarks = model.Remarks;
-                put.DetailsOfProgram = model.DetailsOfProgram;
-                put.Status = model.Status;
-                put.ActionRequired = model.ActionRequired;
-                put.Observation = model.Observation;
-                put.PlaceLocationProgram = model.PlaceLocationProgram;
+            PutClientProgram put = new PutClientProgram();
+            put.ProgramId = model.ProgramId;
+            put.ClientId = model.ClientId;
+            put.Reference = model.Reference;
+            put.Attachment = model.Attachment;
+            put.Date = model.Date;
+            put.NextCheckDate = model.NextCheckDate;
+            put.Deadline = model.Deadline;
+            put.ProgramOfChoice = model.ProgramOfChoice;
+            put.URL = model.URL;
+            put.DaysOfChoice = model.DaysOfChoice;
+            put.OfficerToAct = model.OfficerToTakeAction.Select(o => new PutProgramOfficerToAct { StaffPersonalInfoId = o, ProgramId = model.ProgramId }).ToList();
+            put.Remarks = model.Remarks;
+            put.DetailsOfProgram = model.DetailsOfProgram;
+            put.Status = model.Status;
+            put.ActionRequired = model.ActionRequired;
+            put.Observation = model.Observation;
+            put.PlaceLocationProgram = model.PlaceLocationProgram;
 
             var json = JsonConvert.SerializeObject(put);
             var entity = await _clientProgramService.Put(put);
@@ -301,6 +293,45 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int progId)
+        {
+            var entity = await GetDownload(progId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientProgram> GetDownload(int Id)
+        {
+            var i = await _clientProgramService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientProgram
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                NextCheckDate = i.NextCheckDate,
+                Observation = i.Observation,
+                ActionRequired = i.ActionRequired,
+                Deadline = i.Deadline,
+                Remarks = i.Remarks,
+                URL = i.URL,
+                Attachment = i.Attachment,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                ProgramOfChoiceName = _baseService.GetBaseRecordItemById(i.ProgramOfChoice).Result.ValueName,
+                DaysOfChoiceName = _baseService.GetBaseRecordItemById(i.DaysOfChoice).Result.ValueName,
+                PlaceLocationProgramName = _baseService.GetBaseRecordItemById(i.PlaceLocationProgram).Result.ValueName,
+                DetailsOfProgramName = _baseService.GetBaseRecordItemById(i.DetailsOfProgram).Result.ValueName,
+            };
+            return putEntity;
         }
     }
 }

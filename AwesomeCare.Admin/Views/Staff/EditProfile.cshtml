@@ -145,7 +145,7 @@
                                                     <div class="col-xs-12 col-sm-4 col-md-4">
                                                         <div class="form-group">
                                                             <label asp-for="DrivingLicenseExpiryDate" class="control-label"></label>
-                                                            <input data-provide="datepicker" asp-for="DrivingLicenseExpiryDate.Value" data-date-autoclose="true" type="text" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <input data-provide="datepicker" asp-for="DrivingLicenseExpiryDate" data-date-autoclose="true" type="text" class="form-control" data-date-format="mm/dd/yyyy">
                                                             <span asp-validation-for="DrivingLicenseExpiryDate" class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -181,18 +181,18 @@
                                                     </div>
                                                     <div class="col-xs-12 col-sm-4 col-md-4">
                                                         <div class="form-group">
-                                                            <label asp-for="RightToWorkAttachment" class="control-label"></label>
+                                                            <label asp-for="RightToWorkFile" class="control-label"></label>
 
-                                                            <input type="file" asp-for="RightToWorkAttachment" class="form-control">
+                                                            <input type="file" asp-for="RightToWorkFile" class="form-control">
 
                                                             <span asp-validation-for="RightToWorkFile" class="text-danger"></span>
-                                                            <span asp-validation-for="RightToWorkAttachment" class="text-danger"></span>
+                                                            <span asp-validation-for="RightToWorkFile" class="text-danger"></span>
                                                         </div>
                                                     </div>
                                                     <div class="col-xs-12 col-sm-4 col-md-4">
                                                         <div class="form-group">
                                                             <label asp-for="RightToWorkExpiryDate" class="control-label"></label>
-                                                            <input data-provide="datepicker" type="text" asp-for="RightToWorkExpiryDate.Value" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <input data-provide="datepicker" type="text" asp-for="RightToWorkExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
                                                             <span asp-validation-for="RightToWorkExpiryDate" class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -233,7 +233,7 @@
                                                     <div class="col-xs-12 col-sm-4 col-md-4">
                                                         <div class="form-group">
                                                             <label asp-for="DBSExpiryDate" class="control-label"></label>
-                                                            <input data-provide="datepicker" type="text" asp-for="DBSExpiryDate.Value" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <input data-provide="datepicker" type="text" asp-for="DBSExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
                                                             <span asp-validation-for="DBSExpiryDate" class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -277,7 +277,7 @@
                                                     <div class="col-xs-12 col-sm-4 col-md-4">
                                                         <div class="form-group">
                                                             <label asp-for="NIExpiryDate" class="control-label"></label>
-                                                            <input data-provide="datepicker" type="text" asp-for="NIExpiryDate.Value" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
+                                                            <input data-provide="datepicker" type="text" asp-for="NIExpiryDate" data-date-autoclose="true" class="form-control" data-date-format="mm/dd/yyyy">
                                                             <span asp-validation-for="NIExpiryDate" class="text-danger"></span>
                                                         </div>
                                                     </div>
@@ -778,8 +778,8 @@
 </div>
 
 @section Scripts{
-    <script src="~/assets/js/pages/forms/form-wizard.js"></script>
-    <script src="~/assets/js/pages/forms/dropify.js"></script>
+    <script src="../assets2/js/pages/forms/form-wizard.js"></script>
+    <script src="../assets2/js/pages/forms/dropify.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

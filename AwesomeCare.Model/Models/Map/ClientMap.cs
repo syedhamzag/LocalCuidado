@@ -196,9 +196,12 @@ namespace AwesomeCare.Model.Models.Map
           .HasDefaultValue(0);
 
             builder.Property(p => p.KeyworkerId)
-          .HasColumnName("KeyworkerId")
-          .HasDefaultValue(0);
+              .HasColumnName("KeyworkerId")
+              .HasDefaultValue(0);
 
+            builder.Property(p => p.LocationDistance)
+             .HasColumnName("LocationDistance")
+             .HasDefaultValue(0.01);
 
             builder.HasMany(p => p.RegulatoryContact)
                 .WithOne(p => p.Client)

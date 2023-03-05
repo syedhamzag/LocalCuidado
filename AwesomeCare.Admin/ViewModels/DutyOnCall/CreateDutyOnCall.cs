@@ -11,28 +11,24 @@ namespace AwesomeCare.Admin.ViewModels.DutyOnCall
 {
     public class CreateDutyOnCall
     {
-        public CreateDutyOnCall()
-        {
-            ListItems = new List<SelectListItem> {
-                new SelectListItem("Yes","true"),
-                new SelectListItem("No","false")
-            };
-            Staffs = new List<SelectListItem>();
-        }
-
         [DataType(DataType.Upload)]
         public IFormFile Attach { get; set; }
 
-        public List<SelectListItem> Staffs { get; set; }
-        public List<SelectListItem> ListItems { get; set; }
-        
-        
+        public List<SelectListItem> Staffs { get; set; } = new List<SelectListItem>(); 
+        public List<SelectListItem> ListItems { get; set; } = new List<SelectListItem>{
+                new SelectListItem("Yes","true"),
+                new SelectListItem("No","false")
+            };
+
+
         public int DutyOnCallId { get; set; }
         public int ClientId { get; set; }
         public string Subject { get; set; }
         public List<int> PersonResponsible { get; set; }
+        public string PersonResponsibleName { get; set; } 
         public DateTime DateOfCall { get; set; }
         public List<int> PersonToAct { get; set; }
+        public string PersonToActName { get; set; } 
         public DateTime TimeOfCall { get; set; }
         public int Status { get; set; }
         public string DetailsOfIncident { get; set; }
@@ -60,11 +56,16 @@ namespace AwesomeCare.Admin.ViewModels.DutyOnCall
         public bool StaffBlacklisted { get; set; }
         public bool NotifyStaffInvolved { get; set; }
         public string Attachment { get; set; }
-
         public string StatusName { get; set; }
         public string ClientName { get; set; }
+        public string IdNumber { get; set; }
+        public string DOB { get; set; }
         public string PriorityName { get; set; }
         public string NotificationStatusName { get; set; }
+        public string TypeOfIncidentName { get; set; }
+        public string TelephoneToCallName { get; set; }
+        public string PositionOfReportingName { get; set; }
+        public string TypeOfDutyCallName { get; set; }
 
 
     }

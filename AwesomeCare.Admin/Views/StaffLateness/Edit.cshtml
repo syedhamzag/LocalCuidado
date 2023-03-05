@@ -1,0 +1,96 @@
+﻿@using AwesomeCare.Admin.ViewModels.Staff;
+@model CreateStaffLateness
+@{
+    ViewData["Title"] = "Update Staff Lateness";
+}
+@section HeaderScripts{
+    <link rel="stylesheet" href="../../../assets2/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets2/vendor/dropify/css/dropify.min.css">
+}
+<div class="row clearfix">
+    <div class="col-lg-12 col-md-12">
+        <div class="card planned_task">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body">
+                <form asp-controller="StaffLateness" asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                            <input type="hidden" asp-for="StaffLatenessId" />
+                            <input type="hidden" asp-for="SN" />
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                <label>Rota</label>
+                                <select asp-for="Rota" asp-items="@Model.Rotas" class="selectpicker form-control" data-live-search="true"></select>
+                                <span asp-validation-for="Rota" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-6 col-lg-6">
+                                    <label class="control-label">Staff</label>
+                                    <select asp-for="StaffPersonalInfoId" asp-items="Model.StaffList" class="selectpicker form-control" data-live-search="true">
+                                    </select>
+                                    <span asp-validation-for="StaffPersonalInfoId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label class="control-label">Status</label>
+                                    <baserecord asp-key="Staff_Communication_Status" asp-for="Status" asp-items="null" />
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label>Date</label>
+                                    <input type="text" asp-for="Date" class="form-control" data-provide="datepicker" data-date-autoclose="true" data-date-format="mm/dd/yyyy" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                                <div class="form-group col-sm-4 col-xs-12 col-md-4 col-lg-4">
+                                    <label>Time Critical</label>
+                                    <input type="text" asp-for="TimeCritical" data-provide="timepicker" data-show-meridian="false" data-minute-step="1" class="form-control" />
+                                    <span asp-validation-for="TimeCritical" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Reason</label>
+                                        <input type="text" asp-for="Reason" class="form-control" />
+                                        <span asp-validation-for="Reason" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Response</label>
+                                        <input type="text" asp-for="Response" class="form-control" />
+                                        <span asp-validation-for="Response" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                                </div>
+                                <div class="form-group col-sm-6 col-xs-12 col-md-4 col-lg-6">
+                                    <a asp-action="Index" class="btn btn-primary pull-left">Cancel</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section VendorScripts{
+    <script src="../../../assets2/vendor/jquery-steps/jquery.steps.js"></script> <!-- JQuery Steps Plugin Js -->
+    <script src="../../../assets2/vendor/dropify/js/dropify.min.js"></script>
+    <script src="../../../assets2/bundles/mainscripts.bundle.js"></script>
+}
+
+@section Scripts{
+    <script src="../../../assets2/js/pages/forms/form-wizard.js"></script>
+    <script src="../../../assets2/js/pages/forms/dropify.js"></script>
+}

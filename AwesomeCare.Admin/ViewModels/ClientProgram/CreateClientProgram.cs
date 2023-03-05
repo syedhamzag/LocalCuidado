@@ -28,6 +28,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientProgram
         public string Reference { get; set; }
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         [Required]
         public int ClientId { get; set; }
         [Required]
@@ -59,5 +61,10 @@ namespace AwesomeCare.Admin.ViewModels.ClientProgram
         [Required]
         public string URL { get; set; }
         public string Attachment { get; set; }
+        public string ProgramOfChoiceName { get; set; }
+        public string DaysOfChoiceName { get; set; }
+        public string PlaceLocationProgramName { get; set; }
+        public string DetailsOfProgramName { get; set; }
+
     }
 }

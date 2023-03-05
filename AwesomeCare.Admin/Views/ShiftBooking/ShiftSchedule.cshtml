@@ -3,12 +3,14 @@
 @{
     ViewData["Title"] = "Shift Booking Schedule";
 }
+
+
 <!-- /Content -->
 <!-- Search Filter -->
 <form asp-action="ShiftSchedule" method="post">
 <div class="row filter-row">
 					
-	<div class="col-sm-6 col-md-4"> 
+	<div class="col-sm-6 col-md-6"> 
 		<div class="form-group form-focus select-focus focused">
 			<select name="rota" asp-items="@Model.Rotas" class="selectpicker form-control" data-live-search="true"></select>
 		</div>
@@ -31,17 +33,12 @@
 	</div>
 	<div class="col-sm-6 col-md-2">  
 		<input type="submit" class="btn btn-success w-100" value="Search" />  
-	</div>
-    <div class="col-sm-6 col-md-2">  
-		<a class="btn add-btn" asp-action="EditStaff" asp-controller="ShiftBooking" asp-route-shiftId="@Model.ShiftBookingId"><i class="fa fa-pencil"></i> Edit Staff</a>
-	</div>
+	</div>     
 </div>
 </form>
 <!-- Search Filter -->
-
 <div class="row">
 	<div class="col-md-12">
-        
 		<div class="table-responsive">
 			<table class="table table-striped table-dark custom-table datatable">
 				<thead>

@@ -14,7 +14,6 @@ namespace AwesomeCare.Model.Models
         public int ShiftBookingId { get; set; }
         public int StaffPersonalInfoId { get; set; }
 
-      
         public virtual ShiftBooking ShiftBooking { get; set; }
         public virtual StaffPersonalInfo StaffPersonalInfo { get; set; }
         public virtual ICollection<StaffShiftBookingDay> Days { get; set; }

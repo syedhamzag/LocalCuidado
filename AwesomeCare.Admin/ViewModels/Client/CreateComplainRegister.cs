@@ -39,6 +39,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         #endregion
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string IdNumber { get; set; }
+        public string DOB { get; set; }
 
         [Required]
         public string Reference { get; set; }
@@ -79,9 +81,11 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string ROOTCAUSE { get; set; }
         [Required]
         public string REMARK { get; set; }
+
         [Required]
         [Display(Name = "Status")]
         public int StatusId { get; set; }
+        public string StatusIdName { get; set; }
         public string EvidenceFilePath { get; set; }
         public async Task SaveFileToDisk(IWebHostEnvironment env)
         {

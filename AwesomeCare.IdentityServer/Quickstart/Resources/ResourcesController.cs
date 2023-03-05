@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using AwesomeCare.IdentityServer.ViewModels;
 using IdentityServer4.EntityFramework.DbContexts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace AwesomeCare.IdentityServer.Quickstart.Resources
 {
+   // [Authorize]
     public class ResourcesController : Controller
     {
         private ConfigurationDbContext _dbContext;

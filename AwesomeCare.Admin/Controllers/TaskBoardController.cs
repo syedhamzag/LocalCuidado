@@ -99,7 +99,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.AssignedBy + System.IO.Path.GetExtension(model.Image.FileName);
                 string folder = "taskboard";
                 string filename = string.Concat(folder, "_TaskImage_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream(), model.Image.ContentType);
                 model.TaskImage = path;
             }
             else
@@ -111,7 +111,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.AssignedBy + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "taskboard";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -157,7 +157,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.AssignedBy + System.IO.Path.GetExtension(model.Image.FileName);
                 string folder = "taskboard";
                 string filename = string.Concat(folder, "_TaskImage_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream(), model.Image.ContentType);
                 model.TaskImage = path;
             }
             else
@@ -169,7 +169,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.AssignedBy + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "taskboard";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(),model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -199,7 +199,7 @@ namespace AwesomeCare.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(int clientId, int pin)
+        public async Task<IActionResult> _Index(int clientId, int pin)
         {
             var getmodal = await _taskService.GetPin();
             if (pin != getmodal.Pin)

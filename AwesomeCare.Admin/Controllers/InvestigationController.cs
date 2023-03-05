@@ -82,7 +82,7 @@ namespace AwesomeCare.Admin.Controllers
                     string client = model.Clients.FirstOrDefault(c => c.Value == model.ClientId.ToString())?.Text;
                     string filename = staff + "_" + client + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_" + i + "_" + file.FileName;
 
-                    var attachment = await _fileUpload.UploadFile("investigations", true, filename, file.OpenReadStream());
+                    var attachment = await _fileUpload.UploadFile("investigations", true, filename, file.OpenReadStream(),file.ContentType);
 
                     model.InvestigationAttachments.Add(new PostInvestigationAttachment
                     {

@@ -28,6 +28,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         #endregion
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         public string ActiveTab { get; set; } = "servicewatch";
         public int WatchId { get; set; }
         public string Reference { get; set; }
@@ -63,5 +65,10 @@ namespace AwesomeCare.Admin.ViewModels.ClientServiceWatch
         [Required]
         public string URL { get; set; }
         public string Attachment { get; set; }
+        public string IncidentName { get; set; }
+        public string DetailsName { get; set; }
+        public string ContactName { get; set; }
+        public string OfficerToActName { get; set; }
+
     }
 }

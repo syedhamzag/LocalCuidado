@@ -26,8 +26,13 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         public IFormFile Attach { get; set; }
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
+
+
         #region DropDowns
         public ICollection<SelectListItem> OFFICERTOACT { get; set; }
+        public string OFFICERTOACTNAME { get; set; }
         public ICollection<SelectListItem> Status_ { get; set; }
         #endregion
 
@@ -68,7 +73,9 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         [Required]
         [Display(Name = "OFFICERTOACT")]
         public List<int> OfficerToTakeAction { get; set; }
+        public string OfficerToTakeActionName { get; set; }
         public List<string> OfficerName { get; set; }
+        
         [Required]
         [Display(Name = "Status_")]
         public int Status { get; set; }
@@ -85,5 +92,6 @@ namespace AwesomeCare.Admin.ViewModels.ClientLogAudit
         [Required]        
         public string LogURL { get; set; }
         public string EvidenceFilePath { get; set; }
+        public string RepeatOfIncidentName { get; set; }
     }
 }

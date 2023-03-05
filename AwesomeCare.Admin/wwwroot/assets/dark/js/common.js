@@ -144,9 +144,9 @@ function CustomJs() {
 	});
 	$(window).on('load resize', function() {
 		if($(window).innerWidth() < 420) {
-			$('.navbar-brand logo.svg').attr('src', '../assets/images/logo-icon.svg');
+			$('.navbar-brand logo.svg').attr('src', '../assets2/images/logo-icon.svg');
 		} else {
-			$('.navbar-brand logo-icon.svg').attr('src', '../assets/images/logo.svg');
+			$('.navbar-brand logo-icon.svg').attr('src', '../assets2/images/logo.svg');
 		}
     });
     

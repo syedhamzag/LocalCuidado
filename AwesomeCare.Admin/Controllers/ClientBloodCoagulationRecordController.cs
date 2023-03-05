@@ -43,9 +43,9 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
 
-        public ClientBloodCoagulationRecordController(IClientBloodCoagulationRecordService clientBloodCoagulationRecordService, IFileUpload fileUpload, 
-            IClientService clientService, IStaffService staffService, IWebHostEnvironment env, 
-            ILogger<ClientController> logger, IMemoryCache cache,  IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
+        public ClientBloodCoagulationRecordController(IClientBloodCoagulationRecordService clientBloodCoagulationRecordService, IFileUpload fileUpload,
+            IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
         {
             _clientBloodCoagulationRecordService = clientBloodCoagulationRecordService;
             _clientService = clientService;
@@ -60,7 +60,7 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _clientBloodCoagulationRecordService.Get();
-            
+
             var client = await _clientService.GetClientDetail();
             List<CreateClientBloodCoagulationRecord> reports = new List<CreateClientBloodCoagulationRecord>();
             foreach (GetClientBloodCoagulationRecord item in entities)
@@ -74,17 +74,17 @@ namespace AwesomeCare.Admin.Controllers
                 report.TargetINRAttach = item.TargetINRAttach;
                 reports.Add(report);
             }
-            
+
             return View(reports);
         }
 
         public async Task<IActionResult> Index(int? clientId)
         {
-            var model = new CreateClientBloodCoagulationRecord();           
+            var model = new CreateClientBloodCoagulationRecord();
             var staffs = await _staffService.GetStaffs();
             model.ClientId = clientId.Value;
             var client = await _clientService.GetClientDetail();
-            model.ClientName = client.Where(s=>s.ClientId==clientId.Value).FirstOrDefault().FullName;
+            model.ClientName = client.Where(s => s.ClientId == clientId.Value).FirstOrDefault().FullName;
             model.OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
             return View(model);
 
@@ -124,7 +124,7 @@ namespace AwesomeCare.Admin.Controllers
             };
             return View(putEntity);
         }
-        public async Task<IActionResult> Email(int bloodId,string sender,string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int bloodId, string sender, string password, string recipient, string Smtp)
         {
             var BloodCoagulationRecord = await _clientBloodCoagulationRecordService.Get(bloodId);
             var json = JsonConvert.SerializeObject(BloodCoagulationRecord);
@@ -134,14 +134,6 @@ namespace AwesomeCare.Admin.Controllers
             string body = "";
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
-        }
-        public async Task<IActionResult> Download(int bloodId)
-        {
-            var BloodCoagulationRecord = await _clientBloodCoagulationRecordService.Get(bloodId);
-            var json = JsonConvert.SerializeObject(BloodCoagulationRecord);
-            byte[] byte1 = GeneratePdf(json);
-    
-            return File(byte1, "application/pdf","ClientBloodCoagulationRecord.pdf");
         }
         public byte[] GeneratePdf(string paragraphs)
         {
@@ -158,7 +150,7 @@ namespace AwesomeCare.Admin.Controllers
                         pdfDoc.SetDefaultPageSize(PageSize.A4);
                         pdfDoc.SetCloseWriter(true);
                         Document document = new Document(pdfDoc);
-                        var para = new Paragraph(paragraphs.Replace("{","").Replace("}","").Replace("\"","").Replace(",","\n"));
+                        var para = new Paragraph(paragraphs.Replace("{", "").Replace("}", "").Replace("\"", "").Replace(",", "\n"));
                         document.Add(para);
                         buffer = memStream.ToArray();
                         document.Close();
@@ -189,7 +181,7 @@ namespace AwesomeCare.Admin.Controllers
                 NewINR = BloodCoagulationRecord.Result.NewINR,
                 BloodStatus = BloodCoagulationRecord.Result.BloodStatus,
                 Comment = BloodCoagulationRecord.Result.Comment,
-                StaffName = BloodCoagulationRecord.Result.StaffName.Select(s=>s.StaffPersonalInfoId).ToList(),
+                StaffName = BloodCoagulationRecord.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
                 Physician = BloodCoagulationRecord.Result.Physician.Select(s => s.StaffPersonalInfoId).ToList(),
                 PhysicianResponce = BloodCoagulationRecord.Result.PhysicianResponce,
                 OfficerToAct = BloodCoagulationRecord.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
@@ -198,7 +190,7 @@ namespace AwesomeCare.Admin.Controllers
                 Status = BloodCoagulationRecord.Result.Status,
                 TargetINRAttach = BloodCoagulationRecord.Result.TargetINRAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-        };
+            };
             return View(putEntity);
         }
         [HttpPost]
@@ -221,7 +213,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetINRAttachment.FileName);
                 string folder = "clientbloodcoag";
                 string filename = string.Concat(folder, "_TargetINR_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetINRAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetINRAttachment.OpenReadStream(), model.TargetINRAttachment.ContentType);
                 model.TargetINRAttach = path;
             }
             else
@@ -229,28 +221,28 @@ namespace AwesomeCare.Admin.Controllers
                 model.TargetINRAttach = "No Image";
             }
             #endregion
-                postlog.ClientId = model.ClientId;
-                postlog.Reference = model.Reference;
-                postlog.Date = model.Date;
-                postlog.Time = model.Time;
-                postlog.Indication = model.Indication;
-                postlog.StartDate = model.StartDate;
-                postlog.TargetINR = model.TargetINR;
-                postlog.CurrentDose = model.CurrentDose;
-                postlog.INR = model.INR;
-                postlog.NewDose = model.NewDose;
-                postlog.NewINR = model.NewINR;
-                postlog.BloodStatus = model.BloodStatus;
-                postlog.Comment = model.Comment;
-                postlog.StaffName = model.StaffName.Select(o => new PostBloodCoagStaffName{StaffPersonalInfoId=o,BloodRecordId = model.BloodRecordId}).ToList();
-                postlog.Physician = model.Physician.Select(o => new PostBloodCoagPhysician{StaffPersonalInfoId=o,BloodRecordId = model.BloodRecordId}).ToList();
-                postlog.PhysicianResponce = model.PhysicianResponce;
-                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostBloodCoagOfficerToAct{ StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
-                postlog.Deadline = model.Deadline;
-                postlog.Remark = model.Remark;
-                postlog.Status = model.Status;
-                postlog.TargetINRAttach = model.TargetINRAttach;
-            
+            postlog.ClientId = model.ClientId;
+            postlog.Reference = model.Reference;
+            postlog.Date = model.Date;
+            postlog.Time = model.Time;
+            postlog.Indication = model.Indication;
+            postlog.StartDate = model.StartDate;
+            postlog.TargetINR = model.TargetINR;
+            postlog.CurrentDose = model.CurrentDose;
+            postlog.INR = model.INR;
+            postlog.NewDose = model.NewDose;
+            postlog.NewINR = model.NewINR;
+            postlog.BloodStatus = model.BloodStatus;
+            postlog.Comment = model.Comment;
+            postlog.StaffName = model.StaffName.Select(o => new PostBloodCoagStaffName { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
+            postlog.Physician = model.Physician.Select(o => new PostBloodCoagPhysician { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
+            postlog.PhysicianResponce = model.PhysicianResponce;
+            postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostBloodCoagOfficerToAct { StaffPersonalInfoId = o, BloodRecordId = model.BloodRecordId }).ToList();
+            postlog.Deadline = model.Deadline;
+            postlog.Remark = model.Remark;
+            postlog.Status = model.Status;
+            postlog.TargetINRAttach = model.TargetINRAttach;
+
             var result = await _clientBloodCoagulationRecordService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -277,7 +269,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetINRAttachment.FileName);
                 string folder = "clientbloodcoag";
                 string filename = string.Concat(folder, "_TargetINR_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetINRAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetINRAttachment.OpenReadStream(), model.TargetINRAttachment.ContentType);
                 model.TargetINRAttach = path;
             }
             else
@@ -324,6 +316,46 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int bloodId)
+        {
+            var entity = await GetDownload(bloodId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientBloodCoagulationRecord> GetDownload(int Id)
+        {
+            var i = await _clientBloodCoagulationRecordService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientBloodCoagulationRecord
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                TargetINRAttach = i.TargetINRAttach,
+                Comment = i.Comment,
+                Deadline = i.Deadline,
+                PhysicianResponce = i.PhysicianResponce,
+                Remark = i.Remark,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                IndicationName = _baseService.GetBaseRecordItemById(i.Indication).Result.ValueName,
+                CurrentDoseName = _baseService.GetBaseRecordItemById(i.CurrentDose).Result.ValueName,
+                INRName = _baseService.GetBaseRecordItemById(i.INR).Result.ValueName,
+                NewDoseName = _baseService.GetBaseRecordItemById(i.NewDose).Result.ValueName,
+                NewINRName = _baseService.GetBaseRecordItemById(i.NewINR).Result.ValueName,
+                BloodStatusName = _baseService.GetBaseRecordItemById(i.BloodStatus).Result.ValueName,
+            };
+            return putEntity;
         }
     }
 }

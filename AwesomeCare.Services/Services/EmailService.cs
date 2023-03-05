@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Mandrill;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -57,7 +58,7 @@ namespace AwesomeCare.Services.Services
                 List<EmailAddress> tos = recipients.Select(e => new EmailAddress(e)).ToList();
 
                 var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, tos, subject, "", htmlContent, showAllRecipients);
-               
+
                 msg.Attachments = new List<SendGrid.Helpers.Mail.Attachment>
                 {
                     new SendGrid.Helpers.Mail.Attachment()
@@ -81,7 +82,7 @@ namespace AwesomeCare.Services.Services
         }
         public async Task SendEmail(System.Net.Mail.Attachment attachment, string subject, string body, string sender, string password, string recipient, string Smtp)
         {
-            try 
+            try
             {
                 SmtpClient smtp = new SmtpClient();
                 smtp.EnableSsl = true;
@@ -94,17 +95,19 @@ namespace AwesomeCare.Services.Services
                 MailMessage msg = new MailMessage(sender, recipient);
                 msg.Subject = subject;
                 msg.Body = body;
-                if(attachment != null)
+                if (attachment != null)
                     msg.Attachments.Add(attachment);
                 msg.IsBodyHtml = true;
                 smtp.Send(msg);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message, "Email Not Sent", null);
             }
-            
+
         }
+
+    
     }
 }

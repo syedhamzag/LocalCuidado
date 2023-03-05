@@ -18,6 +18,7 @@ using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -34,15 +35,18 @@ namespace AwesomeCare.Admin.Controllers
         private IBaseRecordService _baseRecord;
         private IClientInvolvingParty _involvingparty;
         private IPersonalDetailService _personaldetailService;
+        private readonly ILogger<PersonalDetailController> logger;
 
         public PersonalDetailController (IFileUpload fileUpload, IStaffService staffService, IClientService clientService,IBaseRecordService baseRecord, 
-            IClientInvolvingParty involvingparty, IPersonalDetailService personaldetailService) : base(fileUpload)
+            IClientInvolvingParty involvingparty, IPersonalDetailService personaldetailService,
+            ILogger<PersonalDetailController> logger) : base(fileUpload)
         {
             _staffService = staffService;
             _clientService = clientService;
             _baseRecord = baseRecord;
             _involvingparty = involvingparty;
             _personaldetailService = personaldetailService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> Reports()
@@ -63,7 +67,7 @@ namespace AwesomeCare.Admin.Controllers
             return View(reports);
         }
 
-        public async Task<IActionResult> Index(int clientId)
+        public async ValueTask<IActionResult> Index(int clientId)
         {
             var client = await _clientService.GetClientDetail();
             CreateCarePlan model = new CreateCarePlan();
@@ -133,7 +137,7 @@ namespace AwesomeCare.Admin.Controllers
             var pdetail = await _personaldetailService.Get(model.ClientId);
             if (pdetail != null)
             {
-                model = Get(model.ClientId);
+                model =await Get(model.ClientId);
                 model.ClassList = classItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
 
                 foreach (var item in model.ClassList)
@@ -310,7 +314,7 @@ namespace AwesomeCare.Admin.Controllers
                     {
                         string folder = "clientcomplain";
                         string filename = string.Concat(ImageId,DateTime.Now.ToString());
-                        path = await _fileUpload.UploadFile(folder, true, filename, Image.OpenReadStream());
+                        path = await _fileUpload.UploadFile(folder, true, filename, Image.OpenReadStream(), Image.ContentType);
                     }
                     else
                     {
@@ -421,7 +425,7 @@ namespace AwesomeCare.Admin.Controllers
             
 
             //var client = await _clientService.GetClientDetail();
-            model = Get(clientId);
+            model =await Get(clientId);
             model.ClassList = classItems.BaseRecordItems.Select(s => new SelectListItem(s.ValueName, s.BaseRecordItemId.ToString())).ToList();
             foreach (var item in model.ClassList)
             {
@@ -472,117 +476,127 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
         }
 
-        public CreateCarePlan Get(int clientId)
+        public async ValueTask<CreateCarePlan> Get(int clientId)
         {
-            var staff = _staffService.GetStaffs();
-            var involve = _clientService.GetClient(clientId);
-            var pdetail = _personaldetailService.Get(clientId);
-            var client = _clientService.GetClient(clientId);
-            var details = _clientService.GetClientDetail();
-            var party = _involvingparty.Get(clientId);
-            var Relation = "N/A";
-            if (party.Result != null)
+            try
             {
-                Relation = party.Result.Relationship;
+                var staff = await _staffService.GetStaffs();
+                var involve = await _clientService.GetClient(clientId);
+                var pdetail = await _personaldetailService.Get(clientId);
+                var client = await _clientService.GetClient(clientId);
+                var details = await _clientService.GetClientDetail();
+                var party = await _involvingparty.Get(clientId);
+                var Relation = "N/A";
+                if (party != null)
+                {
+                    Relation = party.Relationship;
+                }
+
+                var PersonalDetail = _personaldetailService.Get(clientId);
+                var putEntity = new CreateCarePlan
+                {
+                    #region Personal Details
+                    ClientId = clientId,
+                    PersonalDetailId = pdetail.PersonalDetailId,
+                    #endregion
+
+                    #region Capacity
+                    CapacityId = pdetail.Capacity.FirstOrDefault().CapacityId,
+                    Implications = pdetail.Capacity.FirstOrDefault().Implications,
+                    Pointer = pdetail.Capacity.FirstOrDefault().Pointer,
+                    IndicatorList = pdetail.Capacity.FirstOrDefault().Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                    Indicator = pdetail.Capacity.FirstOrDefault().Indicator.Select(s => s.BaseRecordId).ToList(),
+                    #endregion
+
+                    #region ConsentCare
+                    CareId = pdetail.ConsentCare.FirstOrDefault().CareId,
+                    CareSignature = pdetail.ConsentCare.FirstOrDefault().Signature,
+                    CareDate = pdetail.ConsentCare.FirstOrDefault().Date,
+                    CareName = pdetail.ConsentCare.FirstOrDefault().Name,
+                    CareRelation = Relation,
+                    #endregion
+
+                    #region ConsentData
+                    DataId = pdetail.ConsentData.FirstOrDefault().DataId,
+                    DataSignature = pdetail.ConsentData.FirstOrDefault().Signature,
+                    DataDate = pdetail.ConsentData.FirstOrDefault().Date,
+                    DataName = pdetail.ConsentData.FirstOrDefault().Name,
+                    DataRelation = Relation,
+                    #endregion
+
+                    #region ConsentLandLine
+                    LandLineId = pdetail.ConsentLandline.FirstOrDefault().LandlineId,
+                    LandLineSignature = pdetail.ConsentLandline.FirstOrDefault().Signature,
+                    LandLineDate = pdetail.ConsentLandline.FirstOrDefault().Date,
+                    LandLogList = pdetail.ConsentLandline.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                    LandLineLogMethod = pdetail.ConsentLandline.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList(),
+                    LandName = pdetail.ConsentLandline.FirstOrDefault().Name,
+                    LandRelation = Relation,
+                    #endregion
+
+                    #region Equipment
+                    GetEquipment = pdetail.Equipment,
+                    StaffList = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
+                    #endregion
+
+                    #region KeyIndicators
+                    AboutMe = pdetail.KeyIndicators.FirstOrDefault().AboutMe,
+                    KeyId = pdetail.KeyIndicators.FirstOrDefault().KeyId,
+                    FamilyRole = pdetail.KeyIndicators.FirstOrDefault().FamilyRole,
+                    Debture = pdetail.KeyIndicators.FirstOrDefault().Debture,
+                    LivingStatus = pdetail.KeyIndicators.FirstOrDefault().LivingStatus,
+                    KeyLogList = pdetail.KeyIndicators.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
+                    LogMethod = pdetail.KeyIndicators.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList(),
+                    ThingsILike = pdetail.KeyIndicators.FirstOrDefault().ThingsILike,
+                    #endregion
+
+                    #region Personal
+                    PersonalId = pdetail.Personal.FirstOrDefault().PersonalId,
+                    Smoking = pdetail.Personal.FirstOrDefault().Smoking,
+                    DNR = pdetail.Personal.FirstOrDefault().DNR,
+                    FullName = details.Where(s => s.ClientId == clientId).Select(s => s.FullName).FirstOrDefault(),
+                    PreferredLanguage = client.LanguageId,
+                    Gender = client.GenderId,
+                    DateofBirth = client.DateOfBirth,
+                    Address = client.Address,
+                    PostCode = client.PostCode,
+                    Telephone = client.Telephone,
+                    PreferredName = client.Firstname,
+                    AccessCode = client.KeySafe,
+                    PreferredGender = client.ChoiceOfStaffId,
+                    KeyWorker = client.Keyworker,
+                    TeamLeader = client.TeamLeader,
+                    Religion = pdetail.Personal.FirstOrDefault().Religion,
+                    Nationality = pdetail.Personal.FirstOrDefault().Nationality,
+                    #endregion
+
+                    #region Person Centred
+                    GetPersonCentred = pdetail.PersonCentred,
+                    #endregion
+
+                    #region Review
+                    ReviewId = pdetail.Review.FirstOrDefault().ReviewId,
+                    CP_PreDate = pdetail.Review.FirstOrDefault().CP_PreDate,
+                    CP_ReviewDate = pdetail.Review.FirstOrDefault().CP_ReviewDate,
+                    RA_PreDate = pdetail.Review.FirstOrDefault().RA_PreDate,
+                    RA_ReviewDate = pdetail.Review.FirstOrDefault().RA_ReviewDate,
+                    #endregion
+
+                    InvolingList = involve.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList(),
+                    EquipmentCount = pdetail.Equipment.Count,
+                    PersonCentreCount = pdetail.PersonCentred.Count,
+                    ActionName = "Update",
+
+                };
+                return putEntity;
             }
-
-            var PersonalDetail = _personaldetailService.Get(clientId);
-            var putEntity = new CreateCarePlan
+            catch (Exception ex)
             {
-                #region Personal Details
-                ClientId = clientId,
-                PersonalDetailId = pdetail.Result.PersonalDetailId,
-                #endregion
+                logger.LogError(ex, "");
+                //return default;
 
-                #region Capacity
-                CapacityId = pdetail.Result.Capacity.FirstOrDefault().CapacityId,
-                Implications = pdetail.Result.Capacity.FirstOrDefault().Implications,
-                Pointer = pdetail.Result.Capacity.FirstOrDefault().Pointer,
-                IndicatorList = pdetail.Result.Capacity.FirstOrDefault().Indicator.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                Indicator = pdetail.Result.Capacity.FirstOrDefault().Indicator.Select(s => s.BaseRecordId).ToList(),
-                #endregion
-
-                #region ConsentCare
-                CareId = pdetail.Result.ConsentCare.FirstOrDefault().CareId,
-                CareSignature = pdetail.Result.ConsentCare.FirstOrDefault().Signature,
-                CareDate = pdetail.Result.ConsentCare.FirstOrDefault().Date,
-                CareName = pdetail.Result.ConsentCare.FirstOrDefault().Name,
-                CareRelation = Relation,
-                #endregion
-
-                #region ConsentData
-                DataId = pdetail.Result.ConsentData.FirstOrDefault().DataId,
-                DataSignature = pdetail.Result.ConsentData.FirstOrDefault().Signature,
-                DataDate = pdetail.Result.ConsentData.FirstOrDefault().Date,
-                DataName = pdetail.Result.ConsentData.FirstOrDefault().Name,
-                DataRelation = Relation,
-                #endregion
-
-                #region ConsentLandLine
-                LandLineId = pdetail.Result.ConsentLandline.FirstOrDefault().LandlineId,
-                LandLineSignature = pdetail.Result.ConsentLandline.FirstOrDefault().Signature,
-                LandLineDate = pdetail.Result.ConsentLandline.FirstOrDefault().Date,
-                LandLogList = pdetail.Result.ConsentLandline.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                LandLineLogMethod = pdetail.Result.ConsentLandline.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList(),
-                LandName = pdetail.Result.ConsentLandline.FirstOrDefault().Name,
-                LandRelation = Relation,
-                #endregion
-
-                #region Equipment
-                GetEquipment = pdetail.Result.Equipment,
-                StaffList = staff.Result.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList(),
-                #endregion
-
-                #region KeyIndicators
-                AboutMe = pdetail.Result.KeyIndicators.FirstOrDefault().AboutMe,
-                KeyId = pdetail.Result.KeyIndicators.FirstOrDefault().KeyId,
-                FamilyRole = pdetail.Result.KeyIndicators.FirstOrDefault().FamilyRole,
-                Debture = pdetail.Result.KeyIndicators.FirstOrDefault().Debture,
-                LivingStatus = pdetail.Result.KeyIndicators.FirstOrDefault().LivingStatus,
-                KeyLogList = pdetail.Result.KeyIndicators.FirstOrDefault().LogMethod.Select(s => new SelectListItem(s.ValueName, s.BaseRecordId.ToString())).ToList(),
-                LogMethod = pdetail.Result.KeyIndicators.FirstOrDefault().LogMethod.Select(s => s.BaseRecordId).ToList(),
-                ThingsILike = pdetail.Result.KeyIndicators.FirstOrDefault().ThingsILike,
-                #endregion
-
-                #region Personal
-                PersonalId = pdetail.Result.Personal.FirstOrDefault().PersonalId,
-                Smoking = pdetail.Result.Personal.FirstOrDefault().Smoking,
-                DNR = pdetail.Result.Personal.FirstOrDefault().DNR,
-                FullName = details.Result.Where(s => s.ClientId == clientId).Select(s => s.FullName).FirstOrDefault(),
-                PreferredLanguage = client.Result.LanguageId,
-                Gender = client.Result.GenderId,
-                DateofBirth = client.Result.DateOfBirth,
-                Address = client.Result.Address,
-                PostCode = client.Result.PostCode,
-                Telephone = client.Result.Telephone,
-                PreferredName = client.Result.Firstname,
-                AccessCode = client.Result.KeySafe,
-                PreferredGender = client.Result.ChoiceOfStaffId,
-                KeyWorker = client.Result.Keyworker,
-                TeamLeader = client.Result.TeamLeader,
-                Religion = pdetail.Result.Personal.FirstOrDefault().Religion,
-                Nationality = pdetail.Result.Personal.FirstOrDefault().Nationality,
-                #endregion
-
-                #region Person Centred
-                GetPersonCentred = pdetail.Result.PersonCentred,
-                #endregion
-
-                #region Review
-                ReviewId = pdetail.Result.Review.FirstOrDefault().ReviewId,
-                CP_PreDate = pdetail.Result.Review.FirstOrDefault().CP_PreDate,
-                CP_ReviewDate = pdetail.Result.Review.FirstOrDefault().CP_ReviewDate,
-                RA_PreDate = pdetail.Result.Review.FirstOrDefault().RA_PreDate,
-                RA_ReviewDate = pdetail.Result.Review.FirstOrDefault().RA_ReviewDate,
-                #endregion
-
-                InvolingList = involve.Result.InvolvingParties.Select(s => new SelectListItem(s.Name, s.ClientInvolvingPartyId.ToString())).ToList(),
-                EquipmentCount = pdetail.Result.Equipment.Count,
-                PersonCentreCount = pdetail.Result.PersonCentred.Count,
-                ActionName = "Update",
-
-            };
-            return putEntity;
+                throw;
+            }
         }
     }
 }

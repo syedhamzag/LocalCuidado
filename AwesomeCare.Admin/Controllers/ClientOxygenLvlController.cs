@@ -130,14 +130,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int oxygenId)
-        {
-            var OxygenLvl = await _clientOxygenLvlService.Get(oxygenId);
-            var json = JsonConvert.SerializeObject(OxygenLvl);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientOxygenLvl.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -212,7 +204,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
                 string folder = "clientoxygenlevel";
                 string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream(),model.SeeChartAttachment.ContentType);
                 model.SeeChartAttach = path;
             }
             else
@@ -225,7 +217,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetOxygenAttachment.FileName);
                 string folder = "clientoxygenlevel";
                 string filename = string.Concat(folder, "_TargetOxygenAttachment_",extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetOxygenAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetOxygenAttachment.OpenReadStream(),model.TargetOxygenAttachment.ContentType);
                 model.TargetOxygenAttach = path;
             }
             else
@@ -279,7 +271,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
                 string folder = "clientoxygenlevel";
                 string filename = string.Concat(folder, "_SeeChartAttachment_", model.ClientId);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream(), model.SeeChartAttachment.ContentType);
                 model.SeeChartAttach = path;
             }
             else
@@ -292,7 +284,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetOxygenAttachment.FileName);
                 string folder = "clientoxygenlevel";
                 string filename = string.Concat(folder, "_TargetOxygen_", model.ClientId);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetOxygenAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetOxygenAttachment.OpenReadStream(), model.TargetOxygenAttachment.ContentType);
                 model.TargetOxygenAttach = path;
             }
             else
@@ -334,6 +326,51 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int oxygenId)
+        {
+            var entity = await GetDownload(oxygenId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientOxygenLvl> GetDownload(int Id)
+        {
+            var i = await _clientOxygenLvlService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientOxygenLvl
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                TargetOxygenAttach = i.TargetOxygenAttach,
+                CurrentReading = i.CurrentReading,
+                SeeChartAttach = i.SeeChartAttach,
+                Comment = i.Comment,
+                PhysicianResponse = i.PhysicianResponse,
+                Deadline = i.Deadline,
+                Remarks = i.Remarks,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                TargetOxygenName = _baseService.GetBaseRecordItemById(i.TargetOxygen).Result.ValueName,
+                SeeChartName = _baseService.GetBaseRecordItemById(i.SeeChart).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

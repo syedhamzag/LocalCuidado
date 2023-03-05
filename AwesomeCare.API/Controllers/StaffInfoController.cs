@@ -149,7 +149,7 @@ namespace AwesomeCare.API.Controllers
 
             var postEntity = Mapper.Map<StaffPersonalInfo>(model);
             var entity = await _staffInfoRepository.InsertEntity(postEntity);
-            entity.RegistrationId = $"AHS/ST/{DateTime.Now.ToString("yy")}/{ entity.StaffPersonalInfoId.ToString("D6")}";
+            entity.RegistrationId = $"AHS/ST/{DateTime.Now.ToString("yy")}/{entity.StaffPersonalInfoId.ToString("D6")}";
             entity = await _staffInfoRepository.UpdateEntity(entity);
 
             return CreatedAtAction("GetAsync", new { id = entity.StaffPersonalInfoId }, entity);
@@ -182,14 +182,14 @@ namespace AwesomeCare.API.Controllers
 
             var postEntity = Mapper.Map<StaffPersonalInfo>(model);
             var entity = await _staffInfoRepository.InsertEntity(postEntity);
-            entity.RegistrationId = $"AHS/ST/{DateTime.Now.ToString("yy")}/{ entity.StaffPersonalInfoId.ToString("D6")}";
+            entity.RegistrationId = $"AHS/ST/{DateTime.Now.ToString("yy")}/{entity.StaffPersonalInfoId.ToString("D6")}";
             entity = await _staffInfoRepository.UpdateEntity(entity);
 
             return Ok(entity.StaffPersonalInfoId);
 
         }
 
-       
+
         [HttpGet("Profile/{id}")]
         [ProducesResponseType(type: typeof(GetStaffProfile), statusCode: StatusCodes.Status200OK)]
         public async Task<IActionResult> Profile(int id)
@@ -467,7 +467,7 @@ namespace AwesomeCare.API.Controllers
             }
             var postEntity = Mapper.Map<List<StaffRota>>(model);
 
-             await _staffRotaRepository.InsertEntities(postEntity);
+            await _staffRotaRepository.InsertEntities(postEntity);
 
 
             return Ok();
@@ -694,7 +694,7 @@ namespace AwesomeCare.API.Controllers
                                                            AllocatedDays = sh.AllocatedDays,
                                                            Class = sh.Class,
                                                            EndDate = sh.EndDate,
-                                                           
+
                                                        }).ToList(),
 
                                 }).FirstOrDefault();
@@ -748,7 +748,7 @@ namespace AwesomeCare.API.Controllers
                                                                                            select new GetTrainingMatrixList
                                                                                            {
                                                                                                Date = l.Date,
-                                                                                               MatrixId=l.MatrixId,
+                                                                                               MatrixId = l.MatrixId,
                                                                                                TrainingId = l.TrainingId,
                                                                                            }).ToList(),
                                                               }).ToList(),
@@ -869,7 +869,7 @@ namespace AwesomeCare.API.Controllers
                                                                                  StaffPersonalInfoId = o.StaffPersonalInfoId,
                                                                                  StaffName = staff.FirstName + " " + staff.LastName
                                                                              }).ToList(),
-                                                             Reference  = s.Reference,
+                                                             Reference = s.Reference,
 
                                                          }).ToList(),
 
@@ -901,7 +901,7 @@ namespace AwesomeCare.API.Controllers
                                                                           join staff in _staffInfoRepository.Table on o.StaffPersonalInfoId equals staff.StaffPersonalInfoId
                                                                           select new GetAdlObsOfficerToAct
                                                                           {
-                                                                              ObservationId = o.ObservationId,  
+                                                                              ObservationId = o.ObservationId,
                                                                               AdlObsOfficerToActId = o.AdlObsOfficerToActId,
                                                                               StaffPersonalInfoId = o.StaffPersonalInfoId,
                                                                               StaffName = staff.FirstName + " " + staff.LastName
@@ -1103,17 +1103,17 @@ namespace AwesomeCare.API.Controllers
                                 {
                                     StaffPersonalInfoId = st.StaffPersonalInfoId,
                                     GetStaffReference = (from rf in st.StaffReference
-                                                  select new GetStaffReference
-                                                  {
-                                                      Address = rf.Address,
-                                                      Attachment = rf.Attachment,
-                                                      Email = rf.Email,
-                                                      Contact = rf.Contact, 
-                                                      Date  = rf.Date,
-                                                      DateofEmployement = rf.DateofEmployement,
-                                                      DateofExit = rf.DateofExit,
-                                                      RehireStaff = rf.RehireStaff,
-                                                  }).ToList(),
+                                                         select new GetStaffReference
+                                                         {
+                                                             Address = rf.Address,
+                                                             Attachment = rf.Attachment,
+                                                             Email = rf.Email,
+                                                             Contact = rf.Contact,
+                                                             Date = rf.Date,
+                                                             DateofEmployement = rf.DateofEmployement,
+                                                             DateofExit = rf.DateofExit,
+                                                             RehireStaff = rf.RehireStaff,
+                                                         }).ToList(),
 
                                 }).FirstOrDefault();
 
@@ -1159,8 +1159,8 @@ namespace AwesomeCare.API.Controllers
                                                                     Guideline = s.Guideline,
                                                                     Remarks = s.Remarks,
                                                                     Status = s.Status,
-                                                                    Type = s.Type,  
-                                                                    VaccStatus  = s.VaccStatus,
+                                                                    Type = s.Type,
+                                                                    VaccStatus = s.VaccStatus,
                                                                 }).ToList(),
 
                                 }).FirstOrDefault();
@@ -1275,11 +1275,11 @@ namespace AwesomeCare.API.Controllers
                                                              GetStaffShadowingTask = (from t in s.StaffShadowingTask
                                                                                       select new GetStaffShadowingTask
                                                                                       {
-                                                                                        Answer = t.Answer,
-                                                                                        Title = t.Title,
-                                                                                        Comment = t.Comment,
-                                                                                        Point = t.Point,
-                                                                                        Score = t.Score,
+                                                                                          Answer = t.Answer,
+                                                                                          Title = t.Title,
+                                                                                          Comment = t.Comment,
+                                                                                          Point = t.Point,
+                                                                                          Score = t.Score,
                                                                                       }).ToList(),
                                                          }).ToList(),
 
@@ -1298,18 +1298,18 @@ namespace AwesomeCare.API.Controllers
                                 {
                                     StaffPersonalInfoId = st.StaffPersonalInfoId,
                                     GetSalaryAllowance = (from edu in st.SalaryAllowance
-                                                 select new GetSalaryAllowance
-                                                 {
-                                                     EndDate = edu.EndDate,
-                                                     StaffPersonalInfoId = edu.StaffPersonalInfoId,
-                                                     StartDate = edu.StartDate,
-                                                     AllowanceType = edu.AllowanceType,
-                                                     Amount = edu.Amount,
-                                                     Deleted = edu.Deleted,
-                                                     Percentage = edu.Percentage,
-                                                     Reoccurent = edu.Reoccurent,
-                                                     SalaryAllowanceId = edu.SalaryAllowanceId,
-                                                 }).ToList(),
+                                                          select new GetSalaryAllowance
+                                                          {
+                                                              EndDate = edu.EndDate,
+                                                              StaffPersonalInfoId = edu.StaffPersonalInfoId,
+                                                              StartDate = edu.StartDate,
+                                                              AllowanceType = edu.AllowanceType,
+                                                              Amount = edu.Amount,
+                                                              Deleted = edu.Deleted,
+                                                              Percentage = edu.Percentage,
+                                                              Reoccurent = edu.Reoccurent,
+                                                              SalaryAllowanceId = edu.SalaryAllowanceId,
+                                                          }).ToList(),
 
                                 }).FirstOrDefault();
 
@@ -1326,18 +1326,18 @@ namespace AwesomeCare.API.Controllers
                                 {
                                     StaffPersonalInfoId = st.StaffPersonalInfoId,
                                     GetSalaryDeduction = (from edu in st.SalaryDeduction
-                                                 select new GetSalaryDeduction
-                                                 {
-                                                     EndDate = edu.EndDate,
-                                                     StaffPersonalInfoId = edu.StaffPersonalInfoId,
-                                                     StartDate = edu.StartDate,
-                                                     AllowanceType = edu.AllowanceType,
-                                                     Amount = edu.Amount,
-                                                     Deleted = edu.Deleted,
-                                                     Percentage = edu.Percentage,
-                                                     Reoccurent = edu.Reoccurent,
-                                                     SalaryDeductionId = edu.SalaryDeductionId,
-                                                 }).ToList(),
+                                                          select new GetSalaryDeduction
+                                                          {
+                                                              EndDate = edu.EndDate,
+                                                              StaffPersonalInfoId = edu.StaffPersonalInfoId,
+                                                              StartDate = edu.StartDate,
+                                                              AllowanceType = edu.AllowanceType,
+                                                              Amount = edu.Amount,
+                                                              Deleted = edu.Deleted,
+                                                              Percentage = edu.Percentage,
+                                                              Reoccurent = edu.Reoccurent,
+                                                              SalaryDeductionId = edu.SalaryDeductionId,
+                                                          }).ToList(),
 
                                 }).FirstOrDefault();
 
@@ -1353,7 +1353,7 @@ namespace AwesomeCare.API.Controllers
                                 select new GetStaffProfile
                                 {
                                     StaffPersonalInfoId = st.StaffPersonalInfoId,
-                                    
+
                                 }).FirstOrDefault();
 
             return Ok(staffProfile);

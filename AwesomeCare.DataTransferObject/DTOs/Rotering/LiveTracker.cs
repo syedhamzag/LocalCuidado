@@ -48,6 +48,14 @@ namespace AwesomeCare.DataTransferObject.DTOs.Rotering
         public List<string> TaskPerformed { get; set; }
         public string ClockInAddress { get; set; }
         public string ClockOutAddress { get; set; }
+        public string ClockInGeolocation { get; set; }
+        public string ClockOutGeolocation { get; set; }
+        public string ClockInClientTelephone { get; set; }
+        public string ClockOutClientTelephone { get; set; }
+        public string ClockInDistance { get; set; }
+        public string ClockOutDistance { get; set; }
+        public int? ClockInCount { get; set; }
+        public int? ClockOutCount { get; set; }
         public string Comment { get; set; }
         public string HandOver { get; set; }
         public string BowelMovement { get; set; }

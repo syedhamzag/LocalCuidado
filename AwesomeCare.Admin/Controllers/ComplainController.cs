@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Hosting;
 using AwesomeCare.Admin.Services.Staff;
 using AwesomeCare.Admin.Services.Admin;
 using AwesomeCare.DataTransferObject.DTOs.ClientComplain;
+using System.IO;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -34,8 +35,8 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
 
-        public ComplainController(IComplainService complainService, IFileUpload fileUpload, 
-            IClientService clientService, IStaffService staffService, IWebHostEnvironment env, 
+        public ComplainController(IComplainService complainService, IFileUpload fileUpload,
+            IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
             ILogger<ClientController> logger, IMemoryCache cache, IBaseRecordService baseService) : base(fileUpload)
         {
             _complainService = complainService;
@@ -75,7 +76,7 @@ namespace AwesomeCare.Admin.Controllers
             if (complain == null) return NotFound();
             var putEntity = new CreateComplainRegister
             {
-                ClientName = client.Where(s=>s.ClientId==complain.Result.ClientId).FirstOrDefault().FullName,
+                ClientName = client.Where(s => s.ClientId == complain.Result.ClientId).FirstOrDefault().FullName,
                 Reference = complain.Result.Reference,
                 ComplainId = complain.Result.ComplainId,
                 ClientId = complain.Result.ClientId,
@@ -136,7 +137,7 @@ namespace AwesomeCare.Admin.Controllers
                     string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                     string folder = "clientcomplain";
                     string filename = string.Concat(folder, "_Evidence_", extention);
-                    string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                    string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream(), model.Evidence.ContentType);
                     model.EvidenceFilePath = path;
 
                 }
@@ -161,7 +162,7 @@ namespace AwesomeCare.Admin.Controllers
                 post.IRFNUMBER = model.IRFNUMBER;
                 post.LETTERTOSTAFF = model.LETTERTOSTAFF;
                 post.LINK = model.LINK;
-                post.OfficerToAct = model.OfficerToAct.Select(o => new PostComplainOfficerToAct { StaffPersonalInfoId = o, ComplainId = model.ComplainId}).ToList();
+                post.OfficerToAct = model.OfficerToAct.Select(o => new PostComplainOfficerToAct { StaffPersonalInfoId = o, ComplainId = model.ComplainId }).ToList();
                 post.Reference = model.Reference;
                 post.REMARK = model.REMARK;
                 post.ROOTCAUSE = model.ROOTCAUSE;
@@ -172,13 +173,13 @@ namespace AwesomeCare.Admin.Controllers
                 var result = await _complainService.Create(post);
                 var content = await result.Content.ReadAsStringAsync();
 
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode , Message = result.Content.ReadAsStringAsync().Result != null ? "New Complain successfully registered" : "An Error Occurred" });
+                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = result.Content.ReadAsStringAsync().Result != null ? "New Complain successfully registered" : "An Error Occurred" });
                 return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             catch (Exception ex)
             {
                 SetOperationStatus(new Models.OperationStatus { IsSuccessful = false, Message = "An Error Occurred" });
-                _logger.LogError(ex, "CreateComplainRegister", null);
+                _logger.LogError(ex, ex.Message, null);
                 return View("CreateComplainRegister", model);
             }
         }
@@ -188,9 +189,9 @@ namespace AwesomeCare.Admin.Controllers
             var staffNames = await _staffService.GetStaffs();
             var client = await _clientService.GetClientDetail();
             if (complain == null) return NotFound();
-        var putEntity = new CreateComplainRegister
+            var putEntity = new CreateComplainRegister
             {
-               
+
                 Reference = complain.Result.Reference,
                 ComplainId = complain.Result.ComplainId,
                 ClientId = complain.Result.ClientId,
@@ -214,7 +215,7 @@ namespace AwesomeCare.Admin.Controllers
                 OfficerToAct = complain.Result.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList(),
                 StaffName = complain.Result.StaffName.Select(s => s.StaffPersonalInfoId).ToList(),
                 STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-        };
+            };
             return View(putEntity);
         }
         [HttpPost]
@@ -233,7 +234,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "_Evidence_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream(), model.Evidence.ContentType);
                 model.EvidenceFilePath = path;
             }
             else
@@ -264,16 +265,16 @@ namespace AwesomeCare.Admin.Controllers
             put.SOURCEOFCOMPLAINTS = model.SOURCEOFCOMPLAINTS;
             put.StaffName = model.StaffName.Select(o => new PutComplainStaffName { StaffPersonalInfoId = o, ComplainId = model.ComplainId }).ToList();
             put.StatusId = model.StatusId;
-            
+
             var putComplain = Mapper.Map<PutComplainRegister>(put);
             var entity = await _complainService.Put(putComplain);
-            
+
             SetOperationStatus(new Models.OperationStatus
             {
                 IsSuccessful = entity.IsSuccessStatusCode,
                 Message = entity.IsSuccessStatusCode == true ? "Successful" : "Operation failed"
             });
-            if (entity.IsSuccessStatusCode)
+            if (entity.IsSuccessStatusCode != false)
             {
                 return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
@@ -283,9 +284,52 @@ namespace AwesomeCare.Admin.Controllers
                 model.STAFFINVOLVED = staffNames.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
                 return View(model);
             }
-            
+
 
         }
-        #endregion
+        public async Task<IActionResult> Download(int complainId)
+        {
+            var entity = await GetDownload(complainId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateComplainRegister> GetDownload(int complainId)
+        {
+            var i = await _complainService.Get(complainId);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateComplainRegister
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                LINK = i.LINK,
+                IRFNUMBER = i.IRFNUMBER,
+                INCIDENTDATE = i.INCIDENTDATE,
+                DATERECIEVED = i.DATERECIEVED,
+                DATEOFACKNOWLEDGEMENT = i.DATEOFACKNOWLEDGEMENT,
+                SOURCEOFCOMPLAINTS = i.SOURCEOFCOMPLAINTS,
+                COMPLAINANTCONTACT = i.COMPLAINANTCONTACT,
+                CONCERNSRAISED = i.CONCERNSRAISED,
+                DUEDATE = i.DUEDATE,
+                LETTERTOSTAFF = i.LETTERTOSTAFF,
+                INVESTIGATIONOUTCOME = i.INVESTIGATIONOUTCOME,
+                ACTIONTAKEN = i.ACTIONTAKEN,
+                FINALRESPONSETOFAMILY = i.FINALRESPONSETOFAMILY,
+                ROOTCAUSE = i.ROOTCAUSE,
+                REMARK = i.REMARK,
+                EvidenceFilePath = i.EvidenceFilePath,
+                StatusIdName = _baseService.GetBaseRecordItemById(i.StatusId).Result.ValueName,
+            };
+            return putEntity;
+            #endregion
+        }
     }
 }

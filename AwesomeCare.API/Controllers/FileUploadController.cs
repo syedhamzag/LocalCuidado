@@ -48,7 +48,7 @@ namespace AwesomeCare.API.Controllers
 
             string filename = string.Concat(model.FileName.Replace(" ", ""), Path.GetExtension(model.File.FileName));
 
-            var result = await fileUpload.UploadFile(model.FolderName, true, filename, model.File.OpenReadStream());
+            var result = await fileUpload.UploadFile(model.FolderName, true, filename, model.File.OpenReadStream(), model.File.ContentType);
 
             return Ok(result);
         }

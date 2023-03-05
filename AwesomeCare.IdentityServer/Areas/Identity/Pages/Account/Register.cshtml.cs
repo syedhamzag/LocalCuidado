@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using AwesomeCare.Services.Services;
+using Newtonsoft.Json;
 
 namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
 {
@@ -25,7 +26,7 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailService _emailSender;
+        private readonly IMailChimpService mailChimpService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration configuration;
 
@@ -33,13 +34,13 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailService emailSender,
+            IMailChimpService mailChimpService,
             RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
+            this.mailChimpService = mailChimpService;
             _roleManager = roleManager;
             this.configuration = configuration;
         }
@@ -104,11 +105,20 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = user.Id, code = code },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendAsync(new List<string> { Input.Email }, "Confirm your email",
-                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    string content = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+                    var emailResult = await mailChimpService.SendAsync("Confirm your email", content, true, new List<DataTransferObject.Models.MailChimp.Recipient>
+                    {
+                        new DataTransferObject.Models.MailChimp.Recipient
+                        {
+                            Email = Input.Email,
+                            Name = "",
+                             Type = DataTransferObject.Enums.EmailTypeEnum.to
+                        }
+                    });
 
-                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    string emailResultJson = JsonConvert.SerializeObject(emailResult);
+                    _logger.LogInformation($"Register email result {emailResultJson}");
+
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

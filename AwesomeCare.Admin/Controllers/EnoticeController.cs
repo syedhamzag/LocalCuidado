@@ -86,7 +86,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_Attachment_", model.Date);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
+                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream(),model.Attach.ContentType);
                 model.Image = pathA;
             }
             else
@@ -119,7 +119,7 @@ namespace AwesomeCare.Admin.Controllers
             {
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_Attachment_", model.Date);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
+                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream(),model.Attach.ContentType);
                 model.Image = pathA;
 
             }

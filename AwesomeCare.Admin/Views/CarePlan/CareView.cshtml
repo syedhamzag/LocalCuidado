@@ -2,8 +2,8 @@
 @model CreateCarePlanView
 @{ ViewData["Title"] = "View Care Plan"; }
 @section HeaderScripts{
-    <link rel="stylesheet" href="../../../assets/vendor/jquery-steps/jquery.steps.css">
-    <link rel="stylesheet" href="../../../assets/vendor/dropify/css/dropify.min.css">
+    <link rel="stylesheet" href="../../../assets2/vendor/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" href="../../../assets2/vendor/dropify/css/dropify.min.css">
 }
 <div class="row clearfix">
     <div class="col-lg-12 col-md-12">
@@ -291,6 +291,7 @@
                                         <th>Location</th>
                                         <th>Person To Act</th>
                                         <th>Status Attachment</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -306,12 +307,20 @@
                                             <td><baserecord asp-key="Equipment_Location" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).Location" asp-items="null" /></td>
                                             <td><select class="selectpicker" data-live-search="true" asp-for="@Model.GetEquipment.FirstOrDefault(s=>s.EquipmentId==equip.EquipmentId).PersonToAct" asp-items="Model.StaffList"></select></td>
                                             <td><img src="@equip.Attachment" height="75" width="75" /></td>
+                                            <td><textarea class="form-control"></textarea></td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
                         }
 
+                    </div>
+                </div>
+                <hr />
+                <h4>Moving and handling</h4>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <textarea class="form-control"></textarea>
                     </div>
                 </div>
                 <hr />
@@ -908,6 +917,33 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         @if (Model.HealthCondId > 0)
                         {
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    @if (Model.GetManagingTasks.Count > 0)
+                                    {
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Desc</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var clc in Model.GetClientHealthCondition)
+                                                {
+                                                    <tr>
+                                                        <td>@clc.Name</td>
+                                                        <td style="white-space: normal; text-align: justify;">@clc.Desc</td>
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="form-group col-sm-4 col-md-4 col-xs-12 col-lg-4">
                                     <label class="control-label">Condition Name</label>

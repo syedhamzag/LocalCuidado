@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using AwesomeCare.Admin.Services.ClientRotaName;
 using AwesomeCare.Admin.Services.Medication;
 using AwesomeCare.Admin.Services.Staff;
+using AwesomeCare.Admin.Services.Client;
 using AwesomeCare.Admin.ViewModels.Staff;
 using AwesomeCare.DataTransferObject.DTOs.Medication;
 using AwesomeCare.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using AwesomeCare.Admin.ViewModels.Medication;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -17,13 +19,15 @@ namespace AwesomeCare.Admin.Controllers
     {
         private IMedicationService _medicationService;
         private IStaffService _staffService;
+        private IClientService _clientService;
         private IClientRotaNameService _clientRotaNameService;
 
-        public MedicationController(IMedicationService medicationService, IFileUpload fileUpload, IStaffService staffService, IClientRotaNameService clientRotaNameService) : base(fileUpload)
+        public MedicationController(IMedicationService medicationService, IFileUpload fileUpload, IStaffService staffService, IClientRotaNameService clientRotaNameService, IClientService clientService) : base(fileUpload)
         {
             _medicationService = medicationService;
             _staffService = staffService;
             _clientRotaNameService = clientRotaNameService;
+            _clientService = clientService;
         }
 
         public async Task<IActionResult> Index()
@@ -165,6 +169,32 @@ namespace AwesomeCare.Admin.Controllers
             var medTracker = await _medicationService.MedTracker(sdate, edate);
 
             return View(medTracker);
+        }
+        public async Task<IActionResult> MARChart()
+        {
+            var model = new MedTrackerViewModel();
+            var clients = await _clientService.GetClientDetail();
+            model.ClientList = clients.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MARChart(MedTrackerViewModel model)
+        {
+            int year = Convert.ToInt32(model.StartDate.ToString("yyyy"));
+            int month = Convert.ToInt32(model.StartDate.ToString("MM"));
+            int lastday = DateTime.DaysInMonth(year, month);
+            model.FirstDay = new DateTime(year, month, 01);
+            model.LastDay = new DateTime(year, month, lastday);
+            model.DaysInMonth = lastday;
+            var clients = await _clientService.GetClientDetail();
+            model.ClientList = clients.Select(s => new SelectListItem(s.FullName, s.ClientId.ToString())).ToList();
+            var sdate = model.FirstDay.ToString("yyyy-MM-dd");
+            var edate = model.LastDay.ToString("yyyy-MM-dd");
+
+            var medTracker = await _medicationService.MedTracker(sdate, edate);
+            model.MedTracker = medTracker.Where(s=>s.ClientId==model.ClientId).ToList();
+            return View(model);
         }
     }
 }

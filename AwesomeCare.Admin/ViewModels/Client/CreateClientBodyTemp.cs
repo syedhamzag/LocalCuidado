@@ -34,6 +34,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string ActiveTab { get; set; } = "bodytemp";
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         [Required]
         public int BodyTempId { get; set; }
         [Required]
@@ -71,5 +73,10 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Remarks { get; set; }
         [Required]
         public int Status { get; set; }
+
+        public string TargetTempName { get; set; }
+        public string SeeChartName { get; set; }
+        public string OfficerToActName { get; set; }
+
     }
 }

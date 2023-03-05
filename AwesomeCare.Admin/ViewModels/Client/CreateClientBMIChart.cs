@@ -30,6 +30,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
 
         public string ActiveTab { get; set; } = "BMIChart";
         public string ClientName { get; set; }
+        public string IdNumber { get; set; }
+        public string DOB { get; set; }
         public string StatusName { get; set; }
         [Required]
         public int BMIChartId { get; set; }
@@ -69,5 +71,9 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Remarks { get; set; }
         [Required]
         public int Status { get; set; }
+        public string HeightName { get; set; }
+        public string NumberRangeName { get; set; }
+        public string SeeChartName { get; set; }
+        public string OfficerToActName { get; set; }
     }
 }

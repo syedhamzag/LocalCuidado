@@ -63,14 +63,26 @@ namespace AwesomeCare.Admin.Controllers
             List<CreateStaffSpotCheck> reports = new List<CreateStaffSpotCheck>();
             foreach (GetStaffSpotCheck item in entities)
             {
-                var report = new CreateStaffSpotCheck();
-                report.SpotCheckId = item.SpotCheckId;
-                report.Date = item.Date;
-                report.NextCheckDate = item.NextCheckDate;
-                report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffId).Select(s => s.Fullname).FirstOrDefault();
-                report.StatusName = _baseService.GetBaseRecordItemById(item.Status).Result.ValueName;
-                report.Attachment = item.Attachment;
-                reports.Add(report);
+                try
+                {
+                    var report = new CreateStaffSpotCheck();
+                    report.SpotCheckId = item.SpotCheckId;
+                    report.Date = item.Date;
+                    report.NextCheckDate = item.NextCheckDate;
+                    report.StaffName = staff.Where(s => s.StaffPersonalInfoId == item.StaffId).Select(s => s.Fullname).FirstOrDefault();
+                    var statusReport = await _baseService.GetBaseRecordItemById(item.Status);
+                    if (statusReport != null)
+                    {
+                        report.StatusName = statusReport.ValueName;
+                    }
+
+                    report.Attachment = item.Attachment;
+                    reports.Add(report);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "");
+                }
             }
             return View(reports);
         }
@@ -212,7 +224,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.StaffId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "staffspotcheck";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -264,7 +276,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.StaffId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "staffspotcheck";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(),model.Attach.ContentType);
                 model.Attachment = path;
 
             }
